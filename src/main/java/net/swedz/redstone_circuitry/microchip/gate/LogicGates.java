@@ -13,6 +13,7 @@ import net.swedz.redstone_circuitry.microchip.gate.gate.NANDGate;
 import net.swedz.redstone_circuitry.microchip.gate.gate.NORGate;
 import net.swedz.redstone_circuitry.microchip.gate.gate.NOTGate;
 import net.swedz.redstone_circuitry.microchip.gate.gate.ORGate;
+import net.swedz.redstone_circuitry.microchip.gate.gate.XORGate;
 
 import java.util.Collections;
 import java.util.List;
@@ -60,6 +61,7 @@ public final class LogicGates
 	public static final LogicGateType<NANDGate> NAND = register("nand", "NAND", NANDGate.CODEC, NANDGate.STREAM_CODEC, () -> NANDGate.INSTANCE);
 	public static final LogicGateType<ORGate>   OR   = register("or", "OR", ORGate.CODEC, ORGate.STREAM_CODEC, () -> ORGate.INSTANCE);
 	public static final LogicGateType<NORGate>  NOR  = register("nor", "NOR", NORGate.CODEC, NORGate.STREAM_CODEC, () -> NORGate.INSTANCE);
+	public static final LogicGateType<XORGate>  XOR  = register("xor", "XOR", XORGate.CODEC, XORGate.STREAM_CODEC, () -> XORGate.INSTANCE);
 	
 	public static void init()
 	{
