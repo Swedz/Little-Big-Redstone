@@ -1,4 +1,9 @@
 {
   "block.redstone_circuitry.microchip": "Microchip",
+  "item.redstone_circuitry.and_gate": "AND Gate",
+  "item.redstone_circuitry.nand_gate": "NAND Gate",
+  "item.redstone_circuitry.nor_gate": "NOR Gate",
+  "item.redstone_circuitry.not_gate": "NOT Gate",
+  "item.redstone_circuitry.or_gate": "OR Gate",
   "itemGroup.redstone_circuitry.redstone_circuitry": "Redstone Circuitry"
 }
