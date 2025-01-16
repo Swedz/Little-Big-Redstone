@@ -5,7 +5,6 @@ import io.netty.buffer.ByteBuf;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.codec.StreamCodec;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.level.Level;
 import net.swedz.redstone_circuitry.RCText;
 import net.swedz.redstone_circuitry.microchip.gate.LogicGate;
@@ -56,7 +55,7 @@ public final class XORGate implements LogicGate<XORGate>
 	}
 	
 	@Override
-	public void appendTooltip(Item.TooltipContext context, List<Component> lines)
+	public void appendNoShiftHoverText(List<Component> lines)
 	{
 		lines.add(line(RCText.LOGIC_GATE_ALGEBRA).arg(RCText.LOGIC_GATE_ALGEBRA_XOR.text().withStyle(DEFAULT_STYLE)).withStyle(DEFAULT_STYLE));
 	}
