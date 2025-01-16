@@ -1,0 +1,58 @@
+plugins {
+    id 'java-library'
+    id 'idea'
+    id 'maven-publish'
+    id 'net.neoforged.moddev' version '1.0.14'
+    id 'com.matthewprenger.cursegradle' version '1.4.0'
+    id 'com.modrinth.minotaur' version '2.+'
+}
+
+configurations {
+    runtimeClasspath.extendsFrom localImplementation
+    compileClasspath.extendsFrom localImplementation
+}
+
+version = (System.getenv("MOD_VERSION") ?: "0.0.0-local") + "-${minecraft_version}"
+group = mod_group_id
+base {
+    archivesName = artifact_name
+}
+
+logger.lifecycle("${mod_name} version ${version}")
+
+apply from: 'dependencies.gradle'
+
+tasks.named('jar') {
+    from "LICENSE"
+}
+
+task sourceJar(type: Jar) {
+    archiveClassifier.set("sources")
+    from sourceSets.main.allJava
+    from "LICENSE"
+}
+
+apply from: 'deploy.gradle'
+
+apply from: 'neoforge.gradle'
+
+java.toolchain.languageVersion = JavaLanguageVersion.of(21)
+
+sourceSets.main.resources { srcDir 'src/generated/resources' }
+
+tasks.withType(JavaCompile).configureEach {
+    options.encoding = 'UTF-8'
+}
+
+idea {
+    module {
+        downloadSources = true
+        downloadJavadoc = true
+    }
+}
+
+processResources {
+    duplicatesStrategy = 'exclude'
+
+    exclude(".cache")
+}

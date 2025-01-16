@@ -1,0 +1,48 @@
+{
+    "content": "",
+    "tts": false,
+    "embeds": [
+        {
+            "id": 722295639,
+            "title": "$RELEASE_TYPE_DISPLAY Published",
+            "description": "",
+            "url": "https://github.com/$GITHUB_REPOSITORY/releases/tag/$GITHUB_RELEASE_TAG_NAME",
+            "color": $EMBED_COLOR,
+            "fields": [
+                {
+                    "id": 488008850,
+                    "name": "Version",
+                    "value": "$MOD_VERSION_SHORT",
+                    "inline": false
+                },
+                {
+                    "id": 166449711,
+                    "name": "Minecraft Version",
+                    "value": "$MINECRAFT_VERSION",
+                    "inline": false
+                },
+                {
+                    "id": 205983055,
+                    "name": "Changelog",
+                    "value": "$MOD_CHANGELOG_TRIMMED_DISCORD",
+                    "inline": false
+                },
+                {
+                    "id": 742525752,
+                    "name": "Download",
+                    "value": "[$ARTIFACT_NAME-$GITHUB_RELEASE_TAG_NAME.jar](https://modrinth.com/mod/$MODRINTH_PROJECT_SLUG/version/$GITHUB_RELEASE_TAG_NAME)",
+                    "inline": false
+                }
+            ],
+            "author": {
+                "name": "$MOD_NAME",
+                "icon_url": "$MOD_DISCORD_ICON",
+                "url": "$MOD_GITHUB"
+            }
+        }
+    ],
+    "components": [],
+    "actions": {},
+    "username": "GitHub",
+    "avatar_url": "https://cdn.discordapp.com/avatars/988943967250944000/df91181b3f1cf0ef1592fbe18e0962d7.webp"
+}

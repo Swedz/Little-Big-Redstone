@@ -1,0 +1,23 @@
+repositories {
+	mavenLocal()
+	mavenCentral()
+	maven {
+		name "Modmaven"
+		url "https://modmaven.dev"
+		content {
+			// Tesseract
+			includeGroup "net.swedz"
+		}
+	}
+}
+
+dependencies {
+	jarJar(implementation("io.github.llamalad7:mixinextras-neoforge:${mixinextras_version}")) {
+		version {
+			strictly "[${mixinextras_version},)"
+			prefer mixinextras_version
+		}
+	}
+
+	implementation "net.swedz:tesseract-api-neoforge:${tesseract_version}"
+}

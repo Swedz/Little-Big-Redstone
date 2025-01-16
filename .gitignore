@@ -1,0 +1,30 @@
+# eclipse
+bin
+*.launch
+.settings
+.metadata
+.classpath
+.project
+
+# idea
+out
+*.ipr
+*.iws
+*.iml
+.idea
+
+# gradle
+build
+.gradle
+
+# other
+.env
+.secrets
+eclipse
+run
+runs
+run-data
+repo
+
+# datagen
+src/generated/resources/.cache/

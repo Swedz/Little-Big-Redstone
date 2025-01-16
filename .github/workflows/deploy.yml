@@ -1,0 +1,78 @@
+name: 'Deploy'
+
+on:
+  release:
+    types: [ published ]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      # Set up Github actions, JDK & Gradle
+      - uses: actions/checkout@v2
+      - name: Set up JDK 21
+        uses: actions/setup-java@v3
+        with:
+          java-version: 21
+          cache: gradle
+          distribution: temurin
+      - name: Grant execute permission for gradlew
+        run: chmod +x gradlew
+
+      # Load the variables needed
+      - name: Load gradle.properties into the environment
+        run: |
+          while IFS='=' read -r key value; do
+            [[ -z "$key" || "$key" =~ ^#.* ]] && continue
+            env_key=$(echo "$key" | tr '[:lower:]' '[:upper:]' | tr '.' '_')
+            echo "${env_key}=${value}" >> $GITHUB_ENV
+          done < gradle.properties
+      - name: Load GitHub variables into the environment
+        run: |
+          echo "GITHUB_REPOSITORY=${{ github.repository }}" >> $GITHUB_ENV
+          echo "GITHUB_RELEASE_TAG_NAME=${{ github.event.release.tag_name }}" >> $GITHUB_ENV
+          {
+            echo "MOD_CHANGELOG<<EOF"
+            echo "${{ github.event.release.body }}"
+            echo "EOF"
+          } >> $GITHUB_ENV
+      - name: Generate variables using release data
+        run: |
+          echo "MOD_VERSION=$(echo "$GITHUB_RELEASE_TAG_NAME" | sed -E 's/-[^-]+$//')" >> $GITHUB_ENV
+          echo "RELEASE_TYPE=$(echo "$GITHUB_RELEASE_TAG_NAME" | grep -oE '(alpha|beta)' || echo "release")" >> $GITHUB_ENV
+      - name: Build changelog
+        run: ./gradlew buildChangelog
+      - name: Finalize variables
+        run: |
+          echo "MOD_VERSION_SHORT=${MOD_VERSION%%-*}" >> $GITHUB_ENV
+          echo "RELEASE_TYPE_DISPLAY=${RELEASE_TYPE^}" >> $GITHUB_ENV
+          echo "EMBED_COLOR=$(if [ $RELEASE_TYPE == "alpha" ]; then echo 15875907; elif [ $RELEASE_TYPE == "beta" ]; then echo 15774258; else echo 2336090; fi)" >> $GITHUB_ENV
+      - name: Prepare Discord webhook JSON file
+        run: |
+          envsubst < .github/workflows/discord_message.json > prepared_discord_message.json
+          echo "Prepared Discord webhook JSON:"
+          cat prepared_discord_message.json
+
+      # Build the mod and publish it to ModMaven, CurseForge, and Modrinth
+      - name: Build with Gradle
+        run: ./gradlew build
+      - name: Publish to ModMaven
+        uses: gradle/gradle-build-action@v2
+        with:
+          arguments: publishMavenJavaPublicationToModmavenRepository
+        env:
+          MODMAVEN_USERNAME: ${{ secrets.MODMAVEN_USERNAME }}
+          MODMAVEN_PASSWORD: ${{ secrets.MODMAVEN_PASSWORD }}
+      - name: Publish to Curseforge
+        run: ./gradlew curseforge
+        env:
+          CURSEFORGE_API_KEY: ${{ secrets.CURSEFORGE_API_KEY }}
+      - name: Publish to Modrinth
+        run: ./gradlew modrinth
+        env:
+          MODRINTH_API_KEY: ${{ secrets.MODRINTH_API_KEY }}
+
+      # Post to the Discord that the update has been deployed
+      - name: Post to Discord
+        run: |
+          curl -i -H "Accept: application/json" -H "Content-Type:application/json" -X POST --data @prepared_discord_message.json ${{ secrets.RELEASE_WEBHOOK_URL }}
