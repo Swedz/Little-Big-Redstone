@@ -1,4 +1,4 @@
-package net.swedz.my_mod;
+package net.swedz.redstone_circuitry;
 
 import net.minecraft.resources.ResourceLocation;
 import net.neoforged.bus.api.IEventBus;
@@ -7,11 +7,11 @@ import net.neoforged.fml.common.Mod;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-@Mod(MyMod.ID)
-public final class MyMod
+@Mod(RedstoneCircuitry.ID)
+public final class RedstoneCircuitry
 {
-	public static final String ID   = "my_mod";
-	public static final String NAME = "My Mod";
+	public static final String ID   = "redstone_circuitry";
+	public static final String NAME = "Redstone Circuitry";
 	
 	public static ResourceLocation id(String path)
 	{
@@ -20,8 +20,7 @@ public final class MyMod
 	
 	public static final Logger LOGGER = LoggerFactory.getLogger(NAME);
 	
-	public MyMod(IEventBus bus, ModContainer container)
+	public RedstoneCircuitry(IEventBus bus, ModContainer container)
 	{
-		LOGGER.info("Mod has been loaded!");
 	}
 }
