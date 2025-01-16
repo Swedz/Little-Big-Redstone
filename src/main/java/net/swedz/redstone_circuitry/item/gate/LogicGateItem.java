@@ -1,19 +1,21 @@
 package net.swedz.redstone_circuitry.item.gate;
 
 import net.minecraft.world.item.Item;
+import net.swedz.redstone_circuitry.RCComponents;
+import net.swedz.redstone_circuitry.microchip.gate.LogicGateType;
 
 public final class LogicGateItem extends Item
 {
-	private final LogicGate gate;
+	private final LogicGateType<?> type;
 	
-	public LogicGateItem(Properties properties, LogicGate gate)
+	public LogicGateItem(Properties properties, LogicGateType<?> type)
 	{
-		super(properties);
-		this.gate = gate;
+		super(properties.component(RCComponents.LOGIC_GATE.get(), type.defaultFactory().create()));
+		this.type = type;
 	}
 	
-	public LogicGate getLogicGate()
+	public LogicGateType<?> getLogicGateType()
 	{
-		return gate;
+		return type;
 	}
 }

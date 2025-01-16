@@ -4,8 +4,9 @@ import com.google.common.collect.Sets;
 import net.minecraft.world.item.Item;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.registries.DeferredRegister;
-import net.swedz.redstone_circuitry.item.gate.LogicGate;
 import net.swedz.redstone_circuitry.item.gate.LogicGateItem;
+import net.swedz.redstone_circuitry.microchip.gate.LogicGateType;
+import net.swedz.redstone_circuitry.microchip.gate.LogicGates;
 import net.swedz.tesseract.neoforge.registry.SortOrder;
 import net.swedz.tesseract.neoforge.registry.common.CommonModelBuilders;
 import net.swedz.tesseract.neoforge.registry.holder.ItemHolder;
@@ -36,11 +37,14 @@ public final class RCItems
 		Registry.init(bus);
 	}
 	
-	public static final ItemHolder<LogicGateItem> NOT_GATE  = createGate("not", "NOT", LogicGate.NOT, 0).register();
-	public static final ItemHolder<LogicGateItem> AND_GATE  = createGate("and", "AND", LogicGate.AND, 1).register();
-	public static final ItemHolder<LogicGateItem> NAND_GATE = createGate("nand", "NAND", LogicGate.NAND, 2).register();
-	public static final ItemHolder<LogicGateItem> OR_GATE   = createGate("or", "OR", LogicGate.OR, 3).register();
-	public static final ItemHolder<LogicGateItem> NOR_GATE  = createGate("nor", "NOR", LogicGate.NOR, 4).register();
+	static
+	{
+		int index = 0;
+		for(LogicGateType<?> gateType : LogicGates.values())
+		{
+			createGate(gateType.id(), gateType.englishName(), gateType, index++).register();
+		}
+	}
 	
 	public static Set<ItemHolder> values()
 	{
@@ -58,8 +62,8 @@ public final class RCItems
 		return holder;
 	}
 	
-	public static ItemHolder<LogicGateItem> createGate(String id, String englishName, LogicGate gate, int order)
+	public static ItemHolder<LogicGateItem> createGate(String id, String englishName, LogicGateType<?> type, int order)
 	{
-		return create(id + "_gate", englishName + " Gate", (p) -> new LogicGateItem(p, gate), RCSortOrder.LOGIC_GATES.and(order)).withModelBuilder(CommonModelBuilders::generated);
+		return create(id + "_gate", englishName + " Gate", (p) -> new LogicGateItem(p, type), RCSortOrder.LOGIC_GATES.and(order)).withModelBuilder(CommonModelBuilders::generated);
 	}
 }

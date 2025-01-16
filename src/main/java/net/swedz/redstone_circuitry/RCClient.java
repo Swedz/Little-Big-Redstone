@@ -15,6 +15,7 @@ public final class RCClient
 {
 	public RCClient(IEventBus bus, ModContainer container)
 	{
+		RCTooltips.init();
 	}
 	
 	@SubscribeEvent

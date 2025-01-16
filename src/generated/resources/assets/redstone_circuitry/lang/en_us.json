@@ -5,5 +5,6 @@
   "item.redstone_circuitry.nor_gate": "NOR Gate",
   "item.redstone_circuitry.not_gate": "NOT Gate",
   "item.redstone_circuitry.or_gate": "OR Gate",
-  "itemGroup.redstone_circuitry.redstone_circuitry": "Redstone Circuitry"
+  "itemGroup.redstone_circuitry.redstone_circuitry": "Redstone Circuitry",
+  "text.redstone_circuitry.logic_gate": "Type: %s"
 }

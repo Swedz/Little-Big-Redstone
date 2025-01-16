@@ -1,6 +1,8 @@
 package net.swedz.redstone_circuitry.blockentity;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.HolderLookup;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.MenuProvider;
 import net.minecraft.world.entity.player.Inventory;
@@ -28,5 +30,17 @@ public final class MicrochipBlockEntity extends BlockEntity implements MenuProvi
 	public AbstractContainerMenu createMenu(int containerId, Inventory inventory, Player player)
 	{
 		return new MicrochipMenu(containerId, inventory);
+	}
+	
+	@Override
+	protected void loadAdditional(CompoundTag tag, HolderLookup.Provider registries)
+	{
+		super.loadAdditional(tag, registries);
+	}
+	
+	@Override
+	protected void saveAdditional(CompoundTag tag, HolderLookup.Provider registries)
+	{
+		super.saveAdditional(tag, registries);
 	}
 }
