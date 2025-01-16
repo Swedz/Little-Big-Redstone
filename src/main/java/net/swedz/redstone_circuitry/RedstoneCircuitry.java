@@ -22,5 +22,8 @@ public final class RedstoneCircuitry
 	
 	public RedstoneCircuitry(IEventBus bus, ModContainer container)
 	{
+		RCItems.init(bus);
+		RCBlocks.init(bus);
+		RCCreativeTabs.init(bus);
 	}
 }
