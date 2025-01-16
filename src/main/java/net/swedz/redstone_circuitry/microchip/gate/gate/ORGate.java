@@ -1,27 +1,30 @@
-package net.swedz.redstone_circuitry.microchip.gate;
+package net.swedz.redstone_circuitry.microchip.gate.gate;
 
 import com.mojang.serialization.MapCodec;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.world.level.Level;
+import net.swedz.redstone_circuitry.microchip.gate.LogicGate;
+import net.swedz.redstone_circuitry.microchip.gate.LogicGateType;
+import net.swedz.redstone_circuitry.microchip.gate.LogicGates;
 
-public final class NORGate implements LogicGate
+public final class ORGate implements LogicGate
 {
-	public static final NORGate INSTANCE = new NORGate();
+	public static final ORGate INSTANCE = new ORGate();
 	
-	public static final MapCodec<NORGate> CODEC = MapCodec.unit(INSTANCE);
+	public static final MapCodec<ORGate> CODEC = MapCodec.unit(INSTANCE);
 	
-	public static final StreamCodec<ByteBuf, NORGate> STREAM_CODEC = StreamCodec.unit(INSTANCE);
+	public static final StreamCodec<ByteBuf, ORGate> STREAM_CODEC = StreamCodec.unit(INSTANCE);
 	
-	private NORGate()
+	private ORGate()
 	{
 	}
 	
 	@Override
 	public LogicGateType type()
 	{
-		return LogicGates.NOR;
+		return LogicGates.OR;
 	}
 	
 	@Override
@@ -37,10 +40,10 @@ public final class NORGate implements LogicGate
 		{
 			if(input)
 			{
-				return false;
+				return true;
 			}
 		}
-		return true;
+		return false;
 	}
 	
 	@Override

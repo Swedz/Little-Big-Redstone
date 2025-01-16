@@ -8,6 +8,11 @@ import com.mojang.serialization.MapCodec;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
+import net.swedz.redstone_circuitry.microchip.gate.gate.ANDGate;
+import net.swedz.redstone_circuitry.microchip.gate.gate.NANDGate;
+import net.swedz.redstone_circuitry.microchip.gate.gate.NORGate;
+import net.swedz.redstone_circuitry.microchip.gate.gate.NOTGate;
+import net.swedz.redstone_circuitry.microchip.gate.gate.ORGate;
 
 import java.util.Collections;
 import java.util.List;

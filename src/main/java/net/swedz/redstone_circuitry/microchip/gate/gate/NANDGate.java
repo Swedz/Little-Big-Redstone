@@ -1,10 +1,13 @@
-package net.swedz.redstone_circuitry.microchip.gate;
+package net.swedz.redstone_circuitry.microchip.gate.gate;
 
 import com.mojang.serialization.MapCodec;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.world.level.Level;
+import net.swedz.redstone_circuitry.microchip.gate.LogicGate;
+import net.swedz.redstone_circuitry.microchip.gate.LogicGateType;
+import net.swedz.redstone_circuitry.microchip.gate.LogicGates;
 
 public final class NANDGate implements LogicGate
 {

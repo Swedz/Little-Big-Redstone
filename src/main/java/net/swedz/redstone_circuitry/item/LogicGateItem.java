@@ -1,4 +1,4 @@
-package net.swedz.redstone_circuitry.item.gate;
+package net.swedz.redstone_circuitry.item;
 
 import net.minecraft.world.item.Item;
 import net.swedz.redstone_circuitry.RCComponents;

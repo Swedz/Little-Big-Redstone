@@ -4,7 +4,7 @@ import com.google.common.collect.Sets;
 import net.minecraft.world.item.Item;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.registries.DeferredRegister;
-import net.swedz.redstone_circuitry.item.gate.LogicGateItem;
+import net.swedz.redstone_circuitry.item.LogicGateItem;
 import net.swedz.redstone_circuitry.microchip.gate.LogicGateType;
 import net.swedz.redstone_circuitry.microchip.gate.LogicGates;
 import net.swedz.tesseract.neoforge.registry.SortOrder;
