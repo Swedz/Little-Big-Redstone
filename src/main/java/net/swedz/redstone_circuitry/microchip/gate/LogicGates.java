@@ -8,6 +8,7 @@ import com.mojang.serialization.MapCodec;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
+import net.swedz.redstone_circuitry.RCText;
 import net.swedz.redstone_circuitry.microchip.gate.gate.ANDGate;
 import net.swedz.redstone_circuitry.microchip.gate.gate.NANDGate;
 import net.swedz.redstone_circuitry.microchip.gate.gate.NORGate;
@@ -48,20 +49,25 @@ public final class LogicGates
 		return getMaybe(id).getOrThrow(IllegalArgumentException::new);
 	}
 	
-	private static <T extends LogicGate> LogicGateType<T> register(String id, String englishName, MapCodec<T> codec, StreamCodec<ByteBuf, T> streamCodec, LogicGateFactory defaultFactory)
+	private static <T extends LogicGate> LogicGateType<T> register(
+			String id, String englishName,
+			RCText algebraText,
+			MapCodec<T> codec, StreamCodec<ByteBuf, T> streamCodec,
+			LogicGateFactory defaultFactory
+	)
 	{
-		var type = new LogicGateType<>(id, englishName, codec, streamCodec, defaultFactory);
+		var type = new LogicGateType<>(id, englishName, algebraText, codec, streamCodec, defaultFactory);
 		LOGIC_GATES.add(type);
 		LOGIC_GATES_MAP.put(id, type);
 		return type;
 	}
 	
-	public static final LogicGateType<NOTGate>  NOT  = register("not", "NOT", NOTGate.CODEC, NOTGate.STREAM_CODEC, () -> NOTGate.INSTANCE);
-	public static final LogicGateType<ANDGate>  AND  = register("and", "AND", ANDGate.CODEC, ANDGate.STREAM_CODEC, () -> ANDGate.INSTANCE);
-	public static final LogicGateType<NANDGate> NAND = register("nand", "NAND", NANDGate.CODEC, NANDGate.STREAM_CODEC, () -> NANDGate.INSTANCE);
-	public static final LogicGateType<ORGate>   OR   = register("or", "OR", ORGate.CODEC, ORGate.STREAM_CODEC, () -> ORGate.INSTANCE);
-	public static final LogicGateType<NORGate>  NOR  = register("nor", "NOR", NORGate.CODEC, NORGate.STREAM_CODEC, () -> NORGate.INSTANCE);
-	public static final LogicGateType<XORGate>  XOR  = register("xor", "XOR", XORGate.CODEC, XORGate.STREAM_CODEC, () -> XORGate.INSTANCE);
+	public static final LogicGateType<NOTGate>  NOT  = register("not", "NOT", RCText.LOGIC_GATE_ALGEBRA_NOT, NOTGate.CODEC, NOTGate.STREAM_CODEC, () -> NOTGate.INSTANCE);
+	public static final LogicGateType<ANDGate>  AND  = register("and", "AND", RCText.LOGIC_GATE_ALGEBRA_AND, ANDGate.CODEC, ANDGate.STREAM_CODEC, () -> ANDGate.INSTANCE);
+	public static final LogicGateType<NANDGate> NAND = register("nand", "NAND", RCText.LOGIC_GATE_ALGEBRA_NAND, NANDGate.CODEC, NANDGate.STREAM_CODEC, () -> NANDGate.INSTANCE);
+	public static final LogicGateType<ORGate>   OR   = register("or", "OR", RCText.LOGIC_GATE_ALGEBRA_OR, ORGate.CODEC, ORGate.STREAM_CODEC, () -> ORGate.INSTANCE);
+	public static final LogicGateType<NORGate>  NOR  = register("nor", "NOR", RCText.LOGIC_GATE_ALGEBRA_NOR, NORGate.CODEC, NORGate.STREAM_CODEC, () -> NORGate.INSTANCE);
+	public static final LogicGateType<XORGate>  XOR  = register("xor", "XOR", RCText.LOGIC_GATE_ALGEBRA_XOR, XORGate.CODEC, XORGate.STREAM_CODEC, () -> XORGate.INSTANCE);
 	
 	public static void init()
 	{

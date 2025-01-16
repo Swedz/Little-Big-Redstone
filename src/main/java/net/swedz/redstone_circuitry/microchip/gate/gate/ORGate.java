@@ -3,13 +3,21 @@ package net.swedz.redstone_circuitry.microchip.gate.gate;
 import com.mojang.serialization.MapCodec;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.core.BlockPos;
+import net.minecraft.network.chat.Component;
 import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.level.Level;
+import net.swedz.redstone_circuitry.RCText;
 import net.swedz.redstone_circuitry.microchip.gate.LogicGate;
 import net.swedz.redstone_circuitry.microchip.gate.LogicGateType;
 import net.swedz.redstone_circuitry.microchip.gate.LogicGates;
 
-public final class ORGate implements LogicGate
+import java.util.List;
+
+import static net.swedz.redstone_circuitry.RCTooltips.*;
+import static net.swedz.tesseract.neoforge.tooltip.TextLine.*;
+
+public final class ORGate implements LogicGate<ORGate>
 {
 	public static final ORGate INSTANCE = new ORGate();
 	
@@ -22,7 +30,7 @@ public final class ORGate implements LogicGate
 	}
 	
 	@Override
-	public LogicGateType type()
+	public LogicGateType<ORGate> type()
 	{
 		return LogicGates.OR;
 	}
@@ -44,6 +52,12 @@ public final class ORGate implements LogicGate
 			}
 		}
 		return false;
+	}
+	
+	@Override
+	public void appendTooltip(Item.TooltipContext context, List<Component> lines)
+	{
+		lines.add(line(RCText.LOGIC_GATE_ALGEBRA).arg(RCText.LOGIC_GATE_ALGEBRA_OR.text().withStyle(DEFAULT_STYLE)).withStyle(DEFAULT_STYLE));
 	}
 	
 	@Override
