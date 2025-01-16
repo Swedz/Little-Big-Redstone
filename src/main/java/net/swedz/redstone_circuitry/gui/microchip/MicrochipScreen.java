@@ -28,8 +28,7 @@ public final class MicrochipScreen extends AbstractContainerScreen<MicrochipMenu
 	public void render(GuiGraphics graphics, int mouseX, int mouseY, float partialTick)
 	{
 		super.render(graphics, mouseX, mouseY, partialTick);
-		
-		// TODO
+		this.renderTooltip(graphics, mouseX, mouseY);
 	}
 	
 	@Override
