@@ -25,5 +25,6 @@ public final class RedstoneCircuitry
 		RCItems.init(bus);
 		RCBlocks.init(bus);
 		RCCreativeTabs.init(bus);
+		RCMenus.init(bus);
 	}
 }
