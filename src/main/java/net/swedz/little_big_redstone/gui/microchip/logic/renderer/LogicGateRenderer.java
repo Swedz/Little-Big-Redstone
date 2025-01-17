@@ -21,8 +21,7 @@ public final class LogicGateRenderer<G extends LogicGate> extends LogicRenderer<
 		x -= ((size.width() - 1) * 16) / 2;
 		y -= ((size.height() - 1) * 16) / 2;
 		
-		this.renderBackground(graphics, BACKGROUND, x, y, size.width(), size.height(), 1, 1, 1);
-		this.renderBackground(graphics, BACKGROUND_OVERLAY, x, y, size.width(), size.height(), 1, 1, 1);
+		this.renderBackground(graphics, x, y, size, 1, 1, 1);
 		
 		int centerX = x + ((size.width() * 16) / 2) - 8;
 		int centerY = y + ((size.height() * 16) / 2) - 8;

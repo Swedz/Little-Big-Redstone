@@ -4,6 +4,7 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.resources.ResourceLocation;
 import net.swedz.little_big_redstone.LBR;
 import net.swedz.little_big_redstone.microchip.logic.Logic;
+import net.swedz.little_big_redstone.microchip.logic.LogicGridSize;
 
 public abstract class LogicRenderer<L extends Logic>
 {
@@ -16,9 +17,12 @@ public abstract class LogicRenderer<L extends Logic>
 	
 	public abstract void render(GuiGraphics graphics, L logic, int x, int y);
 	
-	protected void renderBackground(GuiGraphics graphics, ResourceLocation texture, int x, int y, int width, int height, float red, float green, float blue)
+	protected void renderGridBlock(GuiGraphics graphics, ResourceLocation texture, int x, int y, LogicGridSize size, float red, float green, float blue)
 	{
 		graphics.setColor(red, green, blue, 1);
+		
+		int width = size.width();
+		int height = size.height();
 		
 		if(width == 1 && height == 1)
 		{
@@ -41,5 +45,11 @@ public abstract class LogicRenderer<L extends Logic>
 		}
 		
 		graphics.setColor(1, 1, 1, 1);
+	}
+	
+	protected void renderBackground(GuiGraphics graphics, int x, int y, LogicGridSize size, float red, float green, float blue)
+	{
+		this.renderGridBlock(graphics, BACKGROUND, x, y, size, red, green, blue);
+		this.renderGridBlock(graphics, BACKGROUND_OVERLAY, x, y, size, 1, 1, 1);
 	}
 }
