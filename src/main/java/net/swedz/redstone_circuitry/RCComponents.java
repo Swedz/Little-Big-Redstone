@@ -1,32 +1,31 @@
 package net.swedz.redstone_circuitry;
 
+import com.mojang.serialization.Codec;
 import net.minecraft.core.component.DataComponentType;
 import net.minecraft.core.registries.Registries;
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.codec.StreamCodec;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
-import net.swedz.redstone_circuitry.microchip.gate.LogicGate;
-import net.swedz.redstone_circuitry.microchip.gate.LogicGates;
+import net.swedz.redstone_circuitry.microchip.logic.Logic;
+import net.swedz.redstone_circuitry.microchip.logic.Logics;
 
 import java.util.function.Supplier;
-import java.util.function.UnaryOperator;
 
 public final class RCComponents
 {
 	private static final DeferredRegister.DataComponents COMPONENTS = DeferredRegister.createDataComponents(Registries.DATA_COMPONENT_TYPE, RedstoneCircuitry.ID);
 	
-	public static final Supplier<DataComponentType<LogicGate>> LOGIC_GATE = create(
-			"logic_gate",
-			(b) -> b.persistent(LogicGates.CODEC).networkSynchronized(LogicGates.STREAM_CODEC)
-	);
+	public static final Supplier<DataComponentType<Logic>> LOGIC = create("logic", Logics.CODEC, Logics.STREAM_CODEC);
 	
 	public static void init(IEventBus bus)
 	{
 		COMPONENTS.register(bus);
 	}
 	
-	private static <D> DeferredHolder<DataComponentType<?>, DataComponentType<D>> create(String name, UnaryOperator<DataComponentType.Builder<D>> builder)
+	private static <D> DeferredHolder<DataComponentType<?>, DataComponentType<D>> create(String name, Codec<D> codec, StreamCodec<? super RegistryFriendlyByteBuf, D> streamCodec)
 	{
-		return COMPONENTS.registerComponentType(name, builder);
+		return COMPONENTS.registerComponentType(name, (b) -> b.persistent(codec).networkSynchronized(streamCodec));
 	}
 }

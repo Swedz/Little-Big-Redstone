@@ -4,9 +4,9 @@ import com.google.common.collect.Sets;
 import net.minecraft.world.item.Item;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.registries.DeferredRegister;
-import net.swedz.redstone_circuitry.item.LogicGateItem;
-import net.swedz.redstone_circuitry.microchip.gate.LogicGateType;
-import net.swedz.redstone_circuitry.microchip.gate.LogicGates;
+import net.swedz.redstone_circuitry.item.LogicItem;
+import net.swedz.redstone_circuitry.microchip.logic.LogicType;
+import net.swedz.redstone_circuitry.microchip.logic.Logics;
 import net.swedz.tesseract.neoforge.registry.SortOrder;
 import net.swedz.tesseract.neoforge.registry.common.CommonModelBuilders;
 import net.swedz.tesseract.neoforge.registry.holder.ItemHolder;
@@ -40,7 +40,7 @@ public final class RCItems
 	static
 	{
 		int index = 0;
-		for(LogicGateType<?> gateType : LogicGates.values())
+		for(LogicType<?> gateType : Logics.values())
 		{
 			createGate(gateType.id(), gateType.englishName(), gateType, index++).register();
 		}
@@ -62,8 +62,8 @@ public final class RCItems
 		return holder;
 	}
 	
-	public static ItemHolder<LogicGateItem> createGate(String id, String englishName, LogicGateType<?> type, int order)
+	public static ItemHolder<LogicItem> createGate(String id, String englishName, LogicType<?> type, int order)
 	{
-		return create(id + "_gate", englishName + " Gate", (p) -> new LogicGateItem(p, type), RCSortOrder.LOGIC_GATES.and(order)).withModelBuilder(CommonModelBuilders::generated);
+		return create(id + "_gate", englishName + " Gate", (p) -> new LogicItem(p, type), RCSortOrder.LOGIC_GATES.and(order)).withModelBuilder(CommonModelBuilders::generated);
 	}
 }

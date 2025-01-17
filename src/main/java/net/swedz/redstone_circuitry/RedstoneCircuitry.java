@@ -4,7 +4,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.ModContainer;
 import net.neoforged.fml.common.Mod;
-import net.swedz.redstone_circuitry.microchip.gate.LogicGates;
+import net.swedz.redstone_circuitry.microchip.logic.Logics;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -23,7 +23,7 @@ public final class RedstoneCircuitry
 	
 	public RedstoneCircuitry(IEventBus bus, ModContainer container)
 	{
-		LogicGates.init();
+		Logics.init();
 		
 		RCComponents.init(bus);
 		RCItems.init(bus);

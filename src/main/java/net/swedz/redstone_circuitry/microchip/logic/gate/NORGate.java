@@ -1,4 +1,4 @@
-package net.swedz.redstone_circuitry.microchip.gate.gate;
+package net.swedz.redstone_circuitry.microchip.logic.gate;
 
 import com.mojang.serialization.MapCodec;
 import io.netty.buffer.ByteBuf;
@@ -7,16 +7,16 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.world.level.Level;
 import net.swedz.redstone_circuitry.RCText;
-import net.swedz.redstone_circuitry.microchip.gate.LogicGate;
-import net.swedz.redstone_circuitry.microchip.gate.LogicGateType;
-import net.swedz.redstone_circuitry.microchip.gate.LogicGates;
+import net.swedz.redstone_circuitry.api.IntRange;
+import net.swedz.redstone_circuitry.microchip.logic.LogicType;
+import net.swedz.redstone_circuitry.microchip.logic.Logics;
 
 import java.util.List;
 
 import static net.swedz.redstone_circuitry.RCTooltips.*;
 import static net.swedz.tesseract.neoforge.tooltip.TextLine.*;
 
-public final class NORGate implements LogicGate<NORGate>
+public final class NORGate extends LogicGate<NORGate>
 {
 	public static final NORGate INSTANCE = new NORGate();
 	
@@ -29,19 +29,19 @@ public final class NORGate implements LogicGate<NORGate>
 	}
 	
 	@Override
-	public LogicGateType<NORGate> type()
+	public LogicType<NORGate> type()
 	{
-		return LogicGates.NOR;
+		return Logics.NOR;
 	}
 	
 	@Override
-	public int inputCount()
+	public IntRange inputs()
 	{
-		return 3;
+		return new IntRange(2, 16);
 	}
 	
 	@Override
-	public boolean process(Level level, BlockPos pos, boolean[] inputs)
+	public boolean processInputs(Level level, BlockPos pos, boolean[] inputs)
 	{
 		for(boolean input : inputs)
 		{
