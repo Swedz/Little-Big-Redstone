@@ -10,6 +10,7 @@ import net.minecraft.network.codec.StreamCodec;
 import net.swedz.little_big_redstone.api.IntRange;
 import net.swedz.little_big_redstone.microchip.logic.Logic;
 import net.swedz.little_big_redstone.microchip.logic.LogicContext;
+import net.swedz.little_big_redstone.microchip.logic.LogicGridSize;
 import net.swedz.little_big_redstone.microchip.logic.LogicType;
 import net.swedz.little_big_redstone.microchip.logic.LogicTypes;
 
@@ -156,6 +157,12 @@ public final class LogicSequencer extends Logic<LogicSequencer>
 	public boolean output()
 	{
 		return outputState;
+	}
+	
+	@Override
+	public LogicGridSize size()
+	{
+		return new LogicGridSize(2, 1);
 	}
 	
 	@Override
