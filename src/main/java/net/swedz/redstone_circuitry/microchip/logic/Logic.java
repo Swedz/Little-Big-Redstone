@@ -6,7 +6,7 @@ import net.swedz.tesseract.neoforge.api.Assert;
 
 import java.util.List;
 
-public abstract class Logic<G extends Logic>
+public abstract class Logic<L extends Logic>
 {
 	protected abstract void processTickInternal(LogicContext context, boolean[] inputs);
 	
@@ -17,7 +17,7 @@ public abstract class Logic<G extends Logic>
 		this.processTickInternal(context, inputs);
 	}
 	
-	public abstract LogicType<G> type();
+	public abstract LogicType<L> type();
 	
 	public abstract IntRange inputsAllowed();
 	

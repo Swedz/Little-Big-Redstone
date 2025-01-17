@@ -4,9 +4,9 @@ import com.mojang.serialization.MapCodec;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.network.codec.StreamCodec;
 
-public record LogicType<G extends Logic>(
+public record LogicType<L extends Logic>(
 		String id, String englishName,
-		MapCodec<G> codec, StreamCodec<ByteBuf, G> streamCodec,
+		MapCodec<L> codec, StreamCodec<ByteBuf, L> streamCodec,
 		LogicFactory defaultFactory
 )
 {

@@ -6,7 +6,9 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.item.ItemStack;
+import net.swedz.redstone_circuitry.RCComponents;
 import net.swedz.redstone_circuitry.RedstoneCircuitry;
+import net.swedz.redstone_circuitry.gui.microchip.logic.LogicRenderers;
 import net.swedz.redstone_circuitry.helper.GuiGraphicsHelper;
 
 public final class MicrochipScreen extends AbstractContainerScreen<MicrochipMenu>
@@ -56,9 +58,10 @@ public final class MicrochipScreen extends AbstractContainerScreen<MicrochipMenu
 	@Override
 	public void renderFloatingItem(GuiGraphics graphics, ItemStack stack, int x, int y, String text)
 	{
-		if(this.isWithinBoard(x + 8, y + 8))
+		if(stack.has(RCComponents.LOGIC) && this.isWithinBoard(x + 8, y + 8))
 		{
-			// TODO
+			var logic = stack.get(RCComponents.LOGIC);
+			LogicRenderers.render(graphics, logic, x, y);
 		}
 		else
 		{
