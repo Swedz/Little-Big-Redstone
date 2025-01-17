@@ -9,6 +9,14 @@ repositories {
 			includeGroup "net.swedz"
 		}
 	}
+	maven {
+		name = "TerraformersMC"
+		url = "https://maven.terraformersmc.com/releases/"
+		content {
+			// EMI
+			includeGroup "dev.emi"
+		}
+	}
 }
 
 dependencies {
@@ -20,4 +28,10 @@ dependencies {
 	}
 
 	implementation "net.swedz:tesseract-api-neoforge:${tesseract_version}"
+
+	if (project.runtime_include_emi.toBoolean()) {
+		localImplementation "dev.emi:emi-neoforge:${emi_version}"
+	} else {
+		compileOnly "dev.emi:emi-neoforge:${emi_version}"
+	}
 }
