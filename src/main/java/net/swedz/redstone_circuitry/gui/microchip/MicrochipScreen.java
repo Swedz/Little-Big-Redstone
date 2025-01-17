@@ -3,11 +3,19 @@ package net.swedz.redstone_circuitry.gui.microchip;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
 import net.swedz.redstone_circuitry.RedstoneCircuitry;
+import net.swedz.redstone_circuitry.helper.GuiGraphicsHelper;
 
 public final class MicrochipScreen extends AbstractContainerScreen<MicrochipMenu>
 {
+	private static final ResourceLocation SHADOW_HOVER_OVERLAY = RedstoneCircuitry.id("textures/gui/container/microchip_shadow_hover_overlay.png");
+	private static final ResourceLocation CIRCUIT_BACKGROUND   = RedstoneCircuitry.id("textures/gui/container/microchip_circuit_background.png");
+	private static final ResourceLocation INVENTORY_BACKGROUND = RedstoneCircuitry.id("textures/gui/container/microchip_inventory_background.png");
+	
+	private static final int VERTICAL_PADDING = 12;
+	
 	public MicrochipScreen(MicrochipMenu menu, Inventory playerInventory, Component title)
 	{
 		super(menu, playerInventory, title);
@@ -16,12 +24,24 @@ public final class MicrochipScreen extends AbstractContainerScreen<MicrochipMenu
 		imageHeight = 256;
 	}
 	
-	@Override
-	protected void init()
+	private int toLocalX(int x)
 	{
-		super.init();
-		
-		// TODO
+		return x - leftPos;
+	}
+	
+	private int toLocalY(int y)
+	{
+		return y - topPos;
+	}
+	
+	private int toBoardX(int x)
+	{
+		return this.toLocalX(x);
+	}
+	
+	private int toBoardY(int y)
+	{
+		return this.toLocalY(y) - VERTICAL_PADDING;
 	}
 	
 	@Override
@@ -34,29 +54,27 @@ public final class MicrochipScreen extends AbstractContainerScreen<MicrochipMenu
 	@Override
 	protected void renderLabels(GuiGraphics graphics, int mouseX, int mouseY)
 	{
+		// Dont render the "Microchip" and "Inventory" labels
+	}
+	
+	private void renderShadowBg(GuiGraphics graphics, int mouseX, int mouseY, int x, int y, int width, int height, int padding)
+	{
+		for(int p = padding; p >= 1; p--)
+		{
+			graphics.fill(x - p, y - p, x + width + p, y + height + p, 0x40000000);
+		}
+		
+		graphics.enableScissor(x - padding + leftPos, y - padding + topPos, x + width + padding + leftPos, y + height + padding + topPos);
+		GuiGraphicsHelper.blit(graphics, SHADOW_HOVER_OVERLAY, this.toLocalX(mouseX) - 64, this.toLocalY(mouseY) - 64, 128, 128, 0, 0, 64, 64, 64, 64, 1, 1, 1, 0.11f);
+		graphics.disableScissor();
 	}
 	
 	private void renderCircuitBg(GuiGraphics graphics, float partialTicks, int mouseX, int mouseY, int originX, int originY, int boardWidth, int boardHeight)
 	{
+		this.renderShadowBg(graphics, mouseX, mouseY, originX, originY, boardWidth, boardHeight, 3);
+		
 		graphics.setColor(1, 0.5f, 0.5f, 1);
-		
-		int blockSize = 64;
-		
-		int widthBlocks = boardWidth / blockSize;
-		int heightBlocks = boardHeight / blockSize;
-		
-		for(int column = 0; column <= widthBlocks; column++)
-		{
-			for(int row = 0; row <= heightBlocks; row++)
-			{
-				int x = originX + (column * blockSize);
-				int y = originY + (row * blockSize);
-				int width = column == widthBlocks ? boardWidth % blockSize : blockSize;
-				int height = row == heightBlocks ? boardHeight % blockSize : blockSize;
-				graphics.blit(RedstoneCircuitry.id("textures/gui/container/microchip_background.png"), x, y, 0, 0, width, height, blockSize, blockSize);
-			}
-		}
-		
+		graphics.blit(CIRCUIT_BACKGROUND, originX, originY, 0, 0, boardWidth, boardHeight, 64, 64);
 		graphics.setColor(1, 1, 1, 1);
 	}
 	
@@ -66,9 +84,9 @@ public final class MicrochipScreen extends AbstractContainerScreen<MicrochipMenu
 		graphics.pose().pushPose();
 		graphics.pose().translate(leftPos, topPos, 0);
 		
-		this.renderCircuitBg(graphics, partialTick, mouseX, mouseY, 0, 8 + 4, imageWidth, imageHeight - 90 - 12 - 4 - 12);
+		this.renderCircuitBg(graphics, partialTick, mouseX, mouseY, 0, VERTICAL_PADDING, imageWidth, imageHeight - 90 - VERTICAL_PADDING - 4 - VERTICAL_PADDING);
 		
-		graphics.blit(RedstoneCircuitry.id("textures/gui/container/microchip_bottom.png"), 0, imageHeight - 90 - 12, 0, 0, 256, 90);
+		graphics.blit(INVENTORY_BACKGROUND, 0, imageHeight - 90 - VERTICAL_PADDING, 0, 0, 256, 90);
 		
 		graphics.pose().popPose();
 	}
