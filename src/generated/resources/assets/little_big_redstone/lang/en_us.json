@@ -1,0 +1,18 @@
+{
+  "block.little_big_redstone.microchip": "Microchip",
+  "item.little_big_redstone.and_gate": "AND Gate",
+  "item.little_big_redstone.nand_gate": "NAND Gate",
+  "item.little_big_redstone.nor_gate": "NOR Gate",
+  "item.little_big_redstone.not_gate": "NOT Gate",
+  "item.little_big_redstone.or_gate": "OR Gate",
+  "item.little_big_redstone.sequencer": "Sequencer",
+  "item.little_big_redstone.xor_gate": "XOR Gate",
+  "itemGroup.little_big_redstone.little_big_redstone": "Little Big Redstone",
+  "text.little_big_redstone.logic_gate_algebra": "Q = %s",
+  "text.little_big_redstone.logic_gate_algebra_and": "A ∧ B ∧ C",
+  "text.little_big_redstone.logic_gate_algebra_nand": "A ↑ B ↑ C",
+  "text.little_big_redstone.logic_gate_algebra_nor": "A ↓ B ↓ C",
+  "text.little_big_redstone.logic_gate_algebra_not": "¬A",
+  "text.little_big_redstone.logic_gate_algebra_or": "A ∨ B ∨ C",
+  "text.little_big_redstone.logic_gate_algebra_xor": "A ⊻ B ⊻ C"
+}
