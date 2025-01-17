@@ -10,9 +10,9 @@ import net.swedz.redstone_circuitry.helper.GuiGraphicsHelper;
 
 public final class MicrochipScreen extends AbstractContainerScreen<MicrochipMenu>
 {
-	private static final ResourceLocation SHADOW_HOVER_OVERLAY = RedstoneCircuitry.id("textures/gui/container/microchip_shadow_hover_overlay.png");
-	private static final ResourceLocation CIRCUIT_BACKGROUND   = RedstoneCircuitry.id("textures/gui/container/microchip_circuit_background.png");
-	private static final ResourceLocation INVENTORY_BACKGROUND = RedstoneCircuitry.id("textures/gui/container/microchip_inventory_background.png");
+	private static final ResourceLocation SHADOW_HOVER_OVERLAY = RedstoneCircuitry.id("textures/gui/container/microchip/shadow_hover_overlay.png");
+	private static final ResourceLocation CIRCUIT_BACKGROUND   = RedstoneCircuitry.id("textures/gui/container/microchip/circuit_background.png");
+	private static final ResourceLocation INVENTORY_BACKGROUND = RedstoneCircuitry.id("textures/gui/container/microchip/inventory_background.png");
 	
 	private static final int VERTICAL_PADDING = 12;
 	
