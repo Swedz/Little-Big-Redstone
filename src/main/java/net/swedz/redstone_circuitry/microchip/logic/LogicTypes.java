@@ -15,23 +15,33 @@ import net.swedz.redstone_circuitry.microchip.logic.gate.NORGate;
 import net.swedz.redstone_circuitry.microchip.logic.gate.NOTGate;
 import net.swedz.redstone_circuitry.microchip.logic.gate.ORGate;
 import net.swedz.redstone_circuitry.microchip.logic.gate.XORGate;
+import net.swedz.redstone_circuitry.microchip.logic.sequencer.LogicSequencer;
 
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
-public final class Logics
+public final class LogicTypes
 {
 	private static final List<LogicType<?>>        LOGICS     = Lists.newArrayList();
 	private static final Map<String, LogicType<?>> LOGICS_MAP = Maps.newHashMap();
 	
 	public static final Codec<Logic> CODEC = Codec.STRING
-			.comapFlatMap(Logics::getMaybe, LogicType::id)
+			.comapFlatMap(LogicTypes::getMaybe, LogicType::id)
 			.dispatch(Logic::type, LogicType::codec);
 	
 	public static final StreamCodec<ByteBuf, Logic> STREAM_CODEC = ByteBufCodecs.STRING_UTF8
-			.map(Logics::get, LogicType::id)
+			.map(LogicTypes::get, LogicType::id)
 			.dispatch(Logic::type, LogicType::streamCodec);
+	
+	public static final LogicType<NOTGate>  NOT  = registerGate("not", "NOT", NOTGate.CODEC, NOTGate.STREAM_CODEC, () -> NOTGate.DEFAULT);
+	public static final LogicType<ANDGate>  AND  = registerGate("and", "AND", ANDGate.CODEC, ANDGate.STREAM_CODEC, () -> ANDGate.DEFAULT);
+	public static final LogicType<NANDGate> NAND = registerGate("nand", "NAND", NANDGate.CODEC, NANDGate.STREAM_CODEC, () -> NANDGate.DEFAULT);
+	public static final LogicType<ORGate>   OR   = registerGate("or", "OR", ORGate.CODEC, ORGate.STREAM_CODEC, () -> ORGate.DEFAULT);
+	public static final LogicType<NORGate>  NOR  = registerGate("nor", "NOR", NORGate.CODEC, NORGate.STREAM_CODEC, () -> NORGate.DEFAULT);
+	public static final LogicType<XORGate>  XOR  = registerGate("xor", "XOR", XORGate.CODEC, XORGate.STREAM_CODEC, () -> XORGate.DEFAULT);
+	
+	public static final LogicType<LogicSequencer> SEQUENCER = register("sequencer", "Sequencer", LogicSequencer.CODEC, LogicSequencer.STREAM_CODEC, () -> LogicSequencer.DEFAULT);
 	
 	public static List<LogicType<?>> values()
 	{
@@ -41,7 +51,7 @@ public final class Logics
 	private static DataResult<LogicType<?>> getMaybe(String id)
 	{
 		var type = LOGICS_MAP.get(id);
-		return type == null ? DataResult.error(() -> "No logic gizmo exists for the id %s".formatted(id)) : DataResult.success(type);
+		return type == null ? DataResult.error(() -> "No logic type exists for the id %s".formatted(id)) : DataResult.success(type);
 	}
 	
 	public static LogicType<?> get(String id)
@@ -49,7 +59,7 @@ public final class Logics
 		return getMaybe(id).getOrThrow(IllegalArgumentException::new);
 	}
 	
-	private static <T extends LogicGate> LogicType<T> register(
+	private static <T extends Logic> LogicType<T> register(
 			String id, String englishName,
 			MapCodec<T> codec, StreamCodec<ByteBuf, T> streamCodec,
 			LogicFactory defaultFactory
@@ -61,12 +71,14 @@ public final class Logics
 		return type;
 	}
 	
-	public static final LogicType<NOTGate>  NOT  = register("not", "NOT", NOTGate.CODEC, NOTGate.STREAM_CODEC, () -> NOTGate.INSTANCE);
-	public static final LogicType<ANDGate>  AND  = register("and", "AND", ANDGate.CODEC, ANDGate.STREAM_CODEC, () -> ANDGate.INSTANCE);
-	public static final LogicType<NANDGate> NAND = register("nand", "NAND", NANDGate.CODEC, NANDGate.STREAM_CODEC, () -> NANDGate.INSTANCE);
-	public static final LogicType<ORGate>   OR   = register("or", "OR", ORGate.CODEC, ORGate.STREAM_CODEC, () -> ORGate.INSTANCE);
-	public static final LogicType<NORGate>  NOR  = register("nor", "NOR", NORGate.CODEC, NORGate.STREAM_CODEC, () -> NORGate.INSTANCE);
-	public static final LogicType<XORGate>  XOR  = register("xor", "XOR", XORGate.CODEC, XORGate.STREAM_CODEC, () -> XORGate.INSTANCE);
+	private static <T extends LogicGate> LogicType<T> registerGate(
+			String id, String englishName,
+			MapCodec<T> codec, StreamCodec<ByteBuf, T> streamCodec,
+			LogicFactory defaultFactory
+	)
+	{
+		return register(id + "_gate", englishName + " Gate", codec, streamCodec, defaultFactory);
+	}
 	
 	public static void init()
 	{

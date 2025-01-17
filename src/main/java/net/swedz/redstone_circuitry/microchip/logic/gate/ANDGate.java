@@ -2,14 +2,13 @@ package net.swedz.redstone_circuitry.microchip.logic.gate;
 
 import com.mojang.serialization.MapCodec;
 import io.netty.buffer.ByteBuf;
-import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.codec.StreamCodec;
-import net.minecraft.world.level.Level;
 import net.swedz.redstone_circuitry.RCText;
 import net.swedz.redstone_circuitry.api.IntRange;
+import net.swedz.redstone_circuitry.microchip.logic.LogicContext;
 import net.swedz.redstone_circuitry.microchip.logic.LogicType;
-import net.swedz.redstone_circuitry.microchip.logic.Logics;
+import net.swedz.redstone_circuitry.microchip.logic.LogicTypes;
 
 import java.util.List;
 
@@ -18,30 +17,36 @@ import static net.swedz.tesseract.neoforge.tooltip.TextLine.*;
 
 public final class ANDGate extends LogicGate<ANDGate>
 {
-	public static final ANDGate INSTANCE = new ANDGate();
+	public static final ANDGate DEFAULT = new ANDGate(false);
 	
-	public static final MapCodec<ANDGate> CODEC = MapCodec.unit(INSTANCE);
+	public static final MapCodec<ANDGate> CODEC = mapCodec(ANDGate::new);
 	
-	public static final StreamCodec<ByteBuf, ANDGate> STREAM_CODEC = StreamCodec.unit(INSTANCE);
+	public static final StreamCodec<ByteBuf, ANDGate> STREAM_CODEC = streamCodec(ANDGate::new);
 	
-	private ANDGate()
+	private ANDGate(int inputs, boolean outputState)
 	{
+		super(inputs, outputState);
+	}
+	
+	private ANDGate(boolean outputState)
+	{
+		super(outputState);
 	}
 	
 	@Override
 	public LogicType<ANDGate> type()
 	{
-		return Logics.AND;
+		return LogicTypes.AND;
 	}
 	
 	@Override
-	public IntRange inputs()
+	public IntRange inputsAllowed()
 	{
 		return new IntRange(2, 16);
 	}
 	
 	@Override
-	public boolean processInputs(Level level, BlockPos pos, boolean[] inputs)
+	public boolean processInputs(LogicContext context, boolean[] inputs)
 	{
 		for(boolean input : inputs)
 		{

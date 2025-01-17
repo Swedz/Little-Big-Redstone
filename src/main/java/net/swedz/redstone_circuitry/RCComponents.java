@@ -9,7 +9,7 @@ import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import net.swedz.redstone_circuitry.microchip.logic.Logic;
-import net.swedz.redstone_circuitry.microchip.logic.Logics;
+import net.swedz.redstone_circuitry.microchip.logic.LogicTypes;
 
 import java.util.function.Supplier;
 
@@ -17,7 +17,7 @@ public final class RCComponents
 {
 	private static final DeferredRegister.DataComponents COMPONENTS = DeferredRegister.createDataComponents(Registries.DATA_COMPONENT_TYPE, RedstoneCircuitry.ID);
 	
-	public static final Supplier<DataComponentType<Logic>> LOGIC = create("logic", Logics.CODEC, Logics.STREAM_CODEC);
+	public static final Supplier<DataComponentType<Logic>> LOGIC = create("logic", LogicTypes.CODEC, LogicTypes.STREAM_CODEC);
 	
 	public static void init(IEventBus bus)
 	{

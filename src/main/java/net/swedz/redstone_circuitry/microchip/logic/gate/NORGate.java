@@ -8,8 +8,9 @@ import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.world.level.Level;
 import net.swedz.redstone_circuitry.RCText;
 import net.swedz.redstone_circuitry.api.IntRange;
+import net.swedz.redstone_circuitry.microchip.logic.LogicContext;
 import net.swedz.redstone_circuitry.microchip.logic.LogicType;
-import net.swedz.redstone_circuitry.microchip.logic.Logics;
+import net.swedz.redstone_circuitry.microchip.logic.LogicTypes;
 
 import java.util.List;
 
@@ -18,30 +19,36 @@ import static net.swedz.tesseract.neoforge.tooltip.TextLine.*;
 
 public final class NORGate extends LogicGate<NORGate>
 {
-	public static final NORGate INSTANCE = new NORGate();
+	public static final NORGate DEFAULT = new NORGate(false);
 	
-	public static final MapCodec<NORGate> CODEC = MapCodec.unit(INSTANCE);
+	public static final MapCodec<NORGate> CODEC = mapCodec(NORGate::new);
 	
-	public static final StreamCodec<ByteBuf, NORGate> STREAM_CODEC = StreamCodec.unit(INSTANCE);
+	public static final StreamCodec<ByteBuf, NORGate> STREAM_CODEC = streamCodec(NORGate::new);
 	
-	private NORGate()
+	private NORGate(int inputs, boolean outputState)
 	{
+		super(inputs, outputState);
+	}
+	
+	private NORGate(boolean outputState)
+	{
+		super(outputState);
 	}
 	
 	@Override
 	public LogicType<NORGate> type()
 	{
-		return Logics.NOR;
+		return LogicTypes.NOR;
 	}
 	
 	@Override
-	public IntRange inputs()
+	public IntRange inputsAllowed()
 	{
 		return new IntRange(2, 16);
 	}
 	
 	@Override
-	public boolean processInputs(Level level, BlockPos pos, boolean[] inputs)
+	public boolean processInputs(LogicContext context, boolean[] inputs)
 	{
 		for(boolean input : inputs)
 		{

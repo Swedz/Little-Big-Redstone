@@ -2,14 +2,13 @@ package net.swedz.redstone_circuitry.microchip.logic.gate;
 
 import com.mojang.serialization.MapCodec;
 import io.netty.buffer.ByteBuf;
-import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.codec.StreamCodec;
-import net.minecraft.world.level.Level;
 import net.swedz.redstone_circuitry.RCText;
 import net.swedz.redstone_circuitry.api.IntRange;
+import net.swedz.redstone_circuitry.microchip.logic.LogicContext;
 import net.swedz.redstone_circuitry.microchip.logic.LogicType;
-import net.swedz.redstone_circuitry.microchip.logic.Logics;
+import net.swedz.redstone_circuitry.microchip.logic.LogicTypes;
 
 import java.util.List;
 
@@ -18,30 +17,31 @@ import static net.swedz.tesseract.neoforge.tooltip.TextLine.*;
 
 public final class NOTGate extends LogicGate<NOTGate>
 {
-	public static final NOTGate INSTANCE = new NOTGate();
+	public static final NOTGate DEFAULT = new NOTGate(false);
 	
-	public static final MapCodec<NOTGate> CODEC = MapCodec.unit(INSTANCE);
+	public static final MapCodec<NOTGate> CODEC = singleInputMapCodec(NOTGate::new);
 	
-	public static final StreamCodec<ByteBuf, NOTGate> STREAM_CODEC = StreamCodec.unit(INSTANCE);
+	public static final StreamCodec<ByteBuf, NOTGate> STREAM_CODEC = singleInputStreamCodec(NOTGate::new);
 	
-	private NOTGate()
+	private NOTGate(boolean outputState)
 	{
+		super(outputState);
 	}
 	
 	@Override
 	public LogicType<NOTGate> type()
 	{
-		return Logics.NOT;
+		return LogicTypes.NOT;
 	}
 	
 	@Override
-	public IntRange inputs()
+	public IntRange inputsAllowed()
 	{
 		return new IntRange(1, 1);
 	}
 	
 	@Override
-	public boolean processInputs(Level level, BlockPos pos, boolean[] inputs)
+	public boolean processInputs(LogicContext context, boolean[] inputs)
 	{
 		return !inputs[0];
 	}

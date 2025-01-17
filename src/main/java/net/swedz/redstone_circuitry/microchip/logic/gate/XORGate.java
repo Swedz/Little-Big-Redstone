@@ -2,14 +2,13 @@ package net.swedz.redstone_circuitry.microchip.logic.gate;
 
 import com.mojang.serialization.MapCodec;
 import io.netty.buffer.ByteBuf;
-import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.codec.StreamCodec;
-import net.minecraft.world.level.Level;
 import net.swedz.redstone_circuitry.RCText;
 import net.swedz.redstone_circuitry.api.IntRange;
+import net.swedz.redstone_circuitry.microchip.logic.LogicContext;
 import net.swedz.redstone_circuitry.microchip.logic.LogicType;
-import net.swedz.redstone_circuitry.microchip.logic.Logics;
+import net.swedz.redstone_circuitry.microchip.logic.LogicTypes;
 
 import java.util.List;
 
@@ -18,30 +17,36 @@ import static net.swedz.tesseract.neoforge.tooltip.TextLine.*;
 
 public final class XORGate extends LogicGate<XORGate>
 {
-	public static final XORGate INSTANCE = new XORGate();
+	public static final XORGate DEFAULT = new XORGate(false);
 	
-	public static final MapCodec<XORGate> CODEC = MapCodec.unit(INSTANCE);
+	public static final MapCodec<XORGate> CODEC = mapCodec(XORGate::new);
 	
-	public static final StreamCodec<ByteBuf, XORGate> STREAM_CODEC = StreamCodec.unit(INSTANCE);
+	public static final StreamCodec<ByteBuf, XORGate> STREAM_CODEC = streamCodec(XORGate::new);
 	
-	private XORGate()
+	private XORGate(int inputs, boolean outputState)
 	{
+		super(inputs, outputState);
+	}
+	
+	private XORGate(boolean outputState)
+	{
+		super(outputState);
 	}
 	
 	@Override
 	public LogicType<XORGate> type()
 	{
-		return Logics.XOR;
+		return LogicTypes.XOR;
 	}
 	
 	@Override
-	public IntRange inputs()
+	public IntRange inputsAllowed()
 	{
 		return new IntRange(2, 16);
 	}
 	
 	@Override
-	public boolean processInputs(Level level, BlockPos pos, boolean[] inputs)
+	public boolean processInputs(LogicContext context, boolean[] inputs)
 	{
 		int trueCount = 0;
 		for(boolean input : inputs)

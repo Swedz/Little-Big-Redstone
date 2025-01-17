@@ -2,16 +2,32 @@ package net.swedz.redstone_circuitry.microchip.logic;
 
 import net.minecraft.network.chat.Component;
 import net.swedz.redstone_circuitry.api.IntRange;
+import net.swedz.tesseract.neoforge.api.Assert;
 
 import java.util.List;
 
 public abstract class Logic<G extends Logic>
 {
+	protected abstract void processTickInternal(LogicContext context, boolean[] inputs);
+	
+	public final void processTick(LogicContext context, boolean[] inputs)
+	{
+		int expectedInputs = this.inputs();
+		Assert.that(expectedInputs == inputs.length, "Mismatching logic gate input sizes: expected %d but got %d".formatted(expectedInputs, inputs.length));
+		this.processTickInternal(context, inputs);
+	}
+	
 	public abstract LogicType<G> type();
 	
-	public abstract IntRange inputs();
+	public abstract IntRange inputsAllowed();
 	
-	public abstract IntRange outputs();
+	public abstract int inputs();
+	
+	public abstract IntRange outputsAllowed();
+	
+	public abstract int outputs();
+	
+	public abstract boolean output(int index);
 	
 	public LogicGridSize size()
 	{
@@ -23,6 +39,10 @@ public abstract class Logic<G extends Logic>
 	}
 	
 	public void appendShiftHoverText(List<Component> lines)
+	{
+	}
+	
+	public void resetForPickup()
 	{
 	}
 }
