@@ -1,6 +1,9 @@
 package net.swedz.little_big_redstone.microchip.logic;
 
+import com.mojang.serialization.Codec;
+import io.netty.buffer.ByteBuf;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.codec.StreamCodec;
 import net.swedz.little_big_redstone.api.IntRange;
 import net.swedz.tesseract.neoforge.api.Assert;
 
@@ -8,6 +11,10 @@ import java.util.List;
 
 public abstract class Logic<L extends Logic>
 {
+	public static final Codec<Logic> CODEC = LogicTypes.CODEC;
+	
+	public static final StreamCodec<ByteBuf, Logic> STREAM_CODEC = LogicTypes.STREAM_CODEC;
+	
 	protected abstract void processTickInternal(LogicContext context, boolean[] inputs);
 	
 	public final void processTick(LogicContext context, boolean[] inputs)

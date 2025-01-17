@@ -9,7 +9,6 @@ import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import net.swedz.little_big_redstone.microchip.logic.Logic;
-import net.swedz.little_big_redstone.microchip.logic.LogicTypes;
 
 import java.util.function.Supplier;
 
@@ -17,7 +16,7 @@ public final class LBRComponents
 {
 	private static final DeferredRegister.DataComponents COMPONENTS = DeferredRegister.createDataComponents(Registries.DATA_COMPONENT_TYPE, LBR.ID);
 	
-	public static final Supplier<DataComponentType<Logic>> LOGIC = create("logic", LogicTypes.CODEC, LogicTypes.STREAM_CODEC);
+	public static final Supplier<DataComponentType<Logic>> LOGIC = create("logic", Logic.CODEC, Logic.STREAM_CODEC);
 	
 	public static void init(IEventBus bus)
 	{

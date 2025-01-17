@@ -26,11 +26,11 @@ public final class LogicTypes
 	private static final List<LogicType<?>>        LOGICS     = Lists.newArrayList();
 	private static final Map<String, LogicType<?>> LOGICS_MAP = Maps.newHashMap();
 	
-	public static final Codec<Logic> CODEC = Codec.STRING
+	static final Codec<Logic> CODEC = Codec.STRING
 			.comapFlatMap(LogicTypes::getMaybe, LogicType::id)
 			.dispatch(Logic::type, LogicType::codec);
 	
-	public static final StreamCodec<ByteBuf, Logic> STREAM_CODEC = ByteBufCodecs.STRING_UTF8
+	static final StreamCodec<ByteBuf, Logic> STREAM_CODEC = ByteBufCodecs.STRING_UTF8
 			.map(LogicTypes::get, LogicType::id)
 			.dispatch(Logic::type, LogicType::streamCodec);
 	
