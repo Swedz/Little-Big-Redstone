@@ -71,6 +71,10 @@ public final class LogicRenderers
 	
 	public static <L extends Logic> void render(GuiGraphics graphics, L logic, int x, int y)
 	{
-		((LogicRenderer<L>) RENDERERS.get(logic.type())).render(graphics, logic, x, y);
+		var renderer = ((LogicRenderer<L>) RENDERERS.get(logic.type()));
+		if(renderer != null)
+		{
+			renderer.render(graphics, logic, x, y);
+		}
 	}
 }
