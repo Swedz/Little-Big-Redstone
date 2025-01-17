@@ -7,10 +7,10 @@ neoForge {
 		}
 	}
 
-	/*validateAccessTransformers = true
+	validateAccessTransformers = true
 	accessTransformers = [
 			"src/main/resources/${mod_id}.accesstransformer.cfg"
-	]*/
+	]
 	//interfaceInjectionData.from "src/main/resources/interfaces.json"
 
 	parchment {

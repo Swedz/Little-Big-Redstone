@@ -5,6 +5,7 @@ import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.item.ItemStack;
 import net.swedz.redstone_circuitry.RedstoneCircuitry;
 import net.swedz.redstone_circuitry.helper.GuiGraphicsHelper;
 
@@ -14,14 +15,19 @@ public final class MicrochipScreen extends AbstractContainerScreen<MicrochipMenu
 	private static final ResourceLocation CIRCUIT_BACKGROUND   = RedstoneCircuitry.id("textures/gui/container/microchip/circuit_background.png");
 	private static final ResourceLocation INVENTORY_BACKGROUND = RedstoneCircuitry.id("textures/gui/container/microchip/inventory_background.png");
 	
-	private static final int VERTICAL_PADDING = 12;
+	private int boardX, boardY, boardWidth, boardHeight;
 	
 	public MicrochipScreen(MicrochipMenu menu, Inventory playerInventory, Component title)
 	{
 		super(menu, playerInventory, title);
 		
 		imageWidth = 256;
-		imageHeight = 256;
+		imageHeight = 256 - (12 * 2);
+		
+		boardX = 0;
+		boardY = 0;
+		boardWidth = imageWidth;
+		boardHeight = imageHeight - 90 - 4;
 	}
 	
 	private int toLocalX(int x)
@@ -34,14 +40,10 @@ public final class MicrochipScreen extends AbstractContainerScreen<MicrochipMenu
 		return y - topPos;
 	}
 	
-	private int toBoardX(int x)
+	private boolean isWithinBoard(int x, int y)
 	{
-		return this.toLocalX(x);
-	}
-	
-	private int toBoardY(int y)
-	{
-		return this.toLocalY(y) - VERTICAL_PADDING;
+		return x >= boardX && x < boardX + boardWidth &&
+			   y >= boardY && y < boardY + boardHeight;
 	}
 	
 	@Override
@@ -49,6 +51,19 @@ public final class MicrochipScreen extends AbstractContainerScreen<MicrochipMenu
 	{
 		super.render(graphics, mouseX, mouseY, partialTick);
 		this.renderTooltip(graphics, mouseX, mouseY);
+	}
+	
+	@Override
+	public void renderFloatingItem(GuiGraphics graphics, ItemStack stack, int x, int y, String text)
+	{
+		if(this.isWithinBoard(x + 8, y + 8))
+		{
+			// TODO
+		}
+		else
+		{
+			super.renderFloatingItem(graphics, stack, x, y, text);
+		}
 	}
 	
 	@Override
@@ -69,12 +84,12 @@ public final class MicrochipScreen extends AbstractContainerScreen<MicrochipMenu
 		graphics.disableScissor();
 	}
 	
-	private void renderCircuitBg(GuiGraphics graphics, float partialTicks, int mouseX, int mouseY, int originX, int originY, int boardWidth, int boardHeight)
+	private void renderCircuitBg(GuiGraphics graphics, float partialTicks, int mouseX, int mouseY)
 	{
-		this.renderShadowBg(graphics, mouseX, mouseY, originX, originY, boardWidth, boardHeight, 3);
+		this.renderShadowBg(graphics, mouseX, mouseY, boardX, boardY, boardWidth, boardHeight, 3);
 		
 		graphics.setColor(1, 0.5f, 0.5f, 1);
-		graphics.blit(CIRCUIT_BACKGROUND, originX, originY, 0, 0, boardWidth, boardHeight, 64, 64);
+		graphics.blit(CIRCUIT_BACKGROUND, boardX, boardY, 0, 0, boardWidth, boardHeight, 64, 64);
 		graphics.setColor(1, 1, 1, 1);
 	}
 	
@@ -84,9 +99,9 @@ public final class MicrochipScreen extends AbstractContainerScreen<MicrochipMenu
 		graphics.pose().pushPose();
 		graphics.pose().translate(leftPos, topPos, 0);
 		
-		this.renderCircuitBg(graphics, partialTick, mouseX, mouseY, 0, VERTICAL_PADDING, imageWidth, imageHeight - 90 - VERTICAL_PADDING - 4 - VERTICAL_PADDING);
+		this.renderCircuitBg(graphics, partialTick, mouseX, mouseY);
 		
-		graphics.blit(INVENTORY_BACKGROUND, 0, imageHeight - 90 - VERTICAL_PADDING, 0, 0, 256, 90);
+		graphics.blit(INVENTORY_BACKGROUND, 0, imageHeight - 90, 0, 0, 256, 90);
 		
 		graphics.pose().popPose();
 	}

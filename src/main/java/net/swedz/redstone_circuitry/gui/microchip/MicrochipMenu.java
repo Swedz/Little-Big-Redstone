@@ -13,7 +13,7 @@ public final class MicrochipMenu extends AbstractContainerMenu
 	{
 		super(RCMenus.MICROCHIP.get(), containerId);
 		
-		this.setupPlayerInventory(playerInventory, 256 - 90 - 12);
+		this.setupPlayerInventory(playerInventory, 256 - 90 - 12 - 12);
 	}
 	
 	private void setupPlayerInventory(Inventory playerInventory, int startY)
