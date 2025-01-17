@@ -52,4 +52,47 @@ public final class GuiGraphicsHelper
 		BufferUploader.drawWithShader(bufferbuilder.buildOrThrow());
 		RenderSystem.disableBlend();
 	}
+	
+	public static void nineSlice(GuiGraphics graphics, ResourceLocation texture, int screenX, int screenY, int screenWidth, int screenHeight, int textureWidth, int textureHeight, int border)
+	{
+		int texCenterWidth = textureWidth - (border * 2);
+		int texCenterHeight = textureHeight - (border * 2);
+		
+		// Corners
+		graphics.blit(texture, screenX, screenY, 0, 0, border, border, textureWidth, textureHeight);
+		graphics.blit(texture, screenX + screenWidth - border, screenY, textureWidth - border, 0, border, border, textureWidth, textureHeight);
+		graphics.blit(texture, screenX, screenY + screenHeight - border, 0, textureHeight - border, border, border, textureWidth, textureHeight);
+		graphics.blit(texture, screenX + screenWidth - border, screenY + screenHeight - border, textureWidth - border, textureHeight - border, border, border, textureWidth, textureHeight);
+		
+		// Edges
+		for(int i = 0; i <= (screenWidth / texCenterWidth); i++)
+		{
+			int x = screenX + border + (i * texCenterWidth);
+			int width = Math.min(texCenterWidth, screenWidth - (i * texCenterWidth) - (border * 2));
+			graphics.blit(texture, x, screenY, border, 0, width, border, textureWidth, textureHeight);
+			graphics.blit(texture, x, screenY + screenHeight - border, border, textureHeight - border, width, border, textureWidth, textureHeight);
+		}
+		for(int i = 0; i <= (screenHeight / texCenterHeight); i++)
+		{
+			int y = screenY + border + (i * texCenterHeight);
+			int height = Math.min(texCenterHeight, screenHeight - (i * texCenterHeight) - (border * 2));
+			graphics.blit(texture, screenX, y, 0, border, border, height, textureWidth, textureHeight);
+			graphics.blit(texture, screenX + screenWidth - border, y, textureWidth - border, border, border, height, textureWidth, textureHeight);
+		}
+		
+		// Center
+		int centerWidth = (screenWidth - (border * 2)) / texCenterWidth;
+		int centerHeight = (screenHeight - (border * 2)) / texCenterHeight;
+		for(int ix = 0; ix <= centerWidth; ix++)
+		{
+			for(int iy = 0; iy <= centerHeight; iy++)
+			{
+				int x = screenX + border + (ix * texCenterWidth);
+				int y = screenY + border + (iy * texCenterHeight);
+				int width = Math.min(texCenterWidth, screenWidth - (ix * texCenterWidth) - (border * 2));
+				int height = Math.min(texCenterHeight, screenHeight - (iy * texCenterHeight) - (border * 2));
+				graphics.blit(texture, x, y, border, border, width, height, textureWidth, textureHeight);
+			}
+		}
+	}
 }

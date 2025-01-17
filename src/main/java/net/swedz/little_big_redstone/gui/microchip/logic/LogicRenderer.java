@@ -3,6 +3,7 @@ package net.swedz.little_big_redstone.gui.microchip.logic;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.resources.ResourceLocation;
 import net.swedz.little_big_redstone.LBR;
+import net.swedz.little_big_redstone.helper.GuiGraphicsHelper;
 import net.swedz.little_big_redstone.microchip.logic.Logic;
 import net.swedz.little_big_redstone.microchip.logic.LogicGridSize;
 
@@ -30,18 +31,7 @@ public abstract class LogicRenderer<L extends Logic>
 		}
 		else
 		{
-			int widthPixels = width * 16;
-			int heightPixels = height * 16;
-			
-			graphics.blit(texture, x, y, 0, 0, 1, 1, 16, 16);
-			graphics.blit(texture, x + widthPixels - 1, y, 15, 0, 1, 1, 16, 16);
-			graphics.blit(texture, x + widthPixels - 1, y + heightPixels - 1, 15, 15, 1, 1, 16, 16);
-			graphics.blit(texture, x, y + heightPixels - 1, 0, 15, 1, 1, 16, 16);
-			
-			graphics.blit(texture, x + 1, y, widthPixels - 2, 15, 1, 0, 14, 15, 16, 16);
-			graphics.blit(texture, x + widthPixels - 15, y + 1, 15, heightPixels - 2, 1, 1, 15, 14, 16, 16);
-			graphics.blit(texture, x + 1, y + heightPixels - 15, widthPixels - 2, 15, 1, 1, 14, 15, 16, 16);
-			graphics.blit(texture, x, y + 1, 15, heightPixels - 2, 0, 1, 15, 14, 16, 16);
+			GuiGraphicsHelper.nineSlice(graphics, texture, x, y, width * 16, height * 16, 16, 16, 3);
 		}
 		
 		graphics.setColor(1, 1, 1, 1);
