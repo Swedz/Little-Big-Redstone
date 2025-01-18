@@ -13,13 +13,13 @@ import net.swedz.little_big_redstone.microchip.logic.LogicContext;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 
-public abstract class LogicGate<G extends LogicGate> extends Logic<G>
+public abstract class LogicGate<G extends LogicGate> extends Logic<G, LogicGateConfig>
 {
-	protected static <G extends LogicGate> MapCodec<G> mapCodec(BiFunction<Integer, Boolean, G> creator)
+	protected static <G extends LogicGate> MapCodec<G> mapCodec(BiFunction<LogicGateConfig, Boolean, G> creator)
 	{
 		return RecordCodecBuilder.mapCodec((instance) -> instance
 				.group(
-						Codec.INT.fieldOf("input_count").forGetter(LogicGate::inputs),
+						LogicGateConfig.CODEC.fieldOf("config").forGetter((gate) -> (LogicGateConfig) gate.config()),
 						Codec.BOOL.fieldOf("output").forGetter(LogicGate::output)
 				)
 				.apply(instance, creator));
@@ -34,10 +34,10 @@ public abstract class LogicGate<G extends LogicGate> extends Logic<G>
 				.apply(instance, creator));
 	}
 	
-	protected static <G extends LogicGate> StreamCodec<ByteBuf, G> streamCodec(BiFunction<Integer, Boolean, G> creator)
+	protected static <G extends LogicGate> StreamCodec<ByteBuf, G> streamCodec(BiFunction<LogicGateConfig, Boolean, G> creator)
 	{
 		return StreamCodec.composite(
-				ByteBufCodecs.VAR_INT, LogicGate::inputs,
+				LogicGateConfig.STREAM_CODEC, (gate) -> (LogicGateConfig) gate.config(),
 				ByteBufCodecs.BOOL, LogicGate::output,
 				creator
 		);
@@ -51,19 +51,18 @@ public abstract class LogicGate<G extends LogicGate> extends Logic<G>
 		);
 	}
 	
-	private int inputs;
-	
 	private boolean outputState;
 	
-	protected LogicGate(int inputs, boolean outputState)
+	protected LogicGate(LogicGateConfig config, boolean outputState)
 	{
-		this.inputs = inputs;
+		super(config);
 		this.outputState = outputState;
 	}
 	
 	protected LogicGate(boolean outputState)
 	{
-		this.inputs = this.inputsAllowed().min();
+		super(new LogicGateConfig(0));
+		this.config.inputs = this.inputsAllowed().min();
 		this.outputState = outputState;
 	}
 	
@@ -85,7 +84,7 @@ public abstract class LogicGate<G extends LogicGate> extends Logic<G>
 	@Override
 	public final int inputs()
 	{
-		return inputs;
+		return config.inputs;
 	}
 	
 	@Override

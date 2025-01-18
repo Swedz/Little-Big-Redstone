@@ -12,6 +12,7 @@ import net.swedz.little_big_redstone.microchip.logic.LogicType;
 import net.swedz.little_big_redstone.microchip.logic.LogicTypes;
 
 import java.util.List;
+import java.util.Objects;
 
 import static net.swedz.little_big_redstone.LBRTooltips.*;
 import static net.swedz.tesseract.neoforge.tooltip.TextLine.*;
@@ -24,9 +25,9 @@ public final class ORGate extends LogicGate<ORGate>
 	
 	public static final StreamCodec<ByteBuf, ORGate> STREAM_CODEC = streamCodec(ORGate::new);
 	
-	private ORGate(int inputs, boolean outputState)
+	private ORGate(LogicGateConfig config, boolean outputState)
 	{
-		super(inputs, outputState);
+		super(config, outputState);
 	}
 	
 	private ORGate(boolean outputState)
@@ -68,18 +69,19 @@ public final class ORGate extends LogicGate<ORGate>
 	@Override
 	public ORGate copy()
 	{
-		return new ORGate(this.inputs(), this.output());
+		return new ORGate(config.copy(), this.output());
 	}
 	
 	@Override
 	public int hashCode()
 	{
-		return this.type().hashCode();
+		return Objects.hash(this.type(), config);
 	}
 	
 	@Override
 	public boolean equals(Object o)
 	{
-		return this == o;
+		return this == o ||
+			   (o instanceof ORGate other && Objects.equals(config, other.config));
 	}
 }

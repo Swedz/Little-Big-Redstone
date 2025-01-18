@@ -12,6 +12,7 @@ import net.swedz.little_big_redstone.microchip.logic.LogicType;
 import net.swedz.little_big_redstone.microchip.logic.LogicTypes;
 
 import java.util.List;
+import java.util.Objects;
 
 import static net.swedz.little_big_redstone.LBRTooltips.*;
 import static net.swedz.tesseract.neoforge.tooltip.TextLine.*;
@@ -24,9 +25,9 @@ public final class ANDGate extends LogicGate<ANDGate>
 	
 	public static final StreamCodec<ByteBuf, ANDGate> STREAM_CODEC = streamCodec(ANDGate::new);
 	
-	private ANDGate(int inputs, boolean outputState)
+	private ANDGate(LogicGateConfig config, boolean outputState)
 	{
-		super(inputs, outputState);
+		super(config, outputState);
 	}
 	
 	private ANDGate(boolean outputState)
@@ -68,18 +69,19 @@ public final class ANDGate extends LogicGate<ANDGate>
 	@Override
 	public ANDGate copy()
 	{
-		return new ANDGate(this.inputs(), this.output());
+		return new ANDGate(config.copy(), this.output());
 	}
 	
 	@Override
 	public int hashCode()
 	{
-		return this.type().hashCode();
+		return Objects.hash(this.type(), config);
 	}
 	
 	@Override
 	public boolean equals(Object o)
 	{
-		return this == o;
+		return this == o ||
+			   (o instanceof ANDGate other && Objects.equals(config, other.config));
 	}
 }

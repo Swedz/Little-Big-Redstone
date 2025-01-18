@@ -41,7 +41,7 @@ public final class LogicTypes
 	public static final LogicType<NORGate>  NOR  = registerGate("nor", "NOR", NORGate.CODEC, NORGate.STREAM_CODEC, NORGate.DEFAULT);
 	public static final LogicType<XORGate>  XOR  = registerGate("xor", "XOR", XORGate.CODEC, XORGate.STREAM_CODEC, XORGate.DEFAULT);
 	
-	public static final LogicType<LogicSequencer> SEQUENCER = register("sequencer", "Sequencer", LogicSequencer.CODEC, LogicSequencer.STREAM_CODEC, () -> LogicSequencer.DEFAULT);
+	public static final LogicType<LogicSequencer> SEQUENCER = register("sequencer", "Sequencer", LogicSequencer.CODEC, LogicSequencer.STREAM_CODEC, LogicSequencer.DEFAULT);
 	
 	public static List<LogicType<?>> values()
 	{

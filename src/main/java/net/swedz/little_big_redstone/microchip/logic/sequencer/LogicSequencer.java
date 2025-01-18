@@ -10,61 +10,39 @@ import net.minecraft.network.codec.StreamCodec;
 import net.swedz.little_big_redstone.api.IntRange;
 import net.swedz.little_big_redstone.microchip.logic.Logic;
 import net.swedz.little_big_redstone.microchip.logic.LogicContext;
+import net.swedz.little_big_redstone.microchip.logic.LogicFactory;
 import net.swedz.little_big_redstone.microchip.logic.LogicGridSize;
 import net.swedz.little_big_redstone.microchip.logic.LogicType;
 import net.swedz.little_big_redstone.microchip.logic.LogicTypes;
 
-public final class LogicSequencer extends Logic<LogicSequencer>
+public final class LogicSequencer extends Logic<LogicSequencer, LogicSequencerConfig>
 {
-	public static final LogicSequencer DEFAULT = new LogicSequencer(20, 0, false, 0, false);
+	public static final LogicFactory DEFAULT = () -> new LogicSequencer(new LogicSequencerConfig(20, 0, false), 0, false);
 	
 	public static final MapCodec<LogicSequencer> CODEC = RecordCodecBuilder.mapCodec((instance) -> instance
 			.group(
-					Codec.LONG.fieldOf("delay").forGetter(LogicSequencer::delay),
-					Codec.LONG.fieldOf("duration").forGetter(LogicSequencer::duration),
-					Codec.BOOL.fieldOf("requires_continuous_power").forGetter(LogicSequencer::requiresContinuousPower),
+					LogicSequencerConfig.CODEC.fieldOf("config").forGetter(LogicSequencer::config),
 					Codec.LONG.fieldOf("processed_ticks").forGetter(LogicSequencer::processedTicks),
 					Codec.BOOL.fieldOf("output").forGetter(LogicSequencer::output)
 			)
 			.apply(instance, LogicSequencer::new));
 	
 	public static final StreamCodec<ByteBuf, LogicSequencer> STREAM_CODEC = StreamCodec.composite(
-			ByteBufCodecs.VAR_LONG, LogicSequencer::delay,
-			ByteBufCodecs.VAR_LONG, LogicSequencer::duration,
-			ByteBufCodecs.BOOL, LogicSequencer::requiresContinuousPower,
+			LogicSequencerConfig.STREAM_CODEC, LogicSequencer::config,
 			ByteBufCodecs.VAR_LONG, LogicSequencer::processedTicks,
 			ByteBufCodecs.BOOL, LogicSequencer::output,
 			LogicSequencer::new
 	);
 	
-	private long outputDelay, outputDuration;
-	private boolean requiresContinuousPower;
-	
 	private long processedTicks;
+	
 	private boolean outputState;
 	
-	private LogicSequencer(long outputDelay, long outputDuration, boolean requiresContinuousPower, long processedTicks, boolean outputState)
+	private LogicSequencer(LogicSequencerConfig config, long processedTicks, boolean outputState)
 	{
-		this.outputDelay = outputDelay;
-		this.outputDuration = outputDuration;
-		this.requiresContinuousPower = requiresContinuousPower;
+		super(config);
 		this.processedTicks = processedTicks;
 		this.outputState = outputState;
-	}
-	
-	public long delay()
-	{
-		return outputDelay;
-	}
-	
-	public long duration()
-	{
-		return outputDuration;
-	}
-	
-	public boolean requiresContinuousPower()
-	{
-		return requiresContinuousPower;
 	}
 	
 	public long processedTicks()
@@ -74,7 +52,7 @@ public final class LogicSequencer extends Logic<LogicSequencer>
 	
 	public float processedPercentage()
 	{
-		return Math.min((float) processedTicks / (float) outputDelay, 1);
+		return Math.min((float) processedTicks / (float) config.outputDelay, 1);
 	}
 	
 	@Override
@@ -84,7 +62,7 @@ public final class LogicSequencer extends Logic<LogicSequencer>
 		boolean input = inputs[0];
 		boolean output = false;
 		
-		if(requiresContinuousPower)
+		if(config.requiresContinuousPower)
 		{
 			if(input)
 			{
@@ -100,11 +78,11 @@ public final class LogicSequencer extends Logic<LogicSequencer>
 			processedTicks++;
 		}
 		
-		if(processedTicks >= outputDelay)
+		if(processedTicks >= config.outputDelay)
 		{
 			output = true;
 			
-			if(processedTicks > outputDelay + outputDuration)
+			if(processedTicks > config.outputDelay + config.outputDuration)
 			{
 				processedTicks = 0;
 				output = false;
@@ -175,19 +153,19 @@ public final class LogicSequencer extends Logic<LogicSequencer>
 	@Override
 	public LogicSequencer copy()
 	{
-		return new LogicSequencer(outputDelay, outputDuration, requiresContinuousPower, processedTicks, outputState);
+		return new LogicSequencer(config.copy(), processedTicks, outputState);
 	}
 	
 	@Override
 	public int hashCode()
 	{
-		return Objects.hashCode(outputDelay, processedTicks);
+		return Objects.hashCode(config, processedTicks);
 	}
 	
 	@Override
 	public boolean equals(Object o)
 	{
 		return this == o ||
-			   (o instanceof LogicSequencer other && outputDelay == other.outputDelay && processedTicks == other.processedTicks);
+			   (o instanceof LogicSequencer other && Objects.equal(config, other.config) && processedTicks == other.processedTicks);
 	}
 }

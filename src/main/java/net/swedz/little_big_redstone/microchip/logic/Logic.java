@@ -9,11 +9,23 @@ import net.swedz.tesseract.neoforge.api.Assert;
 
 import java.util.List;
 
-public abstract class Logic<L extends Logic>
+public abstract class Logic<L extends Logic, C extends LogicConfig>
 {
 	public static final Codec<Logic> CODEC = LogicTypes.CODEC;
 	
 	public static final StreamCodec<ByteBuf, Logic> STREAM_CODEC = LogicTypes.STREAM_CODEC;
+	
+	protected final C config;
+	
+	protected Logic(C config)
+	{
+		this.config = config;
+	}
+	
+	public C config()
+	{
+		return config;
+	}
 	
 	protected abstract void processTickInternal(LogicContext context, boolean[] inputs);
 	

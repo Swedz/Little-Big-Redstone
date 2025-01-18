@@ -12,6 +12,7 @@ import net.swedz.little_big_redstone.microchip.logic.LogicType;
 import net.swedz.little_big_redstone.microchip.logic.LogicTypes;
 
 import java.util.List;
+import java.util.Objects;
 
 import static net.swedz.little_big_redstone.LBRTooltips.*;
 import static net.swedz.tesseract.neoforge.tooltip.TextLine.*;
@@ -24,9 +25,9 @@ public final class XORGate extends LogicGate<XORGate>
 	
 	public static final StreamCodec<ByteBuf, XORGate> STREAM_CODEC = streamCodec(XORGate::new);
 	
-	private XORGate(int inputs, boolean outputState)
+	private XORGate(LogicGateConfig config, boolean outputState)
 	{
-		super(inputs, outputState);
+		super(config, outputState);
 	}
 	
 	private XORGate(boolean outputState)
@@ -69,18 +70,19 @@ public final class XORGate extends LogicGate<XORGate>
 	@Override
 	public XORGate copy()
 	{
-		return new XORGate(this.inputs(), this.output());
+		return new XORGate(config.copy(), this.output());
 	}
 	
 	@Override
 	public int hashCode()
 	{
-		return this.type().hashCode();
+		return Objects.hash(this.type(), config);
 	}
 	
 	@Override
 	public boolean equals(Object o)
 	{
-		return this == o;
+		return this == o ||
+			   (o instanceof XORGate other && Objects.equals(config, other.config));
 	}
 }
