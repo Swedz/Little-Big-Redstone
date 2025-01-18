@@ -2,15 +2,15 @@ package net.swedz.little_big_redstone.microchip.logic;
 
 public final class LogicContext
 {
-	private boolean changed;
+	private boolean dirty;
 	
-	public boolean changed()
+	public boolean isDirty()
 	{
-		return changed;
+		return dirty;
 	}
 	
-	public void flagChanged()
+	public void markDirty()
 	{
-		changed = true;
+		dirty = true;
 	}
 }

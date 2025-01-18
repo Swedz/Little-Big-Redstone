@@ -93,7 +93,7 @@ public final class LogicSequencer extends Logic<LogicSequencer, LogicSequencerCo
 		outputState = output;
 		if(originalProcessedTicks != processedTicks || output != originalOutput)
 		{
-			context.flagChanged();
+			context.markDirty();
 		}
 	}
 	

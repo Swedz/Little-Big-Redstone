@@ -77,7 +77,7 @@ public abstract class LogicGate<G extends LogicGate> extends Logic<G, LogicGateC
 		outputState = this.processInputs(context, inputs);
 		if(outputState != originalOutput)
 		{
-			context.flagChanged();
+			context.markDirty();
 		}
 	}
 	
