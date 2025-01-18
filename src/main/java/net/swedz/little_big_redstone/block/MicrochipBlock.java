@@ -10,6 +10,7 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.swedz.little_big_redstone.blockentity.MicrochipBlockEntity;
+import net.swedz.little_big_redstone.microchip.Microchip;
 
 public final class MicrochipBlock extends Block implements EntityBlock
 {
@@ -32,7 +33,11 @@ public final class MicrochipBlock extends Block implements EntityBlock
 			BlockEntity blockEntity = level.getBlockEntity(pos);
 			if(blockEntity instanceof MicrochipBlockEntity microchipBlockEntity)
 			{
-				player.openMenu(microchipBlockEntity);
+				player.openMenu(microchipBlockEntity, (buf) ->
+				{
+					buf.writeBlockPos(pos);
+					Microchip.STREAM_CODEC.encode(buf, microchipBlockEntity.microchip());
+				});
 			}
 			return InteractionResult.CONSUME;
 		}

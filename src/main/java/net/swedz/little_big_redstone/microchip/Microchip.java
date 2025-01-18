@@ -2,8 +2,11 @@ package net.swedz.little_big_redstone.microchip;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import io.netty.buffer.ByteBuf;
+import net.minecraft.network.codec.ByteBufCodecs;
+import net.minecraft.network.codec.StreamCodec;
+import net.swedz.little_big_redstone.LBR;
 import net.swedz.little_big_redstone.microchip.logic.Logic;
-import net.swedz.tesseract.neoforge.api.Assert;
 
 import java.util.Arrays;
 import java.util.List;
@@ -19,12 +22,30 @@ public final class Microchip
 			)
 			.apply(instance, Microchip::new));
 	
+	public static final StreamCodec<ByteBuf, Microchip> STREAM_CODEC = StreamCodec.composite(
+			LogicIndex.STREAM_CODEC.apply(ByteBufCodecs.list(MAX_SIZE)),
+			Microchip::values,
+			Microchip::new
+	);
+	
 	private final LogicIndex[] logics = new LogicIndex[MAX_SIZE];
 	
 	private Microchip(List<LogicIndex> logics)
 	{
-		Assert.that(logics.size() == this.logics.length);
-		System.arraycopy(logics.toArray(LogicIndex[]::new), 0, this.logics, 0, logics.size());
+		for(LogicIndex logic : logics)
+		{
+			int slot = logic.slot();
+			if(this.logics[slot] != null)
+			{
+				LBR.LOGGER.error("Duplicate slot id found in logic index element, skipping!");
+				continue;
+			}
+			this.logics[slot] = logic;
+		}
+	}
+	
+	public Microchip()
+	{
 	}
 	
 	public List<LogicIndex> values()
@@ -42,16 +63,18 @@ public final class Microchip
 		return this.get(index) != null;
 	}
 	
-	private LogicIndex set(int index, Logic logic)
+	private LogicIndex set(int index, int x, int y, Logic logic)
 	{
 		LogicIndex original = logics[index];
-		logics[index] = new LogicIndex(index, logic, new LogicOutputPorts());
+		logics[index] = new LogicIndex(index, x, y, logic, new LogicOutputPorts());
 		return original;
 	}
 	
 	public LogicIndex remove(int index)
 	{
-		return this.set(index, null);
+		LogicIndex original = logics[index];
+		logics[index] = null;
+		return original;
 	}
 	
 	public LogicIndex remove(LogicIndex logic)
@@ -59,13 +82,13 @@ public final class Microchip
 		return this.remove(logic.slot());
 	}
 	
-	public boolean add(Logic logic)
+	public boolean add(int x, int y, Logic logic)
 	{
 		for(int i = 0; i < logics.length; i++)
 		{
 			if(logics[i] == null)
 			{
-				this.set(i, logic);
+				this.set(i, x, y, logic);
 				return true;
 			}
 		}
@@ -75,5 +98,15 @@ public final class Microchip
 	public int size()
 	{
 		return (int) Arrays.stream(logics).filter(Objects::nonNull).count();
+	}
+	
+	public void loadFrom(Microchip other)
+	{
+		System.arraycopy(other.logics, 0, logics, 0, logics.length);
+	}
+	
+	public void clear()
+	{
+		Arrays.fill(logics, null);
 	}
 }

@@ -10,12 +10,15 @@ import net.swedz.little_big_redstone.LBR;
 import net.swedz.little_big_redstone.LBRComponents;
 import net.swedz.little_big_redstone.gui.microchip.logic.LogicRenderers;
 import net.swedz.little_big_redstone.helper.GuiGraphicsHelper;
+import net.swedz.little_big_redstone.microchip.Microchip;
 
 public final class MicrochipScreen extends AbstractContainerScreen<MicrochipMenu>
 {
 	private static final ResourceLocation SHADOW_HOVER_OVERLAY = LBR.id("textures/gui/container/microchip/shadow_hover_overlay.png");
 	private static final ResourceLocation CIRCUIT_BACKGROUND   = LBR.id("textures/gui/container/microchip/circuit_background.png");
 	private static final ResourceLocation INVENTORY_BACKGROUND = LBR.id("textures/gui/container/microchip/inventory_background.png");
+	
+	private final Microchip microchip;
 	
 	private int boardX, boardY, boardWidth, boardHeight;
 	
@@ -30,6 +33,8 @@ public final class MicrochipScreen extends AbstractContainerScreen<MicrochipMenu
 		boardY = 0;
 		boardWidth = imageWidth;
 		boardHeight = imageHeight - 90 - 4;
+		
+		microchip = menu.microchip();
 	}
 	
 	private int toLocalX(int x)
@@ -46,6 +51,23 @@ public final class MicrochipScreen extends AbstractContainerScreen<MicrochipMenu
 	{
 		return x >= boardX && x < boardX + boardWidth &&
 			   y >= boardY && y < boardY + boardHeight;
+	}
+	
+	private boolean mouseClickedOnBoard(int mouseX, int mouseY, int button)
+	{
+		// TODO do stuff!
+		LBR.LOGGER.info("clicked on board: {}, {}", mouseX, mouseY);
+		return false;
+	}
+	
+	@Override
+	public boolean mouseClicked(double mouseX, double mouseY, int button)
+	{
+		int localMouseX = this.toLocalX((int) mouseX);
+		int localMouseY = this.toLocalY((int) mouseY);
+		return this.isWithinBoard(localMouseX, localMouseY) ?
+				this.mouseClickedOnBoard(localMouseX, localMouseY, button) :
+				super.mouseClicked(mouseX, mouseY, button);
 	}
 	
 	@Override

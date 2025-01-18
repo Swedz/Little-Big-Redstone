@@ -1,17 +1,42 @@
 package net.swedz.little_big_redstone.gui.microchip;
 
+import net.minecraft.core.BlockPos;
+import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
 import net.swedz.little_big_redstone.LBRMenus;
+import net.swedz.little_big_redstone.microchip.Microchip;
+
+import java.util.function.Supplier;
 
 public final class MicrochipMenu extends AbstractContainerMenu
 {
-	public MicrochipMenu(int containerId, Inventory playerInventory)
+	private final BlockPos          blockPos;
+	private final Supplier<Boolean> validChecker;
+	private final Microchip         microchip;
+	
+	public MicrochipMenu(int containerId, Inventory playerInventory,
+						 BlockPos blockPos, Supplier<Boolean> validChecker, Microchip microchip)
 	{
 		super(LBRMenus.MICROCHIP.get(), containerId);
+		
+		this.blockPos = blockPos;
+		this.validChecker = validChecker;
+		this.microchip = microchip;
+		
+		this.setupPlayerInventory(playerInventory, 256 - 90 - 12 - 12);
+	}
+	
+	public MicrochipMenu(int containerId, Inventory playerInventory, RegistryFriendlyByteBuf buf)
+	{
+		super(LBRMenus.MICROCHIP.get(), containerId);
+		
+		this.blockPos = buf.readBlockPos();
+		this.validChecker = null;
+		this.microchip = Microchip.STREAM_CODEC.decode(buf);
 		
 		this.setupPlayerInventory(playerInventory, 256 - 90 - 12 - 12);
 	}
@@ -31,6 +56,11 @@ public final class MicrochipMenu extends AbstractContainerMenu
 		}
 	}
 	
+	public Microchip microchip()
+	{
+		return microchip;
+	}
+	
 	@Override
 	public ItemStack quickMoveStack(Player player, int slotId)
 	{
@@ -40,6 +70,7 @@ public final class MicrochipMenu extends AbstractContainerMenu
 	@Override
 	public boolean stillValid(Player player)
 	{
-		return true;
+		return (validChecker == null || validChecker.get()) &&
+			   player.blockPosition().closerThan(blockPos, 10);
 	}
 }
