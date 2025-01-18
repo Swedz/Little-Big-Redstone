@@ -1,6 +1,7 @@
 package net.swedz.little_big_redstone.blockentity;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtOps;
@@ -32,6 +33,18 @@ public final class MicrochipBlockEntity extends BlockEntity implements MenuProvi
 	public Microchip microchip()
 	{
 		return microchip;
+	}
+	
+	public boolean isFaceListeningForRedstoneInput(Direction direction)
+	{
+		// TODO check if the microchip has an input logic for this face
+		return true;
+	}
+	
+	public boolean isFaceCapableForRedstoneOutput(Direction direction)
+	{
+		// TODO check if the microchip has an output logic for this face
+		return false;
 	}
 	
 	@Override

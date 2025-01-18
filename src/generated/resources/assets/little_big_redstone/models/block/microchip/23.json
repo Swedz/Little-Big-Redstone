@@ -1,0 +1,12 @@
+{
+  "parent": "minecraft:block/cube",
+  "textures": {
+    "down": "little_big_redstone:block/microchip_on",
+    "east": "little_big_redstone:block/microchip_off",
+    "north": "little_big_redstone:block/microchip_on",
+    "particle": "little_big_redstone:block/microchip_off",
+    "south": "little_big_redstone:block/microchip_off",
+    "up": "little_big_redstone:block/microchip_off",
+    "west": "little_big_redstone:block/microchip_off"
+  }
+}

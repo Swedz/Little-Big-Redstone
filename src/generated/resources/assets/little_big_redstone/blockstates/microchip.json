@@ -1,7 +1,196 @@
 {
   "variants": {
-    "": {
-      "model": "little_big_redstone:block/microchip"
+    "down=false,east=false,north=false,south=false,up=false,west=false": {
+      "model": "little_big_redstone:block/microchip/63"
+    },
+    "down=false,east=false,north=false,south=false,up=false,west=true": {
+      "model": "little_big_redstone:block/microchip/62"
+    },
+    "down=false,east=false,north=false,south=false,up=true,west=false": {
+      "model": "little_big_redstone:block/microchip/61"
+    },
+    "down=false,east=false,north=false,south=false,up=true,west=true": {
+      "model": "little_big_redstone:block/microchip/60"
+    },
+    "down=false,east=false,north=false,south=true,up=false,west=false": {
+      "model": "little_big_redstone:block/microchip/59"
+    },
+    "down=false,east=false,north=false,south=true,up=false,west=true": {
+      "model": "little_big_redstone:block/microchip/58"
+    },
+    "down=false,east=false,north=false,south=true,up=true,west=false": {
+      "model": "little_big_redstone:block/microchip/57"
+    },
+    "down=false,east=false,north=false,south=true,up=true,west=true": {
+      "model": "little_big_redstone:block/microchip/56"
+    },
+    "down=false,east=false,north=true,south=false,up=false,west=false": {
+      "model": "little_big_redstone:block/microchip/55"
+    },
+    "down=false,east=false,north=true,south=false,up=false,west=true": {
+      "model": "little_big_redstone:block/microchip/54"
+    },
+    "down=false,east=false,north=true,south=false,up=true,west=false": {
+      "model": "little_big_redstone:block/microchip/53"
+    },
+    "down=false,east=false,north=true,south=false,up=true,west=true": {
+      "model": "little_big_redstone:block/microchip/52"
+    },
+    "down=false,east=false,north=true,south=true,up=false,west=false": {
+      "model": "little_big_redstone:block/microchip/51"
+    },
+    "down=false,east=false,north=true,south=true,up=false,west=true": {
+      "model": "little_big_redstone:block/microchip/50"
+    },
+    "down=false,east=false,north=true,south=true,up=true,west=false": {
+      "model": "little_big_redstone:block/microchip/49"
+    },
+    "down=false,east=false,north=true,south=true,up=true,west=true": {
+      "model": "little_big_redstone:block/microchip/48"
+    },
+    "down=false,east=true,north=false,south=false,up=false,west=false": {
+      "model": "little_big_redstone:block/microchip/47"
+    },
+    "down=false,east=true,north=false,south=false,up=false,west=true": {
+      "model": "little_big_redstone:block/microchip/46"
+    },
+    "down=false,east=true,north=false,south=false,up=true,west=false": {
+      "model": "little_big_redstone:block/microchip/45"
+    },
+    "down=false,east=true,north=false,south=false,up=true,west=true": {
+      "model": "little_big_redstone:block/microchip/44"
+    },
+    "down=false,east=true,north=false,south=true,up=false,west=false": {
+      "model": "little_big_redstone:block/microchip/43"
+    },
+    "down=false,east=true,north=false,south=true,up=false,west=true": {
+      "model": "little_big_redstone:block/microchip/42"
+    },
+    "down=false,east=true,north=false,south=true,up=true,west=false": {
+      "model": "little_big_redstone:block/microchip/41"
+    },
+    "down=false,east=true,north=false,south=true,up=true,west=true": {
+      "model": "little_big_redstone:block/microchip/40"
+    },
+    "down=false,east=true,north=true,south=false,up=false,west=false": {
+      "model": "little_big_redstone:block/microchip/39"
+    },
+    "down=false,east=true,north=true,south=false,up=false,west=true": {
+      "model": "little_big_redstone:block/microchip/38"
+    },
+    "down=false,east=true,north=true,south=false,up=true,west=false": {
+      "model": "little_big_redstone:block/microchip/37"
+    },
+    "down=false,east=true,north=true,south=false,up=true,west=true": {
+      "model": "little_big_redstone:block/microchip/36"
+    },
+    "down=false,east=true,north=true,south=true,up=false,west=false": {
+      "model": "little_big_redstone:block/microchip/35"
+    },
+    "down=false,east=true,north=true,south=true,up=false,west=true": {
+      "model": "little_big_redstone:block/microchip/34"
+    },
+    "down=false,east=true,north=true,south=true,up=true,west=false": {
+      "model": "little_big_redstone:block/microchip/33"
+    },
+    "down=false,east=true,north=true,south=true,up=true,west=true": {
+      "model": "little_big_redstone:block/microchip/32"
+    },
+    "down=true,east=false,north=false,south=false,up=false,west=false": {
+      "model": "little_big_redstone:block/microchip/31"
+    },
+    "down=true,east=false,north=false,south=false,up=false,west=true": {
+      "model": "little_big_redstone:block/microchip/30"
+    },
+    "down=true,east=false,north=false,south=false,up=true,west=false": {
+      "model": "little_big_redstone:block/microchip/29"
+    },
+    "down=true,east=false,north=false,south=false,up=true,west=true": {
+      "model": "little_big_redstone:block/microchip/28"
+    },
+    "down=true,east=false,north=false,south=true,up=false,west=false": {
+      "model": "little_big_redstone:block/microchip/27"
+    },
+    "down=true,east=false,north=false,south=true,up=false,west=true": {
+      "model": "little_big_redstone:block/microchip/26"
+    },
+    "down=true,east=false,north=false,south=true,up=true,west=false": {
+      "model": "little_big_redstone:block/microchip/25"
+    },
+    "down=true,east=false,north=false,south=true,up=true,west=true": {
+      "model": "little_big_redstone:block/microchip/24"
+    },
+    "down=true,east=false,north=true,south=false,up=false,west=false": {
+      "model": "little_big_redstone:block/microchip/23"
+    },
+    "down=true,east=false,north=true,south=false,up=false,west=true": {
+      "model": "little_big_redstone:block/microchip/22"
+    },
+    "down=true,east=false,north=true,south=false,up=true,west=false": {
+      "model": "little_big_redstone:block/microchip/21"
+    },
+    "down=true,east=false,north=true,south=false,up=true,west=true": {
+      "model": "little_big_redstone:block/microchip/20"
+    },
+    "down=true,east=false,north=true,south=true,up=false,west=false": {
+      "model": "little_big_redstone:block/microchip/19"
+    },
+    "down=true,east=false,north=true,south=true,up=false,west=true": {
+      "model": "little_big_redstone:block/microchip/18"
+    },
+    "down=true,east=false,north=true,south=true,up=true,west=false": {
+      "model": "little_big_redstone:block/microchip/17"
+    },
+    "down=true,east=false,north=true,south=true,up=true,west=true": {
+      "model": "little_big_redstone:block/microchip/16"
+    },
+    "down=true,east=true,north=false,south=false,up=false,west=false": {
+      "model": "little_big_redstone:block/microchip/15"
+    },
+    "down=true,east=true,north=false,south=false,up=false,west=true": {
+      "model": "little_big_redstone:block/microchip/14"
+    },
+    "down=true,east=true,north=false,south=false,up=true,west=false": {
+      "model": "little_big_redstone:block/microchip/13"
+    },
+    "down=true,east=true,north=false,south=false,up=true,west=true": {
+      "model": "little_big_redstone:block/microchip/12"
+    },
+    "down=true,east=true,north=false,south=true,up=false,west=false": {
+      "model": "little_big_redstone:block/microchip/11"
+    },
+    "down=true,east=true,north=false,south=true,up=false,west=true": {
+      "model": "little_big_redstone:block/microchip/10"
+    },
+    "down=true,east=true,north=false,south=true,up=true,west=false": {
+      "model": "little_big_redstone:block/microchip/9"
+    },
+    "down=true,east=true,north=false,south=true,up=true,west=true": {
+      "model": "little_big_redstone:block/microchip/8"
+    },
+    "down=true,east=true,north=true,south=false,up=false,west=false": {
+      "model": "little_big_redstone:block/microchip/7"
+    },
+    "down=true,east=true,north=true,south=false,up=false,west=true": {
+      "model": "little_big_redstone:block/microchip/6"
+    },
+    "down=true,east=true,north=true,south=false,up=true,west=false": {
+      "model": "little_big_redstone:block/microchip/5"
+    },
+    "down=true,east=true,north=true,south=false,up=true,west=true": {
+      "model": "little_big_redstone:block/microchip/4"
+    },
+    "down=true,east=true,north=true,south=true,up=false,west=false": {
+      "model": "little_big_redstone:block/microchip/3"
+    },
+    "down=true,east=true,north=true,south=true,up=false,west=true": {
+      "model": "little_big_redstone:block/microchip/2"
+    },
+    "down=true,east=true,north=true,south=true,up=true,west=false": {
+      "model": "little_big_redstone:block/microchip/1"
+    },
+    "down=true,east=true,north=true,south=true,up=true,west=true": {
+      "model": "little_big_redstone:block/microchip/0"
     }
   }
 }
