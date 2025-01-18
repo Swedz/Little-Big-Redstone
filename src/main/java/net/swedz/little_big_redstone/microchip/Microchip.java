@@ -45,7 +45,7 @@ public final class Microchip
 	private LogicIndex set(int index, Logic logic)
 	{
 		LogicIndex original = logics[index];
-		logics[index] = new LogicIndex(index, logic, new LogicOutputTargets());
+		logics[index] = new LogicIndex(index, logic, new LogicOutputs());
 		return original;
 	}
 	
