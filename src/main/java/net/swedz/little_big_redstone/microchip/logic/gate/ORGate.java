@@ -66,6 +66,12 @@ public final class ORGate extends LogicGate<ORGate>
 	}
 	
 	@Override
+	public ORGate copy()
+	{
+		return new ORGate(this.inputs(), this.output());
+	}
+	
+	@Override
 	public int hashCode()
 	{
 		return this.type().hashCode();

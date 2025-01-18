@@ -173,6 +173,12 @@ public final class LogicSequencer extends Logic<LogicSequencer>
 	}
 	
 	@Override
+	public LogicSequencer copy()
+	{
+		return new LogicSequencer(outputDelay, outputDuration, requiresContinuousPower, processedTicks, outputState);
+	}
+	
+	@Override
 	public int hashCode()
 	{
 		return Objects.hashCode(outputDelay, processedTicks);

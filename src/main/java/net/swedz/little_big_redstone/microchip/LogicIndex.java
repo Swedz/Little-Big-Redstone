@@ -30,6 +30,11 @@ public record LogicIndex(int slot, int x, int y, Logic logic, LogicOutputPorts o
 			LogicIndex::new
 	);
 	
+	public LogicIndex
+	{
+		logic = logic.copy();
+	}
+	
 	public ScreenRectangle bounds()
 	{
 		return new ScreenRectangle(x, y, logic.size().widthPixels(), logic.size().heightPixels());

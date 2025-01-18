@@ -67,6 +67,12 @@ public final class XORGate extends LogicGate<XORGate>
 	}
 	
 	@Override
+	public XORGate copy()
+	{
+		return new XORGate(this.inputs(), this.output());
+	}
+	
+	@Override
 	public int hashCode()
 	{
 		return this.type().hashCode();

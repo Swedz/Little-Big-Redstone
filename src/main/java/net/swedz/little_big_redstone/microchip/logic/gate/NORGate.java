@@ -66,6 +66,12 @@ public final class NORGate extends LogicGate<NORGate>
 	}
 	
 	@Override
+	public NORGate copy()
+	{
+		return new NORGate(this.inputs(), this.output());
+	}
+	
+	@Override
 	public int hashCode()
 	{
 		return this.type().hashCode();

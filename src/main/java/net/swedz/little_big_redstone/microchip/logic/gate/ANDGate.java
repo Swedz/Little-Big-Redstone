@@ -66,6 +66,12 @@ public final class ANDGate extends LogicGate<ANDGate>
 	}
 	
 	@Override
+	public ANDGate copy()
+	{
+		return new ANDGate(this.inputs(), this.output());
+	}
+	
+	@Override
 	public int hashCode()
 	{
 		return this.type().hashCode();

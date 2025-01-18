@@ -66,6 +66,12 @@ public final class NANDGate extends LogicGate<NANDGate>
 	}
 	
 	@Override
+	public NANDGate copy()
+	{
+		return new NANDGate(this.inputs(), this.output());
+	}
+	
+	@Override
 	public int hashCode()
 	{
 		return this.type().hashCode();

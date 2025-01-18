@@ -52,4 +52,6 @@ public abstract class Logic<L extends Logic>
 	public void resetForPickup()
 	{
 	}
+	
+	public abstract L copy();
 }
