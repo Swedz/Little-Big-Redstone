@@ -7,20 +7,20 @@ import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.swedz.little_big_redstone.microchip.logic.Logic;
 
-public record LogicIndex(int slot, Logic logic, LogicOutputs outputTargets)
+public record LogicIndex(int slot, Logic logic, LogicOutputPorts outputPorts)
 {
 	public static final Codec<LogicIndex> CODEC = RecordCodecBuilder.create((instance) -> instance
 			.group(
 					Codec.INT.fieldOf("slot").forGetter(LogicIndex::slot),
 					Logic.CODEC.fieldOf("logic").forGetter(LogicIndex::logic),
-					LogicOutputs.CODEC.fieldOf("output_targets").forGetter(LogicIndex::outputTargets)
+					LogicOutputPorts.CODEC.fieldOf("output_ports").forGetter(LogicIndex::outputPorts)
 			)
 			.apply(instance, LogicIndex::new));
 	
 	public static final StreamCodec<ByteBuf, LogicIndex> STREAM_CODEC = StreamCodec.composite(
 			ByteBufCodecs.VAR_INT, LogicIndex::slot,
 			Logic.STREAM_CODEC, LogicIndex::logic,
-			LogicOutputs.STREAM_CODEC, LogicIndex::outputTargets,
+			LogicOutputPorts.STREAM_CODEC, LogicIndex::outputPorts,
 			LogicIndex::new
 	);
 }

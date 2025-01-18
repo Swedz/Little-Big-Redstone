@@ -14,26 +14,26 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 
-public final class LogicOutputs
+public final class LogicOutputPorts
 {
-	public static final Codec<LogicOutputs> CODEC = Codec.list(Targets.CODEC).comapFlatMap(
-			(list) -> DataResult.success(new LogicOutputs(list.toArray(Targets[]::new))),
+	public static final Codec<LogicOutputPorts> CODEC = Codec.list(Targets.CODEC).comapFlatMap(
+			(list) -> DataResult.success(new LogicOutputPorts(list.toArray(Targets[]::new))),
 			(targets) -> Arrays.asList(targets.targets)
 	);
 	
-	public static final StreamCodec<ByteBuf, LogicOutputs> STREAM_CODEC = Targets.STREAM_CODEC.apply(ByteBufCodecs.list()).map(
-			(list) -> new LogicOutputs(list.toArray(Targets[]::new)),
+	public static final StreamCodec<ByteBuf, LogicOutputPorts> STREAM_CODEC = Targets.STREAM_CODEC.apply(ByteBufCodecs.list()).map(
+			(list) -> new LogicOutputPorts(list.toArray(Targets[]::new)),
 			(targets) -> Arrays.asList(targets.targets)
 	);
 	
 	private Targets[] targets = new Targets[0];
 	
-	private LogicOutputs(Targets[] targets)
+	private LogicOutputPorts(Targets[] targets)
 	{
 		this.targets = targets;
 	}
 	
-	public LogicOutputs()
+	public LogicOutputPorts()
 	{
 	}
 	
