@@ -88,6 +88,7 @@ public final class Microchip
 	
 	public boolean canFit(int x, int y, Logic logic)
 	{
+		// TODO check that this logic piece fits entirely in the board at this position (just check top left and bottom right corners in the bounds)
 		for(LogicIndex entry : logics)
 		{
 			if(entry != null && entry.contains(x, y, logic.size()))

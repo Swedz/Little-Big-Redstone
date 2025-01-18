@@ -48,7 +48,7 @@ public final class MicrochipRenderable implements GuiEventListener, Renderable, 
 				if(entry != null)
 				{
 					microchip.remove(entry);
-					new PlaceTakeLogicPacket(x, y, false).sendToServer();
+					new PlaceTakeLogicPacket(screen.getMenu().containerId, x, y, false).sendToServer();
 					// TODO pick up the item
 				}
 			}
@@ -65,7 +65,7 @@ public final class MicrochipRenderable implements GuiEventListener, Renderable, 
 			if(microchip.canFit(placeX, placeY, logic))
 			{
 				microchip.add(placeX, placeY, logic);
-				new PlaceTakeLogicPacket(placeX, placeY, true).sendToServer();
+				new PlaceTakeLogicPacket(screen.getMenu().containerId, placeX, placeY, true).sendToServer();
 			}
 		}
 		return false;

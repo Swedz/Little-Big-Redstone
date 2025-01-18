@@ -11,9 +11,10 @@ import net.swedz.little_big_redstone.gui.microchip.MicrochipMenu;
 import net.swedz.little_big_redstone.network.LBRCustomPacket;
 import net.swedz.tesseract.neoforge.packet.PacketContext;
 
-public record PlaceTakeLogicPacket(int x, int y, boolean place) implements LBRCustomPacket
+public record PlaceTakeLogicPacket(int containerId, int x, int y, boolean place) implements LBRCustomPacket
 {
 	public static final StreamCodec<ByteBuf, PlaceTakeLogicPacket> STREAM_CODEC = StreamCodec.composite(
+			ByteBufCodecs.VAR_INT, PlaceTakeLogicPacket::containerId,
 			ByteBufCodecs.VAR_INT, PlaceTakeLogicPacket::x,
 			ByteBufCodecs.VAR_INT, PlaceTakeLogicPacket::y,
 			ByteBufCodecs.BOOL, PlaceTakeLogicPacket::place,
@@ -28,7 +29,7 @@ public record PlaceTakeLogicPacket(int x, int y, boolean place) implements LBRCu
 		var player = (ServerPlayer) context.getPlayer();
 		var playerName = player.getGameProfile().getName();
 		
-		if(player.hasContainerOpen() && player.containerMenu instanceof MicrochipMenu menu)
+		if(player.hasContainerOpen() && player.containerMenu instanceof MicrochipMenu menu && menu.containerId == containerId)
 		{
 			var microchip = menu.microchip();
 			ItemStack heldItem = menu.getCarried();
@@ -75,7 +76,7 @@ public record PlaceTakeLogicPacket(int x, int y, boolean place) implements LBRCu
 		}
 		else
 		{
-			LBR.LOGGER.warn("Received PlaceTakeLogicPacket from {} while not in a MicrochipMenu, discarding", playerName);
+			LBR.LOGGER.warn("Received PlaceTakeLogicPacket from {} while not in a microchip menu (or in expired one?), discarding", playerName);
 		}
 	}
 }
