@@ -6,6 +6,7 @@ import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
 import net.swedz.little_big_redstone.LBR;
 import net.swedz.little_big_redstone.network.packet.PlaceTakeLogicPacket;
+import net.swedz.little_big_redstone.network.packet.UpdateMicrochipPacket;
 import net.swedz.tesseract.neoforge.packet.PacketRegistry;
 
 public final class LBRPackets
@@ -25,6 +26,7 @@ public final class LBRPackets
 	static
 	{
 		create("place_take_logic", PlaceTakeLogicPacket.class, PlaceTakeLogicPacket.STREAM_CODEC);
+		create("update_microchip", UpdateMicrochipPacket.class, UpdateMicrochipPacket.STREAM_CODEC);
 	}
 	
 	private static <P extends LBRCustomPacket> void create(String id, Class<P> packetClass, StreamCodec<? super RegistryFriendlyByteBuf, P> packetCodec)

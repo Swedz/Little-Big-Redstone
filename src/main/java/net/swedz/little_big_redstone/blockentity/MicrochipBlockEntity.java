@@ -14,10 +14,11 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.swedz.little_big_redstone.LBR;
 import net.swedz.little_big_redstone.LBRBlocks;
+import net.swedz.little_big_redstone.api.Tickable;
 import net.swedz.little_big_redstone.gui.microchip.MicrochipMenu;
 import net.swedz.little_big_redstone.microchip.Microchip;
 
-public final class MicrochipBlockEntity extends BlockEntity implements MenuProvider
+public final class MicrochipBlockEntity extends BlockEntity implements MenuProvider, Tickable
 {
 	private final Microchip microchip;
 	
@@ -43,6 +44,31 @@ public final class MicrochipBlockEntity extends BlockEntity implements MenuProvi
 	public AbstractContainerMenu createMenu(int containerId, Inventory inventory, Player player)
 	{
 		return new MicrochipMenu(containerId, inventory, worldPosition, () -> !this.isRemoved(), microchip);
+	}
+	
+	@Override
+	public void tick()
+	{
+		if(level.isClientSide())
+		{
+			return;
+		}
+		
+		// TODO tick logic and mark dirty if needed
+		
+		if(microchip.isDirty())
+		{
+			microchip.markClean();
+			this.setChanged();
+		}
+	}
+	
+	@Override
+	public void setChanged()
+	{
+		super.setChanged();
+		
+		// TODO update listening clients
 	}
 	
 	@Override
