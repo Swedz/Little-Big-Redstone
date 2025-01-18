@@ -9,10 +9,10 @@
   "item.little_big_redstone.xor_gate": "XOR Gate",
   "itemGroup.little_big_redstone.little_big_redstone": "Little Big Redstone",
   "text.little_big_redstone.logic_gate_algebra": "Q = %s",
-  "text.little_big_redstone.logic_gate_algebra_and": "A ∧ B ∧ C",
-  "text.little_big_redstone.logic_gate_algebra_nand": "A ↑ B ↑ C",
-  "text.little_big_redstone.logic_gate_algebra_nor": "A ↓ B ↓ C",
+  "text.little_big_redstone.logic_gate_algebra_and": "A ∧ B",
+  "text.little_big_redstone.logic_gate_algebra_nand": "A ↑ B",
+  "text.little_big_redstone.logic_gate_algebra_nor": "A ↓ B",
   "text.little_big_redstone.logic_gate_algebra_not": "¬A",
-  "text.little_big_redstone.logic_gate_algebra_or": "A ∨ B ∨ C",
-  "text.little_big_redstone.logic_gate_algebra_xor": "A ⊻ B ⊻ C"
+  "text.little_big_redstone.logic_gate_algebra_or": "A ∨ B",
+  "text.little_big_redstone.logic_gate_algebra_xor": "A ⊻ B"
 }
