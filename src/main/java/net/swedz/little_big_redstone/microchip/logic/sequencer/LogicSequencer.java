@@ -58,6 +58,7 @@ public final class LogicSequencer extends Logic<LogicSequencer, LogicSequencerCo
 	@Override
 	protected void processTickInternal(LogicContext context, boolean[] inputs)
 	{
+		long originalProcessedTicks = processedTicks;
 		boolean originalOutput = outputState;
 		boolean input = inputs[0];
 		boolean output = false;
@@ -90,7 +91,7 @@ public final class LogicSequencer extends Logic<LogicSequencer, LogicSequencerCo
 		}
 		
 		outputState = output;
-		if(output != originalOutput)
+		if(originalProcessedTicks != processedTicks || output != originalOutput)
 		{
 			context.flagChanged();
 		}
