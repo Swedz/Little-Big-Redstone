@@ -9,15 +9,15 @@ import net.swedz.tesseract.neoforge.api.Assert;
 
 import java.util.List;
 
-public abstract class Logic<L extends Logic, C extends LogicConfig>
+public abstract class LogicComponent<L extends LogicComponent, C extends LogicConfig>
 {
-	public static final Codec<Logic> CODEC = LogicTypes.CODEC;
+	public static final Codec<LogicComponent> CODEC = LogicTypes.CODEC;
 	
-	public static final StreamCodec<ByteBuf, Logic> STREAM_CODEC = LogicTypes.STREAM_CODEC;
+	public static final StreamCodec<ByteBuf, LogicComponent> STREAM_CODEC = LogicTypes.STREAM_CODEC;
 	
 	protected final C config;
 	
-	protected Logic(C config)
+	protected LogicComponent(C config)
 	{
 		this.config = config;
 	}

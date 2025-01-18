@@ -8,14 +8,14 @@ import io.netty.buffer.ByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.swedz.little_big_redstone.api.IntRange;
-import net.swedz.little_big_redstone.microchip.logic.Logic;
+import net.swedz.little_big_redstone.microchip.logic.LogicComponent;
 import net.swedz.little_big_redstone.microchip.logic.LogicContext;
 import net.swedz.little_big_redstone.microchip.logic.LogicFactory;
 import net.swedz.little_big_redstone.microchip.logic.LogicGridSize;
 import net.swedz.little_big_redstone.microchip.logic.LogicType;
 import net.swedz.little_big_redstone.microchip.logic.LogicTypes;
 
-public final class LogicSequencer extends Logic<LogicSequencer, LogicSequencerConfig>
+public final class LogicSequencer extends LogicComponent<LogicSequencer, LogicSequencerConfig>
 {
 	public static final LogicFactory DEFAULT = () -> new LogicSequencer(new LogicSequencerConfig(20, 0, false), 0, false);
 	

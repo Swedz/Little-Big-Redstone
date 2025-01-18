@@ -1,8 +1,8 @@
 package net.swedz.little_big_redstone.gui.microchip.logic;
 
-import net.swedz.little_big_redstone.microchip.logic.Logic;
+import net.swedz.little_big_redstone.microchip.logic.LogicComponent;
 
-public interface LogicRendererProvider<L extends Logic>
+public interface LogicRendererProvider<L extends LogicComponent>
 {
 	LogicRenderer<L> create(Context context);
 	

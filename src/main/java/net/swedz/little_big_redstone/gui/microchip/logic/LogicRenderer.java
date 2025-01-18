@@ -4,10 +4,10 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.resources.ResourceLocation;
 import net.swedz.little_big_redstone.LBR;
 import net.swedz.little_big_redstone.helper.GuiGraphicsHelper;
-import net.swedz.little_big_redstone.microchip.logic.Logic;
+import net.swedz.little_big_redstone.microchip.logic.LogicComponent;
 import net.swedz.little_big_redstone.microchip.logic.LogicGridSize;
 
-public abstract class LogicRenderer<L extends Logic>
+public abstract class LogicRenderer<L extends LogicComponent>
 {
 	public static final ResourceLocation BACKGROUND         = LBR.id("textures/logic/background.png");
 	public static final ResourceLocation BACKGROUND_OVERLAY = LBR.id("textures/logic/background_overlay.png");

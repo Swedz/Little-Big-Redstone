@@ -7,7 +7,7 @@ import net.minecraft.world.item.ItemStack;
 import net.swedz.little_big_redstone.LBRComponents;
 import net.swedz.little_big_redstone.LBRItems;
 
-public record LogicType<L extends Logic>(
+public record LogicType<L extends LogicComponent>(
 		String id, String englishName,
 		MapCodec<L> codec, StreamCodec<ByteBuf, L> streamCodec,
 		LogicFactory defaultFactory

@@ -11,7 +11,7 @@ import net.neoforged.neoforge.event.AddReloadListenerEvent;
 import net.swedz.little_big_redstone.LBR;
 import net.swedz.little_big_redstone.gui.microchip.logic.renderer.LogicGateRenderer;
 import net.swedz.little_big_redstone.gui.microchip.logic.renderer.SequencerRenderer;
-import net.swedz.little_big_redstone.microchip.logic.Logic;
+import net.swedz.little_big_redstone.microchip.logic.LogicComponent;
 import net.swedz.little_big_redstone.microchip.logic.LogicType;
 import net.swedz.little_big_redstone.microchip.logic.LogicTypes;
 
@@ -36,7 +36,7 @@ public final class LogicRenderers
 		register(LogicTypes.SEQUENCER, SequencerRenderer::new);
 	}
 	
-	private static <L extends Logic> void register(LogicType<L> type, LogicRendererProvider<L> provider)
+	private static <L extends LogicComponent> void register(LogicType<L> type, LogicRendererProvider<L> provider)
 	{
 		PROVIDERS.put(type, provider);
 	}
@@ -69,7 +69,7 @@ public final class LogicRenderers
 				}));
 	}
 	
-	public static <L extends Logic> void render(GuiGraphics graphics, L logic, int x, int y)
+	public static <L extends LogicComponent> void render(GuiGraphics graphics, L logic, int x, int y)
 	{
 		var renderer = (LogicRenderer<L>) RENDERERS.get(logic.type());
 		if(renderer != null)

@@ -7,13 +7,13 @@ import io.netty.buffer.ByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.swedz.little_big_redstone.api.IntRange;
-import net.swedz.little_big_redstone.microchip.logic.Logic;
+import net.swedz.little_big_redstone.microchip.logic.LogicComponent;
 import net.swedz.little_big_redstone.microchip.logic.LogicContext;
 
 import java.util.function.BiFunction;
 import java.util.function.Function;
 
-public abstract class LogicGate<G extends LogicGate> extends Logic<G, LogicGateConfig>
+public abstract class LogicGate<G extends LogicGate> extends LogicComponent<G, LogicGateConfig>
 {
 	protected static <G extends LogicGate> MapCodec<G> mapCodec(BiFunction<LogicGateConfig, Boolean, G> creator)
 	{

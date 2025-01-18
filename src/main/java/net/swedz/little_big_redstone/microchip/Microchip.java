@@ -6,7 +6,7 @@ import io.netty.buffer.ByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.swedz.little_big_redstone.LBR;
-import net.swedz.little_big_redstone.microchip.logic.Logic;
+import net.swedz.little_big_redstone.microchip.logic.LogicComponent;
 
 import java.util.Arrays;
 import java.util.List;
@@ -65,7 +65,7 @@ public final class Microchip
 		return this.get(index) != null;
 	}
 	
-	private LogicIndex set(int index, int x, int y, Logic logic)
+	private LogicIndex set(int index, int x, int y, LogicComponent logic)
 	{
 		LogicIndex original = logics[index];
 		logics[index] = new LogicIndex(index, x, y, logic, new LogicOutputPorts());
@@ -86,7 +86,7 @@ public final class Microchip
 		return this.remove(logic.slot());
 	}
 	
-	public boolean canFit(int x, int y, Logic logic)
+	public boolean canFit(int x, int y, LogicComponent logic)
 	{
 		// TODO check that this logic piece fits entirely in the board at this position (just check top left and bottom right corners in the bounds)
 		for(LogicIndex entry : logics)
@@ -99,7 +99,7 @@ public final class Microchip
 		return true;
 	}
 	
-	public boolean add(int x, int y, Logic logic)
+	public boolean add(int x, int y, LogicComponent logic)
 	{
 		for(int i = 0; i < logics.length; i++)
 		{

@@ -26,13 +26,13 @@ public final class LogicTypes
 	private static final List<LogicType<?>>        LOGICS     = Lists.newArrayList();
 	private static final Map<String, LogicType<?>> LOGICS_MAP = Maps.newHashMap();
 	
-	static final Codec<Logic> CODEC = Codec.STRING
+	static final Codec<LogicComponent> CODEC = Codec.STRING
 			.comapFlatMap(LogicTypes::getMaybe, LogicType::id)
-			.dispatch(Logic::type, LogicType::codec);
+			.dispatch(LogicComponent::type, LogicType::codec);
 	
-	static final StreamCodec<ByteBuf, Logic> STREAM_CODEC = ByteBufCodecs.STRING_UTF8
+	static final StreamCodec<ByteBuf, LogicComponent> STREAM_CODEC = ByteBufCodecs.STRING_UTF8
 			.map(LogicTypes::get, LogicType::id)
-			.dispatch(Logic::type, LogicType::streamCodec);
+			.dispatch(LogicComponent::type, LogicType::streamCodec);
 	
 	public static final LogicType<NOTGate>  NOT  = registerGate("not", "NOT", NOTGate.CODEC, NOTGate.STREAM_CODEC, NOTGate.DEFAULT);
 	public static final LogicType<ANDGate>  AND  = registerGate("and", "AND", ANDGate.CODEC, ANDGate.STREAM_CODEC, ANDGate.DEFAULT);
@@ -59,7 +59,7 @@ public final class LogicTypes
 		return getMaybe(id).getOrThrow(IllegalArgumentException::new);
 	}
 	
-	private static <T extends Logic> LogicType<T> register(
+	private static <T extends LogicComponent> LogicType<T> register(
 			String id, String englishName,
 			MapCodec<T> codec, StreamCodec<ByteBuf, T> streamCodec,
 			LogicFactory defaultFactory
