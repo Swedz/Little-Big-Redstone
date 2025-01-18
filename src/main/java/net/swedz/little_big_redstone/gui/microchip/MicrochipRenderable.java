@@ -39,7 +39,8 @@ public final class MicrochipRenderable implements GuiEventListener, Renderable, 
 	
 	private boolean mouseClickedOnBoard(int x, int y, int button)
 	{
-		var carried = screen.getMenu().getCarried();
+		var menu = screen.getMenu();
+		var carried = menu.getCarried();
 		if(carried.isEmpty())
 		{
 			if(button == InputConstants.MOUSE_BUTTON_LEFT)
@@ -48,8 +49,8 @@ public final class MicrochipRenderable implements GuiEventListener, Renderable, 
 				if(entry != null)
 				{
 					microchip.remove(entry);
-					new PlaceTakeLogicPacket(screen.getMenu().containerId, x, y, false).sendToServer();
-					// TODO pick up the item
+					new PlaceTakeLogicPacket(menu.containerId, x, y, false).sendToServer();
+					menu.setCarried(entry.toStack());
 				}
 			}
 			else if(button == InputConstants.MOUSE_BUTTON_RIGHT)
@@ -65,7 +66,7 @@ public final class MicrochipRenderable implements GuiEventListener, Renderable, 
 			if(microchip.canFit(placeX, placeY, logic))
 			{
 				microchip.add(placeX, placeY, logic);
-				new PlaceTakeLogicPacket(screen.getMenu().containerId, placeX, placeY, true).sendToServer();
+				new PlaceTakeLogicPacket(menu.containerId, placeX, placeY, true).sendToServer();
 			}
 		}
 		return false;
@@ -82,7 +83,7 @@ public final class MicrochipRenderable implements GuiEventListener, Renderable, 
 	
 	private void renderWires(GuiGraphics graphics, int mouseX, int mouseY, float partialTicks)
 	{
-		// TODO
+		// TODO render the wire connections, this should be cached and recalculated when something is moved...
 	}
 	
 	private void renderLogic(GuiGraphics graphics, int mouseX, int mouseY, float partialTicks)

@@ -61,7 +61,7 @@ public record PlaceTakeLogicPacket(int containerId, int x, int y, boolean place)
 					if(logic != null)
 					{
 						microchip.remove(logic);
-						// TODO create item from logic component and set the carried item to it
+						menu.setCarried(logic.toStack());
 					}
 					else
 					{

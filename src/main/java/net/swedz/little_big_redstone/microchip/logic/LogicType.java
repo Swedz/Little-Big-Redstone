@@ -3,6 +3,9 @@ package net.swedz.little_big_redstone.microchip.logic;
 import com.mojang.serialization.MapCodec;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.world.item.ItemStack;
+import net.swedz.little_big_redstone.LBRComponents;
+import net.swedz.little_big_redstone.LBRItems;
 
 public record LogicType<L extends Logic>(
 		String id, String englishName,
@@ -10,6 +13,13 @@ public record LogicType<L extends Logic>(
 		LogicFactory defaultFactory
 )
 {
+	public ItemStack toStack(L logic)
+	{
+		var stack = new ItemStack(LBRItems.valueOf(id));
+		stack.set(LBRComponents.LOGIC, logic.copy());
+		return stack;
+	}
+	
 	@Override
 	public boolean equals(Object o)
 	{

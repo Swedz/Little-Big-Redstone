@@ -6,6 +6,7 @@ import io.netty.buffer.ByteBuf;
 import net.minecraft.client.gui.navigation.ScreenRectangle;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.world.item.ItemStack;
 import net.swedz.little_big_redstone.microchip.logic.Logic;
 import net.swedz.little_big_redstone.microchip.logic.LogicGridSize;
 
@@ -33,6 +34,11 @@ public record LogicIndex(int slot, int x, int y, Logic logic, LogicOutputPorts o
 	public LogicIndex
 	{
 		logic = logic.copy();
+	}
+	
+	public ItemStack toStack()
+	{
+		return logic.type().toStack(logic);
 	}
 	
 	public ScreenRectangle bounds()

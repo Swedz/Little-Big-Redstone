@@ -1,6 +1,6 @@
 package net.swedz.little_big_redstone;
 
-import com.google.common.collect.Sets;
+import com.google.common.collect.Maps;
 import net.minecraft.world.item.Item;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.registries.DeferredRegister;
@@ -11,6 +11,7 @@ import net.swedz.tesseract.neoforge.registry.SortOrder;
 import net.swedz.tesseract.neoforge.registry.common.CommonModelBuilders;
 import net.swedz.tesseract.neoforge.registry.holder.ItemHolder;
 
+import java.util.Map;
 import java.util.Set;
 import java.util.function.Function;
 
@@ -18,8 +19,8 @@ public final class LBRItems
 {
 	public static final class Registry
 	{
-		public static final  DeferredRegister.Items ITEMS   = DeferredRegister.createItems(LBR.ID);
-		private static final Set<ItemHolder>        HOLDERS = Sets.newHashSet();
+		public static final  DeferredRegister.Items  ITEMS   = DeferredRegister.createItems(LBR.ID);
+		private static final Map<String, ItemHolder> HOLDERS = Maps.newHashMap();
 		
 		private static void init(IEventBus bus)
 		{
@@ -28,7 +29,7 @@ public final class LBRItems
 		
 		public static void include(ItemHolder holder)
 		{
-			HOLDERS.add(holder);
+			HOLDERS.put(holder.identifier().id(), holder);
 		}
 	}
 	
@@ -48,7 +49,12 @@ public final class LBRItems
 	
 	public static Set<ItemHolder> values()
 	{
-		return Set.copyOf(Registry.HOLDERS);
+		return Set.copyOf(Registry.HOLDERS.values());
+	}
+	
+	public static ItemHolder valueOf(String id)
+	{
+		return Registry.HOLDERS.get(id);
 	}
 	
 	private static <Type extends Item> ItemHolder<Type> create(
