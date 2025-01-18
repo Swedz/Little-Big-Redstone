@@ -71,8 +71,6 @@ public abstract class LogicGate<G extends LogicGate> extends Logic<G, LogicGateC
 	@Override
 	public final void processTickInternal(LogicContext context, boolean[] inputs)
 	{
-		super.processTick(context, inputs);
-		
 		boolean originalOutput = outputState;
 		outputState = this.processInputs(context, inputs);
 		if(outputState != originalOutput)
