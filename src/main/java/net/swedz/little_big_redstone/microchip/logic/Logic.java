@@ -66,4 +66,8 @@ public abstract class Logic<L extends Logic, C extends LogicConfig>
 	}
 	
 	public abstract L copy();
+	
+	public abstract int hashCode();
+	
+	public abstract boolean equals(Object o);
 }

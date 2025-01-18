@@ -63,7 +63,7 @@ public final class NOTGate extends LogicGate<NOTGate>
 	@Override
 	public int hashCode()
 	{
-		return Objects.hash(this.type(), config);
+		return Objects.hash(this.type());
 	}
 	
 	@Override

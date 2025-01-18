@@ -8,6 +8,8 @@ import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.swedz.little_big_redstone.microchip.logic.LogicConfig;
 
+import java.util.Objects;
+
 public final class LogicSequencerConfig extends LogicConfig<LogicSequencerConfig>
 {
 	public static final MapCodec<LogicSequencerConfig> CODEC = RecordCodecBuilder.mapCodec((instance) -> instance
@@ -40,5 +42,18 @@ public final class LogicSequencerConfig extends LogicConfig<LogicSequencerConfig
 	public LogicSequencerConfig copy()
 	{
 		return new LogicSequencerConfig(outputDelay, outputDuration, requiresContinuousPower);
+	}
+	
+	@Override
+	public int hashCode()
+	{
+		return Objects.hash(outputDelay, outputDuration, requiresContinuousPower);
+	}
+	
+	@Override
+	public boolean equals(Object o)
+	{
+		return this == o ||
+			   (o instanceof LogicSequencerConfig other && outputDelay == other.outputDelay && outputDuration == other.outputDuration && requiresContinuousPower == other.requiresContinuousPower);
 	}
 }

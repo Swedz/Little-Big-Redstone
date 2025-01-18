@@ -7,6 +7,8 @@ import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.swedz.little_big_redstone.microchip.logic.LogicConfig;
 
+import java.util.Objects;
+
 public final class LogicGateConfig extends LogicConfig<LogicGateConfig>
 {
 	public static final Codec<LogicGateConfig> CODEC = RecordCodecBuilder.create((instance) -> instance
@@ -31,5 +33,18 @@ public final class LogicGateConfig extends LogicConfig<LogicGateConfig>
 	public LogicGateConfig copy()
 	{
 		return new LogicGateConfig(inputs);
+	}
+	
+	@Override
+	public int hashCode()
+	{
+		return Objects.hash(inputs);
+	}
+	
+	@Override
+	public boolean equals(Object o)
+	{
+		return this == o ||
+			   (o instanceof LogicGateConfig other && inputs == other.inputs);
 	}
 }
