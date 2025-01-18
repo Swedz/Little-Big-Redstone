@@ -1,5 +1,6 @@
 package net.swedz.little_big_redstone.gui.microchip;
 
+import com.mojang.blaze3d.platform.InputConstants;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.network.chat.Component;
@@ -53,10 +54,16 @@ public final class MicrochipScreen extends AbstractContainerScreen<MicrochipMenu
 			   y >= boardY && y < boardY + boardHeight;
 	}
 	
-	private boolean mouseClickedOnBoard(int mouseX, int mouseY, int button)
+	private boolean mouseClickedOnBoard(int x, int y, int button)
 	{
-		// TODO do stuff!
-		LBR.LOGGER.info("clicked on board: {}, {}", mouseX, mouseY);
+		if(button == InputConstants.MOUSE_BUTTON_LEFT)
+		{
+			// TODO place the held logic or pick up the highlighted logic
+		}
+		else if(button == InputConstants.MOUSE_BUTTON_RIGHT)
+		{
+			// TODO open the config menu for the highlighted logic
+		}
 		return false;
 	}
 	
