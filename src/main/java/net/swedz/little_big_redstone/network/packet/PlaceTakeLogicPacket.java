@@ -40,7 +40,7 @@ public record PlaceTakeLogicPacket(int x, int y, boolean place) implements LBRCu
 					if(microchip.canFit(x, y, logic))
 					{
 						microchip.add(x, y, logic);
-						// TODO inform clients
+						heldItem.shrink(1);
 					}
 					else
 					{
@@ -60,7 +60,7 @@ public record PlaceTakeLogicPacket(int x, int y, boolean place) implements LBRCu
 					if(logic != null)
 					{
 						microchip.remove(logic);
-						// TODO inform clients
+						// TODO create item from logic component and set the carried item to it
 					}
 					else
 					{
