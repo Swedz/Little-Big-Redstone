@@ -69,7 +69,7 @@ public final class Microchip
 	{
 		LogicIndex original = logics[index];
 		logics[index] = new LogicIndex(index, x, y, logic, new LogicOutputPorts());
-		dirty = true;
+		this.markDirty();
 		return original;
 	}
 	
@@ -77,7 +77,7 @@ public final class Microchip
 	{
 		LogicIndex original = logics[index];
 		logics[index] = null;
-		dirty = true;
+		this.markDirty();
 		return original;
 	}
 	
@@ -132,18 +132,23 @@ public final class Microchip
 	public void loadFrom(Microchip other)
 	{
 		System.arraycopy(other.logics, 0, logics, 0, logics.length);
-		dirty = true;
+		this.markDirty();
 	}
 	
 	public void clear()
 	{
 		Arrays.fill(logics, null);
-		dirty = true;
+		this.markDirty();
 	}
 	
 	public boolean isDirty()
 	{
 		return dirty;
+	}
+	
+	public void markDirty()
+	{
+		dirty = true;
 	}
 	
 	public void markClean()
