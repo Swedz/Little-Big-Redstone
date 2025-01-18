@@ -1,0 +1,142 @@
+package net.swedz.little_big_redstone.gui.microchip;
+
+import com.mojang.blaze3d.platform.InputConstants;
+import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.components.Renderable;
+import net.minecraft.client.gui.components.events.GuiEventListener;
+import net.minecraft.client.gui.narration.NarratableEntry;
+import net.minecraft.client.gui.narration.NarrationElementOutput;
+import net.minecraft.client.gui.navigation.ScreenRectangle;
+import net.minecraft.resources.ResourceLocation;
+import net.swedz.little_big_redstone.LBR;
+import net.swedz.little_big_redstone.helper.GuiGraphicsHelper;
+import net.swedz.little_big_redstone.microchip.Microchip;
+
+public final class MicrochipRenderable implements GuiEventListener, Renderable, NarratableEntry
+{
+	private static final ResourceLocation SHADOW_HOVER_OVERLAY = LBR.id("textures/gui/container/microchip/shadow_hover_overlay.png");
+	private static final ResourceLocation CIRCUIT_BACKGROUND   = LBR.id("textures/gui/container/microchip/circuit_background.png");
+	
+	private final int x, y, width, height;
+	
+	private final Microchip microchip;
+	
+	public MicrochipRenderable(int x, int y, int width, int height, Microchip microchip)
+	{
+		this.x = x;
+		this.y = y;
+		this.width = width;
+		this.height = height;
+		this.microchip = microchip;
+	}
+	
+	private boolean mouseClickedOnBoard(int x, int y, int button)
+	{
+		if(button == InputConstants.MOUSE_BUTTON_LEFT)
+		{
+			// TODO place the held logic or pick up the highlighted logic
+		}
+		else if(button == InputConstants.MOUSE_BUTTON_RIGHT)
+		{
+			// TODO open the config menu for the highlighted logic
+		}
+		return false;
+	}
+	
+	@Override
+	public boolean mouseClicked(double mx, double my, int button)
+	{
+		int mouseX = (int) mx;
+		int mouseY = (int) my;
+		return this.isMouseOver(mouseX, mouseY) &&
+			   this.mouseClickedOnBoard(this.toLocalX(mouseX), this.toLocalY(mouseY), button);
+	}
+	
+	private void renderWires(GuiGraphics graphics, int mouseX, int mouseY, float partialTicks)
+	{
+		// TODO
+	}
+	
+	private void renderLogic(GuiGraphics graphics, int mouseX, int mouseY, float partialTicks)
+	{
+		// TODO
+	}
+	
+	private void renderShadowBg(GuiGraphics graphics, int mouseX, int mouseY, float partialTicks, int padding)
+	{
+		for(int p = padding; p >= 1; p--)
+		{
+			graphics.fill(-p, -p, width + p, height + p, 0x40000000);
+		}
+		
+		graphics.enableScissor(x - padding, y - padding, x + width + padding, y + height + padding);
+		GuiGraphicsHelper.blit(graphics, SHADOW_HOVER_OVERLAY, this.toLocalX(mouseX) - 64, this.toLocalY(mouseY) - 64, 128, 128, 0, 0, 64, 64, 64, 64, 1, 1, 1, 0.11f);
+		graphics.disableScissor();
+	}
+	
+	private void renderCircuitBg(GuiGraphics graphics, int mouseX, int mouseY, float partialTicks)
+	{
+		this.renderShadowBg(graphics, mouseX, mouseY, partialTicks, 3);
+		
+		graphics.setColor(1, 0.5f, 0.5f, 1);
+		graphics.blit(CIRCUIT_BACKGROUND, 0, 0, 0, 0, width, height, 64, 64);
+		graphics.setColor(1, 1, 1, 1);
+	}
+	
+	@Override
+	public void render(GuiGraphics graphics, int mouseX, int mouseY, float partialTicks)
+	{
+		graphics.pose().pushPose();
+		graphics.pose().translate(x, y, 0);
+		
+		this.renderCircuitBg(graphics, mouseX, mouseY, partialTicks);
+		this.renderLogic(graphics, mouseX, mouseY, partialTicks);
+		this.renderWires(graphics, mouseX, mouseY, partialTicks);
+		
+		graphics.pose().popPose();
+	}
+	
+	@Override
+	public void setFocused(boolean focused)
+	{
+	}
+	
+	@Override
+	public boolean isFocused()
+	{
+		return false;
+	}
+	
+	@Override
+	public NarrationPriority narrationPriority()
+	{
+		return NarrationPriority.NONE;
+	}
+	
+	@Override
+	public void updateNarration(NarrationElementOutput narrationElementOutput)
+	{
+	}
+	
+	@Override
+	public boolean isMouseOver(double mouseX, double mouseY)
+	{
+		return this.getRectangle().containsPoint((int) mouseX, (int) mouseY);
+	}
+	
+	@Override
+	public ScreenRectangle getRectangle()
+	{
+		return new ScreenRectangle(x, y, width, height);
+	}
+	
+	private int toLocalX(int x)
+	{
+		return x - this.x;
+	}
+	
+	private int toLocalY(int y)
+	{
+		return y - this.y;
+	}
+}
