@@ -18,13 +18,10 @@ public final class SequencerRenderer extends LogicRenderer<LogicSequencer>
 	{
 		var size = logic.size();
 		
-		x -= ((size.width() - 1) * 16) / 2;
-		y -= ((size.height() - 1) * 16) / 2;
-		
 		this.renderBackground(graphics, x, y, size, 1, 1, 1);
 		
-		int fillWidth = (size.width() * 16) - 4;
+		int fillWidth = size.widthPixels() - 4;
 		fillWidth = (int) (fillWidth * logic.processedPercentage());
-		graphics.blit(LBR.id("textures/logic/sequencer.png"), x + 2, y + 2, 0, 0, fillWidth, (size.height() * 16) - 4, 12, 12);
+		graphics.blit(LBR.id("textures/logic/sequencer.png"), x + 2, y + 2, 0, 0, fillWidth, size.heightPixels() - 4, 12, 12);
 	}
 }

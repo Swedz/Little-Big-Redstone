@@ -9,8 +9,12 @@ import net.minecraft.client.gui.narration.NarrationElementOutput;
 import net.minecraft.client.gui.navigation.ScreenRectangle;
 import net.minecraft.resources.ResourceLocation;
 import net.swedz.little_big_redstone.LBR;
+import net.swedz.little_big_redstone.LBRComponents;
+import net.swedz.little_big_redstone.gui.microchip.logic.LogicRenderers;
 import net.swedz.little_big_redstone.helper.GuiGraphicsHelper;
+import net.swedz.little_big_redstone.microchip.LogicIndex;
 import net.swedz.little_big_redstone.microchip.Microchip;
+import net.swedz.little_big_redstone.network.packet.PlaceTakeLogicPacket;
 
 public final class MicrochipRenderable implements GuiEventListener, Renderable, NarratableEntry
 {
@@ -19,26 +23,50 @@ public final class MicrochipRenderable implements GuiEventListener, Renderable, 
 	
 	private final int x, y, width, height;
 	
+	private final MicrochipScreen screen;
+	
 	private final Microchip microchip;
 	
-	public MicrochipRenderable(int x, int y, int width, int height, Microchip microchip)
+	public MicrochipRenderable(int x, int y, int width, int height, MicrochipScreen screen)
 	{
 		this.x = x;
 		this.y = y;
 		this.width = width;
 		this.height = height;
-		this.microchip = microchip;
+		this.screen = screen;
+		this.microchip = screen.getMenu().microchip();
 	}
 	
 	private boolean mouseClickedOnBoard(int x, int y, int button)
 	{
-		if(button == InputConstants.MOUSE_BUTTON_LEFT)
+		var carried = screen.getMenu().getCarried();
+		if(carried.isEmpty())
 		{
-			// TODO place the held logic or pick up the highlighted logic
+			if(button == InputConstants.MOUSE_BUTTON_LEFT)
+			{
+				var entry = microchip.findAt(x, y);
+				if(entry != null)
+				{
+					microchip.remove(entry);
+					new PlaceTakeLogicPacket(x, y, false).sendToServer();
+					// TODO pick up the item
+				}
+			}
+			else if(button == InputConstants.MOUSE_BUTTON_RIGHT)
+			{
+				// TODO open edit side menu
+			}
 		}
-		else if(button == InputConstants.MOUSE_BUTTON_RIGHT)
+		else if(carried.has(LBRComponents.LOGIC) && button == InputConstants.MOUSE_BUTTON_LEFT)
 		{
-			// TODO open the config menu for the highlighted logic
+			var logic = carried.get(LBRComponents.LOGIC);
+			int placeX = logic.size().topLeftCornerX(x);
+			int placeY = logic.size().topLeftCornerY(y);
+			if(microchip.canFit(placeX, placeY, logic))
+			{
+				microchip.add(placeX, placeY, logic);
+				new PlaceTakeLogicPacket(placeX, placeY, true).sendToServer();
+			}
 		}
 		return false;
 	}
@@ -59,7 +87,10 @@ public final class MicrochipRenderable implements GuiEventListener, Renderable, 
 	
 	private void renderLogic(GuiGraphics graphics, int mouseX, int mouseY, float partialTicks)
 	{
-		// TODO
+		for(LogicIndex entry : microchip.values())
+		{
+			LogicRenderers.render(graphics, entry.logic(), entry.x(), entry.y());
+		}
 	}
 	
 	private void renderShadowBg(GuiGraphics graphics, int mouseX, int mouseY, float partialTicks, int padding)

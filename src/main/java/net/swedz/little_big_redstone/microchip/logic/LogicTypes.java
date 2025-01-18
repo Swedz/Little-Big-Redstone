@@ -34,12 +34,12 @@ public final class LogicTypes
 			.map(LogicTypes::get, LogicType::id)
 			.dispatch(Logic::type, LogicType::streamCodec);
 	
-	public static final LogicType<NOTGate>  NOT  = registerGate("not", "NOT", NOTGate.CODEC, NOTGate.STREAM_CODEC, () -> NOTGate.DEFAULT);
-	public static final LogicType<ANDGate>  AND  = registerGate("and", "AND", ANDGate.CODEC, ANDGate.STREAM_CODEC, () -> ANDGate.DEFAULT);
-	public static final LogicType<NANDGate> NAND = registerGate("nand", "NAND", NANDGate.CODEC, NANDGate.STREAM_CODEC, () -> NANDGate.DEFAULT);
-	public static final LogicType<ORGate>   OR   = registerGate("or", "OR", ORGate.CODEC, ORGate.STREAM_CODEC, () -> ORGate.DEFAULT);
-	public static final LogicType<NORGate>  NOR  = registerGate("nor", "NOR", NORGate.CODEC, NORGate.STREAM_CODEC, () -> NORGate.DEFAULT);
-	public static final LogicType<XORGate>  XOR  = registerGate("xor", "XOR", XORGate.CODEC, XORGate.STREAM_CODEC, () -> XORGate.DEFAULT);
+	public static final LogicType<NOTGate>  NOT  = registerGate("not", "NOT", NOTGate.CODEC, NOTGate.STREAM_CODEC, NOTGate.DEFAULT);
+	public static final LogicType<ANDGate>  AND  = registerGate("and", "AND", ANDGate.CODEC, ANDGate.STREAM_CODEC, ANDGate.DEFAULT);
+	public static final LogicType<NANDGate> NAND = registerGate("nand", "NAND", NANDGate.CODEC, NANDGate.STREAM_CODEC, NANDGate.DEFAULT);
+	public static final LogicType<ORGate>   OR   = registerGate("or", "OR", ORGate.CODEC, ORGate.STREAM_CODEC, ORGate.DEFAULT);
+	public static final LogicType<NORGate>  NOR  = registerGate("nor", "NOR", NORGate.CODEC, NORGate.STREAM_CODEC, NORGate.DEFAULT);
+	public static final LogicType<XORGate>  XOR  = registerGate("xor", "XOR", XORGate.CODEC, XORGate.STREAM_CODEC, XORGate.DEFAULT);
 	
 	public static final LogicType<LogicSequencer> SEQUENCER = register("sequencer", "Sequencer", LogicSequencer.CODEC, LogicSequencer.STREAM_CODEC, () -> LogicSequencer.DEFAULT);
 	

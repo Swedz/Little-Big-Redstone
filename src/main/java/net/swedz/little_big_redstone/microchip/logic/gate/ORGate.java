@@ -7,6 +7,7 @@ import net.minecraft.network.codec.StreamCodec;
 import net.swedz.little_big_redstone.LBRText;
 import net.swedz.little_big_redstone.api.IntRange;
 import net.swedz.little_big_redstone.microchip.logic.LogicContext;
+import net.swedz.little_big_redstone.microchip.logic.LogicFactory;
 import net.swedz.little_big_redstone.microchip.logic.LogicType;
 import net.swedz.little_big_redstone.microchip.logic.LogicTypes;
 
@@ -17,7 +18,7 @@ import static net.swedz.tesseract.neoforge.tooltip.TextLine.*;
 
 public final class ORGate extends LogicGate<ORGate>
 {
-	public static final ORGate DEFAULT = new ORGate(false);
+	public static final LogicFactory DEFAULT = () -> new ORGate(false);
 	
 	public static final MapCodec<ORGate> CODEC = mapCodec(ORGate::new);
 	

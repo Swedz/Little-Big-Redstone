@@ -15,10 +15,10 @@ public final class LBRTooltips
 	public static final Style HIGHLIGHT_STYLE = Style.EMPTY.withColor(TextColor.fromRgb(0xffde7d)).withItalic(false);
 	
 	public static final TooltipAttachment LOGIC_GATE_NO_SHIFT = TooltipAttachment.multilinesOptional(
-			(stack, item) -> stack.has(LBRComponents.LOGIC.get()),
+			(stack, item) -> stack.has(LBRComponents.LOGIC),
 			(stack, item) ->
 			{
-				var logicGate = stack.get(LBRComponents.LOGIC.get());
+				var logicGate = stack.get(LBRComponents.LOGIC);
 				List<Component> lines = Lists.newArrayList();
 				logicGate.appendNoShiftHoverText(lines);
 				return lines.isEmpty() ? Optional.empty() : Optional.of(lines);
@@ -26,10 +26,10 @@ public final class LBRTooltips
 	).noShiftRequired();
 	
 	public static final TooltipAttachment LOGIC_GATE_SHIFT = TooltipAttachment.multilinesOptional(
-			(stack, item) -> stack.has(LBRComponents.LOGIC.get()),
+			(stack, item) -> stack.has(LBRComponents.LOGIC),
 			(stack, item) ->
 			{
-				var logicGate = stack.get(LBRComponents.LOGIC.get());
+				var logicGate = stack.get(LBRComponents.LOGIC);
 				List<Component> lines = Lists.newArrayList();
 				logicGate.appendShiftHoverText(lines);
 				return lines.isEmpty() ? Optional.empty() : Optional.of(lines);

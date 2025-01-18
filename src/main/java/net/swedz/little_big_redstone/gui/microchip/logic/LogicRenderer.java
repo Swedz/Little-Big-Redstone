@@ -22,16 +22,13 @@ public abstract class LogicRenderer<L extends Logic>
 	{
 		graphics.setColor(red, green, blue, 1);
 		
-		int width = size.width();
-		int height = size.height();
-		
-		if(width == 1 && height == 1)
+		if(size.isSingle())
 		{
 			graphics.blit(texture, x, y, 0, 0, 16, 16, 16, 16);
 		}
 		else
 		{
-			GuiGraphicsHelper.nineSlice(graphics, texture, x, y, width * 16, height * 16, 16, 16, 3);
+			GuiGraphicsHelper.nineSlice(graphics, texture, x, y, size.widthPixels(), size.heightPixels(), 16, 16, 3);
 		}
 		
 		graphics.setColor(1, 1, 1, 1);

@@ -7,6 +7,7 @@ import net.minecraft.network.codec.StreamCodec;
 import net.swedz.little_big_redstone.LBRText;
 import net.swedz.little_big_redstone.api.IntRange;
 import net.swedz.little_big_redstone.microchip.logic.LogicContext;
+import net.swedz.little_big_redstone.microchip.logic.LogicFactory;
 import net.swedz.little_big_redstone.microchip.logic.LogicType;
 import net.swedz.little_big_redstone.microchip.logic.LogicTypes;
 
@@ -17,7 +18,7 @@ import static net.swedz.tesseract.neoforge.tooltip.TextLine.*;
 
 public final class NORGate extends LogicGate<NORGate>
 {
-	public static final NORGate DEFAULT = new NORGate(false);
+	public static final LogicFactory DEFAULT = () -> new NORGate(false);
 	
 	public static final MapCodec<NORGate> CODEC = mapCodec(NORGate::new);
 	

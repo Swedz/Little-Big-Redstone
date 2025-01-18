@@ -9,13 +9,10 @@ import net.minecraft.world.item.ItemStack;
 import net.swedz.little_big_redstone.LBR;
 import net.swedz.little_big_redstone.LBRComponents;
 import net.swedz.little_big_redstone.gui.microchip.logic.LogicRenderers;
-import net.swedz.little_big_redstone.microchip.Microchip;
 
 public final class MicrochipScreen extends AbstractContainerScreen<MicrochipMenu>
 {
 	private static final ResourceLocation INVENTORY_BACKGROUND = LBR.id("textures/gui/container/microchip/inventory_background.png");
-	
-	private final Microchip microchip;
 	
 	private int boardX, boardY, boardWidth, boardHeight;
 	
@@ -30,8 +27,6 @@ public final class MicrochipScreen extends AbstractContainerScreen<MicrochipMenu
 		boardY = 0;
 		boardWidth = imageWidth;
 		boardHeight = imageHeight - 90 - 4;
-		
-		microchip = menu.microchip();
 	}
 	
 	private boolean isWithinBoard(int x, int y)
@@ -45,7 +40,7 @@ public final class MicrochipScreen extends AbstractContainerScreen<MicrochipMenu
 	{
 		super.init();
 		
-		this.addRenderableWidget(new MicrochipRenderable(boardX + leftPos, boardY + topPos, boardWidth, boardHeight, microchip));
+		this.addRenderableWidget(new MicrochipRenderable(boardX + leftPos, boardY + topPos, boardWidth, boardHeight, this));
 	}
 	
 	@Override
@@ -59,10 +54,14 @@ public final class MicrochipScreen extends AbstractContainerScreen<MicrochipMenu
 	@Override
 	public void renderFloatingItem(GuiGraphics graphics, ItemStack stack, int x, int y, String text)
 	{
-		if(stack.has(LBRComponents.LOGIC) && this.isWithinBoard(x + 8, y + 8))
+		int mouseX = x + 8;
+		int mouseY = y + 8;
+		if(stack.has(LBRComponents.LOGIC) && this.isWithinBoard(mouseX, mouseY))
 		{
 			var logic = stack.get(LBRComponents.LOGIC);
-			LogicRenderers.render(graphics, logic, x, y);
+			int logicX = logic.size().topLeftCornerX(mouseX);
+			int logicY = logic.size().topLeftCornerY(mouseY);
+			LogicRenderers.render(graphics, logic, logicX, logicY);
 		}
 		else
 		{

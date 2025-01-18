@@ -82,6 +82,18 @@ public final class Microchip
 		return this.remove(logic.slot());
 	}
 	
+	public boolean canFit(int x, int y, Logic logic)
+	{
+		for(LogicIndex entry : logics)
+		{
+			if(entry != null && entry.contains(x, y, logic.size()))
+			{
+				return false;
+			}
+		}
+		return true;
+	}
+	
 	public boolean add(int x, int y, Logic logic)
 	{
 		for(int i = 0; i < logics.length; i++)
@@ -93,6 +105,18 @@ public final class Microchip
 			}
 		}
 		return false;
+	}
+	
+	public LogicIndex findAt(int x, int y)
+	{
+		for(LogicIndex entry : logics)
+		{
+			if(entry != null && entry.contains(x, y))
+			{
+				return entry;
+			}
+		}
+		return null;
 	}
 	
 	public int size()

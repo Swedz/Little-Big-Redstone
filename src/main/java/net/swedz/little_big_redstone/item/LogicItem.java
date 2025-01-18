@@ -10,7 +10,7 @@ public final class LogicItem extends Item
 	
 	public LogicItem(Properties properties, LogicType<?> type)
 	{
-		super(properties.component(LBRComponents.LOGIC.get(), type.defaultFactory().create()));
+		super(properties.component(LBRComponents.LOGIC, type.defaultFactory().create()));
 		this.type = type;
 	}
 	
