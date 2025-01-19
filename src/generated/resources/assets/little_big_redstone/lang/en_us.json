@@ -1,6 +1,7 @@
 {
   "block.little_big_redstone.microchip": "Microchip",
   "item.little_big_redstone.and_gate": "AND Gate",
+  "item.little_big_redstone.io": "I/O Port",
   "item.little_big_redstone.nand_gate": "NAND Gate",
   "item.little_big_redstone.nor_gate": "NOR Gate",
   "item.little_big_redstone.not_gate": "NOT Gate",

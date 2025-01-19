@@ -1,16 +1,20 @@
 package net.swedz.little_big_redstone.microchip;
 
+import com.google.common.collect.Sets;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import io.netty.buffer.ByteBuf;
+import net.minecraft.core.Direction;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.swedz.little_big_redstone.LBR;
 import net.swedz.little_big_redstone.microchip.logic.LogicComponent;
+import net.swedz.little_big_redstone.microchip.logic.io.LogicIO;
 
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 
 public final class Microchip
 {
@@ -30,6 +34,9 @@ public final class Microchip
 	
 	private final LogicIndex[] logics = new LogicIndex[MAX_SIZE];
 	
+	private Set<Direction> redstoneInputs  = Sets.newHashSet();
+	private Set<Direction> redstoneOutputs = Sets.newHashSet();
+	
 	private boolean dirty;
 	
 	private Microchip(List<LogicIndex> logics)
@@ -42,8 +49,10 @@ public final class Microchip
 				LBR.LOGGER.error("Duplicate slot id found in logic index element, skipping!");
 				continue;
 			}
+			
 			this.logics[slot] = logic;
 		}
+		this.rebuildRedstoneInputOutputCache();
 	}
 	
 	public Microchip()
@@ -69,6 +78,7 @@ public final class Microchip
 	{
 		LogicIndex original = logics[index];
 		logics[index] = new LogicIndex(index, x, y, logic, new LogicOutputPorts());
+		this.rebuildRedstoneInputOutputCache();
 		this.markDirty();
 		return original;
 	}
@@ -77,6 +87,7 @@ public final class Microchip
 	{
 		LogicIndex original = logics[index];
 		logics[index] = null;
+		this.rebuildRedstoneInputOutputCache();
 		this.markDirty();
 		return original;
 	}
@@ -132,13 +143,47 @@ public final class Microchip
 	public void loadFrom(Microchip other)
 	{
 		System.arraycopy(other.logics, 0, logics, 0, logics.length);
+		this.rebuildRedstoneInputOutputCache();
 		this.markDirty();
 	}
 	
 	public void clear()
 	{
 		Arrays.fill(logics, null);
+		this.rebuildRedstoneInputOutputCache();
 		this.markDirty();
+	}
+	
+	private void rebuildRedstoneInputOutputCache()
+	{
+		Set<Direction> inputs = Sets.newHashSet();
+		Set<Direction> outputs = Sets.newHashSet();
+		for(LogicIndex entry : logics)
+		{
+			if(entry != null && entry.logic() instanceof LogicIO io)
+			{
+				if(io.config().input)
+				{
+					inputs.add(io.config().direction);
+				}
+				else
+				{
+					outputs.add(io.config().direction);
+				}
+			}
+		}
+		redstoneInputs = inputs;
+		redstoneOutputs = outputs;
+	}
+	
+	public boolean isFaceListeningForRedstoneInput(Direction direction)
+	{
+		return redstoneInputs.contains(direction);
+	}
+	
+	public boolean isFaceCapableForRedstoneOutput(Direction direction)
+	{
+		return redstoneOutputs.contains(direction);
 	}
 	
 	public boolean isDirty()

@@ -37,14 +37,12 @@ public final class MicrochipBlockEntity extends BlockEntity implements MenuProvi
 	
 	public boolean isFaceListeningForRedstoneInput(Direction direction)
 	{
-		// TODO check if the microchip has an input logic for this face
-		return true;
+		return microchip.isFaceListeningForRedstoneInput(direction);
 	}
 	
 	public boolean isFaceCapableForRedstoneOutput(Direction direction)
 	{
-		// TODO check if the microchip has an output logic for this face
-		return false;
+		return microchip.isFaceCapableForRedstoneOutput(direction);
 	}
 	
 	@Override

@@ -12,6 +12,9 @@ public abstract class LogicRenderer<L extends LogicComponent>
 	public static final ResourceLocation BACKGROUND         = LBR.id("textures/logic/background.png");
 	public static final ResourceLocation BACKGROUND_OVERLAY = LBR.id("textures/logic/background_overlay.png");
 	
+	public static final ResourceLocation BACKGROUND_CIRCLE         = LBR.id("textures/logic/background_circle.png");
+	public static final ResourceLocation BACKGROUND_CIRCLE_OVERLAY = LBR.id("textures/logic/background_circle_overlay.png");
+	
 	public LogicRenderer(LogicRendererProvider.Context context)
 	{
 	}
@@ -38,5 +41,12 @@ public abstract class LogicRenderer<L extends LogicComponent>
 	{
 		this.renderGridBlock(graphics, BACKGROUND, x, y, size, red, green, blue);
 		this.renderGridBlock(graphics, BACKGROUND_OVERLAY, x, y, size, 1, 1, 1);
+	}
+	
+	protected void renderBackgroundCircle(GuiGraphics graphics, int x, int y, float red, float green, float blue)
+	{
+		var size = new LogicGridSize(1, 1);
+		this.renderGridBlock(graphics, BACKGROUND_CIRCLE, x, y, size, red, green, blue);
+		this.renderGridBlock(graphics, BACKGROUND_CIRCLE_OVERLAY, x, y, size, 1, 1, 1);
 	}
 }

@@ -9,6 +9,7 @@ import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.AddReloadListenerEvent;
 import net.swedz.little_big_redstone.LBR;
+import net.swedz.little_big_redstone.gui.microchip.logic.renderer.IORenderer;
 import net.swedz.little_big_redstone.gui.microchip.logic.renderer.LogicGateRenderer;
 import net.swedz.little_big_redstone.gui.microchip.logic.renderer.SequencerRenderer;
 import net.swedz.little_big_redstone.microchip.logic.LogicComponent;
@@ -26,6 +27,8 @@ public final class LogicRenderers
 	
 	static
 	{
+		register(LogicTypes.IO, IORenderer::new);
+		
 		register(LogicTypes.NOT, LogicGateRenderer::new);
 		register(LogicTypes.AND, LogicGateRenderer::new);
 		register(LogicTypes.NAND, LogicGateRenderer::new);

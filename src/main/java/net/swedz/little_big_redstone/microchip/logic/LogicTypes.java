@@ -15,6 +15,7 @@ import net.swedz.little_big_redstone.microchip.logic.gate.NORGate;
 import net.swedz.little_big_redstone.microchip.logic.gate.NOTGate;
 import net.swedz.little_big_redstone.microchip.logic.gate.ORGate;
 import net.swedz.little_big_redstone.microchip.logic.gate.XORGate;
+import net.swedz.little_big_redstone.microchip.logic.io.LogicIO;
 import net.swedz.little_big_redstone.microchip.logic.sequencer.LogicSequencer;
 
 import java.util.Collections;
@@ -33,6 +34,8 @@ public final class LogicTypes
 	static final StreamCodec<ByteBuf, LogicComponent> STREAM_CODEC = ByteBufCodecs.STRING_UTF8
 			.map(LogicTypes::get, LogicType::id)
 			.dispatch(LogicComponent::type, LogicType::streamCodec);
+	
+	public static final LogicType<LogicIO> IO = register("io", "I/O Port", LogicIO.CODEC, LogicIO.STREAM_CODEC, LogicIO.DEFAULT);
 	
 	public static final LogicType<NOTGate>  NOT  = registerGate("not", "NOT", NOTGate.CODEC, NOTGate.STREAM_CODEC, NOTGate.DEFAULT);
 	public static final LogicType<ANDGate>  AND  = registerGate("and", "AND", ANDGate.CODEC, ANDGate.STREAM_CODEC, ANDGate.DEFAULT);
