@@ -8,6 +8,7 @@ import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.item.ItemStack;
 import net.swedz.little_big_redstone.LBR;
 import net.swedz.little_big_redstone.LBRComponents;
+import net.swedz.little_big_redstone.gui.microchip.logic.LogicRenderer;
 import net.swedz.little_big_redstone.gui.microchip.logic.LogicRenderers;
 
 public final class MicrochipScreen extends AbstractContainerScreen<MicrochipMenu>
@@ -61,7 +62,8 @@ public final class MicrochipScreen extends AbstractContainerScreen<MicrochipMenu
 			var logic = stack.get(LBRComponents.LOGIC);
 			int logicX = logic.size().topLeftCornerX(mouseX);
 			int logicY = logic.size().topLeftCornerY(mouseY);
-			LogicRenderers.render(graphics, logic, logicX, logicY);
+			var context = new LogicRenderer.Context(true);
+			LogicRenderers.render(context, graphics, logic, logicX, logicY);
 		}
 		else
 		{

@@ -15,11 +15,48 @@ public abstract class LogicRenderer<L extends LogicComponent>
 	public static final ResourceLocation BACKGROUND_CIRCLE         = LBR.id("textures/logic/background_circle.png");
 	public static final ResourceLocation BACKGROUND_CIRCLE_OVERLAY = LBR.id("textures/logic/background_circle_overlay.png");
 	
+	public static final ResourceLocation PORT_INPUT  = LBR.id("textures/logic/port_input.png");
+	public static final ResourceLocation PORT_OUTPUT = LBR.id("textures/logic/port_output.png");
+	
 	public LogicRenderer(LogicRendererProvider.Context context)
 	{
 	}
 	
-	public abstract void render(GuiGraphics graphics, L logic, int x, int y);
+	public abstract void render(Context context, GuiGraphics graphics, L logic, int x, int y);
+	
+	protected void renderPort(GuiGraphics graphics, int x, int y, LogicGridSize size, boolean input, int index, int maxPorts, float red, float green, float blue)
+	{
+		ResourceLocation texture = input ? PORT_INPUT : PORT_OUTPUT;
+		boolean evenMaxPorts = maxPorts % 2 == 0;
+		
+		int portPadding = size.heightPixels() / maxPorts;
+		
+		int halfX = size.centerX();
+		int halfY = size.centerY();
+		
+		int renderX = x + halfX + (input ? -halfX - 16 : halfX);
+		int renderY = y - 8 + (portPadding * index) + (portPadding / 2) + (evenMaxPorts || maxPorts == 1 ? 0 : 1);
+		
+		graphics.blit(texture, renderX, renderY, 0, 0, 16, 16, 16, 16);
+	}
+	
+	protected void renderAllPorts(Context context, GuiGraphics graphics, int x, int y, L logic, float red, float green, float blue)
+	{
+		if(!context.carried())
+		{
+			var size = logic.size();
+			int inputs = logic.inputs();
+			for(int i = 0; i < inputs; i++)
+			{
+				this.renderPort(graphics, x, y, size, true, i, inputs, 1, 1, 1);
+			}
+			int outputs = logic.outputs();
+			for(int i = 0; i < outputs; i++)
+			{
+				this.renderPort(graphics, x, y, size, false, i, outputs, 1, 1, 1);
+			}
+		}
+	}
 	
 	protected void renderGridBlock(GuiGraphics graphics, ResourceLocation texture, int x, int y, LogicGridSize size, float red, float green, float blue)
 	{
@@ -48,5 +85,9 @@ public abstract class LogicRenderer<L extends LogicComponent>
 		var size = new LogicGridSize(1, 1);
 		this.renderGridBlock(graphics, BACKGROUND_CIRCLE, x, y, size, red, green, blue);
 		this.renderGridBlock(graphics, BACKGROUND_CIRCLE_OVERLAY, x, y, size, 1, 1, 1);
+	}
+	
+	public record Context(boolean carried)
+	{
 	}
 }

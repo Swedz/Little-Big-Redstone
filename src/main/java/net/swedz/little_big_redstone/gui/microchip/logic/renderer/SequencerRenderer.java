@@ -14,9 +14,11 @@ public final class SequencerRenderer extends LogicRenderer<LogicSequencer>
 	}
 	
 	@Override
-	public void render(GuiGraphics graphics, LogicSequencer logic, int x, int y)
+	public void render(Context context, GuiGraphics graphics, LogicSequencer logic, int x, int y)
 	{
 		var size = logic.size();
+		
+		this.renderAllPorts(context, graphics, x, y, logic, 1, 1, 1);
 		
 		this.renderBackground(graphics, x, y, size, 1, 1, 1);
 		

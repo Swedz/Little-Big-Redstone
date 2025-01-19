@@ -72,12 +72,12 @@ public final class LogicRenderers
 				}));
 	}
 	
-	public static <L extends LogicComponent> void render(GuiGraphics graphics, L logic, int x, int y)
+	public static <L extends LogicComponent> void render(LogicRenderer.Context context, GuiGraphics graphics, L logic, int x, int y)
 	{
 		var renderer = (LogicRenderer<L>) RENDERERS.get(logic.type());
 		if(renderer != null)
 		{
-			renderer.render(graphics, logic, x, y);
+			renderer.render(context, graphics, logic, x, y);
 		}
 	}
 }

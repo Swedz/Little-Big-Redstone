@@ -11,6 +11,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import net.swedz.little_big_redstone.LBR;
 import net.swedz.little_big_redstone.LBRComponents;
+import net.swedz.little_big_redstone.gui.microchip.logic.LogicRenderer;
 import net.swedz.little_big_redstone.gui.microchip.logic.LogicRenderers;
 import net.swedz.little_big_redstone.helper.GuiGraphicsHelper;
 import net.swedz.little_big_redstone.microchip.LogicIndex;
@@ -90,9 +91,10 @@ public final class MicrochipRenderable implements GuiEventListener, Renderable, 
 	
 	private void renderLogic(GuiGraphics graphics, int mouseX, int mouseY, float partialTicks)
 	{
+		var context = new LogicRenderer.Context(false);
 		for(LogicIndex entry : microchip.values())
 		{
-			LogicRenderers.render(graphics, entry.logic(), entry.x(), entry.y());
+			LogicRenderers.render(context, graphics, entry.logic(), entry.x(), entry.y());
 		}
 	}
 	
