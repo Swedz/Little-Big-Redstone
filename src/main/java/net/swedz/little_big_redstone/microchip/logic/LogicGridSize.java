@@ -46,7 +46,7 @@ public record LogicGridSize(int width, int height)
 	public int portTopLeftCornerY(int y, boolean input, int index, int maxPorts)
 	{
 		int halfY = this.centerY();
-		int portPadding = this.heightPixels() / maxPorts; // TODO rounding up may get rid of the + 0 : 1 check below
+		int portPadding = this.heightPixels() / maxPorts;
 		return y - 8 + (portPadding * index) + (portPadding / 2) + (maxPorts % 2 == 0 || maxPorts == 1 ? 0 : 1);
 	}
 }
