@@ -27,15 +27,9 @@ public abstract class LogicRenderer<L extends LogicComponent>
 	protected void renderPort(GuiGraphics graphics, int x, int y, LogicGridSize size, boolean input, int index, int maxPorts, float red, float green, float blue)
 	{
 		ResourceLocation texture = input ? PORT_INPUT : PORT_OUTPUT;
-		boolean evenMaxPorts = maxPorts % 2 == 0;
 		
-		int portPadding = size.heightPixels() / maxPorts;
-		
-		int halfX = size.centerX();
-		int halfY = size.centerY();
-		
-		int renderX = x + halfX + (input ? -halfX - 16 : halfX);
-		int renderY = y - 8 + (portPadding * index) + (portPadding / 2) + (evenMaxPorts || maxPorts == 1 ? 0 : 1);
+		int renderX = size.portTopLeftCornerX(x, input, index, maxPorts);
+		int renderY = size.portTopLeftCornerY(y, input, index, maxPorts);
 		
 		graphics.blit(texture, renderX, renderY, 0, 0, 16, 16, 16, 16);
 	}
