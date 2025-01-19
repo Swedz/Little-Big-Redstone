@@ -52,24 +52,36 @@ public final class LogicOutputPorts
 		return this.get(index) != null;
 	}
 	
-	public void add(int index, int target)
+	public boolean add(int index, LogicSelectedPort port)
 	{
+		// TODO cannot insert target because array is too small (out of bounds exception...)
 		Targets value = targets[index];
 		if(value == null)
 		{
 			value = new Targets();
 			targets[index] = value;
 		}
-		value.add(target);
+		return value.add(port.entry().slot(), port.portIndex());
 	}
 	
-	public void remove(int index, int target)
+	public boolean remove(int index, LogicSelectedPort port)
 	{
 		Targets value = targets[index];
 		if(value != null)
 		{
-			value.remove(target);
+			return value.remove(port.entry().slot(), port.portIndex());
 		}
+		return false;
+	}
+	
+	public boolean removeAll(int index, int logicSlot)
+	{
+		Targets value = targets[index];
+		if(value != null)
+		{
+			return value.removeAll(logicSlot);
+		}
+		return false;
 	}
 	
 	public void removeAll(int index)
@@ -84,19 +96,19 @@ public final class LogicOutputPorts
 	
 	public static final class Targets
 	{
-		public static final Codec<Targets> CODEC = Codec.list(Codec.INT).comapFlatMap(
+		public static final Codec<Targets> CODEC = Codec.list(Target.CODEC).comapFlatMap(
 				(list) -> DataResult.success(new Targets(Sets.newHashSet(list))),
 				(targets) -> Lists.newArrayList(targets.targets)
 		);
 		
-		public static final StreamCodec<ByteBuf, Targets> STREAM_CODEC = ByteBufCodecs.VAR_INT.apply(ByteBufCodecs.list()).map(
+		public static final StreamCodec<ByteBuf, Targets> STREAM_CODEC = Target.STREAM_CODEC.apply(ByteBufCodecs.list()).map(
 				(list) -> new Targets(Sets.newHashSet(list)),
 				(targets) -> Lists.newArrayList(targets.targets)
 		);
 		
-		private final Set<Integer> targets;
+		private final Set<Target> targets;
 		
-		private Targets(Set<Integer> targets)
+		private Targets(Set<Target> targets)
 		{
 			this.targets = targets;
 		}
@@ -106,19 +118,38 @@ public final class LogicOutputPorts
 			targets = Sets.newHashSet();
 		}
 		
-		public Set<Integer> values()
+		public Set<Target> values()
 		{
 			return Collections.unmodifiableSet(targets);
 		}
 		
-		public boolean add(int target)
+		public boolean add(int logicSlot, int portIndex)
 		{
-			return targets.add(target);
+			return targets.add(new Target(logicSlot, portIndex));
 		}
 		
-		public boolean remove(int target)
+		public boolean remove(int logicSlot, int portIndex)
 		{
-			return targets.remove(target);
+			return targets.remove(new Target(logicSlot, portIndex));
 		}
+		
+		public boolean removeAll(int logicSlot)
+		{
+			return targets.removeIf((target) -> target.logicSlot() == logicSlot);
+		}
+	}
+	
+	public record Target(int logicSlot, int portIndex)
+	{
+		public static final Codec<Target> CODEC = Codec.list(Codec.INT, 2, 2).xmap(
+				(list) -> new Target(list.getFirst(), list.get(1)),
+				(target) -> List.of(target.logicSlot(), target.portIndex())
+		);
+		
+		public static final StreamCodec<ByteBuf, Target> STREAM_CODEC = StreamCodec.composite(
+				ByteBufCodecs.VAR_INT, Target::logicSlot,
+				ByteBufCodecs.VAR_INT, Target::portIndex,
+				Target::new
+		);
 	}
 }

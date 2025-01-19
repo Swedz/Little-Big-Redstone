@@ -15,6 +15,7 @@ import net.swedz.little_big_redstone.gui.microchip.logic.LogicRenderer;
 import net.swedz.little_big_redstone.gui.microchip.logic.LogicRenderers;
 import net.swedz.little_big_redstone.helper.GuiGraphicsHelper;
 import net.swedz.little_big_redstone.microchip.LogicIndex;
+import net.swedz.little_big_redstone.microchip.LogicSelectedPort;
 import net.swedz.little_big_redstone.microchip.Microchip;
 import net.swedz.little_big_redstone.network.packet.PlaceTakeLogicPacket;
 
@@ -28,6 +29,8 @@ public final class MicrochipRenderable implements GuiEventListener, Renderable, 
 	private final MicrochipScreen screen;
 	
 	private final Microchip microchip;
+	
+	private LogicSelectedPort selectedPort;
 	
 	public MicrochipRenderable(int x, int y, int width, int height, MicrochipScreen screen)
 	{
@@ -50,9 +53,35 @@ public final class MicrochipRenderable implements GuiEventListener, Renderable, 
 				var entry = microchip.findAt(x, y);
 				if(entry != null)
 				{
+					// TODO pop all selected ports that are from this logic component (including other players)
 					microchip.remove(entry);
 					menu.setCarried(entry.toStack());
 					new PlaceTakeLogicPacket(menu.containerId, x, y, false).sendToServer();
+				}
+				else
+				{
+					if(selectedPort != null)
+					{
+						var inputPort = microchip.findAtPort(x, y, true);
+						if(inputPort != null)
+						{
+							LBR.LOGGER.info("inserting output from {}:{} to {}:{}", selectedPort.entry().slot(), selectedPort.portIndex(), inputPort.entry().slot(), inputPort.portIndex());
+							selectedPort.entry().outputPorts().add(selectedPort.portIndex(), inputPort);
+							microchip.markDirty();
+							// TODO inform the server
+						}
+						selectedPort = null;
+					}
+					else
+					{
+						// TODO try to grab hovered wire first
+						
+						var outputPort = microchip.findAtPort(x, y, false);
+						if(outputPort != null)
+						{
+							selectedPort = outputPort;
+						}
+					}
 				}
 			}
 			else if(button == InputConstants.MOUSE_BUTTON_RIGHT)
@@ -80,8 +109,19 @@ public final class MicrochipRenderable implements GuiEventListener, Renderable, 
 	{
 		int mouseX = (int) mx;
 		int mouseY = (int) my;
-		return this.isMouseOver(mouseX, mouseY) &&
-			   this.mouseClickedOnBoard(this.toLocalX(mouseX), this.toLocalY(mouseY), button);
+		if(this.isMouseOver(mouseX, mouseY))
+		{
+			return this.mouseClickedOnBoard(this.toLocalX(mouseX), this.toLocalY(mouseY), button);
+		}
+		else
+		{
+			if(selectedPort != null)
+			{
+				selectedPort = null;
+				return true;
+			}
+			return false;
+		}
 	}
 	
 	private void renderWires(GuiGraphics graphics, int mouseX, int mouseY, float partialTicks)

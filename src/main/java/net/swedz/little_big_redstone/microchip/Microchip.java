@@ -136,6 +136,26 @@ public final class Microchip
 		return null;
 	}
 	
+	public LogicSelectedPort findAtPort(int x, int y, boolean input)
+	{
+		for(LogicIndex entry : logics)
+		{
+			if(entry != null)
+			{
+				var size = entry.logic().size();
+				int totalPorts = input ? entry.logic().inputs() : entry.logic().outputs();
+				for(int index = 0; index < totalPorts; index++)
+				{
+					if(size.portBounds(entry.x(), entry.y(), input, index, totalPorts).containsPoint(x, y))
+					{
+						return new LogicSelectedPort(entry, index);
+					}
+				}
+			}
+		}
+		return null;
+	}
+	
 	public int size()
 	{
 		return (int) Arrays.stream(logics).filter(Objects::nonNull).count();
