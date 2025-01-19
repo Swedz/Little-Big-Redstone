@@ -9,6 +9,7 @@ import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.swedz.little_big_redstone.LBR;
 import net.swedz.little_big_redstone.microchip.logic.LogicComponent;
+import net.swedz.little_big_redstone.microchip.logic.LogicContext;
 import net.swedz.little_big_redstone.microchip.logic.io.LogicIO;
 
 import java.util.Arrays;
@@ -162,13 +163,18 @@ public final class Microchip
 		{
 			if(entry != null && entry.logic() instanceof LogicIO io)
 			{
+				var direction = io.config().direction;
+				if(inputs.contains(direction) || outputs.contains(direction))
+				{
+					continue;
+				}
 				if(io.config().input)
 				{
-					inputs.add(io.config().direction);
+					inputs.add(direction);
 				}
 				else
 				{
-					outputs.add(io.config().direction);
+					outputs.add(direction);
 				}
 			}
 		}
@@ -199,5 +205,17 @@ public final class Microchip
 	public void markClean()
 	{
 		dirty = false;
+	}
+	
+	public void tickLogic(LogicContext context)
+	{
+		for(LogicIndex entry : logics)
+		{
+			if(entry != null)
+			{
+				// TODO pull input values from linked outputs
+				//entry.logic().processTick(context, new boolean[0]);
+			}
+		}
 	}
 }

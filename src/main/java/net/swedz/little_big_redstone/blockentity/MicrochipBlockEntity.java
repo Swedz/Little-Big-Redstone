@@ -1,5 +1,6 @@
 package net.swedz.little_big_redstone.blockentity;
 
+import com.google.common.collect.Sets;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.HolderLookup;
@@ -11,13 +12,18 @@ import net.minecraft.world.MenuProvider;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.swedz.little_big_redstone.LBR;
 import net.swedz.little_big_redstone.LBRBlocks;
 import net.swedz.little_big_redstone.api.Tickable;
+import net.swedz.little_big_redstone.block.MicrochipBlock;
 import net.swedz.little_big_redstone.gui.microchip.MicrochipMenu;
 import net.swedz.little_big_redstone.microchip.Microchip;
+import net.swedz.little_big_redstone.microchip.logic.LogicContext;
+
+import java.util.Set;
 
 public final class MicrochipBlockEntity extends BlockEntity implements MenuProvider, Tickable
 {
@@ -57,6 +63,28 @@ public final class MicrochipBlockEntity extends BlockEntity implements MenuProvi
 		return new MicrochipMenu(containerId, inventory, worldPosition, () -> !this.isRemoved(), microchip);
 	}
 	
+	private LogicContext buildLogicContext()
+	{
+		Set<Direction> inputPower = Sets.newHashSet();
+		Set<Direction> outputPower = Sets.newHashSet();
+		for(Direction direction : Direction.values())
+		{
+			boolean powered = this.getBlockState().getValue(MicrochipBlock.getDirectionalState(direction));
+			if(powered)
+			{
+				if(this.isFaceListeningForRedstoneInput(direction))
+				{
+					inputPower.add(direction);
+				}
+				else if(this.isFaceCapableForRedstoneOutput(direction))
+				{
+					outputPower.add(direction);
+				}
+			}
+		}
+		return new LogicContext(inputPower, outputPower);
+	}
+	
 	@Override
 	public void tick()
 	{
@@ -65,11 +93,20 @@ public final class MicrochipBlockEntity extends BlockEntity implements MenuProvi
 			return;
 		}
 		
-		// TODO tick logic and mark dirty if needed
+		LogicContext context = this.buildLogicContext();
+		microchip.tickLogic(context);
 		
 		if(microchip.isDirty())
 		{
 			microchip.markClean();
+			
+			var originalState = this.getBlockState();
+			var newState = context.applyPoweredState(this.getBlockState());
+			if(newState != originalState)
+			{
+				level.setBlock(worldPosition, newState, Block.UPDATE_ALL);
+			}
+			
 			this.setChanged();
 		}
 	}

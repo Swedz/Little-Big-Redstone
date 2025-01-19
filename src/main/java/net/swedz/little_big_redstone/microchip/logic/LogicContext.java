@@ -2,15 +2,23 @@ package net.swedz.little_big_redstone.microchip.logic;
 
 import com.google.common.collect.Sets;
 import net.minecraft.core.Direction;
+import net.minecraft.world.level.block.state.BlockState;
+import net.swedz.little_big_redstone.block.MicrochipBlock;
 
 import java.util.Set;
 
 public final class LogicContext
 {
-	private final Set<Direction> inputPower  = Sets.newHashSet();
-	private final Set<Direction> outputPower = Sets.newHashSet();
+	private final Set<Direction> inputPower;
+	private final Set<Direction> outputPower;
 	
 	private boolean dirty;
+	
+	public LogicContext(Set<Direction> inputPower, Set<Direction> outputPower)
+	{
+		this.inputPower = inputPower;
+		this.outputPower = outputPower;
+	}
 	
 	public boolean isInputPowered(Direction direction)
 	{
@@ -26,6 +34,7 @@ public final class LogicContext
 	{
 		if(powered)
 		{
+			outputPower.remove(direction);
 			inputPower.add(direction);
 		}
 		else
@@ -38,12 +47,22 @@ public final class LogicContext
 	{
 		if(powered)
 		{
+			inputPower.remove(direction);
 			outputPower.add(direction);
 		}
 		else
 		{
 			outputPower.remove(direction);
 		}
+	}
+	
+	public BlockState applyPoweredState(BlockState state)
+	{
+		for(var direction : Direction.values())
+		{
+			state = state.setValue(MicrochipBlock.getDirectionalState(direction), inputPower.contains(direction) || outputPower.contains(direction));
+		}
+		return state;
 	}
 	
 	public boolean isDirty()
