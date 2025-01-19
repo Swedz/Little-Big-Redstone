@@ -98,6 +98,8 @@ public final class LBRBlocks
 		return (builder) ->
 		{
 			AtomicInteger index = new AtomicInteger();
+			builder.itemModels().getBuilder(block.identifier().id())
+					.parent(builder.models().cubeAll(block.identifier().id(), LBR.id("block/microchip_on")));
 			builder.getVariantBuilder(block.get()).forAllStates((state) ->
 			{
 				boolean up = state.getValue(MicrochipBlock.UP);
