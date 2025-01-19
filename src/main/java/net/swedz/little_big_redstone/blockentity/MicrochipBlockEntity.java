@@ -96,7 +96,7 @@ public final class MicrochipBlockEntity extends BlockEntity implements MenuProvi
 		LogicContext context = this.buildLogicContext();
 		microchip.tickLogic(context);
 		
-		if(microchip.isDirty())
+		if(microchip.isDirty() || context.isDirty())
 		{
 			microchip.markClean();
 			

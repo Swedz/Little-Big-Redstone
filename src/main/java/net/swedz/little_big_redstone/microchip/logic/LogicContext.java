@@ -1,6 +1,5 @@
 package net.swedz.little_big_redstone.microchip.logic;
 
-import com.google.common.collect.Sets;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.block.state.BlockState;
 import net.swedz.little_big_redstone.block.MicrochipBlock;
