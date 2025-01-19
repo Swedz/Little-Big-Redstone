@@ -8,6 +8,7 @@ import net.minecraft.client.gui.narration.NarratableEntry;
 import net.minecraft.client.gui.narration.NarrationElementOutput;
 import net.minecraft.client.gui.navigation.ScreenRectangle;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.ItemStack;
 import net.swedz.little_big_redstone.LBR;
 import net.swedz.little_big_redstone.LBRComponents;
 import net.swedz.little_big_redstone.gui.microchip.logic.LogicRenderers;
@@ -67,6 +68,7 @@ public final class MicrochipRenderable implements GuiEventListener, Renderable, 
 			{
 				microchip.add(placeX, placeY, logic);
 				new PlaceTakeLogicPacket(menu.containerId, placeX, placeY, true).sendToServer();
+				menu.setCarried(ItemStack.EMPTY);
 			}
 		}
 		return false;
