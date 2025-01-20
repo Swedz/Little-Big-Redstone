@@ -74,7 +74,7 @@ public final class LogicSequencer extends LogicComponent<LogicSequencer, LogicSe
 				processedTicks = 0;
 			}
 		}
-		else if(processedTicks > 0)
+		else if(input || processedTicks > 0)
 		{
 			processedTicks++;
 		}
