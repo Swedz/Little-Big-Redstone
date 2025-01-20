@@ -119,6 +119,10 @@ public final class Microchip
 	
 	public boolean add(int x, int y, LogicComponent logic)
 	{
+		if(!this.canFit(x, y, logic))
+		{
+			return false;
+		}
 		for(int i = 0; i < logics.length; i++)
 		{
 			if(logics[i] == null)

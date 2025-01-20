@@ -69,9 +69,8 @@ public final class MicrochipRenderable implements GuiEventListener, Renderable, 
 			var logic = carried.get(LBRComponents.LOGIC);
 			int placeX = logic.size().topLeftCornerX(x);
 			int placeY = logic.size().topLeftCornerY(y);
-			if(microchip.canFit(placeX, placeY, logic))
+			if(microchip.add(placeX, placeY, logic))
 			{
-				microchip.add(placeX, placeY, logic);
 				carried.shrink(1);
 				new PlaceTakeLogicPacket(menu.containerId, placeX, placeY, true).sendToServer();
 			}

@@ -38,9 +38,8 @@ public record PlaceTakeLogicPacket(int containerId, int x, int y, boolean place)
 				if(heldItem.has(LBRComponents.LOGIC))
 				{
 					var logic = heldItem.get(LBRComponents.LOGIC);
-					if(microchip.canFit(x, y, logic))
+					if(microchip.add(x, y, logic))
 					{
-						microchip.add(x, y, logic);
 						heldItem.shrink(1);
 					}
 					else
