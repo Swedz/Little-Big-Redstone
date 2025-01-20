@@ -129,7 +129,7 @@ public final class MicrochipBlockEntity extends BlockEntity implements MenuProvi
 			Microchip.CODEC.parse(NbtOps.INSTANCE, tag.getCompound("microchip"))
 					.ifSuccess(microchip::loadFrom)
 					.ifError((error) ->
-							LBR.LOGGER.error("Failed to load microchip data at {} in {}: {}", worldPosition.toShortString(), level.dimension().location(), error.message()));
+							LBR.LOGGER.error("Failed to load microchip data at {}: {}", worldPosition.toShortString(), error.message()));
 		}
 		else
 		{
