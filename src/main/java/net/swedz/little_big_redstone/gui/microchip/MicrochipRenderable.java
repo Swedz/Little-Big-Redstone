@@ -18,6 +18,7 @@ import net.swedz.little_big_redstone.helper.GuiGraphicsHelper;
 import net.swedz.little_big_redstone.microchip.LogicEntry;
 import net.swedz.little_big_redstone.microchip.LogicSelectedPort;
 import net.swedz.little_big_redstone.microchip.Microchip;
+import net.swedz.little_big_redstone.microchip.logic.LogicTraversal;
 import net.swedz.little_big_redstone.microchip.wire.Wire;
 import net.swedz.little_big_redstone.network.packet.CreateMicrochipWirePacket;
 import net.swedz.little_big_redstone.network.packet.PlaceTakeMicrochipLogicPacket;
@@ -133,25 +134,25 @@ public final class MicrochipRenderable implements GuiEventListener, Renderable, 
 			LogicEntry outputLogic = microchip.components().get(wire.output().slot());
 			LogicEntry inputLogic = microchip.components().get(wire.input().slot());
 			
-			int x1 = outputLogic.x() + outputLogic.component().size().centerX();
-			int y1 = inputLogic.component().size().portTopLeftCornerY(outputLogic.y(), false, wire.output().index(), inputLogic.component().outputs()) + 8;
-			int x2 = inputLogic.x() + inputLogic.component().size().centerX();
+			int x1 = outputLogic.x() + outputLogic.component().size().widthPixels();
+			int y1 = outputLogic.component().size().portTopLeftCornerY(outputLogic.y(), false, wire.output().index(), outputLogic.component().outputs()) + 8;
+			int x2 = inputLogic.x();
 			int y2 = inputLogic.component().size().portTopLeftCornerY(inputLogic.y(), true, wire.input().index(), inputLogic.component().inputs()) + 8;
 			
 			boolean powered = outputLogic.component().output(wire.output().index());
 			
-			graphics.hLine(x1 + 10, x1 + 14, y1, powered ? 0xFFFFFFFF : 0xFF000000);
-			graphics.hLine(x2 - 15, x2 - 11, y2, powered ? 0xFFFFFFFF : 0xFF000000);
+			graphics.hLine(x1 + 2, x1 + 5, y1, powered ? 0xFFFFFFFF : 0xFF000000);
+			graphics.hLine(x2 - 6, x2 - 3, y2, powered ? 0xFFFFFFFF : 0xFF000000);
 		}
 	}
 	
 	private void renderLogic(GuiGraphics graphics, int mouseX, int mouseY, float partialTicks)
 	{
 		var context = new LogicRenderer.Context(false);
-		for(LogicEntry entry : microchip.components())
+		for(var entry : microchip.components())
 		{
 			LogicRenderers.render(context, graphics, entry.component(), entry.x(), entry.y());
-			graphics.drawString(Minecraft.getInstance().font, String.valueOf(entry.slot()), entry.x(), entry.y() - 8, 0xFFFFFF);
+			graphics.drawString(Minecraft.getInstance().font, entry.slot() + " (" + LogicTraversal.buildOrder(microchip).indexOf(entry) + ")", entry.x(), entry.y() - 8, 0xFFFFFF);
 		}
 	}
 	
