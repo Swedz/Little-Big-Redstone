@@ -4,6 +4,7 @@ import com.google.common.collect.Sets;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import io.netty.buffer.ByteBuf;
+import net.minecraft.client.gui.navigation.ScreenRectangle;
 import net.minecraft.core.Direction;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
@@ -19,7 +20,8 @@ import java.util.Set;
 
 public final class Microchip
 {
-	private static final int MAX_SIZE = 16 * 8;
+	private static final int             MAX_SIZE = 16 * 8;
+	private static final ScreenRectangle BOUNDS   = new ScreenRectangle(0, 0, 256, 138);
 	
 	public static final Codec<Microchip> CODEC = RecordCodecBuilder.create((instance) -> instance
 			.group(
@@ -100,7 +102,10 @@ public final class Microchip
 	
 	public boolean canFit(int x, int y, LogicComponent logic)
 	{
-		// TODO check that this logic piece fits entirely in the board at this position (just check top left and bottom right corners in the bounds)
+		if(!BOUNDS.containsPoint(x, y) || !BOUNDS.containsPoint(x + logic.size().widthPixels() - 1, y + logic.size().heightPixels() - 1))
+		{
+			return false;
+		}
 		for(LogicIndex entry : logics)
 		{
 			if(entry != null && entry.contains(x, y, logic.size()))
