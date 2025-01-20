@@ -3,10 +3,10 @@ package net.swedz.little_big_redstone.microchip;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import io.netty.buffer.ByteBuf;
-import net.minecraft.client.gui.navigation.ScreenRectangle;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.world.item.ItemStack;
+import net.swedz.little_big_redstone.api.Bounds;
 import net.swedz.little_big_redstone.microchip.logic.LogicComponent;
 import net.swedz.little_big_redstone.microchip.logic.LogicGridSize;
 
@@ -41,18 +41,18 @@ public record LogicIndex(int slot, int x, int y, LogicComponent logic, LogicOutp
 		return logic.type().toStack(logic);
 	}
 	
-	public ScreenRectangle bounds()
+	public Bounds bounds()
 	{
-		return new ScreenRectangle(x, y, logic.size().widthPixels(), logic.size().heightPixels());
+		return new Bounds(x, y, logic.size().widthPixels(), logic.size().heightPixels());
 	}
 	
 	public boolean contains(int x, int y)
 	{
-		return this.bounds().containsPoint(x, y);
+		return this.bounds().contains(x, y);
 	}
 	
 	public boolean contains(int x, int y, LogicGridSize size)
 	{
-		return this.bounds().overlaps(new ScreenRectangle(x, y, size.widthPixels(), size.heightPixels()));
+		return this.bounds().overlaps(new Bounds(x, y, size.widthPixels(), size.heightPixels()));
 	}
 }

@@ -4,11 +4,11 @@ import com.google.common.collect.Sets;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import io.netty.buffer.ByteBuf;
-import net.minecraft.client.gui.navigation.ScreenRectangle;
 import net.minecraft.core.Direction;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.swedz.little_big_redstone.LBR;
+import net.swedz.little_big_redstone.api.Bounds;
 import net.swedz.little_big_redstone.microchip.logic.LogicComponent;
 import net.swedz.little_big_redstone.microchip.logic.LogicContext;
 import net.swedz.little_big_redstone.microchip.logic.io.LogicIO;
@@ -20,8 +20,9 @@ import java.util.Set;
 
 public final class Microchip
 {
-	private static final int             MAX_SIZE = 16 * 8;
-	private static final ScreenRectangle BOUNDS   = new ScreenRectangle(0, 0, 256, 138);
+	public static final int MAX_SIZE = 16 * 8;
+	
+	public static final Bounds BOUNDS = new Bounds(0, 0, 256, 138);
 	
 	public static final Codec<Microchip> CODEC = RecordCodecBuilder.create((instance) -> instance
 			.group(
@@ -102,7 +103,7 @@ public final class Microchip
 	
 	public boolean canFit(int x, int y, LogicComponent logic)
 	{
-		if(!BOUNDS.containsPoint(x, y) || !BOUNDS.containsPoint(x + logic.size().widthPixels() - 1, y + logic.size().heightPixels() - 1))
+		if(!BOUNDS.contains(logic.size().toBounds(x, y)))
 		{
 			return false;
 		}
@@ -151,7 +152,7 @@ public final class Microchip
 				int totalPorts = input ? entry.logic().inputs() : entry.logic().outputs();
 				for(int index = 0; index < totalPorts; index++)
 				{
-					if(size.portBounds(entry.x(), entry.y(), input, index, totalPorts).containsPoint(x, y))
+					if(size.portBounds(entry.x(), entry.y(), input, index, totalPorts).contains(x, y))
 					{
 						return new LogicSelectedPort(entry, index);
 					}

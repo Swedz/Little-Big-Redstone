@@ -10,6 +10,7 @@ import net.swedz.little_big_redstone.LBR;
 import net.swedz.little_big_redstone.LBRComponents;
 import net.swedz.little_big_redstone.gui.microchip.logic.LogicRenderer;
 import net.swedz.little_big_redstone.gui.microchip.logic.LogicRenderers;
+import net.swedz.little_big_redstone.microchip.Microchip;
 
 public final class MicrochipScreen extends AbstractContainerScreen<MicrochipMenu>
 {
@@ -32,8 +33,7 @@ public final class MicrochipScreen extends AbstractContainerScreen<MicrochipMenu
 	
 	private boolean isWithinBoard(int x, int y)
 	{
-		return x >= boardX && x < boardX + boardWidth &&
-			   y >= boardY && y < boardY + boardHeight;
+		return Microchip.BOUNDS.contains(x, y);
 	}
 	
 	@Override

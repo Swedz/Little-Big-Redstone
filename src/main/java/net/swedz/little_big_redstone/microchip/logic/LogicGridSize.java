@@ -1,6 +1,6 @@
 package net.swedz.little_big_redstone.microchip.logic;
 
-import net.minecraft.client.gui.navigation.ScreenRectangle;
+import net.swedz.little_big_redstone.api.Bounds;
 
 public record LogicGridSize(int width, int height)
 {
@@ -17,6 +17,11 @@ public record LogicGridSize(int width, int height)
 	public int heightPixels()
 	{
 		return height * 16;
+	}
+	
+	public Bounds toBounds(int x, int y)
+	{
+		return new Bounds(x, y, this.widthPixels(), this.heightPixels());
 	}
 	
 	public int centerX()
@@ -52,7 +57,7 @@ public record LogicGridSize(int width, int height)
 		return y - 8 + (portPadding * index) + (portPadding / 2) + (totalPorts % 2 == 0 || totalPorts == 1 ? 0 : 1);
 	}
 	
-	public ScreenRectangle portBounds(int x, int y, boolean input, int index, int totalPorts)
+	public Bounds portBounds(int x, int y, boolean input, int index, int totalPorts)
 	{
 		int portX = this.portTopLeftCornerX(x, input, index, totalPorts);
 		int portY = this.portTopLeftCornerY(y, input, index, totalPorts);
@@ -61,6 +66,6 @@ public record LogicGridSize(int width, int height)
 			portX += 13;
 		}
 		portY += 5;
-		return new ScreenRectangle(portX, portY, 3, 4 + 2);
+		return new Bounds(portX, portY, 3, 6);
 	}
 }
