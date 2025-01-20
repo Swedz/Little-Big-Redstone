@@ -70,6 +70,10 @@ public final class Microchip
 	
 	public LogicIndex get(int index)
 	{
+		if(index < 0 || index >= logics.length)
+		{
+			return null;
+		}
 		return logics[index];
 	}
 	

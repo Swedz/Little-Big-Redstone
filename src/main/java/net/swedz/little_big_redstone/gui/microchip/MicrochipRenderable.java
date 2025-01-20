@@ -17,6 +17,7 @@ import net.swedz.little_big_redstone.helper.GuiGraphicsHelper;
 import net.swedz.little_big_redstone.microchip.LogicIndex;
 import net.swedz.little_big_redstone.microchip.LogicSelectedPort;
 import net.swedz.little_big_redstone.microchip.Microchip;
+import net.swedz.little_big_redstone.network.packet.CreateMicrochipWirePacket;
 import net.swedz.little_big_redstone.network.packet.PlaceTakeMicrochipLogicPacket;
 
 public final class MicrochipRenderable implements GuiEventListener, Renderable, NarratableEntry
@@ -85,7 +86,7 @@ public final class MicrochipRenderable implements GuiEventListener, Renderable, 
 					LBR.LOGGER.info("inserting output from {}:{} to {}:{}", selectedPort.entry().slot(), selectedPort.portIndex(), inputPort.entry().slot(), inputPort.portIndex());
 					microchip.markDirty();
 					carried.shrink(1);
-					// TODO inform the server
+					new CreateMicrochipWirePacket(menu.containerId, selectedPort, inputPort).sendToServer();
 				}
 				else
 				{
