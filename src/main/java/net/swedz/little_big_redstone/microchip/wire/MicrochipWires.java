@@ -74,7 +74,8 @@ public final class MicrochipWires implements Iterable<Wire>
 	
 	public List<Wire> get(int slot)
 	{
-		return List.copyOf(wiresBySlot.get(slot));
+		var list = wiresBySlot.get(slot);
+		return list == null ? List.of() : List.copyOf(list);
 	}
 	
 	public boolean add(Wire wire)
