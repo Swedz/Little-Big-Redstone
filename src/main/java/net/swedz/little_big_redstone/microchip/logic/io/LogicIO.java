@@ -7,7 +7,6 @@ import io.netty.buffer.ByteBuf;
 import net.minecraft.core.Direction;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
-import net.swedz.little_big_redstone.LBR;
 import net.swedz.little_big_redstone.api.IntRange;
 import net.swedz.little_big_redstone.microchip.logic.LogicComponent;
 import net.swedz.little_big_redstone.microchip.logic.LogicContext;
@@ -57,7 +56,6 @@ public final class LogicIO extends LogicComponent<LogicIO, LogicIOConfig>
 		}
 		if(outputState != originalOutputState)
 		{
-			LBR.LOGGER.info("I/O port output state changed to: {}", outputState);
 			context.markDirty();
 		}
 	}

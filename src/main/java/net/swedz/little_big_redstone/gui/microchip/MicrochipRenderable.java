@@ -84,14 +84,9 @@ public final class MicrochipRenderable implements GuiEventListener, Renderable, 
 				var inputPort = microchip.components().findPortAt(x, y, true);
 				if(inputPort != null && microchip.wires().add(selectedPort, inputPort))
 				{
-					LBR.LOGGER.info("inserting output from {}:{} to {}:{}", selectedPort.entry().slot(), selectedPort.portIndex(), inputPort.entry().slot(), inputPort.portIndex());
 					microchip.markDirty();
 					carried.shrink(1);
 					new CreateMicrochipWirePacket(menu.containerId, selectedPort, inputPort).sendToServer();
-				}
-				else
-				{
-					LBR.LOGGER.info("discarding wire");
 				}
 				selectedPort = null;
 			}
@@ -103,7 +98,6 @@ public final class MicrochipRenderable implements GuiEventListener, Renderable, 
 				if(outputPort != null)
 				{
 					selectedPort = outputPort;
-					LBR.LOGGER.info("grabbed wire output {}:{}", selectedPort.entry().slot(), selectedPort.portIndex());
 				}
 			}
 		}
@@ -124,7 +118,6 @@ public final class MicrochipRenderable implements GuiEventListener, Renderable, 
 			if(selectedPort != null)
 			{
 				selectedPort = null;
-				LBR.LOGGER.info("discarding wire");
 				return true;
 			}
 			return false;

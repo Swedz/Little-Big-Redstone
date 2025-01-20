@@ -60,7 +60,7 @@ public record CreateMicrochipWirePacket(
 					}
 					else
 					{
-						LBR.LOGGER.info("Received CreateMicrochipWirePacket from {} with already existing wire: {}#{} -> {}#{}, discarding", playerName, outputSlot, outputPort, inputSlot, inputPort);
+						LBR.LOGGER.warn("Received CreateMicrochipWirePacket from {} with already existing wire: {}#{} -> {}#{}, discarding", playerName, outputSlot, outputPort, inputSlot, inputPort);
 					}
 				}
 				else
