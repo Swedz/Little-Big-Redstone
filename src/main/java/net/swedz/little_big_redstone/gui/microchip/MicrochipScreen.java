@@ -16,19 +16,12 @@ public final class MicrochipScreen extends AbstractContainerScreen<MicrochipMenu
 {
 	private static final ResourceLocation INVENTORY_BACKGROUND = LBR.id("textures/gui/container/microchip/inventory_background.png");
 	
-	private int boardX, boardY, boardWidth, boardHeight;
-	
 	public MicrochipScreen(MicrochipMenu menu, Inventory playerInventory, Component title)
 	{
 		super(menu, playerInventory, title);
 		
 		imageWidth = 256;
 		imageHeight = 256 - (12 * 2);
-		
-		boardX = 0;
-		boardY = 0;
-		boardWidth = imageWidth;
-		boardHeight = imageHeight - 90 - 4;
 	}
 	
 	private boolean isWithinBoard(int x, int y)
@@ -41,7 +34,8 @@ public final class MicrochipScreen extends AbstractContainerScreen<MicrochipMenu
 	{
 		super.init();
 		
-		this.addRenderableWidget(new MicrochipRenderable(boardX + leftPos, boardY + topPos, boardWidth, boardHeight, this));
+		var bounds = Microchip.BOUNDS;
+		this.addRenderableWidget(new MicrochipRenderable(bounds.minX() + leftPos, bounds.minY() + topPos, bounds.width(), bounds.height(), this));
 	}
 	
 	@Override
