@@ -22,7 +22,7 @@ public abstract class LogicRenderer<L extends LogicComponent>
 	{
 	}
 	
-	public abstract void render(Context context, GuiGraphics graphics, L logic, int x, int y);
+	public abstract void render(Context context, GuiGraphics graphics, L component, int x, int y);
 	
 	protected void renderPort(GuiGraphics graphics, int x, int y, LogicGridSize size, boolean input, int index, int maxPorts, float red, float green, float blue)
 	{
@@ -34,17 +34,17 @@ public abstract class LogicRenderer<L extends LogicComponent>
 		graphics.blit(texture, renderX, renderY, 0, 0, 16, 16, 16, 16);
 	}
 	
-	protected void renderAllPorts(Context context, GuiGraphics graphics, int x, int y, L logic, float red, float green, float blue)
+	protected void renderAllPorts(Context context, GuiGraphics graphics, int x, int y, L component, float red, float green, float blue)
 	{
 		if(!context.carried())
 		{
-			var size = logic.size();
-			int inputs = logic.inputs();
+			var size = component.size();
+			int inputs = component.inputs();
 			for(int i = 0; i < inputs; i++)
 			{
 				this.renderPort(graphics, x, y, size, true, i, inputs, 1, 1, 1);
 			}
-			int outputs = logic.outputs();
+			int outputs = component.outputs();
 			for(int i = 0; i < outputs; i++)
 			{
 				this.renderPort(graphics, x, y, size, false, i, outputs, 1, 1, 1);

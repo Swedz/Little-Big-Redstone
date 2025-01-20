@@ -14,12 +14,12 @@ public final class IORenderer extends LogicRenderer<LogicIO>
 	}
 	
 	@Override
-	public void render(Context context, GuiGraphics graphics, LogicIO logic, int x, int y)
+	public void render(Context context, GuiGraphics graphics, LogicIO component, int x, int y)
 	{
-		this.renderAllPorts(context, graphics, x, y, logic, 1, 1, 1);
+		this.renderAllPorts(context, graphics, x, y, component, 1, 1, 1);
 		
 		this.renderBackgroundCircle(graphics, x, y, 1, 1, 1);
 		
-		graphics.blit(LBR.id("textures/logic/%s.png".formatted(logic.config().input ? "io_input" : "io_output")), x, y, 0, 0, 16, 16, 16, 16);
+		graphics.blit(LBR.id("textures/logic/%s.png".formatted(component.config().input ? "io_input" : "io_output")), x, y, 0, 0, 16, 16, 16, 16);
 	}
 }

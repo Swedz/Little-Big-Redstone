@@ -18,9 +18,9 @@ public final class LBRTooltips
 			(stack, item) -> stack.has(LBRComponents.LOGIC),
 			(stack, item) ->
 			{
-				var logicGate = stack.get(LBRComponents.LOGIC);
+				var logicComponent = stack.get(LBRComponents.LOGIC);
 				List<Component> lines = Lists.newArrayList();
-				logicGate.appendNoShiftHoverText(lines);
+				logicComponent.appendNoShiftHoverText(lines);
 				return lines.isEmpty() ? Optional.empty() : Optional.of(lines);
 			}
 	).noShiftRequired();
@@ -29,9 +29,9 @@ public final class LBRTooltips
 			(stack, item) -> stack.has(LBRComponents.LOGIC),
 			(stack, item) ->
 			{
-				var logicGate = stack.get(LBRComponents.LOGIC);
+				var logicComponent = stack.get(LBRComponents.LOGIC);
 				List<Component> lines = Lists.newArrayList();
-				logicGate.appendShiftHoverText(lines);
+				logicComponent.appendShiftHoverText(lines);
 				return lines.isEmpty() ? Optional.empty() : Optional.of(lines);
 			}
 	);

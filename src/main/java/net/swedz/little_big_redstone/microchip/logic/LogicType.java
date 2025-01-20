@@ -13,10 +13,10 @@ public record LogicType<L extends LogicComponent>(
 		LogicFactory defaultFactory
 )
 {
-	public ItemStack toStack(L logic)
+	public ItemStack toStack(L component)
 	{
 		var stack = new ItemStack(LBRItems.valueOf(id));
-		stack.set(LBRComponents.LOGIC, logic.copy());
+		stack.set(LBRComponents.LOGIC, component.copy());
 		return stack;
 	}
 	

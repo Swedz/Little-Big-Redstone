@@ -53,11 +53,11 @@ public final class MicrochipScreen extends AbstractContainerScreen<MicrochipMenu
 		int mouseY = y + 8;
 		if(stack.has(LBRComponents.LOGIC) && this.isWithinBoard(mouseX, mouseY))
 		{
-			var logic = stack.get(LBRComponents.LOGIC);
-			int logicX = logic.size().topLeftCornerX(mouseX);
-			int logicY = logic.size().topLeftCornerY(mouseY);
+			var component = stack.get(LBRComponents.LOGIC);
+			int logicX = component.size().topLeftCornerX(mouseX);
+			int logicY = component.size().topLeftCornerY(mouseY);
 			var context = new LogicRenderer.Context(true);
-			LogicRenderers.render(context, graphics, logic, logicX, logicY);
+			LogicRenderers.render(context, graphics, component, logicX, logicY);
 		}
 		else
 		{

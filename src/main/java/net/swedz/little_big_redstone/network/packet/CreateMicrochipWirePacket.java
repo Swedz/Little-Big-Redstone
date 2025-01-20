@@ -43,15 +43,17 @@ public record CreateMicrochipWirePacket(
 		if(player.hasContainerOpen() && player.containerMenu instanceof MicrochipMenu menu && menu.containerId == containerId)
 		{
 			var microchip = menu.microchip();
+			var components = microchip.components();
+			var wires = microchip.wires();
 			ItemStack heldItem = menu.getCarried();
 			if(heldItem.is(LBRTags.Items.MICROCHIP_WIRE))
 			{
-				var outputLogic = microchip.get(outputSlot);
-				var inputLogic = microchip.get(inputSlot);
-				if(outputLogic != null && outputPort < outputLogic.logic().outputs() &&
-				   inputLogic != null && inputSlot < inputLogic.logic().inputs())
+				var outputLogic = components.get(outputSlot);
+				var inputLogic = components.get(inputSlot);
+				if(outputLogic != null && outputPort < outputLogic.component().outputs() &&
+				   inputLogic != null && inputPort < inputLogic.component().inputs())
 				{
-					if(outputLogic.addOutputPort(outputPort, inputSlot, inputPort))
+					if(wires.add(outputSlot, outputPort, inputSlot, inputPort))
 					{
 						microchip.markDirty();
 						heldItem.shrink(1);

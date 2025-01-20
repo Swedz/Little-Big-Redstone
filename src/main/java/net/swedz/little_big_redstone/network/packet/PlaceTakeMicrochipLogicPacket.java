@@ -31,14 +31,14 @@ public record PlaceTakeMicrochipLogicPacket(int containerId, int x, int y, boole
 		
 		if(player.hasContainerOpen() && player.containerMenu instanceof MicrochipMenu menu && menu.containerId == containerId)
 		{
-			var microchip = menu.microchip();
+			var components = menu.microchip().components();
 			ItemStack heldItem = menu.getCarried();
 			if(place)
 			{
 				if(heldItem.has(LBRComponents.LOGIC))
 				{
-					var logic = heldItem.get(LBRComponents.LOGIC);
-					if(microchip.add(x, y, logic))
+					var component = heldItem.get(LBRComponents.LOGIC);
+					if(components.add(x, y, component))
 					{
 						heldItem.shrink(1);
 					}
@@ -56,11 +56,11 @@ public record PlaceTakeMicrochipLogicPacket(int containerId, int x, int y, boole
 			{
 				if(heldItem.isEmpty())
 				{
-					var logic = microchip.findAt(x, y);
-					if(logic != null)
+					var component = components.findAt(x, y);
+					if(component != null)
 					{
-						microchip.remove(logic);
-						menu.setCarried(logic.toStack());
+						components.remove(component);
+						menu.setCarried(component.toStack());
 					}
 					else
 					{

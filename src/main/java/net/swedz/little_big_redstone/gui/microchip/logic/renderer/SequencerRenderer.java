@@ -14,16 +14,16 @@ public final class SequencerRenderer extends LogicRenderer<LogicSequencer>
 	}
 	
 	@Override
-	public void render(Context context, GuiGraphics graphics, LogicSequencer logic, int x, int y)
+	public void render(Context context, GuiGraphics graphics, LogicSequencer component, int x, int y)
 	{
-		var size = logic.size();
+		var size = component.size();
 		
-		this.renderAllPorts(context, graphics, x, y, logic, 1, 1, 1);
+		this.renderAllPorts(context, graphics, x, y, component, 1, 1, 1);
 		
 		this.renderBackground(graphics, x, y, size, 1, 1, 1);
 		
 		int fillWidth = size.widthPixels() - 4;
-		fillWidth = (int) (fillWidth * logic.processedPercentage());
+		fillWidth = (int) (fillWidth * component.processedPercentage());
 		graphics.blit(LBR.id("textures/logic/sequencer.png"), x + 2, y + 2, 0, 0, fillWidth, size.heightPixels() - 4, 12, 12);
 	}
 }

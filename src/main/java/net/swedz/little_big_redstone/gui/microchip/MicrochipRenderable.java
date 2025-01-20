@@ -14,7 +14,7 @@ import net.swedz.little_big_redstone.LBRTags;
 import net.swedz.little_big_redstone.gui.microchip.logic.LogicRenderer;
 import net.swedz.little_big_redstone.gui.microchip.logic.LogicRenderers;
 import net.swedz.little_big_redstone.helper.GuiGraphicsHelper;
-import net.swedz.little_big_redstone.microchip.LogicIndex;
+import net.swedz.little_big_redstone.microchip.LogicEntry;
 import net.swedz.little_big_redstone.microchip.LogicSelectedPort;
 import net.swedz.little_big_redstone.microchip.Microchip;
 import net.swedz.little_big_redstone.network.packet.CreateMicrochipWirePacket;
@@ -51,11 +51,11 @@ public final class MicrochipRenderable implements GuiEventListener, Renderable, 
 		{
 			if(button == InputConstants.MOUSE_BUTTON_LEFT)
 			{
-				var entry = microchip.findAt(x, y);
+				var entry = microchip.components().findAt(x, y);
 				if(entry != null)
 				{
 					// TODO pop all selected ports that are from this logic component (including other players)
-					microchip.remove(entry);
+					microchip.components().remove(entry);
 					menu.setCarried(entry.toStack());
 					new PlaceTakeMicrochipLogicPacket(menu.containerId, x, y, false).sendToServer();
 				}
@@ -67,10 +67,11 @@ public final class MicrochipRenderable implements GuiEventListener, Renderable, 
 		}
 		else if(carried.has(LBRComponents.LOGIC) && button == InputConstants.MOUSE_BUTTON_LEFT)
 		{
-			var logic = carried.get(LBRComponents.LOGIC);
-			int placeX = logic.size().topLeftCornerX(x);
-			int placeY = logic.size().topLeftCornerY(y);
-			if(microchip.add(placeX, placeY, logic))
+			var component = carried.get(LBRComponents.LOGIC);
+			int placeX = component.size().topLeftCornerX(x);
+			int placeY = component.size().topLeftCornerY(y);
+			
+			if(microchip.components().add(placeX, placeY, component))
 			{
 				carried.shrink(1);
 				new PlaceTakeMicrochipLogicPacket(menu.containerId, placeX, placeY, true).sendToServer();
@@ -80,8 +81,8 @@ public final class MicrochipRenderable implements GuiEventListener, Renderable, 
 		{
 			if(selectedPort != null)
 			{
-				var inputPort = microchip.findAtPort(x, y, true);
-				if(inputPort != null && selectedPort.addOutputPort(inputPort))
+				var inputPort = microchip.components().findPortAt(x, y, true);
+				if(inputPort != null && microchip.wires().add(selectedPort, inputPort))
 				{
 					LBR.LOGGER.info("inserting output from {}:{} to {}:{}", selectedPort.entry().slot(), selectedPort.portIndex(), inputPort.entry().slot(), inputPort.portIndex());
 					microchip.markDirty();
@@ -98,7 +99,7 @@ public final class MicrochipRenderable implements GuiEventListener, Renderable, 
 			{
 				// TODO try to grab hovered wire first
 				
-				var outputPort = microchip.findAtPort(x, y, false);
+				var outputPort = microchip.components().findPortAt(x, y, false);
 				if(outputPort != null)
 				{
 					selectedPort = outputPort;
@@ -138,9 +139,9 @@ public final class MicrochipRenderable implements GuiEventListener, Renderable, 
 	private void renderLogic(GuiGraphics graphics, int mouseX, int mouseY, float partialTicks)
 	{
 		var context = new LogicRenderer.Context(false);
-		for(LogicIndex entry : microchip.values())
+		for(LogicEntry entry : microchip.components())
 		{
-			LogicRenderers.render(context, graphics, entry.logic(), entry.x(), entry.y());
+			LogicRenderers.render(context, graphics, entry.component(), entry.x(), entry.y());
 		}
 	}
 	
