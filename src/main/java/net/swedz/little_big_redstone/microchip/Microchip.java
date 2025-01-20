@@ -100,9 +100,24 @@ public final class Microchip
 	{
 		for(var entry : components.traversal())
 		{
+			int inputSlot = entry.slot();
 			int totalInputs = entry.component().inputs();
 			boolean[] inputs = new boolean[totalInputs];
-			// TODO read inputs ...
+			outer:
+			for(int inputPort = 0; inputPort < totalInputs; inputPort++)
+			{
+				for(var wire : wires.getByInput(inputSlot))
+				{
+					if(wire.input().index() == inputPort)
+					{
+						if(components.get(wire.output().slot()).component().output(wire.output().index()))
+						{
+							inputs[inputPort] = true;
+							continue outer;
+						}
+					}
+				}
+			}
 			entry.component().processTick(context, inputs);
 		}
 	}
