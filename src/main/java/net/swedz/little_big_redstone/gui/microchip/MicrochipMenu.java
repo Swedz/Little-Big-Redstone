@@ -56,6 +56,11 @@ public final class MicrochipMenu extends AbstractContainerMenu
 		}
 	}
 	
+	public BlockPos blockPos()
+	{
+		return blockPos;
+	}
+	
 	public Microchip microchip()
 	{
 		return microchip;

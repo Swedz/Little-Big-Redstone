@@ -8,6 +8,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtOps;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.MenuProvider;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
@@ -22,6 +23,7 @@ import net.swedz.little_big_redstone.block.MicrochipBlock;
 import net.swedz.little_big_redstone.gui.microchip.MicrochipMenu;
 import net.swedz.little_big_redstone.microchip.Microchip;
 import net.swedz.little_big_redstone.microchip.logic.LogicContext;
+import net.swedz.little_big_redstone.network.packet.UpdateMicrochipPacket;
 
 import java.util.Set;
 
@@ -116,7 +118,14 @@ public final class MicrochipBlockEntity extends BlockEntity implements MenuProvi
 	{
 		super.setChanged();
 		
-		// TODO update listening clients
+		// TODO only send client the data that has changed, not the entire microchip
+		for(var player : level.players())
+		{
+			if(player.containerMenu instanceof MicrochipMenu menu && worldPosition.equals(menu.blockPos()))
+			{
+				new UpdateMicrochipPacket(menu.containerId, microchip).sendToClient((ServerPlayer) player);
+			}
+		}
 	}
 	
 	@Override
