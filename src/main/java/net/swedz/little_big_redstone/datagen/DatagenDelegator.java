@@ -5,6 +5,7 @@ import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.data.event.GatherDataEvent;
 import net.swedz.little_big_redstone.LBR;
 import net.swedz.little_big_redstone.datagen.client.DatagenDelegatorClient;
+import net.swedz.little_big_redstone.datagen.server.DatagenDelegatorServer;
 
 @EventBusSubscriber(modid = LBR.ID, bus = EventBusSubscriber.Bus.MOD)
 public final class DatagenDelegator
@@ -13,5 +14,6 @@ public final class DatagenDelegator
 	private static void gatherData(GatherDataEvent event)
 	{
 		DatagenDelegatorClient.configure(event);
+		DatagenDelegatorServer.configure(event);
 	}
 }
