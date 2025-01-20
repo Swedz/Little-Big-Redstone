@@ -17,7 +17,7 @@ public final class Microchip
 	
 	public static final Codec<Microchip> CODEC = RecordCodecBuilder.create((instance) -> instance
 			.group(
-					LogicComponents.CODEC.fieldOf("logics").forGetter(Microchip::components),
+					LogicComponents.CODEC.fieldOf("components").forGetter(Microchip::components),
 					MicrochipWires.CODEC.fieldOf("wires").forGetter(Microchip::wires)
 			)
 			.apply(instance, Microchip::new));
