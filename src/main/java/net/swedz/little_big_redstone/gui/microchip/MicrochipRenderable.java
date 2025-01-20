@@ -1,6 +1,7 @@
 package net.swedz.little_big_redstone.gui.microchip;
 
 import com.mojang.blaze3d.platform.InputConstants;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Renderable;
 import net.minecraft.client.gui.components.events.GuiEventListener;
@@ -133,9 +134,9 @@ public final class MicrochipRenderable implements GuiEventListener, Renderable, 
 			LogicEntry inputLogic = microchip.components().get(wire.input().slot());
 			
 			int x1 = outputLogic.x() + outputLogic.component().size().centerX();
-			int y1 = outputLogic.y() + outputLogic.component().size().centerY();
+			int y1 = inputLogic.component().size().portTopLeftCornerY(outputLogic.y(), false, wire.output().index(), inputLogic.component().outputs()) + 8;
 			int x2 = inputLogic.x() + inputLogic.component().size().centerX();
-			int y2 = inputLogic.y() + inputLogic.component().size().centerY();
+			int y2 = inputLogic.component().size().portTopLeftCornerY(inputLogic.y(), true, wire.input().index(), inputLogic.component().inputs()) + 8;
 			
 			boolean powered = outputLogic.component().output(wire.output().index());
 			
@@ -150,6 +151,7 @@ public final class MicrochipRenderable implements GuiEventListener, Renderable, 
 		for(LogicEntry entry : microchip.components())
 		{
 			LogicRenderers.render(context, graphics, entry.component(), entry.x(), entry.y());
+			graphics.drawString(Minecraft.getInstance().font, String.valueOf(entry.slot()), entry.x(), entry.y() - 8, 0xFFFFFF);
 		}
 	}
 	
