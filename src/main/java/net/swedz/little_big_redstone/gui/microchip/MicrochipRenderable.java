@@ -17,6 +17,7 @@ import net.swedz.little_big_redstone.helper.GuiGraphicsHelper;
 import net.swedz.little_big_redstone.microchip.LogicEntry;
 import net.swedz.little_big_redstone.microchip.LogicSelectedPort;
 import net.swedz.little_big_redstone.microchip.Microchip;
+import net.swedz.little_big_redstone.microchip.wire.Wire;
 import net.swedz.little_big_redstone.network.packet.CreateMicrochipWirePacket;
 import net.swedz.little_big_redstone.network.packet.PlaceTakeMicrochipLogicPacket;
 
@@ -54,7 +55,6 @@ public final class MicrochipRenderable implements GuiEventListener, Renderable, 
 				var entry = microchip.components().findAt(x, y);
 				if(entry != null)
 				{
-					// TODO pop all selected ports that are from this logic component (including other players)
 					microchip.components().remove(entry);
 					menu.setCarried(entry.toStack());
 					new PlaceTakeMicrochipLogicPacket(menu.containerId, x, y, false).sendToServer();
@@ -126,7 +126,22 @@ public final class MicrochipRenderable implements GuiEventListener, Renderable, 
 	
 	private void renderWires(GuiGraphics graphics, int mouseX, int mouseY, float partialTicks)
 	{
-		// TODO render the wire connections, this should be cached and recalculated when something is moved...
+		// TODO redo this to use a pathing algorithm like A*: render the wire connections, this should be cached and recalculated when something is moved...
+		for(Wire wire : microchip.wires())
+		{
+			LogicEntry outputLogic = microchip.components().get(wire.output().slot());
+			LogicEntry inputLogic = microchip.components().get(wire.input().slot());
+			
+			int x1 = outputLogic.x() + outputLogic.component().size().centerX();
+			int y1 = outputLogic.y() + outputLogic.component().size().centerY();
+			int x2 = inputLogic.x() + inputLogic.component().size().centerX();
+			int y2 = inputLogic.y() + inputLogic.component().size().centerY();
+			
+			boolean powered = outputLogic.component().output(wire.output().index());
+			
+			graphics.hLine(x1 + 10, x1 + 14, y1, powered ? 0xFFFFFFFF : 0xFF000000);
+			graphics.hLine(x2 - 15, x2 - 11, y2, powered ? 0xFFFFFFFF : 0xFF000000);
+		}
 	}
 	
 	private void renderLogic(GuiGraphics graphics, int mouseX, int mouseY, float partialTicks)
@@ -162,6 +177,17 @@ public final class MicrochipRenderable implements GuiEventListener, Renderable, 
 	@Override
 	public void render(GuiGraphics graphics, int mouseX, int mouseY, float partialTicks)
 	{
+		// TODO perform this check when the change happens instead of every frame
+		if(selectedPort != null)
+		{
+			var component = microchip.components().get(selectedPort.entry().slot());
+			if(component == null || selectedPort.portIndex() >= component.component().outputs())
+			{
+				selectedPort = null;
+				LBR.LOGGER.info("Cleared selected port because it doesn't exist anymore");
+			}
+		}
+		
 		graphics.pose().pushPose();
 		graphics.pose().translate(x, y, 0);
 		

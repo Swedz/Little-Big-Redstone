@@ -116,6 +116,11 @@ public final class MicrochipWires implements Iterable<Wire>
 		return false;
 	}
 	
+	public void removeAllFrom(int slot)
+	{
+		this.get(slot).forEach(this::remove);
+	}
+	
 	public void removeAllTargeting(int slot)
 	{
 		List<Wire> wiresTargeting = Lists.newArrayList();

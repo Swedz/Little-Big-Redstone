@@ -89,6 +89,7 @@ public final class LogicComponents implements Iterable<LogicEntry>
 	public LogicEntry remove(int slot)
 	{
 		var original = components.remove(slot);
+		microchip.wires().removeAllFrom(slot);
 		for(LogicEntry entry : components.values())
 		{
 			microchip.wires().removeAllTargeting(slot);
