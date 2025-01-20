@@ -11,14 +11,14 @@ import net.swedz.little_big_redstone.gui.microchip.MicrochipMenu;
 import net.swedz.little_big_redstone.network.LBRCustomPacket;
 import net.swedz.tesseract.neoforge.packet.PacketContext;
 
-public record PlaceTakeLogicPacket(int containerId, int x, int y, boolean place) implements LBRCustomPacket
+public record PlaceTakeMicrochipLogicPacket(int containerId, int x, int y, boolean place) implements LBRCustomPacket
 {
-	public static final StreamCodec<ByteBuf, PlaceTakeLogicPacket> STREAM_CODEC = StreamCodec.composite(
-			ByteBufCodecs.VAR_INT, PlaceTakeLogicPacket::containerId,
-			ByteBufCodecs.VAR_INT, PlaceTakeLogicPacket::x,
-			ByteBufCodecs.VAR_INT, PlaceTakeLogicPacket::y,
-			ByteBufCodecs.BOOL, PlaceTakeLogicPacket::place,
-			PlaceTakeLogicPacket::new
+	public static final StreamCodec<ByteBuf, PlaceTakeMicrochipLogicPacket> STREAM_CODEC = StreamCodec.composite(
+			ByteBufCodecs.VAR_INT, PlaceTakeMicrochipLogicPacket::containerId,
+			ByteBufCodecs.VAR_INT, PlaceTakeMicrochipLogicPacket::x,
+			ByteBufCodecs.VAR_INT, PlaceTakeMicrochipLogicPacket::y,
+			ByteBufCodecs.BOOL, PlaceTakeMicrochipLogicPacket::place,
+			PlaceTakeMicrochipLogicPacket::new
 	);
 	
 	@Override

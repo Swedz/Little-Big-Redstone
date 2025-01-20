@@ -17,7 +17,7 @@ import net.swedz.little_big_redstone.helper.GuiGraphicsHelper;
 import net.swedz.little_big_redstone.microchip.LogicIndex;
 import net.swedz.little_big_redstone.microchip.LogicSelectedPort;
 import net.swedz.little_big_redstone.microchip.Microchip;
-import net.swedz.little_big_redstone.network.packet.PlaceTakeLogicPacket;
+import net.swedz.little_big_redstone.network.packet.PlaceTakeMicrochipLogicPacket;
 
 public final class MicrochipRenderable implements GuiEventListener, Renderable, NarratableEntry
 {
@@ -56,7 +56,7 @@ public final class MicrochipRenderable implements GuiEventListener, Renderable, 
 					// TODO pop all selected ports that are from this logic component (including other players)
 					microchip.remove(entry);
 					menu.setCarried(entry.toStack());
-					new PlaceTakeLogicPacket(menu.containerId, x, y, false).sendToServer();
+					new PlaceTakeMicrochipLogicPacket(menu.containerId, x, y, false).sendToServer();
 				}
 			}
 			else if(button == InputConstants.MOUSE_BUTTON_RIGHT)
@@ -72,7 +72,7 @@ public final class MicrochipRenderable implements GuiEventListener, Renderable, 
 			if(microchip.add(placeX, placeY, logic))
 			{
 				carried.shrink(1);
-				new PlaceTakeLogicPacket(menu.containerId, placeX, placeY, true).sendToServer();
+				new PlaceTakeMicrochipLogicPacket(menu.containerId, placeX, placeY, true).sendToServer();
 			}
 		}
 		else if(carried.is(LBRTags.Items.MICROCHIP_WIRE) && button == InputConstants.MOUSE_BUTTON_LEFT)
