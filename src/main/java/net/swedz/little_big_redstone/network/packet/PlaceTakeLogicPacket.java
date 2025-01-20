@@ -64,7 +64,7 @@ public record PlaceTakeLogicPacket(int containerId, int x, int y, boolean place)
 					}
 					else
 					{
-						LBR.LOGGER.warn("Received PlaceTakeLogicPacket from {} with an invalid take position, discarding", playerName);
+						LBR.LOGGER.warn("Received PlaceTakeLogicPacket from {} with an invalid take position ({}, {}), discarding", playerName, x, y);
 					}
 				}
 				else
