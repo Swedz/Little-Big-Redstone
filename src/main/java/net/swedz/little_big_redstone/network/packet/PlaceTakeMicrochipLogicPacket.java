@@ -31,7 +31,8 @@ public record PlaceTakeMicrochipLogicPacket(int containerId, int x, int y, boole
 		
 		if(player.hasContainerOpen() && player.containerMenu instanceof MicrochipMenu menu && menu.containerId == containerId)
 		{
-			var components = menu.microchip().components();
+			var microchip = menu.microchip();
+			var components = microchip.components();
 			ItemStack heldItem = menu.getCarried();
 			if(place)
 			{
@@ -40,6 +41,7 @@ public record PlaceTakeMicrochipLogicPacket(int containerId, int x, int y, boole
 					var component = heldItem.get(LBRComponents.LOGIC);
 					if(components.add(x, y, component))
 					{
+						microchip.markDirty();
 						heldItem.shrink(1);
 					}
 					else
@@ -60,6 +62,7 @@ public record PlaceTakeMicrochipLogicPacket(int containerId, int x, int y, boole
 					if(component != null)
 					{
 						components.remove(component);
+						microchip.markDirty();
 						menu.setCarried(component.toStack());
 					}
 					else

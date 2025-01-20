@@ -11,6 +11,7 @@ import net.swedz.little_big_redstone.microchip.LogicEntry;
 import net.swedz.little_big_redstone.microchip.LogicSelectedPort;
 import net.swedz.little_big_redstone.microchip.Microchip;
 
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -24,6 +25,8 @@ public final class LogicComponents implements Iterable<LogicEntry>
 	private final Microchip microchip;
 	
 	private Map<Integer, LogicEntry> components;
+	
+	private List<LogicEntry> traversalOrder;
 	
 	/**
 	 * Should not ever be used directly, only by other constructors.
@@ -68,6 +71,11 @@ public final class LogicComponents implements Iterable<LogicEntry>
 		return this.values().iterator();
 	}
 	
+	public List<LogicEntry> traversal()
+	{
+		return Collections.unmodifiableList(traversalOrder);
+	}
+	
 	public LogicEntry get(int slot)
 	{
 		return components.get(slot);
@@ -76,32 +84,6 @@ public final class LogicComponents implements Iterable<LogicEntry>
 	public boolean has(int slot)
 	{
 		return components.containsKey(slot);
-	}
-	
-	private LogicEntry set(int slot, int x, int y, LogicComponent component)
-	{
-		var original = components.put(slot, new LogicEntry(slot, x, y, component));
-		microchip.redstoneIOCache().rebuild();
-		microchip.markDirty();
-		return original;
-	}
-	
-	public LogicEntry remove(int slot)
-	{
-		var original = components.remove(slot);
-		microchip.wires().removeAllOutputs(slot);
-		for(LogicEntry entry : components.values())
-		{
-			microchip.wires().removeAllInputs(slot);
-		}
-		microchip.redstoneIOCache().rebuild();
-		microchip.markDirty();
-		return original;
-	}
-	
-	public LogicEntry remove(LogicEntry entry)
-	{
-		return this.remove(entry.slot());
 	}
 	
 	public boolean canFit(int x, int y, LogicComponent component)
@@ -114,29 +96,6 @@ public final class LogicComponents implements Iterable<LogicEntry>
 			}
 		}
 		return true;
-	}
-	
-	private int pickAvailableSlot()
-	{
-		int slot = 0;
-		while(true)
-		{
-			if(!components.containsKey(slot))
-			{
-				return slot;
-			}
-			slot++;
-		}
-	}
-	
-	public boolean add(int x, int y, LogicComponent component)
-	{
-		if(this.canFit(x, y, component))
-		{
-			this.set(this.pickAvailableSlot(), x, y, component);
-			return true;
-		}
-		return false;
 	}
 	
 	public LogicEntry findAt(int x, int y)
@@ -168,6 +127,55 @@ public final class LogicComponents implements Iterable<LogicEntry>
 		return null;
 	}
 	
+	private LogicEntry set(int slot, int x, int y, LogicComponent component)
+	{
+		return components.put(slot, new LogicEntry(slot, x, y, component));
+	}
+	
+	private int pickAvailableSlot()
+	{
+		int slot = 0;
+		while(true)
+		{
+			if(!components.containsKey(slot))
+			{
+				return slot;
+			}
+			slot++;
+		}
+	}
+	
+	public boolean add(int x, int y, LogicComponent component)
+	{
+		if(this.canFit(x, y, component))
+		{
+			this.set(this.pickAvailableSlot(), x, y, component);
+			return true;
+		}
+		return false;
+	}
+	
+	public LogicEntry remove(int slot)
+	{
+		var original = components.remove(slot);
+		microchip.wires().removeAllOutputs(slot);
+		for(LogicEntry entry : components.values())
+		{
+			microchip.wires().removeAllInputs(slot);
+		}
+		return original;
+	}
+	
+	public LogicEntry remove(LogicEntry entry)
+	{
+		return this.remove(entry.slot());
+	}
+	
+	public void rebuildTraversal()
+	{
+		traversalOrder = LogicTraversal.buildOrder(microchip);
+	}
+	
 	public LogicComponents with(Microchip microchip)
 	{
 		var components = new LogicComponents(microchip);
@@ -183,5 +191,6 @@ public final class LogicComponents implements Iterable<LogicEntry>
 	public void clear()
 	{
 		components.clear();
+		traversalOrder.clear();
 	}
 }

@@ -18,7 +18,6 @@ import net.swedz.little_big_redstone.helper.GuiGraphicsHelper;
 import net.swedz.little_big_redstone.microchip.LogicEntry;
 import net.swedz.little_big_redstone.microchip.LogicSelectedPort;
 import net.swedz.little_big_redstone.microchip.Microchip;
-import net.swedz.little_big_redstone.microchip.logic.LogicTraversal;
 import net.swedz.little_big_redstone.microchip.wire.Wire;
 import net.swedz.little_big_redstone.network.packet.CreateMicrochipWirePacket;
 import net.swedz.little_big_redstone.network.packet.PlaceTakeMicrochipLogicPacket;
@@ -58,6 +57,7 @@ public final class MicrochipRenderable implements GuiEventListener, Renderable, 
 				if(entry != null)
 				{
 					microchip.components().remove(entry);
+					microchip.markDirty();
 					menu.setCarried(entry.toStack());
 					new PlaceTakeMicrochipLogicPacket(menu.containerId, x, y, false).sendToServer();
 				}
@@ -75,6 +75,7 @@ public final class MicrochipRenderable implements GuiEventListener, Renderable, 
 			
 			if(microchip.components().add(placeX, placeY, component))
 			{
+				microchip.markDirty();
 				carried.shrink(1);
 				new PlaceTakeMicrochipLogicPacket(menu.containerId, placeX, placeY, true).sendToServer();
 			}
@@ -149,10 +150,12 @@ public final class MicrochipRenderable implements GuiEventListener, Renderable, 
 	private void renderLogic(GuiGraphics graphics, int mouseX, int mouseY, float partialTicks)
 	{
 		var context = new LogicRenderer.Context(false);
-		for(var entry : microchip.components())
+		int traversalIndex = 0;
+		for(var entry : microchip.components().traversal())
 		{
 			LogicRenderers.render(context, graphics, entry.component(), entry.x(), entry.y());
-			graphics.drawString(Minecraft.getInstance().font, entry.slot() + " (" + LogicTraversal.buildOrder(microchip).indexOf(entry) + ")", entry.x(), entry.y() - 8, 0xFFFFFF);
+			graphics.drawString(Minecraft.getInstance().font, entry.slot() + " (" + traversalIndex + ")", entry.x(), entry.y() - 8, 0xFFFFFF);
+			traversalIndex++;
 		}
 	}
 	

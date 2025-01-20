@@ -7,7 +7,6 @@ import net.minecraft.network.codec.StreamCodec;
 import net.swedz.little_big_redstone.api.Bounds;
 import net.swedz.little_big_redstone.microchip.logic.LogicComponents;
 import net.swedz.little_big_redstone.microchip.logic.LogicContext;
-import net.swedz.little_big_redstone.microchip.logic.LogicTraversal;
 import net.swedz.little_big_redstone.microchip.wire.MicrochipWires;
 
 public final class Microchip
@@ -38,6 +37,7 @@ public final class Microchip
 	{
 		this.components = components.with(this);
 		this.wires = wires.with(this);
+		this.components.rebuildTraversal();
 		this.redstoneIOCache = new MicrochipRedstoneIOCache(this);
 		this.redstoneIOCache.rebuild();
 	}
@@ -46,6 +46,7 @@ public final class Microchip
 	{
 		this.components = new LogicComponents(this);
 		this.wires = new MicrochipWires(this);
+		this.components.rebuildTraversal();
 		this.redstoneIOCache = new MicrochipRedstoneIOCache(this);
 	}
 	
@@ -68,7 +69,6 @@ public final class Microchip
 	{
 		components.loadFrom(other.components());
 		wires.loadFrom(other.wires());
-		redstoneIOCache.rebuild();
 		this.markDirty();
 	}
 	
@@ -76,7 +76,6 @@ public final class Microchip
 	{
 		components.clear();
 		wires.clear();
-		redstoneIOCache.rebuild();
 		this.markDirty();
 	}
 	
@@ -87,6 +86,8 @@ public final class Microchip
 	
 	public void markDirty()
 	{
+		components.rebuildTraversal();
+		redstoneIOCache.rebuild();
 		dirty = true;
 	}
 	
@@ -97,8 +98,7 @@ public final class Microchip
 	
 	public void tickLogic(LogicContext context)
 	{
-		// TODO only build the traversal order when things change
-		for(var entry : LogicTraversal.buildOrder(this))
+		for(var entry : components.traversal())
 		{
 			int totalInputs = entry.component().inputs();
 			boolean[] inputs = new boolean[totalInputs];
