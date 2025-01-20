@@ -16,7 +16,7 @@ public record Wire(WirePort output, WirePort input)
 	
 	public static final StreamCodec<ByteBuf, Wire> STREAM_CODEC = StreamCodec.composite(
 			WirePort.STREAM_CODEC, Wire::output,
-			WirePort.STREAM_CODEC, Wire::output,
+			WirePort.STREAM_CODEC, Wire::input,
 			Wire::new
 	);
 	
