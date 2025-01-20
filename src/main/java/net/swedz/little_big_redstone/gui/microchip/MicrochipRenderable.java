@@ -80,7 +80,7 @@ public final class MicrochipRenderable implements GuiEventListener, Renderable, 
 			if(selectedPort != null)
 			{
 				var inputPort = microchip.findAtPort(x, y, true);
-				if(inputPort != null && selectedPort.entry().addOutputPort(inputPort))
+				if(inputPort != null && selectedPort.addOutputPort(inputPort))
 				{
 					LBR.LOGGER.info("inserting output from {}:{} to {}:{}", selectedPort.entry().slot(), selectedPort.portIndex(), inputPort.entry().slot(), inputPort.portIndex());
 					microchip.markDirty();

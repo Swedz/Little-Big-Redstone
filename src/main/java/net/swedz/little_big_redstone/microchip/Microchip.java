@@ -91,6 +91,13 @@ public final class Microchip
 	{
 		LogicIndex original = logics[index];
 		logics[index] = null;
+		for(LogicIndex entry : logics)
+		{
+			if(entry != null)
+			{
+				entry.outputPorts().removeAllTargeting(index);
+			}
+		}
 		this.rebuildRedstoneInputOutputCache();
 		this.markDirty();
 		return original;

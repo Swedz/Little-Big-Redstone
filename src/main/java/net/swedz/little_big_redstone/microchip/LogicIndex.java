@@ -56,8 +56,9 @@ public record LogicIndex(int slot, int x, int y, LogicComponent logic, LogicOutp
 		return this.toBounds().overlaps(new Bounds(x, y, size.widthPixels(), size.heightPixels()));
 	}
 	
-	public boolean addOutputPort(LogicSelectedPort targetPort)
+	public boolean addOutputPort(int portIndex, LogicSelectedPort targetPort)
 	{
-		return outputPorts.add(slot, targetPort.entry().slot(), targetPort.portIndex());
+		outputPorts.setSize(logic.outputs()); // TODO this is just a temporary fix ... something better should be done for this
+		return outputPorts.add(portIndex, targetPort.entry().slot(), targetPort.portIndex());
 	}
 }
