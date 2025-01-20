@@ -7,12 +7,11 @@ import net.minecraft.network.codec.StreamCodec;
 import net.swedz.little_big_redstone.api.Bounds;
 import net.swedz.little_big_redstone.microchip.logic.LogicComponents;
 import net.swedz.little_big_redstone.microchip.logic.LogicContext;
+import net.swedz.little_big_redstone.microchip.logic.LogicTraversal;
 import net.swedz.little_big_redstone.microchip.wire.MicrochipWires;
 
 public final class Microchip
 {
-	public static final int MAX_SIZE = 16 * 8;
-	
 	public static final Bounds BOUNDS = new Bounds(0, 0, 256, 138);
 	
 	public static final Codec<Microchip> CODEC = RecordCodecBuilder.create((instance) -> instance
@@ -98,13 +97,13 @@ public final class Microchip
 	
 	public void tickLogic(LogicContext context)
 	{
-		for(LogicEntry entry : components)
+		// TODO only build the traversal order when things change
+		for(var entry : LogicTraversal.buildOrder(this))
 		{
-			if(entry != null)
-			{
-				// TODO pull input values from linked outputs
-				//entry.logic().processTick(context, new boolean[0]);
-			}
+			int totalInputs = entry.component().inputs();
+			boolean[] inputs = new boolean[totalInputs];
+			// TODO read inputs ...
+			entry.component().processTick(context, inputs);
 		}
 	}
 }

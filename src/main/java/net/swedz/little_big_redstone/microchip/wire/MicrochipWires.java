@@ -7,7 +7,6 @@ import com.mojang.serialization.Codec;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
-import net.swedz.little_big_redstone.LBR;
 import net.swedz.little_big_redstone.microchip.LogicSelectedPort;
 import net.swedz.little_big_redstone.microchip.Microchip;
 
@@ -26,7 +25,8 @@ public final class MicrochipWires implements Iterable<Wire>
 	private final Microchip microchip;
 	
 	private List<Wire>              wires;
-	private Map<Integer, Set<Wire>> wiresBySlot;
+	private Map<Integer, Set<Wire>> wiresByOutputSlot;
+	private Map<Integer, Set<Wire>> wiresByInputSlot;
 	
 	/**
 	 * Should not ever be used directly, only by other constructors.
@@ -35,17 +35,9 @@ public final class MicrochipWires implements Iterable<Wire>
 	{
 		this.microchip = microchip;
 		this.wires = Lists.newArrayList();
-		this.wiresBySlot = Maps.newHashMap();
-		wires.forEach((wire) ->
-		{
-			int slot = wire.output().slot();
-			if(wiresBySlot.containsKey(slot))
-			{
-				LBR.LOGGER.warn("Duplicate slot id ({}) present in wires, skipping!", slot);
-				return;
-			}
-			this.add(wire);
-		});
+		this.wiresByOutputSlot = Maps.newHashMap();
+		this.wiresByInputSlot = Maps.newHashMap();
+		wires.forEach(this::add);
 	}
 	
 	/**
@@ -72,16 +64,23 @@ public final class MicrochipWires implements Iterable<Wire>
 		return this.values().iterator();
 	}
 	
-	public List<Wire> get(int slot)
+	public List<Wire> getByOutput(int outputSlot)
 	{
-		var list = wiresBySlot.get(slot);
+		var list = wiresByOutputSlot.get(outputSlot);
+		return list == null ? List.of() : List.copyOf(list);
+	}
+	
+	public List<Wire> getByInput(int inputSlot)
+	{
+		var list = wiresByInputSlot.get(inputSlot);
 		return list == null ? List.of() : List.copyOf(list);
 	}
 	
 	public boolean add(Wire wire)
 	{
-		if(wiresBySlot.computeIfAbsent(wire.output().slot(), (k) -> Sets.newHashSet()).add(wire))
+		if(wiresByOutputSlot.computeIfAbsent(wire.output().slot(), (__) -> Sets.newHashSet()).add(wire))
 		{
+			wiresByInputSlot.computeIfAbsent(wire.input().slot(), (__) -> Sets.newHashSet()).add(wire);
 			wires.add(wire);
 			return true;
 		}
@@ -102,32 +101,38 @@ public final class MicrochipWires implements Iterable<Wire>
 	{
 		if(wires.remove(wire))
 		{
-			int slot = wire.output().slot();
-			var list = wiresBySlot.get(slot);
-			if(list == null || !list.remove(wire))
+			int outputSlot = wire.output().slot();
+			var outputs = wiresByOutputSlot.get(outputSlot);
+			outputs.remove(wire);
+			if(outputs.isEmpty())
 			{
-				return false;
+				wiresByOutputSlot.remove(outputSlot);
 			}
-			if(list.isEmpty())
+			
+			int inputSlot = wire.input().slot();
+			var inputs = wiresByInputSlot.get(inputSlot);
+			inputs.remove(wire);
+			if(inputs.isEmpty())
 			{
-				wiresBySlot.remove(slot);
+				wiresByInputSlot.remove(inputSlot);
 			}
+			
 			return true;
 		}
 		return false;
 	}
 	
-	public void removeAllFrom(int slot)
+	public void removeAllOutputs(int outputSlot)
 	{
-		this.get(slot).forEach(this::remove);
+		this.getByOutput(outputSlot).forEach(this::remove);
 	}
 	
-	public void removeAllTargeting(int slot)
+	public void removeAllInputs(int inputSlot)
 	{
 		List<Wire> wiresTargeting = Lists.newArrayList();
 		for(Wire wire : wires)
 		{
-			if(wire.input().slot() == slot)
+			if(wire.input().slot() == inputSlot)
 			{
 				wiresTargeting.add(wire);
 			}
@@ -145,12 +150,14 @@ public final class MicrochipWires implements Iterable<Wire>
 	public void loadFrom(MicrochipWires other)
 	{
 		wires = other.wires;
-		wiresBySlot = other.wiresBySlot;
+		wiresByOutputSlot = other.wiresByOutputSlot;
+		wiresByInputSlot = other.wiresByInputSlot;
 	}
 	
 	public void clear()
 	{
 		wires.clear();
-		wiresBySlot.clear();
+		wiresByOutputSlot.clear();
+		wiresByInputSlot.clear();
 	}
 }
