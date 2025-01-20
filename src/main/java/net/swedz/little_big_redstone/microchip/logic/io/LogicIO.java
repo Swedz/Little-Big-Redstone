@@ -102,6 +102,12 @@ public final class LogicIO extends LogicComponent<LogicIO, LogicIOConfig>
 	}
 	
 	@Override
+	public void resetForPickup()
+	{
+		outputState = false;
+	}
+	
+	@Override
 	public LogicIO copy()
 	{
 		return new LogicIO(config.copy(), outputState);
