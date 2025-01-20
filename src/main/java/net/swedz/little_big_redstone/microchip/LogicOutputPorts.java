@@ -52,7 +52,7 @@ public final class LogicOutputPorts
 		return this.get(index) != null;
 	}
 	
-	public boolean add(int index, LogicSelectedPort port)
+	public boolean add(int index, int targetSlot, int targetPortIndex)
 	{
 		// TODO cannot insert target because array is too small (out of bounds exception...)
 		Targets value = targets[index];
@@ -61,25 +61,25 @@ public final class LogicOutputPorts
 			value = new Targets();
 			targets[index] = value;
 		}
-		return value.add(port.entry().slot(), port.portIndex());
+		return value.add(targetSlot, targetPortIndex);
 	}
 	
-	public boolean remove(int index, LogicSelectedPort port)
+	public boolean remove(int index, int targetSlot, int targetPortIndex)
 	{
 		Targets value = targets[index];
 		if(value != null)
 		{
-			return value.remove(port.entry().slot(), port.portIndex());
+			return value.remove(targetSlot, targetPortIndex);
 		}
 		return false;
 	}
 	
-	public boolean removeAll(int index, int logicSlot)
+	public boolean removeAll(int index, int targetSlot)
 	{
 		Targets value = targets[index];
 		if(value != null)
 		{
-			return value.removeAll(logicSlot);
+			return value.removeAll(targetSlot);
 		}
 		return false;
 	}

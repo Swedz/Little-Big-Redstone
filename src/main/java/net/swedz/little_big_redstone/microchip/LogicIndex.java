@@ -41,18 +41,23 @@ public record LogicIndex(int slot, int x, int y, LogicComponent logic, LogicOutp
 		return logic.type().toStack(logic);
 	}
 	
-	public Bounds bounds()
+	public Bounds toBounds()
 	{
 		return new Bounds(x, y, logic.size().widthPixels(), logic.size().heightPixels());
 	}
 	
 	public boolean contains(int x, int y)
 	{
-		return this.bounds().contains(x, y);
+		return this.toBounds().contains(x, y);
 	}
 	
 	public boolean contains(int x, int y, LogicGridSize size)
 	{
-		return this.bounds().overlaps(new Bounds(x, y, size.widthPixels(), size.heightPixels()));
+		return this.toBounds().overlaps(new Bounds(x, y, size.widthPixels(), size.heightPixels()));
+	}
+	
+	public boolean addOutputPort(LogicSelectedPort targetPort)
+	{
+		return outputPorts.add(slot, targetPort.entry().slot(), targetPort.portIndex());
 	}
 }

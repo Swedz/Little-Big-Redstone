@@ -8,9 +8,9 @@ import net.minecraft.client.gui.narration.NarratableEntry;
 import net.minecraft.client.gui.narration.NarrationElementOutput;
 import net.minecraft.client.gui.navigation.ScreenRectangle;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.item.ItemStack;
 import net.swedz.little_big_redstone.LBR;
 import net.swedz.little_big_redstone.LBRComponents;
+import net.swedz.little_big_redstone.LBRTags;
 import net.swedz.little_big_redstone.gui.microchip.logic.LogicRenderer;
 import net.swedz.little_big_redstone.gui.microchip.logic.LogicRenderers;
 import net.swedz.little_big_redstone.helper.GuiGraphicsHelper;
@@ -58,31 +58,6 @@ public final class MicrochipRenderable implements GuiEventListener, Renderable, 
 					menu.setCarried(entry.toStack());
 					new PlaceTakeLogicPacket(menu.containerId, x, y, false).sendToServer();
 				}
-				else
-				{
-					if(selectedPort != null)
-					{
-						var inputPort = microchip.findAtPort(x, y, true);
-						if(inputPort != null)
-						{
-							LBR.LOGGER.info("inserting output from {}:{} to {}:{}", selectedPort.entry().slot(), selectedPort.portIndex(), inputPort.entry().slot(), inputPort.portIndex());
-							selectedPort.entry().outputPorts().add(selectedPort.portIndex(), inputPort);
-							microchip.markDirty();
-							// TODO inform the server
-						}
-						selectedPort = null;
-					}
-					else
-					{
-						// TODO try to grab hovered wire first
-						
-						var outputPort = microchip.findAtPort(x, y, false);
-						if(outputPort != null)
-						{
-							selectedPort = outputPort;
-						}
-					}
-				}
 			}
 			else if(button == InputConstants.MOUSE_BUTTON_RIGHT)
 			{
@@ -97,8 +72,38 @@ public final class MicrochipRenderable implements GuiEventListener, Renderable, 
 			if(microchip.canFit(placeX, placeY, logic))
 			{
 				microchip.add(placeX, placeY, logic);
-				menu.setCarried(ItemStack.EMPTY);
+				carried.shrink(1);
 				new PlaceTakeLogicPacket(menu.containerId, placeX, placeY, true).sendToServer();
+			}
+		}
+		else if(carried.is(LBRTags.Items.MICROCHIP_WIRE) && button == InputConstants.MOUSE_BUTTON_LEFT)
+		{
+			if(selectedPort != null)
+			{
+				var inputPort = microchip.findAtPort(x, y, true);
+				if(inputPort != null && selectedPort.entry().addOutputPort(inputPort))
+				{
+					LBR.LOGGER.info("inserting output from {}:{} to {}:{}", selectedPort.entry().slot(), selectedPort.portIndex(), inputPort.entry().slot(), inputPort.portIndex());
+					microchip.markDirty();
+					carried.shrink(1);
+					// TODO inform the server
+				}
+				else
+				{
+					LBR.LOGGER.info("discarding wire");
+				}
+				selectedPort = null;
+			}
+			else
+			{
+				// TODO try to grab hovered wire first
+				
+				var outputPort = microchip.findAtPort(x, y, false);
+				if(outputPort != null)
+				{
+					selectedPort = outputPort;
+					LBR.LOGGER.info("grabbed wire output {}:{}", selectedPort.entry().slot(), selectedPort.portIndex());
+				}
 			}
 		}
 		return false;
@@ -118,6 +123,7 @@ public final class MicrochipRenderable implements GuiEventListener, Renderable, 
 			if(selectedPort != null)
 			{
 				selectedPort = null;
+				LBR.LOGGER.info("discarding wire");
 				return true;
 			}
 			return false;

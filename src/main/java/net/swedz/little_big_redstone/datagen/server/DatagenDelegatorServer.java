@@ -7,6 +7,7 @@ import net.minecraft.data.loot.LootTableSubProvider;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
 import net.neoforged.neoforge.data.event.GatherDataEvent;
 import net.swedz.little_big_redstone.datagen.server.provider.loottable.BlockLootTableDatagenProvider;
+import net.swedz.little_big_redstone.datagen.server.provider.tags.ItemTagDatagenProvider;
 
 import java.util.List;
 import java.util.Set;
@@ -17,6 +18,8 @@ public final class DatagenDelegatorServer
 	public static void configure(GatherDataEvent event)
 	{
 		addLootTable(event, BlockLootTableDatagenProvider::new);
+		
+		add(event, ItemTagDatagenProvider::new);
 	}
 	
 	private static void add(GatherDataEvent event, Function<GatherDataEvent, DataProvider> providerCreator)
