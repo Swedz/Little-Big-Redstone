@@ -16,7 +16,9 @@ public record LogicType<L extends LogicComponent>(
 	public ItemStack toStack(L component)
 	{
 		var stack = new ItemStack(LBRItems.valueOf(id));
-		stack.set(LBRComponents.LOGIC, component.copy());
+		var copy = component.copy();
+		copy.resetForPickup();
+		stack.set(LBRComponents.LOGIC, copy);
 		return stack;
 	}
 	
