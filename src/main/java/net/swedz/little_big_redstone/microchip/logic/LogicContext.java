@@ -1,20 +1,28 @@
 package net.swedz.little_big_redstone.microchip.logic;
 
+import com.google.common.collect.Lists;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.block.state.BlockState;
 import net.swedz.little_big_redstone.block.MicrochipBlock;
+import net.swedz.little_big_redstone.microchip.LogicEntry;
+import net.swedz.little_big_redstone.microchip.Microchip;
 
+import java.util.Collections;
+import java.util.List;
 import java.util.Set;
 
 public final class LogicContext
 {
+	private final Microchip microchip;
+	
 	private final Set<Direction> inputPower;
 	private final Set<Direction> outputPower;
 	
-	private boolean dirty;
+	private final List<LogicEntry> dirtyEntries = Lists.newArrayList();
 	
-	public LogicContext(Set<Direction> inputPower, Set<Direction> outputPower)
+	public LogicContext(Microchip microchip, Set<Direction> inputPower, Set<Direction> outputPower)
 	{
+		this.microchip = microchip;
 		this.inputPower = inputPower;
 		this.outputPower = outputPower;
 	}
@@ -66,11 +74,22 @@ public final class LogicContext
 	
 	public boolean isDirty()
 	{
-		return dirty;
+		return !dirtyEntries.isEmpty();
 	}
 	
-	public void markDirty()
+	public void markDirty(LogicComponent component)
 	{
-		dirty = true;
+		for(var entry : microchip.components())
+		{
+			if(entry.component() == component)
+			{
+				dirtyEntries.add(entry);
+			}
+		}
+	}
+	
+	public List<LogicEntry> getDirtyEntries()
+	{
+		return Collections.unmodifiableList(dirtyEntries);
 	}
 }

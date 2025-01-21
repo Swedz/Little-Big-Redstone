@@ -56,7 +56,7 @@ public final class LogicIO extends LogicComponent<LogicIO, LogicIOConfig>
 		}
 		if(outputState != originalOutputState)
 		{
-			context.markDirty();
+			context.markDirty(this);
 		}
 	}
 	
@@ -99,6 +99,12 @@ public final class LogicIO extends LogicComponent<LogicIO, LogicIOConfig>
 	public boolean output()
 	{
 		return outputState;
+	}
+	
+	@Override
+	protected void internalLoadFrom(LogicIO other)
+	{
+		outputState = other.outputState;
 	}
 	
 	@Override

@@ -13,7 +13,7 @@ import net.swedz.little_big_redstone.microchip.logic.LogicContext;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 
-public abstract class LogicGate<G extends LogicGate> extends LogicComponent<G, LogicGateConfig>
+public abstract class LogicGate<G extends LogicGate<G>> extends LogicComponent<G, LogicGateConfig>
 {
 	protected static <G extends LogicGate> MapCodec<G> mapCodec(BiFunction<LogicGateConfig, Boolean, G> creator)
 	{
@@ -75,7 +75,7 @@ public abstract class LogicGate<G extends LogicGate> extends LogicComponent<G, L
 		outputState = this.processInputs(context, inputs);
 		if(outputState != originalOutput)
 		{
-			context.markDirty();
+			context.markDirty(this);
 		}
 	}
 	
@@ -106,6 +106,12 @@ public abstract class LogicGate<G extends LogicGate> extends LogicComponent<G, L
 	public final boolean output()
 	{
 		return outputState;
+	}
+	
+	@Override
+	protected void internalLoadFrom(G other)
+	{
+		outputState = other.output();
 	}
 	
 	@Override

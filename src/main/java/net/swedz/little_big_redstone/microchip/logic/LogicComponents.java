@@ -127,9 +127,14 @@ public final class LogicComponents implements Iterable<LogicEntry>
 		return null;
 	}
 	
-	private LogicEntry set(int slot, int x, int y, LogicComponent component)
+	public LogicEntry set(LogicEntry entry)
 	{
-		return components.put(slot, new LogicEntry(slot, x, y, component));
+		return components.put(entry.slot(), entry);
+	}
+	
+	public LogicEntry set(int slot, int x, int y, LogicComponent component)
+	{
+		return this.set(new LogicEntry(slot, x, y, component));
 	}
 	
 	private int pickAvailableSlot()

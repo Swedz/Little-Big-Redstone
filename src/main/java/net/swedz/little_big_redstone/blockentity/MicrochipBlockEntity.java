@@ -23,9 +23,12 @@ import net.swedz.little_big_redstone.block.MicrochipBlock;
 import net.swedz.little_big_redstone.gui.microchip.MicrochipMenu;
 import net.swedz.little_big_redstone.microchip.Microchip;
 import net.swedz.little_big_redstone.microchip.logic.LogicContext;
+import net.swedz.little_big_redstone.network.packet.UpdateComponentsMicrochipPacket;
 import net.swedz.little_big_redstone.network.packet.UpdateMicrochipPacket;
+import net.swedz.tesseract.neoforge.packet.CustomPacket;
 
 import java.util.Set;
+import java.util.function.Function;
 
 public final class MicrochipBlockEntity extends BlockEntity implements MenuProvider, Tickable
 {
@@ -84,7 +87,7 @@ public final class MicrochipBlockEntity extends BlockEntity implements MenuProvi
 				}
 			}
 		}
-		return new LogicContext(inputPower, outputPower);
+		return new LogicContext(microchip, inputPower, outputPower);
 	}
 	
 	@Override
@@ -98,7 +101,9 @@ public final class MicrochipBlockEntity extends BlockEntity implements MenuProvi
 		LogicContext context = this.buildLogicContext();
 		microchip.tickLogic(context);
 		
-		if(microchip.isDirty() || context.isDirty())
+		boolean microchipDirty = microchip.isDirty();
+		boolean contextDirty = context.isDirty();
+		if(microchipDirty || contextDirty)
 		{
 			microchip.markClean();
 			
@@ -110,20 +115,25 @@ public final class MicrochipBlockEntity extends BlockEntity implements MenuProvi
 			}
 			
 			this.setChanged();
+			
+			if(microchipDirty)
+			{
+				this.publishUpdatePacket((container) -> new UpdateMicrochipPacket(container, microchip));
+			}
+			else if(contextDirty)
+			{
+				this.publishUpdatePacket((container) -> new UpdateComponentsMicrochipPacket(container, context.getDirtyEntries()));
+			}
 		}
 	}
 	
-	@Override
-	public void setChanged()
+	private void publishUpdatePacket(Function<Integer, CustomPacket> packetCreator)
 	{
-		super.setChanged();
-		
-		// TODO only send client the data that has changed, not the entire microchip
 		for(var player : level.players())
 		{
 			if(player.containerMenu instanceof MicrochipMenu menu && worldPosition.equals(menu.blockPos()))
 			{
-				new UpdateMicrochipPacket(menu.containerId, microchip).sendToClient((ServerPlayer) player);
+				packetCreator.apply(menu.containerId).sendToClient((ServerPlayer) player);
 			}
 		}
 	}

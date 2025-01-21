@@ -7,6 +7,7 @@ import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
 import net.swedz.little_big_redstone.LBR;
 import net.swedz.little_big_redstone.network.packet.CreateMicrochipWirePacket;
 import net.swedz.little_big_redstone.network.packet.PlaceTakeMicrochipLogicPacket;
+import net.swedz.little_big_redstone.network.packet.UpdateComponentsMicrochipPacket;
 import net.swedz.little_big_redstone.network.packet.UpdateMicrochipPacket;
 import net.swedz.tesseract.neoforge.packet.PacketRegistry;
 
@@ -28,6 +29,7 @@ public final class LBRPackets
 	{
 		create("create_microchip_wire", CreateMicrochipWirePacket.class, CreateMicrochipWirePacket.STREAM_CODEC);
 		create("place_take_microchip_logic", PlaceTakeMicrochipLogicPacket.class, PlaceTakeMicrochipLogicPacket.STREAM_CODEC);
+		create("update_components_microchip", UpdateComponentsMicrochipPacket.class, UpdateComponentsMicrochipPacket.STREAM_CODEC);
 		create("update_microchip", UpdateMicrochipPacket.class, UpdateMicrochipPacket.STREAM_CODEC);
 	}
 	

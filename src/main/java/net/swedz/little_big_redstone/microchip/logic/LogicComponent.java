@@ -9,13 +9,13 @@ import net.swedz.tesseract.neoforge.api.Assert;
 
 import java.util.List;
 
-public abstract class LogicComponent<L extends LogicComponent, C extends LogicConfig>
+public abstract class LogicComponent<L extends LogicComponent<L, C>, C extends LogicConfig>
 {
 	public static final Codec<LogicComponent> CODEC = LogicTypes.CODEC;
 	
 	public static final StreamCodec<ByteBuf, LogicComponent> STREAM_CODEC = LogicTypes.STREAM_CODEC;
 	
-	protected final C config;
+	protected C config;
 	
 	protected LogicComponent(C config)
 	{
@@ -32,7 +32,7 @@ public abstract class LogicComponent<L extends LogicComponent, C extends LogicCo
 	public final void processTick(LogicContext context, boolean[] inputs)
 	{
 		int expectedInputs = this.inputs();
-		Assert.that(expectedInputs == inputs.length, "Mismatching logic gate input sizes: expected %d but got %d".formatted(expectedInputs, inputs.length));
+		Assert.that(expectedInputs == inputs.length, "Mismatching logic component input sizes: expected %d but got %d".formatted(expectedInputs, inputs.length));
 		this.processTickInternal(context, inputs);
 	}
 	
@@ -59,6 +59,14 @@ public abstract class LogicComponent<L extends LogicComponent, C extends LogicCo
 	
 	public void appendShiftHoverText(List<Component> lines)
 	{
+	}
+	
+	protected abstract void internalLoadFrom(L other);
+	
+	public final void loadFrom(L other)
+	{
+		config = other.config;
+		this.internalLoadFrom(other);
 	}
 	
 	public void resetForPickup()

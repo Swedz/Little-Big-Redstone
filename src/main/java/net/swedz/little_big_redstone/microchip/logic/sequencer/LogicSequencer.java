@@ -93,7 +93,7 @@ public final class LogicSequencer extends LogicComponent<LogicSequencer, LogicSe
 		outputState = output;
 		if(originalProcessedTicks != processedTicks || output != originalOutput)
 		{
-			context.markDirty();
+			context.markDirty(this);
 		}
 	}
 	
@@ -142,6 +142,13 @@ public final class LogicSequencer extends LogicComponent<LogicSequencer, LogicSe
 	public LogicGridSize size()
 	{
 		return new LogicGridSize(2, 1);
+	}
+	
+	@Override
+	protected void internalLoadFrom(LogicSequencer other)
+	{
+		processedTicks = other.processedTicks;
+		outputState = other.outputState;
 	}
 	
 	@Override
