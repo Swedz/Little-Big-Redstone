@@ -2,6 +2,7 @@ package net.swedz.little_big_redstone.block;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.world.Containers;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.BlockGetter;
@@ -128,5 +129,20 @@ public final class MicrochipBlock extends Block implements TickableBlock
 			boolean signal = level.getSignal(pos.relative(direction), direction) > 0;
 			level.setBlock(pos, state.setValue(getDirectionalState(direction), signal), Block.UPDATE_ALL);
 		}
+	}
+	
+	@Override
+	protected void onRemove(BlockState state, Level level, BlockPos pos, BlockState newState, boolean movedByPiston)
+	{
+		if(!state.is(newState.getBlock()) &&
+		   level.getBlockEntity(pos) instanceof MicrochipBlockEntity blockEntity)
+		{
+			for(var entry : blockEntity.microchip().components())
+			{
+				var stack = entry.toStack();
+				Containers.dropItemStack(level, pos.getX(), pos.getY(), pos.getZ(), stack);
+			}
+		}
+		super.onRemove(state, level, pos, newState, movedByPiston);
 	}
 }
