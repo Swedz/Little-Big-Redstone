@@ -69,6 +69,6 @@ public final class NOTGate extends LogicGate<NOTGate>
 	@Override
 	public boolean equals(Object o)
 	{
-		return this == o;
+		return o instanceof NOTGate;
 	}
 }
