@@ -117,8 +117,6 @@ public final class MicrochipWires implements Iterable<Wire>
 				wiresByInputSlot.remove(inputSlot);
 			}
 			
-			microchip.markDirty();
-			
 			return true;
 		}
 		return false;

@@ -36,6 +36,10 @@ public class LBRClientProxy extends LBRProxy
 			for(var entry : entries)
 			{
 				var existingEntry = screen.getMenu().microchip().components().get(entry.slot());
+				if(existingEntry == null)
+				{
+					continue;
+				}
 				existingEntry.component().loadFrom(entry.component());
 			}
 		}
