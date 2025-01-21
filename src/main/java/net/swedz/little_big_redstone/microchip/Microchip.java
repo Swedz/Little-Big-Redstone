@@ -4,27 +4,28 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.network.codec.StreamCodec;
-import net.swedz.little_big_redstone.api.Bounds;
 import net.swedz.little_big_redstone.microchip.logic.LogicComponents;
 import net.swedz.little_big_redstone.microchip.logic.LogicContext;
 import net.swedz.little_big_redstone.microchip.wire.MicrochipWires;
 
 public final class Microchip
 {
-	public static final Bounds BOUNDS = new Bounds(8, 20, 240, 133);
-	
 	public static final Codec<Microchip> CODEC = RecordCodecBuilder.create((instance) -> instance
 			.group(
+					MicrochipSize.CODEC.fieldOf("size").forGetter(Microchip::size),
 					LogicComponents.CODEC.fieldOf("components").forGetter(Microchip::components),
 					MicrochipWires.CODEC.fieldOf("wires").forGetter(Microchip::wires)
 			)
 			.apply(instance, Microchip::new));
 	
 	public static final StreamCodec<ByteBuf, Microchip> STREAM_CODEC = StreamCodec.composite(
+			MicrochipSize.STREAM_CODEC, Microchip::size,
 			LogicComponents.STREAM_CODEC, Microchip::components,
 			MicrochipWires.STREAM_CODEC, Microchip::wires,
 			Microchip::new
 	);
+	
+	private final MicrochipSize size;
 	
 	private final LogicComponents components;
 	private final MicrochipWires  wires;
@@ -33,8 +34,9 @@ public final class Microchip
 	
 	private boolean dirty;
 	
-	private Microchip(LogicComponents components, MicrochipWires wires)
+	private Microchip(MicrochipSize size, LogicComponents components, MicrochipWires wires)
 	{
+		this.size = size;
 		this.components = components.with(this);
 		this.wires = wires.with(this);
 		this.components.rebuildTraversal();
@@ -42,12 +44,18 @@ public final class Microchip
 		this.redstoneIOCache.rebuild();
 	}
 	
-	public Microchip()
+	public Microchip(MicrochipSize size)
 	{
+		this.size = size;
 		this.components = new LogicComponents(this);
 		this.wires = new MicrochipWires(this);
 		this.components.rebuildTraversal();
 		this.redstoneIOCache = new MicrochipRedstoneIOCache(this);
+	}
+	
+	public MicrochipSize size()
+	{
+		return size;
 	}
 	
 	public LogicComponents components()

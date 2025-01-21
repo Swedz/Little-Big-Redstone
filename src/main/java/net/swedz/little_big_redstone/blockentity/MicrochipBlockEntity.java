@@ -22,6 +22,7 @@ import net.swedz.little_big_redstone.api.Tickable;
 import net.swedz.little_big_redstone.block.MicrochipBlock;
 import net.swedz.little_big_redstone.gui.microchip.MicrochipMenu;
 import net.swedz.little_big_redstone.microchip.Microchip;
+import net.swedz.little_big_redstone.microchip.MicrochipSize;
 import net.swedz.little_big_redstone.microchip.logic.LogicContext;
 import net.swedz.little_big_redstone.network.packet.UpdateComponentsMicrochipPacket;
 import net.swedz.little_big_redstone.network.packet.UpdateMicrochipPacket;
@@ -38,7 +39,7 @@ public final class MicrochipBlockEntity extends BlockEntity implements MenuProvi
 	{
 		super(LBRBlocks.MICROCHIP_ENTITY.get(), pos, blockState);
 		
-		microchip = new Microchip();
+		microchip = new Microchip(MicrochipSize.create(0.75f));
 	}
 	
 	public Microchip microchip()

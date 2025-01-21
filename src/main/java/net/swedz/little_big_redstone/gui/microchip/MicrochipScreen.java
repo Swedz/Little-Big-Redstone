@@ -10,7 +10,6 @@ import net.swedz.little_big_redstone.LBR;
 import net.swedz.little_big_redstone.LBRComponents;
 import net.swedz.little_big_redstone.gui.microchip.logic.LogicRenderer;
 import net.swedz.little_big_redstone.gui.microchip.logic.LogicRenderers;
-import net.swedz.little_big_redstone.microchip.Microchip;
 
 public final class MicrochipScreen extends AbstractContainerScreen<MicrochipMenu>
 {
@@ -26,7 +25,7 @@ public final class MicrochipScreen extends AbstractContainerScreen<MicrochipMenu
 	
 	private boolean isWithinBoard(int x, int y)
 	{
-		return Microchip.BOUNDS.contains(x, y);
+		return menu.microchip().size().bounds().contains(x, y);
 	}
 	
 	@Override
@@ -34,8 +33,7 @@ public final class MicrochipScreen extends AbstractContainerScreen<MicrochipMenu
 	{
 		super.init();
 		
-		var bounds = Microchip.BOUNDS;
-		this.addRenderableWidget(new MicrochipRenderable(bounds.minX() + leftPos, bounds.minY() + topPos, bounds.width(), bounds.height(), this));
+		this.addRenderableWidget(new MicrochipRenderable(leftPos, topPos, this));
 	}
 	
 	@Override
@@ -49,15 +47,19 @@ public final class MicrochipScreen extends AbstractContainerScreen<MicrochipMenu
 	@Override
 	public void renderFloatingItem(GuiGraphics graphics, ItemStack stack, int x, int y, String text)
 	{
-		int mouseX = x + 8;
-		int mouseY = y + 8;
+		var size = menu.microchip().size();
+		int mouseX = size.boardX(x + 8);
+		int mouseY = size.boardY(y + 8);
 		if(stack.has(LBRComponents.LOGIC) && this.isWithinBoard(mouseX, mouseY))
 		{
 			var component = stack.get(LBRComponents.LOGIC);
 			int logicX = component.size().topLeftCornerX(mouseX);
 			int logicY = component.size().topLeftCornerY(mouseY);
 			var context = new LogicRenderer.Context(true);
+			graphics.pose().pushPose();
+			graphics.pose().scale(size.scale(), size.scale(), size.scale());
 			LogicRenderers.render(context, graphics, component, logicX, logicY);
+			graphics.pose().popPose();
 		}
 		else
 		{

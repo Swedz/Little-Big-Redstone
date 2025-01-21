@@ -35,14 +35,15 @@ public final class MicrochipRenderable implements GuiEventListener, Renderable, 
 	
 	private LogicSelectedPort selectedPort;
 	
-	public MicrochipRenderable(int x, int y, int width, int height, MicrochipScreen screen)
+	public MicrochipRenderable(int x, int y, MicrochipScreen screen)
 	{
-		this.x = x;
-		this.y = y;
-		this.width = width;
-		this.height = height;
-		this.screen = screen;
 		this.microchip = screen.getMenu().microchip();
+		var bounds = microchip.size().bounds();
+		this.x = x + microchip.size().scale(bounds.minX());
+		this.y = y + microchip.size().scale(bounds.minY());
+		this.width = bounds.width();
+		this.height = bounds.height();
+		this.screen = screen;
 	}
 	
 	private boolean mouseClickedOnBoard(int x, int y, int button)
@@ -73,7 +74,7 @@ public final class MicrochipRenderable implements GuiEventListener, Renderable, 
 			int placeX = component.size().topLeftCornerX(x);
 			int placeY = component.size().topLeftCornerY(y);
 			
-			if(Microchip.BOUNDS.normalize().contains(component.size().toBounds(placeX, placeY)) && microchip.components().add(placeX, placeY, component))
+			if(microchip.size().bounds().normalize().contains(component.size().toBounds(placeX, placeY)) && microchip.components().add(placeX, placeY, component))
 			{
 				microchip.markDirty();
 				carried.shrink(1);
@@ -82,6 +83,7 @@ public final class MicrochipRenderable implements GuiEventListener, Renderable, 
 		}
 		else if(carried.is(LBRTags.Items.MICROCHIP_WIRE) && button == InputConstants.MOUSE_BUTTON_LEFT)
 		{
+			LBR.LOGGER.info("{}, {}", x, y);
 			if(selectedPort != null)
 			{
 				var inputPort = microchip.components().findPortAt(x, y, true);
@@ -114,7 +116,7 @@ public final class MicrochipRenderable implements GuiEventListener, Renderable, 
 		int mouseY = (int) my;
 		if(this.isMouseOver(mouseX, mouseY))
 		{
-			return this.mouseClickedOnBoard(this.toLocalX(mouseX), this.toLocalY(mouseY), button);
+			return this.mouseClickedOnBoard(microchip.size().boardX(this.toLocalX(mouseX)), microchip.size().boardY(this.toLocalY(mouseY)), button);
 		}
 		else
 		{
@@ -135,10 +137,10 @@ public final class MicrochipRenderable implements GuiEventListener, Renderable, 
 			LogicEntry outputLogic = microchip.components().get(wire.output().slot());
 			LogicEntry inputLogic = microchip.components().get(wire.input().slot());
 			
-			int x1 = outputLogic.x() + outputLogic.component().size().widthPixels() + x + 3;
-			int y1 = outputLogic.component().size().portTopLeftCornerY(outputLogic.y(), false, wire.output().index(), outputLogic.component().outputs()) + 8 + y;
-			int x2 = inputLogic.x() + x;
-			int y2 = inputLogic.component().size().portTopLeftCornerY(inputLogic.y(), true, wire.input().index(), inputLogic.component().inputs()) + 8 + y;
+			int x1 = microchip.size().scale(outputLogic.x() + outputLogic.component().size().widthPixels() + 3) + x;
+			int y1 = microchip.size().scale(outputLogic.component().size().portTopLeftCornerY(outputLogic.y(), false, wire.output().index(), outputLogic.component().outputs()) + 8) + y;
+			int x2 = microchip.size().scale(inputLogic.x()) + x;
+			int y2 = microchip.size().scale(inputLogic.component().size().portTopLeftCornerY(inputLogic.y(), true, wire.input().index(), inputLogic.component().inputs()) + 8) + y;
 			
 			boolean powered = outputLogic.component().output(wire.output().index());
 			int color = powered ? 0xFFFFFFFF : 0xFF000000;
@@ -187,6 +189,7 @@ public final class MicrochipRenderable implements GuiEventListener, Renderable, 
 		
 		graphics.pose().pushPose();
 		graphics.pose().translate(x, y, 0);
+		graphics.pose().scale(microchip.size().scale(), microchip.size().scale(), microchip.size().scale());
 		
 		this.renderCircuitBg(graphics, mouseX, mouseY, partialTicks);
 		this.renderLogic(graphics, mouseX, mouseY, partialTicks);
@@ -226,7 +229,7 @@ public final class MicrochipRenderable implements GuiEventListener, Renderable, 
 	@Override
 	public ScreenRectangle getRectangle()
 	{
-		return new ScreenRectangle(x, y, width, height);
+		return new ScreenRectangle(x, y, microchip.size().scale(width), microchip.size().scale(height));
 	}
 	
 	private int toLocalX(int x)

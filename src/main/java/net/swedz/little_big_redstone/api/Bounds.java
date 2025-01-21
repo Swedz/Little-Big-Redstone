@@ -89,4 +89,60 @@ public record Bounds(int minX, int minY, int width, int height)
 	{
 		return new Bounds(0, 0, width, height);
 	}
+	
+	/**
+	 * Creates a new bounds instance with the origin x and y of this bounds but with a new width and height.
+	 *
+	 * @param width  the new width
+	 * @param height the new height
+	 * @return the resized bounds
+	 */
+	public Bounds resize(int width, int height)
+	{
+		return new Bounds(minX, minY, width, height);
+	}
+	
+	/**
+	 * Creates a new bounds instance with the origin x and y, as well as the width and height all multiplied by a multiplicator.
+	 *
+	 * @param multiplicator the value to multiply against the bounds values
+	 * @return the multiplied bounds
+	 */
+	public Bounds multiply(float multiplicator)
+	{
+		return new Bounds((int) (minX * multiplicator), (int) (minY * multiplicator), (int) (width * multiplicator), (int) (height * multiplicator));
+	}
+	
+	/**
+	 * Creates a new bounds instance with the origin x and y, as well as the width and height all divided by a divisor (rounding down).
+	 *
+	 * @param divisor the value to divide the bounds values by
+	 * @return the divided bounds
+	 */
+	public Bounds divideFloor(float divisor)
+	{
+		return new Bounds((int) (minX / divisor), (int) (minY / divisor), (int) (width / divisor), (int) (height / divisor));
+	}
+	
+	/**
+	 * Creates a new bounds instance with the origin x and y, as well as the width and height all divided by a divisor (rounding normally).
+	 *
+	 * @param divisor the value to divide the bounds values by
+	 * @return the divided bounds
+	 */
+	public Bounds divideRound(float divisor)
+	{
+		return new Bounds(Math.round(minX / divisor), Math.round(minY / divisor), Math.round(width / divisor), Math.round(height / divisor));
+	}
+	
+	/**
+	 * Creates a new bounds instance with the origin x and y, as well as the width and height all divided by a divisor (rounding up).
+	 *
+	 * @param divisor the value to divide the bounds values by
+	 * @return the divided bounds
+	 */
+	public Bounds divideCeil(float divisor)
+	{
+		return new Bounds((int) Math.ceil(minX / divisor), (int) Math.ceil(minY / divisor), (int) Math.ceil(width / divisor), (int) Math.ceil(height / divisor));
+	}
 }
