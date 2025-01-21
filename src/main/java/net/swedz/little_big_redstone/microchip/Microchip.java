@@ -11,7 +11,7 @@ import net.swedz.little_big_redstone.microchip.wire.MicrochipWires;
 
 public final class Microchip
 {
-	public static final Bounds BOUNDS = new Bounds(0, 0, 256, 138);
+	public static final Bounds BOUNDS = new Bounds(8, 20, 240, 133);
 	
 	public static final Codec<Microchip> CODEC = RecordCodecBuilder.create((instance) -> instance
 			.group(

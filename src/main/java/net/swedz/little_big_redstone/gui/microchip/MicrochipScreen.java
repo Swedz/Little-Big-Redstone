@@ -21,7 +21,7 @@ public final class MicrochipScreen extends AbstractContainerScreen<MicrochipMenu
 		super(menu, playerInventory, title);
 		
 		imageWidth = 256;
-		imageHeight = 256 - (12 * 2);
+		imageHeight = 256;
 	}
 	
 	private boolean isWithinBoard(int x, int y)
@@ -74,6 +74,7 @@ public final class MicrochipScreen extends AbstractContainerScreen<MicrochipMenu
 	@Override
 	protected void renderBg(GuiGraphics graphics, float partialTick, int mouseX, int mouseY)
 	{
-		graphics.blit(INVENTORY_BACKGROUND, leftPos, topPos + imageHeight - 90, 0, 0, 256, 90);
+		graphics.blit(INVENTORY_BACKGROUND, leftPos, topPos, 0, 0, 256, 256);
+		//graphics.blit(INVENTORY_BACKGROUND, leftPos, topPos + imageHeight - 90, 0, 0, 256, 90);
 	}
 }

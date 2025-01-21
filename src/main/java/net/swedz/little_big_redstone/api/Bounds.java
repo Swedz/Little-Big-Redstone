@@ -56,4 +56,14 @@ public record Bounds(int minX, int minY, int width, int height)
 		return this.contains(minX, minY) && this.contains(maxX, minY) &&
 			   this.contains(minX, maxY) && this.contains(maxX, maxY);
 	}
+	
+	/**
+	 * Creates a new bounds instance with the origin x and y at 0, 0.
+	 *
+	 * @return the normalized bounds
+	 */
+	public Bounds normalize()
+	{
+		return new Bounds(0, 0, width, height);
+	}
 }

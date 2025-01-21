@@ -8,6 +8,7 @@ import net.minecraft.world.item.ItemStack;
 import net.swedz.little_big_redstone.LBR;
 import net.swedz.little_big_redstone.LBRComponents;
 import net.swedz.little_big_redstone.gui.microchip.MicrochipMenu;
+import net.swedz.little_big_redstone.microchip.Microchip;
 import net.swedz.little_big_redstone.network.LBRCustomPacket;
 import net.swedz.tesseract.neoforge.packet.PacketContext;
 
@@ -39,7 +40,7 @@ public record PlaceTakeMicrochipLogicPacket(int containerId, int x, int y, boole
 				if(heldItem.has(LBRComponents.LOGIC))
 				{
 					var component = heldItem.get(LBRComponents.LOGIC);
-					if(components.add(x, y, component))
+					if(Microchip.BOUNDS.normalize().contains(component.size().toBounds(x, y)) && components.add(x, y, component))
 					{
 						microchip.markDirty();
 						heldItem.shrink(1);

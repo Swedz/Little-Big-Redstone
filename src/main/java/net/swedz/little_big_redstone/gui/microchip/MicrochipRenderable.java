@@ -15,7 +15,6 @@ import net.swedz.little_big_redstone.LBRComponents;
 import net.swedz.little_big_redstone.LBRTags;
 import net.swedz.little_big_redstone.gui.microchip.logic.LogicRenderer;
 import net.swedz.little_big_redstone.gui.microchip.logic.LogicRenderers;
-import net.swedz.little_big_redstone.helper.GuiGraphicsHelper;
 import net.swedz.little_big_redstone.microchip.LogicEntry;
 import net.swedz.little_big_redstone.microchip.LogicSelectedPort;
 import net.swedz.little_big_redstone.microchip.Microchip;
@@ -74,7 +73,7 @@ public final class MicrochipRenderable implements GuiEventListener, Renderable, 
 			int placeX = component.size().topLeftCornerX(x);
 			int placeY = component.size().topLeftCornerY(y);
 			
-			if(microchip.components().add(placeX, placeY, component))
+			if(Microchip.BOUNDS.normalize().contains(component.size().toBounds(placeX, placeY)) && microchip.components().add(placeX, placeY, component))
 			{
 				microchip.markDirty();
 				carried.shrink(1);
@@ -167,14 +166,14 @@ public final class MicrochipRenderable implements GuiEventListener, Renderable, 
 	
 	private void renderShadowBg(GuiGraphics graphics, int mouseX, int mouseY, float partialTicks, int padding)
 	{
-		for(int p = padding; p >= 1; p--)
+		/*for(int p = padding; p >= 1; p--)
 		{
 			graphics.fill(-p, -p, width + p, height + p, 0x40000000);
 		}
 		
 		graphics.enableScissor(x - padding, y - padding, x + width + padding, y + height + padding);
 		GuiGraphicsHelper.blit(graphics, SHADOW_HOVER_OVERLAY, this.toLocalX(mouseX) - 64, this.toLocalY(mouseY) - 64, 128, 128, 0, 0, 64, 64, 64, 64, 1, 1, 1, 0.11f);
-		graphics.disableScissor();
+		graphics.disableScissor();*/
 	}
 	
 	private void renderCircuitBg(GuiGraphics graphics, int mouseX, int mouseY, float partialTicks)
