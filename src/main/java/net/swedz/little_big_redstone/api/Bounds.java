@@ -1,8 +1,31 @@
 package net.swedz.little_big_redstone.api;
 
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
+import io.netty.buffer.ByteBuf;
+import net.minecraft.network.codec.ByteBufCodecs;
+import net.minecraft.network.codec.StreamCodec;
+
 // TODO move to Tesseract
 public record Bounds(int minX, int minY, int width, int height)
 {
+	public static final Codec<Bounds> CODEC = RecordCodecBuilder.create((instance) -> instance
+			.group(
+					Codec.INT.fieldOf("min_x").forGetter(Bounds::minX),
+					Codec.INT.fieldOf("min_y").forGetter(Bounds::minY),
+					Codec.INT.fieldOf("max_x").forGetter(Bounds::maxX),
+					Codec.INT.fieldOf("max_y").forGetter(Bounds::maxY)
+			)
+			.apply(instance, Bounds::new));
+	
+	public static final StreamCodec<ByteBuf, Bounds> STREAM_CODEC = StreamCodec.composite(
+			ByteBufCodecs.VAR_INT, Bounds::minX,
+			ByteBufCodecs.VAR_INT, Bounds::minY,
+			ByteBufCodecs.VAR_INT, Bounds::maxX,
+			ByteBufCodecs.VAR_INT, Bounds::maxY,
+			Bounds::new
+	);
+	
 	public int maxX()
 	{
 		return minX + width - 1;
