@@ -8,6 +8,7 @@ import net.minecraft.client.gui.components.events.GuiEventListener;
 import net.minecraft.client.gui.narration.NarratableEntry;
 import net.minecraft.client.gui.narration.NarrationElementOutput;
 import net.minecraft.client.gui.navigation.ScreenRectangle;
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.resources.ResourceLocation;
 import net.swedz.little_big_redstone.LBR;
 import net.swedz.little_big_redstone.LBRComponents;
@@ -135,15 +136,20 @@ public final class MicrochipRenderable implements GuiEventListener, Renderable, 
 			LogicEntry outputLogic = microchip.components().get(wire.output().slot());
 			LogicEntry inputLogic = microchip.components().get(wire.input().slot());
 			
-			int x1 = outputLogic.x() + outputLogic.component().size().widthPixels();
-			int y1 = outputLogic.component().size().portTopLeftCornerY(outputLogic.y(), false, wire.output().index(), outputLogic.component().outputs()) + 8;
-			int x2 = inputLogic.x();
-			int y2 = inputLogic.component().size().portTopLeftCornerY(inputLogic.y(), true, wire.input().index(), inputLogic.component().inputs()) + 8;
+			int x1 = outputLogic.x() + outputLogic.component().size().widthPixels() + x + 3;
+			int y1 = outputLogic.component().size().portTopLeftCornerY(outputLogic.y(), false, wire.output().index(), outputLogic.component().outputs()) + 8 + y;
+			int x2 = inputLogic.x() + x;
+			int y2 = inputLogic.component().size().portTopLeftCornerY(inputLogic.y(), true, wire.input().index(), inputLogic.component().inputs()) + 8 + y;
 			
 			boolean powered = outputLogic.component().output(wire.output().index());
+			int color = powered ? 0xFFFFFFFF : 0xFF000000;
 			
-			graphics.hLine(x1 + 2, x1 + 5, y1, powered ? 0xFFFFFFFF : 0xFF000000);
-			graphics.hLine(x2 - 6, x2 - 3, y2, powered ? 0xFFFFFFFF : 0xFF000000);
+			graphics.pose().pushPose();
+			var buffer = graphics.bufferSource().getBuffer(RenderType.lines());
+			buffer.addVertex(x1, y1, 0).setColor(color).setNormal(1, 1, 0);
+			buffer.addVertex(x2, y2, 0).setColor(color).setNormal(1, 1, 0);
+			graphics.bufferSource().endBatch(RenderType.lines());
+			graphics.pose().popPose();
 		}
 	}
 	
