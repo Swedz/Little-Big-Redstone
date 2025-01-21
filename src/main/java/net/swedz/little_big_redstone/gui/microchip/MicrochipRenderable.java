@@ -164,22 +164,8 @@ public final class MicrochipRenderable implements GuiEventListener, Renderable, 
 		}
 	}
 	
-	private void renderShadowBg(GuiGraphics graphics, int mouseX, int mouseY, float partialTicks, int padding)
-	{
-		/*for(int p = padding; p >= 1; p--)
-		{
-			graphics.fill(-p, -p, width + p, height + p, 0x40000000);
-		}
-		
-		graphics.enableScissor(x - padding, y - padding, x + width + padding, y + height + padding);
-		GuiGraphicsHelper.blit(graphics, SHADOW_HOVER_OVERLAY, this.toLocalX(mouseX) - 64, this.toLocalY(mouseY) - 64, 128, 128, 0, 0, 64, 64, 64, 64, 1, 1, 1, 0.11f);
-		graphics.disableScissor();*/
-	}
-	
 	private void renderCircuitBg(GuiGraphics graphics, int mouseX, int mouseY, float partialTicks)
 	{
-		this.renderShadowBg(graphics, mouseX, mouseY, partialTicks, 3);
-		
 		graphics.setColor(1, 0.5f, 0.5f, 1);
 		graphics.blit(CIRCUIT_BACKGROUND, 0, 0, 0, 0, width, height, 64, 64);
 		graphics.setColor(1, 1, 1, 1);
