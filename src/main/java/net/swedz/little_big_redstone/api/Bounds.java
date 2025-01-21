@@ -11,18 +11,18 @@ public record Bounds(int minX, int minY, int width, int height)
 {
 	public static final Codec<Bounds> CODEC = RecordCodecBuilder.create((instance) -> instance
 			.group(
-					Codec.INT.fieldOf("min_x").forGetter(Bounds::minX),
-					Codec.INT.fieldOf("min_y").forGetter(Bounds::minY),
-					Codec.INT.fieldOf("max_x").forGetter(Bounds::maxX),
-					Codec.INT.fieldOf("max_y").forGetter(Bounds::maxY)
+					Codec.INT.fieldOf("x").forGetter(Bounds::minX),
+					Codec.INT.fieldOf("y").forGetter(Bounds::minY),
+					Codec.INT.fieldOf("width").forGetter(Bounds::width),
+					Codec.INT.fieldOf("height").forGetter(Bounds::height)
 			)
 			.apply(instance, Bounds::new));
 	
 	public static final StreamCodec<ByteBuf, Bounds> STREAM_CODEC = StreamCodec.composite(
 			ByteBufCodecs.VAR_INT, Bounds::minX,
 			ByteBufCodecs.VAR_INT, Bounds::minY,
-			ByteBufCodecs.VAR_INT, Bounds::maxX,
-			ByteBufCodecs.VAR_INT, Bounds::maxY,
+			ByteBufCodecs.VAR_INT, Bounds::width,
+			ByteBufCodecs.VAR_INT, Bounds::height,
 			Bounds::new
 	);
 	
