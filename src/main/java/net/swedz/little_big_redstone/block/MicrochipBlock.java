@@ -102,7 +102,8 @@ public final class MicrochipBlock extends Block implements TickableBlock
 		{
 			return 0;
 		}
-		return microchipBlockEntity.isFaceCapableForRedstoneOutput(direction) && state.getValue(getDirectionalState(direction.getOpposite())) ? 15 : 0;
+		direction = direction.getOpposite();
+		return microchipBlockEntity.isFaceCapableForRedstoneOutput(direction) && state.getValue(getDirectionalState(direction)) ? 15 : 0;
 	}
 	
 	@Override
