@@ -51,6 +51,11 @@ public final class MicrochipRenderable implements GuiEventListener, Renderable, 
 		this.screen = screen;
 	}
 	
+	public boolean hasSelectedPort()
+	{
+		return selectedPort != null;
+	}
+	
 	private boolean mouseClickedOnBoard(int x, int y, int button)
 	{
 		var menu = screen.getMenu();
@@ -73,22 +78,8 @@ public final class MicrochipRenderable implements GuiEventListener, Renderable, 
 				// TODO open edit side menu
 			}
 		}
-		else if(carried.has(LBRComponents.LOGIC) && button == InputConstants.MOUSE_BUTTON_LEFT)
-		{
-			var component = carried.get(LBRComponents.LOGIC);
-			int placeX = component.size().topLeftCornerX(x);
-			int placeY = component.size().topLeftCornerY(y);
-			
-			if(microchip.size().bounds().normalize().contains(component.size().toBounds(placeX, placeY)) && microchip.components().add(placeX, placeY, component))
-			{
-				microchip.markDirty();
-				carried.shrink(1);
-				new PlaceTakeMicrochipLogicPacket(menu.containerId, placeX, placeY, true).sendToServer();
-			}
-		}
 		else if(carried.is(LBRTags.Items.MICROCHIP_WIRE) && button == InputConstants.MOUSE_BUTTON_LEFT)
 		{
-			LBR.LOGGER.info("{}, {}", x, y);
 			if(selectedPort != null)
 			{
 				var inputPort = microchip.components().findPortAt(x, y, true);
@@ -109,6 +100,19 @@ public final class MicrochipRenderable implements GuiEventListener, Renderable, 
 				{
 					selectedPort = outputPort;
 				}
+			}
+		}
+		else if(carried.has(LBRComponents.LOGIC) && button == InputConstants.MOUSE_BUTTON_LEFT)
+		{
+			var component = carried.get(LBRComponents.LOGIC);
+			int placeX = component.size().topLeftCornerX(x);
+			int placeY = component.size().topLeftCornerY(y);
+			
+			if(microchip.size().bounds().normalize().contains(component.size().toBounds(placeX, placeY)) && microchip.components().add(placeX, placeY, component))
+			{
+				microchip.markDirty();
+				carried.shrink(1);
+				new PlaceTakeMicrochipLogicPacket(menu.containerId, placeX, placeY, true).sendToServer();
 			}
 		}
 		return false;
@@ -138,15 +142,19 @@ public final class MicrochipRenderable implements GuiEventListener, Renderable, 
 	{
 		if(this.isMouseOver(mouseX, mouseY))
 		{
-			var hovered = microchip.components().findAt(microchip.size().boardX(this.toLocalX(mouseX)), microchip.size().boardY(this.toLocalY(mouseY)));
-			if(hovered != null)
+			var carried = screen.getMenu().getCarried();
+			if(carried.isEmpty())
 			{
-				var component = hovered.component();
-				component.type().tooltip(component, true).ifPresent((Consumer<List<Component>>) (lines) ->
+				var hovered = microchip.components().findAt(microchip.size().boardX(this.toLocalX(mouseX)), microchip.size().boardY(this.toLocalY(mouseY)));
+				if(hovered != null)
 				{
-					lines.addFirst(component.type().displayName().withStyle(Style.EMPTY.withUnderlined(true)));
-					graphics.renderComponentTooltip(Minecraft.getInstance().font, lines, mouseX, mouseY);
-				});
+					var component = hovered.component();
+					component.type().tooltip(component, true).ifPresent((Consumer<List<Component>>) (lines) ->
+					{
+						lines.addFirst(component.type().displayName().withStyle(Style.EMPTY.withUnderlined(true)));
+						graphics.renderComponentTooltip(Minecraft.getInstance().font, lines, mouseX, mouseY);
+					});
+				}
 			}
 		}
 	}
@@ -154,6 +162,7 @@ public final class MicrochipRenderable implements GuiEventListener, Renderable, 
 	private void renderWires(GuiGraphics graphics, int mouseX, int mouseY, float partialTicks)
 	{
 		// TODO redo this to use a pathing algorithm like A*: render the wire connections, this should be cached and recalculated when something is moved...
+		
 		for(Wire wire : microchip.wires())
 		{
 			LogicEntry outputLogic = microchip.components().get(wire.output().slot());
@@ -165,20 +174,36 @@ public final class MicrochipRenderable implements GuiEventListener, Renderable, 
 			int y2 = microchip.size().scale(inputLogic.component().size().portTopLeftCornerY(inputLogic.y(), true, wire.input().index(), inputLogic.component().inputs()) + 8) + y;
 			
 			boolean powered = outputLogic.component().output(wire.output().index());
-			int color = powered ? 0xFFFFFFFF : 0xFF000000;
 			
-			graphics.pose().pushPose();
-			var buffer = graphics.bufferSource().getBuffer(RenderType.lines());
-			buffer.addVertex(x1, y1, 0).setColor(color).setNormal(1, 1, 0);
-			buffer.addVertex(x2, y2, 0).setColor(color).setNormal(1, 1, 0);
-			graphics.bufferSource().endBatch(RenderType.lines());
-			graphics.pose().popPose();
+			this.renderWire(graphics, partialTicks, x1, y1, x2, y2, powered ? 0xFFFFFFFF : 0xFF000000);
 		}
+		
+		if(selectedPort != null)
+		{
+			int x1 = microchip.size().scale(selectedPort.entry().x() + selectedPort.entry().component().size().widthPixels() + 3) + x;
+			int y1 = microchip.size().scale(selectedPort.entry().component().size().portTopLeftCornerY(selectedPort.entry().y(), false, selectedPort.portIndex(), selectedPort.entry().component().outputs()) + 8) + y;
+			int x2 = mouseX;
+			int y2 = mouseY;
+			
+			boolean powered = selectedPort.entry().component().output(selectedPort.portIndex());
+			
+			this.renderWire(graphics, partialTicks, x1, y1, x2, y2, powered ? 0xFFFFFFFF : 0xFF000000);
+		}
+	}
+	
+	private void renderWire(GuiGraphics graphics, float partialTicks, int x1, int y1, int x2, int y2, int color)
+	{
+		graphics.pose().pushPose();
+		var buffer = graphics.bufferSource().getBuffer(RenderType.lines());
+		buffer.addVertex(x1, y1, 0).setColor(color).setNormal(1, 1, 0);
+		buffer.addVertex(x2, y2, 0).setColor(color).setNormal(1, 1, 0);
+		graphics.bufferSource().endBatch(RenderType.lines());
+		graphics.pose().popPose();
 	}
 	
 	private void renderLogic(GuiGraphics graphics, int mouseX, int mouseY, float partialTicks)
 	{
-		var context = new LogicRenderer.Context(false);
+		var context = new LogicRenderer.Context(false, this.hasSelectedPort(), screen.getMenu().getCarried().is(LBRTags.Items.MICROCHIP_WIRE));
 		int traversalIndex = 0;
 		for(var entry : microchip.components().traversal())
 		{

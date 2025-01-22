@@ -24,30 +24,43 @@ public abstract class LogicRenderer<L extends LogicComponent>
 	
 	public abstract void render(Context context, GuiGraphics graphics, L component, int x, int y);
 	
-	protected void renderPort(GuiGraphics graphics, int x, int y, LogicGridSize size, boolean input, int index, int maxPorts, float red, float green, float blue)
+	protected void renderPort(GuiGraphics graphics, int x, int y, LogicGridSize size, boolean input, int index, int maxPorts, float red, float green, float blue, float alpha)
 	{
 		ResourceLocation texture = input ? PORT_INPUT : PORT_OUTPUT;
 		
 		int renderX = size.portTopLeftCornerX(x, input, index, maxPorts);
 		int renderY = size.portTopLeftCornerY(y, input, index, maxPorts);
 		
-		graphics.blit(texture, renderX, renderY, 0, 0, 16, 16, 16, 16);
+		GuiGraphicsHelper.blit(graphics, texture, renderX, renderY, 0, 0, 16, 16, 16, 16, red, green, blue, alpha);
 	}
 	
 	protected void renderAllPorts(Context context, GuiGraphics graphics, int x, int y, L component, float red, float green, float blue)
 	{
-		if(!context.carried())
+		if(!context.isCarried())
 		{
 			var size = component.size();
+			
+			float inputAlpha = 0.5f;
+			float outputAlpha = 0.5f;
+			if(context.hasSelectedPort())
+			{
+				inputAlpha = 1;
+			}
+			else if(context.isCarryingWire())
+			{
+				outputAlpha = 1;
+			}
+			
 			int inputs = component.inputs();
 			for(int i = 0; i < inputs; i++)
 			{
-				this.renderPort(graphics, x, y, size, true, i, inputs, 1, 1, 1);
+				this.renderPort(graphics, x, y, size, true, i, inputs, red, green, blue, inputAlpha);
 			}
+			
 			int outputs = component.outputs();
 			for(int i = 0; i < outputs; i++)
 			{
-				this.renderPort(graphics, x, y, size, false, i, outputs, 1, 1, 1);
+				this.renderPort(graphics, x, y, size, false, i, outputs, red, green, blue, outputAlpha);
 			}
 		}
 	}
@@ -81,7 +94,7 @@ public abstract class LogicRenderer<L extends LogicComponent>
 		this.renderGridBlock(graphics, BACKGROUND_CIRCLE_OVERLAY, x, y, size, 1, 1, 1);
 	}
 	
-	public record Context(boolean carried)
+	public record Context(boolean isCarried, boolean hasSelectedPort, boolean isCarryingWire)
 	{
 	}
 }
