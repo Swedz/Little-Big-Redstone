@@ -14,15 +14,15 @@ import net.minecraft.network.chat.Style;
 import net.minecraft.resources.ResourceLocation;
 import net.swedz.little_big_redstone.LBR;
 import net.swedz.little_big_redstone.LBRComponents;
-import net.swedz.little_big_redstone.LBRTags;
+import net.swedz.little_big_redstone.LBRItems;
 import net.swedz.little_big_redstone.gui.microchip.logic.LogicRenderer;
 import net.swedz.little_big_redstone.gui.microchip.logic.LogicRenderers;
 import net.swedz.little_big_redstone.microchip.LogicEntry;
 import net.swedz.little_big_redstone.microchip.LogicSelectedPort;
 import net.swedz.little_big_redstone.microchip.Microchip;
 import net.swedz.little_big_redstone.microchip.wire.Wire;
-import net.swedz.little_big_redstone.network.packet.CreateMicrochipWirePacket;
 import net.swedz.little_big_redstone.network.packet.PlaceTakeMicrochipLogicPacket;
+import net.swedz.little_big_redstone.network.packet.PlaceTakeMicrochipWirePacket;
 
 import java.util.List;
 import java.util.function.Consumer;
@@ -60,12 +60,31 @@ public final class MicrochipRenderable implements GuiEventListener, Renderable, 
 	{
 		var menu = screen.getMenu();
 		var carried = menu.getCarried();
+		
+		var entry = microchip.components().findAt(x, y);
+		var inputPort = microchip.components().findPortAt(x, y, true);
+		var outputPort = microchip.components().findPortAt(x, y, false);
+		
 		if(carried.isEmpty())
 		{
 			if(button == InputConstants.MOUSE_BUTTON_LEFT)
 			{
-				var entry = microchip.components().findAt(x, y);
-				if(entry != null)
+				if(inputPort != null)
+				{
+					var wires = microchip.wires().getByInput(inputPort.entry().slot(), inputPort.portIndex());
+					if(!wires.isEmpty())
+					{
+						var wire = wires.getFirst();
+						if(microchip.wires().remove(wire))
+						{
+							microchip.markDirty();
+							menu.setCarried(LBRItems.REDSTONE_BIT.asItem().getDefaultInstance());
+							selectedPort = new LogicSelectedPort(microchip.components().get(wire.output().slot()), wire.output().index());
+							new PlaceTakeMicrochipWirePacket(menu.containerId, wire, false).sendToServer();
+						}
+					}
+				}
+				else if(entry != null)
 				{
 					microchip.components().remove(entry);
 					microchip.markDirty();
@@ -78,25 +97,36 @@ public final class MicrochipRenderable implements GuiEventListener, Renderable, 
 				// TODO open edit side menu
 			}
 		}
-		else if(carried.is(LBRTags.Items.MICROCHIP_WIRE) && button == InputConstants.MOUSE_BUTTON_LEFT)
+		else if(carried.is(LBRItems.REDSTONE_BIT.asItem()) && button == InputConstants.MOUSE_BUTTON_LEFT)
 		{
 			if(selectedPort != null)
 			{
-				var inputPort = microchip.components().findPortAt(x, y, true);
 				if(inputPort != null && microchip.wires().add(selectedPort, inputPort))
 				{
 					microchip.markDirty();
 					carried.shrink(1);
-					new CreateMicrochipWirePacket(menu.containerId, selectedPort, inputPort).sendToServer();
+					new PlaceTakeMicrochipWirePacket(menu.containerId, selectedPort, inputPort, true).sendToServer();
 				}
 				selectedPort = null;
 			}
 			else
 			{
-				// TODO try to grab hovered wire first
-				
-				var outputPort = microchip.components().findPortAt(x, y, false);
-				if(outputPort != null)
+				if(inputPort != null)
+				{
+					var wires = microchip.wires().getByInput(inputPort.entry().slot(), inputPort.portIndex());
+					if(!wires.isEmpty())
+					{
+						var wire = wires.getFirst();
+						if(microchip.wires().remove(wire))
+						{
+							microchip.markDirty();
+							carried.grow(1);
+							selectedPort = new LogicSelectedPort(microchip.components().get(wire.output().slot()), wire.output().index());
+							new PlaceTakeMicrochipWirePacket(menu.containerId, wire, false).sendToServer();
+						}
+					}
+				}
+				else if(outputPort != null)
 				{
 					selectedPort = outputPort;
 				}
@@ -201,7 +231,7 @@ public final class MicrochipRenderable implements GuiEventListener, Renderable, 
 	
 	private void renderLogic(GuiGraphics graphics, int mouseX, int mouseY, float partialTicks)
 	{
-		var context = new LogicRenderer.Context(false, this.hasSelectedPort(), screen.getMenu().getCarried().is(LBRTags.Items.MICROCHIP_WIRE));
+		var context = new LogicRenderer.Context(false, this.hasSelectedPort(), screen.getMenu().getCarried().is(LBRItems.REDSTONE_BIT.asItem()));
 		int traversalIndex = 0;
 		for(var entry : microchip.components().traversal())
 		{

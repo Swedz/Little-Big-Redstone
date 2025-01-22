@@ -38,7 +38,7 @@ public final class LBRItems
 		Registry.init(bus);
 	}
 	
-	public static final ItemHolder<Item> REDSTONE_BIT = create("redstone_bit", "Redstone Bit", Item::new, LBRSortOrder.RESOURCES).tag(LBRTags.Items.MICROCHIP_WIRE).withModelBuilder(CommonModelBuilders::generated).register();
+	public static final ItemHolder<Item> REDSTONE_BIT = create("redstone_bit", "Redstone Bit", Item::new, LBRSortOrder.RESOURCES).withModelBuilder(CommonModelBuilders::generated).register();
 	
 	static
 	{

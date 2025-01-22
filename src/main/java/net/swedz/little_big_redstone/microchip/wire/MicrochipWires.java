@@ -70,10 +70,37 @@ public final class MicrochipWires implements Iterable<Wire>
 		return list == null ? List.of() : List.copyOf(list);
 	}
 	
+	public List<Wire> getByOutput(int outputSlot, int outputPort)
+	{
+		return this.getByOutput(outputSlot).stream()
+				.filter((wire) -> wire.output().index() == outputPort)
+				.toList();
+	}
+	
 	public List<Wire> getByInput(int inputSlot)
 	{
 		var list = wiresByInputSlot.get(inputSlot);
 		return list == null ? List.of() : List.copyOf(list);
+	}
+	
+	public List<Wire> getByInput(int inputSlot, int inputPort)
+	{
+		return this.getByInput(inputSlot).stream()
+				.filter((wire) -> wire.input().index() == inputPort)
+				.toList();
+	}
+	
+	public Wire get(WirePort output, WirePort input)
+	{
+		return wires.stream()
+				.filter((wire) -> wire.output().equals(output) && wire.input().equals(input))
+				.findFirst()
+				.orElse(null);
+	}
+	
+	public Wire get(int outputSlot, int outputPort, int inputSlot, int inputPort)
+	{
+		return this.get(new WirePort(outputSlot, outputPort), new WirePort(inputSlot, inputPort));
 	}
 	
 	public boolean add(Wire wire)
@@ -120,6 +147,11 @@ public final class MicrochipWires implements Iterable<Wire>
 			return true;
 		}
 		return false;
+	}
+	
+	public boolean remove(int outputSlot, int outputPort, int inputSlot, int inputPort)
+	{
+		return this.add(new Wire(outputSlot, outputPort, inputSlot, inputPort));
 	}
 	
 	public void removeAllOutputs(int outputSlot)
