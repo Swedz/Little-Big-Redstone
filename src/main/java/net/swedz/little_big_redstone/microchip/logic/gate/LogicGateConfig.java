@@ -6,8 +6,10 @@ import io.netty.buffer.ByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
+import net.swedz.little_big_redstone.LBR;
 import net.swedz.little_big_redstone.LBRText;
 import net.swedz.little_big_redstone.microchip.logic.LogicConfig;
+import net.swedz.little_big_redstone.microchip.logic.LogicConfigMenuBuilder;
 
 import java.util.List;
 import java.util.Objects;
@@ -38,6 +40,13 @@ public final class LogicGateConfig extends LogicConfig<LogicGateConfig>
 	public void appendHoverText(List<Component> lines)
 	{
 		lines.add(line(LBRText.LOGIC_CONFIGURATION_GATE_INPUTS).arg(inputs));
+	}
+	
+	@Override
+	public void buildMenu(int leftPos, int topPos, LogicConfigMenuBuilder builder)
+	{
+		// TODO sliders not allowing dragging?
+		builder.addSlider(Component.literal("Inputs: "), Component.empty(), leftPos + 8, topPos + 25 - 8, 75, 15, 2, 16, inputs, 1, 0, true, (value) -> inputs = value.intValue());
 	}
 	
 	@Override

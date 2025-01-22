@@ -6,6 +6,7 @@ import net.minecraft.world.inventory.MenuType;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.network.IContainerFactory;
 import net.neoforged.neoforge.registries.DeferredRegister;
+import net.swedz.little_big_redstone.gui.logicconfig.LogicConfigMenu;
 import net.swedz.little_big_redstone.gui.microchip.MicrochipMenu;
 
 import java.util.function.Supplier;
@@ -14,7 +15,8 @@ public final class LBRMenus
 {
 	private static final DeferredRegister<MenuType<?>> REGISTRY = DeferredRegister.create(Registries.MENU, LBR.ID);
 	
-	public static final Supplier<MenuType<MicrochipMenu>> MICROCHIP = REGISTRY.register("microchip", () -> new MenuType<>((IContainerFactory<MicrochipMenu>) MicrochipMenu::new, FeatureFlags.DEFAULT_FLAGS));
+	public static final Supplier<MenuType<MicrochipMenu>>   MICROCHIP    = REGISTRY.register("microchip", () -> new MenuType<>((IContainerFactory<MicrochipMenu>) MicrochipMenu::new, FeatureFlags.DEFAULT_FLAGS));
+	public static final Supplier<MenuType<LogicConfigMenu>> LOGIC_CONFIG = REGISTRY.register("logic_config", () -> new MenuType<>((IContainerFactory<LogicConfigMenu>) LogicConfigMenu::new, FeatureFlags.DEFAULT_FLAGS));
 	
 	public static void init(IEventBus bus)
 	{

@@ -1,4 +1,4 @@
-package net.swedz.little_big_redstone.gui.microchip;
+package net.swedz.little_big_redstone.gui.logicconfig;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.RegistryFriendlyByteBuf;
@@ -7,37 +7,37 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.swedz.little_big_redstone.LBRMenus;
 import net.swedz.little_big_redstone.gui.BaseContainerMenu;
-import net.swedz.little_big_redstone.microchip.Microchip;
+import net.swedz.little_big_redstone.microchip.LogicEntry;
 
 import java.util.function.Supplier;
 
-public final class MicrochipMenu extends BaseContainerMenu
+public final class LogicConfigMenu extends BaseContainerMenu
 {
 	private final BlockPos          blockPos;
 	private final Supplier<Boolean> validChecker;
-	private final Microchip         microchip;
+	private final LogicEntry        logicEntry;
 	
-	public MicrochipMenu(int containerId, Inventory playerInventory,
-						 BlockPos blockPos, Supplier<Boolean> validChecker, Microchip microchip)
+	public LogicConfigMenu(int containerId, Inventory playerInventory,
+						   BlockPos blockPos, Supplier<Boolean> validChecker, LogicEntry logicEntry)
 	{
-		super(LBRMenus.MICROCHIP.get(), containerId);
+		super(LBRMenus.LOGIC_CONFIG.get(), containerId);
 		
 		this.blockPos = blockPos;
 		this.validChecker = validChecker;
-		this.microchip = microchip;
+		this.logicEntry = logicEntry;
 		
-		this.setupPlayerInventory(playerInventory, 48, 150);
+		this.setupPlayerInventory(playerInventory, 8, 150);
 	}
 	
-	public MicrochipMenu(int containerId, Inventory playerInventory, RegistryFriendlyByteBuf buf)
+	public LogicConfigMenu(int containerId, Inventory playerInventory, RegistryFriendlyByteBuf buf)
 	{
-		super(LBRMenus.MICROCHIP.get(), containerId);
+		super(LBRMenus.LOGIC_CONFIG.get(), containerId);
 		
 		this.blockPos = buf.readBlockPos();
 		this.validChecker = null;
-		this.microchip = Microchip.STREAM_CODEC.decode(buf);
+		this.logicEntry = LogicEntry.STREAM_CODEC.decode(buf);
 		
-		this.setupPlayerInventory(playerInventory, 48, 150);
+		this.setupPlayerInventory(playerInventory, 8, 150);
 	}
 	
 	public BlockPos blockPos()
@@ -45,9 +45,9 @@ public final class MicrochipMenu extends BaseContainerMenu
 		return blockPos;
 	}
 	
-	public Microchip microchip()
+	public LogicEntry logicEntry()
 	{
-		return microchip;
+		return logicEntry;
 	}
 	
 	@Override

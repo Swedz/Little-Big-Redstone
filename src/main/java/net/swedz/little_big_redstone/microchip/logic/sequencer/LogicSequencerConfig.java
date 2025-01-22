@@ -10,6 +10,7 @@ import net.minecraft.network.codec.StreamCodec;
 import net.swedz.little_big_redstone.LBRText;
 import net.swedz.little_big_redstone.LBRTooltips;
 import net.swedz.little_big_redstone.microchip.logic.LogicConfig;
+import net.swedz.little_big_redstone.microchip.logic.LogicConfigMenuBuilder;
 
 import java.util.List;
 import java.util.Objects;
@@ -50,6 +51,12 @@ public final class LogicSequencerConfig extends LogicConfig<LogicSequencerConfig
 		lines.add(line(LBRText.LOGIC_CONFIGURATION_SEQUENCER_DELAY).arg(outputDelay));
 		lines.add(line(LBRText.LOGIC_CONFIGURATION_SEQUENCER_DURATION).arg(outputDuration));
 		lines.add(line(LBRText.LOGIC_CONFIGURATION_SEQUENCER_CONTINUOUS).arg(requiresContinuousPower, LBRTooltips.BOOLEAN_YES_NO_PARSER));
+	}
+	
+	@Override
+	public void buildMenu(int leftPos, int topPos, LogicConfigMenuBuilder builder)
+	{
+		// TODO
 	}
 	
 	@Override

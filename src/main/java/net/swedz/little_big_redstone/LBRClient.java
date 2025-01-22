@@ -7,6 +7,7 @@ import net.neoforged.fml.ModContainer;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.neoforge.client.event.RegisterMenuScreensEvent;
+import net.swedz.little_big_redstone.gui.logicconfig.LogicConfigScreen;
 import net.swedz.little_big_redstone.gui.microchip.MicrochipScreen;
 
 @Mod(value = LBR.ID, dist = Dist.CLIENT)
@@ -22,5 +23,6 @@ public final class LBRClient
 	private static void registerScreens(RegisterMenuScreensEvent event)
 	{
 		event.register(LBRMenus.MICROCHIP.get(), MicrochipScreen::new);
+		event.register(LBRMenus.LOGIC_CONFIG.get(), LogicConfigScreen::new);
 	}
 }

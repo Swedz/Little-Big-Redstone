@@ -79,6 +79,5 @@ public final class MicrochipScreen extends AbstractContainerScreen<MicrochipMenu
 	protected void renderBg(GuiGraphics graphics, float partialTick, int mouseX, int mouseY)
 	{
 		graphics.blit(INVENTORY_BACKGROUND, leftPos, topPos, 0, 0, 256, 256);
-		//graphics.blit(INVENTORY_BACKGROUND, leftPos, topPos + imageHeight - 90, 0, 0, 256, 90);
 	}
 }

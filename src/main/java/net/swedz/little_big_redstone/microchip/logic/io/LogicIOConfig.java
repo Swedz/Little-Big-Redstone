@@ -11,6 +11,7 @@ import net.minecraft.network.codec.StreamCodec;
 import net.swedz.little_big_redstone.LBRText;
 import net.swedz.little_big_redstone.LBRTooltips;
 import net.swedz.little_big_redstone.microchip.logic.LogicConfig;
+import net.swedz.little_big_redstone.microchip.logic.LogicConfigMenuBuilder;
 
 import java.util.List;
 import java.util.Objects;
@@ -47,6 +48,12 @@ public final class LogicIOConfig extends LogicConfig<LogicIOConfig>
 	{
 		lines.add(line(LBRText.LOGIC_CONFIGURATION_IO_MODE).arg(input, LBRTooltips.INPUT_OUTPUT_PARSER));
 		lines.add(line(LBRText.LOGIC_CONFIGURATION_IO_DIRECTION).arg(direction, LBRTooltips.DIRECTION_PARSER));
+	}
+	
+	@Override
+	public void buildMenu(int leftPos, int topPos, LogicConfigMenuBuilder builder)
+	{
+		// TODO
 	}
 	
 	@Override

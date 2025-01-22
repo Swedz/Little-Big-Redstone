@@ -21,6 +21,7 @@ import net.swedz.little_big_redstone.microchip.LogicEntry;
 import net.swedz.little_big_redstone.microchip.LogicSelectedPort;
 import net.swedz.little_big_redstone.microchip.Microchip;
 import net.swedz.little_big_redstone.microchip.wire.Wire;
+import net.swedz.little_big_redstone.network.packet.OpenLogicConfigPacket;
 import net.swedz.little_big_redstone.network.packet.PlaceTakeMicrochipLogicPacket;
 import net.swedz.little_big_redstone.network.packet.PlaceTakeMicrochipWirePacket;
 
@@ -170,7 +171,7 @@ public final class MicrochipRenderable implements GuiEventListener, Renderable, 
 		   entry != null &&
 		   carried.isEmpty())
 		{
-			// TODO
+			new OpenLogicConfigPacket(menu.containerId, entry.slot()).sendToServer();
 			return true;
 		}
 		
