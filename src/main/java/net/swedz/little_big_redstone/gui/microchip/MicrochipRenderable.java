@@ -149,7 +149,7 @@ public final class MicrochipRenderable implements GuiEventListener, Renderable, 
 				if(hovered != null)
 				{
 					var component = hovered.component();
-					component.type().tooltip(component, true).ifPresent((Consumer<List<Component>>) (lines) ->
+					component.type().tooltip(component, true, false).ifPresent((Consumer<List<Component>>) (lines) ->
 					{
 						lines.addFirst(component.type().displayName().withStyle(Style.EMPTY.withUnderlined(true)));
 						graphics.renderComponentTooltip(Minecraft.getInstance().font, lines, mouseX, mouseY);

@@ -29,7 +29,7 @@ public record LogicType<L extends LogicComponent>(
 		return Component.translatable(LBR.id(id).toLanguageKey("item"));
 	}
 	
-	public Optional<List<Component>> tooltip(L component, boolean extra)
+	public Optional<List<Component>> tooltip(L component, boolean extra, boolean configHeader)
 	{
 		List<Component> lines = Lists.newArrayList();
 		
@@ -48,12 +48,20 @@ public record LogicType<L extends LogicComponent>(
 			component.config().appendHoverText(configLines);
 			if(!configLines.isEmpty())
 			{
-				lines.add(line(LBRText.LOGIC_CONFIGURATION).withStyle(DEFAULT_STYLE));
+				if(configHeader)
+				{
+					lines.add(line(LBRText.LOGIC_CONFIGURATION).withStyle(DEFAULT_STYLE));
+				}
 				lines.addAll(configLines);
 			}
 		}
 		
 		return lines.isEmpty() ? Optional.empty() : Optional.of(lines);
+	}
+	
+	public Optional<List<Component>> tooltip(L component, boolean extra)
+	{
+		return this.tooltip(component, extra, true);
 	}
 	
 	public ItemStack toStack(L component)
