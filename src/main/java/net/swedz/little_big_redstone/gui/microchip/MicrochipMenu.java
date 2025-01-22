@@ -27,7 +27,7 @@ public final class MicrochipMenu extends AbstractContainerMenu
 		this.validChecker = validChecker;
 		this.microchip = microchip;
 		
-		this.setupPlayerInventory(playerInventory, 162);
+		this.setupPlayerInventory(playerInventory, 48, 150);
 	}
 	
 	public MicrochipMenu(int containerId, Inventory playerInventory, RegistryFriendlyByteBuf buf)
@@ -38,21 +38,21 @@ public final class MicrochipMenu extends AbstractContainerMenu
 		this.validChecker = null;
 		this.microchip = Microchip.STREAM_CODEC.decode(buf);
 		
-		this.setupPlayerInventory(playerInventory, 162);
+		this.setupPlayerInventory(playerInventory, 48, 150);
 	}
 	
-	private void setupPlayerInventory(Inventory playerInventory, int startY)
+	private void setupPlayerInventory(Inventory playerInventory, int startX, int startY)
 	{
 		for(int row = 0; row < 3; ++row)
 		{
 			for(int column = 0; column < 9; ++column)
 			{
-				this.addSlot(new Slot(playerInventory, column + row * 9 + 9, 48 + column * 18, row * 18 + startY));
+				this.addSlot(new Slot(playerInventory, column + row * 9 + 9, startX + column * 18, row * 18 + startY));
 			}
 		}
 		for(int column = 0; column < 9; ++column)
 		{
-			this.addSlot(new Slot(playerInventory, column, 48 + column * 18, 58 + startY));
+			this.addSlot(new Slot(playerInventory, column, startX + column * 18, 58 + startY));
 		}
 	}
 	

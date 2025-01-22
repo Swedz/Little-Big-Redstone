@@ -22,7 +22,7 @@ public final class MicrochipScreen extends AbstractContainerScreen<MicrochipMenu
 		super(menu, playerInventory, title);
 		
 		imageWidth = 256;
-		imageHeight = 256;
+		imageHeight = 232;
 	}
 	
 	private boolean isWithinBoard(int x, int y)
