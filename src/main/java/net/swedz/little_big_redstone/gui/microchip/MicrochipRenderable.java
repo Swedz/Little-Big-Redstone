@@ -1,6 +1,5 @@
 package net.swedz.little_big_redstone.gui.microchip;
 
-import com.google.common.collect.Lists;
 import com.mojang.blaze3d.platform.InputConstants;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
@@ -16,7 +15,6 @@ import net.minecraft.resources.ResourceLocation;
 import net.swedz.little_big_redstone.LBR;
 import net.swedz.little_big_redstone.LBRComponents;
 import net.swedz.little_big_redstone.LBRTags;
-import net.swedz.little_big_redstone.LBRText;
 import net.swedz.little_big_redstone.gui.microchip.logic.LogicRenderer;
 import net.swedz.little_big_redstone.gui.microchip.logic.LogicRenderers;
 import net.swedz.little_big_redstone.microchip.LogicEntry;
@@ -27,9 +25,7 @@ import net.swedz.little_big_redstone.network.packet.CreateMicrochipWirePacket;
 import net.swedz.little_big_redstone.network.packet.PlaceTakeMicrochipLogicPacket;
 
 import java.util.List;
-
-import static net.swedz.little_big_redstone.LBRTextLine.*;
-import static net.swedz.little_big_redstone.LBRTooltips.*;
+import java.util.function.Consumer;
 
 public final class MicrochipRenderable implements GuiEventListener, Renderable, NarratableEntry
 {
@@ -145,21 +141,12 @@ public final class MicrochipRenderable implements GuiEventListener, Renderable, 
 			var hovered = microchip.components().findAt(microchip.size().boardX(this.toLocalX(mouseX)), microchip.size().boardY(this.toLocalY(mouseY)));
 			if(hovered != null)
 			{
-				List<Component> lines = Lists.newArrayList();
-				
-				lines.add(hovered.component().type().displayName().withStyle(Style.EMPTY.withUnderlined(true)));
-				
-				hovered.component().appendShiftHoverText(lines);
-				
-				List<Component> configLines = Lists.newArrayList();
-				hovered.component().config().appendHoverText(configLines);
-				if(!configLines.isEmpty())
+				var component = hovered.component();
+				component.type().tooltip(component, true).ifPresent((Consumer<List<Component>>) (lines) ->
 				{
-					lines.add(line(LBRText.LOGIC_CONFIGURATION).withStyle(DEFAULT_STYLE));
-					lines.addAll(configLines);
-				}
-				
-				graphics.renderComponentTooltip(Minecraft.getInstance().font, lines, mouseX, mouseY);
+					lines.addFirst(component.type().displayName().withStyle(Style.EMPTY.withUnderlined(true)));
+					graphics.renderComponentTooltip(Minecraft.getInstance().font, lines, mouseX, mouseY);
+				});
 			}
 		}
 	}

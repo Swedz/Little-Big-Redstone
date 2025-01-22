@@ -1,17 +1,11 @@
 package net.swedz.little_big_redstone;
 
-import com.google.common.collect.Lists;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.Style;
 import net.minecraft.network.chat.TextColor;
 import net.swedz.tesseract.neoforge.tooltip.Parser;
 import net.swedz.tesseract.neoforge.tooltip.TooltipAttachment;
-
-import java.util.List;
-import java.util.Optional;
-
-import static net.swedz.little_big_redstone.LBRTextLine.*;
 
 public final class LBRTooltips
 {
@@ -62,11 +56,7 @@ public final class LBRTooltips
 			(stack, item) ->
 			{
 				var logicComponent = stack.get(LBRComponents.LOGIC);
-				
-				List<Component> lines = Lists.newArrayList();
-				logicComponent.appendNoShiftHoverText(lines);
-				
-				return lines.isEmpty() ? Optional.empty() : Optional.of(lines);
+				return logicComponent.type().tooltip(logicComponent, false);
 			}
 	).noShiftRequired();
 	
@@ -75,19 +65,7 @@ public final class LBRTooltips
 			(stack, item) ->
 			{
 				var logicComponent = stack.get(LBRComponents.LOGIC);
-				
-				List<Component> lines = Lists.newArrayList();
-				logicComponent.appendShiftHoverText(lines);
-				
-				List<Component> configLines = Lists.newArrayList();
-				logicComponent.config().appendHoverText(configLines);
-				if(!configLines.isEmpty())
-				{
-					lines.add(line(LBRText.LOGIC_CONFIGURATION).withStyle(DEFAULT_STYLE));
-					lines.addAll(configLines);
-				}
-				
-				return lines.isEmpty() ? Optional.empty() : Optional.of(lines);
+				return logicComponent.type().tooltip(logicComponent, true);
 			}
 	);
 	
