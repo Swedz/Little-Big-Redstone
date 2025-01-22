@@ -182,12 +182,10 @@ public final class MicrochipRenderable implements GuiEventListener, Renderable, 
 		{
 			int x1 = microchip.size().scale(selectedPort.entry().x() + selectedPort.entry().component().size().widthPixels() + 3) + x;
 			int y1 = microchip.size().scale(selectedPort.entry().component().size().portTopLeftCornerY(selectedPort.entry().y(), false, selectedPort.portIndex(), selectedPort.entry().component().outputs()) + 8) + y;
-			int x2 = mouseX;
-			int y2 = mouseY;
 			
 			boolean powered = selectedPort.entry().component().output(selectedPort.portIndex());
 			
-			this.renderWire(graphics, partialTicks, x1, y1, x2, y2, powered ? 0xFFFFFFFF : 0xFF000000);
+			this.renderWire(graphics, partialTicks, x1, y1, mouseX, mouseY, powered ? 0xFFFFFFFF : 0xFF000000);
 		}
 	}
 	
