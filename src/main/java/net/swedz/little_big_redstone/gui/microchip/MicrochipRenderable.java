@@ -208,7 +208,6 @@ public final class MicrochipRenderable implements GuiEventListener, Renderable, 
 		for(var entry : microchip.components().traversal())
 		{
 			LogicRenderers.render(context, graphics, entry.component(), entry.x(), entry.y());
-			graphics.drawString(Minecraft.getInstance().font, entry.slot() + " (" + traversalIndex + ")", entry.x(), entry.y() - 8, 0xFFFFFF);
 			traversalIndex++;
 		}
 	}
