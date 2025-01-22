@@ -1,5 +1,6 @@
 package net.swedz.little_big_redstone.gui.microchip;
 
+import com.google.common.collect.Lists;
 import com.mojang.blaze3d.platform.InputConstants;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
@@ -9,10 +10,13 @@ import net.minecraft.client.gui.narration.NarratableEntry;
 import net.minecraft.client.gui.narration.NarrationElementOutput;
 import net.minecraft.client.gui.navigation.ScreenRectangle;
 import net.minecraft.client.renderer.RenderType;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.Style;
 import net.minecraft.resources.ResourceLocation;
 import net.swedz.little_big_redstone.LBR;
 import net.swedz.little_big_redstone.LBRComponents;
 import net.swedz.little_big_redstone.LBRTags;
+import net.swedz.little_big_redstone.LBRText;
 import net.swedz.little_big_redstone.gui.microchip.logic.LogicRenderer;
 import net.swedz.little_big_redstone.gui.microchip.logic.LogicRenderers;
 import net.swedz.little_big_redstone.microchip.LogicEntry;
@@ -21,6 +25,11 @@ import net.swedz.little_big_redstone.microchip.Microchip;
 import net.swedz.little_big_redstone.microchip.wire.Wire;
 import net.swedz.little_big_redstone.network.packet.CreateMicrochipWirePacket;
 import net.swedz.little_big_redstone.network.packet.PlaceTakeMicrochipLogicPacket;
+
+import java.util.List;
+
+import static net.swedz.little_big_redstone.LBRTextLine.*;
+import static net.swedz.little_big_redstone.LBRTooltips.*;
 
 public final class MicrochipRenderable implements GuiEventListener, Renderable, NarratableEntry
 {
@@ -129,6 +138,32 @@ public final class MicrochipRenderable implements GuiEventListener, Renderable, 
 		}
 	}
 	
+	private void renderTooltip(GuiGraphics graphics, int mouseX, int mouseY, float partialTicks)
+	{
+		if(this.isMouseOver(mouseX, mouseY))
+		{
+			var hovered = microchip.components().findAt(microchip.size().boardX(this.toLocalX(mouseX)), microchip.size().boardY(this.toLocalY(mouseY)));
+			if(hovered != null)
+			{
+				List<Component> lines = Lists.newArrayList();
+				
+				lines.add(hovered.component().type().displayName().withStyle(Style.EMPTY.withUnderlined(true)));
+				
+				hovered.component().appendShiftHoverText(lines);
+				
+				List<Component> configLines = Lists.newArrayList();
+				hovered.component().config().appendHoverText(configLines);
+				if(!configLines.isEmpty())
+				{
+					lines.add(line(LBRText.LOGIC_CONFIGURATION).withStyle(DEFAULT_STYLE));
+					lines.addAll(configLines);
+				}
+				
+				graphics.renderComponentTooltip(Minecraft.getInstance().font, lines, mouseX, mouseY);
+			}
+		}
+	}
+	
 	private void renderWires(GuiGraphics graphics, int mouseX, int mouseY, float partialTicks)
 	{
 		// TODO redo this to use a pathing algorithm like A*: render the wire connections, this should be cached and recalculated when something is moved...
@@ -196,6 +231,8 @@ public final class MicrochipRenderable implements GuiEventListener, Renderable, 
 		this.renderWires(graphics, mouseX, mouseY, partialTicks);
 		
 		graphics.pose().popPose();
+		
+		this.renderTooltip(graphics, mouseX, mouseY, partialTicks);
 	}
 	
 	@Override

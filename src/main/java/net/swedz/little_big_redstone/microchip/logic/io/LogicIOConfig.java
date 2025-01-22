@@ -5,11 +5,17 @@ import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.core.Direction;
+import net.minecraft.network.chat.Component;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
+import net.swedz.little_big_redstone.LBRText;
+import net.swedz.little_big_redstone.LBRTooltips;
 import net.swedz.little_big_redstone.microchip.logic.LogicConfig;
 
+import java.util.List;
 import java.util.Objects;
+
+import static net.swedz.little_big_redstone.LBRTextLine.*;
 
 public final class LogicIOConfig extends LogicConfig<LogicIOConfig>
 {
@@ -34,6 +40,13 @@ public final class LogicIOConfig extends LogicConfig<LogicIOConfig>
 	{
 		this.input = input;
 		this.direction = direction;
+	}
+	
+	@Override
+	public void appendHoverText(List<Component> lines)
+	{
+		lines.add(line(LBRText.LOGIC_CONFIGURATION_IO_MODE).arg(input, LBRTooltips.INPUT_OUTPUT_PARSER));
+		lines.add(line(LBRText.LOGIC_CONFIGURATION_IO_DIRECTION).arg(direction, LBRTooltips.DIRECTION_PARSER));
 	}
 	
 	@Override

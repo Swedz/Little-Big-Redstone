@@ -4,11 +4,17 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import io.netty.buffer.ByteBuf;
+import net.minecraft.network.chat.Component;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
+import net.swedz.little_big_redstone.LBRText;
+import net.swedz.little_big_redstone.LBRTooltips;
 import net.swedz.little_big_redstone.microchip.logic.LogicConfig;
 
+import java.util.List;
 import java.util.Objects;
+
+import static net.swedz.little_big_redstone.LBRTextLine.*;
 
 public final class LogicSequencerConfig extends LogicConfig<LogicSequencerConfig>
 {
@@ -36,6 +42,14 @@ public final class LogicSequencerConfig extends LogicConfig<LogicSequencerConfig
 		this.outputDelay = outputDelay;
 		this.outputDuration = outputDuration;
 		this.requiresContinuousPower = requiresContinuousPower;
+	}
+	
+	@Override
+	public void appendHoverText(List<Component> lines)
+	{
+		lines.add(line(LBRText.LOGIC_CONFIGURATION_SEQUENCER_DELAY).arg(outputDelay));
+		lines.add(line(LBRText.LOGIC_CONFIGURATION_SEQUENCER_DURATION).arg(outputDuration));
+		lines.add(line(LBRText.LOGIC_CONFIGURATION_SEQUENCER_CONTINUOUS).arg(requiresContinuousPower, LBRTooltips.BOOLEAN_YES_NO_PARSER));
 	}
 	
 	@Override

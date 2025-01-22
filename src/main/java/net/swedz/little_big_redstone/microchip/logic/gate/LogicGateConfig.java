@@ -3,11 +3,16 @@ package net.swedz.little_big_redstone.microchip.logic.gate;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import io.netty.buffer.ByteBuf;
+import net.minecraft.network.chat.Component;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
+import net.swedz.little_big_redstone.LBRText;
 import net.swedz.little_big_redstone.microchip.logic.LogicConfig;
 
+import java.util.List;
 import java.util.Objects;
+
+import static net.swedz.little_big_redstone.LBRTextLine.*;
 
 public final class LogicGateConfig extends LogicConfig<LogicGateConfig>
 {
@@ -27,6 +32,12 @@ public final class LogicGateConfig extends LogicConfig<LogicGateConfig>
 	public LogicGateConfig(int inputs)
 	{
 		this.inputs = inputs;
+	}
+	
+	@Override
+	public void appendHoverText(List<Component> lines)
+	{
+		lines.add(line(LBRText.LOGIC_CONFIGURATION_GATE_INPUTS).arg(inputs));
 	}
 	
 	@Override

@@ -14,8 +14,8 @@ import net.swedz.little_big_redstone.microchip.logic.LogicTypes;
 import java.util.List;
 import java.util.Objects;
 
+import static net.swedz.little_big_redstone.LBRTextLine.*;
 import static net.swedz.little_big_redstone.LBRTooltips.*;
-import static net.swedz.tesseract.neoforge.tooltip.TextLine.*;
 
 public final class ORGate extends LogicGate<ORGate>
 {
