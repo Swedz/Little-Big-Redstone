@@ -79,6 +79,7 @@ public record PlaceTakeMicrochipWirePacket(
 						if(wire != null)
 						{
 							wires.remove(wire);
+							microchip.markDirty();
 							heldItem.grow(1);
 						}
 						else
@@ -104,6 +105,7 @@ public record PlaceTakeMicrochipWirePacket(
 					if(wire != null)
 					{
 						wires.remove(wire);
+						microchip.markDirty();
 						menu.setCarried(LBRItems.REDSTONE_BIT.asItem().getDefaultInstance());
 					}
 					else
