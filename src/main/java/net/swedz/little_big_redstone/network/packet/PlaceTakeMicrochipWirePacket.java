@@ -8,7 +8,7 @@ import net.minecraft.world.item.ItemStack;
 import net.swedz.little_big_redstone.LBR;
 import net.swedz.little_big_redstone.LBRItems;
 import net.swedz.little_big_redstone.gui.microchip.MicrochipMenu;
-import net.swedz.little_big_redstone.microchip.LogicSelectedPort;
+import net.swedz.little_big_redstone.microchip.wire.PortReference;
 import net.swedz.little_big_redstone.microchip.wire.Wire;
 import net.swedz.little_big_redstone.network.LBRCustomPacket;
 import net.swedz.tesseract.neoforge.packet.PacketContext;
@@ -30,9 +30,9 @@ public record PlaceTakeMicrochipWirePacket(
 			PlaceTakeMicrochipWirePacket::new
 	);
 	
-	public PlaceTakeMicrochipWirePacket(int containerId, LogicSelectedPort output, LogicSelectedPort input, boolean place)
+	public PlaceTakeMicrochipWirePacket(int containerId, PortReference output, PortReference input, boolean place)
 	{
-		this(containerId, output.entry().slot(), output.portIndex(), input.entry().slot(), input.portIndex(), place);
+		this(containerId, output.slot(), output.index(), input.slot(), input.index(), place);
 	}
 	
 	public PlaceTakeMicrochipWirePacket(int containerId, Wire wire, boolean place)

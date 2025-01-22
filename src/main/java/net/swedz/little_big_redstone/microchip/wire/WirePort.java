@@ -6,7 +6,7 @@ import io.netty.buffer.ByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 
-public record WirePort(int slot, int index)
+public record WirePort(int slot, int index) implements PortReference
 {
 	public static final Codec<WirePort> CODEC = RecordCodecBuilder.create((instance) -> instance
 			.group(
@@ -20,4 +20,9 @@ public record WirePort(int slot, int index)
 			ByteBufCodecs.VAR_INT, WirePort::index,
 			WirePort::new
 	);
+	
+	public WirePort(PortReference port)
+	{
+		this(port.slot(), port.index());
+	}
 }

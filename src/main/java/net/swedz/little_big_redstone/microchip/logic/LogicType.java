@@ -6,6 +6,7 @@ import io.netty.buffer.ByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.swedz.little_big_redstone.LBR;
 import net.swedz.little_big_redstone.LBRComponents;
@@ -64,9 +65,14 @@ public record LogicType<L extends LogicComponent>(
 		return this.tooltip(component, extra, true);
 	}
 	
+	public Item item()
+	{
+		return LBRItems.valueOf(id).asItem();
+	}
+	
 	public ItemStack toStack(L component)
 	{
-		var stack = new ItemStack(LBRItems.valueOf(id));
+		var stack = new ItemStack(this.item());
 		var copy = component.copy();
 		copy.resetForPickup();
 		stack.set(LBRComponents.LOGIC, copy);

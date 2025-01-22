@@ -56,95 +56,154 @@ public final class MicrochipRenderable implements GuiEventListener, Renderable, 
 		return selectedPort != null;
 	}
 	
-	private boolean mouseClickedOnBoard(int x, int y, int button)
+	private boolean pickupWire(int x, int y, int button, LogicSelectedPort outputPort, LogicSelectedPort inputPort)
 	{
 		var menu = screen.getMenu();
 		var carried = menu.getCarried();
 		
-		var entry = microchip.components().findAt(x, y);
-		var inputPort = microchip.components().findPortAt(x, y, true);
-		var outputPort = microchip.components().findPortAt(x, y, false);
-		
-		if(carried.isEmpty())
+		if(button == InputConstants.MOUSE_BUTTON_LEFT &&
+		   (carried.isEmpty() || carried.is(LBRItems.REDSTONE_BIT.asItem())))
 		{
-			if(button == InputConstants.MOUSE_BUTTON_LEFT)
+			if(outputPort != null && !carried.isEmpty())
 			{
-				if(inputPort != null)
+				selectedPort = outputPort;
+				return true;
+			}
+			else if(inputPort != null)
+			{
+				var wires = microchip.wires().getByInput(inputPort);
+				if(!wires.isEmpty())
 				{
-					var wires = microchip.wires().getByInput(inputPort.entry().slot(), inputPort.portIndex());
-					if(!wires.isEmpty())
+					var wire = wires.getFirst();
+					if(microchip.wires().remove(wire))
 					{
-						var wire = wires.getFirst();
-						if(microchip.wires().remove(wire))
+						microchip.markDirty();
+						if(carried.isEmpty())
 						{
-							microchip.markDirty();
 							menu.setCarried(LBRItems.REDSTONE_BIT.asItem().getDefaultInstance());
-							selectedPort = new LogicSelectedPort(microchip.components().get(wire.output().slot()), wire.output().index());
-							new PlaceTakeMicrochipWirePacket(menu.containerId, wire, false).sendToServer();
 						}
-					}
-				}
-				else if(entry != null)
-				{
-					microchip.components().remove(entry);
-					microchip.markDirty();
-					menu.setCarried(entry.toStack());
-					new PlaceTakeMicrochipLogicPacket(menu.containerId, x, y, false).sendToServer();
-				}
-			}
-			else if(button == InputConstants.MOUSE_BUTTON_RIGHT)
-			{
-				// TODO open edit side menu
-			}
-		}
-		else if(carried.is(LBRItems.REDSTONE_BIT.asItem()) && button == InputConstants.MOUSE_BUTTON_LEFT)
-		{
-			if(selectedPort != null)
-			{
-				if(inputPort != null && microchip.wires().add(selectedPort, inputPort))
-				{
-					microchip.markDirty();
-					carried.shrink(1);
-					new PlaceTakeMicrochipWirePacket(menu.containerId, selectedPort, inputPort, true).sendToServer();
-				}
-				selectedPort = null;
-			}
-			else
-			{
-				if(inputPort != null)
-				{
-					var wires = microchip.wires().getByInput(inputPort.entry().slot(), inputPort.portIndex());
-					if(!wires.isEmpty())
-					{
-						var wire = wires.getFirst();
-						if(microchip.wires().remove(wire))
+						else
 						{
-							microchip.markDirty();
 							carried.grow(1);
-							selectedPort = new LogicSelectedPort(microchip.components().get(wire.output().slot()), wire.output().index());
-							new PlaceTakeMicrochipWirePacket(menu.containerId, wire, false).sendToServer();
 						}
+						selectedPort = new LogicSelectedPort(microchip.components().get(wire.output().slot()), wire.output().index());
+						new PlaceTakeMicrochipWirePacket(menu.containerId, wire, false).sendToServer();
+						return true;
 					}
-				}
-				else if(outputPort != null)
-				{
-					selectedPort = outputPort;
 				}
 			}
 		}
-		else if(carried.has(LBRComponents.LOGIC) && button == InputConstants.MOUSE_BUTTON_LEFT)
+		
+		return false;
+	}
+	
+	private boolean pickupLogic(int x, int y, int button, LogicEntry entry)
+	{
+		var menu = screen.getMenu();
+		var carried = menu.getCarried();
+		
+		if(button == InputConstants.MOUSE_BUTTON_LEFT &&
+		   entry != null &&
+		   carried.isEmpty())
+		{
+			microchip.components().remove(entry);
+			microchip.markDirty();
+			menu.setCarried(entry.toStack());
+			new PlaceTakeMicrochipLogicPacket(menu.containerId, x, y, false).sendToServer();
+			return true;
+		}
+		
+		return false;
+	}
+	
+	private boolean placeWire(int x, int y, int button, LogicSelectedPort inputPort)
+	{
+		var menu = screen.getMenu();
+		var carried = menu.getCarried();
+		
+		if(carried.is(LBRItems.REDSTONE_BIT.asItem()) &&
+		   this.hasSelectedPort())
+		{
+			if(inputPort != null && microchip.wires().add(selectedPort, inputPort))
+			{
+				microchip.markDirty();
+				carried.shrink(1);
+				new PlaceTakeMicrochipWirePacket(menu.containerId, selectedPort, inputPort, true).sendToServer();
+			}
+			selectedPort = null;
+			return true;
+		}
+		
+		return false;
+	}
+	
+	private boolean placeLogic(int x, int y, int button)
+	{
+		var menu = screen.getMenu();
+		var carried = menu.getCarried();
+		
+		if(carried.has(LBRComponents.LOGIC))
 		{
 			var component = carried.get(LBRComponents.LOGIC);
 			int placeX = component.size().topLeftCornerX(x);
 			int placeY = component.size().topLeftCornerY(y);
 			
-			if(microchip.size().bounds().normalize().contains(component.size().toBounds(placeX, placeY)) && microchip.components().add(placeX, placeY, component))
+			if(microchip.size().bounds().normalize().contains(component.size().toBounds(placeX, placeY)) &&
+			   microchip.components().add(placeX, placeY, component))
 			{
 				microchip.markDirty();
 				carried.shrink(1);
 				new PlaceTakeMicrochipLogicPacket(menu.containerId, placeX, placeY, true).sendToServer();
+				return true;
 			}
 		}
+		
+		return false;
+	}
+	
+	private boolean openLogicConfig(int x, int y, int button, LogicEntry entry)
+	{
+		var menu = screen.getMenu();
+		var carried = menu.getCarried();
+		
+		if(button == InputConstants.MOUSE_BUTTON_RIGHT &&
+		   entry != null &&
+		   carried.isEmpty())
+		{
+			// TODO
+			return true;
+		}
+		
+		return false;
+	}
+	
+	private boolean mouseClickedOnBoard(int x, int y, int button)
+	{
+		var entry = microchip.components().findAt(x, y);
+		var inputPort = microchip.components().findPortAt(x, y, true);
+		var outputPort = microchip.components().findPortAt(x, y, false);
+		
+		if(this.pickupWire(x, y, button, outputPort, inputPort))
+		{
+			return false;
+		}
+		else if(this.pickupLogic(x, y, button, entry))
+		{
+			return false;
+		}
+		else if(this.placeWire(x, y, button, inputPort))
+		{
+			return false;
+		}
+		else if(this.placeLogic(x, y, button))
+		{
+			return false;
+		}
+		else if(this.openLogicConfig(x, y, button, entry))
+		{
+			return false;
+		}
+		
 		return false;
 	}
 	
@@ -211,9 +270,9 @@ public final class MicrochipRenderable implements GuiEventListener, Renderable, 
 		if(selectedPort != null)
 		{
 			int x1 = microchip.size().scale(selectedPort.entry().x() + selectedPort.entry().component().size().widthPixels() + 3) + x;
-			int y1 = microchip.size().scale(selectedPort.entry().component().size().portTopLeftCornerY(selectedPort.entry().y(), false, selectedPort.portIndex(), selectedPort.entry().component().outputs()) + 8) + y;
+			int y1 = microchip.size().scale(selectedPort.entry().component().size().portTopLeftCornerY(selectedPort.entry().y(), false, selectedPort.index(), selectedPort.entry().component().outputs()) + 8) + y;
 			
-			boolean powered = selectedPort.entry().component().output(selectedPort.portIndex());
+			boolean powered = selectedPort.entry().component().output(selectedPort.index());
 			
 			this.renderWire(graphics, partialTicks, x1, y1, mouseX, mouseY, powered ? 0xFFFFFFFF : 0xFF000000);
 		}
@@ -253,8 +312,8 @@ public final class MicrochipRenderable implements GuiEventListener, Renderable, 
 		// TODO perform this check when the change happens instead of every frame
 		if(selectedPort != null)
 		{
-			var component = microchip.components().get(selectedPort.entry().slot());
-			if(component == null || selectedPort.portIndex() >= component.component().outputs())
+			var component = microchip.components().get(selectedPort.slot());
+			if(component == null || selectedPort.index() >= component.component().outputs())
 			{
 				selectedPort = null;
 				LBR.LOGGER.info("Cleared selected port because it doesn't exist anymore");

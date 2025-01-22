@@ -7,7 +7,6 @@ import com.mojang.serialization.Codec;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
-import net.swedz.little_big_redstone.microchip.LogicSelectedPort;
 import net.swedz.little_big_redstone.microchip.Microchip;
 
 import java.util.Collections;
@@ -70,10 +69,10 @@ public final class MicrochipWires implements Iterable<Wire>
 		return list == null ? List.of() : List.copyOf(list);
 	}
 	
-	public List<Wire> getByOutput(int outputSlot, int outputPort)
+	public List<Wire> getByOutput(PortReference port)
 	{
-		return this.getByOutput(outputSlot).stream()
-				.filter((wire) -> wire.output().index() == outputPort)
+		return this.getByOutput(port.slot()).stream()
+				.filter((wire) -> wire.output().index() == port.index())
 				.toList();
 	}
 	
@@ -83,17 +82,19 @@ public final class MicrochipWires implements Iterable<Wire>
 		return list == null ? List.of() : List.copyOf(list);
 	}
 	
-	public List<Wire> getByInput(int inputSlot, int inputPort)
+	public List<Wire> getByInput(PortReference port)
 	{
-		return this.getByInput(inputSlot).stream()
-				.filter((wire) -> wire.input().index() == inputPort)
+		return this.getByInput(port.slot()).stream()
+				.filter((wire) -> wire.input().index() == port.index())
 				.toList();
 	}
 	
-	public Wire get(WirePort output, WirePort input)
+	public Wire get(PortReference output, PortReference input)
 	{
 		return wires.stream()
-				.filter((wire) -> wire.output().equals(output) && wire.input().equals(input))
+				.filter((wire) ->
+						wire.output().slot() == output.slot() && wire.output().index() == output.index() &&
+						wire.input().slot() == input.slot() && wire.input().index() == input.index())
 				.findFirst()
 				.orElse(null);
 	}
@@ -119,9 +120,9 @@ public final class MicrochipWires implements Iterable<Wire>
 		return this.add(new Wire(outputSlot, outputPort, inputSlot, inputPort));
 	}
 	
-	public boolean add(LogicSelectedPort output, LogicSelectedPort input)
+	public boolean add(PortReference output, PortReference input)
 	{
-		return this.add(new Wire(output.entry().slot(), output.portIndex(), input.entry().slot(), input.portIndex()));
+		return this.add(new Wire(output.slot(), output.index(), input.slot(), input.index()));
 	}
 	
 	public boolean remove(Wire wire)
@@ -151,7 +152,7 @@ public final class MicrochipWires implements Iterable<Wire>
 	
 	public boolean remove(int outputSlot, int outputPort, int inputSlot, int inputPort)
 	{
-		return this.add(new Wire(outputSlot, outputPort, inputSlot, inputPort));
+		return this.remove(new Wire(outputSlot, outputPort, inputSlot, inputPort));
 	}
 	
 	public void removeAllOutputs(int outputSlot)
