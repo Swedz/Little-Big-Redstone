@@ -131,6 +131,10 @@ public final class MicrochipRenderable implements GuiEventListener, Renderable, 
 				microchip.markDirty();
 				carried.shrink(1);
 				new PlaceTakeMicrochipWirePacket(menu.containerId, selectedPort, inputPort, true).sendToServer();
+				if(carried.isEmpty())
+				{
+					selectedPort = null;
+				}
 			}
 			else
 			{
