@@ -1,4 +1,4 @@
-package net.swedz.little_big_redstone.blockentity;
+package net.swedz.little_big_redstone.block.microchip;
 
 import com.google.common.collect.Sets;
 import net.minecraft.core.BlockPos;
@@ -19,7 +19,6 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.swedz.little_big_redstone.LBR;
 import net.swedz.little_big_redstone.LBRBlocks;
 import net.swedz.little_big_redstone.api.Tickable;
-import net.swedz.little_big_redstone.block.MicrochipBlock;
 import net.swedz.little_big_redstone.gui.microchip.MicrochipMenu;
 import net.swedz.little_big_redstone.microchip.Microchip;
 import net.swedz.little_big_redstone.microchip.MicrochipSize;

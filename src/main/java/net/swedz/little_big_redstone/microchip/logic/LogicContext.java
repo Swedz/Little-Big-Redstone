@@ -3,7 +3,7 @@ package net.swedz.little_big_redstone.microchip.logic;
 import com.google.common.collect.Lists;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.block.state.BlockState;
-import net.swedz.little_big_redstone.block.MicrochipBlock;
+import net.swedz.little_big_redstone.block.microchip.MicrochipBlock;
 import net.swedz.little_big_redstone.microchip.LogicEntry;
 import net.swedz.little_big_redstone.microchip.Microchip;
 

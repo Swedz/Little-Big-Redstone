@@ -1,4 +1,4 @@
-package net.swedz.little_big_redstone.block;
+package net.swedz.little_big_redstone.block.microchip;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -15,7 +15,6 @@ import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.phys.BlockHitResult;
 import net.swedz.little_big_redstone.api.TickableBlock;
-import net.swedz.little_big_redstone.blockentity.MicrochipBlockEntity;
 
 public final class MicrochipBlock extends Block implements TickableBlock
 {
