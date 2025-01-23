@@ -160,18 +160,15 @@ public final class LogicComponents implements Iterable<LogicEntry>
 		return false;
 	}
 	
-	public LogicEntry remove(int slot)
+	public int remove(int slot)
 	{
 		var original = components.remove(slot);
-		microchip.wires().removeAllOutputs(slot);
-		for(LogicEntry entry : components.values())
-		{
-			microchip.wires().removeAllInputs(slot);
-		}
-		return original;
+		int wiresRemoved = microchip.wires().removeAllOutputs(slot);
+		wiresRemoved += microchip.wires().removeAllInputs(slot);
+		return wiresRemoved;
 	}
 	
-	public LogicEntry remove(LogicEntry entry)
+	public int remove(LogicEntry entry)
 	{
 		return this.remove(entry.slot());
 	}

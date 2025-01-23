@@ -72,7 +72,7 @@ public final class MicrochipRenderable implements GuiEventListener, Renderable, 
 			}
 			else if(inputPort != null)
 			{
-				var wires = microchip.wires().getByInput(inputPort);
+				var wires = microchip.wires().getByInputSlot(inputPort);
 				if(!wires.isEmpty())
 				{
 					var wire = wires.getFirst();

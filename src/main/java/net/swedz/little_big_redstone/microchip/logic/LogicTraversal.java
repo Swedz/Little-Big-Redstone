@@ -36,7 +36,7 @@ public final class LogicTraversal
 		
 		for(var entry : microchip.components())
 		{
-			if(entry.component().inputs() == 0 || microchip.wires().getByInput(entry.slot()).isEmpty())
+			if(entry.component().inputs() == 0 || microchip.wires().getByInputSlot(entry.slot()).isEmpty())
 			{
 				recursivelyBuildOrder(microchip, entry, order, componentsPlinged);
 			}
@@ -48,11 +48,11 @@ public final class LogicTraversal
 	private static void recursivelyBuildOrder(Microchip microchip, LogicEntry entry, List<LogicEntry> order, Map<Integer, Integer> componentsPlinged)
 	{
 		order.add(entry);
-		for(var wire : microchip.wires().getByOutput(entry.slot()))
+		for(var wire : microchip.wires().getByOutputSlot(entry.slot()))
 		{
 			var targetEntry = microchip.components().get(wire.input().slot());
 			int plings = componentsPlinged.compute(targetEntry.slot(), (key, value) -> value == null ? 1 : ++value);
-			if(plings == microchip.wires().getByInput(targetEntry.slot()).size())
+			if(plings == microchip.wires().getByInputSlot(targetEntry.slot()).size())
 			{
 				recursivelyBuildOrder(microchip, targetEntry, order, componentsPlinged);
 			}

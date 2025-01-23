@@ -5,7 +5,10 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.item.ItemStack;
+import net.neoforged.neoforge.items.ItemHandlerHelper;
 import net.swedz.little_big_redstone.LBR;
+import net.swedz.little_big_redstone.LBRItems;
 import net.swedz.little_big_redstone.block.microchip.MicrochipBlockEntity;
 import net.swedz.little_big_redstone.microchip.logic.LogicComponent;
 import net.swedz.little_big_redstone.network.LBRCustomPacket;
@@ -35,6 +38,11 @@ public record WriteLogicConfigPacket(BlockPos pos, int slot, LogicComponent comp
 			if(targetComponent != null && targetComponent.component().type().equals(component.type()))
 			{
 				targetComponent.component().config().loadFrom(component.config());
+				int wiresPopped = microchip.wires().cleanup(targetComponent);
+				if(wiresPopped > 0)
+				{
+					ItemHandlerHelper.giveItemToPlayer(player, new ItemStack(LBRItems.REDSTONE_BIT, wiresPopped));
+				}
 				microchip.markDirty();
 				
 				blockEntity.openMenu(player);

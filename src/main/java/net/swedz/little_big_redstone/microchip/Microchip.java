@@ -114,7 +114,7 @@ public final class Microchip
 			outer:
 			for(int inputPort = 0; inputPort < totalInputs; inputPort++)
 			{
-				for(var wire : wires.getByInput(inputSlot))
+				for(var wire : wires.getByInputSlot(inputSlot))
 				{
 					if(wire.input().index() == inputPort)
 					{

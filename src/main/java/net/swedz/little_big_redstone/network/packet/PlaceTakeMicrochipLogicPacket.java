@@ -5,8 +5,10 @@ import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.item.ItemStack;
+import net.neoforged.neoforge.items.ItemHandlerHelper;
 import net.swedz.little_big_redstone.LBR;
 import net.swedz.little_big_redstone.LBRComponents;
+import net.swedz.little_big_redstone.LBRItems;
 import net.swedz.little_big_redstone.gui.microchip.MicrochipMenu;
 import net.swedz.little_big_redstone.network.LBRCustomPacket;
 import net.swedz.tesseract.neoforge.packet.PacketContext;
@@ -61,7 +63,11 @@ public record PlaceTakeMicrochipLogicPacket(int containerId, int x, int y, boole
 					var component = components.findAt(x, y);
 					if(component != null)
 					{
-						components.remove(component);
+						int wiresPopped = components.remove(component);
+						if(wiresPopped > 0)
+						{
+							ItemHandlerHelper.giveItemToPlayer(player, new ItemStack(LBRItems.REDSTONE_BIT, wiresPopped));
+						}
 						microchip.markDirty();
 						menu.setCarried(component.toStack());
 					}

@@ -7,6 +7,7 @@ import com.mojang.serialization.Codec;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
+import net.swedz.little_big_redstone.microchip.LogicEntry;
 import net.swedz.little_big_redstone.microchip.Microchip;
 
 import java.util.Collections;
@@ -63,30 +64,40 @@ public final class MicrochipWires implements Iterable<Wire>
 		return this.values().iterator();
 	}
 	
-	public List<Wire> getByOutput(int outputSlot)
+	public List<Wire> getByOutputSlot(int outputSlot)
 	{
 		var list = wiresByOutputSlot.get(outputSlot);
 		return list == null ? List.of() : List.copyOf(list);
 	}
 	
-	public List<Wire> getByOutput(PortReference port)
+	public List<Wire> getByOutputSlot(PortReference port)
 	{
-		return this.getByOutput(port.slot()).stream()
+		return this.getByOutputSlot(port.slot()).stream()
 				.filter((wire) -> wire.output().index() == port.index())
 				.toList();
 	}
 	
-	public List<Wire> getByInput(int inputSlot)
+	public List<Wire> getByInputSlot(int inputSlot)
 	{
 		var list = wiresByInputSlot.get(inputSlot);
 		return list == null ? List.of() : List.copyOf(list);
 	}
 	
-	public List<Wire> getByInput(PortReference port)
+	public List<Wire> getByInputSlot(PortReference port)
 	{
-		return this.getByInput(port.slot()).stream()
+		return this.getByInputSlot(port.slot()).stream()
 				.filter((wire) -> wire.input().index() == port.index())
 				.toList();
+	}
+	
+	public List<Wire> getInvolvingSlot(int slot)
+	{
+		var outputs = this.getByOutputSlot(slot);
+		var inputs = this.getByInputSlot(slot);
+		List<Wire> combined = Lists.newArrayList();
+		combined.addAll(outputs);
+		combined.addAll(inputs);
+		return Collections.unmodifiableList(combined);
 	}
 	
 	public Wire get(PortReference output, PortReference input)
@@ -155,22 +166,36 @@ public final class MicrochipWires implements Iterable<Wire>
 		return this.remove(new Wire(outputSlot, outputPort, inputSlot, inputPort));
 	}
 	
-	public void removeAllOutputs(int outputSlot)
+	public int removeAllOutputs(int outputSlot)
 	{
-		this.getByOutput(outputSlot).forEach(this::remove);
+		var wires = this.getByOutputSlot(outputSlot);
+		wires.forEach(this::remove);
+		return wires.size();
 	}
 	
-	public void removeAllInputs(int inputSlot)
+	public int removeAllInputs(int inputSlot)
 	{
-		List<Wire> wiresTargeting = Lists.newArrayList();
-		for(Wire wire : wires)
+		var wires = this.getByInputSlot(inputSlot);
+		wires.forEach(this::remove);
+		return wires.size();
+	}
+	
+	public int cleanup(LogicEntry entry)
+	{
+		int wiresRemoved = 0;
+		int slot = entry.slot();
+		int totalInputs = entry.component().inputs();
+		int totalOutputs = entry.component().outputs();
+		for(var wire : this.getInvolvingSlot(slot))
 		{
-			if(wire.input().slot() == inputSlot)
+			if((wire.input().slot() == slot && wire.input().index() >= totalInputs) ||
+			   (wire.output().slot() == slot && wire.output().index() >= totalOutputs))
 			{
-				wiresTargeting.add(wire);
+				this.remove(wire);
+				wiresRemoved++;
 			}
 		}
-		wiresTargeting.forEach(this::remove);
+		return wiresRemoved;
 	}
 	
 	public MicrochipWires with(Microchip microchip)
