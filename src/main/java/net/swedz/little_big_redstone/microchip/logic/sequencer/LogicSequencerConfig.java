@@ -9,8 +9,8 @@ import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.swedz.little_big_redstone.LBRText;
 import net.swedz.little_big_redstone.LBRTooltips;
-import net.swedz.little_big_redstone.microchip.logic.LogicConfig;
-import net.swedz.little_big_redstone.microchip.logic.LogicConfigMenuBuilder;
+import net.swedz.little_big_redstone.microchip.logic.config.LogicConfig;
+import net.swedz.little_big_redstone.microchip.logic.config.LogicConfigMenuBuilder;
 
 import java.util.List;
 import java.util.Objects;
@@ -48,15 +48,27 @@ public final class LogicSequencerConfig extends LogicConfig<LogicSequencerConfig
 	@Override
 	public void appendHoverText(List<Component> lines)
 	{
-		lines.add(line(LBRText.LOGIC_CONFIGURATION_SEQUENCER_DELAY).arg(outputDelay));
-		lines.add(line(LBRText.LOGIC_CONFIGURATION_SEQUENCER_DURATION).arg(outputDuration));
-		lines.add(line(LBRText.LOGIC_CONFIGURATION_SEQUENCER_CONTINUOUS).arg(requiresContinuousPower, LBRTooltips.BOOLEAN_YES_NO_PARSER));
+		lines.add(line(LBRText.LOGIC_CONFIG_TOOLTIP_SEQUENCER_DELAY).arg(outputDelay));
+		lines.add(line(LBRText.LOGIC_CONFIG_TOOLTIP_SEQUENCER_DURATION).arg(outputDuration));
+		lines.add(line(LBRText.LOGIC_CONFIG_TOOLTIP_SEQUENCER_CONTINUOUS).arg(requiresContinuousPower, LBRTooltips.BOOLEAN_YES_NO_PARSER));
 	}
 	
 	@Override
-	public void buildMenu(int leftPos, int topPos, LogicConfigMenuBuilder builder)
+	public void buildMenu(LogicConfigMenuBuilder builder)
 	{
-		// TODO
+		builder.addSlider(LBRText.LOGIC_CONFIG_BUTTON_SEQUENCER_DELAY.text(), Component.empty(), 0, 0, 160, 18, 1, 60 * 20, outputDelay, 1, 0, true, (value) -> outputDelay = value.intValue());
+		
+		builder.addSlider(LBRText.LOGIC_CONFIG_BUTTON_SEQUENCER_DELAY.text(), Component.empty(), 0, 23, 160, 18, 0, 60 * 20, outputDuration, 1, 0, true, (value) -> outputDuration = value.intValue());
+		
+		builder.addCheckbox(LBRText.LOGIC_CONFIG_BUTTON_SEQUENCER_CONTINUOUS.text().withColor(0x3E3E3E), 0, 46, requiresContinuousPower, (value) -> requiresContinuousPower = value);
+	}
+	
+	@Override
+	public void loadFrom(LogicSequencerConfig other)
+	{
+		outputDelay = other.outputDelay;
+		outputDuration = other.outputDuration;
+		requiresContinuousPower = other.requiresContinuousPower;
 	}
 	
 	@Override

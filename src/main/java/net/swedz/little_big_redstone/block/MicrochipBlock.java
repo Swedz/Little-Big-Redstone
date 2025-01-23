@@ -16,7 +16,6 @@ import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.phys.BlockHitResult;
 import net.swedz.little_big_redstone.api.TickableBlock;
 import net.swedz.little_big_redstone.blockentity.MicrochipBlockEntity;
-import net.swedz.little_big_redstone.microchip.Microchip;
 
 public final class MicrochipBlock extends Block implements TickableBlock
 {
@@ -69,14 +68,9 @@ public final class MicrochipBlock extends Block implements TickableBlock
 	{
 		if(!level.isClientSide())
 		{
-			BlockEntity blockEntity = level.getBlockEntity(pos);
-			if(blockEntity instanceof MicrochipBlockEntity microchipBlockEntity)
+			if(level.getBlockEntity(pos) instanceof MicrochipBlockEntity blockEntity)
 			{
-				player.openMenu(microchipBlockEntity, (buf) ->
-				{
-					buf.writeBlockPos(pos);
-					Microchip.STREAM_CODEC.encode(buf, microchipBlockEntity.microchip());
-				});
+				blockEntity.openMenu(player);
 			}
 			return InteractionResult.CONSUME;
 		}

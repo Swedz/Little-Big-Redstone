@@ -6,10 +6,9 @@ import io.netty.buffer.ByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
-import net.swedz.little_big_redstone.LBR;
 import net.swedz.little_big_redstone.LBRText;
-import net.swedz.little_big_redstone.microchip.logic.LogicConfig;
-import net.swedz.little_big_redstone.microchip.logic.LogicConfigMenuBuilder;
+import net.swedz.little_big_redstone.microchip.logic.config.LogicConfig;
+import net.swedz.little_big_redstone.microchip.logic.config.LogicConfigMenuBuilder;
 
 import java.util.List;
 import java.util.Objects;
@@ -39,14 +38,19 @@ public final class LogicGateConfig extends LogicConfig<LogicGateConfig>
 	@Override
 	public void appendHoverText(List<Component> lines)
 	{
-		lines.add(line(LBRText.LOGIC_CONFIGURATION_GATE_INPUTS).arg(inputs));
+		lines.add(line(LBRText.LOGIC_CONFIG_TOOLTIP_GATE_INPUTS).arg(inputs));
 	}
 	
 	@Override
-	public void buildMenu(int leftPos, int topPos, LogicConfigMenuBuilder builder)
+	public void buildMenu(LogicConfigMenuBuilder builder)
 	{
-		// TODO sliders not allowing dragging?
-		builder.addSlider(Component.literal("Inputs: "), Component.empty(), leftPos + 8, topPos + 25 - 8, 75, 15, 2, 16, inputs, 1, 0, true, (value) -> inputs = value.intValue());
+		builder.addSlider(LBRText.LOGIC_CONFIG_BUTTON_GATE_INPUTS.text(), Component.empty(), 0, 0, 160, 18, 2, 16, inputs, 1, 0, true, (value) -> inputs = value.intValue());
+	}
+	
+	@Override
+	public void loadFrom(LogicGateConfig other)
+	{
+		inputs = other.inputs;
 	}
 	
 	@Override

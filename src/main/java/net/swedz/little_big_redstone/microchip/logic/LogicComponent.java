@@ -5,6 +5,7 @@ import io.netty.buffer.ByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.codec.StreamCodec;
 import net.swedz.little_big_redstone.api.IntRange;
+import net.swedz.little_big_redstone.microchip.logic.config.LogicConfig;
 import net.swedz.tesseract.neoforge.api.Assert;
 
 import java.util.List;
@@ -15,7 +16,7 @@ public abstract class LogicComponent<L extends LogicComponent<L, C>, C extends L
 	
 	public static final StreamCodec<ByteBuf, LogicComponent> STREAM_CODEC = LogicTypes.STREAM_CODEC;
 	
-	protected C config;
+	protected final C config;
 	
 	protected LogicComponent(C config)
 	{
@@ -65,7 +66,7 @@ public abstract class LogicComponent<L extends LogicComponent<L, C>, C extends L
 	
 	public final void loadFrom(L other)
 	{
-		config = other.config;
+		config.loadFrom(other.config);
 		this.internalLoadFrom(other);
 	}
 	

@@ -11,9 +11,14 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
 import net.neoforged.neoforge.client.gui.widget.ExtendedSlider;
 import net.swedz.little_big_redstone.LBR;
+import net.swedz.little_big_redstone.LBRText;
 import net.swedz.little_big_redstone.microchip.LogicEntry;
-import net.swedz.little_big_redstone.microchip.logic.LogicConfigMenuBuilder;
+import net.swedz.little_big_redstone.microchip.logic.config.LogicConfigMenuBuilder;
+import net.swedz.little_big_redstone.network.packet.RequestMicrochipMenuPacket;
+import net.swedz.little_big_redstone.network.packet.WriteLogicConfigPacket;
+import net.swedz.tesseract.neoforge.helper.ComponentHelper;
 
+import java.util.List;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
@@ -22,6 +27,8 @@ public final class LogicConfigScreen extends AbstractContainerScreen<LogicConfig
 	private static final ResourceLocation INVENTORY_BACKGROUND = LBR.id("textures/gui/container/logic_config/inventory_background.png");
 	
 	private final LogicEntry logicEntry;
+	
+	private int configX, configY;
 	
 	public LogicConfigScreen(LogicConfigMenu menu, Inventory playerInventory, Component title)
 	{
@@ -35,26 +42,28 @@ public final class LogicConfigScreen extends AbstractContainerScreen<LogicConfig
 	}
 	
 	@Override
-	public <T> void addCycleButton(Component name, int x, int y, int width, int height, boolean displayOnlyValue, T initialValue, Function<T, Component> valueStringifier, Consumer<T> onChange)
+	public <T> void addCycleButton(Component name, int x, int y, int width, int height, boolean displayOnlyValue, T initialValue, List<T> values, Function<T, Component> valueStringifier, Consumer<T> onChange)
 	{
-		var builder = CycleButton.builder(valueStringifier)
+		var builder = CycleButton.builder((T value) -> ComponentHelper.stripStyle(valueStringifier.apply(value)))
+				.withValues(values)
 				.withInitialValue(initialValue);
 		if(displayOnlyValue)
 		{
 			builder.displayOnlyValue();
 		}
-		this.addRenderableWidget(builder.create(x, y, width, height, name, (button, value) -> onChange.accept(value)));
+		this.addRenderableWidget(builder.create(configX + x, configY + y, width, height, name, (button, value) -> onChange.accept(value)));
 	}
 	
 	@Override
 	public void addSlider(Component prefix, Component suffix, int x, int y, int width, int height, double minValue, double maxValue, double currentValue, double stepSize, int precision, boolean drawString, Consumer<Double> onChange)
 	{
-		this.addRenderableWidget(new ExtendedSlider(x, y, width, height, prefix, suffix, minValue, maxValue, currentValue, stepSize, precision, drawString)
+		this.addRenderableWidget(new ExtendedSlider(configX + x, configY + y, width, height, prefix, suffix, minValue, maxValue, currentValue, stepSize, precision, drawString)
 		{
 			@Override
-			protected void applyValue()
+			protected void updateMessage()
 			{
-				onChange.accept(value);
+				super.updateMessage();
+				onChange.accept(minValue + (value * (maxValue - minValue)));
 			}
 		});
 	}
@@ -62,37 +71,40 @@ public final class LogicConfigScreen extends AbstractContainerScreen<LogicConfig
 	@Override
 	public void addCheckbox(Component text, int x, int y, boolean initialValue, Consumer<Boolean> onChange)
 	{
-		this.addRenderableWidget(Checkbox.builder(text, Minecraft.getInstance().font)
-				.pos(x, y)
+		this.addRenderableWidget(Checkbox.builder(Component.empty(), Minecraft.getInstance().font)
+				.pos(configX + x, configY + y)
 				.selected(initialValue)
 				.onValueChange((button, value) -> onChange.accept(value))
 				.build());
+		this.addRenderableOnly((graphics, mouseX, mouseY, partialTicks) ->
+				graphics.drawString(Minecraft.getInstance().font, text, configX + x + 21, configY + y + 8 - 3, 0xFFFFFF, false));
 	}
 	
 	private void save()
 	{
-		// TODO send to server and return to microchip
+		new WriteLogicConfigPacket(menu.blockPos(), logicEntry.slot(), logicEntry.component()).sendToServer();
 	}
 	
 	private void cancel()
 	{
-		// TODO close and return to microchip
+		new RequestMicrochipMenuPacket(menu.blockPos()).sendToServer();
 	}
 	
 	@Override
 	protected void init()
 	{
 		super.init();
+		configX = leftPos + 8;
+		configY = topPos + 17;
 		
-		// TODO dont pass leftPos and topPos here, apply that to the methods implemented above
-		logicEntry.component().config().buildMenu(leftPos, topPos, this);
+		logicEntry.component().config().buildMenu(this);
 		
-		this.addRenderableWidget(Button.builder(Component.literal("Save"), (__) -> this.save())
-				.bounds(leftPos + 8, topPos + imageHeight - 94 - 19, 75, 15)
+		this.addRenderableWidget(Button.builder(LBRText.LOGIC_CONFIG_BUTTON_SAVE.text(), (__) -> this.save())
+				.bounds(leftPos + 8, topPos + imageHeight - 94 - 20, 75, 16)
 				.build());
 		
-		this.addRenderableWidget(Button.builder(Component.literal("Cancel"), (__) -> this.cancel())
-				.bounds(leftPos + imageWidth - 75 - 8, topPos + imageHeight - 94 - 19, 75, 15)
+		this.addRenderableWidget(Button.builder(LBRText.LOGIC_CONFIG_BUTTON_CANCEL.text(), (__) -> this.cancel())
+				.bounds(leftPos + imageWidth - 75 - 8, topPos + imageHeight - 94 - 20, 75, 16)
 				.build());
 	}
 	
@@ -100,5 +112,13 @@ public final class LogicConfigScreen extends AbstractContainerScreen<LogicConfig
 	protected void renderBg(GuiGraphics graphics, float partialTicks, int mouseX, int mouseY)
 	{
 		graphics.blit(INVENTORY_BACKGROUND, leftPos, topPos, 0, 0, imageWidth, imageHeight);
+	}
+	
+	@Override
+	public boolean mouseDragged(double mouseX, double mouseY, int button, double dragX, double dragY)
+	{
+		return this.getFocused() != null && this.isDragging() && button == 0 ?
+				this.getFocused().mouseDragged(mouseX, mouseY, button, dragX, dragY) :
+				super.mouseDragged(mouseX, mouseY, button, dragX, dragY);
 	}
 }

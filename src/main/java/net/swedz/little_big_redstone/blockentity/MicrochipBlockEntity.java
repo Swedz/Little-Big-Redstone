@@ -69,6 +69,15 @@ public final class MicrochipBlockEntity extends BlockEntity implements MenuProvi
 		return new MicrochipMenu(containerId, inventory, worldPosition, () -> !this.isRemoved(), microchip);
 	}
 	
+	public void openMenu(Player player)
+	{
+		player.openMenu(this, (buf) ->
+		{
+			buf.writeBlockPos(worldPosition);
+			Microchip.STREAM_CODEC.encode(buf, microchip);
+		});
+	}
+	
 	private LogicContext buildLogicContext()
 	{
 		Set<Direction> inputPower = Sets.newHashSet();
