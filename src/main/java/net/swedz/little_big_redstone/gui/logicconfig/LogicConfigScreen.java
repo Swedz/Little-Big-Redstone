@@ -5,6 +5,7 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.Checkbox;
 import net.minecraft.client.gui.components.CycleButton;
+import net.minecraft.client.gui.components.Tooltip;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -42,9 +43,10 @@ public final class LogicConfigScreen extends AbstractContainerScreen<LogicConfig
 	}
 	
 	@Override
-	public <T> void addCycleButton(Component name, int x, int y, int width, int height, boolean displayOnlyValue, T initialValue, List<T> values, Function<T, Component> valueStringifier, Consumer<T> onChange)
+	public <T> void addCycleButton(Component name, Component tooltip, int x, int y, int width, int height, boolean displayOnlyValue, T initialValue, List<T> values, Function<T, Component> valueStringifier, Consumer<T> onChange)
 	{
 		var builder = CycleButton.builder((T value) -> ComponentHelper.stripStyle(valueStringifier.apply(value)))
+				.withTooltip((__) -> Tooltip.create(tooltip))
 				.withValues(values)
 				.withInitialValue(initialValue);
 		if(displayOnlyValue)
@@ -55,9 +57,9 @@ public final class LogicConfigScreen extends AbstractContainerScreen<LogicConfig
 	}
 	
 	@Override
-	public void addSlider(Component prefix, Component suffix, int x, int y, int width, int height, double minValue, double maxValue, double currentValue, double stepSize, int precision, boolean drawString, Consumer<Double> onChange)
+	public void addSlider(Component prefix, Component suffix, Component tooltip, int x, int y, int width, int height, double minValue, double maxValue, double currentValue, double stepSize, int precision, boolean drawString, Consumer<Double> onChange)
 	{
-		this.addRenderableWidget(new ExtendedSlider(configX + x, configY + y, width, height, prefix, suffix, minValue, maxValue, currentValue, stepSize, precision, drawString)
+		var widget = new ExtendedSlider(configX + x, configY + y, width, height, prefix, suffix, minValue, maxValue, currentValue, stepSize, precision, drawString)
 		{
 			@Override
 			protected void updateMessage()
@@ -65,13 +67,16 @@ public final class LogicConfigScreen extends AbstractContainerScreen<LogicConfig
 				super.updateMessage();
 				onChange.accept(minValue + (value * (maxValue - minValue)));
 			}
-		});
+		};
+		widget.setTooltip(Tooltip.create(tooltip));
+		this.addRenderableWidget(widget);
 	}
 	
 	@Override
-	public void addCheckbox(Component text, int x, int y, boolean initialValue, Consumer<Boolean> onChange)
+	public void addCheckbox(Component text, Component tooltip, int x, int y, boolean initialValue, Consumer<Boolean> onChange)
 	{
 		this.addRenderableWidget(Checkbox.builder(Component.empty(), Minecraft.getInstance().font)
+				.tooltip(Tooltip.create(tooltip))
 				.pos(configX + x, configY + y)
 				.selected(initialValue)
 				.onValueChange((button, value) -> onChange.accept(value))
@@ -99,11 +104,11 @@ public final class LogicConfigScreen extends AbstractContainerScreen<LogicConfig
 		
 		logicEntry.component().config().buildMenu(this);
 		
-		this.addRenderableWidget(Button.builder(LBRText.LOGIC_CONFIG_BUTTON_SAVE.text(), (__) -> this.save())
+		this.addRenderableWidget(Button.builder(LBRText.LOGIC_CONFIG_BUTTON_LABEL_SAVE.text(), (__) -> this.save())
 				.bounds(leftPos + 8, topPos + imageHeight - 94 - 20, 75, 16)
 				.build());
 		
-		this.addRenderableWidget(Button.builder(LBRText.LOGIC_CONFIG_BUTTON_CANCEL.text(), (__) -> this.cancel())
+		this.addRenderableWidget(Button.builder(LBRText.LOGIC_CONFIG_BUTTON_LABEL_CANCEL.text(), (__) -> this.cancel())
 				.bounds(leftPos + imageWidth - 75 - 8, topPos + imageHeight - 94 - 20, 75, 16)
 				.build());
 	}

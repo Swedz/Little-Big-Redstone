@@ -44,7 +44,7 @@ public final class LogicGateConfig extends LogicConfig<LogicGateConfig>
 	@Override
 	public void buildMenu(LogicConfigMenuBuilder builder)
 	{
-		builder.addSlider(LBRText.LOGIC_CONFIG_BUTTON_GATE_INPUTS.text(), Component.empty(), 0, 0, 160, 18, 2, 16, inputs, 1, 0, true, (value) -> inputs = value.intValue());
+		builder.addSlider(LBRText.LOGIC_CONFIG_BUTTON_LABEL_GATE_INPUTS.text(), Component.empty(), LBRText.LOGIC_CONFIG_BUTTON_TOOLTIP_GATE_INPUTS.text(), 0, 0, 160, 18, 2, 16, inputs, 1, 0, true, (value) -> inputs = value.intValue());
 	}
 	
 	@Override
