@@ -125,13 +125,17 @@ public final class MicrochipRenderable implements GuiEventListener, Renderable, 
 		if(carried.is(LBRItems.REDSTONE_BIT.asItem()) &&
 		   this.hasSelectedPort())
 		{
-			if(inputPort != null && microchip.wires().add(selectedPort, inputPort))
+			if(button == InputConstants.MOUSE_BUTTON_LEFT &&
+			   inputPort != null && microchip.wires().add(selectedPort, inputPort))
 			{
 				microchip.markDirty();
 				carried.shrink(1);
 				new PlaceTakeMicrochipWirePacket(menu.containerId, selectedPort, inputPort, true).sendToServer();
 			}
-			selectedPort = null;
+			else
+			{
+				selectedPort = null;
+			}
 			return true;
 		}
 		
