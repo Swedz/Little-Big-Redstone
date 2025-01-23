@@ -143,7 +143,8 @@ public final class MicrochipRenderable implements GuiEventListener, Renderable, 
 		var menu = screen.getMenu();
 		var carried = menu.getCarried();
 		
-		if(carried.has(LBRComponents.LOGIC))
+		if(button == InputConstants.MOUSE_BUTTON_LEFT &&
+		   carried.has(LBRComponents.LOGIC))
 		{
 			var component = carried.get(LBRComponents.LOGIC);
 			int placeX = component.size().topLeftCornerX(x);
