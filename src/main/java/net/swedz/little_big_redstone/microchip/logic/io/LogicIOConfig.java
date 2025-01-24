@@ -84,7 +84,7 @@ public final class LogicIOConfig extends LogicConfig<LogicIOConfig>
 	@Override
 	public void buildMenu(LogicConfigMenuBuilder builder)
 	{
-		builder.addCycleButton(LBRText.LOGIC_CONFIG_BUTTON_LABEL_IO_MODE.text(), LBRText.LOGIC_CONFIG_BUTTON_TOOLTIP_IO_MODE.text(), 0, 0, 160, 18, false, input, List.of(true, false), LBRTooltips.INPUT_OUTPUT_PARSER::parse, (value) -> input = value);
+		builder.addCycleButton(LBRText.LOGIC_CONFIG_BUTTON_LABEL_IO_MODE.text(), LBRText.LOGIC_CONFIG_BUTTON_TOOLTIP_IO_MODE.text(), 0, 0, 160, 18, false, input, List.of(true, false), (value) -> LBRTooltips.INPUT_OUTPUT_PARSER.parse(value).plainCopy(), (value) -> input = value);
 		
 		builder.addCycleButton(LBRText.LOGIC_CONFIG_BUTTON_LABEL_IO_DIRECTION.text(), LBRText.LOGIC_CONFIG_BUTTON_TOOLTIP_IO_DIRECTION.text(), 0, 23, 160, 18, false, direction, Arrays.asList(Direction.values()), LBRTooltips.DIRECTION_PARSER::parse, (value) -> direction = value);
 	}

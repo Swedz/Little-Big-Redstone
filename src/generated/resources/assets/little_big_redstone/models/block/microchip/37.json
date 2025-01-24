@@ -1,12 +1,12 @@
 {
   "parent": "minecraft:block/cube",
   "textures": {
-    "down": "little_big_redstone:block/microchip_off",
-    "east": "little_big_redstone:block/microchip_on",
-    "north": "little_big_redstone:block/microchip_on",
-    "particle": "little_big_redstone:block/microchip_off",
-    "south": "little_big_redstone:block/microchip_off",
-    "up": "little_big_redstone:block/microchip_on",
-    "west": "little_big_redstone:block/microchip_off"
+    "down": "little_big_redstone:block/microchip_down_off",
+    "east": "little_big_redstone:block/microchip_east_on",
+    "north": "little_big_redstone:block/microchip_north_on",
+    "particle": "little_big_redstone:block/microchip",
+    "south": "little_big_redstone:block/microchip_south_off",
+    "up": "little_big_redstone:block/microchip_up_on",
+    "west": "little_big_redstone:block/microchip_west_off"
   }
 }

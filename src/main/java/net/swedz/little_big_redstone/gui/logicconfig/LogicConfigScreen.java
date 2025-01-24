@@ -17,7 +17,6 @@ import net.swedz.little_big_redstone.microchip.LogicEntry;
 import net.swedz.little_big_redstone.microchip.logic.config.LogicConfigMenuBuilder;
 import net.swedz.little_big_redstone.network.packet.RequestMicrochipMenuPacket;
 import net.swedz.little_big_redstone.network.packet.WriteLogicConfigPacket;
-import net.swedz.tesseract.neoforge.helper.ComponentHelper;
 
 import java.util.List;
 import java.util.function.Consumer;
@@ -45,7 +44,7 @@ public final class LogicConfigScreen extends AbstractContainerScreen<LogicConfig
 	@Override
 	public <T> void addCycleButton(Component name, Component tooltip, int x, int y, int width, int height, boolean displayOnlyValue, T initialValue, List<T> values, Function<T, Component> valueStringifier, Consumer<T> onChange)
 	{
-		var builder = CycleButton.builder((T value) -> ComponentHelper.stripStyle(valueStringifier.apply(value)))
+		var builder = CycleButton.builder(valueStringifier)
 				.withTooltip((__) -> Tooltip.create(tooltip))
 				.withValues(values)
 				.withInitialValue(initialValue);

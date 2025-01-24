@@ -1,6 +1,7 @@
 package net.swedz.little_big_redstone;
 
 import com.google.common.collect.Sets;
+import net.minecraft.core.Direction;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.BlockTags;
@@ -21,6 +22,7 @@ import net.swedz.tesseract.neoforge.registry.common.CommonLootTableBuilders;
 import net.swedz.tesseract.neoforge.registry.holder.BlockHolder;
 import net.swedz.tesseract.neoforge.registry.holder.BlockWithItemHolder;
 
+import java.util.Locale;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.BiFunction;
@@ -97,6 +99,8 @@ public final class LBRBlocks
 	{
 		return (builder) ->
 		{
+			Function<Direction, ResourceLocation> textureOn = (direction) -> LBR.id("block/microchip_%s_on".formatted(direction.toString().toLowerCase(Locale.ROOT)));
+			Function<Direction, ResourceLocation> textureOff = (direction) -> LBR.id("block/microchip_%s_off".formatted(direction.toString().toLowerCase(Locale.ROOT)));
 			AtomicInteger index = new AtomicInteger();
 			builder.itemModels().getBuilder(block.identifier().id())
 					.parent(builder.models().cubeAll(block.identifier().id(), LBR.id("block/microchip_on")));
@@ -108,12 +112,18 @@ public final class LBRBlocks
 				boolean south = state.getValue(MicrochipBlock.SOUTH);
 				boolean east = state.getValue(MicrochipBlock.EAST);
 				boolean west = state.getValue(MicrochipBlock.WEST);
-				ResourceLocation on = LBR.id("block/microchip_on");
-				ResourceLocation off = LBR.id("block/microchip_off");
 				return ConfiguredModel.builder()
 						.modelFile(builder.models()
-								.cube("block/microchip/" + index.getAndIncrement(), down ? on : off, up ? on : off, north ? on : off, south ? on : off, east ? on : off, west ? on : off)
-								.texture("particle", off))
+								.cube(
+										"block/microchip/" + index.getAndIncrement(),
+										down ? textureOn.apply(Direction.DOWN) : textureOff.apply(Direction.DOWN),
+										up ? textureOn.apply(Direction.UP) : textureOff.apply(Direction.UP),
+										north ? textureOn.apply(Direction.NORTH) : textureOff.apply(Direction.NORTH),
+										south ? textureOn.apply(Direction.SOUTH) : textureOff.apply(Direction.SOUTH),
+										east ? textureOn.apply(Direction.EAST) : textureOff.apply(Direction.EAST),
+										west ? textureOn.apply(Direction.WEST) : textureOff.apply(Direction.WEST)
+								)
+								.texture("particle", LBR.id("block/microchip")))
 						.build();
 			});
 		};

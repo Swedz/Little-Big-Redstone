@@ -16,6 +16,19 @@ public final class LBRTooltips
 	public static final Style INPUT_STYLE     = Style.EMPTY.withColor(TextColor.fromRgb(0x7D9EFF)).withItalic(false);
 	public static final Style OUTPUT_STYLE    = Style.EMPTY.withColor(TextColor.fromRgb(0xFF9D7D)).withItalic(false);
 	
+	public static Style directionStyle(Direction direction)
+	{
+		return Style.EMPTY.withColor(TextColor.fromRgb(switch (direction)
+		{
+			case DOWN -> 0xFFD800;
+			case UP -> 0xFFFFFF;
+			case NORTH -> 0x4CFF00;
+			case SOUTH -> 0x0094FF;
+			case WEST -> 0xFF6A00;
+			case EAST -> 0xFF0000;
+		})).withItalic(false);
+	}
+	
 	public static final Parser<Boolean> INPUT_OUTPUT_PARSER = (input) -> input ? LBRText.INPUT.text().withStyle(INPUT_STYLE) : LBRText.OUTPUT.text().withStyle(OUTPUT_STYLE);
 	
 	public static final Parser<Direction> DIRECTION_PARSER = (direction) -> (switch (direction)
@@ -26,7 +39,7 @@ public final class LBRTooltips
 		case SOUTH -> LBRText.DIRECTION_SOUTH;
 		case WEST -> LBRText.DIRECTION_WEST;
 		case EAST -> LBRText.DIRECTION_EAST;
-	}).text().withStyle(HIGHLIGHT_STYLE);
+	}).text().withStyle(directionStyle(direction));
 	
 	public static final Parser<Boolean> BOOLEAN_YES_NO_PARSER = (value) -> value ? LBRText.YES.text().withStyle(YES_STYLE) : LBRText.NO.text().withStyle(NO_STYLE);
 	
