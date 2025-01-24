@@ -93,9 +93,7 @@ public abstract class LogicComponent<L extends LogicComponent<L, C>, C extends L
 		this.internalLoadFrom(other);
 	}
 	
-	public void resetForPickup()
-	{
-	}
+	public abstract void resetForPickup();
 	
 	public abstract L copy();
 	

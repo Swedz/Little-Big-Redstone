@@ -4,6 +4,7 @@ import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.Style;
 import net.minecraft.network.chat.TextColor;
+import net.swedz.little_big_redstone.microchip.logic.reader.LogicReaderMode;
 import net.swedz.tesseract.neoforge.tooltip.Parser;
 import net.swedz.tesseract.neoforge.tooltip.TooltipAttachment;
 
@@ -42,6 +43,13 @@ public final class LBRTooltips
 	}).text().withStyle(directionStyle(direction));
 	
 	public static final Parser<Boolean> BOOLEAN_YES_NO_PARSER = (value) -> value ? LBRText.YES.text().withStyle(YES_STYLE) : LBRText.NO.text().withStyle(NO_STYLE);
+	
+	public static final Parser<LogicReaderMode> READER_MODE_PARSER = (value) -> (switch (value)
+	{
+		case ITEM -> LBRText.CAPABILITY_ITEM;
+		case FLUID -> LBRText.CAPABILITY_FLUID;
+		case ENERGY -> LBRText.CAPABILITY_ENERGY;
+	}).text().withStyle(HIGHLIGHT_STYLE);
 	
 	public static final Parser<Object> DEFAULT_PARSER = (value) ->
 	{

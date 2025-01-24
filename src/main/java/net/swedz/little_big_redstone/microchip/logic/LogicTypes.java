@@ -16,6 +16,7 @@ import net.swedz.little_big_redstone.microchip.logic.gate.NOTGate;
 import net.swedz.little_big_redstone.microchip.logic.gate.ORGate;
 import net.swedz.little_big_redstone.microchip.logic.gate.XORGate;
 import net.swedz.little_big_redstone.microchip.logic.io.LogicIO;
+import net.swedz.little_big_redstone.microchip.logic.reader.LogicReader;
 import net.swedz.little_big_redstone.microchip.logic.sequencer.LogicSequencer;
 
 import java.util.Collections;
@@ -43,6 +44,8 @@ public final class LogicTypes
 	public static final LogicType<ORGate>   OR   = registerGate("or", "OR", ORGate.CODEC, ORGate.STREAM_CODEC, ORGate::new);
 	public static final LogicType<NORGate>  NOR  = registerGate("nor", "NOR", NORGate.CODEC, NORGate.STREAM_CODEC, NORGate::new);
 	public static final LogicType<XORGate>  XOR  = registerGate("xor", "XOR", XORGate.CODEC, XORGate.STREAM_CODEC, XORGate::new);
+	
+	public static final LogicType<LogicReader> READER = register("reader", "Reader", LogicReader.CODEC, LogicReader.STREAM_CODEC, LogicReader::new);
 	
 	public static final LogicType<LogicSequencer> SEQUENCER = register("sequencer", "Sequencer", LogicSequencer.CODEC, LogicSequencer.STREAM_CODEC, LogicSequencer::new);
 	

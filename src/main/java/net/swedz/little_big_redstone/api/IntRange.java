@@ -8,6 +8,7 @@ import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.util.Mth;
 import net.swedz.tesseract.neoforge.api.Assert;
 
+// TODO move to Tesseract
 public record IntRange(int min, int max)
 {
 	public static final Codec<IntRange> CODEC = RecordCodecBuilder.create((instance) -> instance

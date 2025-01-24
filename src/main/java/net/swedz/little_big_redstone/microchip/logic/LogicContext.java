@@ -1,6 +1,8 @@
 package net.swedz.little_big_redstone.microchip.logic;
 
 import com.google.common.collect.Lists;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.Level;
 import net.swedz.little_big_redstone.block.microchip.MicrochipBlockEntity;
 import net.swedz.little_big_redstone.microchip.LogicEntry;
 import net.swedz.little_big_redstone.microchip.awareness.AwarenessType;
@@ -18,6 +20,16 @@ public final class LogicContext
 	public LogicContext(MicrochipBlockEntity blockEntity)
 	{
 		this.blockEntity = blockEntity;
+	}
+	
+	public Level level()
+	{
+		return blockEntity.getLevel();
+	}
+	
+	public BlockPos pos()
+	{
+		return blockEntity.getBlockPos();
 	}
 	
 	public <A extends MicrochipAwareness<A>> A awareness(AwarenessType<A> type)

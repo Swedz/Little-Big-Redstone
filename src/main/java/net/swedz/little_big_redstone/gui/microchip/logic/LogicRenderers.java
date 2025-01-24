@@ -11,6 +11,7 @@ import net.neoforged.neoforge.event.AddReloadListenerEvent;
 import net.swedz.little_big_redstone.LBR;
 import net.swedz.little_big_redstone.gui.microchip.logic.renderer.IORenderer;
 import net.swedz.little_big_redstone.gui.microchip.logic.renderer.LogicGateRenderer;
+import net.swedz.little_big_redstone.gui.microchip.logic.renderer.ReaderRenderer;
 import net.swedz.little_big_redstone.gui.microchip.logic.renderer.SequencerRenderer;
 import net.swedz.little_big_redstone.microchip.logic.LogicComponent;
 import net.swedz.little_big_redstone.microchip.logic.LogicType;
@@ -35,6 +36,8 @@ public final class LogicRenderers
 		register(LogicTypes.OR, LogicGateRenderer::new);
 		register(LogicTypes.NOR, LogicGateRenderer::new);
 		register(LogicTypes.XOR, LogicGateRenderer::new);
+		
+		register(LogicTypes.READER, ReaderRenderer::new);
 		
 		register(LogicTypes.SEQUENCER, SequencerRenderer::new);
 	}
