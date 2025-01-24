@@ -5,6 +5,7 @@ import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.ModContainer;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
+import net.swedz.little_big_redstone.microchip.awareness.AwarenessTypes;
 import net.swedz.little_big_redstone.microchip.logic.LogicTypes;
 import net.swedz.little_big_redstone.network.LBRPackets;
 import org.slf4j.Logger;
@@ -26,6 +27,7 @@ public final class LBR
 	public LBR(IEventBus bus, ModContainer container)
 	{
 		LogicTypes.init();
+		AwarenessTypes.init();
 		
 		LBRComponents.init(bus);
 		LBRItems.init(bus);

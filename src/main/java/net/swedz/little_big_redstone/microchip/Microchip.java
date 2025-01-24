@@ -4,6 +4,7 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.network.codec.StreamCodec;
+import net.swedz.little_big_redstone.microchip.awareness.MicrochipAwarenesses;
 import net.swedz.little_big_redstone.microchip.logic.LogicComponents;
 import net.swedz.little_big_redstone.microchip.logic.LogicContext;
 import net.swedz.little_big_redstone.microchip.wire.MicrochipWires;
@@ -30,7 +31,7 @@ public final class Microchip
 	private final LogicComponents components;
 	private final MicrochipWires  wires;
 	
-	private final MicrochipRedstoneIOCache redstoneIOCache;
+	private final MicrochipAwarenesses awarenesses;
 	
 	private boolean dirty;
 	
@@ -40,8 +41,9 @@ public final class Microchip
 		this.components = components.with(this);
 		this.wires = wires.with(this);
 		this.components.rebuildTraversal();
-		this.redstoneIOCache = new MicrochipRedstoneIOCache(this);
-		this.redstoneIOCache.rebuild();
+		this.awarenesses = new MicrochipAwarenesses();
+		this.awarenesses.rebuild(this);
+		this.awarenesses.load(this);
 	}
 	
 	public Microchip(MicrochipSize size)
@@ -50,7 +52,8 @@ public final class Microchip
 		this.components = new LogicComponents(this);
 		this.wires = new MicrochipWires(this);
 		this.components.rebuildTraversal();
-		this.redstoneIOCache = new MicrochipRedstoneIOCache(this);
+		this.awarenesses = new MicrochipAwarenesses();
+		this.awarenesses.rebuild(this);
 	}
 	
 	public MicrochipSize size()
@@ -68,9 +71,9 @@ public final class Microchip
 		return wires;
 	}
 	
-	public MicrochipRedstoneIOCache redstoneIOCache()
+	public MicrochipAwarenesses awarenesses()
 	{
-		return redstoneIOCache;
+		return awarenesses;
 	}
 	
 	public void loadFrom(Microchip other)
@@ -95,7 +98,8 @@ public final class Microchip
 	public void markDirty()
 	{
 		components.rebuildTraversal();
-		redstoneIOCache.rebuild();
+		awarenesses.rebuild(this);
+		awarenesses.load(this);
 		dirty = true;
 	}
 	

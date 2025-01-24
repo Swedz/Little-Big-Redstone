@@ -6,6 +6,9 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
+import net.swedz.little_big_redstone.microchip.awareness.AwarenessType;
+import net.swedz.little_big_redstone.microchip.awareness.AwarenessTypes;
+import net.swedz.little_big_redstone.microchip.awareness.MicrochipAware;
 import net.swedz.little_big_redstone.microchip.logic.LogicComponent;
 import net.swedz.little_big_redstone.microchip.logic.LogicContext;
 import net.swedz.little_big_redstone.microchip.logic.LogicType;
@@ -13,7 +16,7 @@ import net.swedz.little_big_redstone.microchip.logic.LogicTypes;
 
 import java.util.Objects;
 
-public final class LogicIO extends LogicComponent<LogicIO, LogicIOConfig>
+public final class LogicIO extends LogicComponent<LogicIO, LogicIOConfig> implements MicrochipAware
 {
 	public static final MapCodec<LogicIO> CODEC = RecordCodecBuilder.mapCodec((instance) -> instance
 			.group(
@@ -48,6 +51,14 @@ public final class LogicIO extends LogicComponent<LogicIO, LogicIOConfig>
 	}
 	
 	@Override
+	public AwarenessType<?>[] awarenessTypes()
+	{
+		return new AwarenessType[]{
+				AwarenessTypes.REDSTONE
+		};
+	}
+	
+	@Override
 	protected LogicIOConfig defaultConfig()
 	{
 		return new LogicIOConfig();
@@ -59,12 +70,12 @@ public final class LogicIO extends LogicComponent<LogicIO, LogicIOConfig>
 		boolean originalOutputState = outputState;
 		if(config.input)
 		{
-			outputState = context.isInputPowered(config.direction);
+			outputState = context.awareness(AwarenessTypes.REDSTONE).isInputPowered(config.direction);
 		}
 		else
 		{
 			outputState = inputs[0];
-			context.setOutputPowered(config.direction, outputState);
+			context.awareness(AwarenessTypes.REDSTONE).setOutputPowered(config.direction, outputState);
 		}
 		if(outputState != originalOutputState)
 		{

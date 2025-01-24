@@ -1,8 +1,6 @@
 package net.swedz.little_big_redstone.block.microchip;
 
-import com.google.common.collect.Sets;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtOps;
@@ -13,7 +11,6 @@ import net.minecraft.world.MenuProvider;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
-import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.swedz.little_big_redstone.LBR;
@@ -22,12 +19,12 @@ import net.swedz.little_big_redstone.api.Tickable;
 import net.swedz.little_big_redstone.gui.microchip.MicrochipMenu;
 import net.swedz.little_big_redstone.microchip.Microchip;
 import net.swedz.little_big_redstone.microchip.MicrochipSize;
+import net.swedz.little_big_redstone.microchip.awareness.AwarenessContext;
 import net.swedz.little_big_redstone.microchip.logic.LogicContext;
 import net.swedz.little_big_redstone.network.packet.UpdateComponentsMicrochipPacket;
 import net.swedz.little_big_redstone.network.packet.UpdateMicrochipPacket;
 import net.swedz.tesseract.neoforge.packet.CustomPacket;
 
-import java.util.Set;
 import java.util.function.Function;
 
 public final class MicrochipBlockEntity extends BlockEntity implements MenuProvider, Tickable
@@ -44,16 +41,6 @@ public final class MicrochipBlockEntity extends BlockEntity implements MenuProvi
 	public Microchip microchip()
 	{
 		return microchip;
-	}
-	
-	public boolean isFaceListeningForRedstoneInput(Direction direction)
-	{
-		return microchip.redstoneIOCache().isFaceListeningForRedstoneInput(direction);
-	}
-	
-	public boolean isFaceCapableForRedstoneOutput(Direction direction)
-	{
-		return microchip.redstoneIOCache().isFaceCapableForRedstoneOutput(direction);
 	}
 	
 	@Override
@@ -77,28 +64,6 @@ public final class MicrochipBlockEntity extends BlockEntity implements MenuProvi
 		});
 	}
 	
-	private LogicContext buildLogicContext()
-	{
-		Set<Direction> inputPower = Sets.newHashSet();
-		Set<Direction> outputPower = Sets.newHashSet();
-		for(Direction direction : Direction.values())
-		{
-			boolean powered = this.getBlockState().getValue(MicrochipBlock.getDirectionalState(direction));
-			if(powered)
-			{
-				if(this.isFaceListeningForRedstoneInput(direction))
-				{
-					inputPower.add(direction);
-				}
-				else if(this.isFaceCapableForRedstoneOutput(direction))
-				{
-					outputPower.add(direction);
-				}
-			}
-		}
-		return new LogicContext(microchip, inputPower, outputPower);
-	}
-	
 	@Override
 	public void tick()
 	{
@@ -107,7 +72,9 @@ public final class MicrochipBlockEntity extends BlockEntity implements MenuProvi
 			return;
 		}
 		
-		LogicContext context = this.buildLogicContext();
+		microchip.awarenesses().preTick(new AwarenessContext(this));
+		
+		LogicContext context = new LogicContext(this);
 		microchip.tickLogic(context);
 		
 		boolean microchipDirty = microchip.isDirty();
@@ -116,12 +83,7 @@ public final class MicrochipBlockEntity extends BlockEntity implements MenuProvi
 		{
 			microchip.markClean();
 			
-			var originalState = this.getBlockState();
-			var newState = context.applyPoweredState(this.getBlockState());
-			if(newState != originalState)
-			{
-				level.setBlock(worldPosition, newState, Block.UPDATE_ALL);
-			}
+			microchip.awarenesses().postTick(new AwarenessContext(this), microchipDirty, contextDirty);
 			
 			this.setChanged();
 			

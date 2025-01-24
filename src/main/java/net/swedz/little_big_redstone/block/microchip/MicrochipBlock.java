@@ -15,6 +15,8 @@ import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.phys.BlockHitResult;
 import net.swedz.little_big_redstone.api.TickableBlock;
+import net.swedz.little_big_redstone.microchip.awareness.AwarenessContext;
+import net.swedz.little_big_redstone.microchip.awareness.AwarenessTypes;
 
 public final class MicrochipBlock extends Block implements TickableBlock
 {
@@ -91,37 +93,27 @@ public final class MicrochipBlock extends Block implements TickableBlock
 	@Override
 	protected int getSignal(BlockState state, BlockGetter level, BlockPos pos, Direction direction)
 	{
-		BlockEntity blockEntity = level.getBlockEntity(pos);
-		if(!(blockEntity instanceof MicrochipBlockEntity microchipBlockEntity))
+		if(!(level.getBlockEntity(pos) instanceof MicrochipBlockEntity blockEntity))
 		{
 			return 0;
 		}
-		direction = direction.getOpposite();
-		return microchipBlockEntity.isFaceCapableForRedstoneOutput(direction) && state.getValue(getDirectionalState(direction)) ? 15 : 0;
+		
+		var redstone = blockEntity.microchip().awarenesses().get(AwarenessTypes.REDSTONE);
+		return redstone != null && redstone.outputRedstoneSignal(state, direction) ? 15 : 0;
 	}
 	
 	@Override
 	protected void neighborChanged(BlockState state, Level level, BlockPos pos, Block neighborBlock, BlockPos neighborPos, boolean movedByPiston)
 	{
-		if(level.isClientSide())
-		{
-			return;
-		}
-		
-		BlockEntity blockEntity = level.getBlockEntity(pos);
-		if(!(blockEntity instanceof MicrochipBlockEntity microchipBlockEntity))
+		if(level.isClientSide() ||
+		   !(level.getBlockEntity(pos) instanceof MicrochipBlockEntity blockEntity))
 		{
 			return;
 		}
 		
 		var delta = neighborPos.subtract(pos);
-		Direction direction = Direction.fromDelta(delta.getX(), delta.getY(), delta.getZ());
-		if(microchipBlockEntity.isFaceListeningForRedstoneInput(direction) &&
-		   !microchipBlockEntity.isFaceCapableForRedstoneOutput(direction))
-		{
-			boolean signal = level.getSignal(pos.relative(direction), direction) > 0;
-			level.setBlock(pos, state.setValue(getDirectionalState(direction), signal), Block.UPDATE_ALL);
-		}
+		Direction neighborDirection = Direction.fromDelta(delta.getX(), delta.getY(), delta.getZ());
+		blockEntity.microchip().awarenesses().neighborChanged(new AwarenessContext(blockEntity), neighborBlock, neighborPos, neighborDirection, movedByPiston);
 	}
 	
 	@Override
