@@ -14,7 +14,6 @@ import java.util.List;
 import java.util.Objects;
 
 import static net.swedz.little_big_redstone.LBRTextLine.*;
-import static net.swedz.little_big_redstone.LBRTooltips.*;
 
 public final class ORGate extends LogicGate<ORGate, MultiLogicGateConfig>
 {
@@ -65,7 +64,7 @@ public final class ORGate extends LogicGate<ORGate, MultiLogicGateConfig>
 	@Override
 	public void appendNoShiftHoverText(List<Component> lines)
 	{
-		lines.add(line(LBRText.LOGIC_GATE_ALGEBRA).arg(LBRText.LOGIC_GATE_ALGEBRA_OR.text().withStyle(DEFAULT_STYLE)).withStyle(DEFAULT_STYLE));
+		lines.add(line(LBRText.LOGIC_GATE_ALGEBRA).arg(LBRText.LOGIC_GATE_ALGEBRA_OR.text()));
 	}
 	
 	@Override

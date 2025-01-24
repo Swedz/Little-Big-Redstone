@@ -51,7 +51,7 @@ public record LogicType<L extends LogicComponent>(
 			{
 				if(configHeader)
 				{
-					lines.add(line(LBRText.LOGIC_CONFIG_TOOLTIP).withStyle(DEFAULT_STYLE));
+					lines.add(line(LBRText.LOGIC_CONFIG_TOOLTIP));
 				}
 				lines.addAll(configLines);
 			}

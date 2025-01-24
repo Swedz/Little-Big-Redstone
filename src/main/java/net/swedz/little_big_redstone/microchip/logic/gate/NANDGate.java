@@ -65,7 +65,7 @@ public final class NANDGate extends LogicGate<NANDGate, MultiLogicGateConfig>
 	@Override
 	public void appendNoShiftHoverText(List<Component> lines)
 	{
-		lines.add(line(LBRText.LOGIC_GATE_ALGEBRA).arg(LBRText.LOGIC_GATE_ALGEBRA_NAND.text().withStyle(DEFAULT_STYLE)).withStyle(DEFAULT_STYLE));
+		lines.add(line(LBRText.LOGIC_GATE_ALGEBRA).arg(LBRText.LOGIC_GATE_ALGEBRA_NAND.text()));
 	}
 	
 	@Override
