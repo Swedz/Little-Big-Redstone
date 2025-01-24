@@ -5,11 +5,10 @@ import io.netty.buffer.ByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.codec.StreamCodec;
 import net.swedz.little_big_redstone.LBRText;
-import net.swedz.little_big_redstone.api.IntRange;
 import net.swedz.little_big_redstone.microchip.logic.LogicContext;
-import net.swedz.little_big_redstone.microchip.logic.LogicFactory;
 import net.swedz.little_big_redstone.microchip.logic.LogicType;
 import net.swedz.little_big_redstone.microchip.logic.LogicTypes;
+import net.swedz.little_big_redstone.microchip.logic.gate.config.MultiLogicGateConfig;
 
 import java.util.List;
 import java.util.Objects;
@@ -17,15 +16,13 @@ import java.util.Objects;
 import static net.swedz.little_big_redstone.LBRTextLine.*;
 import static net.swedz.little_big_redstone.LBRTooltips.*;
 
-public final class NANDGate extends LogicGate<NANDGate>
+public final class NANDGate extends LogicGate<NANDGate, MultiLogicGateConfig>
 {
-	public static final LogicFactory DEFAULT = () -> new NANDGate(false);
+	public static final MapCodec<NANDGate> CODEC = mapCodec(MultiLogicGateConfig.CODEC, NANDGate::new);
 	
-	public static final MapCodec<NANDGate> CODEC = mapCodec(NANDGate::new);
+	public static final StreamCodec<ByteBuf, NANDGate> STREAM_CODEC = streamCodec(MultiLogicGateConfig.STREAM_CODEC, NANDGate::new);
 	
-	public static final StreamCodec<ByteBuf, NANDGate> STREAM_CODEC = streamCodec(NANDGate::new);
-	
-	private NANDGate(LogicGateConfig config, boolean outputState)
+	private NANDGate(MultiLogicGateConfig config, boolean outputState)
 	{
 		super(config, outputState);
 	}
@@ -35,16 +32,21 @@ public final class NANDGate extends LogicGate<NANDGate>
 		super(outputState);
 	}
 	
+	public NANDGate()
+	{
+		this(false);
+	}
+	
+	@Override
+	protected MultiLogicGateConfig defaultConfig()
+	{
+		return new MultiLogicGateConfig();
+	}
+	
 	@Override
 	public LogicType<NANDGate> type()
 	{
 		return LogicTypes.NAND;
-	}
-	
-	@Override
-	public IntRange inputsAllowed()
-	{
-		return new IntRange(2, 16);
 	}
 	
 	@Override

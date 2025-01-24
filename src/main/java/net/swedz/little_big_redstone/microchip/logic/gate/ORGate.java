@@ -5,11 +5,10 @@ import io.netty.buffer.ByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.codec.StreamCodec;
 import net.swedz.little_big_redstone.LBRText;
-import net.swedz.little_big_redstone.api.IntRange;
 import net.swedz.little_big_redstone.microchip.logic.LogicContext;
-import net.swedz.little_big_redstone.microchip.logic.LogicFactory;
 import net.swedz.little_big_redstone.microchip.logic.LogicType;
 import net.swedz.little_big_redstone.microchip.logic.LogicTypes;
+import net.swedz.little_big_redstone.microchip.logic.gate.config.MultiLogicGateConfig;
 
 import java.util.List;
 import java.util.Objects;
@@ -17,15 +16,13 @@ import java.util.Objects;
 import static net.swedz.little_big_redstone.LBRTextLine.*;
 import static net.swedz.little_big_redstone.LBRTooltips.*;
 
-public final class ORGate extends LogicGate<ORGate>
+public final class ORGate extends LogicGate<ORGate, MultiLogicGateConfig>
 {
-	public static final LogicFactory DEFAULT = () -> new ORGate(false);
+	public static final MapCodec<ORGate> CODEC = mapCodec(MultiLogicGateConfig.CODEC, ORGate::new);
 	
-	public static final MapCodec<ORGate> CODEC = mapCodec(ORGate::new);
+	public static final StreamCodec<ByteBuf, ORGate> STREAM_CODEC = streamCodec(MultiLogicGateConfig.STREAM_CODEC, ORGate::new);
 	
-	public static final StreamCodec<ByteBuf, ORGate> STREAM_CODEC = streamCodec(ORGate::new);
-	
-	private ORGate(LogicGateConfig config, boolean outputState)
+	private ORGate(MultiLogicGateConfig config, boolean outputState)
 	{
 		super(config, outputState);
 	}
@@ -35,16 +32,21 @@ public final class ORGate extends LogicGate<ORGate>
 		super(outputState);
 	}
 	
+	public ORGate()
+	{
+		this(false);
+	}
+	
+	@Override
+	protected MultiLogicGateConfig defaultConfig()
+	{
+		return new MultiLogicGateConfig();
+	}
+	
 	@Override
 	public LogicType<ORGate> type()
 	{
 		return LogicTypes.OR;
-	}
-	
-	@Override
-	public IntRange inputsAllowed()
-	{
-		return new IntRange(2, 16);
 	}
 	
 	@Override

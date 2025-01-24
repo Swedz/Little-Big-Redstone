@@ -5,11 +5,10 @@ import io.netty.buffer.ByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.codec.StreamCodec;
 import net.swedz.little_big_redstone.LBRText;
-import net.swedz.little_big_redstone.api.IntRange;
 import net.swedz.little_big_redstone.microchip.logic.LogicContext;
-import net.swedz.little_big_redstone.microchip.logic.LogicFactory;
 import net.swedz.little_big_redstone.microchip.logic.LogicType;
 import net.swedz.little_big_redstone.microchip.logic.LogicTypes;
+import net.swedz.little_big_redstone.microchip.logic.gate.config.SingleLogicGateConfig;
 
 import java.util.List;
 import java.util.Objects;
@@ -17,29 +16,32 @@ import java.util.Objects;
 import static net.swedz.little_big_redstone.LBRTextLine.*;
 import static net.swedz.little_big_redstone.LBRTooltips.*;
 
-public final class NOTGate extends LogicGate<NOTGate>
+public final class NOTGate extends LogicGate<NOTGate, SingleLogicGateConfig>
 {
-	public static final LogicFactory DEFAULT = () -> new NOTGate(false);
+	public static final MapCodec<NOTGate> CODEC = mapCodec(NOTGate::new);
 	
-	public static final MapCodec<NOTGate> CODEC = singleInputMapCodec(NOTGate::new);
-	
-	public static final StreamCodec<ByteBuf, NOTGate> STREAM_CODEC = singleInputStreamCodec(NOTGate::new);
+	public static final StreamCodec<ByteBuf, NOTGate> STREAM_CODEC = streamCodec(NOTGate::new);
 	
 	private NOTGate(boolean outputState)
 	{
 		super(outputState);
 	}
 	
+	public NOTGate()
+	{
+		this(false);
+	}
+	
+	@Override
+	protected SingleLogicGateConfig defaultConfig()
+	{
+		return SingleLogicGateConfig.INSTANCE;
+	}
+	
 	@Override
 	public LogicType<NOTGate> type()
 	{
 		return LogicTypes.NOT;
-	}
-	
-	@Override
-	public IntRange inputsAllowed()
-	{
-		return new IntRange(1, 1);
 	}
 	
 	@Override

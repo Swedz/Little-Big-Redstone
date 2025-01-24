@@ -4,13 +4,10 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import io.netty.buffer.ByteBuf;
-import net.minecraft.core.Direction;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
-import net.swedz.little_big_redstone.api.IntRange;
 import net.swedz.little_big_redstone.microchip.logic.LogicComponent;
 import net.swedz.little_big_redstone.microchip.logic.LogicContext;
-import net.swedz.little_big_redstone.microchip.logic.LogicFactory;
 import net.swedz.little_big_redstone.microchip.logic.LogicType;
 import net.swedz.little_big_redstone.microchip.logic.LogicTypes;
 
@@ -18,8 +15,6 @@ import java.util.Objects;
 
 public final class LogicIO extends LogicComponent<LogicIO, LogicIOConfig>
 {
-	public static final LogicFactory DEFAULT = () -> new LogicIO(new LogicIOConfig(true, Direction.NORTH), false);
-	
 	public static final MapCodec<LogicIO> CODEC = RecordCodecBuilder.mapCodec((instance) -> instance
 			.group(
 					LogicIOConfig.CODEC.fieldOf("config").forGetter(LogicIO::config),
@@ -39,6 +34,23 @@ public final class LogicIO extends LogicComponent<LogicIO, LogicIOConfig>
 	{
 		super(config);
 		this.outputState = outputState;
+	}
+	
+	private LogicIO(boolean outputState)
+	{
+		super();
+		this.outputState = outputState;
+	}
+	
+	public LogicIO()
+	{
+		this(false);
+	}
+	
+	@Override
+	protected LogicIOConfig defaultConfig()
+	{
+		return new LogicIOConfig();
 	}
 	
 	@Override
@@ -64,30 +76,6 @@ public final class LogicIO extends LogicComponent<LogicIO, LogicIOConfig>
 	public LogicType<LogicIO> type()
 	{
 		return LogicTypes.IO;
-	}
-	
-	@Override
-	public IntRange inputsAllowed()
-	{
-		return config.input ? new IntRange(0, 0) : new IntRange(1, 1);
-	}
-	
-	@Override
-	public int inputs()
-	{
-		return config.input ? 0 : 1;
-	}
-	
-	@Override
-	public IntRange outputsAllowed()
-	{
-		return config.input ? new IntRange(1, 1) : new IntRange(0, 0);
-	}
-	
-	@Override
-	public int outputs()
-	{
-		return config.input ? 1 : 0;
 	}
 	
 	@Override

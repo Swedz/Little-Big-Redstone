@@ -10,6 +10,7 @@ import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.swedz.little_big_redstone.LBRText;
 import net.swedz.little_big_redstone.LBRTooltips;
+import net.swedz.little_big_redstone.api.IntRange;
 import net.swedz.little_big_redstone.microchip.logic.config.LogicConfig;
 import net.swedz.little_big_redstone.microchip.logic.config.LogicConfigMenuBuilder;
 
@@ -42,6 +43,35 @@ public final class LogicIOConfig extends LogicConfig<LogicIOConfig>
 	{
 		this.input = input;
 		this.direction = direction;
+	}
+	
+	public LogicIOConfig()
+	{
+		this(true, Direction.NORTH);
+	}
+	
+	@Override
+	public IntRange inputsAllowed()
+	{
+		return input ? new IntRange(0, 0) : new IntRange(1, 1);
+	}
+	
+	@Override
+	public int inputs()
+	{
+		return input ? 0 : 1;
+	}
+	
+	@Override
+	public IntRange outputsAllowed()
+	{
+		return input ? new IntRange(1, 1) : new IntRange(0, 0);
+	}
+	
+	@Override
+	public int outputs()
+	{
+		return input ? 1 : 0;
 	}
 	
 	@Override

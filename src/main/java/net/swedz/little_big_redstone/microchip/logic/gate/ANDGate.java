@@ -5,11 +5,10 @@ import io.netty.buffer.ByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.codec.StreamCodec;
 import net.swedz.little_big_redstone.LBRText;
-import net.swedz.little_big_redstone.api.IntRange;
 import net.swedz.little_big_redstone.microchip.logic.LogicContext;
-import net.swedz.little_big_redstone.microchip.logic.LogicFactory;
 import net.swedz.little_big_redstone.microchip.logic.LogicType;
 import net.swedz.little_big_redstone.microchip.logic.LogicTypes;
+import net.swedz.little_big_redstone.microchip.logic.gate.config.MultiLogicGateConfig;
 
 import java.util.List;
 import java.util.Objects;
@@ -17,15 +16,13 @@ import java.util.Objects;
 import static net.swedz.little_big_redstone.LBRTextLine.*;
 import static net.swedz.little_big_redstone.LBRTooltips.*;
 
-public final class ANDGate extends LogicGate<ANDGate>
+public final class ANDGate extends LogicGate<ANDGate, MultiLogicGateConfig>
 {
-	public static final LogicFactory DEFAULT = () -> new ANDGate(false);
+	public static final MapCodec<ANDGate> CODEC = mapCodec(MultiLogicGateConfig.CODEC, ANDGate::new);
 	
-	public static final MapCodec<ANDGate> CODEC = mapCodec(ANDGate::new);
+	public static final StreamCodec<ByteBuf, ANDGate> STREAM_CODEC = streamCodec(MultiLogicGateConfig.STREAM_CODEC, ANDGate::new);
 	
-	public static final StreamCodec<ByteBuf, ANDGate> STREAM_CODEC = streamCodec(ANDGate::new);
-	
-	private ANDGate(LogicGateConfig config, boolean outputState)
+	private ANDGate(MultiLogicGateConfig config, boolean outputState)
 	{
 		super(config, outputState);
 	}
@@ -35,16 +32,21 @@ public final class ANDGate extends LogicGate<ANDGate>
 		super(outputState);
 	}
 	
+	public ANDGate()
+	{
+		this(false);
+	}
+	
+	@Override
+	protected MultiLogicGateConfig defaultConfig()
+	{
+		return new MultiLogicGateConfig();
+	}
+	
 	@Override
 	public LogicType<ANDGate> type()
 	{
 		return LogicTypes.AND;
-	}
-	
-	@Override
-	public IntRange inputsAllowed()
-	{
-		return new IntRange(2, 16);
 	}
 	
 	@Override

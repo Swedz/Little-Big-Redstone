@@ -7,18 +7,14 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
-import net.swedz.little_big_redstone.api.IntRange;
 import net.swedz.little_big_redstone.microchip.logic.LogicComponent;
 import net.swedz.little_big_redstone.microchip.logic.LogicContext;
-import net.swedz.little_big_redstone.microchip.logic.LogicFactory;
 import net.swedz.little_big_redstone.microchip.logic.LogicGridSize;
 import net.swedz.little_big_redstone.microchip.logic.LogicType;
 import net.swedz.little_big_redstone.microchip.logic.LogicTypes;
 
 public final class LogicSequencer extends LogicComponent<LogicSequencer, LogicSequencerConfig>
 {
-	public static final LogicFactory DEFAULT = () -> new LogicSequencer(new LogicSequencerConfig(20, 0, false), 0, false);
-	
 	public static final MapCodec<LogicSequencer> CODEC = RecordCodecBuilder.mapCodec((instance) -> instance
 			.group(
 					LogicSequencerConfig.CODEC.fieldOf("config").forGetter(LogicSequencer::config),
@@ -43,6 +39,24 @@ public final class LogicSequencer extends LogicComponent<LogicSequencer, LogicSe
 		super(config);
 		this.processedTicks = processedTicks;
 		this.outputState = outputState;
+	}
+	
+	private LogicSequencer(long processedTicks, boolean outputState)
+	{
+		super();
+		this.processedTicks = processedTicks;
+		this.outputState = outputState;
+	}
+	
+	public LogicSequencer()
+	{
+		this(0, false);
+	}
+	
+	@Override
+	protected LogicSequencerConfig defaultConfig()
+	{
+		return new LogicSequencerConfig();
 	}
 	
 	public long processedTicks()
@@ -101,30 +115,6 @@ public final class LogicSequencer extends LogicComponent<LogicSequencer, LogicSe
 	public LogicType<LogicSequencer> type()
 	{
 		return LogicTypes.SEQUENCER;
-	}
-	
-	@Override
-	public IntRange inputsAllowed()
-	{
-		return new IntRange(1, 1);
-	}
-	
-	@Override
-	public int inputs()
-	{
-		return 1;
-	}
-	
-	@Override
-	public IntRange outputsAllowed()
-	{
-		return new IntRange(1, 1);
-	}
-	
-	@Override
-	public int outputs()
-	{
-		return 1;
 	}
 	
 	@Override

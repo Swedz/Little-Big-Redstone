@@ -6,26 +6,26 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
-import net.swedz.little_big_redstone.api.IntRange;
 import net.swedz.little_big_redstone.microchip.logic.LogicComponent;
 import net.swedz.little_big_redstone.microchip.logic.LogicContext;
+import net.swedz.little_big_redstone.microchip.logic.config.LogicConfig;
 
 import java.util.function.BiFunction;
 import java.util.function.Function;
 
-public abstract class LogicGate<G extends LogicGate<G>> extends LogicComponent<G, LogicGateConfig>
+public abstract class LogicGate<G extends LogicGate<G, C>, C extends LogicConfig<C>> extends LogicComponent<G, C>
 {
-	protected static <G extends LogicGate> MapCodec<G> mapCodec(BiFunction<LogicGateConfig, Boolean, G> creator)
+	protected static <G extends LogicGate<G, C>, C extends LogicConfig<C>> MapCodec<G> mapCodec(Codec<C> configCodec, BiFunction<C, Boolean, G> creator)
 	{
 		return RecordCodecBuilder.mapCodec((instance) -> instance
 				.group(
-						LogicGateConfig.CODEC.fieldOf("config").forGetter((gate) -> (LogicGateConfig) gate.config()),
+						configCodec.fieldOf("config").forGetter(LogicComponent::config),
 						Codec.BOOL.fieldOf("output").forGetter(LogicGate::output)
 				)
 				.apply(instance, creator));
 	}
 	
-	protected static <G extends LogicGate> MapCodec<G> singleInputMapCodec(Function<Boolean, G> creator)
+	protected static <G extends LogicGate<G, C>, C extends LogicConfig<C>> MapCodec<G> mapCodec(Function<Boolean, G> creator)
 	{
 		return RecordCodecBuilder.mapCodec((instance) -> instance
 				.group(
@@ -34,16 +34,16 @@ public abstract class LogicGate<G extends LogicGate<G>> extends LogicComponent<G
 				.apply(instance, creator));
 	}
 	
-	protected static <G extends LogicGate> StreamCodec<ByteBuf, G> streamCodec(BiFunction<LogicGateConfig, Boolean, G> creator)
+	protected static <G extends LogicGate<G, C>, C extends LogicConfig<C>> StreamCodec<ByteBuf, G> streamCodec(StreamCodec<ByteBuf, C> configCodec, BiFunction<C, Boolean, G> creator)
 	{
 		return StreamCodec.composite(
-				LogicGateConfig.STREAM_CODEC, (gate) -> (LogicGateConfig) gate.config(),
+				configCodec, LogicComponent::config,
 				ByteBufCodecs.BOOL, LogicGate::output,
 				creator
 		);
 	}
 	
-	protected static <G extends LogicGate> StreamCodec<ByteBuf, G> singleInputStreamCodec(Function<Boolean, G> creator)
+	protected static <G extends LogicGate<G, C>, C extends LogicConfig<C>> StreamCodec<ByteBuf, G> streamCodec(Function<Boolean, G> creator)
 	{
 		return StreamCodec.composite(
 				ByteBufCodecs.BOOL, LogicGate::output,
@@ -53,7 +53,7 @@ public abstract class LogicGate<G extends LogicGate<G>> extends LogicComponent<G
 	
 	private boolean outputState;
 	
-	protected LogicGate(LogicGateConfig config, boolean outputState)
+	protected LogicGate(C config, boolean outputState)
 	{
 		super(config);
 		this.outputState = outputState;
@@ -61,8 +61,7 @@ public abstract class LogicGate<G extends LogicGate<G>> extends LogicComponent<G
 	
 	protected LogicGate(boolean outputState)
 	{
-		super(new LogicGateConfig(0));
-		this.config.inputs = this.inputsAllowed().min();
+		super();
 		this.outputState = outputState;
 	}
 	
@@ -77,24 +76,6 @@ public abstract class LogicGate<G extends LogicGate<G>> extends LogicComponent<G
 		{
 			context.markDirty(this);
 		}
-	}
-	
-	@Override
-	public final int inputs()
-	{
-		return config.inputs;
-	}
-	
-	@Override
-	public final IntRange outputsAllowed()
-	{
-		return new IntRange(1, 1);
-	}
-	
-	@Override
-	public final int outputs()
-	{
-		return 1;
 	}
 	
 	@Override

@@ -9,6 +9,7 @@ import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.swedz.little_big_redstone.LBRText;
 import net.swedz.little_big_redstone.LBRTooltips;
+import net.swedz.little_big_redstone.api.IntRange;
 import net.swedz.little_big_redstone.microchip.logic.config.LogicConfig;
 import net.swedz.little_big_redstone.microchip.logic.config.LogicConfigMenuBuilder;
 
@@ -43,6 +44,35 @@ public final class LogicSequencerConfig extends LogicConfig<LogicSequencerConfig
 		this.outputDelay = outputDelay;
 		this.outputDuration = outputDuration;
 		this.requiresContinuousPower = requiresContinuousPower;
+	}
+	
+	public LogicSequencerConfig()
+	{
+		this(20, 0, false);
+	}
+	
+	@Override
+	public IntRange inputsAllowed()
+	{
+		return new IntRange(1, 1);
+	}
+	
+	@Override
+	public int inputs()
+	{
+		return 1;
+	}
+	
+	@Override
+	public IntRange outputsAllowed()
+	{
+		return new IntRange(1, 1);
+	}
+	
+	@Override
+	public int outputs()
+	{
+		return 1;
 	}
 	
 	@Override

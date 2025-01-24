@@ -10,7 +10,7 @@ import net.swedz.tesseract.neoforge.api.Assert;
 
 import java.util.List;
 
-public abstract class LogicComponent<L extends LogicComponent<L, C>, C extends LogicConfig>
+public abstract class LogicComponent<L extends LogicComponent<L, C>, C extends LogicConfig> implements LogicPortHolder
 {
 	public static final Codec<LogicComponent> CODEC = LogicTypes.CODEC;
 	
@@ -23,9 +23,40 @@ public abstract class LogicComponent<L extends LogicComponent<L, C>, C extends L
 		this.config = config;
 	}
 	
+	protected LogicComponent()
+	{
+		this.config = this.defaultConfig();
+	}
+	
 	public C config()
 	{
 		return config;
+	}
+	
+	protected abstract C defaultConfig();
+	
+	@Override
+	public final IntRange inputsAllowed()
+	{
+		return config.inputsAllowed();
+	}
+	
+	@Override
+	public final int inputs()
+	{
+		return config.inputs();
+	}
+	
+	@Override
+	public final IntRange outputsAllowed()
+	{
+		return config.outputsAllowed();
+	}
+	
+	@Override
+	public final int outputs()
+	{
+		return config.outputs();
 	}
 	
 	protected abstract void processTickInternal(LogicContext context, boolean[] inputs);
@@ -38,14 +69,6 @@ public abstract class LogicComponent<L extends LogicComponent<L, C>, C extends L
 	}
 	
 	public abstract LogicType<L> type();
-	
-	public abstract IntRange inputsAllowed();
-	
-	public abstract int inputs();
-	
-	public abstract IntRange outputsAllowed();
-	
-	public abstract int outputs();
 	
 	public abstract boolean output(int index);
 	

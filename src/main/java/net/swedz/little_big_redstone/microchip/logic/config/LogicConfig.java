@@ -1,10 +1,11 @@
 package net.swedz.little_big_redstone.microchip.logic.config;
 
 import net.minecraft.network.chat.Component;
+import net.swedz.little_big_redstone.microchip.logic.LogicPortHolder;
 
 import java.util.List;
 
-public abstract class LogicConfig<C extends LogicConfig<C>>
+public abstract class LogicConfig<C extends LogicConfig<C>> implements LogicPortHolder
 {
 	public abstract void appendHoverText(List<Component> lines);
 	

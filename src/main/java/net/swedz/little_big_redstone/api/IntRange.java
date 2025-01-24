@@ -1,5 +1,6 @@
 package net.swedz.little_big_redstone.api;
 
+import net.minecraft.util.Mth;
 import net.swedz.tesseract.neoforge.api.Assert;
 
 public record IntRange(int min, int max)
@@ -17,5 +18,10 @@ public record IntRange(int min, int max)
 	public boolean contains(int value)
 	{
 		return value >= min && value <= max;
+	}
+	
+	public int clamp(int value)
+	{
+		return Mth.clamp(value, min, max);
 	}
 }
