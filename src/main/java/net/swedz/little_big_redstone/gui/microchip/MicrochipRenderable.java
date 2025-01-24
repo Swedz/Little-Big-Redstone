@@ -1,5 +1,6 @@
 package net.swedz.little_big_redstone.gui.microchip;
 
+import com.google.common.collect.Lists;
 import com.mojang.blaze3d.platform.InputConstants;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
@@ -248,11 +249,10 @@ public final class MicrochipRenderable implements GuiEventListener, Renderable, 
 				if(hovered != null)
 				{
 					var component = hovered.component();
-					component.type().tooltip(component, true, false).ifPresent((Consumer<List<Component>>) (lines) ->
-					{
-						lines.addFirst(component.type().displayName().withStyle(Style.EMPTY.withUnderlined(true)));
-						graphics.renderComponentTooltip(Minecraft.getInstance().font, lines, mouseX, mouseY);
-					});
+					List<Component> lines = Lists.newArrayList();
+					lines.add(component.type().displayName().withStyle(Style.EMPTY.withUnderlined(true)));
+					component.type().tooltip(component, true, false).ifPresent((Consumer<List<Component>>) lines::addAll);
+					graphics.renderComponentTooltip(Minecraft.getInstance().font, lines, mouseX, mouseY);
 				}
 			}
 		}
