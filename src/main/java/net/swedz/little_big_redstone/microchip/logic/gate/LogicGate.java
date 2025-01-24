@@ -94,7 +94,7 @@ public abstract class LogicGate<G extends LogicGate<G, C>, C extends LogicConfig
 	public LogicGridSize size()
 	{
 		int inputs = this.inputs();
-		return new LogicGridSize(1, inputs >= 2 ? inputs / 2 : 1);
+		return new LogicGridSize(1, Math.max(1, inputs / 2));
 	}
 	
 	@Override
