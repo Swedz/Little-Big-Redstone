@@ -149,6 +149,18 @@ public final class RedstoneAwareness extends MicrochipAwareness<RedstoneAwarenes
 		
 		var newState = state;
 		
+		if(microchipDirty)
+		{
+			for(var direction : Direction.values())
+			{
+				if(inputSides.contains(direction) && !outputSides.contains(direction) &&
+				   level.getSignal(pos.relative(direction), direction) > 0)
+				{
+					inputPower.add(direction);
+				}
+			}
+		}
+		
 		for(var direction : Direction.values())
 		{
 			newState = newState.setValue(MicrochipBlock.getDirectionalState(direction), inputPower.contains(direction) || outputPower.contains(direction));
