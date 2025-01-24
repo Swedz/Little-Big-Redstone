@@ -88,7 +88,7 @@ public final class LogicSequencerConfig extends LogicConfig<LogicSequencerConfig
 	{
 		builder.addSlider(LBRText.LOGIC_CONFIG_BUTTON_LABEL_SEQUENCER_DELAY.text(), Component.empty(), LBRText.LOGIC_CONFIG_BUTTON_TOOLTIP_SEQUENCER_DELAY.text(), 0, 0, 160, 18, 1, 60 * 20, outputDelay, 1, 0, true, (value) -> outputDelay = value.intValue());
 		
-		builder.addSlider(LBRText.LOGIC_CONFIG_BUTTON_LABEL_SEQUENCER_DELAY.text(), Component.empty(), LBRText.LOGIC_CONFIG_BUTTON_TOOLTIP_SEQUENCER_DURATION.text(), 0, 23, 160, 18, 0, 60 * 20, outputDuration, 1, 0, true, (value) -> outputDuration = value.intValue());
+		builder.addSlider(LBRText.LOGIC_CONFIG_BUTTON_LABEL_SEQUENCER_DURATION.text(), Component.empty(), LBRText.LOGIC_CONFIG_BUTTON_TOOLTIP_SEQUENCER_DURATION.text(), 0, 23, 160, 18, 0, 60 * 20, outputDuration, 1, 0, true, (value) -> outputDuration = value.intValue());
 		
 		builder.addCheckbox(LBRText.LOGIC_CONFIG_BUTTON_LABEL_SEQUENCER_CONTINUOUS.text().withColor(0x3E3E3E), LBRText.LOGIC_CONFIG_BUTTON_TOOLTIP_SEQUENCER_CONTINUOUS.text(), 0, 46, requiresContinuousPower, (value) -> requiresContinuousPower = value);
 	}
