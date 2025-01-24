@@ -8,6 +8,7 @@ import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.swedz.little_big_redstone.microchip.logic.LogicComponent;
 import net.swedz.little_big_redstone.microchip.logic.LogicContext;
+import net.swedz.little_big_redstone.microchip.logic.LogicGridSize;
 import net.swedz.little_big_redstone.microchip.logic.config.LogicConfig;
 
 import java.util.function.BiFunction;
@@ -87,6 +88,13 @@ public abstract class LogicGate<G extends LogicGate<G, C>, C extends LogicConfig
 	public final boolean output()
 	{
 		return outputState;
+	}
+	
+	@Override
+	public LogicGridSize size()
+	{
+		int inputs = this.inputs();
+		return new LogicGridSize(1, inputs >= 2 ? inputs / 2 : 1);
 	}
 	
 	@Override
