@@ -129,7 +129,7 @@ public final class LogicReader extends LogicComponent<LogicReader, LogicReaderCo
 			}
 		}
 		
-		outputState = config.powerRange.contains(fill);
+		outputState = fill >= config.fillThreshold;
 		if(outputState != originalOutputState)
 		{
 			context.markDirty(this);
