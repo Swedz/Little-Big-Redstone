@@ -14,11 +14,13 @@ import net.neoforged.neoforge.client.gui.widget.ExtendedSlider;
 import net.swedz.little_big_redstone.LBR;
 import net.swedz.little_big_redstone.LBRText;
 import net.swedz.little_big_redstone.microchip.LogicEntry;
+import net.swedz.little_big_redstone.microchip.logic.config.LogicConfigButtonReference;
 import net.swedz.little_big_redstone.microchip.logic.config.LogicConfigMenuBuilder;
 import net.swedz.little_big_redstone.network.packet.RequestMicrochipMenuPacket;
 import net.swedz.little_big_redstone.network.packet.WriteLogicConfigPacket;
 
 import java.util.List;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
@@ -42,7 +44,7 @@ public final class LogicConfigScreen extends AbstractContainerScreen<LogicConfig
 	}
 	
 	@Override
-	public <T> void addCycleButton(Component name, Component tooltip, int x, int y, int width, int height, boolean displayOnlyValue, T initialValue, List<T> values, Function<T, Component> valueStringifier, Consumer<T> onChange)
+	public <T> LogicConfigButtonReference addCycleButton(Component name, Component tooltip, int x, int y, int width, int height, boolean displayOnlyValue, T initialValue, List<T> values, Function<T, Component> valueStringifier, Consumer<T> onChange)
 	{
 		var builder = CycleButton.builder(valueStringifier)
 				.withTooltip((__) -> Tooltip.create(tooltip))
@@ -52,11 +54,26 @@ public final class LogicConfigScreen extends AbstractContainerScreen<LogicConfig
 		{
 			builder.displayOnlyValue();
 		}
-		this.addRenderableWidget(builder.create(configX + x, configY + y, width, height, name, (button, value) -> onChange.accept(value)));
+		var button = builder.create(configX + x, configY + y, width, height, name, (__, value) -> onChange.accept(value));
+		this.addRenderableWidget(button);
+		return new LogicConfigButtonReference()
+		{
+			@Override
+			public void setText(Component text)
+			{
+				button.setMessage(text);
+			}
+			
+			@Override
+			public void setTooltip(Component tooltip)
+			{
+				button.setTooltip(Tooltip.create(tooltip));
+			}
+		};
 	}
 	
 	@Override
-	public void addSlider(Component prefix, Component suffix, Component tooltip, int x, int y, int width, int height, double minValue, double maxValue, double currentValue, double stepSize, int precision, boolean drawString, Consumer<Double> onChange)
+	public LogicConfigButtonReference addSlider(Component prefix, Component suffix, Component tooltip, int x, int y, int width, int height, double minValue, double maxValue, double currentValue, double stepSize, int precision, boolean drawString, Consumer<Double> onChange)
 	{
 		var widget = new ExtendedSlider(configX + x, configY + y, width, height, prefix, suffix, minValue, maxValue, currentValue, stepSize, precision, drawString)
 		{
@@ -69,19 +86,50 @@ public final class LogicConfigScreen extends AbstractContainerScreen<LogicConfig
 		};
 		widget.setTooltip(Tooltip.create(tooltip));
 		this.addRenderableWidget(widget);
+		return new LogicConfigButtonReference()
+		{
+			
+			@Override
+			public void setText(Component text)
+			{
+				widget.setMessage(text);
+			}
+			
+			@Override
+			public void setTooltip(Component tooltip)
+			{
+				widget.setTooltip(Tooltip.create(tooltip));
+			}
+		};
 	}
 	
 	@Override
-	public void addCheckbox(Component text, Component tooltip, int x, int y, boolean initialValue, Consumer<Boolean> onChange)
+	public LogicConfigButtonReference addCheckbox(Component text, Component tooltip, int x, int y, boolean initialValue, Consumer<Boolean> onChange)
 	{
-		this.addRenderableWidget(Checkbox.builder(Component.empty(), Minecraft.getInstance().font)
+		AtomicReference<Component> textReference = new AtomicReference<>(text);
+		var button = Checkbox.builder(Component.empty(), Minecraft.getInstance().font)
 				.tooltip(Tooltip.create(tooltip))
 				.pos(configX + x, configY + y)
 				.selected(initialValue)
-				.onValueChange((button, value) -> onChange.accept(value))
-				.build());
+				.onValueChange((__, value) -> onChange.accept(value))
+				.build();
+		this.addRenderableWidget(button);
 		this.addRenderableOnly((graphics, mouseX, mouseY, partialTicks) ->
-				graphics.drawString(Minecraft.getInstance().font, text, configX + x + 21, configY + y + 8 - 3, 0xFFFFFF, false));
+				graphics.drawString(Minecraft.getInstance().font, textReference.get(), configX + x + 21, configY + y + 8 - 3, 0xFFFFFF, false));
+		return new LogicConfigButtonReference()
+		{
+			@Override
+			public void setText(Component text)
+			{
+				textReference.set(text);
+			}
+			
+			@Override
+			public void setTooltip(Component tooltip)
+			{
+				button.setTooltip(Tooltip.create(tooltip));
+			}
+		};
 	}
 	
 	private void save()
