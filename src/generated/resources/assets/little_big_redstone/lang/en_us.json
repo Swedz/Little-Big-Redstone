@@ -9,6 +9,7 @@
   "item.little_big_redstone.reader": "Reader",
   "item.little_big_redstone.redstone_bit": "Redstone Bit",
   "item.little_big_redstone.sequencer": "Sequencer",
+  "item.little_big_redstone.toggle_gate": "Toggle Gate",
   "item.little_big_redstone.xor_gate": "XOR Gate",
   "itemGroup.little_big_redstone.little_big_redstone": "Little Big Redstone",
   "text.little_big_redstone.capability_energy": "Energy",

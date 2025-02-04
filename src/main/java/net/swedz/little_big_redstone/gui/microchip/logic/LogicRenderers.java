@@ -13,6 +13,7 @@ import net.swedz.little_big_redstone.gui.microchip.logic.renderer.IORenderer;
 import net.swedz.little_big_redstone.gui.microchip.logic.renderer.LogicGateRenderer;
 import net.swedz.little_big_redstone.gui.microchip.logic.renderer.ReaderRenderer;
 import net.swedz.little_big_redstone.gui.microchip.logic.renderer.SequencerRenderer;
+import net.swedz.little_big_redstone.gui.microchip.logic.renderer.ToggleGateRenderer;
 import net.swedz.little_big_redstone.microchip.logic.LogicComponent;
 import net.swedz.little_big_redstone.microchip.logic.LogicType;
 import net.swedz.little_big_redstone.microchip.logic.LogicTypes;
@@ -40,6 +41,8 @@ public final class LogicRenderers
 		register(LogicTypes.READER, ReaderRenderer::new);
 		
 		register(LogicTypes.SEQUENCER, SequencerRenderer::new);
+		
+		register(LogicTypes.TOGGLE, ToggleGateRenderer::new);
 	}
 	
 	private static <L extends LogicComponent> void register(LogicType<L> type, LogicRendererProvider<L> provider)
