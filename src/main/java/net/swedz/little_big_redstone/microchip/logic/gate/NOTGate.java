@@ -11,7 +11,6 @@ import net.swedz.little_big_redstone.microchip.logic.LogicTypes;
 import net.swedz.little_big_redstone.microchip.logic.gate.config.SingleLogicGateConfig;
 
 import java.util.List;
-import java.util.Objects;
 
 import static net.swedz.little_big_redstone.LBRTextLine.*;
 
@@ -64,7 +63,7 @@ public final class NOTGate extends LogicGate<NOTGate, SingleLogicGateConfig>
 	@Override
 	public int hashCode()
 	{
-		return Objects.hash(this.type());
+		return this.type().hashCode();
 	}
 	
 	@Override

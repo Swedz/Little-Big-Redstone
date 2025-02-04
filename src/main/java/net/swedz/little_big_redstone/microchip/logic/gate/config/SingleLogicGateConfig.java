@@ -69,6 +69,6 @@ public final class SingleLogicGateConfig extends LogicConfig<SingleLogicGateConf
 	@Override
 	public boolean equals(Object o)
 	{
-		return o instanceof SingleLogicGateConfig other;
+		return o instanceof SingleLogicGateConfig;
 	}
 }
