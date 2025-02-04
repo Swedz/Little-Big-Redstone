@@ -55,6 +55,11 @@ public final class ToggleGateConfig extends LogicConfig<ToggleGateConfig>
 	}
 	
 	@Override
+	public void resetForPickup()
+	{
+	}
+	
+	@Override
 	public ToggleGateConfig copy()
 	{
 		return this;

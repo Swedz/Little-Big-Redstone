@@ -109,6 +109,11 @@ public final class LogicReaderConfig extends LogicConfig<LogicReaderConfig>
 	}
 	
 	@Override
+	public void resetForPickup()
+	{
+	}
+	
+	@Override
 	public LogicReaderConfig copy()
 	{
 		return new LogicReaderConfig(mode, direction, fillThreshold);

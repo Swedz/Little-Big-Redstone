@@ -39,6 +39,7 @@ public final class Microchip
 	{
 		this.size = size;
 		this.components = components.with(this);
+		this.components.updateValidity();
 		this.wires = wires.with(this);
 		this.components.rebuildTraversal();
 		this.awarenesses = new MicrochipAwarenesses();
@@ -50,6 +51,7 @@ public final class Microchip
 	{
 		this.size = size;
 		this.components = new LogicComponents(this);
+		this.components.updateValidity();
 		this.wires = new MicrochipWires(this);
 		this.components.rebuildTraversal();
 		this.awarenesses = new MicrochipAwarenesses();

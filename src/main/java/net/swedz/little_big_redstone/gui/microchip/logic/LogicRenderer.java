@@ -94,6 +94,11 @@ public abstract class LogicRenderer<L extends LogicComponent>
 		this.renderGridBlock(graphics, BACKGROUND_CIRCLE_OVERLAY, x, y, size, 1, 1, 1);
 	}
 	
+	protected void renderInvalidOverlay(GuiGraphics graphics, int x, int y, LogicGridSize size)
+	{
+		graphics.blit(LBR.id("textures/logic/misconfigured.png"), x + size.widthPixels() - 7 + 1, y - 1, 0, 0, 7, 7, 7, 7);
+	}
+	
 	public record Context(boolean isCarried, boolean hasSelectedPort, boolean isCarryingWire)
 	{
 	}

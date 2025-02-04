@@ -107,7 +107,7 @@ public final class LogicIO extends LogicComponent<LogicIO, LogicIOConfig> implem
 	}
 	
 	@Override
-	public void resetForPickup()
+	public void internalResetForPickup()
 	{
 		outputState = false;
 	}

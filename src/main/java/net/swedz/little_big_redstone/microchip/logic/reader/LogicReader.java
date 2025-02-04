@@ -160,7 +160,7 @@ public final class LogicReader extends LogicComponent<LogicReader, LogicReaderCo
 	}
 	
 	@Override
-	public void resetForPickup()
+	public void internalResetForPickup()
 	{
 		outputState = false;
 	}

@@ -87,7 +87,7 @@ public final class ToggleGate extends LogicComponent<ToggleGate, ToggleGateConfi
 	}
 	
 	@Override
-	public void resetForPickup()
+	public void internalResetForPickup()
 	{
 		outputState = false;
 	}

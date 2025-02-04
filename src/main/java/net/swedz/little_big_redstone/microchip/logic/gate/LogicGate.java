@@ -104,7 +104,7 @@ public abstract class LogicGate<G extends LogicGate<G, C>, C extends LogicConfig
 	}
 	
 	@Override
-	public void resetForPickup()
+	public void internalResetForPickup()
 	{
 		outputState = false;
 	}

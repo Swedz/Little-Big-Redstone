@@ -65,7 +65,10 @@ public abstract class LogicComponent<L extends LogicComponent<L, C>, C extends L
 	{
 		int expectedInputs = this.inputs();
 		Assert.that(expectedInputs == inputs.length, "Mismatching logic component input sizes: expected %d but got %d".formatted(expectedInputs, inputs.length));
-		this.processTickInternal(context, inputs);
+		if(config.isValid())
+		{
+			this.processTickInternal(context, inputs);
+		}
 	}
 	
 	public abstract LogicType<L> type();
@@ -93,7 +96,13 @@ public abstract class LogicComponent<L extends LogicComponent<L, C>, C extends L
 		this.internalLoadFrom(other);
 	}
 	
-	public abstract void resetForPickup();
+	protected abstract void internalResetForPickup();
+	
+	public final void resetForPickup()
+	{
+		config.resetForPickup();
+		this.internalResetForPickup();
+	}
 	
 	public abstract L copy();
 	

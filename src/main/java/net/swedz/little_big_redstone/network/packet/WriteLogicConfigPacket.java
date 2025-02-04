@@ -38,6 +38,7 @@ public record WriteLogicConfigPacket(BlockPos pos, int slot, LogicComponent comp
 			if(targetComponent != null && targetComponent.component().type().equals(component.type()))
 			{
 				targetComponent.component().config().loadFrom(component.config());
+				microchip.components().updateValidity();
 				int wiresPopped = microchip.wires().cleanup(targetComponent);
 				if(wiresPopped > 0)
 				{

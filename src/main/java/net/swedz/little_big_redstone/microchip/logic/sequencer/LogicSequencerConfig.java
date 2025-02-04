@@ -102,6 +102,11 @@ public final class LogicSequencerConfig extends LogicConfig<LogicSequencerConfig
 	}
 	
 	@Override
+	public void resetForPickup()
+	{
+	}
+	
+	@Override
 	public LogicSequencerConfig copy()
 	{
 		return new LogicSequencerConfig(outputDelay, outputDuration, requiresContinuousPower);

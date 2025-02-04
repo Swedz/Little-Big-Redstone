@@ -11,6 +11,7 @@ import net.minecraft.network.codec.StreamCodec;
 import net.swedz.little_big_redstone.LBRText;
 import net.swedz.little_big_redstone.LBRTooltips;
 import net.swedz.little_big_redstone.api.IntRange;
+import net.swedz.little_big_redstone.microchip.logic.LogicComponents;
 import net.swedz.little_big_redstone.microchip.logic.config.LogicConfig;
 import net.swedz.little_big_redstone.microchip.logic.config.LogicConfigMenuBuilder;
 
@@ -27,9 +28,10 @@ public final class LogicIOConfig extends LogicConfig<LogicIOConfig>
 					Codec.BOOL.fieldOf("input").forGetter((config) -> config.input),
 					Direction.CODEC.fieldOf("direction").forGetter((config) -> config.direction)
 			)
-			.apply(instance, LogicIOConfig::new));
+			.apply(instance, (input, direction) -> new LogicIOConfig(true, input, direction)));
 	
 	public static final StreamCodec<ByteBuf, LogicIOConfig> STREAM_CODEC = StreamCodec.composite(
+			ByteBufCodecs.BOOL, (config) -> config.valid,
 			ByteBufCodecs.BOOL, (config) -> config.input,
 			Direction.STREAM_CODEC, (config) -> config.direction,
 			LogicIOConfig::new
@@ -39,15 +41,30 @@ public final class LogicIOConfig extends LogicConfig<LogicIOConfig>
 	
 	public Direction direction;
 	
-	public LogicIOConfig(boolean input, Direction direction)
+	public LogicIOConfig(boolean valid, boolean input, Direction direction)
 	{
+		this.valid = valid;
 		this.input = input;
 		this.direction = direction;
 	}
 	
 	public LogicIOConfig()
 	{
-		this(true, Direction.NORTH);
+		this(true, true, Direction.NORTH);
+	}
+	
+	@Override
+	protected boolean calculateValidity(LogicComponents components)
+	{
+		for(var entry : components)
+		{
+			if(entry.component().config() != this && entry.component().config() instanceof LogicIOConfig entryConfig &&
+			   input != entryConfig.input && direction == entryConfig.direction)
+			{
+				return false;
+			}
+		}
+		return true;
 	}
 	
 	@Override
@@ -97,9 +114,15 @@ public final class LogicIOConfig extends LogicConfig<LogicIOConfig>
 	}
 	
 	@Override
+	public void resetForPickup()
+	{
+		valid = true;
+	}
+	
+	@Override
 	public LogicIOConfig copy()
 	{
-		return new LogicIOConfig(input, direction);
+		return new LogicIOConfig(valid, input, direction);
 	}
 	
 	@Override

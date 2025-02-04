@@ -21,5 +21,10 @@ public final class IORenderer extends LogicRenderer<LogicIO>
 		this.renderBackgroundCircle(graphics, x, y, 1, 1, 1);
 		
 		graphics.blit(LBR.id("textures/logic/%s.png".formatted(component.config().input ? "io_input" : "io_output")), x, y, 0, 0, 16, 16, 16, 16);
+		
+		if(!component.config().isValid())
+		{
+			this.renderInvalidOverlay(graphics, x, y, component.size());
+		}
 	}
 }

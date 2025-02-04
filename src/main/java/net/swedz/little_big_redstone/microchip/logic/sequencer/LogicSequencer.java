@@ -142,7 +142,7 @@ public final class LogicSequencer extends LogicComponent<LogicSequencer, LogicSe
 	}
 	
 	@Override
-	public void resetForPickup()
+	public void internalResetForPickup()
 	{
 		processedTicks = 0;
 		outputState = false;

@@ -17,7 +17,6 @@ import java.util.List;
 import java.util.Optional;
 
 import static net.swedz.little_big_redstone.LBRTextLine.*;
-import static net.swedz.little_big_redstone.LBRTooltips.*;
 
 public record LogicType<L extends LogicComponent>(
 		String id, String englishName,

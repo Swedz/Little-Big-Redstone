@@ -84,6 +84,11 @@ public final class MultiLogicGateConfig extends LogicConfig<MultiLogicGateConfig
 	}
 	
 	@Override
+	public void resetForPickup()
+	{
+	}
+	
+	@Override
 	public MultiLogicGateConfig copy()
 	{
 		return new MultiLogicGateConfig(inputs);

@@ -178,6 +178,14 @@ public final class LogicComponents implements Iterable<LogicEntry>
 		traversalOrder = LogicTraversal.buildOrder(microchip);
 	}
 	
+	public void updateValidity()
+	{
+		for(var entry : components.values())
+		{
+			entry.component().config().recalculateValidity(this);
+		}
+	}
+	
 	public LogicComponents with(Microchip microchip)
 	{
 		var components = new LogicComponents(microchip);

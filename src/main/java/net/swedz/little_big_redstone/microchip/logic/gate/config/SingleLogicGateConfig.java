@@ -55,6 +55,11 @@ public final class SingleLogicGateConfig extends LogicConfig<SingleLogicGateConf
 	}
 	
 	@Override
+	public void resetForPickup()
+	{
+	}
+	
+	@Override
 	public SingleLogicGateConfig copy()
 	{
 		return this;
