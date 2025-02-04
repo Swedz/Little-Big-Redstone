@@ -4,17 +4,17 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.swedz.little_big_redstone.LBR;
 import net.swedz.little_big_redstone.gui.microchip.logic.LogicRenderer;
 import net.swedz.little_big_redstone.gui.microchip.logic.LogicRendererProvider;
-import net.swedz.little_big_redstone.microchip.logic.toggle.ToggleGate;
+import net.swedz.little_big_redstone.microchip.logic.latch.tflipflop.TFlipFlop;
 
-public final class ToggleGateRenderer extends LogicRenderer<ToggleGate>
+public final class TFlipFlopRenderer extends LogicRenderer<TFlipFlop>
 {
-	public ToggleGateRenderer(LogicRendererProvider.Context context)
+	public TFlipFlopRenderer(LogicRendererProvider.Context context)
 	{
 		super(context);
 	}
 	
 	@Override
-	public void render(Context context, GuiGraphics graphics, ToggleGate component, int x, int y)
+	public void render(Context context, GuiGraphics graphics, TFlipFlop component, int x, int y)
 	{
 		var size = component.size();
 		
@@ -24,6 +24,6 @@ public final class ToggleGateRenderer extends LogicRenderer<ToggleGate>
 		
 		int centerX = x + size.centerX() - 8;
 		int centerY = y + size.centerY() - 8;
-		graphics.blit(LBR.id("textures/logic/toggle_gate_%s.png".formatted(component.output() ? "on" : "off")), centerX, centerY, 0, 0, 16, 16, 16, 16);
+		graphics.blit(LBR.id("textures/logic/t_flip_flop_%s.png".formatted(component.output() ? "on" : "off")), centerX, centerY, 0, 0, 16, 16, 16, 16);
 	}
 }

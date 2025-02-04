@@ -1,4 +1,4 @@
-package net.swedz.little_big_redstone.microchip.logic.toggle;
+package net.swedz.little_big_redstone.microchip.logic.latch.tflipflop;
 
 import net.minecraft.network.chat.Component;
 import net.swedz.little_big_redstone.api.IntRange;
@@ -7,11 +7,11 @@ import net.swedz.little_big_redstone.microchip.logic.config.LogicConfigMenuBuild
 
 import java.util.List;
 
-public final class ToggleGateConfig extends LogicConfig<ToggleGateConfig>
+public final class TFlipFlopConfig extends LogicConfig<TFlipFlopConfig>
 {
-	public static final ToggleGateConfig INSTANCE = new ToggleGateConfig();
+	public static final TFlipFlopConfig INSTANCE = new TFlipFlopConfig();
 	
-	private ToggleGateConfig()
+	private TFlipFlopConfig()
 	{
 	}
 	
@@ -50,7 +50,7 @@ public final class ToggleGateConfig extends LogicConfig<ToggleGateConfig>
 	}
 	
 	@Override
-	public void loadFrom(ToggleGateConfig other)
+	public void loadFrom(TFlipFlopConfig other)
 	{
 	}
 	
@@ -60,7 +60,7 @@ public final class ToggleGateConfig extends LogicConfig<ToggleGateConfig>
 	}
 	
 	@Override
-	public ToggleGateConfig copy()
+	public TFlipFlopConfig copy()
 	{
 		return this;
 	}
@@ -74,6 +74,6 @@ public final class ToggleGateConfig extends LogicConfig<ToggleGateConfig>
 	@Override
 	public boolean equals(Object o)
 	{
-		return o instanceof ToggleGateConfig;
+		return o instanceof TFlipFlopConfig;
 	}
 }

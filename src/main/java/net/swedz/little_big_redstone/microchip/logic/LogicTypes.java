@@ -18,7 +18,7 @@ import net.swedz.little_big_redstone.microchip.logic.gate.XORGate;
 import net.swedz.little_big_redstone.microchip.logic.io.LogicIO;
 import net.swedz.little_big_redstone.microchip.logic.reader.LogicReader;
 import net.swedz.little_big_redstone.microchip.logic.sequencer.LogicSequencer;
-import net.swedz.little_big_redstone.microchip.logic.toggle.ToggleGate;
+import net.swedz.little_big_redstone.microchip.logic.latch.tflipflop.TFlipFlop;
 
 import java.util.Collections;
 import java.util.List;
@@ -50,7 +50,7 @@ public final class LogicTypes
 	
 	public static final LogicType<LogicSequencer> SEQUENCER = register("sequencer", "Sequencer", LogicSequencer.CODEC, LogicSequencer.STREAM_CODEC, LogicSequencer::new);
 	
-	public static final LogicType<ToggleGate> TOGGLE = register("toggle_gate", "Toggle Gate", ToggleGate.CODEC, ToggleGate.STREAM_CODEC, ToggleGate::new);
+	public static final LogicType<TFlipFlop> T_FLIP_FLOP = register("t_flip_flop", "T Flip-Flop", TFlipFlop.CODEC, TFlipFlop.STREAM_CODEC, TFlipFlop::new);
 	
 	public static List<LogicType<?>> values()
 	{

@@ -1,4 +1,4 @@
-package net.swedz.little_big_redstone.microchip.logic.toggle;
+package net.swedz.little_big_redstone.microchip.logic.latch.tflipflop;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
@@ -11,44 +11,44 @@ import net.swedz.little_big_redstone.microchip.logic.LogicContext;
 import net.swedz.little_big_redstone.microchip.logic.LogicType;
 import net.swedz.little_big_redstone.microchip.logic.LogicTypes;
 
-public final class ToggleGate extends LogicComponent<ToggleGate, ToggleGateConfig>
+public final class TFlipFlop extends LogicComponent<TFlipFlop, TFlipFlopConfig>
 {
-	public static final MapCodec<ToggleGate> CODEC = RecordCodecBuilder.mapCodec((instance) -> instance
+	public static final MapCodec<TFlipFlop> CODEC = RecordCodecBuilder.mapCodec((instance) -> instance
 			.group(
-					Codec.BOOL.fieldOf("last_input").forGetter(ToggleGate::lastInput),
-					Codec.BOOL.fieldOf("output").forGetter(ToggleGate::output)
+					Codec.BOOL.fieldOf("last_input").forGetter(TFlipFlop::lastInput),
+					Codec.BOOL.fieldOf("output").forGetter(TFlipFlop::output)
 			)
-			.apply(instance, ToggleGate::new));
+			.apply(instance, TFlipFlop::new));
 	
-	public static final StreamCodec<ByteBuf, ToggleGate> STREAM_CODEC = StreamCodec.composite(
-			ByteBufCodecs.BOOL, ToggleGate::lastInput,
-			ByteBufCodecs.BOOL, ToggleGate::output,
-			ToggleGate::new
+	public static final StreamCodec<ByteBuf, TFlipFlop> STREAM_CODEC = StreamCodec.composite(
+			ByteBufCodecs.BOOL, TFlipFlop::lastInput,
+			ByteBufCodecs.BOOL, TFlipFlop::output,
+			TFlipFlop::new
 	);
 	
 	private boolean lastInputState, outputState;
 	
-	private ToggleGate(boolean lastInputState, boolean outputState)
+	private TFlipFlop(boolean lastInputState, boolean outputState)
 	{
 		this.lastInputState = lastInputState;
 		this.outputState = outputState;
 	}
 	
-	public ToggleGate()
+	public TFlipFlop()
 	{
 		this(false, false);
 	}
 	
 	@Override
-	protected ToggleGateConfig defaultConfig()
+	protected TFlipFlopConfig defaultConfig()
 	{
-		return ToggleGateConfig.INSTANCE;
+		return TFlipFlopConfig.INSTANCE;
 	}
 	
 	@Override
-	public LogicType<ToggleGate> type()
+	public LogicType<TFlipFlop> type()
 	{
-		return LogicTypes.TOGGLE;
+		return LogicTypes.T_FLIP_FLOP;
 	}
 	
 	@Override
@@ -81,7 +81,7 @@ public final class ToggleGate extends LogicComponent<ToggleGate, ToggleGateConfi
 	}
 	
 	@Override
-	protected void internalLoadFrom(ToggleGate other)
+	protected void internalLoadFrom(TFlipFlop other)
 	{
 		outputState = other.output();
 	}
@@ -93,9 +93,9 @@ public final class ToggleGate extends LogicComponent<ToggleGate, ToggleGateConfi
 	}
 	
 	@Override
-	public ToggleGate copy()
+	public TFlipFlop copy()
 	{
-		return new ToggleGate(lastInputState, outputState);
+		return new TFlipFlop(lastInputState, outputState);
 	}
 	
 	@Override
@@ -107,6 +107,6 @@ public final class ToggleGate extends LogicComponent<ToggleGate, ToggleGateConfi
 	@Override
 	public boolean equals(Object o)
 	{
-		return o instanceof ToggleGate;
+		return o instanceof TFlipFlop;
 	}
 }

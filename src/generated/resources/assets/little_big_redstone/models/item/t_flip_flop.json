@@ -1,6 +1,6 @@
 {
   "parent": "minecraft:item/generated",
   "textures": {
-    "layer0": "little_big_redstone:item/toggle_gate"
+    "layer0": "little_big_redstone:item/t_flip_flop"
   }
 }
