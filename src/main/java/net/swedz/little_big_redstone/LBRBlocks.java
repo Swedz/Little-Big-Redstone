@@ -6,22 +6,29 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.world.item.BlockItem;
+import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
+import net.minecraft.world.level.block.state.properties.AttachFace;
 import net.minecraft.world.level.material.MapColor;
+import net.minecraft.world.level.material.PushReaction;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.client.model.generators.BlockStateProvider;
 import net.neoforged.neoforge.client.model.generators.ConfiguredModel;
+import net.neoforged.neoforge.client.model.generators.ModelFile;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import net.swedz.little_big_redstone.block.microchip.MicrochipBlock;
 import net.swedz.little_big_redstone.block.microchip.MicrochipBlockEntity;
+import net.swedz.little_big_redstone.block.stickynote.StickyNoteBlock;
 import net.swedz.tesseract.neoforge.registry.SortOrder;
 import net.swedz.tesseract.neoforge.registry.common.CommonLootTableBuilders;
 import net.swedz.tesseract.neoforge.registry.holder.BlockHolder;
 import net.swedz.tesseract.neoforge.registry.holder.BlockWithItemHolder;
 
+import java.util.List;
 import java.util.Locale;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -55,9 +62,55 @@ public final class LBRBlocks
 		Registry.init(bus);
 	}
 	
-	public static final BlockHolder<MicrochipBlock> MICROCHIP = create("microchip", "Microchip", MicrochipBlock::new, BlockItem::new, LBRSortOrder.BLOCKS).withProperties((p) -> p.mapColor(MapColor.STONE).destroyTime(4f).requiresCorrectToolForDrops()).tag(BlockTags.MINEABLE_WITH_PICKAXE).withLootTable(CommonLootTableBuilders::self).withModel(LBRBlocks::microchipBlockState).register();
+	public static final BlockHolder<MicrochipBlock> MICROCHIP = create("microchip", "Microchip", MicrochipBlock::new, BlockItem::new, LBRSortOrder.MICROCHIP).withProperties((p) -> p.mapColor(MapColor.STONE).destroyTime(4f).requiresCorrectToolForDrops()).tag(BlockTags.MINEABLE_WITH_PICKAXE).withLootTable(CommonLootTableBuilders::self).withModel(LBRBlocks::microchipBlockState).register();
 	
 	public static final Supplier<BlockEntityType<MicrochipBlockEntity>> MICROCHIP_ENTITY = Registry.BLOCK_ENTITIES.register("microchip", () -> BlockEntityType.Builder.of(MicrochipBlockEntity::new, MICROCHIP.get()).build(null));
+	
+	static
+	{
+		List<DyeColor> colors = List.of(
+				DyeColor.WHITE,
+				DyeColor.LIGHT_GRAY,
+				DyeColor.GRAY,
+				DyeColor.BLACK,
+				DyeColor.BROWN,
+				DyeColor.RED,
+				DyeColor.ORANGE,
+				DyeColor.YELLOW,
+				DyeColor.LIME,
+				DyeColor.GREEN,
+				DyeColor.CYAN,
+				DyeColor.LIGHT_BLUE,
+				DyeColor.BLUE,
+				DyeColor.PURPLE,
+				DyeColor.MAGENTA,
+				DyeColor.PINK
+		);
+		List<String> colorNames = List.of(
+				"White",
+				"Light Gray",
+				"Gray",
+				"Black",
+				"Brown",
+				"Red",
+				"Orange",
+				"Yellow",
+				"Lime",
+				"Green",
+				"Cyan",
+				"Light Blue",
+				"Blue",
+				"Purple",
+				"Magenta",
+				"Pink"
+		);
+		for(int i = 0; i < colors.size(); i++)
+		{
+			var color = colors.get(i);
+			var colorName = colorNames.get(i);
+			createStickyNote(color, colorName, i).register();
+		}
+	}
 	
 	public static Set<BlockHolder> values()
 	{
@@ -127,5 +180,50 @@ public final class LBRBlocks
 						.build();
 			});
 		};
+	}
+	
+	private static BlockWithItemHolder<StickyNoteBlock, BlockItem> createStickyNote(DyeColor color, String colorEnglishName, int order)
+	{
+		final String colorId = color.getName();
+		final String id = "%s_sticky_note".formatted(colorId);
+		final String englishName = "%s Sticky Note".formatted(colorEnglishName);
+		
+		BlockWithItemHolder<StickyNoteBlock, BlockItem> block = create(id, englishName, (p) -> new StickyNoteBlock(p, color), BlockItem::new, LBRSortOrder.STICKY_NOTES.and(order));
+		block.withLootTable(CommonLootTableBuilders::self);
+		block.withProperties((p) -> p
+				.mapColor(MapColor.STONE)
+				.sound(SoundType.WOOL)
+				.instabreak()
+				.noCollission()
+				.forceSolidOn()
+				.pushReaction(PushReaction.DESTROY));
+		block.tag(LBRTags.Blocks.STICKY_NOTES);
+		block.withModel((holder) -> (provider) ->
+		{
+			ResourceLocation paperTexture = LBR.id("block/sticky_note_paper_%s".formatted(colorId));
+			ResourceLocation pinTexture = LBR.id("block/sticky_note_pin");
+			ModelFile model = provider.models()
+					.withExistingParent(holder.identifier().id(), "%s:block/sticky_note".formatted(LBR.ID))
+					.renderType(ResourceLocation.withDefaultNamespace("cutout"))
+					.texture("particle", paperTexture)
+					.texture("paper", paperTexture)
+					.texture("pin", pinTexture);
+			provider.getVariantBuilder(holder.get()).forAllStates((state) ->
+			{
+				Direction facing = state.getValue(StickyNoteBlock.FACING);
+				AttachFace face = state.getValue(StickyNoteBlock.FACE);
+				return ConfiguredModel.builder()
+						.modelFile(model)
+						.rotationX(face == AttachFace.FLOOR ? 0 : (face == AttachFace.WALL ? 90 : 180))
+						.rotationY((int) (face == AttachFace.WALL ? facing.getOpposite() : facing).toYRot())
+						.build();
+			});
+		});
+		block.item().tag(LBRTags.Items.STICKY_NOTES);
+		block.item().withModel((holder) -> (provider) ->
+				provider.getBuilder(holder.identifier().id())
+						.parent(new ModelFile.UncheckedModelFile("item/generated"))
+						.texture("layer0", "%s:item/sticky_note_%s".formatted(LBR.ID, colorId)));
+		return block;
 	}
 }

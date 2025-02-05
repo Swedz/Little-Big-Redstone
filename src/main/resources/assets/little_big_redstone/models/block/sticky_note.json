@@ -1,0 +1,33 @@
+{
+	"ambientocclusion": false,
+	"elements": [
+		{
+			"name": "paper",
+			"from": [3, 0.25, 3],
+			"to": [13, 0.25, 13],
+			"rotation": {"angle": 0, "axis": "y", "origin": [3, 3, 3.75]},
+			"faces": {
+				"north": {"uv": [0, 0, 5, 0], "texture": "#paper"},
+				"east": {"uv": [0, 0, 5, 0], "texture": "#paper"},
+				"south": {"uv": [0, 0, 5, 0], "texture": "#paper"},
+				"west": {"uv": [0, 0, 5, 0], "texture": "#paper"},
+				"up": {"uv": [5, 5, 0, 0], "texture": "#paper"},
+				"down": {"uv": [5, 5, 0, 10], "texture": "#paper"}
+			}
+		},
+		{
+			"name": "pin",
+			"from": [7.25, 0, 11.5],
+			"to": [8.25, 0.75, 12.5],
+			"rotation": {"angle": 45, "axis": "y", "origin": [7.25, 0, 11.5]},
+			"faces": {
+				"north": {"uv": [0, 0, 1, 1], "texture": "#pin"},
+				"east": {"uv": [0, 1, 1, 2], "texture": "#pin"},
+				"south": {"uv": [1, 0, 2, 1], "texture": "#pin"},
+				"west": {"uv": [1, 1, 2, 2], "texture": "#pin"},
+				"up": {"uv": [1, 3, 0, 2], "texture": "#pin"},
+				"down": {"uv": [3, 0, 2, 1], "texture": "#pin"}
+			}
+		}
+	]
+}

@@ -1,0 +1,9 @@
+{
+  "parent": "little_big_redstone:block/sticky_note",
+  "render_type": "minecraft:cutout",
+  "textures": {
+    "paper": "little_big_redstone:block/sticky_note_paper_brown",
+    "particle": "little_big_redstone:block/sticky_note_paper_brown",
+    "pin": "little_big_redstone:block/sticky_note_pin"
+  }
+}
