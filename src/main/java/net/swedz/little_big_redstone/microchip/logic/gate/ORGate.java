@@ -68,6 +68,12 @@ public final class ORGate extends LogicGate<ORGate, MultiLogicGateConfig>
 	}
 	
 	@Override
+	public void appendShiftHoverText(List<Component> lines)
+	{
+		lines.add(line(LBRText.LOGIC_HELP_OR_GATE));
+	}
+	
+	@Override
 	public ORGate copy()
 	{
 		return new ORGate(config.copy(), this.output());

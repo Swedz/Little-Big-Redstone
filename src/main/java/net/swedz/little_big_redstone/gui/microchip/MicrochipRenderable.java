@@ -251,7 +251,7 @@ public final class MicrochipRenderable implements GuiEventListener, Renderable, 
 					var component = hovered.component();
 					List<Component> lines = Lists.newArrayList();
 					lines.add(component.type().displayName().withStyle(Style.EMPTY.withUnderlined(true)));
-					component.type().tooltip(component, true, false).ifPresent((Consumer<List<Component>>) lines::addAll);
+					component.type().tooltip(component, false, true, false).ifPresent((Consumer<List<Component>>) lines::addAll);
 					graphics.renderComponentTooltip(Minecraft.getInstance().font, lines, mouseX, mouseY);
 				}
 			}

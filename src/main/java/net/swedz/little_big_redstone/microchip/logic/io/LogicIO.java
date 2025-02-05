@@ -4,8 +4,10 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import io.netty.buffer.ByteBuf;
+import net.minecraft.network.chat.Component;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
+import net.swedz.little_big_redstone.LBRText;
 import net.swedz.little_big_redstone.microchip.awareness.AwarenessType;
 import net.swedz.little_big_redstone.microchip.awareness.AwarenessTypes;
 import net.swedz.little_big_redstone.microchip.awareness.MicrochipAware;
@@ -14,7 +16,10 @@ import net.swedz.little_big_redstone.microchip.logic.LogicContext;
 import net.swedz.little_big_redstone.microchip.logic.LogicType;
 import net.swedz.little_big_redstone.microchip.logic.LogicTypes;
 
+import java.util.List;
 import java.util.Objects;
+
+import static net.swedz.little_big_redstone.LBRTextLine.*;
 
 public final class LogicIO extends LogicComponent<LogicIO, LogicIOConfig> implements MicrochipAware
 {
@@ -98,6 +103,13 @@ public final class LogicIO extends LogicComponent<LogicIO, LogicIOConfig> implem
 	public boolean output()
 	{
 		return outputState;
+	}
+	
+	@Override
+	public void appendShiftHoverText(List<Component> lines)
+	{
+		lines.add(line(LBRText.LOGIC_HELP_IO_PORT_1));
+		lines.add(line(LBRText.LOGIC_HELP_IO_PORT_2));
 	}
 	
 	@Override

@@ -69,6 +69,12 @@ public final class ANDGate extends LogicGate<ANDGate, MultiLogicGateConfig>
 	}
 	
 	@Override
+	public void appendShiftHoverText(List<Component> lines)
+	{
+		lines.add(line(LBRText.LOGIC_HELP_AND_GATE));
+	}
+	
+	@Override
 	public ANDGate copy()
 	{
 		return new ANDGate(config.copy(), this.output());

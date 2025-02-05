@@ -68,6 +68,12 @@ public final class NORGate extends LogicGate<NORGate, MultiLogicGateConfig>
 	}
 	
 	@Override
+	public void appendShiftHoverText(List<Component> lines)
+	{
+		lines.add(line(LBRText.LOGIC_HELP_NOR_GATE));
+	}
+	
+	@Override
 	public NORGate copy()
 	{
 		return new NORGate(config.copy(), this.output());

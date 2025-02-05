@@ -69,6 +69,12 @@ public final class XORGate extends LogicGate<XORGate, MultiLogicGateConfig>
 	}
 	
 	@Override
+	public void appendShiftHoverText(List<Component> lines)
+	{
+		lines.add(line(LBRText.LOGIC_HELP_XOR_GATE));
+	}
+	
+	@Override
 	public XORGate copy()
 	{
 		return new XORGate(config.copy(), this.output());

@@ -55,6 +55,12 @@ public final class NOTGate extends LogicGate<NOTGate, SingleLogicGateConfig>
 	}
 	
 	@Override
+	public void appendShiftHoverText(List<Component> lines)
+	{
+		lines.add(line(LBRText.LOGIC_HELP_NOT_GATE));
+	}
+	
+	@Override
 	public NOTGate copy()
 	{
 		return new NOTGate(this.output());

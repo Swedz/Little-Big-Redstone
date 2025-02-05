@@ -5,13 +5,19 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import io.netty.buffer.ByteBuf;
+import net.minecraft.network.chat.Component;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
+import net.swedz.little_big_redstone.LBRText;
 import net.swedz.little_big_redstone.microchip.logic.LogicComponent;
 import net.swedz.little_big_redstone.microchip.logic.LogicContext;
 import net.swedz.little_big_redstone.microchip.logic.LogicGridSize;
 import net.swedz.little_big_redstone.microchip.logic.LogicType;
 import net.swedz.little_big_redstone.microchip.logic.LogicTypes;
+
+import java.util.List;
+
+import static net.swedz.little_big_redstone.LBRTextLine.*;
 
 public final class LogicSequencer extends LogicComponent<LogicSequencer, LogicSequencerConfig>
 {
@@ -132,6 +138,14 @@ public final class LogicSequencer extends LogicComponent<LogicSequencer, LogicSe
 	public LogicGridSize size()
 	{
 		return new LogicGridSize(2, 1);
+	}
+	
+	@Override
+	public void appendShiftHoverText(List<Component> lines)
+	{
+		lines.add(line(LBRText.LOGIC_HELP_SEQUENCER_1));
+		lines.add(line(LBRText.LOGIC_HELP_SEQUENCER_2));
+		lines.add(line(LBRText.LOGIC_HELP_SEQUENCER_3));
 	}
 	
 	@Override

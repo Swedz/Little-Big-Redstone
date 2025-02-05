@@ -29,25 +29,36 @@ public record LogicType<L extends LogicComponent>(
 		return Component.translatable(LBR.id(id).toLanguageKey("item"));
 	}
 	
-	public Optional<List<Component>> tooltip(L component, boolean extra, boolean configHeader)
+	public Optional<List<Component>> tooltip(L component, boolean shift, boolean config, boolean configHeader)
 	{
 		List<Component> lines = Lists.newArrayList();
 		
-		if(extra)
+		List<Component> noShiftLines = Lists.newArrayList();
+		component.appendNoShiftHoverText(noShiftLines);
+		
+		if(shift)
 		{
+			if(!noShiftLines.isEmpty())
+			{
+				lines.add(Component.empty());
+			}
 			component.appendShiftHoverText(lines);
 		}
 		else
 		{
-			component.appendNoShiftHoverText(lines);
+			lines.addAll(noShiftLines);
 		}
 		
-		if(extra)
+		if(config)
 		{
 			List<Component> configLines = Lists.newArrayList();
 			component.config().appendHoverText(configLines);
 			if(!configLines.isEmpty())
 			{
+				if(!lines.isEmpty())
+				{
+					lines.add(Component.empty());
+				}
 				if(configHeader)
 				{
 					lines.add(line(LBRText.LOGIC_CONFIG_TOOLTIP));
@@ -59,9 +70,9 @@ public record LogicType<L extends LogicComponent>(
 		return lines.isEmpty() ? Optional.empty() : Optional.of(lines);
 	}
 	
-	public Optional<List<Component>> tooltip(L component, boolean extra)
+	public Optional<List<Component>> tooltip(L component, boolean shift, boolean config)
 	{
-		return this.tooltip(component, extra, true);
+		return this.tooltip(component, shift, config, true);
 	}
 	
 	public Item item()

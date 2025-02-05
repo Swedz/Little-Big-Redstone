@@ -69,6 +69,12 @@ public final class NANDGate extends LogicGate<NANDGate, MultiLogicGateConfig>
 	}
 	
 	@Override
+	public void appendShiftHoverText(List<Component> lines)
+	{
+		lines.add(line(LBRText.LOGIC_HELP_NAND_GATE));
+	}
+	
+	@Override
 	public NANDGate copy()
 	{
 		return new NANDGate(config.copy(), this.output());

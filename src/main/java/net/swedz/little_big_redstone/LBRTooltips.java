@@ -77,7 +77,7 @@ public final class LBRTooltips
 			(stack, item) ->
 			{
 				var logicComponent = stack.get(LBRComponents.LOGIC);
-				return logicComponent.type().tooltip(logicComponent, false);
+				return logicComponent.type().tooltip(logicComponent, false, false);
 			}
 	).noShiftRequired();
 	
@@ -86,7 +86,7 @@ public final class LBRTooltips
 			(stack, item) ->
 			{
 				var logicComponent = stack.get(LBRComponents.LOGIC);
-				return logicComponent.type().tooltip(logicComponent, true);
+				return logicComponent.type().tooltip(logicComponent, true, true);
 			}
 	);
 	
