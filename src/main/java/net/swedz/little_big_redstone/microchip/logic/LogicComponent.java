@@ -35,6 +35,8 @@ public abstract class LogicComponent<L extends LogicComponent<L, C>, C extends L
 	
 	protected abstract C defaultConfig();
 	
+	public abstract LogicType<L> type();
+	
 	@Override
 	public final IntRange inputsAllowed()
 	{
@@ -70,8 +72,6 @@ public abstract class LogicComponent<L extends LogicComponent<L, C>, C extends L
 			this.processTickInternal(context, inputs);
 		}
 	}
-	
-	public abstract LogicType<L> type();
 	
 	public abstract boolean output(int index);
 	

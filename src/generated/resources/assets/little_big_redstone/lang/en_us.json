@@ -8,6 +8,7 @@
   "item.little_big_redstone.or_gate": "OR Gate",
   "item.little_big_redstone.reader": "Reader",
   "item.little_big_redstone.redstone_bit": "Redstone Bit",
+  "item.little_big_redstone.rs_nor_latch": "RS NOR Latch",
   "item.little_big_redstone.sequencer": "Sequencer",
   "item.little_big_redstone.t_flip_flop": "T Flip-Flop",
   "item.little_big_redstone.xor_gate": "XOR Gate",

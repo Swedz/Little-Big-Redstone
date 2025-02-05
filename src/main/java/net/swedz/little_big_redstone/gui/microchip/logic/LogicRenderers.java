@@ -11,6 +11,7 @@ import net.neoforged.neoforge.event.AddReloadListenerEvent;
 import net.swedz.little_big_redstone.LBR;
 import net.swedz.little_big_redstone.gui.microchip.logic.renderer.IORenderer;
 import net.swedz.little_big_redstone.gui.microchip.logic.renderer.LogicGateRenderer;
+import net.swedz.little_big_redstone.gui.microchip.logic.renderer.RSNORLatchRenderer;
 import net.swedz.little_big_redstone.gui.microchip.logic.renderer.ReaderRenderer;
 import net.swedz.little_big_redstone.gui.microchip.logic.renderer.SequencerRenderer;
 import net.swedz.little_big_redstone.gui.microchip.logic.renderer.TFlipFlopRenderer;
@@ -43,6 +44,7 @@ public final class LogicRenderers
 		register(LogicTypes.SEQUENCER, SequencerRenderer::new);
 		
 		register(LogicTypes.T_FLIP_FLOP, TFlipFlopRenderer::new);
+		register(LogicTypes.RS_NOR_LATCH, RSNORLatchRenderer::new);
 	}
 	
 	private static <L extends LogicComponent> void register(LogicType<L> type, LogicRendererProvider<L> provider)
