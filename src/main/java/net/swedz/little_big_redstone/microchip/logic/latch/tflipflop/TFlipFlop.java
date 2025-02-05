@@ -83,12 +83,14 @@ public final class TFlipFlop extends LogicComponent<TFlipFlop, TFlipFlopConfig>
 	@Override
 	protected void internalLoadFrom(TFlipFlop other)
 	{
-		outputState = other.output();
+		lastInputState = other.lastInputState;
+		outputState = other.outputState;
 	}
 	
 	@Override
 	public void internalResetForPickup()
 	{
+		lastInputState = false;
 		outputState = false;
 	}
 	
