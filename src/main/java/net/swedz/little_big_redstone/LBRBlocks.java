@@ -200,14 +200,12 @@ public final class LBRBlocks
 		block.tag(LBRTags.Blocks.STICKY_NOTES);
 		block.withModel((holder) -> (provider) ->
 		{
-			ResourceLocation paperTexture = LBR.id("block/sticky_note_paper_%s".formatted(colorId));
-			ResourceLocation pinTexture = LBR.id("block/sticky_note_pin");
+			ResourceLocation texture = LBR.id("block/sticky_note_%s".formatted(colorId));
 			ModelFile model = provider.models()
 					.withExistingParent(holder.identifier().id(), "%s:block/sticky_note".formatted(LBR.ID))
 					.renderType(ResourceLocation.withDefaultNamespace("cutout"))
-					.texture("particle", paperTexture)
-					.texture("paper", paperTexture)
-					.texture("pin", pinTexture);
+					.texture("particle", texture)
+					.texture("texture", texture);
 			provider.getVariantBuilder(holder.get()).forAllStates((state) ->
 			{
 				Direction facing = state.getValue(StickyNoteBlock.FACING);

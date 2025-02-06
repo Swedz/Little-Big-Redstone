@@ -2,8 +2,7 @@
   "parent": "little_big_redstone:block/sticky_note",
   "render_type": "minecraft:cutout",
   "textures": {
-    "paper": "little_big_redstone:block/sticky_note_paper_orange",
-    "particle": "little_big_redstone:block/sticky_note_paper_orange",
-    "pin": "little_big_redstone:block/sticky_note_pin"
+    "particle": "little_big_redstone:block/sticky_note_orange",
+    "texture": "little_big_redstone:block/sticky_note_orange"
   }
 }
