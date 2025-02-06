@@ -4,14 +4,18 @@ import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.world.MenuProvider;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.EntityBlock;
 import net.minecraft.world.level.block.FaceAttachedHorizontalDirectionalBlock;
 import net.minecraft.world.level.block.SimpleWaterloggedBlock;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.AttachFace;
@@ -22,7 +26,7 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 
 import static net.minecraft.world.level.block.state.properties.BlockStateProperties.*;
 
-public final class StickyNoteBlock extends FaceAttachedHorizontalDirectionalBlock implements SimpleWaterloggedBlock
+public final class StickyNoteBlock extends FaceAttachedHorizontalDirectionalBlock implements SimpleWaterloggedBlock, EntityBlock
 {
 	private static final MapCodec<StickyNoteBlock> CODEC = RecordCodecBuilder.mapCodec((instance) -> instance
 			.group(
@@ -143,5 +147,26 @@ public final class StickyNoteBlock extends FaceAttachedHorizontalDirectionalBloc
 			relative = pos.relative(facing.getOpposite());
 		}
 		return level.getBlockState(relative).isSolid();
+	}
+	
+	@Override
+	public BlockEntity newBlockEntity(BlockPos pos, BlockState state)
+	{
+		return new StickyNoteBlockEntity(pos, state, color);
+	}
+	
+	@Override
+	protected boolean triggerEvent(BlockState state, Level level, BlockPos pos, int id, int param)
+	{
+		super.triggerEvent(state, level, pos, id, param);
+		BlockEntity blockentity = level.getBlockEntity(pos);
+		return blockentity != null && blockentity.triggerEvent(id, param);
+	}
+	
+	@Override
+	protected MenuProvider getMenuProvider(BlockState state, Level level, BlockPos pos)
+	{
+		BlockEntity blockentity = level.getBlockEntity(pos);
+		return blockentity instanceof MenuProvider ? (MenuProvider) blockentity : null;
 	}
 }

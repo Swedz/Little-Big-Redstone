@@ -1,5 +1,6 @@
 package net.swedz.little_big_redstone;
 
+import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import net.minecraft.core.Direction;
 import net.minecraft.core.registries.Registries;
@@ -23,6 +24,7 @@ import net.neoforged.neoforge.registries.DeferredRegister;
 import net.swedz.little_big_redstone.block.microchip.MicrochipBlock;
 import net.swedz.little_big_redstone.block.microchip.MicrochipBlockEntity;
 import net.swedz.little_big_redstone.block.stickynote.StickyNoteBlock;
+import net.swedz.little_big_redstone.block.stickynote.StickyNoteBlockEntity;
 import net.swedz.tesseract.neoforge.registry.SortOrder;
 import net.swedz.tesseract.neoforge.registry.common.CommonLootTableBuilders;
 import net.swedz.tesseract.neoforge.registry.holder.BlockHolder;
@@ -66,8 +68,11 @@ public final class LBRBlocks
 	
 	public static final Supplier<BlockEntityType<MicrochipBlockEntity>> MICROCHIP_ENTITY = Registry.BLOCK_ENTITIES.register("microchip", () -> BlockEntityType.Builder.of(MicrochipBlockEntity::new, MICROCHIP.get()).build(null));
 	
+	public static final Supplier<BlockEntityType<StickyNoteBlockEntity>> STICKY_NOTE_ENTITY;
+	
 	static
 	{
+		List<BlockHolder> stickyNoteBlocks = Lists.newArrayList();
 		List<DyeColor> colors = List.of(
 				DyeColor.WHITE,
 				DyeColor.LIGHT_GRAY,
@@ -108,8 +113,19 @@ public final class LBRBlocks
 		{
 			var color = colors.get(i);
 			var colorName = colorNames.get(i);
-			createStickyNote(color, colorName, i).register();
+			var block = createStickyNote(color, colorName, i).register();
+			stickyNoteBlocks.add(block);
 		}
+		
+		STICKY_NOTE_ENTITY = Registry.BLOCK_ENTITIES.register(
+				"sticky_note",
+				() -> BlockEntityType.Builder
+						.of(
+								(pos, state) -> new StickyNoteBlockEntity(pos, state, state.getBlock() instanceof StickyNoteBlock block ? block.color() : DyeColor.WHITE),
+								stickyNoteBlocks.stream().map(BlockHolder::get).toArray(Block[]::new)
+						)
+						.build(null)
+		);
 	}
 	
 	public static Set<BlockHolder> values()
@@ -189,6 +205,7 @@ public final class LBRBlocks
 		final String englishName = "%s Sticky Note".formatted(colorEnglishName);
 		
 		BlockWithItemHolder<StickyNoteBlock, BlockItem> block = create(id, englishName, (p) -> new StickyNoteBlock(p, color), BlockItem::new, LBRSortOrder.STICKY_NOTES.and(order));
+		
 		block.withLootTable(CommonLootTableBuilders::self);
 		block.withProperties((p) -> p
 				.mapColor(MapColor.STONE)
@@ -198,6 +215,7 @@ public final class LBRBlocks
 				.forceSolidOn()
 				.pushReaction(PushReaction.DESTROY));
 		block.tag(LBRTags.Blocks.STICKY_NOTES);
+		
 		block.withModel((holder) -> (provider) ->
 		{
 			ResourceLocation texture = LBR.id("block/sticky_note_%s".formatted(colorId));
@@ -217,11 +235,13 @@ public final class LBRBlocks
 						.build();
 			});
 		});
+		
 		block.item().tag(LBRTags.Items.STICKY_NOTES);
 		block.item().withModel((holder) -> (provider) ->
 				provider.getBuilder(holder.identifier().id())
 						.parent(new ModelFile.UncheckedModelFile("item/generated"))
 						.texture("layer0", "%s:item/sticky_note_%s".formatted(LBR.ID, colorId)));
+		
 		return block;
 	}
 }

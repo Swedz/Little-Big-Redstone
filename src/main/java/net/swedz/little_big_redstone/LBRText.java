@@ -66,6 +66,7 @@ public enum LBRText implements TranslatableTextEnum
 	LOGIC_HELP_XOR_GATE("Output is ON when the amount of ON inputs is odd, otherwise output is OFF."),
 	NO("No"),
 	OUTPUT("Output"),
+	STICKY_NOTE("Sticky Note"),
 	YES("Yes");
 	
 	private final String englishText;
