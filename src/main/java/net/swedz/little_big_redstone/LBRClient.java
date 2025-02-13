@@ -6,7 +6,9 @@ import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.ModContainer;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.fml.common.Mod;
+import net.neoforged.neoforge.client.event.EntityRenderersEvent;
 import net.neoforged.neoforge.client.event.RegisterMenuScreensEvent;
+import net.swedz.little_big_redstone.entity.stickynote.StickyNoteEntityRenderer;
 import net.swedz.little_big_redstone.gui.logicconfig.LogicConfigScreen;
 import net.swedz.little_big_redstone.gui.microchip.MicrochipScreen;
 
@@ -24,5 +26,11 @@ public final class LBRClient
 	{
 		event.register(LBRMenus.MICROCHIP.get(), MicrochipScreen::new);
 		event.register(LBRMenus.LOGIC_CONFIG.get(), LogicConfigScreen::new);
+	}
+	
+	@SubscribeEvent
+	private static void registerEntityRenderers(EntityRenderersEvent.RegisterRenderers event)
+	{
+		event.registerEntityRenderer(LBREntities.STICKY_NOTE.get(), StickyNoteEntityRenderer::new);
 	}
 }

@@ -32,6 +32,7 @@ public final class LBR
 		LBRComponents.init(bus);
 		LBRItems.init(bus);
 		LBRBlocks.init(bus);
+		LBREntities.init(bus);
 		LBRCreativeTabs.init(bus);
 		LBRMenus.init(bus);
 		
