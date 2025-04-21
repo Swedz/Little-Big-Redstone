@@ -3,6 +3,7 @@ package net.swedz.little_big_redstone;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.item.DyeColor;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import net.swedz.tesseract.neoforge.registry.holder.ItemHolder;
@@ -16,7 +17,7 @@ public final class LBRCreativeTabs
 	
 	public static final Supplier<CreativeModeTab> CREATIVE_TAB = CREATIVE_MODE_TABS.register(LBR.ID, () -> CreativeModeTab.builder()
 			.title(Component.translatable(LBR.id(LBR.ID).toLanguageKey("itemGroup")))
-			.icon(() -> LBRBlocks.MICROCHIP.get().asItem().getDefaultInstance())
+			.icon(() -> LBRBlocks.microchip(DyeColor.RED).get().asItem().getDefaultInstance())
 			.displayItems((params, output) ->
 			{
 				Comparator<ItemHolder> compareBySortOrder = Comparator.comparing(ItemHolder::sortOrder);

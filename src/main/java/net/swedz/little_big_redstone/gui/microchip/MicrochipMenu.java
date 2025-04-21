@@ -4,6 +4,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.ItemStack;
 import net.swedz.little_big_redstone.LBRMenus;
 import net.swedz.little_big_redstone.gui.BaseContainerMenu;
@@ -16,15 +17,17 @@ public final class MicrochipMenu extends BaseContainerMenu
 	private final BlockPos          blockPos;
 	private final Supplier<Boolean> validChecker;
 	private final Microchip         microchip;
+	private final DyeColor          color;
 	
 	public MicrochipMenu(int containerId, Inventory playerInventory,
-						 BlockPos blockPos, Supplier<Boolean> validChecker, Microchip microchip)
+						 BlockPos blockPos, Supplier<Boolean> validChecker, Microchip microchip, DyeColor color)
 	{
 		super(LBRMenus.MICROCHIP.get(), containerId);
 		
 		this.blockPos = blockPos;
 		this.validChecker = validChecker;
 		this.microchip = microchip;
+		this.color = color;
 		
 		this.setupPlayerInventory(playerInventory, 48, 150);
 	}
@@ -36,6 +39,7 @@ public final class MicrochipMenu extends BaseContainerMenu
 		this.blockPos = buf.readBlockPos();
 		this.validChecker = null;
 		this.microchip = Microchip.STREAM_CODEC.decode(buf);
+		this.color = DyeColor.STREAM_CODEC.decode(buf);
 		
 		this.setupPlayerInventory(playerInventory, 48, 150);
 	}
@@ -48,6 +52,11 @@ public final class MicrochipMenu extends BaseContainerMenu
 	public Microchip microchip()
 	{
 		return microchip;
+	}
+	
+	public DyeColor color()
+	{
+		return color;
 	}
 	
 	@Override

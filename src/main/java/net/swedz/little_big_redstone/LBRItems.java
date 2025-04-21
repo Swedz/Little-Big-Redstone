@@ -6,6 +6,7 @@ import net.minecraft.world.item.Item;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.client.model.generators.ModelFile;
 import net.neoforged.neoforge.registries.DeferredRegister;
+import net.swedz.little_big_redstone.helper.DyeColorHelper;
 import net.swedz.little_big_redstone.item.LogicItem;
 import net.swedz.little_big_redstone.item.StickyNoteItem;
 import net.swedz.little_big_redstone.microchip.logic.LogicType;
@@ -16,7 +17,6 @@ import net.swedz.tesseract.neoforge.registry.common.CommonModelBuilders;
 import net.swedz.tesseract.neoforge.registry.holder.ItemHolder;
 
 import java.util.Collections;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.function.Function;
@@ -50,56 +50,17 @@ public final class LBRItems
 	
 	static
 	{
-		int index = 0;
-		for(LogicType<?> type : LogicTypes.values())
 		{
-			createLogic(type.id(), type.englishName(), type, index++).register();
+			int index = 0;
+			for(LogicType<?> type : LogicTypes.values())
+			{
+				createLogic(type.id(), type.englishName(), type, index++).register();
+			}
 		}
 		
 		Map<DyeColor, ItemHolder<StickyNoteItem>> stickyNotes = Maps.newHashMap();
-		List<DyeColor> colors = List.of(
-				DyeColor.WHITE,
-				DyeColor.LIGHT_GRAY,
-				DyeColor.GRAY,
-				DyeColor.BLACK,
-				DyeColor.BROWN,
-				DyeColor.RED,
-				DyeColor.ORANGE,
-				DyeColor.YELLOW,
-				DyeColor.LIME,
-				DyeColor.GREEN,
-				DyeColor.CYAN,
-				DyeColor.LIGHT_BLUE,
-				DyeColor.BLUE,
-				DyeColor.PURPLE,
-				DyeColor.MAGENTA,
-				DyeColor.PINK
-		);
-		List<String> colorNames = List.of(
-				"White",
-				"Light Gray",
-				"Gray",
-				"Black",
-				"Brown",
-				"Red",
-				"Orange",
-				"Yellow",
-				"Lime",
-				"Green",
-				"Cyan",
-				"Light Blue",
-				"Blue",
-				"Purple",
-				"Magenta",
-				"Pink"
-		);
-		for(int i = 0; i < colors.size(); i++)
-		{
-			var color = colors.get(i);
-			var colorName = colorNames.get(i);
-			var item = createStickyNote(color, colorName, i).register();
-			stickyNotes.put(color, item);
-		}
+		DyeColorHelper.forEachIndexed((color, colorName, index) ->
+				stickyNotes.put(color, createStickyNote(color, colorName, index).register()));
 		STICKY_NOTES = Collections.unmodifiableMap(stickyNotes);
 	}
 	
@@ -145,6 +106,6 @@ public final class LBRItems
 				.withModel((holder) -> (provider) ->
 						provider.getBuilder(holder.identifier().id())
 								.parent(new ModelFile.UncheckedModelFile("item/generated"))
-								.texture("layer0", "%s:item/sticky_note_%s".formatted(LBR.ID, colorId)));
+								.texture("layer0", LBR.id("item/sticky_note_%s".formatted(colorId))));
 	}
 }

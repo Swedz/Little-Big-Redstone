@@ -26,6 +26,7 @@ import net.swedz.little_big_redstone.network.packet.OpenLogicConfigPacket;
 import net.swedz.little_big_redstone.network.packet.PlaceTakeMicrochipLogicPacket;
 import net.swedz.little_big_redstone.network.packet.PlaceTakeMicrochipWirePacket;
 
+import java.awt.Color;
 import java.util.List;
 import java.util.function.Consumer;
 
@@ -311,7 +312,9 @@ public final class MicrochipRenderable implements GuiEventListener, Renderable, 
 	
 	private void renderCircuitBg(GuiGraphics graphics, int mouseX, int mouseY, float partialTicks)
 	{
-		graphics.setColor(1, 0.5f, 0.5f, 1);
+		// TODO pick better colors for this
+		var color = new Color(screen.getMenu().color().getFireworkColor());
+		graphics.setColor(color.getRed() / 255f, color.getGreen() / 255f, color.getBlue() / 255f, 1);
 		graphics.blit(CIRCUIT_BACKGROUND, 0, 0, 0, 0, width, height, 64, 64);
 		graphics.setColor(1, 1, 1, 1);
 	}

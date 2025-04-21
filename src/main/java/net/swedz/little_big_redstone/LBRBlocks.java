@@ -1,23 +1,33 @@
 package net.swedz.little_big_redstone;
 
+import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
+import net.minecraft.core.Direction;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.world.item.BlockItem;
+import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.material.MapColor;
 import net.neoforged.bus.api.IEventBus;
+import net.neoforged.neoforge.client.model.generators.ModelFile;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import net.swedz.little_big_redstone.block.microchip.MicrochipBlock;
 import net.swedz.little_big_redstone.block.microchip.MicrochipBlockEntity;
+import net.swedz.little_big_redstone.client.model.BasicCustomLoaderBuilder;
+import net.swedz.little_big_redstone.helper.DyeColorHelper;
+import net.swedz.tesseract.neoforge.api.Assert;
 import net.swedz.tesseract.neoforge.registry.SortOrder;
 import net.swedz.tesseract.neoforge.registry.common.CommonLootTableBuilders;
 import net.swedz.tesseract.neoforge.registry.holder.BlockHolder;
 import net.swedz.tesseract.neoforge.registry.holder.BlockWithItemHolder;
 
+import java.util.Collections;
+import java.util.Locale;
+import java.util.Map;
 import java.util.Set;
 import java.util.function.BiFunction;
 import java.util.function.Function;
@@ -48,9 +58,29 @@ public final class LBRBlocks
 		Registry.init(bus);
 	}
 	
-	public static final BlockHolder<MicrochipBlock> MICROCHIP = create("microchip", "Microchip", MicrochipBlock::new, BlockItem::new, LBRSortOrder.MICROCHIP).withProperties((p) -> p.mapColor(MapColor.STONE).destroyTime(4f).requiresCorrectToolForDrops()).tag(BlockTags.MINEABLE_WITH_PICKAXE).withLootTable(CommonLootTableBuilders::self).register();
+	private static final Map<DyeColor, BlockHolder<MicrochipBlock>> MICROCHIPS;
 	
-	public static final Supplier<BlockEntityType<MicrochipBlockEntity>> MICROCHIP_ENTITY = Registry.BLOCK_ENTITIES.register("microchip", () -> BlockEntityType.Builder.of(MicrochipBlockEntity::new, MICROCHIP.get()).build(null));
+	static
+	{
+		Map<DyeColor, BlockHolder<MicrochipBlock>> microchips = Maps.newHashMap();
+		DyeColorHelper.forEachIndexed((color, colorName, index) ->
+				microchips.put(color, createMicrochip(color, colorName, index).register()));
+		MICROCHIPS = Collections.unmodifiableMap(microchips);
+	}
+	
+	public static BlockHolder<MicrochipBlock> microchip(DyeColor color)
+	{
+		Assert.notNull(color);
+		return MICROCHIPS.get(color);
+	}
+	
+	public static final Supplier<BlockEntityType<MicrochipBlockEntity>> MICROCHIP_ENTITY = Registry.BLOCK_ENTITIES.register(
+			"microchip",
+			() -> BlockEntityType.Builder.of(
+					MicrochipBlockEntity::new,
+					MICROCHIPS.values().stream().map(BlockHolder::get).toArray(Block[]::new)
+			).build(null)
+	);
 	
 	public static Set<BlockHolder> values()
 	{
@@ -86,5 +116,39 @@ public final class LBRBlocks
 		Registry.include(holder);
 		LBRItems.Registry.include(holder.item());
 		return holder;
+	}
+	
+	private static BlockHolder<MicrochipBlock> createMicrochip(DyeColor color, String colorEnglishName, int order)
+	{
+		final String colorId = color.getName();
+		final String id = "%s_microchip".formatted(colorId);
+		final String englishName = "%s Microchip".formatted(colorEnglishName);
+		return create(id, englishName, (p) -> new MicrochipBlock(p, color), BlockItem::new, LBRSortOrder.MICROCHIP.and(order))
+				.withProperties((p) -> p
+						.mapColor(MapColor.STONE)
+						.destroyTime(4f)
+						.requiresCorrectToolForDrops())
+				.tag(LBRTags.Blocks.MICROCHIPS, BlockTags.MINEABLE_WITH_PICKAXE)
+				.withLootTable(CommonLootTableBuilders::self)
+				.withModel((block) -> (provider) ->
+				{
+					var blockModel = provider.models().getBuilder(block.identifier().id())
+							.parent(new ModelFile.UncheckedModelFile("block/block"))
+							.customLoader((b, efh) -> new BasicCustomLoaderBuilder<>(LBR.id("microchip"), b, efh)).end()
+							.texture("particle", LBR.id("block/microchip_%s".formatted(colorId)))
+							.texture("base", LBR.id("block/microchip_%s".formatted(colorId)));
+					for(var direction : Direction.values())
+					{
+						String directionName = direction.toString().toLowerCase(Locale.ROOT);
+						blockModel.texture("side_overlay_%s".formatted(directionName), LBR.id("block/microchip_side_overlay_%s".formatted(directionName)));
+					}
+					blockModel.texture("signal_on_overlay", LBR.id("block/microchip_signal_on_overlay"));
+					blockModel.texture("signal_off_overlay", LBR.id("block/microchip_signal_off_overlay"));
+					
+					provider.simpleBlock(block.get(), blockModel);
+					
+					provider.itemModels().getBuilder(block.identifier().id())
+							.parent(blockModel);
+				});
 	}
 }

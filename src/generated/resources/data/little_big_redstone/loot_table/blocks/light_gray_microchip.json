@@ -11,11 +11,11 @@
       "entries": [
         {
           "type": "minecraft:item",
-          "name": "little_big_redstone:microchip"
+          "name": "little_big_redstone:light_gray_microchip"
         }
       ],
       "rolls": 1.0
     }
   ],
-  "random_sequence": "little_big_redstone:blocks/microchip"
+  "random_sequence": "little_big_redstone:blocks/light_gray_microchip"
 }

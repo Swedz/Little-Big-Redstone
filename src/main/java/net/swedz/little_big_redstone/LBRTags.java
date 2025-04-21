@@ -14,6 +14,6 @@ public final class LBRTags
 	
 	public static final class Blocks
 	{
-		public static final TagKey<Block> STICKY_NOTES = TagKey.create(Registries.BLOCK, LBR.id("sticky_notes"));
+		public static final TagKey<Block> MICROCHIPS = TagKey.create(Registries.BLOCK, LBR.id("microchips"));
 	}
 }

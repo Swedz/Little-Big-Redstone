@@ -11,6 +11,7 @@ import net.minecraft.world.MenuProvider;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.swedz.little_big_redstone.LBR;
@@ -43,16 +44,21 @@ public final class MicrochipBlockEntity extends BlockEntity implements MenuProvi
 		return microchip;
 	}
 	
+	public DyeColor color()
+	{
+		return ((MicrochipBlock) this.getBlockState().getBlock()).color();
+	}
+	
 	@Override
 	public Component getDisplayName()
 	{
-		return Component.translatable(LBRBlocks.MICROCHIP.identifier().location().toLanguageKey("block"));
+		return Component.translatable(this.getBlockState().getBlock().getDescriptionId());
 	}
 	
 	@Override
 	public AbstractContainerMenu createMenu(int containerId, Inventory inventory, Player player)
 	{
-		return new MicrochipMenu(containerId, inventory, worldPosition, () -> !this.isRemoved(), microchip);
+		return new MicrochipMenu(containerId, inventory, worldPosition, () -> !this.isRemoved(), microchip, this.color());
 	}
 	
 	public void openMenu(Player player)
@@ -61,6 +67,7 @@ public final class MicrochipBlockEntity extends BlockEntity implements MenuProvi
 		{
 			buf.writeBlockPos(worldPosition);
 			Microchip.STREAM_CODEC.encode(buf, microchip);
+			DyeColor.STREAM_CODEC.encode(buf, this.color());
 		});
 	}
 	

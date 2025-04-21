@@ -5,6 +5,7 @@ import net.minecraft.core.Direction;
 import net.minecraft.world.Containers;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
@@ -40,9 +41,14 @@ public final class MicrochipBlock extends Block implements TickableBlock
 		};
 	}
 	
-	public MicrochipBlock(Properties properties)
+	private final DyeColor color;
+	
+	public MicrochipBlock(Properties properties, DyeColor color)
 	{
 		super(properties.isRedstoneConductor(Blocks::never));
+		
+		this.color = color;
+		
 		this.registerDefaultState(stateDefinition.any()
 				.setValue(UP, false)
 				.setValue(DOWN, false)
@@ -50,6 +56,11 @@ public final class MicrochipBlock extends Block implements TickableBlock
 				.setValue(SOUTH, false)
 				.setValue(EAST, false)
 				.setValue(WEST, false));
+	}
+	
+	public DyeColor color()
+	{
+		return color;
 	}
 	
 	@Override
