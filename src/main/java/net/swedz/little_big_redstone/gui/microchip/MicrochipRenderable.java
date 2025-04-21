@@ -312,7 +312,7 @@ public final class MicrochipRenderable implements GuiEventListener, Renderable, 
 	
 	private void renderCircuitBg(GuiGraphics graphics, int mouseX, int mouseY, float partialTicks)
 	{
-		// TODO pick better colors for this
+		// TODO pick better colors for this (or use separate textures for each?)
 		var color = new Color(screen.getMenu().color().getFireworkColor());
 		graphics.setColor(color.getRed() / 255f, color.getGreen() / 255f, color.getBlue() / 255f, 1);
 		graphics.blit(CIRCUIT_BACKGROUND, 0, 0, 0, 0, width, height, 64, 64);

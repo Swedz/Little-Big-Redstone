@@ -14,6 +14,7 @@ import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.material.MapColor;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.client.model.generators.ModelFile;
+import net.neoforged.neoforge.client.model.generators.loaders.ItemLayerModelBuilder;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import net.swedz.little_big_redstone.block.microchip.MicrochipBlock;
 import net.swedz.little_big_redstone.block.microchip.MicrochipBlockEntity;
@@ -134,7 +135,7 @@ public final class LBRBlocks
 				{
 					var blockModel = provider.models().getBuilder(block.identifier().id())
 							.parent(new ModelFile.UncheckedModelFile("block/block"))
-							.customLoader((b, efh) -> new BasicCustomLoaderBuilder<>(LBR.id("microchip"), b, efh)).end()
+							.customLoader((parent, efh) -> new BasicCustomLoaderBuilder<>(LBR.id("microchip"), parent, efh)).end()
 							.texture("particle", LBR.id("block/microchip_%s".formatted(colorId)))
 							.texture("base", LBR.id("block/microchip_%s".formatted(colorId)));
 					for(var direction : Direction.values())
@@ -148,7 +149,12 @@ public final class LBRBlocks
 					provider.simpleBlock(block.get(), blockModel);
 					
 					provider.itemModels().getBuilder(block.identifier().id())
-							.parent(blockModel);
+							.parent(new ModelFile.UncheckedModelFile("item/generated"))
+							.texture("layer0", LBR.id("item/microchip"))
+							.texture("layer1", LBR.id("item/microchip_overlay"))
+							.customLoader((parent, efh) -> ItemLayerModelBuilder.begin(parent, efh)
+									// TODO pick better colors for this (or use separate textures for each?)
+									.color(0xFF000000 | color.getFireworkColor(), 0));
 				});
 	}
 }
