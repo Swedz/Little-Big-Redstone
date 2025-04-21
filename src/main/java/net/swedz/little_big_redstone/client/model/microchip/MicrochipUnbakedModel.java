@@ -1,4 +1,4 @@
-package net.swedz.little_big_redstone.client.model;
+package net.swedz.little_big_redstone.client.model.microchip;
 
 import com.google.common.collect.Maps;
 import net.minecraft.client.renderer.block.model.ItemOverrides;

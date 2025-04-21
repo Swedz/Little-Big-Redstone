@@ -1,4 +1,4 @@
-package net.swedz.little_big_redstone.client.model;
+package net.swedz.little_big_redstone.client.model.microchip;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
@@ -65,8 +65,11 @@ public final class MicrochipBakedModel implements IDynamicBakedModel
 	{
 		List<BakedQuad> quads = Lists.newArrayList();
 		quads.addAll(new ElementBuilder().allFaces().getQuads(baseTextures::get));
-		quads.addAll(new ElementBuilder().allFaces().getQuads(sideOverlayTextures::get));
-		quads.addAll(new ElementBuilder().allFaces().getQuads((direction) -> (state != null && state.getValue(MicrochipBlock.getDirectionalState(direction)) ? signalOnOverlayTextures : signalOffOverlayTextures).get(direction)));
+		if(state != null)
+		{
+			quads.addAll(new ElementBuilder().allFaces().getQuads(sideOverlayTextures::get));
+			quads.addAll(new ElementBuilder().allFaces().getQuads((direction) -> (state.getValue(MicrochipBlock.getDirectionalState(direction)) ? signalOnOverlayTextures : signalOffOverlayTextures).get(direction)));
+		}
 		return quads;
 	}
 	
