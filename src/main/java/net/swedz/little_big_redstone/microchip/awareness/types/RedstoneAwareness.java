@@ -1,6 +1,5 @@
 package net.swedz.little_big_redstone.microchip.awareness.types;
 
-import com.google.common.collect.Sets;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.block.Block;
@@ -13,58 +12,59 @@ import net.swedz.little_big_redstone.microchip.awareness.AwarenessTypes;
 import net.swedz.little_big_redstone.microchip.awareness.MicrochipAwareness;
 import net.swedz.little_big_redstone.microchip.logic.io.LogicIO;
 
-import java.util.Set;
-
 public final class RedstoneAwareness extends MicrochipAwareness<RedstoneAwareness>
 {
-	// TODO use arrays?
-	private Set<Direction> inputSides  = Sets.newHashSet();
-	private Set<Direction> outputSides = Sets.newHashSet();
+	private boolean[] inputSides  = new boolean[6];
+	private boolean[] outputSides = new boolean[6];
 	
-	private Set<Direction> inputPower  = Sets.newHashSet();
-	private Set<Direction> outputPower = Sets.newHashSet();
+	private boolean[] inputPower  = new boolean[6];
+	private boolean[] outputPower = new boolean[6];
 	
-	public Set<Direction> getSides()
+	public boolean[] getSides()
 	{
-		Set<Direction> sides = Sets.newHashSet();
-		sides.addAll(inputSides);
-		sides.addAll(outputSides);
+		boolean[] sides = new boolean[6];
+		for(int index = 0; index < sides.length; index++)
+		{
+			sides[index] = inputSides[index] || outputSides[index];
+		}
 		return sides;
 	}
 	
 	public boolean isInputPowered(Direction direction)
 	{
-		return inputPower.contains(direction);
+		return inputPower[direction.ordinal()];
 	}
 	
 	public boolean isOutputPowered(Direction direction)
 	{
-		return outputPower.contains(direction);
+		return outputPower[direction.ordinal()];
 	}
 	
 	public void setInputPowered(Direction direction, boolean powered)
 	{
+		int index = direction.ordinal();
 		if(powered)
 		{
-			outputPower.remove(direction);
-			inputPower.add(direction);
+			outputPower[index] = false;
+			inputPower[index] = true;
 		}
 		else
 		{
-			inputPower.remove(direction);
+			inputPower[index] = false;
 		}
 	}
 	
 	public void setOutputPowered(Direction direction, boolean powered)
 	{
+		int index = direction.ordinal();
 		if(powered)
 		{
-			inputPower.remove(direction);
-			outputPower.add(direction);
+			inputPower[index] = false;
+			outputPower[index] = true;
 		}
 		else
 		{
-			outputPower.remove(direction);
+			outputPower[index] = false;
 		}
 	}
 	
@@ -72,7 +72,7 @@ public final class RedstoneAwareness extends MicrochipAwareness<RedstoneAwarenes
 	{
 		direction = direction.getOpposite();
 		
-		return outputSides.contains(direction) &&
+		return outputSides[direction.ordinal()] &&
 			   state.getValue(MicrochipBlock.getDirectionalState(direction));
 	}
 	
@@ -85,24 +85,24 @@ public final class RedstoneAwareness extends MicrochipAwareness<RedstoneAwarenes
 	@Override
 	public void load(Microchip microchip)
 	{
-		Set<Direction> inputs = Sets.newHashSet();
-		Set<Direction> outputs = Sets.newHashSet();
+		boolean[] inputs = new boolean[6];
+		boolean[] outputs = new boolean[6];
 		for(var entry : microchip.components())
 		{
 			if(entry.component() instanceof LogicIO io)
 			{
-				var direction = io.config().direction;
-				if(inputs.contains(direction) || outputs.contains(direction))
+				var direction = io.config().direction.ordinal();
+				if(inputs[direction] || outputs[direction])
 				{
 					continue;
 				}
 				if(io.config().input)
 				{
-					inputs.add(direction);
+					inputs[direction] = true;
 				}
 				else
 				{
-					outputs.add(direction);
+					outputs[direction] = true;
 				}
 			}
 		}
@@ -116,7 +116,8 @@ public final class RedstoneAwareness extends MicrochipAwareness<RedstoneAwarenes
 		var level = context.level();
 		var pos = context.pos();
 		
-		if(inputSides.contains(neighborDirection) && !outputSides.contains(neighborDirection))
+		int neighborDirectionIndex = neighborDirection.ordinal();
+		if(inputSides[neighborDirectionIndex] && !outputSides[neighborDirectionIndex])
 		{
 			boolean signal = level.getSignal(neighborPos, neighborDirection) > 0;
 			level.setBlock(pos, context.state().setValue(MicrochipBlock.getDirectionalState(neighborDirection), signal), Block.UPDATE_ALL);
@@ -128,20 +129,21 @@ public final class RedstoneAwareness extends MicrochipAwareness<RedstoneAwarenes
 	{
 		var state = context.state();
 		
-		Set<Direction> inputs = Sets.newHashSet();
-		Set<Direction> outputs = Sets.newHashSet();
+		boolean[] inputs = new boolean[6];
+		boolean[] outputs = new boolean[6];
 		for(var direction : Direction.values())
 		{
+			int index = direction.ordinal();
 			boolean powered = state.getValue(MicrochipBlock.getDirectionalState(direction));
 			if(powered)
 			{
-				if(inputSides.contains(direction))
+				if(inputSides[index])
 				{
-					inputs.add(direction);
+					inputs[index] = true;
 				}
-				else if(outputSides.contains(direction))
+				else if(outputSides[index])
 				{
-					outputs.add(direction);
+					outputs[index] = true;
 				}
 			}
 		}
@@ -162,17 +164,19 @@ public final class RedstoneAwareness extends MicrochipAwareness<RedstoneAwarenes
 		{
 			for(var direction : Direction.values())
 			{
-				if(inputSides.contains(direction) && !outputSides.contains(direction) &&
+				int index = direction.ordinal();
+				if(inputSides[index] && !outputSides[index] &&
 				   level.getSignal(pos.relative(direction), direction) > 0)
 				{
-					inputPower.add(direction);
+					inputPower[index] = true;
 				}
 			}
 		}
 		
 		for(var direction : Direction.values())
 		{
-			newState = newState.setValue(MicrochipBlock.getDirectionalState(direction), inputPower.contains(direction) || outputPower.contains(direction));
+			int index = direction.ordinal();
+			newState = newState.setValue(MicrochipBlock.getDirectionalState(direction), inputPower[index] || outputPower[index]);
 		}
 		if(newState != state)
 		{

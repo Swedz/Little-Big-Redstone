@@ -20,7 +20,7 @@ public final class MicrochipModelData
 			)
 			.apply(instance, (sides) -> new MicrochipModelData(Booleans.toArray(sides))));
 	
-	private final boolean[] sides;
+	private boolean[] sides = new boolean[6];
 	
 	private MicrochipModelData(boolean[] sides)
 	{
@@ -29,7 +29,6 @@ public final class MicrochipModelData
 	
 	public MicrochipModelData()
 	{
-		this(new boolean[6]);
 	}
 	
 	public boolean side(Direction direction)
@@ -37,9 +36,9 @@ public final class MicrochipModelData
 		return sides[direction.ordinal()];
 	}
 	
-	public MicrochipModelData side(Direction direction, boolean visible)
+	public MicrochipModelData sides(boolean[] sides)
 	{
-		sides[direction.ordinal()] = visible;
+		this.sides = sides;
 		return this;
 	}
 	
