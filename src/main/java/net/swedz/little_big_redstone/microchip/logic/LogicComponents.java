@@ -11,7 +11,6 @@ import net.swedz.little_big_redstone.microchip.LogicEntry;
 import net.swedz.little_big_redstone.microchip.LogicSelectedPort;
 import net.swedz.little_big_redstone.microchip.Microchip;
 
-import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -24,9 +23,9 @@ public final class LogicComponents implements Iterable<LogicEntry>
 	
 	private final Microchip microchip;
 	
-	private Map<Integer, LogicEntry> components;
+	private Map<Integer, LogicEntry> components = Maps.newHashMap();
 	
-	private List<LogicEntry> traversalOrder;
+	private List<LogicEntry> traversalOrder = List.of();
 	
 	/**
 	 * Should not ever be used directly, only by other constructors.
@@ -34,7 +33,6 @@ public final class LogicComponents implements Iterable<LogicEntry>
 	private LogicComponents(Microchip microchip, List<LogicEntry> components)
 	{
 		this.microchip = microchip;
-		this.components = Maps.newHashMap();
 		components.forEach((c) ->
 		{
 			int slot = c.slot();
@@ -73,7 +71,7 @@ public final class LogicComponents implements Iterable<LogicEntry>
 	
 	public List<LogicEntry> traversal()
 	{
-		return Collections.unmodifiableList(traversalOrder);
+		return traversalOrder;
 	}
 	
 	public LogicEntry get(int slot)
@@ -201,6 +199,6 @@ public final class LogicComponents implements Iterable<LogicEntry>
 	public void clear()
 	{
 		components.clear();
-		traversalOrder.clear();
+		traversalOrder = List.of();
 	}
 }
