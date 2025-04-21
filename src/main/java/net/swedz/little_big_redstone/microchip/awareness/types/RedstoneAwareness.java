@@ -17,11 +17,20 @@ import java.util.Set;
 
 public final class RedstoneAwareness extends MicrochipAwareness<RedstoneAwareness>
 {
+	// TODO use arrays?
 	private Set<Direction> inputSides  = Sets.newHashSet();
 	private Set<Direction> outputSides = Sets.newHashSet();
 	
 	private Set<Direction> inputPower  = Sets.newHashSet();
 	private Set<Direction> outputPower = Sets.newHashSet();
+	
+	public Set<Direction> getSides()
+	{
+		Set<Direction> sides = Sets.newHashSet();
+		sides.addAll(inputSides);
+		sides.addAll(outputSides);
+		return sides;
+	}
 	
 	public boolean isInputPowered(Direction direction)
 	{

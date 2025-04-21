@@ -6,6 +6,10 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtOps;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.protocol.Packet;
+import net.minecraft.network.protocol.game.ClientGamePacketListener;
+import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.MenuProvider;
 import net.minecraft.world.entity.player.Inventory;
@@ -14,13 +18,16 @@ import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
+import net.neoforged.neoforge.client.model.data.ModelData;
 import net.swedz.little_big_redstone.LBR;
 import net.swedz.little_big_redstone.LBRBlocks;
 import net.swedz.little_big_redstone.api.Tickable;
+import net.swedz.little_big_redstone.client.model.microchip.MicrochipModelData;
 import net.swedz.little_big_redstone.gui.microchip.MicrochipMenu;
 import net.swedz.little_big_redstone.microchip.Microchip;
 import net.swedz.little_big_redstone.microchip.MicrochipSize;
 import net.swedz.little_big_redstone.microchip.awareness.AwarenessContext;
+import net.swedz.little_big_redstone.microchip.awareness.AwarenessTypes;
 import net.swedz.little_big_redstone.microchip.logic.LogicContext;
 import net.swedz.little_big_redstone.network.packet.UpdateComponentsMicrochipPacket;
 import net.swedz.little_big_redstone.network.packet.UpdateMicrochipPacket;
@@ -31,6 +38,9 @@ import java.util.function.Function;
 public final class MicrochipBlockEntity extends BlockEntity implements MenuProvider, Tickable
 {
 	private final Microchip microchip;
+	
+	private boolean            modelDataChanged = true;
+	private MicrochipModelData modelData;
 	
 	public MicrochipBlockEntity(BlockPos pos, BlockState blockState)
 	{
@@ -53,6 +63,38 @@ public final class MicrochipBlockEntity extends BlockEntity implements MenuProvi
 	public Component getDisplayName()
 	{
 		return Component.translatable(this.getBlockState().getBlock().getDescriptionId());
+	}
+	
+	public void sync()
+	{
+		if(!(level instanceof ServerLevel serverLevel))
+		{
+			throw new IllegalStateException("Cannot call sync() on the logical client");
+		}
+		modelDataChanged = true;
+		serverLevel.getChunkSource().blockChanged(worldPosition);
+	}
+	
+	private MicrochipModelData createModelData()
+	{
+		var data = new MicrochipModelData();
+		var redstone = microchip.awarenesses().get(AwarenessTypes.REDSTONE);
+		if(redstone != null)
+		{
+			for(var direction : redstone.getSides())
+			{
+				data.side(direction, true);
+			}
+		}
+		return data;
+	}
+	
+	@Override
+	public ModelData getModelData()
+	{
+		return ModelData.builder()
+				.with(MicrochipModelData.KEY, modelData)
+				.build();
 	}
 	
 	@Override
@@ -96,6 +138,12 @@ public final class MicrochipBlockEntity extends BlockEntity implements MenuProvi
 			
 			if(microchipDirty)
 			{
+				var newModelData = this.createModelData();
+				if(!newModelData.equals(modelData))
+				{
+					modelData = newModelData;
+					this.sync();
+				}
 				this.publishUpdatePacket((container) -> new UpdateMicrochipPacket(container, microchip));
 			}
 			else if(contextDirty)
@@ -117,6 +165,24 @@ public final class MicrochipBlockEntity extends BlockEntity implements MenuProvi
 	}
 	
 	@Override
+	public CompoundTag getUpdateTag(HolderLookup.Provider registries)
+	{
+		var tag = new CompoundTag();
+		if(modelDataChanged)
+		{
+			modelDataChanged = false;
+			tag.put("microchip_model_data", MicrochipModelData.CODEC.encodeStart(NbtOps.INSTANCE, this.createModelData()).getOrThrow());
+		}
+		return tag;
+	}
+	
+	@Override
+	public Packet<ClientGamePacketListener> getUpdatePacket()
+	{
+		return ClientboundBlockEntityDataPacket.create(this);
+	}
+	
+	@Override
 	protected void loadAdditional(CompoundTag tag, HolderLookup.Provider registries)
 	{
 		super.loadAdditional(tag, registries);
@@ -131,6 +197,22 @@ public final class MicrochipBlockEntity extends BlockEntity implements MenuProvi
 		else
 		{
 			microchip.clear();
+		}
+		
+		if(level != null && level.isClientSide())
+		{
+			if(tag.contains("microchip_model_data", Tag.TAG_COMPOUND))
+			{
+				MicrochipModelData.CODEC.parse(NbtOps.INSTANCE, tag.getCompound("microchip_model_data"))
+						.ifSuccess((modelData) -> this.modelData = modelData)
+						.ifError((error) ->
+						{
+							modelData = null;
+							LBR.LOGGER.error("Failed to load microchip model data at {}: {}", worldPosition.toShortString(), error.message());
+						});
+				level.sendBlockUpdated(worldPosition, null, null, 0);
+				this.requestModelDataUpdate();
+			}
 		}
 	}
 	

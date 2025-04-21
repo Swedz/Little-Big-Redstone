@@ -28,6 +28,7 @@ import org.joml.Vector3f;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
+import java.util.function.Predicate;
 
 public final class MicrochipBakedModel implements IDynamicBakedModel
 {
@@ -60,15 +61,26 @@ public final class MicrochipBakedModel implements IDynamicBakedModel
 		this.signalOffOverlayTextures = signalOffOverlayTextures;
 	}
 	
-	@Override
-	public List<BakedQuad> getQuads(BlockState state, Direction cullDirection, RandomSource random, ModelData data, RenderType renderType)
+	private static MicrochipModelData getModelData(ModelData modelData)
 	{
+		var data = modelData.get(MicrochipModelData.KEY);
+		return data != null ? data : MicrochipModelData.DEFAULT;
+	}
+	
+	@Override
+	public List<BakedQuad> getQuads(BlockState state, Direction cullDirection, RandomSource random, ModelData modelData, RenderType renderType)
+	{
+		var data = getModelData(modelData);
 		List<BakedQuad> quads = Lists.newArrayList();
 		quads.addAll(new ElementBuilder().allFaces().getQuads(baseTextures::get));
 		if(state != null)
 		{
-			quads.addAll(new ElementBuilder().allFaces().getQuads(sideOverlayTextures::get));
-			quads.addAll(new ElementBuilder().allFaces().getQuads((direction) -> (state.getValue(MicrochipBlock.getDirectionalState(direction)) ? signalOnOverlayTextures : signalOffOverlayTextures).get(direction)));
+			quads.addAll(new ElementBuilder()
+					.allFaces()
+					.getQuads(sideOverlayTextures::get));
+			quads.addAll(new ElementBuilder()
+					.allFaces(data::side)
+					.getQuads((direction) -> (state.getValue(MicrochipBlock.getDirectionalState(direction)) ? signalOnOverlayTextures : signalOffOverlayTextures).get(direction)));
 		}
 		return quads;
 	}
@@ -83,13 +95,21 @@ public final class MicrochipBakedModel implements IDynamicBakedModel
 			return this;
 		}
 		
-		public ElementBuilder allFaces()
+		public ElementBuilder allFaces(Predicate<Direction> filter)
 		{
 			for(var direction : Direction.values())
 			{
-				this.face(direction);
+				if(filter == null || filter.test(direction))
+				{
+					this.face(direction);
+				}
 			}
 			return this;
+		}
+		
+		public ElementBuilder allFaces()
+		{
+			return this.allFaces(null);
 		}
 		
 		public List<BakedQuad> getQuads(Function<Direction, TextureAtlasSprite> spriteGetter)
