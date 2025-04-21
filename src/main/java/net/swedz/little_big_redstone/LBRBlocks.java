@@ -19,7 +19,6 @@ import net.neoforged.neoforge.registries.DeferredRegister;
 import net.swedz.little_big_redstone.block.microchip.MicrochipBlock;
 import net.swedz.little_big_redstone.block.microchip.MicrochipBlockEntity;
 import net.swedz.little_big_redstone.client.model.BasicCustomLoaderBuilder;
-import net.swedz.little_big_redstone.helper.DyeColorHelper;
 import net.swedz.tesseract.neoforge.api.Assert;
 import net.swedz.tesseract.neoforge.registry.SortOrder;
 import net.swedz.tesseract.neoforge.registry.common.CommonLootTableBuilders;
@@ -64,7 +63,7 @@ public final class LBRBlocks
 	static
 	{
 		Map<DyeColor, BlockHolder<MicrochipBlock>> microchips = Maps.newHashMap();
-		DyeColorHelper.forEachIndexed((color, colorName, index) ->
+		LBRColors.forEachIndexed((color, colorName, index) ->
 				microchips.put(color, createMicrochip(color, colorName, index).register()));
 		MICROCHIPS = Collections.unmodifiableMap(microchips);
 	}
@@ -153,8 +152,7 @@ public final class LBRBlocks
 							.texture("layer0", LBR.id("item/microchip"))
 							.texture("layer1", LBR.id("item/microchip_overlay"))
 							.customLoader((parent, efh) -> ItemLayerModelBuilder.begin(parent, efh)
-									// TODO pick better colors for this (or use separate textures for each?)
-									.color(0xFF000000 | color.getFireworkColor(), 0));
+									.color(LBRColors.microchipItem(color), 0));
 				});
 	}
 }

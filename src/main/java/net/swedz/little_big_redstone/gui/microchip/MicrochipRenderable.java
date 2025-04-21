@@ -14,6 +14,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.Style;
 import net.minecraft.resources.ResourceLocation;
 import net.swedz.little_big_redstone.LBR;
+import net.swedz.little_big_redstone.LBRColors;
 import net.swedz.little_big_redstone.LBRComponents;
 import net.swedz.little_big_redstone.LBRItems;
 import net.swedz.little_big_redstone.gui.microchip.logic.LogicRenderer;
@@ -312,8 +313,7 @@ public final class MicrochipRenderable implements GuiEventListener, Renderable, 
 	
 	private void renderCircuitBg(GuiGraphics graphics, int mouseX, int mouseY, float partialTicks)
 	{
-		// TODO pick better colors for this (or use separate textures for each?)
-		var color = new Color(screen.getMenu().color().getFireworkColor());
+		var color = new Color(LBRColors.circuitboard(screen.getMenu().color()));
 		graphics.setColor(color.getRed() / 255f, color.getGreen() / 255f, color.getBlue() / 255f, 1);
 		graphics.blit(CIRCUIT_BACKGROUND, 0, 0, 0, 0, width, height, 64, 64);
 		graphics.setColor(1, 1, 1, 1);

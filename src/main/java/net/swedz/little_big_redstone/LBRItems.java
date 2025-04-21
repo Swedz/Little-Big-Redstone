@@ -6,7 +6,6 @@ import net.minecraft.world.item.Item;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.client.model.generators.ModelFile;
 import net.neoforged.neoforge.registries.DeferredRegister;
-import net.swedz.little_big_redstone.helper.DyeColorHelper;
 import net.swedz.little_big_redstone.item.LogicItem;
 import net.swedz.little_big_redstone.item.StickyNoteItem;
 import net.swedz.little_big_redstone.microchip.logic.LogicType;
@@ -59,7 +58,7 @@ public final class LBRItems
 		}
 		
 		Map<DyeColor, ItemHolder<StickyNoteItem>> stickyNotes = Maps.newHashMap();
-		DyeColorHelper.forEachIndexed((color, colorName, index) ->
+		LBRColors.forEachIndexed((color, colorName, index) ->
 				stickyNotes.put(color, createStickyNote(color, colorName, index).register()));
 		STICKY_NOTES = Collections.unmodifiableMap(stickyNotes);
 	}

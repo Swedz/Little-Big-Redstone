@@ -3,9 +3,7 @@
   "loader": "neoforge:item_layers",
   "neoforge_data": {
     "layers": {
-      "0": {
-        "color": "fff0f0f0"
-      }
+      "0": {}
     }
   },
   "render_types": {},
