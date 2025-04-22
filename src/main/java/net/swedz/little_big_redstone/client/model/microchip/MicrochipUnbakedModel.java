@@ -34,14 +34,12 @@ public final class MicrochipUnbakedModel implements IUnbakedGeometry<MicrochipUn
 		var signalOnOverlayTextureFallback = spriteGetter.apply(context.getMaterial("signal_on_overlay"));
 		var signalOffOverlayTextureFallback = spriteGetter.apply(context.getMaterial("signal_off_overlay"));
 		Map<Direction, TextureAtlasSprite> baseTextures = Maps.newHashMap();
-		Map<Direction, TextureAtlasSprite> sideOverlayTextures = Maps.newHashMap();
 		Map<Direction, TextureAtlasSprite> signalOnOverlayTextures = Maps.newHashMap();
 		Map<Direction, TextureAtlasSprite> signalOffOverlayTextures = Maps.newHashMap();
 		for(var direction : Direction.values())
 		{
 			var directionName = direction.name().toLowerCase(Locale.ROOT);
 			baseTextures.put(direction, getMaterialOrDefault(context, spriteGetter, "base_" + directionName, baseTextureFallback));
-			sideOverlayTextures.put(direction, spriteGetter.apply(context.getMaterial("side_overlay_" + directionName)));
 			signalOnOverlayTextures.put(direction, getMaterialOrDefault(context, spriteGetter, "signal_on_overlay_" + directionName, signalOnOverlayTextureFallback));
 			signalOffOverlayTextures.put(direction, getMaterialOrDefault(context, spriteGetter, "signal_off_overlay_" + directionName, signalOffOverlayTextureFallback));
 		}
@@ -52,7 +50,6 @@ public final class MicrochipUnbakedModel implements IUnbakedGeometry<MicrochipUn
 				context.useBlockLight(),
 				spriteGetter.apply(context.getMaterial("particle")),
 				baseTextures,
-				sideOverlayTextures,
 				signalOnOverlayTextures, signalOffOverlayTextures
 		);
 	}

@@ -2,7 +2,6 @@ package net.swedz.little_big_redstone;
 
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
-import net.minecraft.core.Direction;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.world.item.BlockItem;
@@ -26,7 +25,6 @@ import net.swedz.tesseract.neoforge.registry.holder.BlockHolder;
 import net.swedz.tesseract.neoforge.registry.holder.BlockWithItemHolder;
 
 import java.util.Collections;
-import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 import java.util.function.BiFunction;
@@ -137,11 +135,6 @@ public final class LBRBlocks
 							.customLoader((parent, efh) -> new BasicCustomLoaderBuilder<>(LBR.id("microchip"), parent, efh)).end()
 							.texture("particle", LBR.id("block/microchip_%s".formatted(colorId)))
 							.texture("base", LBR.id("block/microchip_%s".formatted(colorId)));
-					for(var direction : Direction.values())
-					{
-						String directionName = direction.toString().toLowerCase(Locale.ROOT);
-						blockModel.texture("side_overlay_%s".formatted(directionName), LBR.id("block/microchip_side_overlay_%s".formatted(directionName)));
-					}
 					blockModel.texture("signal_on_overlay", LBR.id("block/microchip_signal_on_overlay"));
 					blockModel.texture("signal_off_overlay", LBR.id("block/microchip_signal_off_overlay"));
 					

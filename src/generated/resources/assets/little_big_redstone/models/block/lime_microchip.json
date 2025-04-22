@@ -4,12 +4,6 @@
   "textures": {
     "base": "little_big_redstone:block/microchip_lime",
     "particle": "little_big_redstone:block/microchip_lime",
-    "side_overlay_down": "little_big_redstone:block/microchip_side_overlay_down",
-    "side_overlay_east": "little_big_redstone:block/microchip_side_overlay_east",
-    "side_overlay_north": "little_big_redstone:block/microchip_side_overlay_north",
-    "side_overlay_south": "little_big_redstone:block/microchip_side_overlay_south",
-    "side_overlay_up": "little_big_redstone:block/microchip_side_overlay_up",
-    "side_overlay_west": "little_big_redstone:block/microchip_side_overlay_west",
     "signal_off_overlay": "little_big_redstone:block/microchip_signal_off_overlay",
     "signal_on_overlay": "little_big_redstone:block/microchip_signal_on_overlay"
   }

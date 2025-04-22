@@ -39,14 +39,12 @@ public final class MicrochipBakedModel implements IDynamicBakedModel
 	
 	private final TextureAtlasSprite                 particle;
 	private final Map<Direction, TextureAtlasSprite> baseTextures;
-	private final Map<Direction, TextureAtlasSprite> sideOverlayTextures;
 	private final Map<Direction, TextureAtlasSprite> signalOnOverlayTextures;
 	private final Map<Direction, TextureAtlasSprite> signalOffOverlayTextures;
 	
 	MicrochipBakedModel(ItemTransforms transforms, boolean useAmbientOcclusion, boolean isGui3d, boolean usesBlockLight,
 						TextureAtlasSprite particle,
 						Map<Direction, TextureAtlasSprite> baseTextures,
-						Map<Direction, TextureAtlasSprite> sideOverlayTextures,
 						Map<Direction, TextureAtlasSprite> signalOnOverlayTextures,
 						Map<Direction, TextureAtlasSprite> signalOffOverlayTextures)
 	{
@@ -56,7 +54,6 @@ public final class MicrochipBakedModel implements IDynamicBakedModel
 		this.usesBlockLight = usesBlockLight;
 		this.particle = particle;
 		this.baseTextures = baseTextures;
-		this.sideOverlayTextures = sideOverlayTextures;
 		this.signalOnOverlayTextures = signalOnOverlayTextures;
 		this.signalOffOverlayTextures = signalOffOverlayTextures;
 	}
@@ -75,9 +72,6 @@ public final class MicrochipBakedModel implements IDynamicBakedModel
 		quads.addAll(new ElementBuilder().allFaces().getQuads(baseTextures::get));
 		if(state != null)
 		{
-			quads.addAll(new ElementBuilder()
-					.allFaces()
-					.getQuads(sideOverlayTextures::get));
 			quads.addAll(new ElementBuilder()
 					.allFaces(data::side)
 					.getQuads((direction) -> (state.getValue(MicrochipBlock.getDirectionalState(direction)) ? signalOnOverlayTextures : signalOffOverlayTextures).get(direction)));
