@@ -11,7 +11,7 @@ import net.neoforged.neoforge.client.event.EntityRenderersEvent;
 import net.neoforged.neoforge.client.event.ModelEvent;
 import net.neoforged.neoforge.client.event.RegisterMenuScreensEvent;
 import net.swedz.little_big_redstone.client.model.microchip.MicrochipUnbakedModel;
-import net.swedz.little_big_redstone.entity.stickynote.StickyNoteEntityRenderer;
+import net.swedz.little_big_redstone.client.entity.StickyNoteEntityRenderer;
 import net.swedz.little_big_redstone.gui.logicconfig.LogicConfigScreen;
 import net.swedz.little_big_redstone.gui.microchip.MicrochipScreen;
 import net.swedz.tesseract.neoforge.registry.holder.ItemHolder;

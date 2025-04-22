@@ -1,4 +1,4 @@
-package net.swedz.little_big_redstone.entity.stickynote;
+package net.swedz.little_big_redstone.client.entity;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
@@ -16,6 +16,7 @@ import net.minecraft.world.inventory.InventoryMenu;
 import net.minecraft.world.item.DyeColor;
 import net.neoforged.neoforge.client.model.data.ModelData;
 import net.swedz.little_big_redstone.LBRClientModels;
+import net.swedz.little_big_redstone.entity.stickynote.StickyNoteEntity;
 
 public final class StickyNoteEntityRenderer extends EntityRenderer<StickyNoteEntity>
 {
