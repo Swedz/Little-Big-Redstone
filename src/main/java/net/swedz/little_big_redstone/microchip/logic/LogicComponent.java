@@ -4,11 +4,13 @@ import com.mojang.serialization.Codec;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.world.item.DyeColor;
 import net.swedz.little_big_redstone.api.IntRange;
 import net.swedz.little_big_redstone.microchip.logic.config.LogicConfig;
 import net.swedz.tesseract.neoforge.api.Assert;
 
 import java.util.List;
+import java.util.Optional;
 
 public abstract class LogicComponent<L extends LogicComponent<L, C>, C extends LogicConfig> implements LogicPortHolder
 {
@@ -18,13 +20,17 @@ public abstract class LogicComponent<L extends LogicComponent<L, C>, C extends L
 	
 	protected final C config;
 	
-	protected LogicComponent(C config)
+	protected Optional<DyeColor> color;
+	
+	protected LogicComponent(C config, Optional<DyeColor> color)
 	{
 		this.config = config;
+		this.color = color;
 	}
 	
-	protected LogicComponent()
+	protected LogicComponent(Optional<DyeColor> color)
 	{
+		this.color = color;
 		this.config = this.defaultConfig();
 	}
 	
@@ -34,6 +40,21 @@ public abstract class LogicComponent<L extends LogicComponent<L, C>, C extends L
 	}
 	
 	protected abstract C defaultConfig();
+	
+	public final Optional<DyeColor> color()
+	{
+		return color;
+	}
+	
+	public final void setColor(Optional<DyeColor> color)
+	{
+		this.color = color;
+	}
+	
+	public final void resetColor()
+	{
+		color = Optional.empty();
+	}
 	
 	public abstract LogicType<L> type();
 	
@@ -93,6 +114,7 @@ public abstract class LogicComponent<L extends LogicComponent<L, C>, C extends L
 	public final void loadFrom(L other)
 	{
 		config.loadFrom(other.config);
+		color = other.color;
 		this.internalLoadFrom(other);
 	}
 	

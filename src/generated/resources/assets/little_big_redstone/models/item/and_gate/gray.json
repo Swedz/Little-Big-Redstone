@@ -1,0 +1,16 @@
+{
+  "parent": "minecraft:item/generated",
+  "loader": "neoforge:item_layers",
+  "neoforge_data": {
+    "layers": {
+      "0": {
+        "color": "ff555555"
+      }
+    }
+  },
+  "render_types": {},
+  "textures": {
+    "layer0": "little_big_redstone:item/and_gate",
+    "layer1": "little_big_redstone:item/and_gate_overlay"
+  }
+}

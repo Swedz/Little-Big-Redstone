@@ -4,6 +4,7 @@ import com.mojang.serialization.MapCodec;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.world.item.DyeColor;
 import net.swedz.little_big_redstone.LBRText;
 import net.swedz.little_big_redstone.microchip.logic.LogicContext;
 import net.swedz.little_big_redstone.microchip.logic.LogicType;
@@ -11,6 +12,8 @@ import net.swedz.little_big_redstone.microchip.logic.LogicTypes;
 import net.swedz.little_big_redstone.microchip.logic.gate.config.SingleLogicGateConfig;
 
 import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
 
 import static net.swedz.little_big_redstone.LBRTextLine.*;
 
@@ -20,14 +23,14 @@ public final class NOTGate extends LogicGate<NOTGate, SingleLogicGateConfig>
 	
 	public static final StreamCodec<ByteBuf, NOTGate> STREAM_CODEC = streamCodec(NOTGate::new);
 	
-	private NOTGate(boolean outputState)
+	private NOTGate(Optional<DyeColor> color, boolean outputState)
 	{
-		super(outputState);
+		super(color, outputState);
 	}
 	
 	public NOTGate()
 	{
-		this(false);
+		this(Optional.empty(), false);
 	}
 	
 	@Override
@@ -63,18 +66,19 @@ public final class NOTGate extends LogicGate<NOTGate, SingleLogicGateConfig>
 	@Override
 	public NOTGate copy()
 	{
-		return new NOTGate(this.output());
+		return new NOTGate(color, this.output());
 	}
 	
 	@Override
 	public int hashCode()
 	{
-		return this.type().hashCode();
+		return Objects.hash(this.type(), color);
 	}
 	
 	@Override
 	public boolean equals(Object o)
 	{
-		return o instanceof NOTGate;
+		return this == o ||
+			   (o instanceof NOTGate other && Objects.equals(color, other.color));
 	}
 }

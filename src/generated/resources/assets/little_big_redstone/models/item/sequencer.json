@@ -1,6 +1,105 @@
 {
   "parent": "minecraft:item/generated",
+  "overrides": [
+    {
+      "model": "little_big_redstone:item/sequencer/white",
+      "predicate": {
+        "little_big_redstone:dye_color": 0.0
+      }
+    },
+    {
+      "model": "little_big_redstone:item/sequencer/orange",
+      "predicate": {
+        "little_big_redstone:dye_color": 1.0
+      }
+    },
+    {
+      "model": "little_big_redstone:item/sequencer/magenta",
+      "predicate": {
+        "little_big_redstone:dye_color": 2.0
+      }
+    },
+    {
+      "model": "little_big_redstone:item/sequencer/light_blue",
+      "predicate": {
+        "little_big_redstone:dye_color": 3.0
+      }
+    },
+    {
+      "model": "little_big_redstone:item/sequencer/yellow",
+      "predicate": {
+        "little_big_redstone:dye_color": 4.0
+      }
+    },
+    {
+      "model": "little_big_redstone:item/sequencer/lime",
+      "predicate": {
+        "little_big_redstone:dye_color": 5.0
+      }
+    },
+    {
+      "model": "little_big_redstone:item/sequencer/pink",
+      "predicate": {
+        "little_big_redstone:dye_color": 6.0
+      }
+    },
+    {
+      "model": "little_big_redstone:item/sequencer/gray",
+      "predicate": {
+        "little_big_redstone:dye_color": 7.0
+      }
+    },
+    {
+      "model": "little_big_redstone:item/sequencer/light_gray",
+      "predicate": {
+        "little_big_redstone:dye_color": 8.0
+      }
+    },
+    {
+      "model": "little_big_redstone:item/sequencer/cyan",
+      "predicate": {
+        "little_big_redstone:dye_color": 9.0
+      }
+    },
+    {
+      "model": "little_big_redstone:item/sequencer/purple",
+      "predicate": {
+        "little_big_redstone:dye_color": 10.0
+      }
+    },
+    {
+      "model": "little_big_redstone:item/sequencer/blue",
+      "predicate": {
+        "little_big_redstone:dye_color": 11.0
+      }
+    },
+    {
+      "model": "little_big_redstone:item/sequencer/brown",
+      "predicate": {
+        "little_big_redstone:dye_color": 12.0
+      }
+    },
+    {
+      "model": "little_big_redstone:item/sequencer/green",
+      "predicate": {
+        "little_big_redstone:dye_color": 13.0
+      }
+    },
+    {
+      "model": "little_big_redstone:item/sequencer/red",
+      "predicate": {
+        "little_big_redstone:dye_color": 14.0
+      }
+    },
+    {
+      "model": "little_big_redstone:item/sequencer/black",
+      "predicate": {
+        "little_big_redstone:dye_color": 15.0
+      }
+    }
+  ],
   "textures": {
-    "layer0": "little_big_redstone:item/sequencer"
+    "layer0": "little_big_redstone:item/sequencer",
+    "layer1": "little_big_redstone:item/sequencer_overlay"
   }
 }

@@ -8,6 +8,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.util.Mth;
+import net.minecraft.world.item.DyeColor;
 import net.swedz.little_big_redstone.LBRText;
 import net.swedz.little_big_redstone.microchip.awareness.AwarenessType;
 import net.swedz.little_big_redstone.microchip.awareness.AwarenessTypes;
@@ -19,6 +20,7 @@ import net.swedz.little_big_redstone.microchip.logic.LogicTypes;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 import static net.swedz.little_big_redstone.LBRTextLine.*;
 
@@ -27,33 +29,35 @@ public final class LogicReader extends LogicComponent<LogicReader, LogicReaderCo
 	public static final MapCodec<LogicReader> CODEC = RecordCodecBuilder.mapCodec((instance) -> instance
 			.group(
 					LogicReaderConfig.CODEC.fieldOf("config").forGetter(LogicReader::config),
+					DyeColor.CODEC.optionalFieldOf("color").forGetter(LogicReader::color),
 					Codec.BOOL.fieldOf("output").forGetter(LogicReader::output)
 			)
 			.apply(instance, LogicReader::new));
 	
 	public static final StreamCodec<ByteBuf, LogicReader> STREAM_CODEC = StreamCodec.composite(
 			LogicReaderConfig.STREAM_CODEC, LogicReader::config,
+			ByteBufCodecs.optional(DyeColor.STREAM_CODEC), LogicReader::color,
 			ByteBufCodecs.BOOL, LogicReader::output,
 			LogicReader::new
 	);
 	
 	private boolean outputState;
 	
-	private LogicReader(LogicReaderConfig config, boolean outputState)
+	private LogicReader(LogicReaderConfig config, Optional<DyeColor> color, boolean outputState)
 	{
-		super(config);
+		super(config, color);
 		this.outputState = outputState;
 	}
 	
-	private LogicReader(boolean outputState)
+	private LogicReader(Optional<DyeColor> color, boolean outputState)
 	{
-		super();
+		super(color);
 		this.outputState = outputState;
 	}
 	
 	public LogicReader()
 	{
-		this(false);
+		this(Optional.empty(), false);
 	}
 	
 	@Override
@@ -180,19 +184,19 @@ public final class LogicReader extends LogicComponent<LogicReader, LogicReaderCo
 	@Override
 	public LogicReader copy()
 	{
-		return new LogicReader(config.copy(), outputState);
+		return new LogicReader(config.copy(), color, outputState);
 	}
 	
 	@Override
 	public int hashCode()
 	{
-		return Objects.hash(config);
+		return Objects.hash(this.type(), config, color);
 	}
 	
 	@Override
 	public boolean equals(Object o)
 	{
 		return this == o ||
-			   (o instanceof LogicReader other && Objects.equals(config, other.config));
+			   (o instanceof LogicReader other && Objects.equals(config, other.config) && Objects.equals(color, other.color));
 	}
 }

@@ -7,6 +7,7 @@ import io.netty.buffer.ByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.world.item.DyeColor;
 import net.swedz.little_big_redstone.LBRText;
 import net.swedz.little_big_redstone.microchip.logic.LogicComponent;
 import net.swedz.little_big_redstone.microchip.logic.LogicContext;
@@ -14,6 +15,8 @@ import net.swedz.little_big_redstone.microchip.logic.LogicType;
 import net.swedz.little_big_redstone.microchip.logic.LogicTypes;
 
 import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
 
 import static net.swedz.little_big_redstone.LBRTextLine.*;
 
@@ -21,25 +24,28 @@ public final class RSNORLatch extends LogicComponent<RSNORLatch, RSNORLatchConfi
 {
 	public static final MapCodec<RSNORLatch> CODEC = RecordCodecBuilder.mapCodec((instance) -> instance
 			.group(
+					DyeColor.CODEC.optionalFieldOf("color").forGetter(RSNORLatch::color),
 					Codec.BOOL.fieldOf("output").forGetter(RSNORLatch::output)
 			)
 			.apply(instance, RSNORLatch::new));
 	
 	public static final StreamCodec<ByteBuf, RSNORLatch> STREAM_CODEC = StreamCodec.composite(
+			ByteBufCodecs.optional(DyeColor.STREAM_CODEC), RSNORLatch::color,
 			ByteBufCodecs.BOOL, RSNORLatch::output,
 			RSNORLatch::new
 	);
 	
 	private boolean outputState;
 	
-	private RSNORLatch(boolean outputState)
+	private RSNORLatch(Optional<DyeColor> color, boolean outputState)
 	{
+		super(color);
 		this.outputState = outputState;
 	}
 	
 	public RSNORLatch()
 	{
-		this(false);
+		this(Optional.empty(), false);
 	}
 	
 	@Override
@@ -103,18 +109,19 @@ public final class RSNORLatch extends LogicComponent<RSNORLatch, RSNORLatchConfi
 	@Override
 	public RSNORLatch copy()
 	{
-		return new RSNORLatch(outputState);
+		return new RSNORLatch(color, outputState);
 	}
 	
 	@Override
 	public int hashCode()
 	{
-		return this.type().hashCode();
+		return Objects.hash(this.type(), color);
 	}
 	
 	@Override
 	public boolean equals(Object o)
 	{
-		return o instanceof RSNORLatch;
+		return this == o ||
+			   (o instanceof RSNORLatch other && Objects.equals(color, other.color));
 	}
 }

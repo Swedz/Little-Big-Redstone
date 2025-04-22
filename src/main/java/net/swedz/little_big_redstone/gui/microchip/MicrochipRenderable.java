@@ -17,12 +17,14 @@ import net.swedz.little_big_redstone.LBR;
 import net.swedz.little_big_redstone.LBRColors;
 import net.swedz.little_big_redstone.LBRComponents;
 import net.swedz.little_big_redstone.LBRItems;
+import net.swedz.little_big_redstone.gui.microchip.logic.DyeComponentResult;
 import net.swedz.little_big_redstone.gui.microchip.logic.LogicRenderer;
 import net.swedz.little_big_redstone.gui.microchip.logic.LogicRenderers;
 import net.swedz.little_big_redstone.microchip.LogicEntry;
 import net.swedz.little_big_redstone.microchip.LogicSelectedPort;
 import net.swedz.little_big_redstone.microchip.Microchip;
 import net.swedz.little_big_redstone.microchip.wire.Wire;
+import net.swedz.little_big_redstone.network.packet.DyeMicrochipLogicPacket;
 import net.swedz.little_big_redstone.network.packet.OpenLogicConfigPacket;
 import net.swedz.little_big_redstone.network.packet.PlaceTakeMicrochipLogicPacket;
 import net.swedz.little_big_redstone.network.packet.PlaceTakeMicrochipWirePacket;
@@ -58,6 +60,32 @@ public final class MicrochipRenderable implements GuiEventListener, Renderable, 
 	public boolean hasSelectedPort()
 	{
 		return selectedPort != null;
+	}
+	
+	private boolean dyeComponent(int x, int y, int button, LogicEntry entry)
+	{
+		var menu = screen.getMenu();
+		var carried = menu.getCarried();
+		
+		if(button == InputConstants.MOUSE_BUTTON_RIGHT &&
+		   entry != null)
+		{
+			var result = DyeComponentResult.test(menu, carried, entry);
+			if(result.success())
+			{
+				entry.component().setColor(result.color());
+				microchip.markDirty();
+				if(result.consume())
+				{
+					carried.consume(1, screen.getMinecraft().player);
+				}
+				result.playSound(screen.getMinecraft().player);
+				new DyeMicrochipLogicPacket(menu.containerId, entry.slot()).sendToServer();
+				return true;
+			}
+		}
+		
+		return false;
 	}
 	
 	private boolean pickupWire(int x, int y, int button, LogicSelectedPort outputPort, LogicSelectedPort inputPort)
@@ -196,7 +224,11 @@ public final class MicrochipRenderable implements GuiEventListener, Renderable, 
 		var inputPort = microchip.components().findPortAt(x, y, true);
 		var outputPort = microchip.components().findPortAt(x, y, false);
 		
-		if(this.pickupWire(x, y, button, outputPort, inputPort))
+		if(this.dyeComponent(x, y, button, entry))
+		{
+			return false;
+		}
+		else if(this.pickupWire(x, y, button, outputPort, inputPort))
 		{
 			return false;
 		}
@@ -302,7 +334,7 @@ public final class MicrochipRenderable implements GuiEventListener, Renderable, 
 	
 	private void renderLogic(GuiGraphics graphics, int mouseX, int mouseY, float partialTicks)
 	{
-		var context = new LogicRenderer.Context(false, this.hasSelectedPort(), screen.getMenu().getCarried().is(LBRItems.REDSTONE_BIT.asItem()));
+		var context = new LogicRenderer.Context(screen.getMenu().color(), false, this.hasSelectedPort(), screen.getMenu().getCarried().is(LBRItems.REDSTONE_BIT.asItem()));
 		int traversalIndex = 0;
 		for(var entry : microchip.components().traversal())
 		{

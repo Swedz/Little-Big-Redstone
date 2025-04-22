@@ -7,6 +7,7 @@ import io.netty.buffer.ByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.world.item.DyeColor;
 import net.swedz.little_big_redstone.LBRText;
 import net.swedz.little_big_redstone.microchip.logic.LogicComponent;
 import net.swedz.little_big_redstone.microchip.logic.LogicContext;
@@ -14,6 +15,8 @@ import net.swedz.little_big_redstone.microchip.logic.LogicType;
 import net.swedz.little_big_redstone.microchip.logic.LogicTypes;
 
 import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
 
 import static net.swedz.little_big_redstone.LBRTextLine.*;
 
@@ -21,12 +24,14 @@ public final class TFlipFlop extends LogicComponent<TFlipFlop, TFlipFlopConfig>
 {
 	public static final MapCodec<TFlipFlop> CODEC = RecordCodecBuilder.mapCodec((instance) -> instance
 			.group(
+					DyeColor.CODEC.optionalFieldOf("color").forGetter(TFlipFlop::color),
 					Codec.BOOL.fieldOf("last_input").forGetter(TFlipFlop::lastInput),
 					Codec.BOOL.fieldOf("output").forGetter(TFlipFlop::output)
 			)
 			.apply(instance, TFlipFlop::new));
 	
 	public static final StreamCodec<ByteBuf, TFlipFlop> STREAM_CODEC = StreamCodec.composite(
+			ByteBufCodecs.optional(DyeColor.STREAM_CODEC), TFlipFlop::color,
 			ByteBufCodecs.BOOL, TFlipFlop::lastInput,
 			ByteBufCodecs.BOOL, TFlipFlop::output,
 			TFlipFlop::new
@@ -34,15 +39,16 @@ public final class TFlipFlop extends LogicComponent<TFlipFlop, TFlipFlopConfig>
 	
 	private boolean lastInputState, outputState;
 	
-	private TFlipFlop(boolean lastInputState, boolean outputState)
+	private TFlipFlop(Optional<DyeColor> color, boolean lastInputState, boolean outputState)
 	{
+		super(color);
 		this.lastInputState = lastInputState;
 		this.outputState = outputState;
 	}
 	
 	public TFlipFlop()
 	{
-		this(false, false);
+		this(Optional.empty(), false, false);
 	}
 	
 	@Override
@@ -109,18 +115,19 @@ public final class TFlipFlop extends LogicComponent<TFlipFlop, TFlipFlopConfig>
 	@Override
 	public TFlipFlop copy()
 	{
-		return new TFlipFlop(lastInputState, outputState);
+		return new TFlipFlop(color, lastInputState, outputState);
 	}
 	
 	@Override
 	public int hashCode()
 	{
-		return this.type().hashCode();
+		return Objects.hash(this.type(), color);
 	}
 	
 	@Override
 	public boolean equals(Object o)
 	{
-		return o instanceof TFlipFlop;
+		return this == o ||
+			   (o instanceof TFlipFlop other && Objects.equals(color, other.color));
 	}
 }

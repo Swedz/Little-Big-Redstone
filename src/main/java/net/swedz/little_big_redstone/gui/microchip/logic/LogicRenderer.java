@@ -2,6 +2,7 @@ package net.swedz.little_big_redstone.gui.microchip.logic;
 
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.DyeColor;
 import net.swedz.little_big_redstone.LBR;
 import net.swedz.little_big_redstone.helper.GuiGraphicsHelper;
 import net.swedz.little_big_redstone.microchip.logic.LogicComponent;
@@ -99,7 +100,7 @@ public abstract class LogicRenderer<L extends LogicComponent>
 		graphics.blit(LBR.id("textures/logic/misconfigured.png"), x + size.widthPixels() - 7 + 1, y - 1, 0, 0, 7, 7, 7, 7);
 	}
 	
-	public record Context(boolean isCarried, boolean hasSelectedPort, boolean isCarryingWire)
+	public record Context(DyeColor boardColor, boolean isCarried, boolean hasSelectedPort, boolean isCarryingWire)
 	{
 	}
 }

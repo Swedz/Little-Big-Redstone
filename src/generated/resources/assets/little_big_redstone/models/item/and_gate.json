@@ -1,6 +1,105 @@
 {
   "parent": "minecraft:item/generated",
+  "overrides": [
+    {
+      "model": "little_big_redstone:item/and_gate/white",
+      "predicate": {
+        "little_big_redstone:dye_color": 0.0
+      }
+    },
+    {
+      "model": "little_big_redstone:item/and_gate/orange",
+      "predicate": {
+        "little_big_redstone:dye_color": 1.0
+      }
+    },
+    {
+      "model": "little_big_redstone:item/and_gate/magenta",
+      "predicate": {
+        "little_big_redstone:dye_color": 2.0
+      }
+    },
+    {
+      "model": "little_big_redstone:item/and_gate/light_blue",
+      "predicate": {
+        "little_big_redstone:dye_color": 3.0
+      }
+    },
+    {
+      "model": "little_big_redstone:item/and_gate/yellow",
+      "predicate": {
+        "little_big_redstone:dye_color": 4.0
+      }
+    },
+    {
+      "model": "little_big_redstone:item/and_gate/lime",
+      "predicate": {
+        "little_big_redstone:dye_color": 5.0
+      }
+    },
+    {
+      "model": "little_big_redstone:item/and_gate/pink",
+      "predicate": {
+        "little_big_redstone:dye_color": 6.0
+      }
+    },
+    {
+      "model": "little_big_redstone:item/and_gate/gray",
+      "predicate": {
+        "little_big_redstone:dye_color": 7.0
+      }
+    },
+    {
+      "model": "little_big_redstone:item/and_gate/light_gray",
+      "predicate": {
+        "little_big_redstone:dye_color": 8.0
+      }
+    },
+    {
+      "model": "little_big_redstone:item/and_gate/cyan",
+      "predicate": {
+        "little_big_redstone:dye_color": 9.0
+      }
+    },
+    {
+      "model": "little_big_redstone:item/and_gate/purple",
+      "predicate": {
+        "little_big_redstone:dye_color": 10.0
+      }
+    },
+    {
+      "model": "little_big_redstone:item/and_gate/blue",
+      "predicate": {
+        "little_big_redstone:dye_color": 11.0
+      }
+    },
+    {
+      "model": "little_big_redstone:item/and_gate/brown",
+      "predicate": {
+        "little_big_redstone:dye_color": 12.0
+      }
+    },
+    {
+      "model": "little_big_redstone:item/and_gate/green",
+      "predicate": {
+        "little_big_redstone:dye_color": 13.0
+      }
+    },
+    {
+      "model": "little_big_redstone:item/and_gate/red",
+      "predicate": {
+        "little_big_redstone:dye_color": 14.0
+      }
+    },
+    {
+      "model": "little_big_redstone:item/and_gate/black",
+      "predicate": {
+        "little_big_redstone:dye_color": 15.0
+      }
+    }
+  ],
   "textures": {
-    "layer0": "little_big_redstone:item/and_gate"
+    "layer0": "little_big_redstone:item/and_gate",
+    "layer1": "little_big_redstone:item/and_gate_overlay"
   }
 }

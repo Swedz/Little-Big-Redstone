@@ -9,6 +9,9 @@ public final class LBRTags
 {
 	public static final class Items
 	{
+		public static final TagKey<Item> DYE_WASHER          = TagKey.create(Registries.ITEM, LBR.id("dye_washer"));
+		public static final TagKey<Item> DYE_WASHER_CONSUMED = TagKey.create(Registries.ITEM, LBR.id("dye_washer/consumed"));
+		
 		public static final TagKey<Item> STICKY_NOTES = TagKey.create(Registries.ITEM, LBR.id("sticky_notes"));
 	}
 	

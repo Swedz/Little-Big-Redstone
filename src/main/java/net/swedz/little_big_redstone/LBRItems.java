@@ -1,13 +1,16 @@
 package net.swedz.little_big_redstone;
 
 import com.google.common.collect.Maps;
+import net.minecraft.client.renderer.item.ItemProperties;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.Item;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.client.model.generators.ModelFile;
+import net.neoforged.neoforge.client.model.generators.loaders.ItemLayerModelBuilder;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import net.swedz.little_big_redstone.item.LogicItem;
 import net.swedz.little_big_redstone.item.StickyNoteItem;
+import net.swedz.little_big_redstone.microchip.logic.LogicComponent;
 import net.swedz.little_big_redstone.microchip.logic.LogicType;
 import net.swedz.little_big_redstone.microchip.logic.LogicTypes;
 import net.swedz.tesseract.neoforge.api.Assert;
@@ -16,6 +19,7 @@ import net.swedz.tesseract.neoforge.registry.common.CommonModelBuilders;
 import net.swedz.tesseract.neoforge.registry.holder.ItemHolder;
 
 import java.util.Collections;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 import java.util.function.Function;
@@ -92,7 +96,37 @@ public final class LBRItems
 	
 	private static ItemHolder<LogicItem> createLogic(String id, String englishName, LogicType<?> type, int order)
 	{
-		return create(id, englishName, (p) -> new LogicItem(p, type), LBRSortOrder.LOGIC.and(order)).withModelBuilder(CommonModelBuilders::generated);
+		return create(id, englishName, (p) -> new LogicItem(p, type), LBRSortOrder.LOGIC.and(order))
+				.withClientRegistrationListener((item) ->
+						ItemProperties.register(item, LBR.id("dye_color"), (stack, __, ___, ____) ->
+						{
+							if(stack.has(LBRComponents.LOGIC))
+							{
+								LogicComponent<?, ?> component = stack.get(LBRComponents.LOGIC);
+								return component.color().map(Enum::ordinal).orElse(-1);
+							}
+							return -1;
+						}))
+				.withModel((item) -> (provider) ->
+				{
+					var model = provider.getBuilder("item/%s".formatted(id))
+							.parent(new ModelFile.UncheckedModelFile("item/generated"))
+							.texture("layer0", LBR.id("item/%s".formatted(id)))
+							.texture("layer1", LBR.id("item/%s_overlay".formatted(id)));
+					for(var color : DyeColor.values())
+					{
+						model.override()
+								.predicate(LBR.id("dye_color"), color.ordinal())
+								.model(provider.getBuilder("item/%s/%s".formatted(id, color.toString().toLowerCase(Locale.ROOT)))
+										.parent(new ModelFile.UncheckedModelFile("item/generated"))
+										.texture("layer0", LBR.id("item/%s".formatted(id)))
+										.texture("layer1", LBR.id("item/%s_overlay".formatted(id)))
+										.customLoader((parent, efh) -> ItemLayerModelBuilder.begin(parent, efh)
+												.color(LBRColors.component(color), 0))
+										.end())
+								.end();
+					}
+				});
 	}
 	
 	private static ItemHolder<StickyNoteItem> createStickyNote(DyeColor color, String colorEnglishName, int order)

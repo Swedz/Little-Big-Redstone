@@ -4,6 +4,7 @@ import com.mojang.serialization.MapCodec;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.world.item.DyeColor;
 import net.swedz.little_big_redstone.LBRText;
 import net.swedz.little_big_redstone.microchip.logic.LogicContext;
 import net.swedz.little_big_redstone.microchip.logic.LogicType;
@@ -12,6 +13,7 @@ import net.swedz.little_big_redstone.microchip.logic.gate.config.MultiLogicGateC
 
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 import static net.swedz.little_big_redstone.LBRTextLine.*;
 
@@ -21,19 +23,19 @@ public final class NORGate extends LogicGate<NORGate, MultiLogicGateConfig>
 	
 	public static final StreamCodec<ByteBuf, NORGate> STREAM_CODEC = streamCodec(MultiLogicGateConfig.STREAM_CODEC, NORGate::new);
 	
-	private NORGate(MultiLogicGateConfig config, boolean outputState)
+	private NORGate(MultiLogicGateConfig config, Optional<DyeColor> color, boolean outputState)
 	{
-		super(config, outputState);
+		super(config, color, outputState);
 	}
 	
-	private NORGate(boolean outputState)
+	private NORGate(Optional<DyeColor> color, boolean outputState)
 	{
-		super(outputState);
+		super(color, outputState);
 	}
 	
 	public NORGate()
 	{
-		this(false);
+		this(Optional.empty(), false);
 	}
 	
 	@Override
@@ -76,19 +78,19 @@ public final class NORGate extends LogicGate<NORGate, MultiLogicGateConfig>
 	@Override
 	public NORGate copy()
 	{
-		return new NORGate(config.copy(), this.output());
+		return new NORGate(config.copy(), color, this.output());
 	}
 	
 	@Override
 	public int hashCode()
 	{
-		return Objects.hash(this.type(), config);
+		return Objects.hash(this.type(), config, color);
 	}
 	
 	@Override
 	public boolean equals(Object o)
 	{
 		return this == o ||
-			   (o instanceof NORGate other && Objects.equals(config, other.config));
+			   (o instanceof NORGate other && Objects.equals(config, other.config) && Objects.equals(color, other.color));
 	}
 }

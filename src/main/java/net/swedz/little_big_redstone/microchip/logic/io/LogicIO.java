@@ -7,6 +7,7 @@ import io.netty.buffer.ByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.world.item.DyeColor;
 import net.swedz.little_big_redstone.LBRText;
 import net.swedz.little_big_redstone.microchip.awareness.AwarenessType;
 import net.swedz.little_big_redstone.microchip.awareness.AwarenessTypes;
@@ -18,6 +19,7 @@ import net.swedz.little_big_redstone.microchip.logic.LogicTypes;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 import static net.swedz.little_big_redstone.LBRTextLine.*;
 
@@ -26,33 +28,35 @@ public final class LogicIO extends LogicComponent<LogicIO, LogicIOConfig> implem
 	public static final MapCodec<LogicIO> CODEC = RecordCodecBuilder.mapCodec((instance) -> instance
 			.group(
 					LogicIOConfig.CODEC.fieldOf("config").forGetter(LogicIO::config),
+					DyeColor.CODEC.optionalFieldOf("color").forGetter(LogicIO::color),
 					Codec.BOOL.fieldOf("output").forGetter(LogicIO::output)
 			)
 			.apply(instance, LogicIO::new));
 	
 	public static final StreamCodec<ByteBuf, LogicIO> STREAM_CODEC = StreamCodec.composite(
 			LogicIOConfig.STREAM_CODEC, LogicIO::config,
+			ByteBufCodecs.optional(DyeColor.STREAM_CODEC), LogicIO::color,
 			ByteBufCodecs.BOOL, LogicIO::output,
 			LogicIO::new
 	);
 	
 	private boolean outputState;
 	
-	private LogicIO(LogicIOConfig config, boolean outputState)
+	private LogicIO(LogicIOConfig config, Optional<DyeColor> color, boolean outputState)
 	{
-		super(config);
+		super(config, color);
 		this.outputState = outputState;
 	}
 	
-	private LogicIO(boolean outputState)
+	private LogicIO(Optional<DyeColor> color, boolean outputState)
 	{
-		super();
+		super(color);
 		this.outputState = outputState;
 	}
 	
 	public LogicIO()
 	{
-		this(false);
+		this(Optional.empty(), false);
 	}
 	
 	@Override
@@ -127,19 +131,19 @@ public final class LogicIO extends LogicComponent<LogicIO, LogicIOConfig> implem
 	@Override
 	public LogicIO copy()
 	{
-		return new LogicIO(config.copy(), outputState);
+		return new LogicIO(config.copy(), color, outputState);
 	}
 	
 	@Override
 	public int hashCode()
 	{
-		return Objects.hash(config);
+		return Objects.hash(this.type(), config, color);
 	}
 	
 	@Override
 	public boolean equals(Object o)
 	{
 		return this == o ||
-			   (o instanceof LogicIO other && Objects.equals(config, other.config));
+			   (o instanceof LogicIO other && Objects.equals(config, other.config) && Objects.equals(color, other.color));
 	}
 }

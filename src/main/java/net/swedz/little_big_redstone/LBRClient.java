@@ -6,6 +6,7 @@ import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.ModContainer;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.fml.common.Mod;
+import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
 import net.neoforged.neoforge.client.event.EntityRenderersEvent;
 import net.neoforged.neoforge.client.event.ModelEvent;
 import net.neoforged.neoforge.client.event.RegisterMenuScreensEvent;
@@ -13,6 +14,7 @@ import net.swedz.little_big_redstone.client.model.microchip.MicrochipUnbakedMode
 import net.swedz.little_big_redstone.entity.stickynote.StickyNoteEntityRenderer;
 import net.swedz.little_big_redstone.gui.logicconfig.LogicConfigScreen;
 import net.swedz.little_big_redstone.gui.microchip.MicrochipScreen;
+import net.swedz.tesseract.neoforge.registry.holder.ItemHolder;
 
 @Mod(value = LBR.ID, dist = Dist.CLIENT)
 @EventBusSubscriber(value = Dist.CLIENT, modid = LBR.ID, bus = EventBusSubscriber.Bus.MOD)
@@ -21,6 +23,12 @@ public final class LBRClient
 	public LBRClient(IEventBus bus, ModContainer container)
 	{
 		LBRTooltips.init();
+	}
+	
+	@SubscribeEvent
+	private static void registerItemProperties(FMLClientSetupEvent event)
+	{
+		event.enqueueWork(() -> LBRItems.values().forEach(ItemHolder::triggerClientRegistrationListener));
 	}
 	
 	@SubscribeEvent

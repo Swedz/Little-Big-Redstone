@@ -8,6 +8,7 @@ import io.netty.buffer.ByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.world.item.DyeColor;
 import net.swedz.little_big_redstone.LBRText;
 import net.swedz.little_big_redstone.microchip.logic.LogicComponent;
 import net.swedz.little_big_redstone.microchip.logic.LogicContext;
@@ -16,6 +17,7 @@ import net.swedz.little_big_redstone.microchip.logic.LogicType;
 import net.swedz.little_big_redstone.microchip.logic.LogicTypes;
 
 import java.util.List;
+import java.util.Optional;
 
 import static net.swedz.little_big_redstone.LBRTextLine.*;
 
@@ -24,6 +26,7 @@ public final class LogicSequencer extends LogicComponent<LogicSequencer, LogicSe
 	public static final MapCodec<LogicSequencer> CODEC = RecordCodecBuilder.mapCodec((instance) -> instance
 			.group(
 					LogicSequencerConfig.CODEC.fieldOf("config").forGetter(LogicSequencer::config),
+					DyeColor.CODEC.optionalFieldOf("color").forGetter(LogicSequencer::color),
 					Codec.LONG.fieldOf("processed_ticks").forGetter(LogicSequencer::processedTicks),
 					Codec.BOOL.fieldOf("output").forGetter(LogicSequencer::output)
 			)
@@ -31,6 +34,7 @@ public final class LogicSequencer extends LogicComponent<LogicSequencer, LogicSe
 	
 	public static final StreamCodec<ByteBuf, LogicSequencer> STREAM_CODEC = StreamCodec.composite(
 			LogicSequencerConfig.STREAM_CODEC, LogicSequencer::config,
+			ByteBufCodecs.optional(DyeColor.STREAM_CODEC), LogicSequencer::color,
 			ByteBufCodecs.VAR_LONG, LogicSequencer::processedTicks,
 			ByteBufCodecs.BOOL, LogicSequencer::output,
 			LogicSequencer::new
@@ -40,23 +44,23 @@ public final class LogicSequencer extends LogicComponent<LogicSequencer, LogicSe
 	
 	private boolean outputState;
 	
-	private LogicSequencer(LogicSequencerConfig config, long processedTicks, boolean outputState)
+	private LogicSequencer(LogicSequencerConfig config, Optional<DyeColor> color, long processedTicks, boolean outputState)
 	{
-		super(config);
+		super(config, color);
 		this.processedTicks = processedTicks;
 		this.outputState = outputState;
 	}
 	
-	private LogicSequencer(long processedTicks, boolean outputState)
+	private LogicSequencer(Optional<DyeColor> color, long processedTicks, boolean outputState)
 	{
-		super();
+		super(color);
 		this.processedTicks = processedTicks;
 		this.outputState = outputState;
 	}
 	
 	public LogicSequencer()
 	{
-		this(0, false);
+		this(Optional.empty(), 0, false);
 	}
 	
 	@Override
@@ -165,19 +169,19 @@ public final class LogicSequencer extends LogicComponent<LogicSequencer, LogicSe
 	@Override
 	public LogicSequencer copy()
 	{
-		return new LogicSequencer(config.copy(), processedTicks, outputState);
+		return new LogicSequencer(config.copy(), color, processedTicks, outputState);
 	}
 	
 	@Override
 	public int hashCode()
 	{
-		return Objects.hashCode(config, processedTicks);
+		return Objects.hashCode(this.type(), config, color, processedTicks);
 	}
 	
 	@Override
 	public boolean equals(Object o)
 	{
 		return this == o ||
-			   (o instanceof LogicSequencer other && Objects.equal(config, other.config) && processedTicks == other.processedTicks);
+			   (o instanceof LogicSequencer other && Objects.equal(config, other.config) && Objects.equal(color, other.color) && processedTicks == other.processedTicks);
 	}
 }

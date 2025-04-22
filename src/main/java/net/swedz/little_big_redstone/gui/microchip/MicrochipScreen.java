@@ -57,7 +57,7 @@ public final class MicrochipScreen extends AbstractContainerScreen<MicrochipMenu
 			var component = stack.get(LBRComponents.LOGIC);
 			int logicX = component.size().topLeftCornerX(mouseX);
 			int logicY = component.size().topLeftCornerY(mouseY);
-			var context = new LogicRenderer.Context(true, microchipWidget.hasSelectedPort(), false);
+			var context = new LogicRenderer.Context(menu.color(), true, microchipWidget.hasSelectedPort(), false);
 			graphics.pose().pushPose();
 			graphics.pose().scale(size.scale(), size.scale(), size.scale());
 			LogicRenderers.render(context, graphics, component, logicX, logicY);
