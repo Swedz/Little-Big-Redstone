@@ -33,9 +33,21 @@ public final class LBRColors
 		};
 	}
 	
-	public static int component(DyeColor color)
+	public static int componentForeground(DyeColor color)
 	{
 		return ColorHelper.getVibrantColor(color);
+	}
+	
+	public static int componentBackground(DyeColor color)
+	{
+		if(color == DyeColor.BLACK || color == DyeColor.GRAY)
+		{
+			return 0xFFFFFFFF;
+		}
+		else
+		{
+			return 0xFF000000;
+		}
 	}
 	
 	public static int microchipItem(DyeColor color)

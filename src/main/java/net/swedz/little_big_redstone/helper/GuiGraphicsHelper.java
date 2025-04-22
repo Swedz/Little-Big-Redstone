@@ -13,6 +13,20 @@ import org.joml.Matrix4f;
 
 public final class GuiGraphicsHelper
 {
+	public static void setColor(GuiGraphics graphics, int argb)
+	{
+		float red = ColorConversions.redFloat(argb);
+		float green = ColorConversions.greenFloat(argb);
+		float blue = ColorConversions.blueFloat(argb);
+		float alpha = ColorConversions.alphaFloat(argb);
+		graphics.setColor(red, green, blue, alpha);
+	}
+	
+	public static void resetColor(GuiGraphics graphics)
+	{
+		graphics.setColor(1, 1, 1, 1);
+	}
+	
 	public static void blit(GuiGraphics graphics, ResourceLocation texture, int x, int y, int uOffset, int vOffset, int uWidth, int vHeight, float red, float green, float blue, float alpha)
 	{
 		blit(graphics, texture, x, y, 0, (float) uOffset, (float) vOffset, uWidth, vHeight, 256, 256, red, green, blue, alpha);

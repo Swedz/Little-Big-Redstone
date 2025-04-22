@@ -20,6 +20,7 @@ import net.swedz.little_big_redstone.LBRItems;
 import net.swedz.little_big_redstone.gui.microchip.logic.DyeComponentResult;
 import net.swedz.little_big_redstone.gui.microchip.logic.LogicRenderer;
 import net.swedz.little_big_redstone.gui.microchip.logic.LogicRenderers;
+import net.swedz.little_big_redstone.helper.GuiGraphicsHelper;
 import net.swedz.little_big_redstone.microchip.LogicEntry;
 import net.swedz.little_big_redstone.microchip.LogicSelectedPort;
 import net.swedz.little_big_redstone.microchip.Microchip;
@@ -29,7 +30,6 @@ import net.swedz.little_big_redstone.network.packet.OpenLogicConfigPacket;
 import net.swedz.little_big_redstone.network.packet.PlaceTakeMicrochipLogicPacket;
 import net.swedz.little_big_redstone.network.packet.PlaceTakeMicrochipWirePacket;
 
-import java.awt.Color;
 import java.util.List;
 import java.util.function.Consumer;
 
@@ -345,10 +345,9 @@ public final class MicrochipRenderable implements GuiEventListener, Renderable, 
 	
 	private void renderCircuitBg(GuiGraphics graphics, int mouseX, int mouseY, float partialTicks)
 	{
-		var color = new Color(LBRColors.circuitboard(screen.getMenu().color()));
-		graphics.setColor(color.getRed() / 255f, color.getGreen() / 255f, color.getBlue() / 255f, 1);
+		GuiGraphicsHelper.setColor(graphics, LBRColors.circuitboard(screen.getMenu().color()));
 		graphics.blit(CIRCUIT_BACKGROUND, 0, 0, 0, 0, width, height, 64, 64);
-		graphics.setColor(1, 1, 1, 1);
+		GuiGraphicsHelper.resetColor(graphics);
 	}
 	
 	@Override

@@ -11,6 +11,7 @@ import net.neoforged.neoforge.client.event.EntityRenderersEvent;
 import net.neoforged.neoforge.client.event.ModelEvent;
 import net.neoforged.neoforge.client.event.RegisterMenuScreensEvent;
 import net.swedz.little_big_redstone.client.entity.StickyNoteEntityRenderer;
+import net.swedz.little_big_redstone.client.model.logic.LogicUnbakedModel;
 import net.swedz.little_big_redstone.client.model.microchip.MicrochipUnbakedModel;
 import net.swedz.little_big_redstone.gui.logicconfig.LogicConfigScreen;
 import net.swedz.little_big_redstone.gui.microchip.MicrochipScreen;
@@ -47,6 +48,7 @@ public final class LBRClient
 	@SubscribeEvent
 	private static void registerGeometryLoaders(ModelEvent.RegisterGeometryLoaders event)
 	{
+		event.register(LogicUnbakedModel.ID, LogicUnbakedModel.LOADER);
 		event.register(MicrochipUnbakedModel.ID, MicrochipUnbakedModel.LOADER);
 	}
 }

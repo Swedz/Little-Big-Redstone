@@ -1,16 +1,14 @@
 package net.swedz.little_big_redstone;
 
 import com.google.common.collect.Maps;
-import net.minecraft.client.renderer.item.ItemProperties;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.Item;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.client.model.generators.ModelFile;
-import net.neoforged.neoforge.client.model.generators.loaders.ItemLayerModelBuilder;
 import net.neoforged.neoforge.registries.DeferredRegister;
+import net.swedz.little_big_redstone.client.model.logic.LogicModelBuilder;
 import net.swedz.little_big_redstone.item.LogicItem;
 import net.swedz.little_big_redstone.item.StickyNoteItem;
-import net.swedz.little_big_redstone.microchip.logic.LogicComponent;
 import net.swedz.little_big_redstone.microchip.logic.LogicType;
 import net.swedz.little_big_redstone.microchip.logic.LogicTypes;
 import net.swedz.tesseract.neoforge.api.Assert;
@@ -54,10 +52,14 @@ public final class LBRItems
 	static
 	{
 		{
+			Map<String, LogicBackgroundType> logicBackgroundTypes = Map.of(
+					"io", LogicBackgroundType.CIRCLE,
+					"reader", LogicBackgroundType.CIRCLE
+			);
 			int index = 0;
 			for(LogicType<?> type : LogicTypes.values())
 			{
-				createLogic(type.id(), type.englishName(), type, index++).register();
+				createLogic(type.id(), type.englishName(), type, logicBackgroundTypes.getOrDefault(type.id(), LogicBackgroundType.SQUARE), index++).register();
 			}
 		}
 		
@@ -94,38 +96,43 @@ public final class LBRItems
 		return holder;
 	}
 	
-	private static ItemHolder<LogicItem> createLogic(String id, String englishName, LogicType<?> type, int order)
+	private enum LogicBackgroundType
+	{
+		CIRCLE,
+		SQUARE;
+		
+		private final String key = this.toString().toLowerCase(Locale.ROOT);
+		
+		public String key()
+		{
+			return key;
+		}
+	}
+	
+	private static ItemHolder<LogicItem> createLogic(String id, String englishName, LogicType<?> type, LogicBackgroundType backgroundType, int order)
 	{
 		return create(id, englishName, (p) -> new LogicItem(p, type), LBRSortOrder.LOGIC.and(order))
-				.withClientRegistrationListener((item) ->
-						ItemProperties.register(item, LBR.id("dye_color"), (stack, __, ___, ____) ->
-						{
-							if(stack.has(LBRComponents.LOGIC))
-							{
-								LogicComponent<?, ?> component = stack.get(LBRComponents.LOGIC);
-								return component.color().map(Enum::ordinal).orElse(-1);
-							}
-							return -1;
-						}))
 				.withModel((item) -> (provider) ->
 				{
-					var model = provider.getBuilder("item/%s".formatted(id))
+					provider.getBuilder("item/%s".formatted(id))
 							.parent(new ModelFile.UncheckedModelFile("item/generated"))
-							.texture("layer0", LBR.id("item/%s".formatted(id)))
-							.texture("layer1", LBR.id("item/%s_overlay".formatted(id)));
-					for(var color : DyeColor.values())
-					{
-						model.override()
-								.predicate(LBR.id("dye_color"), color.ordinal())
-								.model(provider.getBuilder("item/%s/%s".formatted(id, color.toString().toLowerCase(Locale.ROOT)))
-										.parent(new ModelFile.UncheckedModelFile("item/generated"))
-										.texture("layer0", LBR.id("item/%s".formatted(id)))
-										.texture("layer1", LBR.id("item/%s_overlay".formatted(id)))
-										.customLoader((parent, efh) -> ItemLayerModelBuilder.begin(parent, efh)
-												.color(LBRColors.component(color), 0))
-										.end())
-								.end();
-					}
+							.texture("layer0", LBR.id("item/logic_background_%s".formatted(backgroundType.key())))
+							.texture("layer1", LBR.id("item/logic_border_%s".formatted(backgroundType.key())))
+							.texture("layer2", LBR.id("item/%s".formatted(id)))
+							.customLoader((parent, efh) ->
+							{
+								var builder = LogicModelBuilder.builder(parent, efh)
+										.foregroundLayers(1, 2)
+										.backgroundLayers(0);
+								for(var color : DyeColor.values())
+								{
+									builder.foregroundColor(color, LBRColors.componentForeground(color));
+									builder.backgroundColor(color, LBRColors.componentBackground(color));
+								}
+								return builder;
+							})
+							.end();
+					// TODO circuitboard display context model
 				});
 	}
 	

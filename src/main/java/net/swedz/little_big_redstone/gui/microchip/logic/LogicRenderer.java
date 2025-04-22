@@ -10,11 +10,11 @@ import net.swedz.little_big_redstone.microchip.logic.LogicGridSize;
 
 public abstract class LogicRenderer<L extends LogicComponent>
 {
-	public static final ResourceLocation BACKGROUND         = LBR.id("textures/logic/background.png");
-	public static final ResourceLocation BACKGROUND_OVERLAY = LBR.id("textures/logic/background_overlay.png");
+	public static final ResourceLocation BORDER_SQUARE     = LBR.id("textures/logic/border_square.png");
+	public static final ResourceLocation BACKGROUND_SQUARE = LBR.id("textures/logic/background_square.png");
 	
-	public static final ResourceLocation BACKGROUND_CIRCLE         = LBR.id("textures/logic/background_circle.png");
-	public static final ResourceLocation BACKGROUND_CIRCLE_OVERLAY = LBR.id("textures/logic/background_circle_overlay.png");
+	public static final ResourceLocation BORDER_CIRCLE     = LBR.id("textures/logic/border_circle.png");
+	public static final ResourceLocation BACKGROUND_CIRCLE = LBR.id("textures/logic/background_circle.png");
 	
 	public static final ResourceLocation PORT_INPUT  = LBR.id("textures/logic/port_input.png");
 	public static final ResourceLocation PORT_OUTPUT = LBR.id("textures/logic/port_output.png");
@@ -66,9 +66,9 @@ public abstract class LogicRenderer<L extends LogicComponent>
 		}
 	}
 	
-	protected void renderGridBlock(GuiGraphics graphics, ResourceLocation texture, int x, int y, LogicGridSize size, float red, float green, float blue)
+	protected void renderGridBlock(GuiGraphics graphics, ResourceLocation texture, int x, int y, LogicGridSize size, int argb)
 	{
-		graphics.setColor(red, green, blue, 1);
+		GuiGraphicsHelper.setColor(graphics, argb);
 		
 		if(size.isSingle())
 		{
@@ -79,20 +79,20 @@ public abstract class LogicRenderer<L extends LogicComponent>
 			GuiGraphicsHelper.nineSlice(graphics, texture, x, y, size.widthPixels(), size.heightPixels(), 16, 16, 3);
 		}
 		
-		graphics.setColor(1, 1, 1, 1);
+		GuiGraphicsHelper.resetColor(graphics);
 	}
 	
-	protected void renderBackground(GuiGraphics graphics, int x, int y, LogicGridSize size, float red, float green, float blue)
+	protected void renderBackground(GuiGraphics graphics, int x, int y, LogicGridSize size, int foregroundColor, int backgroundColor)
 	{
-		this.renderGridBlock(graphics, BACKGROUND, x, y, size, red, green, blue);
-		this.renderGridBlock(graphics, BACKGROUND_OVERLAY, x, y, size, 1, 1, 1);
+		this.renderGridBlock(graphics, BORDER_SQUARE, x, y, size, foregroundColor);
+		this.renderGridBlock(graphics, BACKGROUND_SQUARE, x, y, size, backgroundColor);
 	}
 	
-	protected void renderBackgroundCircle(GuiGraphics graphics, int x, int y, float red, float green, float blue)
+	protected void renderBackgroundCircle(GuiGraphics graphics, int x, int y, int foregroundColor, int backgroundColor)
 	{
 		var size = new LogicGridSize(1, 1);
-		this.renderGridBlock(graphics, BACKGROUND_CIRCLE, x, y, size, red, green, blue);
-		this.renderGridBlock(graphics, BACKGROUND_CIRCLE_OVERLAY, x, y, size, 1, 1, 1);
+		this.renderGridBlock(graphics, BORDER_CIRCLE, x, y, size, foregroundColor);
+		this.renderGridBlock(graphics, BACKGROUND_CIRCLE, x, y, size, backgroundColor);
 	}
 	
 	protected void renderInvalidOverlay(GuiGraphics graphics, int x, int y, LogicGridSize size)

@@ -5,7 +5,7 @@ import net.swedz.little_big_redstone.LBR;
 import net.swedz.little_big_redstone.LBRColors;
 import net.swedz.little_big_redstone.gui.microchip.logic.LogicRenderer;
 import net.swedz.little_big_redstone.gui.microchip.logic.LogicRendererProvider;
-import net.swedz.little_big_redstone.helper.ColorConversions;
+import net.swedz.little_big_redstone.helper.GuiGraphicsHelper;
 import net.swedz.little_big_redstone.microchip.logic.latch.rs.RSNORLatch;
 
 public final class RSNORLatchRenderer extends LogicRenderer<RSNORLatch>
@@ -22,16 +22,15 @@ public final class RSNORLatchRenderer extends LogicRenderer<RSNORLatch>
 		
 		this.renderAllPorts(context, graphics, x, y, component, 1, 1, 1);
 		
-		int argb = LBRColors.component(component.color().orElse(context.boardColor()));
-		float red = ColorConversions.redFloat(argb);
-		float green = ColorConversions.greenFloat(argb);
-		float blue = ColorConversions.blueFloat(argb);
-		this.renderBackground(graphics, x, y, size, red, green, blue);
+		var color = component.color().orElse(context.boardColor());
+		int foregroundColor = LBRColors.componentForeground(color);
+		int backgroundColor = LBRColors.componentBackground(color);
+		this.renderBackground(graphics, x, y, size, foregroundColor, backgroundColor);
 		
-		graphics.setColor(red, green, blue, 1);
+		GuiGraphicsHelper.setColor(graphics, foregroundColor);
 		int centerX = x + size.centerX() - 8;
 		int centerY = y + size.centerY() - 8;
 		graphics.blit(LBR.id("textures/logic/rs_nor_latch_%s.png".formatted(component.output() ? "on" : "off")), centerX, centerY, 0, 0, 16, 16, 16, 16);
-		graphics.setColor(1, 1, 1, 1);
+		GuiGraphicsHelper.resetColor(graphics);
 	}
 }
