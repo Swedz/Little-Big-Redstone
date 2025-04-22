@@ -36,34 +36,41 @@ public record OpenLogicConfigPacket(int containerId, int slot) implements LBRCus
 			var pos = menu.blockPos();
 			var microchip = menu.microchip();
 			var entry = microchip.components().get(slot);
-			var blockEntity = player.level().getBlockEntity(pos);
-			if(blockEntity != null)
+			if(entry != null)
 			{
-				player.openMenu(
-						new MenuProvider()
-						{
-							@Override
-							public Component getDisplayName()
+				var blockEntity = player.level().getBlockEntity(pos);
+				if(blockEntity != null)
+				{
+					player.openMenu(
+							new MenuProvider()
 							{
-								return entry.component().type().displayName();
-							}
-							
-							@Override
-							public AbstractContainerMenu createMenu(int containerId, Inventory playerInventory, Player player)
+								@Override
+								public Component getDisplayName()
+								{
+									return entry.component().type().displayName();
+								}
+								
+								@Override
+								public AbstractContainerMenu createMenu(int containerId, Inventory playerInventory, Player player)
+								{
+									return new LogicConfigMenu(containerId, playerInventory, menu.blockPos(), () -> !blockEntity.isRemoved() && microchip.components().values().contains(entry), entry);
+								}
+							},
+							(buf) ->
 							{
-								return new LogicConfigMenu(containerId, playerInventory, menu.blockPos(), () -> !blockEntity.isRemoved() && microchip.components().values().contains(entry), entry);
+								buf.writeBlockPos(menu.blockPos());
+								LogicEntry.STREAM_CODEC.encode(buf, entry);
 							}
-						},
-						(buf) ->
-						{
-							buf.writeBlockPos(menu.blockPos());
-							LogicEntry.STREAM_CODEC.encode(buf, entry);
-						}
-				);
+					);
+				}
+				else
+				{
+					LBR.LOGGER.warn("Received OpenLogicConfigPacket from {} for non-existent block entity?, discarding", playerName);
+				}
 			}
 			else
 			{
-				LBR.LOGGER.warn("Received OpenLogicConfigPacket from {} for non-existent block entity?, discarding", playerName);
+				LBR.LOGGER.warn("Received OpenLogicConfigPacket from {} targetting mismatching or non-existent component (slot {})", playerName, slot);
 			}
 		}
 		else
