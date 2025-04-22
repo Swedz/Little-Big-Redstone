@@ -51,8 +51,7 @@ public record DyeComponentResult(Result result, Action action, Optional<DyeColor
 		{
 			return new DyeComponentResult(Result.WRONG_ITEM, null, Optional.empty(), false);
 		}
-		if(entry.component().color().equals(color) ||
-		   menu.color() == color.orElse(null))
+		if(entry.component().color().equals(color))
 		{
 			return new DyeComponentResult(Result.NO_CHANGE, null, Optional.empty(), false);
 		}
