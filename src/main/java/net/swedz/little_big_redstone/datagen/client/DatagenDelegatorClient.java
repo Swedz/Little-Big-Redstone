@@ -5,6 +5,7 @@ import net.neoforged.neoforge.data.event.GatherDataEvent;
 import net.swedz.little_big_redstone.datagen.client.provider.LanguageDatagenProvider;
 import net.swedz.little_big_redstone.datagen.client.provider.models.BlockModelsDatagenProvider;
 import net.swedz.little_big_redstone.datagen.client.provider.models.ItemModelsDatagenProvider;
+import net.swedz.little_big_redstone.datagen.client.provider.models.LogicItemModelsDatagenProvider;
 
 import java.util.function.Function;
 
@@ -14,6 +15,7 @@ public final class DatagenDelegatorClient
 	{
 		add(event, BlockModelsDatagenProvider::new);
 		add(event, ItemModelsDatagenProvider::new);
+		add(event, LogicItemModelsDatagenProvider::new);
 		add(event, LanguageDatagenProvider::new);
 	}
 	

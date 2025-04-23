@@ -1,11 +1,10 @@
 package net.swedz.little_big_redstone.gui.microchip.logic.renderer;
 
 import net.minecraft.client.gui.GuiGraphics;
-import net.swedz.little_big_redstone.LBR;
-import net.swedz.little_big_redstone.LBRColors;
 import net.swedz.little_big_redstone.gui.microchip.logic.LogicRenderer;
 import net.swedz.little_big_redstone.gui.microchip.logic.LogicRendererProvider;
 import net.swedz.little_big_redstone.helper.GuiGraphicsHelper;
+import net.swedz.little_big_redstone.microchip.logic.LogicGridSize;
 import net.swedz.little_big_redstone.microchip.logic.io.LogicIO;
 
 public final class IORenderer extends LogicRenderer<LogicIO>
@@ -20,13 +19,16 @@ public final class IORenderer extends LogicRenderer<LogicIO>
 	{
 		this.renderAllPorts(context, graphics, x, y, component, 1, 1, 1);
 		
-		var color = component.color().orElse(context.boardColor());
-		int foregroundColor = LBRColors.componentForeground(color);
-		int backgroundColor = LBRColors.componentBackground(color);
-		this.renderBackgroundCircle(graphics, x, y, foregroundColor, backgroundColor);
+		this.renderBackground(
+				graphics,
+				context.getTexture("background"),
+				context.getTexture("border"),
+				x, y, LogicGridSize.SINGLE,
+				context.foregroundColor(), context.backgroundColor()
+		);
 		
-		GuiGraphicsHelper.setColor(graphics, foregroundColor);
-		graphics.blit(LBR.id("textures/logic/%s.png".formatted(component.config().input ? "io_input" : "io_output")), x, y, 0, 0, 16, 16, 16, 16);
+		GuiGraphicsHelper.setColor(graphics, context.foregroundColor());
+		graphics.blit(context.getTexture(component.config().input ? "input" : "output"), x, y, 0, 0, 16, 16, 16, 16);
 		GuiGraphicsHelper.resetColor(graphics);
 		
 		if(!component.config().isValid())

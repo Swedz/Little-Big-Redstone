@@ -1,8 +1,6 @@
 package net.swedz.little_big_redstone.gui.microchip.logic.renderer;
 
 import net.minecraft.client.gui.GuiGraphics;
-import net.swedz.little_big_redstone.LBR;
-import net.swedz.little_big_redstone.LBRColors;
 import net.swedz.little_big_redstone.gui.microchip.logic.LogicRenderer;
 import net.swedz.little_big_redstone.gui.microchip.logic.LogicRendererProvider;
 import net.swedz.little_big_redstone.helper.GuiGraphicsHelper;
@@ -22,15 +20,18 @@ public final class TFlipFlopRenderer extends LogicRenderer<TFlipFlop>
 		
 		this.renderAllPorts(context, graphics, x, y, component, 1, 1, 1);
 		
-		var color = component.color().orElse(context.boardColor());
-		int foregroundColor = LBRColors.componentForeground(color);
-		int backgroundColor = LBRColors.componentBackground(color);
-		this.renderBackground(graphics, x, y, size, foregroundColor, backgroundColor);
+		this.renderBackground(
+				graphics,
+				context.getTexture("background"),
+				context.getTexture("border"),
+				x, y, size,
+				context.foregroundColor(), context.backgroundColor()
+		);
 		
-		GuiGraphicsHelper.setColor(graphics, foregroundColor);
+		GuiGraphicsHelper.setColor(graphics, context.foregroundColor());
 		int centerX = x + size.centerX() - 8;
 		int centerY = y + size.centerY() - 8;
-		graphics.blit(LBR.id("textures/logic/t_flip_flop_%s.png".formatted(component.output() ? "on" : "off")), centerX, centerY, 0, 0, 16, 16, 16, 16);
+		graphics.blit(context.getTexture(component.output() ? "on" : "off"), centerX, centerY, 0, 0, 16, 16, 16, 16);
 		GuiGraphicsHelper.resetColor(graphics);
 	}
 }

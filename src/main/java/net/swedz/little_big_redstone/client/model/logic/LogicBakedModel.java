@@ -6,7 +6,9 @@ import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.renderer.block.model.ItemOverrides;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.resources.model.BakedModel;
+import net.minecraft.client.resources.model.Material;
 import net.minecraft.core.Direction;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.ItemDisplayContext;
@@ -18,6 +20,7 @@ import net.swedz.little_big_redstone.LBR;
 import net.swedz.little_big_redstone.LBRComponents;
 import net.swedz.little_big_redstone.microchip.logic.LogicComponent;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -25,12 +28,28 @@ public final class LogicBakedModel implements IDynamicBakedModel
 {
 	private final BakedModel fallback;
 	
-	private final Map<DyeColor, BakedModel> models;
+	private final Map<DyeColor, LogicModelColorSet> colorPalette;
+	private final Map<DyeColor, BakedModel>         itemModels;
+	private final Map<String, Material>             boardTextures;
 	
-	LogicBakedModel(Map<DyeColor, BakedModel> models)
+	LogicBakedModel(Map<DyeColor, LogicModelColorSet> colorPalette,
+					Map<DyeColor, BakedModel> itemModels,
+					Map<String, Material> boardTextures)
 	{
-		this.fallback = models.get(DyeColor.WHITE);
-		this.models = models;
+		this.colorPalette = Collections.unmodifiableMap(colorPalette);
+		this.fallback = itemModels.get(DyeColor.WHITE);
+		this.itemModels = Collections.unmodifiableMap(itemModels);
+		this.boardTextures = Collections.unmodifiableMap(boardTextures);
+	}
+	
+	public LogicModelColorSet getColorPalette(DyeColor color)
+	{
+		return colorPalette.getOrDefault(color, LogicModelColorSet.DEFAULT);
+	}
+	
+	public ResourceLocation getBoardTexture(String key)
+	{
+		return boardTextures.get(key).texture().withPrefix("textures/").withSuffix(".png");
 	}
 	
 	@Override
@@ -42,7 +61,7 @@ public final class LogicBakedModel implements IDynamicBakedModel
 			return List.of(fallback);
 		}
 		var color = component.color().orElse(DyeColor.WHITE);
-		return List.of(models.getOrDefault(color, fallback));
+		return List.of(itemModels.getOrDefault(color, fallback));
 	}
 	
 	@Override

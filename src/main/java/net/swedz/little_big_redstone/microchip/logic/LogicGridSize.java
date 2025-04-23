@@ -4,6 +4,8 @@ import net.swedz.little_big_redstone.api.Bounds;
 
 public record LogicGridSize(int width, int height)
 {
+	public static final LogicGridSize SINGLE = new LogicGridSize(1, 1);
+	
 	public boolean isSingle()
 	{
 		return width == 1 && height == 1;

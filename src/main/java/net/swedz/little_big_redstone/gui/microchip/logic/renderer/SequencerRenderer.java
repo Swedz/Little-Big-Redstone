@@ -1,8 +1,6 @@
 package net.swedz.little_big_redstone.gui.microchip.logic.renderer;
 
 import net.minecraft.client.gui.GuiGraphics;
-import net.swedz.little_big_redstone.LBR;
-import net.swedz.little_big_redstone.LBRColors;
 import net.swedz.little_big_redstone.gui.microchip.logic.LogicRenderer;
 import net.swedz.little_big_redstone.gui.microchip.logic.LogicRendererProvider;
 import net.swedz.little_big_redstone.helper.GuiGraphicsHelper;
@@ -22,15 +20,18 @@ public final class SequencerRenderer extends LogicRenderer<LogicSequencer>
 		
 		this.renderAllPorts(context, graphics, x, y, component, 1, 1, 1);
 		
-		var color = component.color().orElse(context.boardColor());
-		int foregroundColor = LBRColors.componentForeground(color);
-		int backgroundColor = LBRColors.componentBackground(color);
-		this.renderBackground(graphics, x, y, size, foregroundColor, backgroundColor);
+		this.renderBackground(
+				graphics,
+				context.getTexture("background"),
+				context.getTexture("border"),
+				x, y, size,
+				context.foregroundColor(), context.backgroundColor()
+		);
 		
-		GuiGraphicsHelper.setColor(graphics, foregroundColor);
+		GuiGraphicsHelper.setColor(graphics, context.foregroundColor());
 		int fillWidth = size.widthPixels() - 4;
 		fillWidth = (int) (fillWidth * component.processedPercentage());
-		graphics.blit(LBR.id("textures/logic/sequencer.png"), x + 2, y + 2, 0, 0, fillWidth, size.heightPixels() - 4, 12, 12);
+		graphics.blit(context.getTexture("progress"), x + 2, y + 2, 0, 0, fillWidth, size.heightPixels() - 4, 12, 12);
 		GuiGraphicsHelper.resetColor(graphics);
 	}
 }

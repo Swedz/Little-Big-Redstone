@@ -334,12 +334,10 @@ public final class MicrochipRenderable implements GuiEventListener, Renderable, 
 	
 	private void renderLogic(GuiGraphics graphics, int mouseX, int mouseY, float partialTicks)
 	{
-		var context = new LogicRenderer.Context(screen.getMenu().color(), false, this.hasSelectedPort(), screen.getMenu().getCarried().is(LBRItems.REDSTONE_BIT.asItem()));
-		int traversalIndex = 0;
 		for(var entry : microchip.components().traversal())
 		{
+			var context = LogicRenderer.Context.create(screen.getMenu().color(), entry.component(), false, this.hasSelectedPort(), screen.getMenu().getCarried().is(LBRItems.REDSTONE_BIT.asItem()));
 			LogicRenderers.render(context, graphics, entry.component(), entry.x(), entry.y());
-			traversalIndex++;
 		}
 	}
 	

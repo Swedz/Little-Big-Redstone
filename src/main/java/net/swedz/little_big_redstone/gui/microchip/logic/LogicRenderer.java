@@ -1,12 +1,18 @@
 package net.swedz.little_big_redstone.gui.microchip.logic;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.DyeColor;
 import net.swedz.little_big_redstone.LBR;
+import net.swedz.little_big_redstone.client.model.logic.LogicBakedModel;
+import net.swedz.little_big_redstone.client.model.logic.LogicModelColorSet;
 import net.swedz.little_big_redstone.helper.GuiGraphicsHelper;
 import net.swedz.little_big_redstone.microchip.logic.LogicComponent;
 import net.swedz.little_big_redstone.microchip.logic.LogicGridSize;
+
+import java.util.function.Function;
 
 public abstract class LogicRenderer<L extends LogicComponent>
 {
@@ -82,17 +88,10 @@ public abstract class LogicRenderer<L extends LogicComponent>
 		GuiGraphicsHelper.resetColor(graphics);
 	}
 	
-	protected void renderBackground(GuiGraphics graphics, int x, int y, LogicGridSize size, int foregroundColor, int backgroundColor)
+	protected void renderBackground(GuiGraphics graphics, ResourceLocation background, ResourceLocation border, int x, int y, LogicGridSize size, int foregroundColor, int backgroundColor)
 	{
-		this.renderGridBlock(graphics, BORDER_SQUARE, x, y, size, foregroundColor);
-		this.renderGridBlock(graphics, BACKGROUND_SQUARE, x, y, size, backgroundColor);
-	}
-	
-	protected void renderBackgroundCircle(GuiGraphics graphics, int x, int y, int foregroundColor, int backgroundColor)
-	{
-		var size = new LogicGridSize(1, 1);
-		this.renderGridBlock(graphics, BORDER_CIRCLE, x, y, size, foregroundColor);
-		this.renderGridBlock(graphics, BACKGROUND_CIRCLE, x, y, size, backgroundColor);
+		this.renderGridBlock(graphics, background, x, y, size, backgroundColor);
+		this.renderGridBlock(graphics, border, x, y, size, foregroundColor);
 	}
 	
 	protected void renderInvalidOverlay(GuiGraphics graphics, int x, int y, LogicGridSize size)
@@ -100,7 +99,34 @@ public abstract class LogicRenderer<L extends LogicComponent>
 		graphics.blit(LBR.id("textures/logic/misconfigured.png"), x + size.widthPixels() - 7 + 1, y - 1, 0, 0, 7, 7, 7, 7);
 	}
 	
-	public record Context(DyeColor boardColor, boolean isCarried, boolean hasSelectedPort, boolean isCarryingWire)
+	public record Context(
+			LogicModelColorSet colorPalette,
+			Function<String, ResourceLocation> textureGetter,
+			boolean isCarried, boolean hasSelectedPort, boolean isCarryingWire
+	)
 	{
+		public static Context create(DyeColor menuColor, LogicComponent<?, ?> component, boolean isCarried, boolean hasSelectedPort, boolean isCarryingWire)
+		{
+			var type = component.type();
+			var model = (LogicBakedModel) Minecraft.getInstance().getModelManager().getModel(ModelResourceLocation.inventory(LBR.id(type.id())));
+			var color = (DyeColor) component.color().orElse(menuColor);
+			var colorPalette = model.getColorPalette(color);
+			return new Context(colorPalette, model::getBoardTexture, isCarried, hasSelectedPort, isCarryingWire);
+		}
+		
+		public ResourceLocation getTexture(String key)
+		{
+			return textureGetter.apply(key);
+		}
+		
+		public int foregroundColor()
+		{
+			return colorPalette.foreground();
+		}
+		
+		public int backgroundColor()
+		{
+			return colorPalette.background();
+		}
 	}
 }

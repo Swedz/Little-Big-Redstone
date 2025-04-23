@@ -6,7 +6,6 @@ import net.minecraft.world.item.Item;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.client.model.generators.ModelFile;
 import net.neoforged.neoforge.registries.DeferredRegister;
-import net.swedz.little_big_redstone.client.model.logic.LogicModelBuilder;
 import net.swedz.little_big_redstone.item.LogicItem;
 import net.swedz.little_big_redstone.item.StickyNoteItem;
 import net.swedz.little_big_redstone.microchip.logic.LogicType;
@@ -17,7 +16,6 @@ import net.swedz.tesseract.neoforge.registry.common.CommonModelBuilders;
 import net.swedz.tesseract.neoforge.registry.holder.ItemHolder;
 
 import java.util.Collections;
-import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 import java.util.function.Function;
@@ -52,14 +50,10 @@ public final class LBRItems
 	static
 	{
 		{
-			Map<String, LogicBackgroundType> logicBackgroundTypes = Map.of(
-					"io", LogicBackgroundType.CIRCLE,
-					"reader", LogicBackgroundType.CIRCLE
-			);
 			int index = 0;
 			for(LogicType<?> type : LogicTypes.values())
 			{
-				createLogic(type.id(), type.englishName(), type, logicBackgroundTypes.getOrDefault(type.id(), LogicBackgroundType.SQUARE), index++).register();
+				createLogic(type.id(), type.englishName(), type, index++).register();
 			}
 		}
 		
@@ -96,44 +90,9 @@ public final class LBRItems
 		return holder;
 	}
 	
-	private enum LogicBackgroundType
+	private static ItemHolder<LogicItem> createLogic(String id, String englishName, LogicType<?> type, int order)
 	{
-		CIRCLE,
-		SQUARE;
-		
-		private final String key = this.toString().toLowerCase(Locale.ROOT);
-		
-		public String key()
-		{
-			return key;
-		}
-	}
-	
-	private static ItemHolder<LogicItem> createLogic(String id, String englishName, LogicType<?> type, LogicBackgroundType backgroundType, int order)
-	{
-		return create(id, englishName, (p) -> new LogicItem(p, type), LBRSortOrder.LOGIC.and(order))
-				.withModel((item) -> (provider) ->
-				{
-					provider.getBuilder("item/%s".formatted(id))
-							.parent(new ModelFile.UncheckedModelFile("item/generated"))
-							.texture("layer0", LBR.id("item/logic_background_%s".formatted(backgroundType.key())))
-							.texture("layer1", LBR.id("item/logic_border_%s".formatted(backgroundType.key())))
-							.texture("layer2", LBR.id("item/%s".formatted(id)))
-							.customLoader((parent, efh) ->
-							{
-								var builder = LogicModelBuilder.builder(parent, efh)
-										.foregroundLayers(1, 2)
-										.backgroundLayers(0);
-								for(var color : DyeColor.values())
-								{
-									builder.foregroundColor(color, LBRColors.componentForeground(color));
-									builder.backgroundColor(color, LBRColors.componentBackground(color));
-								}
-								return builder;
-							})
-							.end();
-					// TODO circuitboard display context model
-				});
+		return create(id, englishName, (p) -> new LogicItem(p, type), LBRSortOrder.LOGIC.and(order));
 	}
 	
 	private static ItemHolder<StickyNoteItem> createStickyNote(DyeColor color, String colorEnglishName, int order)
