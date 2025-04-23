@@ -73,19 +73,10 @@
     }
   },
   "item": {
-    "layers": {
-      "background": [
-        0
-      ],
-      "foreground": [
-        1,
-        2
-      ]
-    },
     "textures": {
-      "layer0": "little_big_redstone:item/logic_background_square",
-      "layer1": "little_big_redstone:item/logic_border_square",
-      "layer2": "little_big_redstone:item/sequencer"
+      "background": "little_big_redstone:item/logic_background_square",
+      "border": "little_big_redstone:item/logic_border_square",
+      "icon": "little_big_redstone:item/sequencer"
     }
   },
   "loader": "little_big_redstone:logic"

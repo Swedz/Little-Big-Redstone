@@ -6,7 +6,6 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 import com.mojang.serialization.JsonOps;
-import it.unimi.dsi.fastutil.ints.IntOpenHashSet;
 import it.unimi.dsi.fastutil.ints.IntSet;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.DyeColor;
@@ -16,7 +15,6 @@ import net.neoforged.neoforge.client.model.generators.ModelProvider;
 import net.neoforged.neoforge.common.data.ExistingFileHelper;
 import net.swedz.tesseract.neoforge.api.Assert;
 
-import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.Locale;
 import java.util.Map;
@@ -28,13 +26,9 @@ public final class LogicModelBuilder<T extends ModelBuilder<T>> extends CustomLo
 		return new LogicModelBuilder<>(parent, existingFileHelper);
 	}
 	
-	private final Map<DyeColor, LogicModelColorSet> colorPalette = Maps.newHashMap();
-	
-	private final LinkedHashMap<String, String> itemTextures         = Maps.newLinkedHashMap();
-	private final IntSet                        itemForegroundLayers = new IntOpenHashSet();
-	private final IntSet                        itemBackgroundLayers = new IntOpenHashSet();
-	
-	private final LinkedHashMap<String, String> boardTextures = Maps.newLinkedHashMap();
+	private final Map<DyeColor, LogicModelColorSet> colorPalette  = Maps.newHashMap();
+	private final LinkedHashMap<String, String>     itemTextures  = Maps.newLinkedHashMap();
+	private final LinkedHashMap<String, String>     boardTextures = Maps.newLinkedHashMap();
 	
 	private LogicModelBuilder(T parent, ExistingFileHelper existingFileHelper)
 	{
@@ -69,36 +63,12 @@ public final class LogicModelBuilder<T extends ModelBuilder<T>> extends CustomLo
 		return this;
 	}
 	
-	public LogicModelBuilder<T> itemTexture(int layer, ResourceLocation texture)
+	public LogicModelBuilder<T> itemTexture(String key, ResourceLocation texture)
 	{
-		Assert.that(layer >= 0);
+		Assert.notNull(key);
 		Assert.notNull(texture);
 		Assert.that(existingFileHelper.exists(texture, ModelProvider.TEXTURE), "Texture %s does not exist".formatted(texture));
-		itemTextures.put("layer" + layer, texture.toString());
-		return this;
-	}
-	
-	public LogicModelBuilder<T> itemForegroundLayers(int... layers)
-	{
-		Assert.notNull(layers);
-		Assert.that(layers.length > 0);
-		Assert.that(Arrays.stream(layers).allMatch((l) -> l >= 0));
-		for(int layer : layers)
-		{
-			itemForegroundLayers.add(layer);
-		}
-		return this;
-	}
-	
-	public LogicModelBuilder<T> itemBackgroundLayers(int... layers)
-	{
-		Assert.notNull(layers);
-		Assert.that(layers.length > 0);
-		Assert.that(Arrays.stream(layers).allMatch((l) -> l >= 0));
-		for(int layer : layers)
-		{
-			itemBackgroundLayers.add(layer);
-		}
+		itemTextures.put(key, texture.toString());
 		return this;
 	}
 	
@@ -143,10 +113,6 @@ public final class LogicModelBuilder<T extends ModelBuilder<T>> extends CustomLo
 		
 		JsonObject itemJson = new JsonObject();
 		itemJson.add("textures", toJson(itemTextures));
-		JsonObject itemLayersJson = new JsonObject();
-		itemLayersJson.add("background", toJson(itemBackgroundLayers));
-		itemLayersJson.add("foreground", toJson(itemForegroundLayers));
-		itemJson.add("layers", itemLayersJson);
 		json.add("item", itemJson);
 		
 		JsonObject boardJson = new JsonObject();

@@ -89,11 +89,9 @@ public final class LogicItemModelsDatagenProvider extends ItemModelProvider
 				.customLoader((parent, efh) ->
 				{
 					var builder = LogicModelBuilder.builder(parent, efh)
-							.itemTexture(0, backgroundType.itemBackground())
-							.itemBackgroundLayers(0)
-							.itemTexture(1, backgroundType.itemBorder())
-							.itemTexture(2, LBR.id("item/%s".formatted(id)))
-							.itemForegroundLayers(1, 2)
+							.itemTexture("background", backgroundType.itemBackground())
+							.itemTexture("border", backgroundType.itemBorder())
+							.itemTexture("icon", LBR.id("item/%s".formatted(id)))
 							.boardTexture("background", backgroundType.boardBackground())
 							.boardTexture("border", backgroundType.boardBorder());
 					if(icon)
