@@ -19,14 +19,7 @@ public final class RSNORLatchRenderer extends LogicRenderer<RSNORLatch>
 		var size = component.size();
 		
 		this.renderAllPorts(context, graphics, x, y, component, 1, 1, 1);
-		
-		this.renderBackground(
-				graphics,
-				context.getTexture("background"),
-				context.getTexture("border"),
-				x, y, size,
-				context.foregroundColor(), context.backgroundColor()
-		);
+		this.renderBackground(context, graphics, x, y, component);
 		
 		GuiGraphicsHelper.setColor(graphics, context.foregroundColor());
 		int centerX = x + size.centerX() - 8;

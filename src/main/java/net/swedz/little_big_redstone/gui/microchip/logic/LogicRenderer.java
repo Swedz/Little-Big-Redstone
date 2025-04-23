@@ -94,6 +94,17 @@ public abstract class LogicRenderer<L extends LogicComponent>
 		this.renderGridBlock(graphics, border, x, y, size, foregroundColor);
 	}
 	
+	protected void renderBackground(Context context, GuiGraphics graphics, int x, int y, LogicComponent component)
+	{
+		this.renderBackground(
+				graphics,
+				context.getTexture("background"),
+				context.getTexture("border"),
+				x, y, component.size(),
+				context.foregroundColor(), context.backgroundColor()
+		);
+	}
+	
 	protected void renderInvalidOverlay(GuiGraphics graphics, int x, int y, LogicGridSize size)
 	{
 		graphics.blit(LBR.id("textures/logic/misconfigured.png"), x + size.widthPixels() - 7 + 1, y - 1, 0, 0, 7, 7, 7, 7);
