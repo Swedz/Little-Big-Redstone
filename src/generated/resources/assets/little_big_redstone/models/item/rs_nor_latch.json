@@ -1,12 +1,10 @@
 {
   "parent": "minecraft:item/generated",
-  "board": {
-    "textures": {
-      "background": "little_big_redstone:logic/background_square",
-      "border": "little_big_redstone:logic/border_square",
-      "off": "little_big_redstone:logic/rs_nor_latch_off",
-      "on": "little_big_redstone:logic/rs_nor_latch_on"
-    }
+  "board_textures": {
+    "background": "little_big_redstone:logic/background_square",
+    "border": "little_big_redstone:logic/border_square",
+    "off": "little_big_redstone:logic/rs_nor_latch_off",
+    "on": "little_big_redstone:logic/rs_nor_latch_on"
   },
   "color_palette": {
     "black": {
@@ -73,12 +71,10 @@
       "foreground": "ffffff00"
     }
   },
-  "item": {
-    "textures": {
-      "background": "little_big_redstone:item/logic_background_square",
-      "border": "little_big_redstone:item/logic_border_square",
-      "icon": "little_big_redstone:item/rs_nor_latch"
-    }
+  "item_textures": {
+    "background": "little_big_redstone:item/logic_background_square",
+    "border": "little_big_redstone:item/logic_border_square",
+    "icon": "little_big_redstone:item/rs_nor_latch"
   },
   "loader": "little_big_redstone:logic"
 }

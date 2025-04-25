@@ -1,6 +1,8 @@
 package net.swedz.little_big_redstone.client.model.logic;
 
 import com.google.common.collect.Maps;
+import com.google.gson.JsonParseException;
+import com.mojang.serialization.JsonOps;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.block.model.ItemOverrides;
 import net.minecraft.client.renderer.texture.MissingTextureAtlasSprite;
@@ -21,10 +23,7 @@ import net.neoforged.neoforge.client.model.geometry.IGeometryLoader;
 import net.neoforged.neoforge.client.model.geometry.IUnbakedGeometry;
 import net.neoforged.neoforge.client.model.geometry.UnbakedGeometryHelper;
 import net.swedz.little_big_redstone.LBR;
-import net.swedz.little_big_redstone.helper.ModelHelper;
 
-import java.util.Collections;
-import java.util.Locale;
 import java.util.Map;
 import java.util.function.Function;
 
@@ -32,52 +31,20 @@ public final class LogicUnbakedModel implements IUnbakedGeometry<LogicUnbakedMod
 {
 	public static final ResourceLocation                   ID     = LBR.id("logic");
 	public static final IGeometryLoader<LogicUnbakedModel> LOADER = (json, context) ->
-	{
-		Map<DyeColor, LogicModelColorSet> colorPalette = Maps.newHashMap();
-		if(json.has("color_palette"))
-		{
-			for(var dyeEntry : json.getAsJsonObject("color_palette").entrySet())
-			{
-				DyeColor dyeColor = DyeColor.valueOf(dyeEntry.getKey().toUpperCase(Locale.ROOT));
-				colorPalette.put(dyeColor, LogicModelColorSet.read(dyeEntry.getValue().getAsJsonObject()));
-			}
-		}
-		
-		Map<String, Material> itemTextures = Maps.newHashMap();
-		if(json.has("item"))
-		{
-			var itemJson = json.getAsJsonObject("item");
-			itemTextures = ModelHelper.gatherTextures(itemJson, "textures");
-		}
-		
-		Map<String, Material> boardTextures = Maps.newHashMap();
-		if(json.has("board"))
-		{
-			var boardJson = json.getAsJsonObject("board");
-			boardTextures = ModelHelper.gatherTextures(boardJson, "textures");
-		}
-		
-		return new LogicUnbakedModel(colorPalette, itemTextures, boardTextures);
-	};
+			new LogicUnbakedModel(LogicBakingModelData.CODEC.parse(JsonOps.INSTANCE, json).getOrThrow(JsonParseException::new));
 	
 	private static final RenderTypeGroup RENDER_TYPES = new RenderTypeGroup(RenderType.translucent(), NeoForgeRenderTypes.ITEM_UNSORTED_TRANSLUCENT.get());
 	
-	private final Map<DyeColor, LogicModelColorSet> colorPalette;
-	private final Map<String, Material>             itemTextures;
-	private final Map<String, Material>             boardTextures;
+	private final LogicBakingModelData bakingModelData;
 	
-	private LogicUnbakedModel(Map<DyeColor, LogicModelColorSet> colorPalette,
-							  Map<String, Material> itemTextures,
-							  Map<String, Material> boardTextures)
+	private LogicUnbakedModel(LogicBakingModelData bakingModelData)
 	{
-		this.colorPalette = Collections.unmodifiableMap(colorPalette);
-		this.itemTextures = Collections.unmodifiableMap(itemTextures);
-		this.boardTextures = Collections.unmodifiableMap(boardTextures);
+		this.bakingModelData = bakingModelData;
 	}
 	
 	private void bakeLayer(CompositeModel.Baked.Builder builder, int index, String texture, ExtraFaceData faceData, Function<Material, TextureAtlasSprite> spriteGetter, ModelState modelState)
 	{
-		var sprite = spriteGetter.apply(itemTextures.get(texture));
+		var sprite = spriteGetter.apply(new Material(InventoryMenu.BLOCK_ATLAS, bakingModelData.getItemTexture(texture)));
 		var unbaked = UnbakedGeometryHelper.createUnbakedItemElements(index, sprite, faceData);
 		var quads = UnbakedGeometryHelper.bakeElements(unbaked, (__) -> sprite, modelState);
 		builder.addQuads(RENDER_TYPES, quads);
@@ -98,14 +65,14 @@ public final class LogicUnbakedModel implements IUnbakedGeometry<LogicUnbakedMod
 			Map<DyeColor, BakedModel> itemModels = Maps.newHashMap();
 			for(var dyeColor : DyeColor.values())
 			{
-				var colorSet = colorPalette.get(dyeColor);
+				var colorSet = bakingModelData.getColorSet(dyeColor);
 				var builder = CompositeModel.Baked.builder(context, particle, overrides, context.getTransforms());
 				this.bakeLayer(builder, 0, "background", colorSet.backgroundFaceData(), spriteGetter, modelState);
 				this.bakeLayer(builder, 1, "border", colorSet.foregroundFaceData(), spriteGetter, modelState);
 				this.bakeLayer(builder, 2, "icon", colorSet.foregroundFaceData(), spriteGetter, modelState);
 				itemModels.put(dyeColor, builder.build());
 			}
-			return new LogicBakedModel(colorPalette, itemModels, boardTextures);
+			return new LogicBakedModel(bakingModelData, itemModels);
 		}
 		catch (Exception ex)
 		{

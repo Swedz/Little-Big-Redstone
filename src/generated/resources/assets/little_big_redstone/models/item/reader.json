@@ -1,11 +1,9 @@
 {
   "parent": "minecraft:item/generated",
-  "board": {
-    "textures": {
-      "background": "little_big_redstone:logic/background_circle",
-      "border": "little_big_redstone:logic/border_circle",
-      "icon": "little_big_redstone:logic/reader"
-    }
+  "board_textures": {
+    "background": "little_big_redstone:logic/background_circle",
+    "border": "little_big_redstone:logic/border_circle",
+    "icon": "little_big_redstone:logic/reader"
   },
   "color_palette": {
     "black": {
@@ -72,12 +70,10 @@
       "foreground": "ffffff00"
     }
   },
-  "item": {
-    "textures": {
-      "background": "little_big_redstone:item/logic_background_circle",
-      "border": "little_big_redstone:item/logic_border_circle",
-      "icon": "little_big_redstone:item/reader"
-    }
+  "item_textures": {
+    "background": "little_big_redstone:item/logic_background_circle",
+    "border": "little_big_redstone:item/logic_border_circle",
+    "icon": "little_big_redstone:item/reader"
   },
   "loader": "little_big_redstone:logic"
 }

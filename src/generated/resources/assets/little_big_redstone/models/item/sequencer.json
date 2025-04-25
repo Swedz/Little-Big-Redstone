@@ -1,11 +1,9 @@
 {
   "parent": "minecraft:item/generated",
-  "board": {
-    "textures": {
-      "background": "little_big_redstone:logic/background_square",
-      "border": "little_big_redstone:logic/border_square",
-      "progress": "little_big_redstone:logic/sequencer"
-    }
+  "board_textures": {
+    "background": "little_big_redstone:logic/background_square",
+    "border": "little_big_redstone:logic/border_square",
+    "progress": "little_big_redstone:logic/sequencer"
   },
   "color_palette": {
     "black": {
@@ -72,12 +70,10 @@
       "foreground": "ffffff00"
     }
   },
-  "item": {
-    "textures": {
-      "background": "little_big_redstone:item/logic_background_square",
-      "border": "little_big_redstone:item/logic_border_square",
-      "icon": "little_big_redstone:item/sequencer"
-    }
+  "item_textures": {
+    "background": "little_big_redstone:item/logic_background_square",
+    "border": "little_big_redstone:item/logic_border_square",
+    "icon": "little_big_redstone:item/sequencer"
   },
   "loader": "little_big_redstone:logic"
 }

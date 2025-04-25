@@ -7,7 +7,7 @@ import net.neoforged.neoforge.client.model.generators.ModelFile;
 import net.neoforged.neoforge.data.event.GatherDataEvent;
 import net.swedz.little_big_redstone.LBR;
 import net.swedz.little_big_redstone.LBRColors;
-import net.swedz.little_big_redstone.client.model.logic.LogicModelBuilder;
+import net.swedz.little_big_redstone.client.model.logic.LogicBakingModelData;
 import net.swedz.little_big_redstone.microchip.logic.LogicType;
 import net.swedz.little_big_redstone.microchip.logic.LogicTypes;
 
@@ -81,14 +81,14 @@ public final class LogicItemModelsDatagenProvider extends ItemModelProvider
 		}
 	}
 	
-	private void logicComponent(LogicType<?> type, BackgroundType backgroundType, boolean icon, Consumer<LogicModelBuilder> also)
+	private void logicComponent(LogicType<?> type, BackgroundType backgroundType, boolean icon, Consumer<LogicBakingModelData.Builder<?>> also)
 	{
 		String id = type.id();
 		this.getBuilder("item/%s".formatted(id))
 				.parent(new ModelFile.UncheckedModelFile("item/generated"))
 				.customLoader((parent, efh) ->
 				{
-					var builder = LogicModelBuilder.builder(parent, efh)
+					var builder = LogicBakingModelData.builder(parent, efh)
 							.itemTexture("background", backgroundType.itemBackground())
 							.itemTexture("border", backgroundType.itemBorder())
 							.itemTexture("icon", LBR.id("item/%s".formatted(id)))

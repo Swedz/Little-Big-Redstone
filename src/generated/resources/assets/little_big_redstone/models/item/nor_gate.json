@@ -1,11 +1,9 @@
 {
   "parent": "minecraft:item/generated",
-  "board": {
-    "textures": {
-      "background": "little_big_redstone:logic/background_square",
-      "border": "little_big_redstone:logic/border_square",
-      "icon": "little_big_redstone:logic/nor_gate"
-    }
+  "board_textures": {
+    "background": "little_big_redstone:logic/background_square",
+    "border": "little_big_redstone:logic/border_square",
+    "icon": "little_big_redstone:logic/nor_gate"
   },
   "color_palette": {
     "black": {
@@ -72,12 +70,10 @@
       "foreground": "ffffff00"
     }
   },
-  "item": {
-    "textures": {
-      "background": "little_big_redstone:item/logic_background_square",
-      "border": "little_big_redstone:item/logic_border_square",
-      "icon": "little_big_redstone:item/nor_gate"
-    }
+  "item_textures": {
+    "background": "little_big_redstone:item/logic_background_square",
+    "border": "little_big_redstone:item/logic_border_square",
+    "icon": "little_big_redstone:item/nor_gate"
   },
   "loader": "little_big_redstone:logic"
 }

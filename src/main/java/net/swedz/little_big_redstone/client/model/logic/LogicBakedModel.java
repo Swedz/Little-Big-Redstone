@@ -6,9 +6,7 @@ import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.renderer.block.model.ItemOverrides;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.resources.model.BakedModel;
-import net.minecraft.client.resources.model.Material;
 import net.minecraft.core.Direction;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.ItemDisplayContext;
@@ -26,30 +24,22 @@ import java.util.Map;
 
 public final class LogicBakedModel implements IDynamicBakedModel
 {
-	private final BakedModel fallback;
+	private final LogicBakingModelData bakingModelData;
 	
-	private final Map<DyeColor, LogicModelColorSet> colorPalette;
-	private final Map<DyeColor, BakedModel>         itemModels;
-	private final Map<String, Material>             boardTextures;
+	private final Map<DyeColor, BakedModel> itemModels;
+	private final BakedModel                fallback;
 	
-	LogicBakedModel(Map<DyeColor, LogicModelColorSet> colorPalette,
-					Map<DyeColor, BakedModel> itemModels,
-					Map<String, Material> boardTextures)
+	LogicBakedModel(LogicBakingModelData bakingModelData,
+					Map<DyeColor, BakedModel> itemModels)
 	{
-		this.colorPalette = Collections.unmodifiableMap(colorPalette);
-		this.fallback = itemModels.get(DyeColor.WHITE);
+		this.bakingModelData = bakingModelData;
 		this.itemModels = Collections.unmodifiableMap(itemModels);
-		this.boardTextures = Collections.unmodifiableMap(boardTextures);
+		this.fallback = itemModels.get(DyeColor.WHITE);
 	}
 	
-	public LogicModelColorSet getColorPalette(DyeColor color)
+	public LogicBakingModelData getData()
 	{
-		return colorPalette.getOrDefault(color, LogicModelColorSet.DEFAULT);
-	}
-	
-	public ResourceLocation getBoardTexture(String key)
-	{
-		return boardTextures.get(key).texture().withPrefix("textures/").withSuffix(".png");
+		return bakingModelData;
 	}
 	
 	@Override

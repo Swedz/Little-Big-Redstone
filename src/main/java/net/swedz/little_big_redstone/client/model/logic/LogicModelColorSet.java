@@ -1,10 +1,7 @@
 package net.swedz.little_big_redstone.client.model.logic;
 
-import com.google.gson.JsonElement;
-import com.google.gson.JsonParseException;
 import com.mojang.datafixers.util.Either;
 import com.mojang.serialization.Codec;
-import com.mojang.serialization.JsonOps;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.neoforged.neoforge.client.model.ExtraFaceData;
 
@@ -25,15 +22,6 @@ public record LogicModelColorSet(int foreground, int background)
 					COLOR.optionalFieldOf("background", DEFAULT.background()).forGetter(LogicModelColorSet::background)
 			)
 			.apply(instance, LogicModelColorSet::new));
-	
-	public static LogicModelColorSet read(JsonElement json)
-	{
-		if(json == null)
-		{
-			return DEFAULT;
-		}
-		return CODEC.parse(JsonOps.INSTANCE, json).getOrThrow(JsonParseException::new);
-	}
 	
 	public ExtraFaceData foregroundFaceData()
 	{

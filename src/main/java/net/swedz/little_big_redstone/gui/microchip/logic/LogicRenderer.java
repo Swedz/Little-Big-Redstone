@@ -119,10 +119,10 @@ public abstract class LogicRenderer<L extends LogicComponent>
 		public static Context create(DyeColor menuColor, LogicComponent<?, ?> component, boolean isCarried, boolean hasSelectedPort, boolean isCarryingWire)
 		{
 			var type = component.type();
-			var model = (LogicBakedModel) Minecraft.getInstance().getModelManager().getModel(ModelResourceLocation.inventory(LBR.id(type.id())));
+			var modelData = ((LogicBakedModel) Minecraft.getInstance().getModelManager().getModel(ModelResourceLocation.inventory(LBR.id(type.id())))).getData();
 			var color = (DyeColor) component.color().orElse(menuColor);
-			var colorPalette = model.getColorPalette(color);
-			return new Context(colorPalette, model::getBoardTexture, isCarried, hasSelectedPort, isCarryingWire);
+			var colorPalette = modelData.getColorSet(color);
+			return new Context(colorPalette, modelData::getBoardTexture, isCarried, hasSelectedPort, isCarryingWire);
 		}
 		
 		public ResourceLocation getTexture(String key)
