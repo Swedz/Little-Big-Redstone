@@ -122,7 +122,7 @@ public abstract class LogicRenderer<L extends LogicComponent>
 			var modelData = ((LogicBakedModel) Minecraft.getInstance().getModelManager().getModel(ModelResourceLocation.inventory(LBR.id(type.id())))).getData();
 			var color = (DyeColor) component.color().orElse(menuColor);
 			var colorPalette = modelData.getColorSet(color);
-			return new Context(colorPalette, modelData::getBoardTexture, isCarried, hasSelectedPort, isCarryingWire);
+			return new Context(colorPalette, modelData::getBoardTextureLocation, isCarried, hasSelectedPort, isCarryingWire);
 		}
 		
 		public ResourceLocation getTexture(String key)
