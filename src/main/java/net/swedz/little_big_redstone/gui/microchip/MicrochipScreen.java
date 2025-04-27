@@ -25,6 +25,11 @@ public final class MicrochipScreen extends AbstractContainerScreen<MicrochipMenu
 		imageHeight = 232;
 	}
 	
+	public void handleUpdate()
+	{
+		microchipWidget.handleUpdate();
+	}
+	
 	private boolean isWithinBoard(int x, int y)
 	{
 		return menu.microchip().size().bounds().contains(x, y);

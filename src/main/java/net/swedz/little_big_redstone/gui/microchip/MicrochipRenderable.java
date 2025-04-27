@@ -62,6 +62,19 @@ public final class MicrochipRenderable implements GuiEventListener, Renderable, 
 		return selectedPort != null;
 	}
 	
+	public void handleUpdate()
+	{
+		if(this.hasSelectedPort())
+		{
+			var component = microchip.components().get(selectedPort.slot());
+			if(component == null || selectedPort.index() >= component.component().outputs())
+			{
+				selectedPort = null;
+				LBR.LOGGER.info("Cleared selected port because it doesn't exist anymore");
+			}
+		}
+	}
+	
 	private boolean dyeComponent(int x, int y, int button, LogicEntry entry)
 	{
 		var menu = screen.getMenu();
@@ -263,7 +276,7 @@ public final class MicrochipRenderable implements GuiEventListener, Renderable, 
 		}
 		else
 		{
-			if(selectedPort != null)
+			if(this.hasSelectedPort())
 			{
 				selectedPort = null;
 				return true;
@@ -311,7 +324,7 @@ public final class MicrochipRenderable implements GuiEventListener, Renderable, 
 			this.renderWire(graphics, partialTicks, x1, y1, x2, y2, powered ? 0xFFFFFFFF : 0xFF000000);
 		}
 		
-		if(selectedPort != null)
+		if(this.hasSelectedPort())
 		{
 			int x1 = microchip.size().scale(selectedPort.entry().x() + selectedPort.entry().component().size().widthPixels() + 3) + x;
 			int y1 = microchip.size().scale(selectedPort.entry().component().size().portTopLeftCornerY(selectedPort.entry().y(), false, selectedPort.index(), selectedPort.entry().component().outputs()) + 8) + y;
@@ -351,17 +364,6 @@ public final class MicrochipRenderable implements GuiEventListener, Renderable, 
 	@Override
 	public void render(GuiGraphics graphics, int mouseX, int mouseY, float partialTicks)
 	{
-		// TODO perform this check when the change happens instead of every frame
-		if(selectedPort != null)
-		{
-			var component = microchip.components().get(selectedPort.slot());
-			if(component == null || selectedPort.index() >= component.component().outputs())
-			{
-				selectedPort = null;
-				LBR.LOGGER.info("Cleared selected port because it doesn't exist anymore");
-			}
-		}
-		
 		graphics.pose().pushPose();
 		graphics.pose().translate(x, y, 0);
 		graphics.pose().scale(microchip.size().scale(), microchip.size().scale(), microchip.size().scale());

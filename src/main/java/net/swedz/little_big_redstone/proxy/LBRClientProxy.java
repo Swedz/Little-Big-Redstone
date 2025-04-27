@@ -19,6 +19,7 @@ public class LBRClientProxy extends LBRProxy
 		if(Minecraft.getInstance().screen instanceof MicrochipScreen screen &&
 		   screen.getMenu().containerId == containerId)
 		{
+			screen.handleUpdate();
 			screen.getMenu().microchip().loadFrom(microchip);
 		}
 		else
@@ -33,6 +34,7 @@ public class LBRClientProxy extends LBRProxy
 		if(Minecraft.getInstance().screen instanceof MicrochipScreen screen &&
 		   screen.getMenu().containerId == containerId)
 		{
+			screen.handleUpdate();
 			for(var entry : entries)
 			{
 				var existingEntry = screen.getMenu().microchip().components().get(entry.slot());
