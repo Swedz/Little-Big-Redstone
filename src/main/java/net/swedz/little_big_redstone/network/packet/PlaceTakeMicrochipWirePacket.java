@@ -73,7 +73,7 @@ public record PlaceTakeMicrochipWirePacket(
 							LBR.LOGGER.warn("Received PlaceTakeMicrochipWirePacket from {} with already existing wire: {}#{} -> {}#{}, discarding", playerName, outputSlot, outputPort, inputSlot, inputPort);
 						}
 					}
-					else
+					else if(heldItem.getCount() < heldItem.getMaxStackSize())
 					{
 						var wire = wires.get(outputSlot, outputPort, inputSlot, inputPort);
 						if(wire != null)
@@ -87,6 +87,10 @@ public record PlaceTakeMicrochipWirePacket(
 							LBR.LOGGER.warn("Received PlaceTakeMicrochipWirePacket from {} for non-existing wire: {}#{} -> {}#{}, discarding", playerName, outputSlot, outputPort, inputSlot, inputPort);
 						}
 					}
+					else
+					{
+						LBR.LOGGER.warn("Received PlaceTakeMicrochipWirePacket from {} with too many items: {} >= {}, discarding", playerName, heldItem.getCount(), heldItem.getMaxStackSize());
+					}
 				}
 				else
 				{
@@ -99,7 +103,7 @@ public record PlaceTakeMicrochipWirePacket(
 				{
 					LBR.LOGGER.warn("Received PlaceTakeMicrochipWirePacket from {} without holding a microchip wire item, discarding", playerName);
 				}
-				else
+				else if(heldItem.isEmpty())
 				{
 					var wire = wires.get(outputSlot, outputPort, inputSlot, inputPort);
 					if(wire != null)
@@ -112,6 +116,10 @@ public record PlaceTakeMicrochipWirePacket(
 					{
 						LBR.LOGGER.warn("Received PlaceTakeMicrochipWirePacket from {} for non-existing wire: {}#{} -> {}#{}, discarding", playerName, outputSlot, outputPort, inputSlot, inputPort);
 					}
+				}
+				else
+				{
+					LBR.LOGGER.warn("Received PlaceTakeMicrochipWirePacket from {} while holding an item other than a microchip wire item, discarding", playerName);
 				}
 			}
 		}

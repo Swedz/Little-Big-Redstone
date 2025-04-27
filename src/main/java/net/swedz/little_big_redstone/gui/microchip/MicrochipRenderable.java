@@ -101,7 +101,7 @@ public final class MicrochipRenderable implements GuiEventListener, Renderable, 
 				selectedPort = outputPort;
 				return true;
 			}
-			else if(inputPort != null)
+			else if(inputPort != null && (carried.isEmpty() || carried.getCount() < carried.getMaxStackSize()))
 			{
 				var wires = microchip.wires().getByInputSlot(inputPort);
 				if(!wires.isEmpty())
