@@ -94,20 +94,31 @@ public final class MicrochipBlockEntity extends BlockEntity implements MenuProvi
 				.build();
 	}
 	
+	private boolean isMenuValid(Player player)
+	{
+		return !this.isRemoved() &&
+			   player.level() == level && worldPosition.getCenter().distanceTo(player.position()) <= 16;
+	}
+	
 	@Override
 	public AbstractContainerMenu createMenu(int containerId, Inventory inventory, Player player)
 	{
-		return new MicrochipMenu(containerId, inventory, worldPosition, () -> !this.isRemoved(), microchip, this.color());
+		return new MicrochipMenu(containerId, inventory, worldPosition, () -> this.isMenuValid(player), microchip, this.color());
 	}
 	
-	public void openMenu(Player player)
+	public boolean openMenu(Player player)
 	{
-		player.openMenu(this, (buf) ->
+		if(this.isMenuValid(player))
 		{
-			buf.writeBlockPos(worldPosition);
-			Microchip.STREAM_CODEC.encode(buf, microchip);
-			DyeColor.STREAM_CODEC.encode(buf, this.color());
-		});
+			player.openMenu(this, (buf) ->
+			{
+				buf.writeBlockPos(worldPosition);
+				Microchip.STREAM_CODEC.encode(buf, microchip);
+				DyeColor.STREAM_CODEC.encode(buf, this.color());
+			});
+			return true;
+		}
+		return false;
 	}
 	
 	@Override

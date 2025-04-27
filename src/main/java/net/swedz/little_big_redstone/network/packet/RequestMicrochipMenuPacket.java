@@ -26,7 +26,10 @@ public record RequestMicrochipMenuPacket(BlockPos pos) implements LBRCustomPacke
 		
 		if(player.level().getBlockEntity(pos) instanceof MicrochipBlockEntity blockEntity)
 		{
-			blockEntity.openMenu(player);
+			if(!blockEntity.openMenu(player))
+			{
+				LBR.LOGGER.warn("Received WriteLogicConfigPacket from {} when too far or not in the same dimension or the block entity is removed, discarding", playerName);
+			}
 		}
 		else
 		{
