@@ -10,11 +10,10 @@ import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.AddReloadListenerEvent;
 import net.swedz.little_big_redstone.LBR;
 import net.swedz.little_big_redstone.gui.microchip.logic.renderer.IORenderer;
-import net.swedz.little_big_redstone.gui.microchip.logic.renderer.LogicGateRenderer;
-import net.swedz.little_big_redstone.gui.microchip.logic.renderer.RSNORLatchRenderer;
+import net.swedz.little_big_redstone.gui.microchip.logic.renderer.OnOffLogicRenderer;
 import net.swedz.little_big_redstone.gui.microchip.logic.renderer.ReaderRenderer;
 import net.swedz.little_big_redstone.gui.microchip.logic.renderer.SequencerRenderer;
-import net.swedz.little_big_redstone.gui.microchip.logic.renderer.TFlipFlopRenderer;
+import net.swedz.little_big_redstone.gui.microchip.logic.renderer.SimpleLogicRenderer;
 import net.swedz.little_big_redstone.microchip.logic.LogicComponent;
 import net.swedz.little_big_redstone.microchip.logic.LogicType;
 import net.swedz.little_big_redstone.microchip.logic.LogicTypes;
@@ -32,19 +31,19 @@ public final class LogicRenderers
 	{
 		register(LogicTypes.IO, IORenderer::new);
 		
-		register(LogicTypes.NOT, LogicGateRenderer::new);
-		register(LogicTypes.AND, LogicGateRenderer::new);
-		register(LogicTypes.NAND, LogicGateRenderer::new);
-		register(LogicTypes.OR, LogicGateRenderer::new);
-		register(LogicTypes.NOR, LogicGateRenderer::new);
-		register(LogicTypes.XOR, LogicGateRenderer::new);
+		register(LogicTypes.NOT, SimpleLogicRenderer::new);
+		register(LogicTypes.AND, SimpleLogicRenderer::new);
+		register(LogicTypes.NAND, SimpleLogicRenderer::new);
+		register(LogicTypes.OR, SimpleLogicRenderer::new);
+		register(LogicTypes.NOR, SimpleLogicRenderer::new);
+		register(LogicTypes.XOR, SimpleLogicRenderer::new);
 		
 		register(LogicTypes.READER, ReaderRenderer::new);
 		
 		register(LogicTypes.SEQUENCER, SequencerRenderer::new);
 		
-		register(LogicTypes.T_FLIP_FLOP, TFlipFlopRenderer::new);
-		register(LogicTypes.RS_NOR_LATCH, RSNORLatchRenderer::new);
+		register(LogicTypes.T_FLIP_FLOP, OnOffLogicRenderer::new);
+		register(LogicTypes.RS_NOR_LATCH, OnOffLogicRenderer::new);
 	}
 	
 	private static <L extends LogicComponent> void register(LogicType<L> type, LogicRendererProvider<L> provider)
