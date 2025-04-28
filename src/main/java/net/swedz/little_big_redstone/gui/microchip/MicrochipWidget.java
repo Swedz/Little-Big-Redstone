@@ -9,10 +9,10 @@ import net.minecraft.client.gui.components.events.GuiEventListener;
 import net.minecraft.client.gui.narration.NarratableEntry;
 import net.minecraft.client.gui.narration.NarrationElementOutput;
 import net.minecraft.client.gui.navigation.ScreenRectangle;
-import net.minecraft.client.renderer.RenderType;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.Style;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.DyeColor;
 import net.swedz.little_big_redstone.LBR;
 import net.swedz.little_big_redstone.LBRColors;
 import net.swedz.little_big_redstone.LBRComponents;
@@ -20,11 +20,11 @@ import net.swedz.little_big_redstone.LBRItems;
 import net.swedz.little_big_redstone.gui.microchip.logic.DyeComponentResult;
 import net.swedz.little_big_redstone.gui.microchip.logic.LogicRenderer;
 import net.swedz.little_big_redstone.gui.microchip.logic.LogicRenderers;
+import net.swedz.little_big_redstone.gui.microchip.wire.WireRendering;
 import net.swedz.little_big_redstone.helper.GuiGraphicsHelper;
 import net.swedz.little_big_redstone.microchip.LogicEntry;
 import net.swedz.little_big_redstone.microchip.LogicSelectedPort;
 import net.swedz.little_big_redstone.microchip.Microchip;
-import net.swedz.little_big_redstone.microchip.wire.Wire;
 import net.swedz.little_big_redstone.network.packet.DyeMicrochipLogicPacket;
 import net.swedz.little_big_redstone.network.packet.OpenLogicConfigPacket;
 import net.swedz.little_big_redstone.network.packet.PlaceTakeMicrochipLogicPacket;
@@ -33,7 +33,7 @@ import net.swedz.little_big_redstone.network.packet.PlaceTakeMicrochipWirePacket
 import java.util.List;
 import java.util.function.Consumer;
 
-public final class MicrochipRenderable implements GuiEventListener, Renderable, NarratableEntry
+public final class MicrochipWidget implements GuiEventListener, Renderable, NarratableEntry
 {
 	private static final ResourceLocation SHADOW_HOVER_OVERLAY = LBR.id("textures/gui/container/microchip/shadow_hover_overlay.png");
 	private static final ResourceLocation CIRCUIT_BACKGROUND   = LBR.id("textures/gui/container/microchip/circuit_background.png");
@@ -44,22 +44,42 @@ public final class MicrochipRenderable implements GuiEventListener, Renderable, 
 	
 	private final Microchip microchip;
 	
+	private final WireRendering wires;
+	
 	private LogicSelectedPort selectedPort;
 	
-	public MicrochipRenderable(int x, int y, MicrochipScreen screen)
+	public MicrochipWidget(int x, int y, MicrochipScreen screen)
 	{
+		this.screen = screen;
 		this.microchip = screen.getMenu().microchip();
+		
+		this.wires = new WireRendering(this);
+		
 		var bounds = microchip.size().bounds();
 		this.x = x + microchip.size().scale(bounds.minX());
 		this.y = y + microchip.size().scale(bounds.minY());
 		this.width = bounds.width();
 		this.height = bounds.height();
-		this.screen = screen;
+	}
+	
+	public DyeColor color()
+	{
+		return screen.getMenu().color();
+	}
+	
+	public Microchip microchip()
+	{
+		return microchip;
 	}
 	
 	public boolean hasSelectedPort()
 	{
 		return selectedPort != null;
+	}
+	
+	public LogicSelectedPort getSelectedPort()
+	{
+		return selectedPort;
 	}
 	
 	public void handleUpdate()
@@ -73,6 +93,8 @@ public final class MicrochipRenderable implements GuiEventListener, Renderable, 
 				LBR.LOGGER.info("Cleared selected port because it doesn't exist anymore");
 			}
 		}
+		
+		wires.rebuildPaths();
 	}
 	
 	private boolean dyeComponent(int x, int y, int button, LogicEntry entry)
@@ -153,6 +175,7 @@ public final class MicrochipRenderable implements GuiEventListener, Renderable, 
 		{
 			microchip.components().remove(entry);
 			microchip.markDirty();
+			wires.rebuildPaths();
 			menu.setCarried(entry.toStack());
 			new PlaceTakeMicrochipLogicPacket(menu.containerId, x, y, false).sendToServer();
 			return true;
@@ -203,9 +226,10 @@ public final class MicrochipRenderable implements GuiEventListener, Renderable, 
 			int placeY = component.size().topLeftCornerY(y);
 			
 			if(microchip.size().bounds().normalize().contains(component.size().toBounds(placeX, placeY)) &&
-			   microchip.components().add(placeX, placeY, component))
+			   microchip.components().add(placeX, placeY, component) != null)
 			{
 				microchip.markDirty();
+				wires.rebuildPaths();
 				carried.shrink(1);
 				new PlaceTakeMicrochipLogicPacket(menu.containerId, placeX, placeY, true).sendToServer();
 				return true;
@@ -305,46 +329,6 @@ public final class MicrochipRenderable implements GuiEventListener, Renderable, 
 		}
 	}
 	
-	private void renderWires(GuiGraphics graphics, int mouseX, int mouseY, float partialTicks)
-	{
-		// TODO redo this to use a pathing algorithm like A*: render the wire connections, this should be cached and recalculated when something is moved...
-		
-		for(Wire wire : microchip.wires())
-		{
-			LogicEntry outputLogic = microchip.components().get(wire.output().slot());
-			LogicEntry inputLogic = microchip.components().get(wire.input().slot());
-			
-			int x1 = microchip.size().scale(outputLogic.x() + outputLogic.component().size().widthPixels() + 3) + x;
-			int y1 = microchip.size().scale(outputLogic.component().size().portTopLeftCornerY(outputLogic.y(), false, wire.output().index(), outputLogic.component().outputs()) + 8) + y;
-			int x2 = microchip.size().scale(inputLogic.x()) + x;
-			int y2 = microchip.size().scale(inputLogic.component().size().portTopLeftCornerY(inputLogic.y(), true, wire.input().index(), inputLogic.component().inputs()) + 8) + y;
-			
-			boolean powered = outputLogic.component().output(wire.output().index());
-			
-			this.renderWire(graphics, partialTicks, x1, y1, x2, y2, powered ? 0xFFFFFFFF : 0xFF000000);
-		}
-		
-		if(this.hasSelectedPort())
-		{
-			int x1 = microchip.size().scale(selectedPort.entry().x() + selectedPort.entry().component().size().widthPixels() + 3) + x;
-			int y1 = microchip.size().scale(selectedPort.entry().component().size().portTopLeftCornerY(selectedPort.entry().y(), false, selectedPort.index(), selectedPort.entry().component().outputs()) + 8) + y;
-			
-			boolean powered = selectedPort.entry().component().output(selectedPort.index());
-			
-			this.renderWire(graphics, partialTicks, x1, y1, mouseX, mouseY, powered ? 0xFFFFFFFF : 0xFF000000);
-		}
-	}
-	
-	private void renderWire(GuiGraphics graphics, float partialTicks, int x1, int y1, int x2, int y2, int color)
-	{
-		graphics.pose().pushPose();
-		var buffer = graphics.bufferSource().getBuffer(RenderType.lines());
-		buffer.addVertex(x1, y1, 0).setColor(color).setNormal(1, 1, 0);
-		buffer.addVertex(x2, y2, 0).setColor(color).setNormal(1, 1, 0);
-		graphics.bufferSource().endBatch(RenderType.lines());
-		graphics.pose().popPose();
-	}
-	
 	private void renderLogic(GuiGraphics graphics, int mouseX, int mouseY, float partialTicks)
 	{
 		for(var entry : microchip.components().traversal())
@@ -370,7 +354,7 @@ public final class MicrochipRenderable implements GuiEventListener, Renderable, 
 		
 		this.renderCircuitBg(graphics, mouseX, mouseY, partialTicks);
 		this.renderLogic(graphics, mouseX, mouseY, partialTicks);
-		this.renderWires(graphics, mouseX, mouseY, partialTicks);
+		wires.renderWires(graphics, mouseX, mouseY, partialTicks);
 		
 		graphics.pose().popPose();
 		
@@ -411,12 +395,12 @@ public final class MicrochipRenderable implements GuiEventListener, Renderable, 
 		return new ScreenRectangle(x, y, microchip.size().scale(width), microchip.size().scale(height));
 	}
 	
-	private int toLocalX(int x)
+	public int toLocalX(int x)
 	{
 		return x - this.x;
 	}
 	
-	private int toLocalY(int y)
+	public int toLocalY(int y)
 	{
 		return y - this.y;
 	}

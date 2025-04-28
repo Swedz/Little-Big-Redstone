@@ -42,7 +42,7 @@ public record PlaceTakeMicrochipLogicPacket(int containerId, int x, int y, boole
 				{
 					var component = heldItem.get(LBRComponents.LOGIC);
 					if(microchip.size().bounds().normalize().contains(component.size().toBounds(x, y)) &&
-					   components.add(x, y, component))
+					   components.add(x, y, component) != null)
 					{
 						microchip.components().updateValidity();
 						microchip.markDirty();

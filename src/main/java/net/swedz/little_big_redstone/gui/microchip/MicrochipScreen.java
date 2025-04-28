@@ -15,7 +15,7 @@ public final class MicrochipScreen extends AbstractContainerScreen<MicrochipMenu
 {
 	private static final ResourceLocation INVENTORY_BACKGROUND = LBR.id("textures/gui/container/microchip/inventory_background.png");
 	
-	private MicrochipRenderable microchipWidget;
+	private MicrochipWidget microchipWidget;
 	
 	public MicrochipScreen(MicrochipMenu menu, Inventory playerInventory, Component title)
 	{
@@ -40,7 +40,7 @@ public final class MicrochipScreen extends AbstractContainerScreen<MicrochipMenu
 	{
 		super.init();
 		
-		this.addRenderableWidget(microchipWidget = new MicrochipRenderable(leftPos, topPos, this));
+		this.addRenderableWidget(microchipWidget = new MicrochipWidget(leftPos, topPos, this));
 	}
 	
 	@Override

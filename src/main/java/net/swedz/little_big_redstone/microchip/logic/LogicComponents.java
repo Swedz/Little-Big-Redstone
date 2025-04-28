@@ -125,16 +125,6 @@ public final class LogicComponents implements Iterable<LogicEntry>
 		return null;
 	}
 	
-	public LogicEntry set(LogicEntry entry)
-	{
-		return components.put(entry.slot(), entry);
-	}
-	
-	public LogicEntry set(int slot, int x, int y, LogicComponent component)
-	{
-		return this.set(new LogicEntry(slot, x, y, component));
-	}
-	
 	private int pickAvailableSlot()
 	{
 		int slot = 0;
@@ -148,14 +138,16 @@ public final class LogicComponents implements Iterable<LogicEntry>
 		}
 	}
 	
-	public boolean add(int x, int y, LogicComponent component)
+	public LogicEntry add(int x, int y, LogicComponent component)
 	{
 		if(this.canFit(x, y, component))
 		{
-			this.set(this.pickAvailableSlot(), x, y, component);
-			return true;
+			int slot = this.pickAvailableSlot();
+			var entry = new LogicEntry(slot, x, y, component);
+			components.put(slot, entry);
+			return entry;
 		}
-		return false;
+		return null;
 	}
 	
 	public int remove(int slot)
