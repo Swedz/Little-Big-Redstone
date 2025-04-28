@@ -54,7 +54,8 @@ public record LogicGridSize(int width, int height)
 	{
 		int halfY = this.centerY();
 		int portPadding = this.heightPixels() / totalPorts;
-		return y - 8 + (portPadding * index) + (portPadding / 2) + (totalPorts % 2 == 0 || totalPorts == 1 ? 0 : 1);
+		int remainingPortPadding = this.heightPixels() - (portPadding * totalPorts);
+		return y - 8 + (portPadding * index) + (portPadding / 2) + (int) Math.ceil(remainingPortPadding / 2f);
 	}
 	
 	public Bounds portBounds(int x, int y, boolean input, int index, int totalPorts)
