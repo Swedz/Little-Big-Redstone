@@ -103,6 +103,20 @@ public record Bounds(int minX, int minY, int width, int height)
 	}
 	
 	/**
+	 * Creates a new bounds instance grown by the given x and y amounts. The new bounds moves up and to the left by the
+	 * amount it has grown and the width and height are expanded by twice the amount to grow. This creates the effect of
+	 * the bounds retaining the center position it had previously.
+	 *
+	 * @param x the amount to grow in the x dimension
+	 * @param y the amount to grow in the y dimension
+	 * @return the resized bounds
+	 */
+	public Bounds grow(int x, int y)
+	{
+		return new Bounds(minX - x, minY - y, width + (x * 2), height + (y * 2));
+	}
+	
+	/**
 	 * Creates a new bounds instance with the origin x and y, as well as the width and height all multiplied by a multiplicator.
 	 *
 	 * @param multiplicator the value to multiply against the bounds values
