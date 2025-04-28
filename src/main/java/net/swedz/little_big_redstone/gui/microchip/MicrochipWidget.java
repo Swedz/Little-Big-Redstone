@@ -331,7 +331,7 @@ public final class MicrochipWidget implements GuiEventListener, Renderable, Narr
 	
 	private void renderLogic(GuiGraphics graphics, int mouseX, int mouseY, float partialTicks)
 	{
-		for(var entry : microchip.components().traversal())
+		for(var entry : microchip.components())
 		{
 			var context = LogicRenderer.Context.create(screen.getMenu().color(), entry.component(), false, this.hasSelectedPort(), screen.getMenu().getCarried().is(LBRItems.REDSTONE_BIT.asItem()));
 			LogicRenderers.render(context, graphics, entry.component(), entry.x(), entry.y());
