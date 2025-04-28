@@ -43,7 +43,6 @@ public class LBRClientProxy extends LBRProxy
 				}
 				existingEntry.component().loadFrom(entry.component());
 			}
-			screen.handleUpdate();
 		}
 		else
 		{
