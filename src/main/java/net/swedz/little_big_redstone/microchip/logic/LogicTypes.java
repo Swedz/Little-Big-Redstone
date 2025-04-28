@@ -8,6 +8,7 @@ import com.mojang.serialization.MapCodec;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
+import net.swedz.little_big_redstone.microchip.logic.debug.LogicDebugger;
 import net.swedz.little_big_redstone.microchip.logic.gate.ANDGate;
 import net.swedz.little_big_redstone.microchip.logic.gate.LogicGate;
 import net.swedz.little_big_redstone.microchip.logic.gate.NANDGate;
@@ -37,6 +38,8 @@ public final class LogicTypes
 	static final StreamCodec<ByteBuf, LogicComponent> STREAM_CODEC = ByteBufCodecs.STRING_UTF8
 			.map(LogicTypes::get, LogicType::id)
 			.dispatch(LogicComponent::type, LogicType::streamCodec);
+	
+	public static final LogicType<LogicDebugger> DEBUGGER = register("debugger", "Debugger", LogicDebugger.CODEC, LogicDebugger.STREAM_CODEC, LogicDebugger::new);
 	
 	public static final LogicType<LogicIO> IO = register("io", "I/O Port", LogicIO.CODEC, LogicIO.STREAM_CODEC, LogicIO::new);
 	

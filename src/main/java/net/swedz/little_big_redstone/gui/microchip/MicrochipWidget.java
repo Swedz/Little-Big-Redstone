@@ -335,6 +335,25 @@ public final class MicrochipWidget implements GuiEventListener, Renderable, Narr
 		{
 			var context = LogicRenderer.Context.create(screen.getMenu().color(), entry.component(), false, this.hasSelectedPort(), screen.getMenu().getCarried().is(LBRItems.REDSTONE_BIT.asItem()));
 			LogicRenderers.render(context, graphics, entry.component(), entry.x(), entry.y());
+			
+			if(microchip.isDebug())
+			{
+				List<Integer> indexes = Lists.newArrayList();
+				int index = 0;
+				for(var other : microchip.components().traversal())
+				{
+					if(entry.slot() == other.slot())
+					{
+						indexes.add(index);
+					}
+					index++;
+				}
+				for(int i = 0; i < indexes.size(); i++)
+				{
+					int ind = indexes.get(i);
+					graphics.drawString(Minecraft.getInstance().font, Integer.toString(ind), entry.x(), entry.y() + (i * 8), 0xFFFFFF);
+				}
+			}
 		}
 	}
 	

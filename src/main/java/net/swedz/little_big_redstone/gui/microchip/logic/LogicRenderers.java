@@ -29,6 +29,8 @@ public final class LogicRenderers
 	
 	static
 	{
+		register(LogicTypes.DEBUGGER, SimpleLogicRenderer::new);
+		
 		register(LogicTypes.IO, IORenderer::new);
 		
 		register(LogicTypes.NOT, SimpleLogicRenderer::new);

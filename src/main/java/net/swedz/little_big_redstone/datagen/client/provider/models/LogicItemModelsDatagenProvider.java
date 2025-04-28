@@ -24,6 +24,8 @@ public final class LogicItemModelsDatagenProvider extends ItemModelProvider
 	@Override
 	protected void registerModels()
 	{
+		this.logicComponent(LogicTypes.DEBUGGER, BackgroundType.SQUARE, true);
+		
 		this.logicComponent(LogicTypes.IO, BackgroundType.CIRCLE, false, (b) -> b
 				.boardTexture("input", LBR.id("logic/io_input"))
 				.boardTexture("output", LBR.id("logic/io_output")));

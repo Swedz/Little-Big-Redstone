@@ -26,6 +26,7 @@ public final class LogicComponents implements Iterable<LogicEntry>
 	private Map<Integer, LogicEntry> components = Maps.newHashMap();
 	
 	private List<LogicEntry> traversalOrder = List.of();
+	private boolean          debug;
 	
 	/**
 	 * Should not ever be used directly, only by other constructors.
@@ -42,6 +43,10 @@ public final class LogicComponents implements Iterable<LogicEntry>
 				return;
 			}
 			this.components.put(slot, c);
+			if(c.component().type() == LogicTypes.DEBUGGER)
+			{
+				debug = true;
+			}
 		});
 	}
 	
@@ -72,6 +77,11 @@ public final class LogicComponents implements Iterable<LogicEntry>
 	public List<LogicEntry> traversal()
 	{
 		return traversalOrder;
+	}
+	
+	public boolean isDebug()
+	{
+		return debug;
 	}
 	
 	public LogicEntry get(int slot)
@@ -142,6 +152,14 @@ public final class LogicComponents implements Iterable<LogicEntry>
 	{
 		if(this.canFit(x, y, component))
 		{
+			if(component.type() == LogicTypes.DEBUGGER)
+			{
+				if(debug)
+				{
+					return null;
+				}
+				debug = true;
+			}
 			int slot = this.pickAvailableSlot();
 			var entry = new LogicEntry(slot, x, y, component);
 			components.put(slot, entry);
@@ -155,6 +173,10 @@ public final class LogicComponents implements Iterable<LogicEntry>
 		var original = components.remove(slot);
 		int wiresRemoved = microchip.wires().removeAllOutputs(slot);
 		wiresRemoved += microchip.wires().removeAllInputs(slot);
+		if(original.component().type() == LogicTypes.DEBUGGER)
+		{
+			debug = false;
+		}
 		return wiresRemoved;
 	}
 	
@@ -186,11 +208,13 @@ public final class LogicComponents implements Iterable<LogicEntry>
 	public void loadFrom(LogicComponents other)
 	{
 		components = other.components;
+		debug = other.debug;
 	}
 	
 	public void clear()
 	{
 		components.clear();
 		traversalOrder = List.of();
+		debug = false;
 	}
 }

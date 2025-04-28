@@ -68,6 +68,11 @@ public final class Microchip
 		return components;
 	}
 	
+	public boolean isDebug()
+	{
+		return components.isDebug();
+	}
+	
 	public MicrochipWires wires()
 	{
 		return wires;

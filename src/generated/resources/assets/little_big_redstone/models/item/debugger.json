@@ -1,0 +1,79 @@
+{
+  "parent": "minecraft:item/generated",
+  "board_textures": {
+    "background": "little_big_redstone:logic/background_square",
+    "border": "little_big_redstone:logic/border_square",
+    "icon": "little_big_redstone:logic/debugger"
+  },
+  "color_palette": {
+    "black": {
+      "background": "ffffffff",
+      "foreground": "ff000000"
+    },
+    "blue": {
+      "background": "ff000000",
+      "foreground": "ff0000ff"
+    },
+    "brown": {
+      "background": "ff000000",
+      "foreground": "ff8b4513"
+    },
+    "cyan": {
+      "background": "ff000000",
+      "foreground": "ff00aaaa"
+    },
+    "gray": {
+      "background": "ffffffff",
+      "foreground": "ff555555"
+    },
+    "green": {
+      "background": "ff000000",
+      "foreground": "ff00aa00"
+    },
+    "light_blue": {
+      "background": "ff000000",
+      "foreground": "ff00ffff"
+    },
+    "light_gray": {
+      "background": "ff000000",
+      "foreground": "ffaaaaaa"
+    },
+    "lime": {
+      "background": "ff000000",
+      "foreground": "ff00ff00"
+    },
+    "magenta": {
+      "background": "ff000000",
+      "foreground": "ffff00ff"
+    },
+    "orange": {
+      "background": "ff000000",
+      "foreground": "ffff7f00"
+    },
+    "pink": {
+      "background": "ff000000",
+      "foreground": "ffffb4ff"
+    },
+    "purple": {
+      "background": "ff000000",
+      "foreground": "ffaa00aa"
+    },
+    "red": {
+      "background": "ff000000",
+      "foreground": "ffff0000"
+    },
+    "white": {
+      "background": "ff000000"
+    },
+    "yellow": {
+      "background": "ff000000",
+      "foreground": "ffffff00"
+    }
+  },
+  "item_textures": {
+    "background": "little_big_redstone:item/logic_background_square",
+    "border": "little_big_redstone:item/logic_border_square",
+    "icon": "little_big_redstone:item/debugger"
+  },
+  "loader": "little_big_redstone:logic"
+}
