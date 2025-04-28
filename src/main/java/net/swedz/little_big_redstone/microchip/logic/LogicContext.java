@@ -46,7 +46,7 @@ public final class LogicContext
 	{
 		for(var entry : blockEntity.microchip().components())
 		{
-			if(entry.component() == component)
+			if(entry.component() == component && !dirtyEntries.contains(entry))
 			{
 				dirtyEntries.add(entry);
 			}
