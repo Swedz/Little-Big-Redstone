@@ -3,6 +3,7 @@ package net.swedz.little_big_redstone.gui.microchip.wire;
 import net.minecraft.client.gui.GuiGraphics;
 import net.swedz.little_big_redstone.LBR;
 import net.swedz.little_big_redstone.LBRColors;
+import net.swedz.little_big_redstone.api.Bounds;
 import net.swedz.little_big_redstone.gui.microchip.MicrochipWidget;
 import net.swedz.little_big_redstone.helper.GuiGraphicsHelper;
 import net.swedz.little_big_redstone.microchip.LogicEntry;
@@ -15,7 +16,8 @@ public final class WireRendering
 	private final MicrochipWidget widget;
 	private final Microchip       microchip;
 	
-	private final int         wireMargin;
+	private final int wireMargin;
+	
 	private final WirePathing pathing;
 	
 	public WireRendering(MicrochipWidget widget)
@@ -24,7 +26,15 @@ public final class WireRendering
 		this.microchip = widget.microchip();
 		
 		this.wireMargin = 3;
-		this.pathing = new WirePathing(microchip, wireMargin + 1);
+		int componentMargin = wireMargin + 1;
+		this.pathing = new WirePathing(
+				microchip,
+				wireMargin * 2,
+				(b) -> new Bounds(
+						b.minX() - componentMargin, b.minY() - componentMargin,
+						b.width() + (componentMargin * 2) - 1, b.height() + (componentMargin * 2) - 1
+				)
+		);
 	}
 	
 	public void rebuildPaths()

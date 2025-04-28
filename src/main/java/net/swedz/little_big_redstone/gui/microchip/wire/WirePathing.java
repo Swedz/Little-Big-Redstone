@@ -14,18 +14,23 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.PriorityQueue;
 import java.util.Set;
+import java.util.function.Function;
 
 public final class WirePathing
 {
 	private final Microchip microchip;
-	private final int       componentMarginXY;
+	
+	private final int                      areaMarginXY;
+	private final Function<Bounds, Bounds> componentBoundMutator;
 	
 	private final Map<Wire, List<Position>> paths = Maps.newHashMap();
 	
-	public WirePathing(Microchip microchip, int componentMarginXY)
+	public WirePathing(Microchip microchip, int areaMarginXY, Function<Bounds, Bounds> componentBoundMutator)
 	{
 		this.microchip = microchip;
-		this.componentMarginXY = componentMarginXY;
+		
+		this.areaMarginXY = areaMarginXY;
+		this.componentBoundMutator = componentBoundMutator;
 	}
 	
 	public List<Position> get(Wire wire, int startX, int startY, int endX, int endY)
@@ -37,7 +42,7 @@ public final class WirePathing
 	
 	private List<Position> build(int startX, int startY, int endX, int endY)
 	{
-		return path(startX, startY, endX, endY, microchip, componentMarginXY);
+		return path(startX, startY, endX, endY, microchip, areaMarginXY, componentBoundMutator);
 	}
 	
 	public void forgetEverything()
@@ -50,24 +55,25 @@ public final class WirePathing
 	 * implementation. This respects the space of logic components according to the <code>componentMarginXY</code>
 	 * parameter. Paths that overlap a component are not impossible, but are deprioritized significantly.
 	 *
-	 * @param startX            the start x coordinate
-	 * @param startY            the start y coordinate
-	 * @param endX              the end x coordinate
-	 * @param endY              the end y coordinate
-	 * @param microchip         the microchip
-	 * @param componentMarginXY the margins to apply to all component bounds
+	 * @param startX                the start x coordinate
+	 * @param startY                the start y coordinate
+	 * @param endX                  the end x coordinate
+	 * @param endY                  the end y coordinate
+	 * @param microchip             the microchip
+	 * @param areaMarginXY          the margin to apply to the full area of the microchip
+	 * @param componentBoundMutator the function used to create the bounds for components
 	 * @return the list of positions that construct the best path between the points
 	 */
-	private static List<Position> path(int startX, int startY, int endX, int endY, Microchip microchip, int componentMarginXY)
+	private static List<Position> path(int startX, int startY, int endX, int endY, Microchip microchip, int areaMarginXY, Function<Bounds, Bounds> componentBoundMutator)
 	{
 		var start = new Node(startX, startY);
 		var end = new Node(endX, endY);
-		var bounds = microchip.size().bounds().normalize().grow(componentMarginXY * 2, componentMarginXY * 2);
+		var bounds = microchip.size().bounds().normalize().grow(areaMarginXY, areaMarginXY);
 		
 		List<Bounds> avoidAreas = Lists.newArrayList();
 		for(var entry : microchip.components())
 		{
-			avoidAreas.add(entry.toBounds().grow(componentMarginXY, componentMarginXY));
+			avoidAreas.add(componentBoundMutator.apply(entry.toBounds()));
 		}
 		
 		PriorityQueue<Node> open = Queues.newPriorityQueue();
