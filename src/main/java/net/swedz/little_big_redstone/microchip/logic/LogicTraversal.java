@@ -1,29 +1,24 @@
 package net.swedz.little_big_redstone.microchip.logic;
 
 import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
+import com.google.common.collect.Sets;
 import net.swedz.little_big_redstone.microchip.LogicEntry;
 import net.swedz.little_big_redstone.microchip.Microchip;
+import net.swedz.little_big_redstone.microchip.wire.Wire;
 
 import java.util.Collections;
 import java.util.List;
-import java.util.Map;
+import java.util.Set;
 
 public final class LogicTraversal
 {
 	/**
-	 * <p>
-	 * Builds the logic traversal order for the microchip provided. The below described process ensures that logic
-	 * components will not be ticked until all of their parent logic components have been ticked first so that the
-	 * output data fetched is accurate.
-	 * </p>
-	 * <p>
-	 * The process starts with components with 0 input ports (i.e. components that take input from the world or
-	 * components that lack any wires inputting into it). It then iterates over all of the wires coming out of this
-	 * component and increments a counter for each. Once this counter has reached the total amount of wires plugged
-	 * into this component, the component will tick. Following this, the process will recursively do the same for
-	 * all subsequent components.
-	 * </p>
+	 * Builds the logic traversal order for the microchip provided. The order is determined using a slightly modified
+	 * version of a Breadth-First Search (BFS) over the circuit's components (which is effectively a graph). Starting
+	 * at components with no inputs we add all children components to the order and then mark the wire(s) as "used". A
+	 * wire that has been used cannot be used again to cause a component to be added to the order so as to avoid
+	 * infinitely looping. After adding all children of the component, the children are iterated over again and then
+	 * the algorithm is performed recursively over each child component.
 	 *
 	 * @param microchip the microchip
 	 * @return an immutable list containing the logic entries to tick in the order they should tick
@@ -31,31 +26,35 @@ public final class LogicTraversal
 	public static List<LogicEntry> buildOrder(Microchip microchip)
 	{
 		List<LogicEntry> order = Lists.newArrayList();
-		
-		Map<Integer, Integer> componentsPlinged = Maps.newHashMap();
+		Set<Wire> wiresUsed = Sets.newHashSet();
 		
 		for(var entry : microchip.components())
 		{
 			if(entry.component().inputs() == 0 || microchip.wires().getByInputSlot(entry.slot()).isEmpty())
 			{
-				recursivelyBuildOrder(microchip, entry, order, componentsPlinged);
+				order.add(entry);
+				recursivelyBuildOrder(microchip, entry, order, wiresUsed);
 			}
 		}
 		
 		return Collections.unmodifiableList(order);
 	}
 	
-	private static void recursivelyBuildOrder(Microchip microchip, LogicEntry entry, List<LogicEntry> order, Map<Integer, Integer> componentsPlinged)
+	private static void recursivelyBuildOrder(Microchip microchip, LogicEntry entry, List<LogicEntry> order, Set<Wire> wiresUsed)
 	{
-		order.add(entry);
+		List<LogicEntry> toBuild = Lists.newArrayList();
 		for(var wire : microchip.wires().getByOutputSlot(entry.slot()))
 		{
-			var targetEntry = microchip.components().get(wire.input().slot());
-			int plings = componentsPlinged.compute(targetEntry.slot(), (key, value) -> value == null ? 1 : ++value);
-			if(plings == microchip.wires().getByInputSlot(targetEntry.slot()).size())
+			if(wiresUsed.add(wire))
 			{
-				recursivelyBuildOrder(microchip, targetEntry, order, componentsPlinged);
+				var targetEntry = microchip.components().get(wire.input().slot());
+				order.add(targetEntry);
+				toBuild.add(targetEntry);
 			}
+		}
+		for(var targetEntry : toBuild)
+		{
+			recursivelyBuildOrder(microchip, targetEntry, order, wiresUsed);
 		}
 	}
 }
