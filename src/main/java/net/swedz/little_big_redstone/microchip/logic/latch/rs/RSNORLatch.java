@@ -63,6 +63,7 @@ public final class RSNORLatch extends LogicComponent<RSNORLatch, RSNORLatchConfi
 	@Override
 	protected void processTickInternal(LogicContext context, boolean[] inputs)
 	{
+		boolean originalOutputState = outputState;
 		boolean set = inputs[0];
 		boolean reset = inputs[1];
 		
@@ -73,6 +74,11 @@ public final class RSNORLatch extends LogicComponent<RSNORLatch, RSNORLatchConfi
 		else if(set)
 		{
 			outputState = true;
+		}
+		
+		if(originalOutputState != outputState)
+		{
+			context.markDirty(this);
 		}
 	}
 	

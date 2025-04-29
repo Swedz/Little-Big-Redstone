@@ -71,6 +71,7 @@ public final class TFlipFlop extends LogicComponent<TFlipFlop, TFlipFlopConfig>
 		if(!lastInputState && input)
 		{
 			outputState = !outputState;
+			context.markDirty(this);
 		}
 		
 		lastInputState = input;

@@ -83,7 +83,7 @@ public final class LogicSequencer extends LogicComponent<LogicSequencer, LogicSe
 	protected void processTickInternal(LogicContext context, boolean[] inputs)
 	{
 		long originalProcessedTicks = processedTicks;
-		boolean originalOutput = outputState;
+		boolean originalOutputState = outputState;
 		boolean input = inputs[0];
 		boolean output = false;
 		
@@ -115,7 +115,7 @@ public final class LogicSequencer extends LogicComponent<LogicSequencer, LogicSe
 		}
 		
 		outputState = output;
-		if(originalProcessedTicks != processedTicks || output != originalOutput)
+		if(originalProcessedTicks != processedTicks || output != originalOutputState)
 		{
 			context.markDirty(this);
 		}
