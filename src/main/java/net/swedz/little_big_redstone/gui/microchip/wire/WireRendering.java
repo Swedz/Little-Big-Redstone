@@ -138,7 +138,7 @@ public final class WireRendering
 		
 		int argb = this.getWireColor(outputLogic);
 		
-		this.renderWire(graphics, wire, hovered, startX, startY, endX, endY, powered, argb, partialTicks);
+		this.renderWire(graphics, wire, hovered, startX, startY, endX, endY, true, powered, argb, partialTicks);
 	}
 	
 	private void renderWire(GuiGraphics graphics, LogicEntry outputLogic, int mouseX, int mouseY, int outputIndex, float partialTicks)
@@ -147,28 +147,31 @@ public final class WireRendering
 		int startY = this.getWireStartY(outputLogic, outputIndex);
 		int endX;
 		int endY;
+		boolean usePadding;
 		if(widget.getHovered().shouldInteractPort() && widget.getHovered().isPortInput())
 		{
 			var inputLogic = widget.getHovered().logic();
 			endX = this.getWireEndX(inputLogic);
 			endY = this.getWireEndY(inputLogic, widget.getHovered().port().index());
+			usePadding = true;
 		}
 		else
 		{
 			endX = microchip.size().boardX(widget.toLocalX(mouseX)) + 1;
 			endY = microchip.size().boardY(widget.toLocalY(mouseY)) - 1;
+			usePadding = false;
 		}
 		
 		boolean powered = outputLogic.component().output(outputIndex);
 		
 		int argb = this.getWireColor(outputLogic);
 		
-		this.renderWire(graphics, null, true, startX, startY, endX, endY, powered, argb, partialTicks);
+		this.renderWire(graphics, null, true, startX, startY, endX, endY, usePadding, powered, argb, partialTicks);
 	}
 	
-	private void renderWire(GuiGraphics graphics, Wire wire, boolean hovered, int startX, int startY, int endX, int endY, boolean powered, int argb, float partialTicks)
+	private void renderWire(GuiGraphics graphics, Wire wire, boolean hovered, int startX, int startY, int endX, int endY, boolean usePadding, boolean powered, int argb, float partialTicks)
 	{
-		int portPadding = wire != null ? wirePortPadding : 0;
+		int portPadding = usePadding ? wirePortPadding : 0;
 		
 		float speed = 8;
 		float ticks = Minecraft.getInstance().level.getGameTime() + partialTicks;
