@@ -83,11 +83,11 @@ public final class MicrochipWires implements Iterable<Wire>
 		return list == null ? List.of() : List.copyOf(list);
 	}
 	
-	public List<Wire> getByInputSlot(PortReference port)
+	public Wire getByInputSlot(PortReference port)
 	{
 		return this.getByInputSlot(port.slot()).stream()
 				.filter((wire) -> wire.input().index() == port.index())
-				.toList();
+				.findFirst().orElse(null);
 	}
 	
 	public List<Wire> getInvolvingSlot(int slot)

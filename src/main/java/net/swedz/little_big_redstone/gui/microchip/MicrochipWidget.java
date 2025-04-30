@@ -25,6 +25,7 @@ import net.swedz.little_big_redstone.helper.GuiGraphicsHelper;
 import net.swedz.little_big_redstone.microchip.LogicEntry;
 import net.swedz.little_big_redstone.microchip.LogicSelectedPort;
 import net.swedz.little_big_redstone.microchip.Microchip;
+import net.swedz.little_big_redstone.microchip.wire.Wire;
 import net.swedz.little_big_redstone.network.packet.DyeMicrochipLogicPacket;
 import net.swedz.little_big_redstone.network.packet.OpenLogicConfigPacket;
 import net.swedz.little_big_redstone.network.packet.PlaceTakeMicrochipLogicPacket;
@@ -131,6 +132,29 @@ public final class MicrochipWidget implements GuiEventListener, Renderable, Narr
 		return false;
 	}
 	
+	private boolean pickupWire(Wire wire)
+	{
+		var menu = screen.getMenu();
+		var carried = menu.getCarried();
+		
+		if(wire != null && microchip.wires().remove(wire))
+		{
+			microchip.markDirty();
+			if(carried.isEmpty())
+			{
+				menu.setCarried(LBRItems.REDSTONE_BIT.asItem().getDefaultInstance());
+			}
+			else
+			{
+				carried.grow(1);
+			}
+			selectedPort = new LogicSelectedPort(microchip.components().get(wire.output().slot()), wire.output().index());
+			new PlaceTakeMicrochipWirePacket(menu.containerId, wire, false).sendToServer();
+			return true;
+		}
+		return false;
+	}
+	
 	private boolean pickupWire(int x, int y, int button)
 	{
 		var menu = screen.getMenu();
@@ -148,31 +172,14 @@ public final class MicrochipWidget implements GuiEventListener, Renderable, Narr
 				}
 				else if(hovered.isPortInput() && (carried.isEmpty() || carried.getCount() < carried.getMaxStackSize()))
 				{
-					var wires = microchip.wires().getByInputSlot(hovered.port());
-					if(!wires.isEmpty())
-					{
-						var wire = wires.getFirst();
-						if(microchip.wires().remove(wire))
-						{
-							microchip.markDirty();
-							if(carried.isEmpty())
-							{
-								menu.setCarried(LBRItems.REDSTONE_BIT.asItem().getDefaultInstance());
-							}
-							else
-							{
-								carried.grow(1);
-							}
-							selectedPort = new LogicSelectedPort(microchip.components().get(wire.output().slot()), wire.output().index());
-							new PlaceTakeMicrochipWirePacket(menu.containerId, wire, false).sendToServer();
-							return true;
-						}
-					}
+					var wire = microchip.wires().getByInputSlot(hovered.port());
+					return this.pickupWire(wire);
 				}
 			}
 			else if(hovered.shouldInteractWire())
 			{
-				// TODO pick up wire
+				var wire = hovered.wire();
+				return this.pickupWire(wire);
 			}
 		}
 		
