@@ -145,8 +145,19 @@ public final class WireRendering
 	{
 		int startX = this.getWireStartX(outputLogic);
 		int startY = this.getWireStartY(outputLogic, outputIndex);
-		int endX = microchip.size().boardX(widget.toLocalX(mouseX)) + 1;
-		int endY = microchip.size().boardY(widget.toLocalY(mouseY)) - 1;
+		int endX;
+		int endY;
+		if(widget.getHovered().shouldInteractPort() && widget.getHovered().isPortInput())
+		{
+			var inputLogic = widget.getHovered().logic();
+			endX = this.getWireEndX(inputLogic);
+			endY = this.getWireEndY(inputLogic, widget.getHovered().port().index());
+		}
+		else
+		{
+			endX = microchip.size().boardX(widget.toLocalX(mouseX)) + 1;
+			endY = microchip.size().boardY(widget.toLocalY(mouseY)) - 1;
+		}
 		
 		boolean powered = outputLogic.component().output(outputIndex);
 		

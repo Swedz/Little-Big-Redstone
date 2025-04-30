@@ -156,7 +156,7 @@ public final class MicrochipWidgetHovering
 	
 	public boolean shouldInteractPort()
 	{
-		return this.hasPort();
+		return this.hasLogic() && this.hasPort();
 	}
 	
 	public boolean shouldInteractWire()
