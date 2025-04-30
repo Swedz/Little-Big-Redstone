@@ -168,6 +168,8 @@ public final class WireRendering
 	
 	private void renderWire(GuiGraphics graphics, Wire wire, boolean hovered, int startX, int startY, int endX, int endY, boolean powered, int argb, float partialTicks)
 	{
+		int portPadding = wire != null ? wirePortPadding : 0;
+		
 		float speed = 8;
 		float ticks = Minecraft.getInstance().level.getGameTime() + partialTicks;
 		float interpolate = ((float) Math.sin(Math.toRadians((ticks * speed) % 360f)) + 3f) / 4f;
@@ -175,16 +177,16 @@ public final class WireRendering
 		
 		var texture = LBR.id("textures/gui/container/microchip/wire_%s.png".formatted(powered ? "on" : "off"));
 		GuiGraphicsHelper.setColor(graphics, argb);
-		graphics.blit(texture, startX, startY, startX, startY, wirePortPadding, wireSize, 16, 16);
-		graphics.blit(texture, endX - wirePortPadding, endY, endX - wirePortPadding, endY, wirePortPadding, wireSize, 16, 16);
+		graphics.blit(texture, startX, startY, startX, startY, portPadding, wireSize, 16, 16);
+		graphics.blit(texture, endX - portPadding, endY, endX - portPadding, endY, portPadding, wireSize, 16, 16);
 		if(hovered)
 		{
 			graphics.setColor(1, 1, 1, interpolate);
-			graphics.fill(startX, startY, startX + wirePortPadding, startY + wireSize, 0xFFFFFFFF);
-			graphics.fill(endX - wirePortPadding, endY, endX, endY + wireSize, 0xFFFFFFFF);
+			graphics.fill(startX, startY, startX + portPadding, startY + wireSize, 0xFFFFFFFF);
+			graphics.fill(endX - portPadding, endY, endX, endY + wireSize, 0xFFFFFFFF);
 			GuiGraphicsHelper.setColor(graphics, argb);
 		}
-		for(var position : pathing.get(wire, startX + wirePortPadding, startY, endX - wirePortPadding - wireSize, endY))
+		for(var position : pathing.get(wire, startX + portPadding, startY, endX - portPadding - wireSize, endY))
 		{
 			graphics.blit(texture, position.x(), position.y(), position.x(), position.y(), wireSize, wireSize, 16, 16);
 			if(hovered)
