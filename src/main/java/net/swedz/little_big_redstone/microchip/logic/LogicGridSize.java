@@ -64,9 +64,9 @@ public record LogicGridSize(int width, int height)
 		int portY = this.portTopLeftCornerY(y, input, index, totalPorts);
 		if(input)
 		{
-			portX += 13;
+			portX += 11;
 		}
 		portY += 5;
-		return new Bounds(portX, portY, 3, 6);
+		return new Bounds(portX, portY, 5, 6);
 	}
 }
