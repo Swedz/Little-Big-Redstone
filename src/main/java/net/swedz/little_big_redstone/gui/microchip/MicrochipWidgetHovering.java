@@ -73,6 +73,11 @@ public final class MicrochipWidgetHovering
 		if(logic != null)
 		{
 			topLayerWires.addAll(microchip.wires().getByOutputSlot(logic.slot()));
+			if(wire != null)
+			{
+				topLayerWires.remove(wire);
+				topLayerWires.add(wire);
+			}
 		}
 		
 		return new MicrochipWidgetHovering(logic, port, portInput, wire, topLayerWires);
