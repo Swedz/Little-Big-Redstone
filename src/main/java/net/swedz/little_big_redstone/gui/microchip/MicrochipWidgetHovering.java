@@ -45,6 +45,10 @@ public final class MicrochipWidgetHovering
 					portInput = false;
 				}
 			}
+			else
+			{
+				wire = microchip.wires().getByInputSlot(port);
+			}
 			if(port != null)
 			{
 				logic = microchip.components().get(port.slot());
@@ -72,7 +76,12 @@ public final class MicrochipWidgetHovering
 		// If something was found involving a logic component, set the component's output wires to be rendered last
 		if(logic != null)
 		{
-			topLayerWires.addAll(microchip.wires().getByOutputSlot(logic.slot()));
+			int outputSlot = logic.slot();
+			if(wire != null)
+			{
+				outputSlot = wire.output().slot();
+			}
+			topLayerWires.addAll(microchip.wires().getByOutputSlot(outputSlot));
 			if(wire != null)
 			{
 				topLayerWires.remove(wire);
@@ -161,7 +170,7 @@ public final class MicrochipWidgetHovering
 	
 	public boolean shouldInteractWire()
 	{
-		return this.hasWire();
+		return !this.hasPort() && this.hasWire();
 	}
 	
 	public boolean shouldInteractBoard()
