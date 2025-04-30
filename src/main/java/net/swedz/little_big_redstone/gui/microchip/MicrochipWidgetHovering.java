@@ -43,6 +43,15 @@ public final class MicrochipWidgetHovering
 				if(port != null)
 				{
 					portInput = false;
+					// Only allow selecting the wire in the output port if no item is held in the cursor
+					if(widget.menu().getCarried().isEmpty())
+					{
+						var wires = microchip.wires().getByOutputSlot(port);
+						if(!wires.isEmpty())
+						{
+							wire = wires.getLast();
+						}
+					}
 				}
 			}
 			else
@@ -170,7 +179,7 @@ public final class MicrochipWidgetHovering
 	
 	public boolean shouldInteractWire()
 	{
-		return !this.hasPort() && this.hasWire();
+		return this.hasWire();
 	}
 	
 	public boolean shouldInteractBoard()

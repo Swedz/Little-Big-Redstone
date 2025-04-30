@@ -65,9 +65,14 @@ public final class MicrochipWidget implements GuiEventListener, Renderable, Narr
 		this.height = bounds.height();
 	}
 	
+	public MicrochipMenu menu()
+	{
+		return screen.getMenu();
+	}
+	
 	public DyeColor color()
 	{
-		return screen.getMenu().color();
+		return this.menu().color();
 	}
 	
 	public Microchip microchip()
@@ -107,7 +112,7 @@ public final class MicrochipWidget implements GuiEventListener, Renderable, Narr
 	
 	private boolean dyeComponent(int x, int y, int button)
 	{
-		var menu = screen.getMenu();
+		var menu = this.menu();
 		var carried = menu.getCarried();
 		var logic = hovered.logic();
 		
@@ -134,7 +139,7 @@ public final class MicrochipWidget implements GuiEventListener, Renderable, Narr
 	
 	private boolean pickupWire(Wire wire)
 	{
-		var menu = screen.getMenu();
+		var menu = this.menu();
 		var carried = menu.getCarried();
 		
 		if(wire != null && microchip.wires().remove(wire))
@@ -157,12 +162,18 @@ public final class MicrochipWidget implements GuiEventListener, Renderable, Narr
 	
 	private boolean pickupWire(int x, int y, int button)
 	{
-		var menu = screen.getMenu();
+		var menu = this.menu();
 		var carried = menu.getCarried();
 		
 		if(button == InputConstants.MOUSE_BUTTON_LEFT &&
 		   (carried.isEmpty() || carried.is(LBRItems.REDSTONE_BIT.asItem())))
 		{
+			if(carried.isEmpty() && hovered.shouldInteractWire())
+			{
+				var wire = hovered.wire();
+				return this.pickupWire(wire);
+			}
+			
 			if(hovered.shouldInteractPort())
 			{
 				if(hovered.isPortOutput() && !carried.isEmpty())
@@ -176,7 +187,8 @@ public final class MicrochipWidget implements GuiEventListener, Renderable, Narr
 					return this.pickupWire(wire);
 				}
 			}
-			else if(hovered.shouldInteractWire())
+			
+			if(!carried.isEmpty() && hovered.shouldInteractWire())
 			{
 				var wire = hovered.wire();
 				return this.pickupWire(wire);
@@ -188,7 +200,7 @@ public final class MicrochipWidget implements GuiEventListener, Renderable, Narr
 	
 	private boolean pickupLogic(int x, int y, int button)
 	{
-		var menu = screen.getMenu();
+		var menu = this.menu();
 		var carried = menu.getCarried();
 		var logic = hovered.logic();
 		
@@ -209,7 +221,7 @@ public final class MicrochipWidget implements GuiEventListener, Renderable, Narr
 	
 	private boolean placeWire(int x, int y, int button)
 	{
-		var menu = screen.getMenu();
+		var menu = this.menu();
 		var carried = menu.getCarried();
 		var port = hovered.port();
 		
@@ -241,7 +253,7 @@ public final class MicrochipWidget implements GuiEventListener, Renderable, Narr
 	
 	private boolean placeLogic(int x, int y, int button)
 	{
-		var menu = screen.getMenu();
+		var menu = this.menu();
 		var carried = menu.getCarried();
 		
 		if(button == InputConstants.MOUSE_BUTTON_LEFT &&
@@ -268,7 +280,7 @@ public final class MicrochipWidget implements GuiEventListener, Renderable, Narr
 	
 	private boolean openLogicConfig(int x, int y, int button)
 	{
-		var menu = screen.getMenu();
+		var menu = this.menu();
 		var carried = menu.getCarried();
 		var logic = hovered.logic();
 		
@@ -342,7 +354,7 @@ public final class MicrochipWidget implements GuiEventListener, Renderable, Narr
 	{
 		if(hovered.shouldRenderTooltip())
 		{
-			var carried = screen.getMenu().getCarried();
+			var carried = this.menu().getCarried();
 			if(carried.isEmpty())
 			{
 				var component = hovered.logic().component();
@@ -356,7 +368,7 @@ public final class MicrochipWidget implements GuiEventListener, Renderable, Narr
 	
 	private void renderLogic(GuiGraphics graphics, LogicEntry entry)
 	{
-		var context = LogicRenderer.Context.create(screen.getMenu().color(), entry.component(), false, this.hasSelectedPort(), screen.getMenu().getCarried().is(LBRItems.REDSTONE_BIT.asItem()));
+		var context = LogicRenderer.Context.create(this.menu().color(), entry.component(), false, this.hasSelectedPort(), this.menu().getCarried().is(LBRItems.REDSTONE_BIT.asItem()));
 		LogicRenderers.render(context, graphics, entry.component(), entry.x(), entry.y());
 		
 		if(microchip.isDebug())
@@ -398,7 +410,7 @@ public final class MicrochipWidget implements GuiEventListener, Renderable, Narr
 	
 	private void renderCircuitBg(GuiGraphics graphics, int mouseX, int mouseY, float partialTicks)
 	{
-		GuiGraphicsHelper.setColor(graphics, LBRColors.circuitboard(screen.getMenu().color()));
+		GuiGraphicsHelper.setColor(graphics, LBRColors.circuitboard(this.menu().color()));
 		graphics.blit(CIRCUIT_BACKGROUND, 0, 0, 0, 0, width, height, 64, 64);
 		GuiGraphicsHelper.resetColor(graphics);
 	}
