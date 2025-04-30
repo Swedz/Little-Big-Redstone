@@ -1,6 +1,7 @@
 package net.swedz.little_big_redstone.gui.microchip.wire;
 
 import com.google.common.collect.Lists;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.swedz.little_big_redstone.LBR;
 import net.swedz.little_big_redstone.LBRColors;
@@ -77,12 +78,12 @@ public final class WireRendering
 			{
 				continue;
 			}
-			this.renderWire(graphics, wire, mouseX, mouseY, partialTicks);
+			this.renderWire(graphics, wire, false, mouseX, mouseY, partialTicks);
 		}
 		
 		for(var wire : widget.getHovered().topLayerWires())
 		{
-			this.renderWire(graphics, wire, mouseX, mouseY, partialTicks);
+			this.renderWire(graphics, wire, widget.getHovered().wire() == wire, mouseX, mouseY, partialTicks);
 		}
 		
 		if(widget.hasSelectedPort() &&
@@ -90,15 +91,15 @@ public final class WireRendering
 		   microchip.components().findAt(microchip.size().boardX(widget.toLocalX(mouseX)), microchip.size().boardY(widget.toLocalY(mouseY))) == null)
 		{
 			var selectedPort = widget.getSelectedPort();
-			this.renderWire(graphics, selectedPort.entry(), mouseX, mouseY, selectedPort.index());
+			this.renderWire(graphics, selectedPort.entry(), mouseX, mouseY, selectedPort.index(), partialTicks);
 		}
 	}
 	
-	private void renderWire(GuiGraphics graphics, Wire wire, int mouseX, int mouseY, float partialTicks)
+	private void renderWire(GuiGraphics graphics, Wire wire, boolean hovered, int mouseX, int mouseY, float partialTicks)
 	{
 		LogicEntry outputLogic = microchip.components().get(wire.output().slot());
 		LogicEntry inputLogic = microchip.components().get(wire.input().slot());
-		this.renderWire(graphics, wire, outputLogic, inputLogic, wire.output().index(), wire.input().index());
+		this.renderWire(graphics, wire, hovered, outputLogic, inputLogic, wire.output().index(), wire.input().index(), partialTicks);
 	}
 	
 	private int getWireStartX(LogicEntry outputLogic)
@@ -126,7 +127,7 @@ public final class WireRendering
 		return LBRColors.componentForeground(((LogicComponent<?, ?>) outputLogic.component()).color().orElse(widget.color()));
 	}
 	
-	private void renderWire(GuiGraphics graphics, Wire wire, LogicEntry outputLogic, LogicEntry inputLogic, int outputIndex, int inputIndex)
+	private void renderWire(GuiGraphics graphics, Wire wire, boolean hovered, LogicEntry outputLogic, LogicEntry inputLogic, int outputIndex, int inputIndex, float partialTicks)
 	{
 		int startX = this.getWireStartX(outputLogic);
 		int startY = this.getWireStartY(outputLogic, outputIndex);
@@ -137,10 +138,10 @@ public final class WireRendering
 		
 		int argb = this.getWireColor(outputLogic);
 		
-		this.renderWire(graphics, wire, startX, startY, endX, endY, powered, argb);
+		this.renderWire(graphics, wire, hovered, startX, startY, endX, endY, powered, argb, partialTicks);
 	}
 	
-	private void renderWire(GuiGraphics graphics, LogicEntry outputLogic, int mouseX, int mouseY, int outputIndex)
+	private void renderWire(GuiGraphics graphics, LogicEntry outputLogic, int mouseX, int mouseY, int outputIndex, float partialTicks)
 	{
 		int startX = this.getWireStartX(outputLogic);
 		int startY = this.getWireStartY(outputLogic, outputIndex);
@@ -151,18 +152,36 @@ public final class WireRendering
 		
 		int argb = this.getWireColor(outputLogic);
 		
-		this.renderWire(graphics, null, startX, startY, endX, endY, powered, argb);
+		this.renderWire(graphics, null, true, startX, startY, endX, endY, powered, argb, partialTicks);
 	}
 	
-	private void renderWire(GuiGraphics graphics, Wire wire, int startX, int startY, int endX, int endY, boolean powered, int argb)
+	private void renderWire(GuiGraphics graphics, Wire wire, boolean hovered, int startX, int startY, int endX, int endY, boolean powered, int argb, float partialTicks)
 	{
+		float speed = 8;
+		float ticks = Minecraft.getInstance().level.getGameTime() + partialTicks;
+		float interpolate = ((float) Math.sin(Math.toRadians((ticks * speed) % 360f)) + 3f) / 4f;
+		interpolate /= 2f;
+		
 		var texture = LBR.id("textures/gui/container/microchip/wire_%s.png".formatted(powered ? "on" : "off"));
 		GuiGraphicsHelper.setColor(graphics, argb);
 		graphics.blit(texture, startX, startY, startX, startY, wirePortPadding, wireSize, 16, 16);
 		graphics.blit(texture, endX - wirePortPadding, endY, endX - wirePortPadding, endY, wirePortPadding, wireSize, 16, 16);
+		if(hovered)
+		{
+			graphics.setColor(1, 1, 1, interpolate);
+			graphics.fill(startX, startY, startX + wirePortPadding, startY + wireSize, 0xFFFFFFFF);
+			graphics.fill(endX - wirePortPadding, endY, endX, endY + wireSize, 0xFFFFFFFF);
+			GuiGraphicsHelper.setColor(graphics, argb);
+		}
 		for(var position : pathing.get(wire, startX + wirePortPadding, startY, endX - wirePortPadding - wireSize, endY))
 		{
 			graphics.blit(texture, position.x(), position.y(), position.x(), position.y(), wireSize, wireSize, 16, 16);
+			if(hovered)
+			{
+				graphics.setColor(1, 1, 1, interpolate);
+				graphics.fill(position.x(), position.y(), position.x() + wireSize, position.y() + wireSize, 0xFFFFFFFF);
+				GuiGraphicsHelper.setColor(graphics, argb);
+			}
 		}
 		GuiGraphicsHelper.resetColor(graphics);
 	}
