@@ -51,8 +51,8 @@ public final class MicrochipWidgetHovering
 			}
 		}
 		
-		// If no port was found, try to find the hovered wire, if any
-		if(logic == null)
+		// If no port was found and no port is selected, try to find the hovered wire, if any
+		if(logic == null && !widget.hasSelectedPort())
 		{
 			wire = previous.wire();
 			if(wire == null || !wireRendering.isHovering(wire, boardMouseX, boardMouseY))
