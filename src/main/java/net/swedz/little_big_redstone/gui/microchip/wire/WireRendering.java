@@ -1,5 +1,6 @@
 package net.swedz.little_big_redstone.gui.microchip.wire;
 
+import com.google.common.collect.Lists;
 import net.minecraft.client.gui.GuiGraphics;
 import net.swedz.little_big_redstone.LBR;
 import net.swedz.little_big_redstone.LBRColors;
@@ -11,12 +12,17 @@ import net.swedz.little_big_redstone.microchip.Microchip;
 import net.swedz.little_big_redstone.microchip.logic.LogicComponent;
 import net.swedz.little_big_redstone.microchip.wire.Wire;
 
+import java.util.Collections;
+import java.util.List;
+
 public final class WireRendering
 {
 	private final MicrochipWidget widget;
 	private final Microchip       microchip;
 	
-	private final int wireMargin;
+	private final int wireSize;
+	private final int wirePadding;
+	private final int wirePortPadding;
 	
 	private final WirePathing pathing;
 	
@@ -25,11 +31,13 @@ public final class WireRendering
 		this.widget = widget;
 		this.microchip = widget.microchip();
 		
-		this.wireMargin = 3;
-		int componentMargin = wireMargin + 1;
+		this.wireSize = 2;
+		this.wirePadding = 1;
+		this.wirePortPadding = 3;
+		int componentMargin = wirePortPadding + 1;
 		this.pathing = new WirePathing(
 				microchip,
-				wireMargin * 2,
+				wirePortPadding * 2,
 				(b) -> new Bounds(
 						b.minX() - componentMargin, b.minY() - componentMargin,
 						b.width() + (componentMargin * 2) - 1, b.height() + (componentMargin * 2) - 1
@@ -42,13 +50,39 @@ public final class WireRendering
 		pathing.forgetEverything();
 	}
 	
+	public boolean isHovering(Wire wire, int boardMouseX, int boardMouseY)
+	{
+		return pathing.contains(wire, boardMouseX, boardMouseY, wireSize, wirePadding);
+	}
+	
+	public Wire findHoveredWire(int boardMouseX, int boardMouseY)
+	{
+		List<Wire> backwardsWires = Lists.newArrayList(microchip.wires());
+		Collections.reverse(backwardsWires);
+		for(var wire : backwardsWires)
+		{
+			if(this.isHovering(wire, boardMouseX, boardMouseY))
+			{
+				return wire;
+			}
+		}
+		return null;
+	}
+	
 	public void renderWires(GuiGraphics graphics, int mouseX, int mouseY, float partialTicks)
 	{
 		for(var wire : microchip.wires())
 		{
-			LogicEntry outputLogic = microchip.components().get(wire.output().slot());
-			LogicEntry inputLogic = microchip.components().get(wire.input().slot());
-			this.renderWire(graphics, wire, outputLogic, inputLogic, wire.output().index(), wire.input().index());
+			if(widget.getHovered().topLayerWires().contains(wire))
+			{
+				continue;
+			}
+			this.renderWire(graphics, wire, mouseX, mouseY, partialTicks);
+		}
+		
+		for(var wire : widget.getHovered().topLayerWires())
+		{
+			this.renderWire(graphics, wire, mouseX, mouseY, partialTicks);
 		}
 		
 		if(widget.hasSelectedPort() &&
@@ -58,6 +92,13 @@ public final class WireRendering
 			var selectedPort = widget.getSelectedPort();
 			this.renderWire(graphics, selectedPort.entry(), mouseX, mouseY, selectedPort.index());
 		}
+	}
+	
+	private void renderWire(GuiGraphics graphics, Wire wire, int mouseX, int mouseY, float partialTicks)
+	{
+		LogicEntry outputLogic = microchip.components().get(wire.output().slot());
+		LogicEntry inputLogic = microchip.components().get(wire.input().slot());
+		this.renderWire(graphics, wire, outputLogic, inputLogic, wire.output().index(), wire.input().index());
 	}
 	
 	private int getWireStartX(LogicEntry outputLogic)
@@ -117,11 +158,11 @@ public final class WireRendering
 	{
 		var texture = LBR.id("textures/gui/container/microchip/wire_%s.png".formatted(powered ? "on" : "off"));
 		GuiGraphicsHelper.setColor(graphics, argb);
-		graphics.blit(texture, startX, startY, startX, startY, wireMargin, 2, 16, 16);
-		graphics.blit(texture, endX - wireMargin, endY, endX - wireMargin, endY, wireMargin, 2, 16, 16);
-		for(var position : pathing.get(wire, startX + wireMargin, startY, endX - wireMargin - 2, endY))
+		graphics.blit(texture, startX, startY, startX, startY, wirePortPadding, wireSize, 16, 16);
+		graphics.blit(texture, endX - wirePortPadding, endY, endX - wirePortPadding, endY, wirePortPadding, wireSize, 16, 16);
+		for(var position : pathing.get(wire, startX + wirePortPadding, startY, endX - wirePortPadding - wireSize, endY))
 		{
-			graphics.blit(texture, position.x(), position.y(), position.x(), position.y(), 2, 2, 16, 16);
+			graphics.blit(texture, position.x(), position.y(), position.x(), position.y(), wireSize, wireSize, 16, 16);
 		}
 		GuiGraphicsHelper.resetColor(graphics);
 	}

@@ -20,16 +20,16 @@ public final class WirePathing
 {
 	private final Microchip microchip;
 	
-	private final int                      areaMarginXY;
+	private final int                      areaPaddingXY;
 	private final Function<Bounds, Bounds> componentBoundMutator;
 	
 	private final Map<Wire, List<Position>> paths = Maps.newHashMap();
 	
-	public WirePathing(Microchip microchip, int areaMarginXY, Function<Bounds, Bounds> componentBoundMutator)
+	public WirePathing(Microchip microchip, int areaPaddingXY, Function<Bounds, Bounds> componentBoundMutator)
 	{
 		this.microchip = microchip;
 		
-		this.areaMarginXY = areaMarginXY;
+		this.areaPaddingXY = areaPaddingXY;
 		this.componentBoundMutator = componentBoundMutator;
 	}
 	
@@ -42,7 +42,24 @@ public final class WirePathing
 	
 	private List<Position> build(int startX, int startY, int endX, int endY)
 	{
-		return path(startX, startY, endX, endY, microchip, areaMarginXY, componentBoundMutator);
+		return path(startX, startY, endX, endY, microchip, areaPaddingXY, componentBoundMutator);
+	}
+	
+	public boolean contains(Wire wire, int x, int y, int wireSectionSize, int wireSectionPadding)
+	{
+		var path = paths.get(wire);
+		if(path != null)
+		{
+			for(var position : path)
+			{
+				if(x >= position.x - wireSectionPadding - 1 && x <= position.x + wireSectionSize + wireSectionPadding - 1 &&
+				   y >= position.y - wireSectionPadding - 1 && y <= position.y + wireSectionSize + wireSectionPadding - 1)
+				{
+					return true;
+				}
+			}
+		}
+		return false;
 	}
 	
 	public void forgetEverything()
@@ -52,7 +69,7 @@ public final class WirePathing
 	
 	/**
 	 * Performs a search to find the best path from the start coordinates to the end coordinates using an A*
-	 * implementation. This respects the space of logic components according to the <code>componentMarginXY</code>
+	 * implementation. This respects the space of logic components according to the <code>areaPaddingXY</code>
 	 * parameter. Paths that overlap a component are not impossible, but are deprioritized significantly.
 	 *
 	 * @param startX                the start x coordinate
@@ -60,15 +77,15 @@ public final class WirePathing
 	 * @param endX                  the end x coordinate
 	 * @param endY                  the end y coordinate
 	 * @param microchip             the microchip
-	 * @param areaMarginXY          the margin to apply to the full area of the microchip
+	 * @param areaPaddingXY         the margin to apply to the full area of the microchip
 	 * @param componentBoundMutator the function used to create the bounds for components
 	 * @return the list of positions that construct the best path between the points
 	 */
-	private static List<Position> path(int startX, int startY, int endX, int endY, Microchip microchip, int areaMarginXY, Function<Bounds, Bounds> componentBoundMutator)
+	private static List<Position> path(int startX, int startY, int endX, int endY, Microchip microchip, int areaPaddingXY, Function<Bounds, Bounds> componentBoundMutator)
 	{
 		var start = new Node(startX, startY);
 		var end = new Node(endX, endY);
-		var bounds = microchip.size().bounds().normalize().grow(areaMarginXY, areaMarginXY);
+		var bounds = microchip.size().bounds().normalize().grow(areaPaddingXY, areaPaddingXY);
 		
 		List<Bounds> avoidAreas = Lists.newArrayList();
 		for(var entry : microchip.components())

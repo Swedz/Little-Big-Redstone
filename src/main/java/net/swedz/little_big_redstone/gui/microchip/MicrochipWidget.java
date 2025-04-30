@@ -46,6 +46,8 @@ public final class MicrochipWidget implements GuiEventListener, Renderable, Narr
 	
 	private final WireRendering wires;
 	
+	private MicrochipWidgetHovering hovered = MicrochipWidgetHovering.NOTHING;
+	
 	private LogicSelectedPort selectedPort;
 	
 	public MicrochipWidget(int x, int y, MicrochipScreen screen)
@@ -70,6 +72,11 @@ public final class MicrochipWidget implements GuiEventListener, Renderable, Narr
 	public Microchip microchip()
 	{
 		return microchip;
+	}
+	
+	public MicrochipWidgetHovering getHovered()
+	{
+		return hovered;
 	}
 	
 	public boolean hasSelectedPort()
@@ -97,25 +104,26 @@ public final class MicrochipWidget implements GuiEventListener, Renderable, Narr
 		wires.rebuildPaths();
 	}
 	
-	private boolean dyeComponent(int x, int y, int button, LogicEntry entry)
+	private boolean dyeComponent(int x, int y, int button)
 	{
 		var menu = screen.getMenu();
 		var carried = menu.getCarried();
+		var logic = hovered.logic();
 		
 		if(button == InputConstants.MOUSE_BUTTON_RIGHT &&
-		   entry != null)
+		   hovered.shouldInteractLogic())
 		{
-			var result = DyeComponentResult.test(menu, carried, entry);
+			var result = DyeComponentResult.test(menu, carried, logic);
 			if(result.success())
 			{
-				entry.component().setColor(result.color());
+				logic.component().setColor(result.color());
 				microchip.markDirty();
 				if(result.consume())
 				{
 					carried.consume(1, screen.getMinecraft().player);
 				}
 				result.playSound(screen.getMinecraft().player);
-				new DyeMicrochipLogicPacket(menu.containerId, entry.slot()).sendToServer();
+				new DyeMicrochipLogicPacket(menu.containerId, logic.slot()).sendToServer();
 				return true;
 			}
 		}
@@ -123,7 +131,7 @@ public final class MicrochipWidget implements GuiEventListener, Renderable, Narr
 		return false;
 	}
 	
-	private boolean pickupWire(int x, int y, int button, LogicSelectedPort outputPort, LogicSelectedPort inputPort)
+	private boolean pickupWire(int x, int y, int button)
 	{
 		var menu = screen.getMenu();
 		var carried = menu.getCarried();
@@ -131,52 +139,60 @@ public final class MicrochipWidget implements GuiEventListener, Renderable, Narr
 		if(button == InputConstants.MOUSE_BUTTON_LEFT &&
 		   (carried.isEmpty() || carried.is(LBRItems.REDSTONE_BIT.asItem())))
 		{
-			if(outputPort != null && !carried.isEmpty())
+			if(hovered.shouldInteractPort())
 			{
-				selectedPort = outputPort;
-				return true;
-			}
-			else if(inputPort != null && (carried.isEmpty() || carried.getCount() < carried.getMaxStackSize()))
-			{
-				var wires = microchip.wires().getByInputSlot(inputPort);
-				if(!wires.isEmpty())
+				if(hovered.isPortOutput() && !carried.isEmpty())
 				{
-					var wire = wires.getFirst();
-					if(microchip.wires().remove(wire))
+					selectedPort = hovered.port();
+					return true;
+				}
+				else if(hovered.isPortInput() && (carried.isEmpty() || carried.getCount() < carried.getMaxStackSize()))
+				{
+					var wires = microchip.wires().getByInputSlot(hovered.port());
+					if(!wires.isEmpty())
 					{
-						microchip.markDirty();
-						if(carried.isEmpty())
+						var wire = wires.getFirst();
+						if(microchip.wires().remove(wire))
 						{
-							menu.setCarried(LBRItems.REDSTONE_BIT.asItem().getDefaultInstance());
+							microchip.markDirty();
+							if(carried.isEmpty())
+							{
+								menu.setCarried(LBRItems.REDSTONE_BIT.asItem().getDefaultInstance());
+							}
+							else
+							{
+								carried.grow(1);
+							}
+							selectedPort = new LogicSelectedPort(microchip.components().get(wire.output().slot()), wire.output().index());
+							new PlaceTakeMicrochipWirePacket(menu.containerId, wire, false).sendToServer();
+							return true;
 						}
-						else
-						{
-							carried.grow(1);
-						}
-						selectedPort = new LogicSelectedPort(microchip.components().get(wire.output().slot()), wire.output().index());
-						new PlaceTakeMicrochipWirePacket(menu.containerId, wire, false).sendToServer();
-						return true;
 					}
 				}
+			}
+			else if(hovered.shouldInteractWire())
+			{
+				// TODO pick up wire
 			}
 		}
 		
 		return false;
 	}
 	
-	private boolean pickupLogic(int x, int y, int button, LogicEntry entry)
+	private boolean pickupLogic(int x, int y, int button)
 	{
 		var menu = screen.getMenu();
 		var carried = menu.getCarried();
+		var logic = hovered.logic();
 		
 		if(button == InputConstants.MOUSE_BUTTON_LEFT &&
-		   entry != null &&
+		   hovered.shouldInteractLogic() &&
 		   carried.isEmpty())
 		{
-			microchip.components().remove(entry);
+			microchip.components().remove(logic);
 			microchip.markDirty();
 			wires.rebuildPaths();
-			menu.setCarried(entry.toStack());
+			menu.setCarried(logic.toStack());
 			new PlaceTakeMicrochipLogicPacket(menu.containerId, x, y, false).sendToServer();
 			return true;
 		}
@@ -184,20 +200,23 @@ public final class MicrochipWidget implements GuiEventListener, Renderable, Narr
 		return false;
 	}
 	
-	private boolean placeWire(int x, int y, int button, LogicSelectedPort inputPort)
+	private boolean placeWire(int x, int y, int button)
 	{
 		var menu = screen.getMenu();
 		var carried = menu.getCarried();
+		var port = hovered.port();
 		
 		if(carried.is(LBRItems.REDSTONE_BIT.asItem()) &&
 		   this.hasSelectedPort())
 		{
 			if(button == InputConstants.MOUSE_BUTTON_LEFT &&
-			   inputPort != null && microchip.wires().add(selectedPort, inputPort))
+			   hovered.shouldInteractPort() &&
+			   hovered.isPortInput() &&
+			   microchip.wires().add(selectedPort, port))
 			{
 				microchip.markDirty();
 				carried.shrink(1);
-				new PlaceTakeMicrochipWirePacket(menu.containerId, selectedPort, inputPort, true).sendToServer();
+				new PlaceTakeMicrochipWirePacket(menu.containerId, selectedPort, port, true).sendToServer();
 				if(carried.isEmpty())
 				{
 					selectedPort = null;
@@ -219,7 +238,8 @@ public final class MicrochipWidget implements GuiEventListener, Renderable, Narr
 		var carried = menu.getCarried();
 		
 		if(button == InputConstants.MOUSE_BUTTON_LEFT &&
-		   carried.has(LBRComponents.LOGIC))
+		   carried.has(LBRComponents.LOGIC) &&
+		   hovered.shouldInteractBoard())
 		{
 			var component = carried.get(LBRComponents.LOGIC);
 			int placeX = component.size().topLeftCornerX(x);
@@ -239,16 +259,17 @@ public final class MicrochipWidget implements GuiEventListener, Renderable, Narr
 		return false;
 	}
 	
-	private boolean openLogicConfig(int x, int y, int button, LogicEntry entry)
+	private boolean openLogicConfig(int x, int y, int button)
 	{
 		var menu = screen.getMenu();
 		var carried = menu.getCarried();
+		var logic = hovered.logic();
 		
 		if(button == InputConstants.MOUSE_BUTTON_RIGHT &&
-		   entry != null &&
+		   hovered.shouldInteractLogic() &&
 		   carried.isEmpty())
 		{
-			new OpenLogicConfigPacket(menu.containerId, entry.slot()).sendToServer();
+			new OpenLogicConfigPacket(menu.containerId, logic.slot()).sendToServer();
 			return true;
 		}
 		
@@ -257,31 +278,32 @@ public final class MicrochipWidget implements GuiEventListener, Renderable, Narr
 	
 	private boolean mouseClickedOnBoard(int x, int y, int button)
 	{
-		var entry = microchip.components().findAt(x, y);
-		var inputPort = microchip.components().findPortAt(x, y, true);
-		var outputPort = microchip.components().findPortAt(x, y, false);
+		int boardX = microchip.size().boardX(this.toLocalX(x));
+		int boardY = microchip.size().boardY(this.toLocalY(y));
 		
-		if(this.dyeComponent(x, y, button, entry))
+		hovered = MicrochipWidgetHovering.test(this, wires, x, y, hovered);
+		
+		if(this.dyeComponent(boardX, boardY, button))
 		{
 			return false;
 		}
-		else if(this.pickupWire(x, y, button, outputPort, inputPort))
+		else if(this.pickupWire(boardX, boardY, button))
 		{
 			return false;
 		}
-		else if(this.pickupLogic(x, y, button, entry))
+		else if(this.pickupLogic(boardX, boardY, button))
 		{
 			return false;
 		}
-		else if(this.placeWire(x, y, button, inputPort))
+		else if(this.placeWire(boardX, boardY, button))
 		{
 			return false;
 		}
-		else if(this.placeLogic(x, y, button))
+		else if(this.placeLogic(boardX, boardY, button))
 		{
 			return false;
 		}
-		else if(this.openLogicConfig(x, y, button, entry))
+		else if(this.openLogicConfig(boardX, boardY, button))
 		{
 			return false;
 		}
@@ -296,7 +318,7 @@ public final class MicrochipWidget implements GuiEventListener, Renderable, Narr
 		int mouseY = (int) my;
 		if(this.isMouseOver(mouseX, mouseY))
 		{
-			return this.mouseClickedOnBoard(microchip.size().boardX(this.toLocalX(mouseX)), microchip.size().boardY(this.toLocalY(mouseY)), button);
+			return this.mouseClickedOnBoard(mouseX, mouseY, button);
 		}
 		else
 		{
@@ -311,20 +333,41 @@ public final class MicrochipWidget implements GuiEventListener, Renderable, Narr
 	
 	private void renderTooltip(GuiGraphics graphics, int mouseX, int mouseY, float partialTicks)
 	{
-		if(this.isMouseOver(mouseX, mouseY))
+		if(hovered.shouldRenderTooltip())
 		{
 			var carried = screen.getMenu().getCarried();
 			if(carried.isEmpty())
 			{
-				var hovered = microchip.components().findAt(microchip.size().boardX(this.toLocalX(mouseX)), microchip.size().boardY(this.toLocalY(mouseY)));
-				if(hovered != null)
+				var component = hovered.logic().component();
+				List<Component> lines = Lists.newArrayList();
+				lines.add(component.type().displayName().withStyle(Style.EMPTY.withUnderlined(true)));
+				component.type().tooltip(component, false, true, false).ifPresent((Consumer<List<Component>>) lines::addAll);
+				graphics.renderComponentTooltip(Minecraft.getInstance().font, lines, mouseX, mouseY);
+			}
+		}
+	}
+	
+	private void renderLogic(GuiGraphics graphics, LogicEntry entry)
+	{
+		var context = LogicRenderer.Context.create(screen.getMenu().color(), entry.component(), false, this.hasSelectedPort(), screen.getMenu().getCarried().is(LBRItems.REDSTONE_BIT.asItem()));
+		LogicRenderers.render(context, graphics, entry.component(), entry.x(), entry.y());
+		
+		if(microchip.isDebug())
+		{
+			List<Integer> indexes = Lists.newArrayList();
+			int index = 0;
+			for(var other : microchip.components().traversal())
+			{
+				if(entry.slot() == other.slot())
 				{
-					var component = hovered.component();
-					List<Component> lines = Lists.newArrayList();
-					lines.add(component.type().displayName().withStyle(Style.EMPTY.withUnderlined(true)));
-					component.type().tooltip(component, false, true, false).ifPresent((Consumer<List<Component>>) lines::addAll);
-					graphics.renderComponentTooltip(Minecraft.getInstance().font, lines, mouseX, mouseY);
+					indexes.add(index);
 				}
+				index++;
+			}
+			for(int i = 0; i < indexes.size(); i++)
+			{
+				int ind = indexes.get(i);
+				graphics.drawString(Minecraft.getInstance().font, Integer.toString(ind), entry.x(), entry.y() + (i * 8), 0xFFFFFF);
 			}
 		}
 	}
@@ -333,27 +376,16 @@ public final class MicrochipWidget implements GuiEventListener, Renderable, Narr
 	{
 		for(var entry : microchip.components())
 		{
-			var context = LogicRenderer.Context.create(screen.getMenu().color(), entry.component(), false, this.hasSelectedPort(), screen.getMenu().getCarried().is(LBRItems.REDSTONE_BIT.asItem()));
-			LogicRenderers.render(context, graphics, entry.component(), entry.x(), entry.y());
-			
-			if(microchip.isDebug())
+			if(entry == hovered.logic())
 			{
-				List<Integer> indexes = Lists.newArrayList();
-				int index = 0;
-				for(var other : microchip.components().traversal())
-				{
-					if(entry.slot() == other.slot())
-					{
-						indexes.add(index);
-					}
-					index++;
-				}
-				for(int i = 0; i < indexes.size(); i++)
-				{
-					int ind = indexes.get(i);
-					graphics.drawString(Minecraft.getInstance().font, Integer.toString(ind), entry.x(), entry.y() + (i * 8), 0xFFFFFF);
-				}
+				continue;
 			}
+			this.renderLogic(graphics, entry);
+		}
+		
+		if(hovered.hasLogic())
+		{
+			this.renderLogic(graphics, hovered.logic());
 		}
 	}
 	
@@ -370,6 +402,8 @@ public final class MicrochipWidget implements GuiEventListener, Renderable, Narr
 		graphics.pose().pushPose();
 		graphics.pose().translate(x, y, 0);
 		graphics.pose().scale(microchip.size().scale(), microchip.size().scale(), microchip.size().scale());
+		
+		hovered = MicrochipWidgetHovering.test(this, wires, mouseX, mouseY, hovered);
 		
 		this.renderCircuitBg(graphics, mouseX, mouseY, partialTicks);
 		this.renderLogic(graphics, mouseX, mouseY, partialTicks);
