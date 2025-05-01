@@ -9,6 +9,7 @@ import net.minecraft.client.gui.components.events.GuiEventListener;
 import net.minecraft.client.gui.narration.NarratableEntry;
 import net.minecraft.client.gui.narration.NarrationElementOutput;
 import net.minecraft.client.gui.navigation.ScreenRectangle;
+import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.Style;
 import net.minecraft.resources.ResourceLocation;
@@ -261,8 +262,8 @@ public final class MicrochipWidget implements GuiEventListener, Renderable, Narr
 		   hovered.shouldInteractBoard())
 		{
 			var component = carried.get(LBRComponents.LOGIC);
-			int placeX = component.size().topLeftCornerX(x);
-			int placeY = component.size().topLeftCornerY(y);
+			int placeX = Screen.hasControlDown() ? screen.getGridSnappedCoord(x - component.size().centerX() + 8) : component.size().topLeftCornerX(x);
+			int placeY = Screen.hasControlDown() ? screen.getGridSnappedCoord(y - component.size().centerY() + 8) : component.size().topLeftCornerY(y);
 			
 			if(microchip.size().bounds().normalize().contains(component.size().toBounds(placeX, placeY)) &&
 			   microchip.components().add(placeX, placeY, component) != null)

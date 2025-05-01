@@ -1,6 +1,7 @@
 package net.swedz.little_big_redstone.gui.microchip;
 
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -35,6 +36,11 @@ public final class MicrochipScreen extends AbstractContainerScreen<MicrochipMenu
 		return menu.microchip().size().bounds().contains(x, y);
 	}
 	
+	public int getGridSnappedCoord(int coord)
+	{
+		return (coord / 16) * 16;
+	}
+	
 	@Override
 	protected void init()
 	{
@@ -55,23 +61,26 @@ public final class MicrochipScreen extends AbstractContainerScreen<MicrochipMenu
 	public void renderFloatingItem(GuiGraphics graphics, ItemStack stack, int x, int y, String text)
 	{
 		var size = menu.microchip().size();
-		int mouseX = size.boardX(x + 8);
-		int mouseY = size.boardY(y + 8);
-		if(stack.has(LBRComponents.LOGIC) && this.isWithinBoard(mouseX, mouseY))
+		
+		if(stack.has(LBRComponents.LOGIC))
 		{
-			var component = stack.get(LBRComponents.LOGIC);
-			int logicX = component.size().topLeftCornerX(mouseX);
-			int logicY = component.size().topLeftCornerY(mouseY);
-			var context = LogicRenderer.Context.create(menu.color(), component, true, microchipWidget.hasSelectedPort(), false);
-			graphics.pose().pushPose();
-			graphics.pose().scale(size.scale(), size.scale(), size.scale());
-			LogicRenderers.render(context, graphics, component, logicX, logicY);
-			graphics.pose().popPose();
+			int mouseX = size.boardX(x + 8);
+			int mouseY = size.boardY(y + 8);
+			if(this.isWithinBoard(mouseX, mouseY))
+			{
+				var component = stack.get(LBRComponents.LOGIC);
+				int logicX = Screen.hasControlDown() ? this.getGridSnappedCoord(mouseX - size.bounds().minX() - component.size().centerX() + 8) + size.boardX(8) : component.size().topLeftCornerX(mouseX);
+				int logicY = Screen.hasControlDown() ? this.getGridSnappedCoord(mouseY - size.bounds().minY() - component.size().centerY() + 8) + size.boardY(8) : component.size().topLeftCornerY(mouseY);
+				var context = LogicRenderer.Context.create(menu.color(), component, true, microchipWidget.hasSelectedPort(), false);
+				graphics.pose().pushPose();
+				graphics.pose().scale(size.scale(), size.scale(), size.scale());
+				LogicRenderers.render(context, graphics, component, logicX, logicY);
+				graphics.pose().popPose();
+				return;
+			}
 		}
-		else
-		{
-			super.renderFloatingItem(graphics, stack, x, y, text);
-		}
+		
+		super.renderFloatingItem(graphics, stack, x, y, text);
 	}
 	
 	@Override
