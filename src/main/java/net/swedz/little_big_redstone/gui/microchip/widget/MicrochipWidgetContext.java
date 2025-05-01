@@ -1,10 +1,9 @@
-package net.swedz.little_big_redstone.gui.microchip;
+package net.swedz.little_big_redstone.gui.microchip.widget;
 
 import com.google.common.collect.Lists;
 import net.minecraft.world.item.ItemStack;
 import net.swedz.little_big_redstone.LBRItems;
 import net.swedz.little_big_redstone.gui.microchip.logic.DyeComponentResult;
-import net.swedz.little_big_redstone.gui.microchip.wire.MicrochipWidgetWires;
 import net.swedz.little_big_redstone.microchip.LogicEntry;
 import net.swedz.little_big_redstone.microchip.LogicSelectedPort;
 import net.swedz.little_big_redstone.microchip.wire.Wire;

@@ -1,4 +1,4 @@
-package net.swedz.little_big_redstone.gui.microchip.wire;
+package net.swedz.little_big_redstone.gui.microchip.widget;
 
 import com.google.common.collect.Lists;
 import net.minecraft.client.gui.GuiGraphics;
@@ -6,10 +6,9 @@ import net.swedz.little_big_redstone.LBR;
 import net.swedz.little_big_redstone.LBRColors;
 import net.swedz.little_big_redstone.api.Bounds;
 import net.swedz.little_big_redstone.gui.microchip.MicrochipScreen;
-import net.swedz.little_big_redstone.gui.microchip.MicrochipWidget;
+import net.swedz.little_big_redstone.gui.microchip.wire.WirePathing;
 import net.swedz.little_big_redstone.helper.GuiGraphicsHelper;
 import net.swedz.little_big_redstone.microchip.LogicEntry;
-import net.swedz.little_big_redstone.microchip.Microchip;
 import net.swedz.little_big_redstone.microchip.logic.LogicComponent;
 import net.swedz.little_big_redstone.microchip.wire.Wire;
 
@@ -19,7 +18,6 @@ import java.util.List;
 public final class MicrochipWidgetWires
 {
 	private final MicrochipWidget widget;
-	private final Microchip       microchip;
 	
 	private final int wireSize;
 	private final int wirePadding;
@@ -27,17 +25,16 @@ public final class MicrochipWidgetWires
 	
 	private final WirePathing pathing;
 	
-	public MicrochipWidgetWires(MicrochipWidget widget)
+	MicrochipWidgetWires(MicrochipWidget widget)
 	{
 		this.widget = widget;
-		this.microchip = widget.microchip();
 		
 		this.wireSize = 2;
 		this.wirePadding = 1;
 		this.wirePortPadding = 3;
 		int componentMargin = wirePortPadding + 1;
 		this.pathing = new WirePathing(
-				microchip,
+				widget.microchip(),
 				wirePortPadding * 2,
 				(b) -> new Bounds(
 						b.minX() - componentMargin, b.minY() - componentMargin,
@@ -58,7 +55,7 @@ public final class MicrochipWidgetWires
 	
 	public Wire findHoveredWire(int boardMouseX, int boardMouseY)
 	{
-		List<Wire> backwardsWires = Lists.newArrayList(microchip.wires());
+		List<Wire> backwardsWires = Lists.newArrayList(widget.microchip().wires());
 		Collections.reverse(backwardsWires);
 		for(var wire : backwardsWires)
 		{
@@ -72,23 +69,23 @@ public final class MicrochipWidgetWires
 	
 	public void renderWires(GuiGraphics graphics, int mouseX, int mouseY, float partialTicks)
 	{
-		for(var wire : microchip.wires())
+		for(var wire : widget.microchip().wires())
 		{
-			if(widget.getContext().topLayerWires().contains(wire))
+			if(widget.context().topLayerWires().contains(wire))
 			{
 				continue;
 			}
 			this.renderWire(graphics, wire, false, mouseX, mouseY, partialTicks);
 		}
 		
-		for(var wire : widget.getContext().topLayerWires())
+		for(var wire : widget.context().topLayerWires())
 		{
-			this.renderWire(graphics, wire, widget.getContext().wire() == wire, mouseX, mouseY, partialTicks);
+			this.renderWire(graphics, wire, widget.context().wire() == wire, mouseX, mouseY, partialTicks);
 		}
 		
 		if(widget.hasSelectedPort() &&
 		   widget.isMouseOver(mouseX, mouseY) &&
-		   microchip.components().findAt(microchip.size().boardX(widget.toLocalX(mouseX)), microchip.size().boardY(widget.toLocalY(mouseY))) == null)
+		   widget.microchip().components().findAt(widget.microchip().size().boardX(widget.toLocalX(mouseX)), widget.microchip().size().boardY(widget.toLocalY(mouseY))) == null)
 		{
 			var selectedPort = widget.getSelectedPort();
 			this.renderWire(graphics, selectedPort.entry(), mouseX, mouseY, selectedPort.index(), partialTicks);
@@ -97,8 +94,8 @@ public final class MicrochipWidgetWires
 	
 	private void renderWire(GuiGraphics graphics, Wire wire, boolean hovered, int mouseX, int mouseY, float partialTicks)
 	{
-		LogicEntry outputLogic = microchip.components().get(wire.output().slot());
-		LogicEntry inputLogic = microchip.components().get(wire.input().slot());
+		LogicEntry outputLogic = widget.microchip().components().get(wire.output().slot());
+		LogicEntry inputLogic = widget.microchip().components().get(wire.input().slot());
 		this.renderWire(graphics, wire, hovered, outputLogic, inputLogic, wire.output().index(), wire.input().index(), partialTicks);
 	}
 	
@@ -148,17 +145,17 @@ public final class MicrochipWidgetWires
 		int endX;
 		int endY;
 		boolean usePadding;
-		if(widget.getContext().shouldInteractPort() && widget.getContext().isPortInput())
+		if(widget.context().shouldInteractPort() && widget.context().isPortInput())
 		{
-			var inputLogic = widget.getContext().logic();
+			var inputLogic = widget.context().logic();
 			endX = this.getWireEndX(inputLogic);
-			endY = this.getWireEndY(inputLogic, widget.getContext().port().index());
+			endY = this.getWireEndY(inputLogic, widget.context().port().index());
 			usePadding = true;
 		}
 		else
 		{
-			endX = microchip.size().boardX(widget.toLocalX(mouseX)) + 1;
-			endY = microchip.size().boardY(widget.toLocalY(mouseY)) - 1;
+			endX = widget.microchip().size().boardX(widget.toLocalX(mouseX)) + 1;
+			endY = widget.microchip().size().boardY(widget.toLocalY(mouseY)) - 1;
 			usePadding = false;
 		}
 		

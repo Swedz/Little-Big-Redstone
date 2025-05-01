@@ -1,8 +1,6 @@
-package net.swedz.little_big_redstone.gui.microchip;
+package net.swedz.little_big_redstone.gui.microchip.widget;
 
-import com.google.common.collect.Lists;
 import com.mojang.blaze3d.platform.InputConstants;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Renderable;
 import net.minecraft.client.gui.components.events.GuiEventListener;
@@ -10,20 +8,13 @@ import net.minecraft.client.gui.narration.NarratableEntry;
 import net.minecraft.client.gui.narration.NarrationElementOutput;
 import net.minecraft.client.gui.navigation.ScreenRectangle;
 import net.minecraft.client.gui.screens.Screen;
-import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.Style;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.DyeColor;
 import net.swedz.little_big_redstone.LBR;
-import net.swedz.little_big_redstone.LBRColors;
 import net.swedz.little_big_redstone.LBRComponents;
 import net.swedz.little_big_redstone.LBRItems;
+import net.swedz.little_big_redstone.gui.microchip.MicrochipMenu;
+import net.swedz.little_big_redstone.gui.microchip.MicrochipScreen;
 import net.swedz.little_big_redstone.gui.microchip.logic.DyeComponentResult;
-import net.swedz.little_big_redstone.gui.microchip.logic.LogicRenderer;
-import net.swedz.little_big_redstone.gui.microchip.logic.LogicRenderers;
-import net.swedz.little_big_redstone.gui.microchip.wire.MicrochipWidgetWires;
-import net.swedz.little_big_redstone.helper.GuiGraphicsHelper;
-import net.swedz.little_big_redstone.microchip.LogicEntry;
 import net.swedz.little_big_redstone.microchip.LogicSelectedPort;
 import net.swedz.little_big_redstone.microchip.Microchip;
 import net.swedz.little_big_redstone.microchip.wire.Wire;
@@ -32,21 +23,15 @@ import net.swedz.little_big_redstone.network.packet.OpenLogicConfigPacket;
 import net.swedz.little_big_redstone.network.packet.PlaceTakeMicrochipLogicPacket;
 import net.swedz.little_big_redstone.network.packet.PlaceTakeMicrochipWirePacket;
 
-import java.util.List;
-import java.util.function.Consumer;
-
 public final class MicrochipWidget implements GuiEventListener, Renderable, NarratableEntry
 {
-	private static final ResourceLocation SHADOW_HOVER_OVERLAY = LBR.id("textures/gui/container/microchip/shadow_hover_overlay.png");
-	private static final ResourceLocation CIRCUIT_BACKGROUND   = LBR.id("textures/gui/container/microchip/circuit_background.png");
-	
-	private final int x, y, width, height;
+	final int x, y, width, height;
 	
 	private final MicrochipScreen screen;
+	private final Microchip       microchip;
 	
-	private final Microchip microchip;
-	
-	private final MicrochipWidgetWires wires;
+	final MicrochipWidgetRenderer renderer;
+	final MicrochipWidgetWires    wires;
 	
 	private MicrochipWidgetContext context = MicrochipWidgetContext.NOTHING;
 	
@@ -57,6 +42,7 @@ public final class MicrochipWidget implements GuiEventListener, Renderable, Narr
 		this.screen = screen;
 		this.microchip = screen.getMenu().microchip();
 		
+		this.renderer = new MicrochipWidgetRenderer(this);
 		this.wires = new MicrochipWidgetWires(this);
 		
 		var bounds = microchip.size().bounds();
@@ -81,7 +67,7 @@ public final class MicrochipWidget implements GuiEventListener, Renderable, Narr
 		return microchip;
 	}
 	
-	public MicrochipWidgetContext getContext()
+	public MicrochipWidgetContext context()
 	{
 		return context;
 	}
@@ -351,110 +337,12 @@ public final class MicrochipWidget implements GuiEventListener, Renderable, Narr
 		}
 	}
 	
-	private void renderTooltip(GuiGraphics graphics, int mouseX, int mouseY, float partialTicks)
-	{
-		if(context.shouldRenderTooltip())
-		{
-			var carried = this.menu().getCarried();
-			if(carried.isEmpty())
-			{
-				var component = context.logic().component();
-				List<Component> lines = Lists.newArrayList();
-				lines.add(component.type().displayName().withStyle(Style.EMPTY.withUnderlined(true)));
-				component.type().tooltip(component, false, true, false).ifPresent((Consumer<List<Component>>) lines::addAll);
-				graphics.renderComponentTooltip(Minecraft.getInstance().font, lines, mouseX, mouseY);
-			}
-		}
-	}
-	
-	private void renderLogic(GuiGraphics graphics, LogicEntry entry)
-	{
-		var context = LogicRenderer.Context.create(this.menu().color(), entry.component(), false, this.hasSelectedPort(), this.menu().getCarried().is(LBRItems.REDSTONE_BIT.asItem()));
-		LogicRenderers.render(context, graphics, entry.component(), entry.x(), entry.y());
-		
-		if(microchip.isDebug())
-		{
-			List<Integer> indexes = Lists.newArrayList();
-			int index = 0;
-			for(var other : microchip.components().traversal())
-			{
-				if(entry.slot() == other.slot())
-				{
-					indexes.add(index);
-				}
-				index++;
-			}
-			for(int i = 0; i < indexes.size(); i++)
-			{
-				int ind = indexes.get(i);
-				graphics.drawString(Minecraft.getInstance().font, Integer.toString(ind), entry.x(), entry.y() + (i * 8), 0xFFFFFF);
-			}
-		}
-	}
-	
-	private void renderLogic(GuiGraphics graphics, int mouseX, int mouseY, float partialTicks)
-	{
-		for(var entry : microchip.components())
-		{
-			if(entry == context.logic())
-			{
-				continue;
-			}
-			this.renderLogic(graphics, entry);
-		}
-		
-		if(context.hasLogic())
-		{
-			this.renderLogic(graphics, context.logic());
-		}
-	}
-	
-	private void renderLogicGridSnappingOverlay(GuiGraphics graphics, int mouseX, int mouseY, float partialTicks)
-	{
-		var carried = this.menu().getCarried();
-		var size = microchip.size();
-		
-		if(Screen.hasControlDown() && carried.has(LBRComponents.LOGIC) && this.isMouseOver(mouseX, mouseY))
-		{
-			var component = carried.get(LBRComponents.LOGIC);
-			int boardX = size.boardX(this.toLocalX(mouseX));
-			int boardY = size.boardY(this.toLocalY(mouseY));
-			int logicX = MicrochipScreen.getGridSnappedCoord(boardX - component.size().centerX() + 8);
-			int logicY = MicrochipScreen.getGridSnappedCoord(boardY - component.size().centerY() + 8);
-			
-			graphics.setColor(1, 1, 1, MicrochipScreen.getPulsingAlpha(partialTicks));
-			graphics.fill(0, logicY, size.bounds().width(), logicY + 1, 0xFFFFFFFF);
-			graphics.fill(0, logicY + component.size().heightPixels() - 1, size.bounds().width(), logicY + component.size().heightPixels(), 0xFFFFFFFF);
-			graphics.fill(logicX, 0, logicX + 1, size.bounds().height(), 0xFFFFFFFF);
-			graphics.fill(logicX + component.size().widthPixels() - 1, 0, logicX + component.size().widthPixels(), size.bounds().height(), 0xFFFFFFFF);
-			GuiGraphicsHelper.resetColor(graphics);
-		}
-	}
-	
-	private void renderCircuitBg(GuiGraphics graphics, int mouseX, int mouseY, float partialTicks)
-	{
-		GuiGraphicsHelper.setColor(graphics, LBRColors.circuitboard(this.menu().color()));
-		graphics.blit(CIRCUIT_BACKGROUND, 0, 0, 0, 0, width, height, 64, 64);
-		GuiGraphicsHelper.resetColor(graphics);
-	}
-	
 	@Override
-	public void render(GuiGraphics graphics, int mouseX, int mouseY, float partialTicks)
+	public void render(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick)
 	{
-		graphics.pose().pushPose();
-		graphics.pose().translate(x, y, 0);
-		graphics.pose().scale(microchip.size().scale(), microchip.size().scale(), microchip.size().scale());
-		
 		context = MicrochipWidgetContext.test(this, wires, mouseX, mouseY, context);
 		
-		this.renderCircuitBg(graphics, mouseX, mouseY, partialTicks);
-		this.renderLogicGridSnappingOverlay(graphics, mouseX, mouseY, partialTicks);
-		this.renderLogic(graphics, mouseX, mouseY, partialTicks);
-		wires.renderWires(graphics, mouseX, mouseY, partialTicks);
-		
-		graphics.pose().popPose();
-		
-		this.renderTooltip(graphics, mouseX, mouseY, partialTicks);
+		renderer.render(guiGraphics, mouseX, mouseY, partialTick);
 	}
 	
 	@Override

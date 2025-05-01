@@ -12,6 +12,7 @@ import net.swedz.little_big_redstone.LBR;
 import net.swedz.little_big_redstone.LBRComponents;
 import net.swedz.little_big_redstone.gui.microchip.logic.LogicRenderer;
 import net.swedz.little_big_redstone.gui.microchip.logic.LogicRenderers;
+import net.swedz.little_big_redstone.gui.microchip.widget.MicrochipWidget;
 
 public final class MicrochipScreen extends AbstractContainerScreen<MicrochipMenu>
 {
