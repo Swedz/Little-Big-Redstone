@@ -5,15 +5,20 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import io.netty.buffer.ByteBuf;
+import net.minecraft.network.chat.Component;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.world.item.DyeColor;
+import net.swedz.little_big_redstone.LBRText;
 import net.swedz.little_big_redstone.microchip.logic.LogicComponent;
 import net.swedz.little_big_redstone.microchip.logic.LogicContext;
 import net.swedz.little_big_redstone.microchip.logic.LogicType;
 import net.swedz.little_big_redstone.microchip.logic.LogicTypes;
 
+import java.util.List;
 import java.util.Optional;
+
+import static net.swedz.little_big_redstone.LBRTextLine.*;
 
 public final class PulseThrottler extends LogicComponent<PulseThrottler, PulseThrottlerConfig>
 {
@@ -128,6 +133,12 @@ public final class PulseThrottler extends LogicComponent<PulseThrottler, PulseTh
 	public boolean output()
 	{
 		return outputState;
+	}
+	
+	@Override
+	public void appendShiftHoverText(List<Component> lines)
+	{
+		lines.add(line(LBRText.LOGIC_HELP_PULSE_THROTTLER));
 	}
 	
 	@Override

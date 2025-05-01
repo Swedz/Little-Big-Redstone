@@ -58,6 +58,7 @@ public enum LBRText implements TranslatableTextEnum
 	LOGIC_HELP_NOR_GATE("Output is ON when all inputs are OFF, otherwise output is ON."),
 	LOGIC_HELP_NOT_GATE("Output is ON when the input is OFF, and output is OFF when the input is ON."),
 	LOGIC_HELP_OR_GATE("Output is ON when any input is ON, otherwise output is OFF."),
+	LOGIC_HELP_PULSE_THROTTLER("Throttles an input signal and yields an output with a configurable duration."),
 	LOGIC_HELP_READER_1("Checks the filled percentage of an adjacent block and yields an ON signal if the block's filled percentage is greater than or equal to the set fill threshold."),
 	LOGIC_HELP_READER_2("Can be used on item, fluid, or energy storages."),
 	LOGIC_HELP_RS_NOR_LATCH_1("When the reset (R) input is ON, the output is always OFF."),
