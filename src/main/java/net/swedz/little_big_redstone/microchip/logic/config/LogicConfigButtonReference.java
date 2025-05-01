@@ -7,4 +7,6 @@ public interface LogicConfigButtonReference
 	void setText(Component text);
 	
 	void setTooltip(Component tooltip);
+	
+	void update();
 }

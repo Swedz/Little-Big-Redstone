@@ -69,6 +69,11 @@ public final class LogicConfigScreen extends AbstractContainerScreen<LogicConfig
 			{
 				button.setTooltip(Tooltip.create(tooltip));
 			}
+			
+			@Override
+			public void update()
+			{
+			}
 		};
 	}
 	
@@ -100,6 +105,12 @@ public final class LogicConfigScreen extends AbstractContainerScreen<LogicConfig
 			{
 				widget.setTooltip(Tooltip.create(tooltip));
 			}
+			
+			@Override
+			public void update()
+			{
+				widget.updateMessage();
+			}
 		};
 	}
 	
@@ -128,6 +139,11 @@ public final class LogicConfigScreen extends AbstractContainerScreen<LogicConfig
 			public void setTooltip(Component tooltip)
 			{
 				button.setTooltip(Tooltip.create(tooltip));
+			}
+			
+			@Override
+			public void update()
+			{
 			}
 		};
 	}
