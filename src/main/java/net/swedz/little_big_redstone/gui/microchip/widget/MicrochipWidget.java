@@ -153,7 +153,8 @@ public final class MicrochipWidget implements GuiEventListener, Renderable, Narr
 		var carried = menu.getCarried();
 		
 		if(button == InputConstants.MOUSE_BUTTON_LEFT &&
-		   MicrochipWidgetContext.canInteractWire(carried))
+		   MicrochipWidgetContext.canInteractWire(carried) &&
+		   !this.hasSelectedPort())
 		{
 			if(carried.isEmpty() && context.shouldInteractWire())
 			{
