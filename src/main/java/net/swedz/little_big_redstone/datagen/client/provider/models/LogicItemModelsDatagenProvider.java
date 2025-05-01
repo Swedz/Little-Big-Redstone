@@ -1,5 +1,6 @@
 package net.swedz.little_big_redstone.datagen.client.provider.models;
 
+import com.google.common.collect.Sets;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.DyeColor;
 import net.neoforged.neoforge.client.model.generators.ItemModelProvider;
@@ -12,17 +13,19 @@ import net.swedz.little_big_redstone.microchip.logic.LogicType;
 import net.swedz.little_big_redstone.microchip.logic.LogicTypes;
 
 import java.util.Locale;
+import java.util.Set;
 import java.util.function.Consumer;
 
 public final class LogicItemModelsDatagenProvider extends ItemModelProvider
 {
+	private final Set<LogicType<?>> generated = Sets.newHashSet();
+	
 	public LogicItemModelsDatagenProvider(GatherDataEvent event)
 	{
 		super(event.getGenerator().getPackOutput(), LBR.ID, event.getExistingFileHelper());
 	}
 	
-	@Override
-	protected void registerModels()
+	private void registerLogicModels()
 	{
 		this.logicComponent(LogicTypes.DEBUGGER, BackgroundType.SQUARE, true);
 		
@@ -48,6 +51,30 @@ public final class LogicItemModelsDatagenProvider extends ItemModelProvider
 		this.logicComponent(LogicTypes.RS_NOR_LATCH, BackgroundType.SQUARE, false, (b) -> b
 				.boardTexture("on", LBR.id("logic/rs_nor_latch_on"))
 				.boardTexture("off", LBR.id("logic/rs_nor_latch_off")));
+	}
+	
+	@Override
+	protected void registerModels()
+	{
+		this.registerLogicModels();
+		this.assertAllTypesAreGenerated();
+	}
+	
+	private void assertAllTypesAreGenerated()
+	{
+		boolean missing = false;
+		for(var type : LogicTypes.values())
+		{
+			if(!generated.contains(type))
+			{
+				missing = true;
+				LBR.LOGGER.error("Did not generate model for logic type {}, did you forget?", type.id());
+			}
+		}
+		if(missing)
+		{
+			throw new IllegalStateException("Missing generated models for some logic types");
+		}
 	}
 	
 	private enum BackgroundType
@@ -85,6 +112,7 @@ public final class LogicItemModelsDatagenProvider extends ItemModelProvider
 	
 	private void logicComponent(LogicType<?> type, BackgroundType backgroundType, boolean icon, Consumer<LogicBakingModelData.Builder<?>> also)
 	{
+		generated.add(type);
 		String id = type.id();
 		this.getBuilder("item/%s".formatted(id))
 				.parent(new ModelFile.UncheckedModelFile("item/generated"))
