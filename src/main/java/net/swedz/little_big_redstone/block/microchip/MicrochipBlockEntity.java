@@ -46,7 +46,7 @@ public final class MicrochipBlockEntity extends BlockEntity implements MenuProvi
 	{
 		super(LBRBlocks.MICROCHIP_ENTITY.get(), pos, blockState);
 		
-		microchip = new Microchip(MicrochipSize.create(0.75f));
+		microchip = new Microchip(MicrochipSize.create(0.5f));
 	}
 	
 	public Microchip microchip()

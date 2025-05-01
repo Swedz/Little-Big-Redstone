@@ -22,7 +22,7 @@ public final class MicrochipSize
 			MicrochipSize::new
 	);
 	
-	private static final Bounds REAL_BOUNDS = new Bounds(8, 8, 240, 133);
+	private static final Bounds REAL_BOUNDS = new Bounds(8, 8, 240, 128);
 	
 	public static MicrochipSize create(float scale)
 	{
@@ -50,16 +50,16 @@ public final class MicrochipSize
 	
 	public int boardX(int x)
 	{
-		return (int) (x / scale);
+		return Math.round(x / scale);
 	}
 	
 	public int boardY(int y)
 	{
-		return (int) (y / scale);
+		return Math.round(y / scale);
 	}
 	
 	public int scale(int coord)
 	{
-		return (int) (coord * scale);
+		return Math.round(coord * scale);
 	}
 }

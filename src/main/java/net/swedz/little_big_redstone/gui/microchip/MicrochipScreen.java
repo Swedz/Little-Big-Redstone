@@ -22,7 +22,7 @@ public final class MicrochipScreen extends AbstractContainerScreen<MicrochipMenu
 		super(menu, playerInventory, title);
 		
 		imageWidth = 256;
-		imageHeight = 232;
+		imageHeight = 227;
 	}
 	
 	public void handleUpdate()

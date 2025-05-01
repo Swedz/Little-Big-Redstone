@@ -29,7 +29,7 @@ public final class MicrochipMenu extends BaseContainerMenu
 		this.microchip = microchip;
 		this.color = color;
 		
-		this.setupPlayerInventory(playerInventory, 48, 150);
+		this.setupPlayerInventory(playerInventory, 48, 145);
 	}
 	
 	public MicrochipMenu(int containerId, Inventory playerInventory, RegistryFriendlyByteBuf buf)
@@ -41,7 +41,7 @@ public final class MicrochipMenu extends BaseContainerMenu
 		this.microchip = Microchip.STREAM_CODEC.decode(buf);
 		this.color = DyeColor.STREAM_CODEC.decode(buf);
 		
-		this.setupPlayerInventory(playerInventory, 48, 150);
+		this.setupPlayerInventory(playerInventory, 48, 145);
 	}
 	
 	public BlockPos blockPos()
