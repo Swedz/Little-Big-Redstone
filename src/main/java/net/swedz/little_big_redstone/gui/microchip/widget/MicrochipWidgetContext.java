@@ -171,6 +171,11 @@ public final class MicrochipWidgetContext
 		return !portInput;
 	}
 	
+	public boolean isPortEmpty()
+	{
+		return !this.hasWire();
+	}
+	
 	public Wire wire()
 	{
 		return wire;

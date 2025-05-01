@@ -219,6 +219,7 @@ public final class MicrochipWidget implements GuiEventListener, Renderable, Narr
 			if(button == InputConstants.MOUSE_BUTTON_LEFT &&
 			   context.shouldInteractPort() &&
 			   context.isPortInput() &&
+			   context.isPortEmpty() &&
 			   microchip.wires().add(selectedPort, port))
 			{
 				microchip.markDirty();

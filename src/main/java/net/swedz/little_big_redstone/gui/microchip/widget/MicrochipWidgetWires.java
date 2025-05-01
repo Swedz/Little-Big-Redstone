@@ -80,7 +80,7 @@ public final class MicrochipWidgetWires
 		
 		for(var wire : widget.context().topLayerWires())
 		{
-			this.renderWire(graphics, wire, widget.context().wire() == wire, mouseX, mouseY, partialTicks);
+			this.renderWire(graphics, wire, !widget.hasSelectedPort() && widget.context().wire() == wire, mouseX, mouseY, partialTicks);
 		}
 		
 		if(widget.hasSelectedPort() &&
@@ -145,7 +145,7 @@ public final class MicrochipWidgetWires
 		int endX;
 		int endY;
 		boolean usePadding;
-		if(widget.context().shouldInteractPort() && widget.context().isPortInput())
+		if(widget.context().shouldInteractPort() && widget.context().isPortInput() && widget.context().isPortEmpty())
 		{
 			var inputLogic = widget.context().logic();
 			endX = this.getWireEndX(inputLogic);

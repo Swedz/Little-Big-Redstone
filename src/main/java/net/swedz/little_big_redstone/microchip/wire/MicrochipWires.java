@@ -70,11 +70,16 @@ public final class MicrochipWires implements Iterable<Wire>
 		return list == null ? List.of() : List.copyOf(list);
 	}
 	
+	public List<Wire> getByOutputSlot(int outputSlot, int outputPort)
+	{
+		return this.getByOutputSlot(outputSlot).stream()
+				.filter((wire) -> wire.output().index() == outputPort)
+				.toList();
+	}
+	
 	public List<Wire> getByOutputSlot(PortReference port)
 	{
-		return this.getByOutputSlot(port.slot()).stream()
-				.filter((wire) -> wire.output().index() == port.index())
-				.toList();
+		return this.getByOutputSlot(port.slot(), port.index());
 	}
 	
 	public List<Wire> getByInputSlot(int inputSlot)
@@ -83,11 +88,16 @@ public final class MicrochipWires implements Iterable<Wire>
 		return list == null ? List.of() : List.copyOf(list);
 	}
 	
+	public Wire getByInputSlot(int inputSlot, int inputPort)
+	{
+		return this.getByInputSlot(inputSlot).stream()
+				.filter((wire) -> wire.input().index() == inputPort)
+				.findFirst().orElse(null);
+	}
+	
 	public Wire getByInputSlot(PortReference port)
 	{
-		return this.getByInputSlot(port.slot()).stream()
-				.filter((wire) -> wire.input().index() == port.index())
-				.findFirst().orElse(null);
+		return this.getByInputSlot(port.slot(), port.index());
 	}
 	
 	public List<Wire> getInvolvingSlot(int slot)
@@ -117,6 +127,10 @@ public final class MicrochipWires implements Iterable<Wire>
 	
 	public boolean add(Wire wire)
 	{
+		if(this.getByInputSlot(wire.input()) != null)
+		{
+			return false;
+		}
 		if(wiresByOutputSlot.computeIfAbsent(wire.output().slot(), (__) -> Sets.newHashSet()).add(wire))
 		{
 			wiresByInputSlot.computeIfAbsent(wire.input().slot(), (__) -> Sets.newHashSet()).add(wire);
