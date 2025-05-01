@@ -56,7 +56,7 @@ public final class LogicConfigScreen extends AbstractContainerScreen<LogicConfig
 		}
 		var button = builder.create(configX + x, configY + y, width, height, name, (__, value) -> onChange.accept(value));
 		this.addRenderableWidget(button);
-		return new LogicConfigButtonReference()
+		return new LogicConfigButtonReference<T>()
 		{
 			@Override
 			public void setText(Component text)
@@ -71,8 +71,9 @@ public final class LogicConfigScreen extends AbstractContainerScreen<LogicConfig
 			}
 			
 			@Override
-			public void update()
+			public void setValue(T value)
 			{
+				button.setValue(value);
 			}
 		};
 	}
@@ -91,7 +92,7 @@ public final class LogicConfigScreen extends AbstractContainerScreen<LogicConfig
 		};
 		widget.setTooltip(Tooltip.create(tooltip));
 		this.addRenderableWidget(widget);
-		return new LogicConfigButtonReference()
+		return new LogicConfigButtonReference<Double>()
 		{
 			
 			@Override
@@ -107,9 +108,9 @@ public final class LogicConfigScreen extends AbstractContainerScreen<LogicConfig
 			}
 			
 			@Override
-			public void update()
+			public void setValue(Double value)
 			{
-				widget.updateMessage();
+				widget.setValue(value);
 			}
 		};
 	}
@@ -127,7 +128,7 @@ public final class LogicConfigScreen extends AbstractContainerScreen<LogicConfig
 		this.addRenderableWidget(button);
 		this.addRenderableOnly((graphics, mouseX, mouseY, partialTicks) ->
 				graphics.drawString(Minecraft.getInstance().font, textReference.get(), configX + x + 21, configY + y + 8 - 3, 0xFFFFFF, false));
-		return new LogicConfigButtonReference()
+		return new LogicConfigButtonReference<Boolean>()
 		{
 			@Override
 			public void setText(Component text)
@@ -142,8 +143,16 @@ public final class LogicConfigScreen extends AbstractContainerScreen<LogicConfig
 			}
 			
 			@Override
-			public void update()
+			public void setValue(Boolean value)
 			{
+				if(value && !button.selected())
+				{
+					button.onPress();
+				}
+				else if(!value && button.selected())
+				{
+					button.onPress();
+				}
 			}
 		};
 	}
