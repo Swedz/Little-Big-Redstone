@@ -4,7 +4,6 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
-import net.swedz.little_big_redstone.LBR;
 import net.swedz.little_big_redstone.block.microchip.MicrochipBlock;
 import net.swedz.little_big_redstone.microchip.Microchip;
 import net.swedz.little_big_redstone.microchip.awareness.AwarenessContext;
@@ -20,9 +19,9 @@ public final class RedstoneAwareness extends MicrochipAwareness<RedstoneAwarenes
 	private boolean[] inputSides  = new boolean[6];
 	private boolean[] outputSides = new boolean[6];
 	
-	private int[]   inputPower           = new int[6];
-	private int[]   outputPower          = new int[6];
-	private int[]   outputPowerEvaluated = new int[6];
+	private int[] inputPower           = new int[6];
+	private int[] outputPower          = new int[6];
+	private int[] outputPowerEvaluated = new int[6];
 	
 	public boolean[] getSides()
 	{
@@ -171,7 +170,6 @@ public final class RedstoneAwareness extends MicrochipAwareness<RedstoneAwarenes
 			if(outputPower[index] != signal)
 			{
 				powerChanged = true;
-				LBR.LOGGER.info("power changed");
 				break;
 			}
 		}
