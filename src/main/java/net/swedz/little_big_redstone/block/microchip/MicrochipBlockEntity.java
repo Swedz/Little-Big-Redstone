@@ -103,7 +103,7 @@ public final class MicrochipBlockEntity extends BlockEntity implements MenuProvi
 	@Override
 	public AbstractContainerMenu createMenu(int containerId, Inventory inventory, Player player)
 	{
-		return new MicrochipMenu(containerId, inventory, worldPosition, () -> this.isMenuValid(player), microchip, this.color());
+		return new MicrochipMenu(containerId, inventory, worldPosition, this::isMenuValid, microchip, this.color());
 	}
 	
 	public boolean openMenu(Player player)

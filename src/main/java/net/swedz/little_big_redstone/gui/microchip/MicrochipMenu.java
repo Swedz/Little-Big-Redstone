@@ -10,17 +10,17 @@ import net.swedz.little_big_redstone.LBRMenus;
 import net.swedz.little_big_redstone.gui.BaseContainerMenu;
 import net.swedz.little_big_redstone.microchip.Microchip;
 
-import java.util.function.Supplier;
+import java.util.function.Function;
 
 public final class MicrochipMenu extends BaseContainerMenu
 {
-	private final BlockPos          blockPos;
-	private final Supplier<Boolean> validChecker;
-	private final Microchip         microchip;
-	private final DyeColor          color;
+	private final BlockPos                  blockPos;
+	private final Function<Player, Boolean> validChecker;
+	private final Microchip                 microchip;
+	private final DyeColor                  color;
 	
 	public MicrochipMenu(int containerId, Inventory playerInventory,
-						 BlockPos blockPos, Supplier<Boolean> validChecker, Microchip microchip, DyeColor color)
+						 BlockPos blockPos, Function<Player, Boolean> validChecker, Microchip microchip, DyeColor color)
 	{
 		super(LBRMenus.MICROCHIP.get(), containerId);
 		
@@ -68,7 +68,6 @@ public final class MicrochipMenu extends BaseContainerMenu
 	@Override
 	public boolean stillValid(Player player)
 	{
-		return (validChecker == null || validChecker.get()) &&
-			   player.blockPosition().closerThan(blockPos, 10);
+		return validChecker == null || validChecker.apply(player);
 	}
 }

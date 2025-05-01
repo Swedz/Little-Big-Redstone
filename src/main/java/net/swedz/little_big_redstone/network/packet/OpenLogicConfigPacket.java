@@ -9,6 +9,7 @@ import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.swedz.little_big_redstone.LBR;
+import net.swedz.little_big_redstone.block.microchip.MicrochipBlockEntity;
 import net.swedz.little_big_redstone.gui.logicconfig.LogicConfigMenu;
 import net.swedz.little_big_redstone.gui.microchip.MicrochipMenu;
 import net.swedz.little_big_redstone.microchip.LogicEntry;
@@ -34,12 +35,12 @@ public record OpenLogicConfigPacket(int containerId, int slot) implements LBRCus
 		if(player.hasContainerOpen() && player.containerMenu instanceof MicrochipMenu menu && menu.containerId == containerId)
 		{
 			var pos = menu.blockPos();
-			var microchip = menu.microchip();
-			var entry = microchip.components().get(slot);
-			if(entry != null)
+			var blockEntity = player.level().getBlockEntity(pos);
+			if(blockEntity instanceof MicrochipBlockEntity)
 			{
-				var blockEntity = player.level().getBlockEntity(pos);
-				if(blockEntity != null)
+				var microchip = menu.microchip();
+				var entry = microchip.components().get(slot);
+				if(entry != null)
 				{
 					player.openMenu(
 							new MenuProvider()
@@ -53,7 +54,7 @@ public record OpenLogicConfigPacket(int containerId, int slot) implements LBRCus
 								@Override
 								public AbstractContainerMenu createMenu(int containerId, Inventory playerInventory, Player player)
 								{
-									return new LogicConfigMenu(containerId, playerInventory, menu.blockPos(), () -> !blockEntity.isRemoved() && microchip.components().values().contains(entry), entry);
+									return new LogicConfigMenu(containerId, playerInventory, menu.blockPos(), () -> menu.stillValid(player) && microchip.components().values().contains(entry), entry);
 								}
 							},
 							(buf) ->
@@ -65,12 +66,12 @@ public record OpenLogicConfigPacket(int containerId, int slot) implements LBRCus
 				}
 				else
 				{
-					LBR.LOGGER.warn("Received OpenLogicConfigPacket from {} for non-existent block entity?, discarding", playerName);
+					LBR.LOGGER.warn("Received OpenLogicConfigPacket from {} targetting mismatching or non-existent component (slot {})", playerName, slot);
 				}
 			}
 			else
 			{
-				LBR.LOGGER.warn("Received OpenLogicConfigPacket from {} targetting mismatching or non-existent component (slot {})", playerName, slot);
+				LBR.LOGGER.warn("Received OpenLogicConfigPacket from {} for non-existent block entity?, discarding", playerName);
 			}
 		}
 		else
