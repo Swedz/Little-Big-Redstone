@@ -76,17 +76,24 @@ public final class LogicIO extends LogicComponent<LogicIO, LogicIOConfig> implem
 	@Override
 	protected void processTickInternal(LogicContext context, boolean[] inputs)
 	{
+		boolean powerChanged = false;
 		boolean originalOutputState = outputState;
 		if(config.input)
 		{
-			outputState = context.awareness(AwarenessTypes.REDSTONE).isInputPowered(config.direction);
+			int signal = context.awareness(AwarenessTypes.REDSTONE).getInputPower(config.direction);
+			outputState = signal >= config.signalStrength;
 		}
 		else
 		{
 			outputState = inputs[0];
-			context.awareness(AwarenessTypes.REDSTONE).setOutputPowered(config.direction, outputState);
+			var redstone = context.awareness(AwarenessTypes.REDSTONE);
+			int signal = outputState ? config.signalStrength : 0;
+			if(redstone.setOutputPowered(config.direction, signal))
+			{
+				powerChanged = true;
+			}
 		}
-		if(outputState != originalOutputState)
+		if(powerChanged || outputState != originalOutputState)
 		{
 			context.markDirty(this);
 		}

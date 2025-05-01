@@ -4,6 +4,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
+import net.swedz.little_big_redstone.LBR;
 import net.swedz.little_big_redstone.block.microchip.MicrochipBlock;
 import net.swedz.little_big_redstone.microchip.Microchip;
 import net.swedz.little_big_redstone.microchip.awareness.AwarenessContext;
@@ -14,11 +15,14 @@ import net.swedz.little_big_redstone.microchip.logic.io.LogicIO;
 
 public final class RedstoneAwareness extends MicrochipAwareness<RedstoneAwareness>
 {
+	private boolean initialized;
+	
 	private boolean[] inputSides  = new boolean[6];
 	private boolean[] outputSides = new boolean[6];
 	
-	private boolean[] inputPower  = new boolean[6];
-	private boolean[] outputPower = new boolean[6];
+	private int[]   inputPower           = new int[6];
+	private int[]   outputPower          = new int[6];
+	private int[]   outputPowerEvaluated = new int[6];
 	
 	public boolean[] getSides()
 	{
@@ -30,50 +34,48 @@ public final class RedstoneAwareness extends MicrochipAwareness<RedstoneAwarenes
 		return sides;
 	}
 	
-	public boolean isInputPowered(Direction direction)
+	public int getInputPower(Direction direction)
 	{
 		return inputPower[direction.ordinal()];
 	}
 	
-	public boolean isOutputPowered(Direction direction)
+	public int getOutputPower(Direction direction)
 	{
 		return outputPower[direction.ordinal()];
 	}
 	
-	public void setInputPowered(Direction direction, boolean powered)
+	public void setInputPowered(Direction direction, int signal)
 	{
 		int index = direction.ordinal();
-		if(powered)
+		if(signal > 0)
 		{
-			outputPower[index] = false;
-			inputPower[index] = true;
+			outputPower[index] = 0;
+			inputPower[index] = signal;
 		}
 		else
 		{
-			inputPower[index] = false;
+			inputPower[index] = 0;
 		}
 	}
 	
-	public void setOutputPowered(Direction direction, boolean powered)
+	public boolean setOutputPowered(Direction direction, int signal)
 	{
 		int index = direction.ordinal();
-		if(powered)
+		if(signal > outputPowerEvaluated[index])
 		{
-			inputPower[index] = false;
-			outputPower[index] = true;
+			inputPower[index] = 0;
+			outputPowerEvaluated[index] = signal;
+			return true;
 		}
-		else
-		{
-			outputPower[index] = false;
-		}
+		return false;
 	}
 	
-	public boolean outputRedstoneSignal(BlockState state, Direction direction)
+	public int outputRedstoneSignal(BlockState state, Direction direction)
 	{
 		direction = direction.getOpposite();
-		
-		return outputSides[direction.ordinal()] &&
-			   state.getValue(MicrochipBlock.getDirectionalState(direction));
+		int index = direction.ordinal();
+		boolean powered = outputSides[index] && state.getValue(MicrochipBlock.getDirectionalState(direction));
+		return powered ? outputPower[index] : 0;
 	}
 	
 	@Override
@@ -85,29 +87,29 @@ public final class RedstoneAwareness extends MicrochipAwareness<RedstoneAwarenes
 	@Override
 	public void load(Microchip microchip)
 	{
-		boolean[] inputs = new boolean[6];
-		boolean[] outputs = new boolean[6];
+		boolean[] inputSides = new boolean[6];
+		boolean[] outputSides = new boolean[6];
 		for(var entry : microchip.components())
 		{
 			if(entry.component() instanceof LogicIO io)
 			{
 				var direction = io.config().direction.ordinal();
-				if(inputs[direction] || outputs[direction])
+				if(inputSides[direction] || outputSides[direction])
 				{
 					continue;
 				}
 				if(io.config().input)
 				{
-					inputs[direction] = true;
+					inputSides[direction] = true;
 				}
 				else
 				{
-					outputs[direction] = true;
+					outputSides[direction] = true;
 				}
 			}
 		}
-		inputSides = inputs;
-		outputSides = outputs;
+		this.inputSides = inputSides;
+		this.outputSides = outputSides;
 	}
 	
 	@Override
@@ -119,36 +121,40 @@ public final class RedstoneAwareness extends MicrochipAwareness<RedstoneAwarenes
 		int neighborDirectionIndex = neighborDirection.ordinal();
 		if(inputSides[neighborDirectionIndex] && !outputSides[neighborDirectionIndex])
 		{
-			boolean signal = level.getSignal(neighborPos, neighborDirection) > 0;
-			level.setBlock(pos, context.state().setValue(MicrochipBlock.getDirectionalState(neighborDirection), signal), Block.UPDATE_ALL);
+			int signal = level.getSignal(neighborPos, neighborDirection);
+			boolean powered = signal > 0;
+			this.setInputPowered(neighborDirection, signal);
+			level.setBlock(pos, context.state().setValue(MicrochipBlock.getDirectionalState(neighborDirection), powered), Block.UPDATE_ALL);
 		}
 	}
 	
 	@Override
 	public void preTick(AwarenessContext context)
 	{
-		var state = context.state();
+		var level = context.level();
+		var pos = context.pos();
 		
-		boolean[] inputs = new boolean[6];
-		boolean[] outputs = new boolean[6];
-		for(var direction : Direction.values())
+		if(!initialized)
 		{
-			int index = direction.ordinal();
-			boolean powered = state.getValue(MicrochipBlock.getDirectionalState(direction));
-			if(powered)
+			int[] inputPower = new int[6];
+			for(var entry : context.microchip().components())
 			{
-				if(inputSides[index])
+				if(entry.component() instanceof LogicIO io)
 				{
-					inputs[index] = true;
-				}
-				else if(outputSides[index])
-				{
-					outputs[index] = true;
+					var direction = io.config().direction;
+					int directionIndex = direction.ordinal();
+					if(inputSides[directionIndex])
+					{
+						int signal = level.getSignal(pos.relative(direction), direction);
+						inputPower[directionIndex] = signal;
+					}
 				}
 			}
+			this.inputPower = inputPower;
+			initialized = true;
 		}
-		inputPower = inputs;
-		outputPower = outputs;
+		
+		outputPowerEvaluated = new int[6];
 	}
 	
 	@Override
@@ -158,29 +164,29 @@ public final class RedstoneAwareness extends MicrochipAwareness<RedstoneAwarenes
 		var pos = context.pos();
 		var state = context.state();
 		
-		var newState = state;
-		
-		if(microchipDirty)
+		boolean powerChanged = false;
+		for(int index = 0; index < outputPowerEvaluated.length; index++)
 		{
-			for(var direction : Direction.values())
+			int signal = outputPowerEvaluated[index];
+			if(outputPower[index] != signal)
 			{
-				int index = direction.ordinal();
-				if(inputSides[index] && !outputSides[index] &&
-				   level.getSignal(pos.relative(direction), direction) > 0)
-				{
-					inputPower[index] = true;
-				}
+				powerChanged = true;
+				LBR.LOGGER.info("power changed");
+				break;
 			}
 		}
+		outputPower = outputPowerEvaluated;
 		
+		var newState = state;
 		for(var direction : Direction.values())
 		{
 			int index = direction.ordinal();
-			newState = newState.setValue(MicrochipBlock.getDirectionalState(direction), inputPower[index] || outputPower[index]);
+			newState = newState.setValue(MicrochipBlock.getDirectionalState(direction), inputPower[index] > 0 || outputPower[index] > 0);
 		}
-		if(newState != state)
+		if(powerChanged || newState != state)
 		{
 			level.setBlock(pos, newState, Block.UPDATE_ALL);
+			level.updateNeighborsAt(pos, state.getBlock());
 		}
 	}
 }
