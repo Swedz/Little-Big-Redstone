@@ -1,27 +1,13 @@
 package net.swedz.little_big_redstone.microchip.logic.debug;
 
-import net.minecraft.network.chat.Component;
 import net.swedz.little_big_redstone.api.IntRange;
 import net.swedz.little_big_redstone.microchip.logic.config.LogicConfig;
-import net.swedz.little_big_redstone.microchip.logic.config.LogicConfigMenuBuilder;
-
-import java.util.List;
 
 public final class LogicDebuggerConfig extends LogicConfig<LogicDebuggerConfig>
 {
 	public static final LogicDebuggerConfig INSTANCE = new LogicDebuggerConfig();
 	
 	private LogicDebuggerConfig()
-	{
-	}
-	
-	@Override
-	public void appendHoverText(List<Component> lines)
-	{
-	}
-	
-	@Override
-	public void buildMenu(LogicConfigMenuBuilder builder)
 	{
 	}
 	

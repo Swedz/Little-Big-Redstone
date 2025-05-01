@@ -91,6 +91,12 @@ public final class LogicReaderConfig extends LogicConfig<LogicReaderConfig>
 	}
 	
 	@Override
+	public boolean hasMenu()
+	{
+		return true;
+	}
+	
+	@Override
 	public void buildMenu(LogicConfigMenuBuilder builder)
 	{
 		builder.addCycleButton(LBRText.LOGIC_CONFIG_BUTTON_LABEL_MODE.text(), LBRText.LOGIC_CONFIG_BUTTON_TOOLTIP_READER_MODE.text(), 0, 0, 160, 18, false, mode, Arrays.asList(LogicReaderMode.values()), (value) -> LBRTooltips.READER_MODE_PARSER.parse(value).plainCopy(), (value) -> mode = value);

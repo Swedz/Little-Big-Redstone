@@ -1,11 +1,7 @@
 package net.swedz.little_big_redstone.microchip.logic.latch.tflipflop;
 
-import net.minecraft.network.chat.Component;
 import net.swedz.little_big_redstone.api.IntRange;
 import net.swedz.little_big_redstone.microchip.logic.config.LogicConfig;
-import net.swedz.little_big_redstone.microchip.logic.config.LogicConfigMenuBuilder;
-
-import java.util.List;
 
 public final class TFlipFlopConfig extends LogicConfig<TFlipFlopConfig>
 {
@@ -37,16 +33,6 @@ public final class TFlipFlopConfig extends LogicConfig<TFlipFlopConfig>
 	public int outputs()
 	{
 		return 1;
-	}
-	
-	@Override
-	public void appendHoverText(List<Component> lines)
-	{
-	}
-	
-	@Override
-	public void buildMenu(LogicConfigMenuBuilder builder)
-	{
 	}
 	
 	@Override

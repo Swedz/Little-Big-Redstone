@@ -84,6 +84,12 @@ public final class LogicSequencerConfig extends LogicConfig<LogicSequencerConfig
 	}
 	
 	@Override
+	public boolean hasMenu()
+	{
+		return true;
+	}
+	
+	@Override
 	public void buildMenu(LogicConfigMenuBuilder builder)
 	{
 		builder.addSlider(LBRText.LOGIC_CONFIG_BUTTON_LABEL_SEQUENCER_DELAY.text(), Component.empty(), LBRText.LOGIC_CONFIG_BUTTON_TOOLTIP_SEQUENCER_DELAY.text(), 0, 0, 160, 18, 1, 60 * 20, outputDelay, 1, 0, true, (value) -> outputDelay = value.intValue());

@@ -25,9 +25,18 @@ public abstract class LogicConfig<C extends LogicConfig<C>> implements LogicPort
 		return true;
 	}
 	
-	public abstract void appendHoverText(List<Component> lines);
+	public void appendHoverText(List<Component> lines)
+	{
+	}
 	
-	public abstract void buildMenu(LogicConfigMenuBuilder builder);
+	public boolean hasMenu()
+	{
+		return false;
+	}
+	
+	public void buildMenu(LogicConfigMenuBuilder builder)
+	{
+	}
 	
 	public abstract void loadFrom(C other);
 	

@@ -40,7 +40,7 @@ public record OpenLogicConfigPacket(int containerId, int slot) implements LBRCus
 			{
 				var microchip = menu.microchip();
 				var entry = microchip.components().get(slot);
-				if(entry != null)
+				if(entry != null && entry.component().config().hasMenu())
 				{
 					player.openMenu(
 							new MenuProvider()
@@ -66,7 +66,7 @@ public record OpenLogicConfigPacket(int containerId, int slot) implements LBRCus
 				}
 				else
 				{
-					LBR.LOGGER.warn("Received OpenLogicConfigPacket from {} targetting mismatching or non-existent component (slot {})", playerName, slot);
+					LBR.LOGGER.warn("Received OpenLogicConfigPacket from {} targetting mismatching or non-existent component or a component with no config menu (slot {})", playerName, slot);
 				}
 			}
 			else

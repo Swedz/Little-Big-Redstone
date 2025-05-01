@@ -275,7 +275,8 @@ public final class MicrochipWidget implements GuiEventListener, Renderable, Narr
 		
 		if(button == InputConstants.MOUSE_BUTTON_RIGHT &&
 		   context.shouldInteractLogic() &&
-		   carried.isEmpty())
+		   carried.isEmpty() &&
+		   logic.component().config().hasMenu())
 		{
 			new OpenLogicConfigPacket(menu.containerId, logic.slot()).sendToServer();
 			return true;

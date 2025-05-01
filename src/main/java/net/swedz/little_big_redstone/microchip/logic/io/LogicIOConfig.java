@@ -99,6 +99,12 @@ public final class LogicIOConfig extends LogicConfig<LogicIOConfig>
 	}
 	
 	@Override
+	public boolean hasMenu()
+	{
+		return true;
+	}
+	
+	@Override
 	public void buildMenu(LogicConfigMenuBuilder builder)
 	{
 		builder.addCycleButton(LBRText.LOGIC_CONFIG_BUTTON_LABEL_MODE.text(), LBRText.LOGIC_CONFIG_BUTTON_TOOLTIP_IO_MODE.text(), 0, 0, 160, 18, false, input, List.of(true, false), (value) -> LBRTooltips.INPUT_OUTPUT_PARSER.parse(value).plainCopy(), (value) -> input = value);
