@@ -28,7 +28,8 @@ public enum LBRText implements TranslatableTextEnum
 	LOGIC_CONFIG_BUTTON_TOOLTIP_GATE_INPUTS("The number of inputs that this logic gate can accept."),
 	LOGIC_CONFIG_BUTTON_TOOLTIP_IO_DIRECTION("The direction this port should interact with redstone power on."),
 	LOGIC_CONFIG_BUTTON_TOOLTIP_IO_MODE("Whether this port should input or output redstone power."),
-	LOGIC_CONFIG_BUTTON_TOOLTIP_IO_SIGNAL_STRENGTH("When in input mode, the minimum redstone signal strength required for the output to be on.\nWhen in output mode, the redstone signal strength that will be outputted."),
+	LOGIC_CONFIG_BUTTON_TOOLTIP_IO_SIGNAL_STRENGTH("When in input mode, the minimum redstone signal strength required for the output to be on." +
+												   "\nWhen in output mode, the redstone signal strength that will be outputted."),
 	LOGIC_CONFIG_BUTTON_TOOLTIP_READER_DIRECTION("The direction this reader should read block capacity from."),
 	LOGIC_CONFIG_BUTTON_TOOLTIP_READER_FILL_THRESHOLD("The minimum percentage filled the block capacity must be for the output to be on."),
 	LOGIC_CONFIG_BUTTON_TOOLTIP_READER_MODE("The type of information to read from the adjacent block."),
