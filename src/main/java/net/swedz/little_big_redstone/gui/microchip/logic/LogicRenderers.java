@@ -43,6 +43,7 @@ public final class LogicRenderers
 		register(LogicTypes.READER, ReaderRenderer::new);
 		
 		register(LogicTypes.SEQUENCER, SequencerRenderer::new);
+		register(LogicTypes.PULSE_THROTTLER, SimpleLogicRenderer::new);
 		
 		register(LogicTypes.T_FLIP_FLOP, OnOffLogicRenderer::new);
 		register(LogicTypes.RS_NOR_LATCH, OnOffLogicRenderer::new);
