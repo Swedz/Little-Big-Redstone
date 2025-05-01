@@ -1,5 +1,6 @@
 package net.swedz.little_big_redstone.gui.microchip;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
@@ -15,6 +16,19 @@ import net.swedz.little_big_redstone.gui.microchip.logic.LogicRenderers;
 public final class MicrochipScreen extends AbstractContainerScreen<MicrochipMenu>
 {
 	private static final ResourceLocation INVENTORY_BACKGROUND = LBR.id("textures/gui/container/microchip/inventory_background.png");
+	
+	public static int getGridSnappedCoord(int coord)
+	{
+		return (coord / 16) * 16;
+	}
+	
+	public static float getPulsingAlpha(float partialTicks)
+	{
+		float speed = 8;
+		float ticks = Minecraft.getInstance().level.getGameTime() + partialTicks;
+		float interpolate = ((float) Math.sin(Math.toRadians((ticks * speed) % 360f)) + 3f) / 4f;
+		return interpolate / 2f;
+	}
 	
 	private MicrochipWidget microchipWidget;
 	
@@ -36,11 +50,6 @@ public final class MicrochipScreen extends AbstractContainerScreen<MicrochipMenu
 		return menu.microchip().size().bounds().contains(x, y);
 	}
 	
-	public int getGridSnappedCoord(int coord)
-	{
-		return (coord / 16) * 16;
-	}
-	
 	@Override
 	protected void init()
 	{
@@ -50,9 +59,9 @@ public final class MicrochipScreen extends AbstractContainerScreen<MicrochipMenu
 	}
 	
 	@Override
-	public void render(GuiGraphics graphics, int mouseX, int mouseY, float partialTick)
+	public void render(GuiGraphics graphics, int mouseX, int mouseY, float partialTicks)
 	{
-		super.render(graphics, mouseX, mouseY, partialTick);
+		super.render(graphics, mouseX, mouseY, partialTicks);
 		
 		this.renderTooltip(graphics, mouseX, mouseY);
 	}
@@ -69,13 +78,15 @@ public final class MicrochipScreen extends AbstractContainerScreen<MicrochipMenu
 			if(this.isWithinBoard(mouseX, mouseY))
 			{
 				var component = stack.get(LBRComponents.LOGIC);
-				int logicX = Screen.hasControlDown() ? this.getGridSnappedCoord(mouseX - size.bounds().minX() - component.size().centerX() + 8) + size.boardX(8) : component.size().topLeftCornerX(mouseX);
-				int logicY = Screen.hasControlDown() ? this.getGridSnappedCoord(mouseY - size.bounds().minY() - component.size().centerY() + 8) + size.boardY(8) : component.size().topLeftCornerY(mouseY);
+				int logicX = Screen.hasControlDown() ? getGridSnappedCoord(mouseX - size.bounds().minX() - component.size().centerX() + 8) + size.boardX(8) : component.size().topLeftCornerX(mouseX);
+				int logicY = Screen.hasControlDown() ? getGridSnappedCoord(mouseY - size.bounds().minY() - component.size().centerY() + 8) + size.boardY(8) : component.size().topLeftCornerY(mouseY);
 				var context = LogicRenderer.Context.create(menu.color(), component, true, microchipWidget.hasSelectedPort(), false);
+				
 				graphics.pose().pushPose();
 				graphics.pose().scale(size.scale(), size.scale(), size.scale());
 				LogicRenderers.render(context, graphics, component, logicX, logicY);
 				graphics.pose().popPose();
+				
 				return;
 			}
 		}
@@ -90,7 +101,7 @@ public final class MicrochipScreen extends AbstractContainerScreen<MicrochipMenu
 	}
 	
 	@Override
-	protected void renderBg(GuiGraphics graphics, float partialTick, int mouseX, int mouseY)
+	protected void renderBg(GuiGraphics graphics, float partialTicks, int mouseX, int mouseY)
 	{
 		graphics.blit(INVENTORY_BACKGROUND, leftPos, topPos, 0, 0, 256, 256);
 	}

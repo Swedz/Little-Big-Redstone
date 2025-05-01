@@ -262,8 +262,8 @@ public final class MicrochipWidget implements GuiEventListener, Renderable, Narr
 		   hovered.shouldInteractBoard())
 		{
 			var component = carried.get(LBRComponents.LOGIC);
-			int placeX = Screen.hasControlDown() ? screen.getGridSnappedCoord(x - component.size().centerX() + 8) : component.size().topLeftCornerX(x);
-			int placeY = Screen.hasControlDown() ? screen.getGridSnappedCoord(y - component.size().centerY() + 8) : component.size().topLeftCornerY(y);
+			int placeX = Screen.hasControlDown() ? MicrochipScreen.getGridSnappedCoord(x - component.size().centerX() + 8) : component.size().topLeftCornerX(x);
+			int placeY = Screen.hasControlDown() ? MicrochipScreen.getGridSnappedCoord(y - component.size().centerY() + 8) : component.size().topLeftCornerY(y);
 			
 			if(microchip.size().bounds().normalize().contains(component.size().toBounds(placeX, placeY)) &&
 			   microchip.components().add(placeX, placeY, component) != null)
@@ -409,6 +409,28 @@ public final class MicrochipWidget implements GuiEventListener, Renderable, Narr
 		}
 	}
 	
+	private void renderLogicGridSnappingOverlay(GuiGraphics graphics, int mouseX, int mouseY, float partialTicks)
+	{
+		var carried = this.menu().getCarried();
+		var size = microchip.size();
+		
+		if(Screen.hasControlDown() && carried.has(LBRComponents.LOGIC) && this.isMouseOver(mouseX, mouseY))
+		{
+			var component = carried.get(LBRComponents.LOGIC);
+			int boardX = size.boardX(this.toLocalX(mouseX));
+			int boardY = size.boardY(this.toLocalY(mouseY));
+			int logicX = MicrochipScreen.getGridSnappedCoord(boardX - component.size().centerX() + 8);
+			int logicY = MicrochipScreen.getGridSnappedCoord(boardY - component.size().centerY() + 8);
+			
+			graphics.setColor(1, 1, 1, MicrochipScreen.getPulsingAlpha(partialTicks));
+			graphics.fill(0, logicY, size.bounds().width(), logicY + 1, 0xFFFFFFFF);
+			graphics.fill(0, logicY + component.size().heightPixels() - 1, size.bounds().width(), logicY + component.size().heightPixels(), 0xFFFFFFFF);
+			graphics.fill(logicX, 0, logicX + 1, size.bounds().height(), 0xFFFFFFFF);
+			graphics.fill(logicX + component.size().widthPixels() - 1, 0, logicX + component.size().widthPixels(), size.bounds().height(), 0xFFFFFFFF);
+			GuiGraphicsHelper.resetColor(graphics);
+		}
+	}
+	
 	private void renderCircuitBg(GuiGraphics graphics, int mouseX, int mouseY, float partialTicks)
 	{
 		GuiGraphicsHelper.setColor(graphics, LBRColors.circuitboard(this.menu().color()));
@@ -426,6 +448,7 @@ public final class MicrochipWidget implements GuiEventListener, Renderable, Narr
 		hovered = MicrochipWidgetHovering.test(this, wires, mouseX, mouseY, hovered);
 		
 		this.renderCircuitBg(graphics, mouseX, mouseY, partialTicks);
+		this.renderLogicGridSnappingOverlay(graphics, mouseX, mouseY, partialTicks);
 		this.renderLogic(graphics, mouseX, mouseY, partialTicks);
 		wires.renderWires(graphics, mouseX, mouseY, partialTicks);
 		

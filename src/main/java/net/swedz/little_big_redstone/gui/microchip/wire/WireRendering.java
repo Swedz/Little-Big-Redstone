@@ -1,11 +1,11 @@
 package net.swedz.little_big_redstone.gui.microchip.wire;
 
 import com.google.common.collect.Lists;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.swedz.little_big_redstone.LBR;
 import net.swedz.little_big_redstone.LBRColors;
 import net.swedz.little_big_redstone.api.Bounds;
+import net.swedz.little_big_redstone.gui.microchip.MicrochipScreen;
 import net.swedz.little_big_redstone.gui.microchip.MicrochipWidget;
 import net.swedz.little_big_redstone.helper.GuiGraphicsHelper;
 import net.swedz.little_big_redstone.microchip.LogicEntry;
@@ -173,10 +173,7 @@ public final class WireRendering
 	{
 		int portPadding = usePadding ? wirePortPadding : 0;
 		
-		float speed = 8;
-		float ticks = Minecraft.getInstance().level.getGameTime() + partialTicks;
-		float interpolate = ((float) Math.sin(Math.toRadians((ticks * speed) % 360f)) + 3f) / 4f;
-		interpolate /= 2f;
+		float pulsingAlpha = MicrochipScreen.getPulsingAlpha(partialTicks);
 		
 		var texture = LBR.id("textures/gui/container/microchip/wire_%s.png".formatted(powered ? "on" : "off"));
 		GuiGraphicsHelper.setColor(graphics, argb);
@@ -184,7 +181,7 @@ public final class WireRendering
 		graphics.blit(texture, endX - portPadding, endY, endX - portPadding, endY, portPadding, wireSize, 16, 16);
 		if(hovered)
 		{
-			graphics.setColor(1, 1, 1, interpolate);
+			graphics.setColor(1, 1, 1, pulsingAlpha);
 			graphics.fill(startX, startY, startX + portPadding, startY + wireSize, 0xFFFFFFFF);
 			graphics.fill(endX - portPadding, endY, endX, endY + wireSize, 0xFFFFFFFF);
 			GuiGraphicsHelper.setColor(graphics, argb);
@@ -194,7 +191,7 @@ public final class WireRendering
 			graphics.blit(texture, position.x(), position.y(), position.x(), position.y(), wireSize, wireSize, 16, 16);
 			if(hovered)
 			{
-				graphics.setColor(1, 1, 1, interpolate);
+				graphics.setColor(1, 1, 1, pulsingAlpha);
 				graphics.fill(position.x(), position.y(), position.x() + wireSize, position.y() + wireSize, 0xFFFFFFFF);
 				GuiGraphicsHelper.setColor(graphics, argb);
 			}
