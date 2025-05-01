@@ -16,7 +16,7 @@ import net.swedz.little_big_redstone.microchip.wire.Wire;
 import java.util.Collections;
 import java.util.List;
 
-public final class WireRendering
+public final class MicrochipWidgetWires
 {
 	private final MicrochipWidget widget;
 	private final Microchip       microchip;
@@ -27,7 +27,7 @@ public final class WireRendering
 	
 	private final WirePathing pathing;
 	
-	public WireRendering(MicrochipWidget widget)
+	public MicrochipWidgetWires(MicrochipWidget widget)
 	{
 		this.widget = widget;
 		this.microchip = widget.microchip();
@@ -74,16 +74,16 @@ public final class WireRendering
 	{
 		for(var wire : microchip.wires())
 		{
-			if(widget.getHovered().topLayerWires().contains(wire))
+			if(widget.getContext().topLayerWires().contains(wire))
 			{
 				continue;
 			}
 			this.renderWire(graphics, wire, false, mouseX, mouseY, partialTicks);
 		}
 		
-		for(var wire : widget.getHovered().topLayerWires())
+		for(var wire : widget.getContext().topLayerWires())
 		{
-			this.renderWire(graphics, wire, widget.getHovered().wire() == wire, mouseX, mouseY, partialTicks);
+			this.renderWire(graphics, wire, widget.getContext().wire() == wire, mouseX, mouseY, partialTicks);
 		}
 		
 		if(widget.hasSelectedPort() &&
@@ -148,11 +148,11 @@ public final class WireRendering
 		int endX;
 		int endY;
 		boolean usePadding;
-		if(widget.getHovered().shouldInteractPort() && widget.getHovered().isPortInput())
+		if(widget.getContext().shouldInteractPort() && widget.getContext().isPortInput())
 		{
-			var inputLogic = widget.getHovered().logic();
+			var inputLogic = widget.getContext().logic();
 			endX = this.getWireEndX(inputLogic);
-			endY = this.getWireEndY(inputLogic, widget.getHovered().port().index());
+			endY = this.getWireEndY(inputLogic, widget.getContext().port().index());
 			usePadding = true;
 		}
 		else

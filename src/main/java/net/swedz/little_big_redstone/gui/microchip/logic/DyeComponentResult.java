@@ -28,6 +28,12 @@ public record DyeComponentResult(Result result, Action action, Optional<DyeColor
 		}
 	}
 	
+	public static boolean is(ItemStack stack)
+	{
+		return (stack.is(Tags.Items.DYES) && stack.getItem() instanceof DyeItem dyeItem) ||
+			   stack.is(LBRTags.Items.DYE_WASHER);
+	}
+	
 	public static DyeComponentResult test(MicrochipMenu menu, ItemStack carried, LogicEntry entry)
 	{
 		Result result;
