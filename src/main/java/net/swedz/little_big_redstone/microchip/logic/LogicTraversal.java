@@ -53,23 +53,22 @@ public final class LogicTraversal
 		}
 		
 		// Only use the last occurrence of each entry
-		Collections.reverse(order);
+		Set<LogicEntry> touched = Sets.newHashSet();
 		List<LogicEntry> finalOrder = Lists.newArrayList();
-		for(var entry : order)
+		for(int i = order.size() - 1; i >= 0; i--)
 		{
-			if(!finalOrder.contains(entry))
+			var entry = order.get(i);
+			if(touched.add(entry))
 			{
-				finalOrder.add(entry);
+				finalOrder.addFirst(entry);
 			}
 		}
-		Collections.reverse(finalOrder);
 		return Collections.unmodifiableList(finalOrder);
 	}
 	
 	private static void recursivelyBuildOrder(Microchip microchip, LogicEntry entry, List<LogicEntry> order, Set<Wire> wiresUsed)
 	{
 		List<LogicEntry> toBuild = Lists.newArrayList();
-		outer:
 		for(var wire : microchip.wires().getByOutputSlot(entry.slot()))
 		{
 			if(wiresUsed.add(wire))
@@ -79,19 +78,12 @@ public final class LogicTraversal
 				if(existingTargetIndex >= 0)
 				{
 					// Prevent infinite loops
-					for(int i = existingTargetIndex + 1; i < order.size(); i++)
+					if(hasChild(microchip, targetEntry, true, targetEntry))
 					{
-						if(order.get(i) == targetEntry)
-						{
-							continue outer;
-						}
+						continue;
 					}
-					// Remove entries after this one so that they can get added by the next call(s) of this method
+					// Remove wires after this one so that they can get added by the next call(s) of this method
 					microchip.wires().getByOutputSlot(targetEntry.slot()).forEach(wiresUsed::remove);
-					while(existingTargetIndex > order.size())
-					{
-						order.remove(existingTargetIndex);
-					}
 				}
 				order.add(targetEntry);
 				toBuild.add(targetEntry);
@@ -101,5 +93,38 @@ public final class LogicTraversal
 		{
 			recursivelyBuildOrder(microchip, targetEntry, order, wiresUsed);
 		}
+	}
+	
+	private static boolean hasChild(Microchip microchip, LogicEntry entry, boolean recursive, LogicEntry search)
+	{
+		return hasChild(microchip, entry, recursive, search, Sets.newLinkedHashSet());
+	}
+	
+	private static boolean hasChild(Microchip microchip, LogicEntry entry, boolean recursive, LogicEntry search, Set<LogicEntry> children)
+	{
+		Set<LogicEntry> found = Sets.newLinkedHashSet();
+		for(var wire : microchip.wires().getByOutputSlot(entry.slot()))
+		{
+			var childEntry = microchip.components().get(wire.input().slot());
+			if(childEntry == search)
+			{
+				return true;
+			}
+			if(children.add(childEntry))
+			{
+				found.add(childEntry);
+			}
+		}
+		if(recursive)
+		{
+			for(var childEntry : found)
+			{
+				if(hasChild(microchip, childEntry, true, search, children))
+				{
+					return true;
+				}
+			}
+		}
+		return false;
 	}
 }
