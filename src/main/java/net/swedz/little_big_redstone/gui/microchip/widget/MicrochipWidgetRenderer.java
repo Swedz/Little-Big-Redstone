@@ -55,6 +55,8 @@ public final class MicrochipWidgetRenderer
 		
 		if(widget.microchip().isDebug())
 		{
+			graphics.drawString(Minecraft.getInstance().font, "#" + entry.slot(), entry.x(), entry.y() - 8, 0xFFFFFF);
+			
 			List<Integer> indexes = Lists.newArrayList();
 			int index = 0;
 			for(var other : widget.microchip().components().traversal())
