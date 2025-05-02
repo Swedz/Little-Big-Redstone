@@ -45,6 +45,7 @@ public final class LogicItemModelsDatagenProvider extends ItemModelProvider
 		this.logicComponent(LogicTypes.SEQUENCER, BackgroundType.SQUARE, false, (b) -> b
 				.boardTexture("progress", LBR.id("logic/sequencer")));
 		this.logicComponent(LogicTypes.PULSE_THROTTLER, BackgroundType.SQUARE, true);
+		this.logicComponent(LogicTypes.SELECTOR, BackgroundType.SQUARE, true);
 		
 		this.logicComponent(LogicTypes.T_FLIP_FLOP, BackgroundType.SQUARE, false, (b) -> b
 				.boardTexture("on", LBR.id("logic/t_flip_flop_on"))

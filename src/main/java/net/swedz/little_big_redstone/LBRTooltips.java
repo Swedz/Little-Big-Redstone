@@ -5,6 +5,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.Style;
 import net.minecraft.network.chat.TextColor;
 import net.swedz.little_big_redstone.microchip.logic.reader.LogicReaderMode;
+import net.swedz.little_big_redstone.microchip.logic.selector.LogicSelectorMode;
 import net.swedz.little_big_redstone.microchip.logic.sequencer.LogicSequencerMode;
 import net.swedz.tesseract.neoforge.tooltip.Parser;
 import net.swedz.tesseract.neoforge.tooltip.TooltipAttachment;
@@ -53,6 +54,8 @@ public final class LBRTooltips
 	}).text().withStyle(HIGHLIGHT_STYLE);
 	
 	public static final Parser<LogicSequencerMode> SEQUENCER_MODE_PARSER = (value) -> value.label().text().withStyle(HIGHLIGHT_STYLE);
+	
+	public static final Parser<LogicSelectorMode> SELECTOR_MODE_PARSER = (value) -> value.label().text().withStyle(HIGHLIGHT_STYLE);
 	
 	public static final Parser<Object> DEFAULT_PARSER = (value) ->
 	{
