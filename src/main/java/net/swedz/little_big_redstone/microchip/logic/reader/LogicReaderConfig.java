@@ -46,7 +46,7 @@ public final class LogicReaderConfig extends LogicConfig<LogicReaderConfig>
 	
 	public float fillThreshold;
 	
-	public LogicReaderConfig(LogicReaderMode mode, Direction direction, float fillThreshold)
+	private LogicReaderConfig(LogicReaderMode mode, Direction direction, float fillThreshold)
 	{
 		this.mode = mode;
 		this.direction = direction;

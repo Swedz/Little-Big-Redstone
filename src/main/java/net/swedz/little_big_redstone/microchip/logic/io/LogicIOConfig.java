@@ -48,7 +48,7 @@ public final class LogicIOConfig extends LogicConfig<LogicIOConfig>
 	
 	public int signalStrength;
 	
-	public LogicIOConfig(boolean valid, boolean input, Direction direction, int signalStrength)
+	private LogicIOConfig(boolean valid, boolean input, Direction direction, int signalStrength)
 	{
 		this.valid = valid;
 		this.input = input;

@@ -32,7 +32,7 @@ public final class PulseThrottlerConfig extends LogicConfig<PulseThrottlerConfig
 	
 	public long outputDuration;
 	
-	public PulseThrottlerConfig(long outputDuration)
+	private PulseThrottlerConfig(long outputDuration)
 	{
 		this.outputDuration = outputDuration;
 	}

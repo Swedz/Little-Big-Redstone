@@ -31,7 +31,7 @@ public final class MultiLogicGateConfig extends LogicConfig<MultiLogicGateConfig
 	
 	public int inputs;
 	
-	public MultiLogicGateConfig(int inputs)
+	private MultiLogicGateConfig(int inputs)
 	{
 		this.inputs = inputs;
 	}

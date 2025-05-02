@@ -48,7 +48,7 @@ public final class LogicSequencerConfig extends LogicConfig<LogicSequencerConfig
 	public boolean autoReset;
 	public boolean resetPort;
 	
-	public LogicSequencerConfig(LogicSequencerMode mode, long outputDelay, boolean autoReset, boolean resetPort)
+	private LogicSequencerConfig(LogicSequencerMode mode, long outputDelay, boolean autoReset, boolean resetPort)
 	{
 		this.mode = mode;
 		this.outputDelay = outputDelay;
