@@ -52,12 +52,7 @@ public final class LBRTooltips
 		case ENERGY -> LBRText.CAPABILITY_ENERGY;
 	}).text().withStyle(HIGHLIGHT_STYLE);
 	
-	public static final Parser<LogicSequencerMode> SEQUENCER_MODE_PARSER = (value) -> (switch (value)
-	{
-		case WEAK -> LBRText.LOGIC_CONFIG_SEQUENCER_MODE_WEAK;
-		case STRONG -> LBRText.LOGIC_CONFIG_SEQUENCER_MODE_STRONG;
-		case COUNTER -> LBRText.LOGIC_CONFIG_SEQUENCER_MODE_COUNTER;
-	}).text().withStyle(HIGHLIGHT_STYLE);
+	public static final Parser<LogicSequencerMode> SEQUENCER_MODE_PARSER = (value) -> value.label().text().withStyle(HIGHLIGHT_STYLE);
 	
 	public static final Parser<Object> DEFAULT_PARSER = (value) ->
 	{
