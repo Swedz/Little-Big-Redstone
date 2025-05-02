@@ -5,6 +5,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.Style;
 import net.minecraft.network.chat.TextColor;
 import net.swedz.little_big_redstone.microchip.logic.reader.LogicReaderMode;
+import net.swedz.little_big_redstone.microchip.logic.sequencer.LogicSequencerMode;
 import net.swedz.tesseract.neoforge.tooltip.Parser;
 import net.swedz.tesseract.neoforge.tooltip.TooltipAttachment;
 
@@ -49,6 +50,13 @@ public final class LBRTooltips
 		case ITEM -> LBRText.CAPABILITY_ITEM;
 		case FLUID -> LBRText.CAPABILITY_FLUID;
 		case ENERGY -> LBRText.CAPABILITY_ENERGY;
+	}).text().withStyle(HIGHLIGHT_STYLE);
+	
+	public static final Parser<LogicSequencerMode> SEQUENCER_MODE_PARSER = (value) -> (switch (value)
+	{
+		case WEAK -> LBRText.LOGIC_CONFIG_SEQUENCER_MODE_WEAK;
+		case STRONG -> LBRText.LOGIC_CONFIG_SEQUENCER_MODE_STRONG;
+		case COUNTER -> LBRText.LOGIC_CONFIG_SEQUENCER_MODE_COUNTER;
 	}).text().withStyle(HIGHLIGHT_STYLE);
 	
 	public static final Parser<Object> DEFAULT_PARSER = (value) ->

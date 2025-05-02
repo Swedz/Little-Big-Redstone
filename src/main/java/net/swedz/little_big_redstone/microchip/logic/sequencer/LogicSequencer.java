@@ -87,31 +87,33 @@ public final class LogicSequencer extends LogicComponent<LogicSequencer, LogicSe
 		boolean input = inputs[0];
 		boolean output = false;
 		
-		if(config.requiresContinuousPower)
+		if(config.resetPort && inputs[1])
+		{
+			processedTicks = 0;
+		}
+		else
 		{
 			if(input)
 			{
 				processedTicks++;
 			}
-			else
+			else if(processedTicks > 0)
 			{
-				processedTicks = 0;
+				if(config.mode == LogicSequencerMode.WEAK)
+				{
+					processedTicks++;
+				}
+				else if(config.mode == LogicSequencerMode.STRONG)
+				{
+					processedTicks--;
+				}
 			}
-		}
-		else if(input || processedTicks > 0)
-		{
-			processedTicks++;
 		}
 		
 		if(processedTicks >= config.outputDelay)
 		{
+			processedTicks = config.autoReset ? 0 : config.outputDelay;
 			output = true;
-			
-			if(processedTicks > config.outputDelay + config.outputDuration)
-			{
-				processedTicks = 0;
-				output = false;
-			}
 		}
 		
 		outputState = output;
