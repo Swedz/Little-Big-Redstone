@@ -20,6 +20,7 @@ import net.swedz.little_big_redstone.microchip.logic.io.LogicIO;
 import net.swedz.little_big_redstone.microchip.logic.latch.rs.RSNORLatch;
 import net.swedz.little_big_redstone.microchip.logic.latch.tflipflop.TFlipFlop;
 import net.swedz.little_big_redstone.microchip.logic.pulse.PulseThrottler;
+import net.swedz.little_big_redstone.microchip.logic.randomizer.LogicRandomizer;
 import net.swedz.little_big_redstone.microchip.logic.reader.LogicReader;
 import net.swedz.little_big_redstone.microchip.logic.selector.LogicSelector;
 import net.swedz.little_big_redstone.microchip.logic.sequencer.LogicSequencer;
@@ -54,9 +55,10 @@ public final class LogicTypes
 	
 	public static final LogicType<LogicReader> READER = register("reader", "Reader", LogicReader.CODEC, LogicReader.STREAM_CODEC, LogicReader::new);
 	
-	public static final LogicType<LogicSequencer> SEQUENCER       = register("sequencer", "Sequencer", LogicSequencer.CODEC, LogicSequencer.STREAM_CODEC, LogicSequencer::new);
-	public static final LogicType<PulseThrottler> PULSE_THROTTLER = register("pulse_throttler", "Pulse Throttler", PulseThrottler.CODEC, PulseThrottler.STREAM_CODEC, PulseThrottler::new);
-	public static final LogicType<LogicSelector>  SELECTOR        = register("selector", "Selector", LogicSelector.CODEC, LogicSelector.STREAM_CODEC, LogicSelector::new);
+	public static final LogicType<LogicSequencer>  SEQUENCER       = register("sequencer", "Sequencer", LogicSequencer.CODEC, LogicSequencer.STREAM_CODEC, LogicSequencer::new);
+	public static final LogicType<PulseThrottler>  PULSE_THROTTLER = register("pulse_throttler", "Pulse Throttler", PulseThrottler.CODEC, PulseThrottler.STREAM_CODEC, PulseThrottler::new);
+	public static final LogicType<LogicSelector>   SELECTOR        = register("selector", "Selector", LogicSelector.CODEC, LogicSelector.STREAM_CODEC, LogicSelector::new);
+	public static final LogicType<LogicRandomizer> RANDOMIZER      = register("randomizer", "Randomizer", LogicRandomizer.CODEC, LogicRandomizer.STREAM_CODEC, LogicRandomizer::new);
 	
 	public static final LogicType<TFlipFlop>  T_FLIP_FLOP  = register("t_flip_flop", "T Flip-Flop", TFlipFlop.CODEC, TFlipFlop.STREAM_CODEC, TFlipFlop::new);
 	public static final LogicType<RSNORLatch> RS_NOR_LATCH = register("rs_nor_latch", "RS NOR Latch", RSNORLatch.CODEC, RSNORLatch.STREAM_CODEC, RSNORLatch::new);
