@@ -10,6 +10,7 @@ import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.item.ItemStack;
 import net.swedz.little_big_redstone.LBR;
 import net.swedz.little_big_redstone.LBRComponents;
+import net.swedz.little_big_redstone.LBRItems;
 import net.swedz.little_big_redstone.gui.microchip.logic.LogicRenderer;
 import net.swedz.little_big_redstone.gui.microchip.logic.LogicRenderers;
 import net.swedz.little_big_redstone.gui.microchip.widget.MicrochipWidget;
@@ -71,12 +72,12 @@ public final class MicrochipScreen extends AbstractContainerScreen<MicrochipMenu
 	public void renderFloatingItem(GuiGraphics graphics, ItemStack stack, int x, int y, String text)
 	{
 		var size = menu.microchip().size();
+		int mouseX = size.boardX(x + 8);
+		int mouseY = size.boardY(y + 8);
 		
-		if(stack.has(LBRComponents.LOGIC))
+		if(this.isWithinBoard(mouseX, mouseY))
 		{
-			int mouseX = size.boardX(x + 8);
-			int mouseY = size.boardY(y + 8);
-			if(this.isWithinBoard(mouseX, mouseY))
+			if(stack.has(LBRComponents.LOGIC))
 			{
 				var component = stack.get(LBRComponents.LOGIC);
 				int logicX = Screen.hasControlDown() ? getGridSnappedCoord(mouseX - size.bounds().minX() - component.size().centerX() + 8) + size.boardX(8) : component.size().topLeftCornerX(mouseX);
@@ -88,6 +89,14 @@ public final class MicrochipScreen extends AbstractContainerScreen<MicrochipMenu
 				LogicRenderers.render(context, graphics, component, logicX, logicY);
 				graphics.pose().popPose();
 				
+				return;
+			}
+			else if(stack.is(LBRItems.REDSTONE_BIT.asItem()))
+			{
+				graphics.pose().pushPose();
+				graphics.pose().scale(size.scale(), size.scale(), size.scale());
+				super.renderFloatingItem(graphics, stack, mouseX - 8, mouseY - 8, text);
+				graphics.pose().popPose();
 				return;
 			}
 		}
