@@ -3,12 +3,10 @@ package net.swedz.little_big_redstone.gui.microchip.widget;
 import com.google.common.collect.Lists;
 import com.mojang.blaze3d.vertex.DefaultVertexFormat;
 import com.mojang.blaze3d.vertex.VertexFormat;
-import net.minecraft.util.FastColor;
 import net.swedz.little_big_redstone.LBR;
 import net.swedz.little_big_redstone.LBRClientShaders;
 import net.swedz.little_big_redstone.LBRColors;
 import net.swedz.little_big_redstone.api.Bounds;
-import net.swedz.little_big_redstone.gui.microchip.MicrochipScreen;
 import net.swedz.little_big_redstone.gui.microchip.wire.WirePathing;
 import net.swedz.little_big_redstone.helper.guigraphics.TesseractGuiGraphics;
 import net.swedz.little_big_redstone.microchip.LogicEntry;
@@ -173,11 +171,6 @@ public final class MicrochipWidgetWires
 	{
 		int portPadding = usePadding ? wirePortPadding : 0;
 		
-		int red = FastColor.ARGB32.red(argb);
-		int green = FastColor.ARGB32.green(argb);
-		int blue = FastColor.ARGB32.blue(argb);
-		float pulsingAlpha = MicrochipScreen.getPulsingAlpha(partialTicks);
-		
 		var path = pathing.get(wire, startX + portPadding, startY, endX - portPadding - wireSize, endY);
 		
 		if(hovered)
@@ -187,7 +180,7 @@ public final class MicrochipWidgetWires
 			graphics.setTextureShader(LBRClientShaders::microchipWireHovered, VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX_COLOR);
 		}
 		
-		graphics.setColor(red, green, blue, 255);
+		graphics.setColor(argb);
 		graphics.setTexture(LBR.id("textures/gui/container/microchip/wire_%s.png".formatted(powered ? "on" : "off")));
 		graphics.blit(startX, startY, startX, startY, portPadding, wireSize, 16, 16);
 		graphics.blit(endX - portPadding, endY, endX - portPadding, endY, portPadding, wireSize, 16, 16);

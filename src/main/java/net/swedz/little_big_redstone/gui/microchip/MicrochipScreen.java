@@ -25,6 +25,7 @@ public final class MicrochipScreen extends AbstractContainerScreen<MicrochipMenu
 		return (coord / 16) * 16;
 	}
 	
+	// TODO replace this with a shader
 	public static float getPulsingAlpha(float partialTicks)
 	{
 		float speed = 8;
