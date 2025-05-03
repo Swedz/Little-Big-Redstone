@@ -61,7 +61,7 @@ public final class StickyNoteItem extends Item
 				level.addFreshEntity(entity);
 			}
 			
-			stack.shrink(1);
+			stack.consume(1, player);
 			return InteractionResult.sidedSuccess(level.isClientSide());
 		}
 		

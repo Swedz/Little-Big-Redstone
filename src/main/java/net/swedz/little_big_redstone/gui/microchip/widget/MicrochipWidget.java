@@ -136,7 +136,7 @@ public final class MicrochipWidget implements GuiEventListener, Renderable, Narr
 			{
 				menu.setCarried(LBRItems.REDSTONE_BIT.asItem().getDefaultInstance());
 			}
-			else
+			else if(!screen.getMinecraft().player.hasInfiniteMaterials())
 			{
 				carried.grow(1);
 			}
@@ -223,7 +223,7 @@ public final class MicrochipWidget implements GuiEventListener, Renderable, Narr
 			   microchip.wires().add(selectedPort, port))
 			{
 				microchip.markDirty();
-				carried.shrink(1);
+				carried.consume(1, screen.getMinecraft().player);
 				new PlaceTakeMicrochipWirePacket(menu.containerId, selectedPort, port, true).sendToServer();
 				if(carried.isEmpty())
 				{
@@ -258,7 +258,7 @@ public final class MicrochipWidget implements GuiEventListener, Renderable, Narr
 			{
 				microchip.markDirty();
 				wires.rebuildPaths();
-				carried.shrink(1);
+				carried.consume(1, screen.getMinecraft().player);
 				new PlaceTakeMicrochipLogicPacket(menu.containerId, placeX, placeY, true).sendToServer();
 				return true;
 			}

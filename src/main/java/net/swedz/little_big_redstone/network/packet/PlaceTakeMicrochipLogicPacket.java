@@ -46,7 +46,7 @@ public record PlaceTakeMicrochipLogicPacket(int containerId, int x, int y, boole
 					{
 						microchip.components().updateValidity();
 						microchip.markDirty();
-						heldItem.shrink(1);
+						heldItem.consume(1, player);
 					}
 					else
 					{

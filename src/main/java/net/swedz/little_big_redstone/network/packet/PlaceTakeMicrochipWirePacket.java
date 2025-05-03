@@ -66,7 +66,7 @@ public record PlaceTakeMicrochipWirePacket(
 						if(wires.add(outputSlot, outputPort, inputSlot, inputPort))
 						{
 							microchip.markDirty();
-							heldItem.shrink(1);
+							heldItem.consume(1, player);
 						}
 						else
 						{
@@ -80,7 +80,10 @@ public record PlaceTakeMicrochipWirePacket(
 						{
 							wires.remove(wire);
 							microchip.markDirty();
-							heldItem.grow(1);
+							if(!player.hasInfiniteMaterials())
+							{
+								heldItem.grow(1);
+							}
 						}
 						else
 						{
