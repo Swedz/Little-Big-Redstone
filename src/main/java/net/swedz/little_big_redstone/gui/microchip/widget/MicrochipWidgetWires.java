@@ -7,6 +7,7 @@ import net.swedz.little_big_redstone.LBRColors;
 import net.swedz.little_big_redstone.api.Bounds;
 import net.swedz.little_big_redstone.gui.microchip.MicrochipScreen;
 import net.swedz.little_big_redstone.gui.microchip.wire.WirePathing;
+import net.swedz.little_big_redstone.helper.ColorConversions;
 import net.swedz.little_big_redstone.helper.GuiGraphicsHelper;
 import net.swedz.little_big_redstone.microchip.LogicEntry;
 import net.swedz.little_big_redstone.microchip.logic.LogicComponent;
@@ -170,29 +171,33 @@ public final class MicrochipWidgetWires
 	{
 		int portPadding = usePadding ? wirePortPadding : 0;
 		
+		float red = ColorConversions.redFloat(argb);
+		float green = ColorConversions.greenFloat(argb);
+		float blue = ColorConversions.blueFloat(argb);
 		float pulsingAlpha = MicrochipScreen.getPulsingAlpha(partialTicks);
 		
-		var texture = LBR.id("textures/gui/container/microchip/wire_%s.png".formatted(powered ? "on" : "off"));
-		GuiGraphicsHelper.setColor(graphics, argb);
-		graphics.blit(texture, startX, startY, startX, startY, portPadding, wireSize, 16, 16);
-		graphics.blit(texture, endX - portPadding, endY, endX - portPadding, endY, portPadding, wireSize, 16, 16);
+		var path = pathing.get(wire, startX + portPadding, startY, endX - portPadding - wireSize, endY);
+		
+		var batch = GuiGraphicsHelper.batchBlit(graphics, LBR.id("textures/gui/container/microchip/wire_%s.png".formatted(powered ? "on" : "off")));
+		batch.add(startX, startY, startX, startY, portPadding, wireSize, 16, 16, red, green, blue, 1);
+		batch.add(endX - portPadding, endY, endX - portPadding, endY, portPadding, wireSize, 16, 16, red, green, blue, 1);
+		for(var position : path)
+		{
+			batch.add(position.x(), position.y(), position.x(), position.y(), wireSize, wireSize, 16, 16, red, green, blue, 1);
+		}
+		batch.end();
+		
+		// TODO get pulsing working again. this does not work because we arent adding the next wire pieces on top of this to avoid overlapping overlay pieces (and cant because of batching)
 		if(hovered)
 		{
-			graphics.setColor(1, 1, 1, pulsingAlpha);
-			graphics.fill(startX, startY, startX + portPadding, startY + wireSize, 0xFFFFFFFF);
-			graphics.fill(endX - portPadding, endY, endX, endY + wireSize, 0xFFFFFFFF);
-			GuiGraphicsHelper.setColor(graphics, argb);
-		}
-		for(var position : pathing.get(wire, startX + portPadding, startY, endX - portPadding - wireSize, endY))
-		{
-			graphics.blit(texture, position.x(), position.y(), position.x(), position.y(), wireSize, wireSize, 16, 16);
-			if(hovered)
+			batch = GuiGraphicsHelper.batchBlit(graphics, LBR.id("textures/gui/container/microchip/wire_hover_overlay.png"), 1, 1, 1, 1);
+			batch.add(startX, startY, startX, startY, portPadding, wireSize, 16, 16);
+			batch.add(endX - portPadding, endY, endX - portPadding, endY, portPadding, wireSize, 16, 16);
+			for(var position : path)
 			{
-				graphics.setColor(1, 1, 1, pulsingAlpha);
-				graphics.fill(position.x(), position.y(), position.x() + wireSize, position.y() + wireSize, 0xFFFFFFFF);
-				GuiGraphicsHelper.setColor(graphics, argb);
+				batch.add(position.x(), position.y(), position.x(), position.y(), wireSize, wireSize, 16, 16);
 			}
+			batch.end();
 		}
-		GuiGraphicsHelper.resetColor(graphics);
 	}
 }
