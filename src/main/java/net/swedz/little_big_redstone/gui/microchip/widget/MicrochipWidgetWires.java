@@ -1,8 +1,11 @@
 package net.swedz.little_big_redstone.gui.microchip.widget;
 
 import com.google.common.collect.Lists;
+import com.mojang.blaze3d.vertex.DefaultVertexFormat;
+import com.mojang.blaze3d.vertex.VertexFormat;
 import net.minecraft.util.FastColor;
 import net.swedz.little_big_redstone.LBR;
+import net.swedz.little_big_redstone.LBRClientShaders;
 import net.swedz.little_big_redstone.LBRColors;
 import net.swedz.little_big_redstone.api.Bounds;
 import net.swedz.little_big_redstone.gui.microchip.MicrochipScreen;
@@ -135,14 +138,7 @@ public final class MicrochipWidgetWires
 		
 		int argb = this.getWireColor(outputLogic);
 		
-		if(hovered)
-		{
-			graphics.delayed(() -> this.renderWire(graphics, wire, hovered, startX, startY, endX, endY, true, powered, argb, partialTicks));
-		}
-		else
-		{
-			this.renderWire(graphics, wire, hovered, startX, startY, endX, endY, true, powered, argb, partialTicks);
-		}
+		this.renderWire(graphics, wire, hovered, startX, startY, endX, endY, true, powered, argb, partialTicks);
 	}
 	
 	private void renderWire(TesseractGuiGraphics graphics, LogicEntry outputLogic, int mouseX, int mouseY, int outputIndex, float partialTicks)
@@ -170,7 +166,7 @@ public final class MicrochipWidgetWires
 		
 		int argb = this.getWireColor(outputLogic);
 		
-		graphics.delayed(() -> this.renderWire(graphics, null, true, startX, startY, endX, endY, usePadding, powered, argb, partialTicks));
+		this.renderWire(graphics, null, true, startX, startY, endX, endY, usePadding, powered, argb, partialTicks);
 	}
 	
 	private void renderWire(TesseractGuiGraphics graphics, Wire wire, boolean hovered, int startX, int startY, int endX, int endY, boolean usePadding, boolean powered, int argb, float partialTicks)
@@ -184,26 +180,27 @@ public final class MicrochipWidgetWires
 		
 		var path = pathing.get(wire, startX + portPadding, startY, endX - portPadding - wireSize, endY);
 		
+		if(hovered)
+		{
+			graphics = graphics.inner();
+			graphics.enableBatching();
+			graphics.setTextureShader(LBRClientShaders::microchipWireHovered, VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX_COLOR);
+		}
+		
 		graphics.setColor(red, green, blue, 255);
 		graphics.setTexture(LBR.id("textures/gui/container/microchip/wire_%s.png".formatted(powered ? "on" : "off")));
 		graphics.blit(startX, startY, startX, startY, portPadding, wireSize, 16, 16);
 		graphics.blit(endX - portPadding, endY, endX - portPadding, endY, portPadding, wireSize, 16, 16);
-		if(hovered)
-		{
-			graphics.setColor(1f, 1f, 1f, pulsingAlpha);
-			graphics.fill(startX, startY, startX + portPadding, startY + wireSize);
-			graphics.fill(endX - portPadding, endY, endX, endY + wireSize);
-		}
 		for(var position : path)
 		{
-			graphics.setColor(red, green, blue, 255);
 			graphics.blit(position.x(), position.y(), position.x(), position.y(), wireSize, wireSize, 16, 16);
-			if(hovered)
-			{
-				graphics.setColor(1f, 1f, 1f, pulsingAlpha);
-				graphics.fill(position.x(), position.y(), position.x() + wireSize, position.y() + wireSize);
-			}
 		}
 		graphics.resetColor();
+		
+		if(hovered)
+		{
+			graphics.resetTextureShader();
+			graphics.end();
+		}
 	}
 }
