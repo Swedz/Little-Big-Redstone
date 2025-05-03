@@ -11,6 +11,8 @@ import net.swedz.little_big_redstone.LBR;
 import net.swedz.little_big_redstone.LBRColors;
 import net.swedz.little_big_redstone.LBRComponents;
 import net.swedz.little_big_redstone.LBRItems;
+import net.swedz.little_big_redstone.LBRText;
+import net.swedz.little_big_redstone.LBRTooltips;
 import net.swedz.little_big_redstone.gui.microchip.MicrochipScreen;
 import net.swedz.little_big_redstone.gui.microchip.logic.LogicRenderer;
 import net.swedz.little_big_redstone.gui.microchip.logic.LogicRenderers;
@@ -43,6 +45,11 @@ public final class MicrochipWidgetRenderer
 				List<Component> lines = Lists.newArrayList();
 				lines.add(component.type().displayName().withStyle(Style.EMPTY.withUnderlined(true)));
 				component.type().tooltip(component, false, true, false).ifPresent((Consumer<List<Component>>) lines::addAll);
+				if(component.config().hasMenu())
+				{
+					lines.add(Component.empty());
+					lines.add(LBRText.LOGIC_CONFIG_TOOLTIP_CLICK_TO_OPEN.text().withStyle(LBRTooltips.DEFAULT_STYLE));
+				}
 				graphics.renderComponentTooltip(Minecraft.getInstance().font, lines, mouseX, mouseY);
 			}
 		}

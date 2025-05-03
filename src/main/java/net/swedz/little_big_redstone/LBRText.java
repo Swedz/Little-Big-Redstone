@@ -50,6 +50,7 @@ public enum LBRText implements TranslatableTextEnum
 	LOGIC_CONFIG_SEQUENCER_MODE_STRONG("Strong"),
 	LOGIC_CONFIG_SEQUENCER_MODE_WEAK("Weak"),
 	LOGIC_CONFIG_TOOLTIP("Configuration:"),
+	LOGIC_CONFIG_TOOLTIP_CLICK_TO_OPEN("Use Right Button to edit the config."),
 	LOGIC_CONFIG_TOOLTIP_DIRECTION("  Direction: %s"),
 	LOGIC_CONFIG_TOOLTIP_DURATION("  Duration: %d"),
 	LOGIC_CONFIG_TOOLTIP_INPUTS("  Inputs: %s"),

@@ -92,6 +92,7 @@
   "text.little_big_redstone.logic_config_sequencer_mode_strong": "Strong",
   "text.little_big_redstone.logic_config_sequencer_mode_weak": "Weak",
   "text.little_big_redstone.logic_config_tooltip": "Configuration:",
+  "text.little_big_redstone.logic_config_tooltip_click_to_open": "Use Right Button to edit the config.",
   "text.little_big_redstone.logic_config_tooltip_direction": "  Direction: %s",
   "text.little_big_redstone.logic_config_tooltip_duration": "  Duration: %d",
   "text.little_big_redstone.logic_config_tooltip_inputs": "  Inputs: %s",
