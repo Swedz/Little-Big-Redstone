@@ -6,6 +6,7 @@ import net.minecraft.world.Containers;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.DyeColor;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
@@ -15,6 +16,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.phys.BlockHitResult;
+import net.swedz.little_big_redstone.LBRItems;
 import net.swedz.little_big_redstone.api.TickableBlock;
 import net.swedz.little_big_redstone.microchip.awareness.AwarenessContext;
 import net.swedz.little_big_redstone.microchip.awareness.AwarenessTypes;
@@ -138,6 +140,8 @@ public final class MicrochipBlock extends Block implements TickableBlock
 				var stack = entry.toStack();
 				Containers.dropItemStack(level, pos.getX(), pos.getY(), pos.getZ(), stack);
 			}
+			var redstoneBits = new ItemStack(LBRItems.REDSTONE_BIT, blockEntity.microchip().wires().values().size());
+			Containers.dropItemStack(level, pos.getX(), pos.getY(), pos.getZ(), redstoneBits);
 		}
 		super.onRemove(state, level, pos, newState, movedByPiston);
 	}
