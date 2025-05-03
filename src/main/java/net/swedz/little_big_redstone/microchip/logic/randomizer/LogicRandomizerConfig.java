@@ -65,7 +65,7 @@ public final class LogicRandomizerConfig extends LogicConfig<LogicRandomizerConf
 	@Override
 	public void buildMenu(LogicConfigMenuBuilder builder)
 	{
-		builder.addSlider(LBRText.LOGIC_CONFIG_BUTTON_LABEL_OUTPUTS.text(), Component.empty(), LBRText.LOGIC_CONFIG_BUTTON_TOOLTIP_OUTPUTS.text(), 0, 0, 160, 18, 2, 10, outputs, 1, 0, true, (value) -> outputs = value.intValue());
+		builder.addSlider(LBRText.LOGIC_CONFIG_BUTTON_LABEL_OUTPUTS.text(), Component.empty(), LBRText.LOGIC_CONFIG_BUTTON_TOOLTIP_OUTPUTS.text(), 0, 0, 160, 18, 1, 8, outputs, 1, 0, true, (value) -> outputs = value.intValue());
 		
 		builder.addSlider(LBRText.LOGIC_CONFIG_BUTTON_LABEL_CHANCE.text(), Component.literal("%"), LBRText.LOGIC_CONFIG_BUTTON_TOOLTIP_RANDOMIZER_CHANCE.text(), 0, 23, 160, 18, 1, 100, chance * 100, 1, 0, true, (value) -> chance = (float) (value / 100f));
 	}
