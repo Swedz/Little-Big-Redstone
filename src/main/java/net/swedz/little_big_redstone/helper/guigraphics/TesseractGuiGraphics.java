@@ -36,6 +36,13 @@ public final class TesseractGuiGraphics implements BlitGuiGraphics, FillGuiGraph
 		this.vanilla = vanilla;
 	}
 	
+	/**
+	 * Returns the vanilla {@link GuiGraphics} instance wrapped by this instance.
+	 *
+	 * @return the vanilla {@link GuiGraphics}
+	 * @deprecated Try to avoid using this as much as possible. If there is something needed in {@link GuiGraphics} not
+	 * supported by this wrapper, add that support instead!
+	 */
 	@Deprecated
 	public GuiGraphics vanilla()
 	{
