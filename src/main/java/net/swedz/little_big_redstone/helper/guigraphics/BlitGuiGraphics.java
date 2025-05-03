@@ -1,10 +1,33 @@
 package net.swedz.little_big_redstone.helper.guigraphics;
 
+import com.mojang.blaze3d.vertex.VertexFormat;
+import net.minecraft.client.renderer.ShaderInstance;
 import net.minecraft.resources.ResourceLocation;
 import org.jetbrains.annotations.ApiStatus;
 
+import java.util.function.Supplier;
+
 public interface BlitGuiGraphics extends ColoredGuiGraphics
 {
+	TextureShaderConfiguration getTextureShader();
+	
+	void setTextureShader(TextureShaderConfiguration textureShader);
+	
+	default void setTextureShader(Supplier<ShaderInstance> shader, VertexFormat.Mode mode, VertexFormat format)
+	{
+		this.setTextureShader(new TextureShaderConfiguration(shader, mode, format));
+	}
+	
+	default void setTextureShader(Supplier<ShaderInstance> shader)
+	{
+		this.setTextureShader(shader, TextureShaderConfiguration.DEFAULT.mode(), TextureShaderConfiguration.DEFAULT.format());
+	}
+	
+	default void resetTextureShader()
+	{
+		this.setTextureShader(TextureShaderConfiguration.DEFAULT);
+	}
+	
 	ResourceLocation getTexture();
 	
 	void setTexture(ResourceLocation texture);

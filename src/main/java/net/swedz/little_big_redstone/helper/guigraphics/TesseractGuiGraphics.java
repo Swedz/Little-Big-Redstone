@@ -18,22 +18,35 @@ import java.util.Map;
 
 public final class TesseractGuiGraphics implements BlitGuiGraphics, FillGuiGraphics, StringGuiGraphics
 {
-	private final GuiGraphics vanilla;
+	private final TesseractGuiGraphics parent;
+	private final GuiGraphics          vanilla;
 	
-	private boolean                                 batching;
-	private List<ResourceLocation>                  batchOrder     = Lists.newArrayList();
-	private Map<ResourceLocation, List<DrawAction>> batches        = Maps.newHashMap();
-	private List<Runnable>                          delayedRenders = Lists.newArrayList();
+	private boolean                      batching;
+	private List<ResourceLocation>       batchOrder     = Lists.newArrayList();
+	private Map<ResourceLocation, Batch> batches        = Maps.newHashMap();
+	private List<Runnable>               delayedRenders = Lists.newArrayList();
+	
+	private record Batch(TextureShaderConfiguration shader, List<DrawAction> draws)
+	{
+	}
 	
 	private int[] color = new int[]{255, 255, 255, 255};
 	
-	private ResourceLocation texture = MissingTextureAtlasSprite.getLocation();
+	private TextureShaderConfiguration textureShader = TextureShaderConfiguration.DEFAULT;
+	private ResourceLocation           texture       = MissingTextureAtlasSprite.getLocation();
+	private List<DrawAction>           textureBatch;
 	
 	private Font font = Minecraft.getInstance().font;
 	
+	private TesseractGuiGraphics(TesseractGuiGraphics parent, GuiGraphics vanilla)
+	{
+		this.parent = parent;
+		this.vanilla = vanilla;
+	}
+	
 	public TesseractGuiGraphics(GuiGraphics vanilla)
 	{
-		this.vanilla = vanilla;
+		this(null, vanilla);
 	}
 	
 	/**
@@ -54,12 +67,27 @@ public final class TesseractGuiGraphics implements BlitGuiGraphics, FillGuiGraph
 		return vanilla.pose();
 	}
 	
+	public TesseractGuiGraphics inner()
+	{
+		return new TesseractGuiGraphics(this, vanilla);
+	}
+	
+	public TesseractGuiGraphics end()
+	{
+		Assert.notNull(parent, "Cannot close outermost graphic instance");
+		if(batching)
+		{
+			parent.delayed(this::drawBatches);
+		}
+		return parent;
+	}
+	
 	public void enableBatching()
 	{
 		batching = true;
 	}
 	
-	public void disableBatching()
+	private void disableBatching()
 	{
 		batching = false;
 		batchOrder = Lists.newArrayList();
@@ -76,13 +104,18 @@ public final class TesseractGuiGraphics implements BlitGuiGraphics, FillGuiGraph
 		
 		for(var texture : batchOrder)
 		{
-			var batch = GuiGraphicsBatch.start(vanilla, texture);
-			var draws = batches.get(texture);
-			for(var draw : draws)
+			var batchInstance = batches.get(texture);
+			var draws = batchInstance.draws();
+			if(!draws.isEmpty())
 			{
-				draw.addVertexes(batch);
+				var shader = batchInstance.shader();
+				var batch = GuiGraphicsBatch.start(vanilla, texture, shader.shader(), shader.mode(), shader.format());
+				for(var draw : draws)
+				{
+					draw.addVertexes(batch);
+				}
+				batch.end();
 			}
-			batch.end();
 		}
 		
 		for(var render : delayedRenders)
@@ -91,6 +124,34 @@ public final class TesseractGuiGraphics implements BlitGuiGraphics, FillGuiGraph
 		}
 		
 		this.disableBatching();
+	}
+	
+	@Override
+	public int[] getColor()
+	{
+		return color;
+	}
+	
+	@Override
+	public void setColor(int red, int green, int blue, int alpha)
+	{
+		color = new int[]{red, green, blue, alpha};
+	}
+	
+	@Override
+	public TextureShaderConfiguration getTextureShader()
+	{
+		return textureShader;
+	}
+	
+	@Override
+	public void setTextureShader(TextureShaderConfiguration textureShader)
+	{
+		if(textureShader == null)
+		{
+			textureShader = TextureShaderConfiguration.DEFAULT;
+		}
+		this.textureShader = textureShader;
 	}
 	
 	@Override
@@ -107,18 +168,31 @@ public final class TesseractGuiGraphics implements BlitGuiGraphics, FillGuiGraph
 			texture = MissingTextureAtlasSprite.getLocation();
 		}
 		this.texture = texture;
+		textureBatch = null;
 	}
 	
-	@Override
-	public int[] getColor()
+	private void addToTextureBatch(DrawAction draw)
 	{
-		return color;
-	}
-	
-	@Override
-	public void setColor(int red, int green, int blue, int alpha)
-	{
-		color = new int[]{red, green, blue, alpha};
+		Assert.that(batching, "Batching has not been enabled");
+		
+		if(textureBatch == null)
+		{
+			var batchInstance = batches.get(texture);
+			List<DrawAction> draws;
+			if(batchInstance == null)
+			{
+				draws = Lists.newArrayList();
+				batchOrder.add(texture);
+				batches.put(texture, new Batch(textureShader, draws));
+			}
+			else
+			{
+				draws = batchInstance.draws();
+			}
+			textureBatch = draws;
+		}
+		
+		textureBatch.add(draw);
 	}
 	
 	@Override
@@ -168,20 +242,11 @@ public final class TesseractGuiGraphics implements BlitGuiGraphics, FillGuiGraph
 		
 		if(batching)
 		{
-			batches.compute(texture, (__, draws) ->
-			{
-				if(draws == null)
-				{
-					draws = Lists.newArrayList();
-					batchOrder.add(texture);
-				}
-				draws.add(draw);
-				return draws;
-			});
+			this.addToTextureBatch(draw);
 		}
 		else
 		{
-			var batch = GuiGraphicsBatch.start(vanilla, texture);
+			var batch = GuiGraphicsBatch.start(vanilla, texture, textureShader.shader(), textureShader.mode(), textureShader.format());
 			draw.addVertexes(batch);
 			batch.end();
 		}
