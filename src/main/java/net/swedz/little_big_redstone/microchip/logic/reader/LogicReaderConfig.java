@@ -29,7 +29,7 @@ public final class LogicReaderConfig extends LogicConfig<LogicReaderConfig>
 			.group(
 					CodecHelper.forLowercaseEnum(LogicReaderMode.class).fieldOf("mode").forGetter((config) -> config.mode),
 					Direction.CODEC.fieldOf("direction").forGetter((config) -> config.direction),
-					Codec.FLOAT.fieldOf("power_range").forGetter((config) -> config.fillThreshold)
+					Codec.FLOAT.fieldOf("fill_threshold").forGetter((config) -> config.fillThreshold)
 			)
 			.apply(instance, LogicReaderConfig::new));
 	
