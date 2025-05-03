@@ -14,6 +14,7 @@ import net.swedz.little_big_redstone.gui.microchip.logic.renderer.OnOffLogicRend
 import net.swedz.little_big_redstone.gui.microchip.logic.renderer.ReaderRenderer;
 import net.swedz.little_big_redstone.gui.microchip.logic.renderer.SequencerRenderer;
 import net.swedz.little_big_redstone.gui.microchip.logic.renderer.SimpleLogicRenderer;
+import net.swedz.little_big_redstone.helper.guigraphics.TesseractGuiGraphics;
 import net.swedz.little_big_redstone.microchip.logic.LogicComponent;
 import net.swedz.little_big_redstone.microchip.logic.LogicType;
 import net.swedz.little_big_redstone.microchip.logic.LogicTypes;
@@ -84,7 +85,7 @@ public final class LogicRenderers
 				}));
 	}
 	
-	public static <L extends LogicComponent> void render(LogicRenderer.Context context, GuiGraphics graphics, L component, int x, int y)
+	public static <L extends LogicComponent> void render(LogicRenderer.Context context, TesseractGuiGraphics graphics, L component, int x, int y)
 	{
 		var renderer = (LogicRenderer<L>) RENDERERS.get(component.type());
 		if(renderer != null)

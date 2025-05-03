@@ -14,6 +14,7 @@ import net.swedz.little_big_redstone.LBRItems;
 import net.swedz.little_big_redstone.gui.microchip.logic.LogicRenderer;
 import net.swedz.little_big_redstone.gui.microchip.logic.LogicRenderers;
 import net.swedz.little_big_redstone.gui.microchip.widget.MicrochipWidget;
+import net.swedz.little_big_redstone.helper.guigraphics.TesseractGuiGraphics;
 
 public final class MicrochipScreen extends AbstractContainerScreen<MicrochipMenu>
 {
@@ -69,7 +70,7 @@ public final class MicrochipScreen extends AbstractContainerScreen<MicrochipMenu
 	}
 	
 	@Override
-	public void renderFloatingItem(GuiGraphics graphics, ItemStack stack, int x, int y, String text)
+	public void renderFloatingItem(GuiGraphics vanilla, ItemStack stack, int x, int y, String text)
 	{
 		var size = menu.microchip().size();
 		int mouseX = size.boardX(x + 8);
@@ -84,24 +85,27 @@ public final class MicrochipScreen extends AbstractContainerScreen<MicrochipMenu
 				int logicY = Screen.hasControlDown() ? getGridSnappedCoord(mouseY - size.bounds().minY() - component.size().centerY() + 8) + size.boardY(8) : component.size().topLeftCornerY(mouseY);
 				var context = LogicRenderer.Context.create(menu.color(), component, true, microchipWidget.hasSelectedPort(), false);
 				
-				graphics.pose().pushPose();
-				graphics.pose().scale(size.scale(), size.scale(), size.scale());
+				vanilla.pose().pushPose();
+				vanilla.pose().scale(size.scale(), size.scale(), size.scale());
+				var graphics = new TesseractGuiGraphics(vanilla);
+				graphics.enableBatching();
 				LogicRenderers.render(context, graphics, component, logicX, logicY);
-				graphics.pose().popPose();
+				graphics.drawBatches();
+				vanilla.pose().popPose();
 				
 				return;
 			}
 			else if(stack.is(LBRItems.REDSTONE_BIT.asItem()))
 			{
-				graphics.pose().pushPose();
-				graphics.pose().scale(size.scale(), size.scale(), size.scale());
-				super.renderFloatingItem(graphics, stack, mouseX - 8, mouseY - 8, text);
-				graphics.pose().popPose();
+				vanilla.pose().pushPose();
+				vanilla.pose().scale(size.scale(), size.scale(), size.scale());
+				super.renderFloatingItem(vanilla, stack, mouseX - 8, mouseY - 8, text);
+				vanilla.pose().popPose();
 				return;
 			}
 		}
 		
-		super.renderFloatingItem(graphics, stack, x, y, text);
+		super.renderFloatingItem(vanilla, stack, x, y, text);
 	}
 	
 	@Override

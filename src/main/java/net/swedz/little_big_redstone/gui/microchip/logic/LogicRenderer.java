@@ -1,14 +1,13 @@
 package net.swedz.little_big_redstone.gui.microchip.logic;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.DyeColor;
 import net.swedz.little_big_redstone.LBR;
 import net.swedz.little_big_redstone.client.model.logic.LogicBakedModel;
 import net.swedz.little_big_redstone.client.model.logic.LogicModelColorSet;
-import net.swedz.little_big_redstone.helper.GuiGraphicsHelper;
+import net.swedz.little_big_redstone.helper.guigraphics.TesseractGuiGraphics;
 import net.swedz.little_big_redstone.microchip.logic.LogicComponent;
 import net.swedz.little_big_redstone.microchip.logic.LogicGridSize;
 
@@ -29,19 +28,20 @@ public abstract class LogicRenderer<L extends LogicComponent>
 	{
 	}
 	
-	public abstract void render(Context context, GuiGraphics graphics, L component, int x, int y);
+	public abstract void render(Context context, TesseractGuiGraphics graphics, L component, int x, int y);
 	
-	protected void renderPort(GuiGraphics graphics, int x, int y, LogicGridSize size, boolean input, int index, int maxPorts, float red, float green, float blue, float alpha)
+	protected void renderPort(TesseractGuiGraphics graphics, int x, int y, LogicGridSize size, boolean input, int index, int maxPorts, float red, float green, float blue, float alpha)
 	{
 		ResourceLocation texture = input ? PORT_INPUT : PORT_OUTPUT;
 		
 		int renderX = size.portTopLeftCornerX(x, input, index, maxPorts);
 		int renderY = size.portTopLeftCornerY(y, input, index, maxPorts);
 		
-		GuiGraphicsHelper.blit(graphics, texture, renderX, renderY, 0, 0, 16, 16, 16, 16, red, green, blue, alpha);
+		graphics.setTexture(texture);
+		graphics.blit(renderX, renderY, 0, 0, 16, 16, 16, 16, red, green, blue, alpha);
 	}
 	
-	protected void renderAllPorts(Context context, GuiGraphics graphics, int x, int y, L component, float red, float green, float blue)
+	protected void renderAllPorts(Context context, TesseractGuiGraphics graphics, int x, int y, L component, float red, float green, float blue)
 	{
 		if(!context.isCarried())
 		{
@@ -72,29 +72,28 @@ public abstract class LogicRenderer<L extends LogicComponent>
 		}
 	}
 	
-	protected void renderGridBlock(GuiGraphics graphics, ResourceLocation texture, int x, int y, LogicGridSize size, int argb)
+	protected void renderGridBlock(TesseractGuiGraphics graphics, ResourceLocation texture, int x, int y, LogicGridSize size, int argb)
 	{
-		GuiGraphicsHelper.setColor(graphics, argb);
-		
+		graphics.setColor(argb);
+		graphics.setTexture(texture);
 		if(size.isSingle())
 		{
-			graphics.blit(texture, x, y, 0, 0, 16, 16, 16, 16);
+			graphics.blit(x, y, 0, 0, 16, 16, 16, 16);
 		}
 		else
 		{
-			GuiGraphicsHelper.nineSlice(graphics, texture, x, y, size.widthPixels(), size.heightPixels(), 16, 16, 3);
+			graphics.nineSlice(x, y, size.widthPixels(), size.heightPixels(), 16, 16, 3);
 		}
-		
-		GuiGraphicsHelper.resetColor(graphics);
+		graphics.resetColor();
 	}
 	
-	protected void renderBackground(GuiGraphics graphics, ResourceLocation background, ResourceLocation border, int x, int y, LogicGridSize size, int foregroundColor, int backgroundColor)
+	protected void renderBackground(TesseractGuiGraphics graphics, ResourceLocation background, ResourceLocation border, int x, int y, LogicGridSize size, int foregroundColor, int backgroundColor)
 	{
 		this.renderGridBlock(graphics, background, x, y, size, backgroundColor);
 		this.renderGridBlock(graphics, border, x, y, size, foregroundColor);
 	}
 	
-	protected void renderBackground(Context context, GuiGraphics graphics, int x, int y, LogicComponent component)
+	protected void renderBackground(Context context, TesseractGuiGraphics graphics, int x, int y, LogicComponent component)
 	{
 		this.renderBackground(
 				graphics,
@@ -105,9 +104,10 @@ public abstract class LogicRenderer<L extends LogicComponent>
 		);
 	}
 	
-	protected void renderInvalidOverlay(GuiGraphics graphics, int x, int y, LogicGridSize size)
+	protected void renderInvalidOverlay(TesseractGuiGraphics graphics, int x, int y, LogicGridSize size)
 	{
-		graphics.blit(LBR.id("textures/logic/misconfigured.png"), x + size.widthPixels() - 7 + 1, y - 1, 0, 0, 7, 7, 7, 7);
+		graphics.setTexture(LBR.id("textures/logic/misconfigured.png"));
+		graphics.blit(x + size.widthPixels() - 7 + 1, y - 1, 0, 0, 7, 7, 7, 7);
 	}
 	
 	public record Context(

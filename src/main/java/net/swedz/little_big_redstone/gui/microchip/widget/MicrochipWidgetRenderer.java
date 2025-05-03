@@ -16,7 +16,7 @@ import net.swedz.little_big_redstone.LBRTooltips;
 import net.swedz.little_big_redstone.gui.microchip.MicrochipScreen;
 import net.swedz.little_big_redstone.gui.microchip.logic.LogicRenderer;
 import net.swedz.little_big_redstone.gui.microchip.logic.LogicRenderers;
-import net.swedz.little_big_redstone.helper.GuiGraphicsHelper;
+import net.swedz.little_big_redstone.helper.guigraphics.TesseractGuiGraphics;
 import net.swedz.little_big_redstone.microchip.LogicEntry;
 
 import java.util.List;
@@ -34,7 +34,7 @@ public final class MicrochipWidgetRenderer
 		this.widget = widget;
 	}
 	
-	private void renderTooltip(GuiGraphics graphics, int mouseX, int mouseY, float partialTicks)
+	private void renderTooltip(TesseractGuiGraphics graphics, int mouseX, int mouseY, float partialTicks)
 	{
 		if(widget.context().shouldRenderTooltip())
 		{
@@ -50,19 +50,20 @@ public final class MicrochipWidgetRenderer
 					lines.add(Component.empty());
 					lines.add(LBRText.LOGIC_CONFIG_TOOLTIP_CLICK_TO_OPEN.text().withStyle(LBRTooltips.DEFAULT_STYLE));
 				}
-				graphics.renderComponentTooltip(Minecraft.getInstance().font, lines, mouseX, mouseY);
+				graphics.vanilla().renderComponentTooltip(Minecraft.getInstance().font, lines, mouseX, mouseY);
 			}
 		}
 	}
 	
-	private void renderLogic(GuiGraphics graphics, LogicEntry entry)
+	private void renderLogic(TesseractGuiGraphics graphics, LogicEntry entry)
 	{
 		var context = LogicRenderer.Context.create(widget.menu().color(), entry.component(), false, widget.hasSelectedPort(), widget.menu().getCarried().is(LBRItems.REDSTONE_BIT.asItem()));
 		LogicRenderers.render(context, graphics, entry.component(), entry.x(), entry.y());
 		
 		if(widget.microchip().isDebug())
 		{
-			graphics.drawString(Minecraft.getInstance().font, "#" + entry.slot(), entry.x(), entry.y() - 8, 0xFFFFFF);
+			graphics.resetColor();
+			graphics.drawString("#" + entry.slot(), entry.x(), entry.y() - 8);
 			
 			List<Integer> indexes = Lists.newArrayList();
 			int index = 0;
@@ -77,12 +78,12 @@ public final class MicrochipWidgetRenderer
 			for(int i = 0; i < indexes.size(); i++)
 			{
 				int ind = indexes.get(i);
-				graphics.drawString(Minecraft.getInstance().font, Integer.toString(ind), entry.x(), entry.y() + (i * 8), 0xFFFFFF);
+				graphics.drawString(Integer.toString(ind), entry.x(), entry.y() + (i * 8));
 			}
 		}
 	}
 	
-	private void renderLogic(GuiGraphics graphics, int mouseX, int mouseY, float partialTicks)
+	private void renderLogic(TesseractGuiGraphics graphics, int mouseX, int mouseY, float partialTicks)
 	{
 		for(var entry : widget.microchip().components())
 		{
@@ -99,7 +100,7 @@ public final class MicrochipWidgetRenderer
 		}
 	}
 	
-	private void renderLogicGridSnappingOverlay(GuiGraphics graphics, int mouseX, int mouseY, float partialTicks)
+	private void renderLogicGridSnappingOverlay(TesseractGuiGraphics graphics, int mouseX, int mouseY, float partialTicks)
 	{
 		var carried = widget.menu().getCarried();
 		var size = widget.microchip().size();
@@ -113,33 +114,39 @@ public final class MicrochipWidgetRenderer
 			int logicY = MicrochipScreen.getGridSnappedCoord(boardY - component.size().centerY() + 8);
 			
 			graphics.setColor(1, 1, 1, MicrochipScreen.getPulsingAlpha(partialTicks));
-			graphics.fill(0, logicY, size.bounds().width(), logicY + 1, 0xFFFFFFFF);
-			graphics.fill(0, logicY + component.size().heightPixels() - 1, size.bounds().width(), logicY + component.size().heightPixels(), 0xFFFFFFFF);
-			graphics.fill(logicX, 0, logicX + 1, size.bounds().height(), 0xFFFFFFFF);
-			graphics.fill(logicX + component.size().widthPixels() - 1, 0, logicX + component.size().widthPixels(), size.bounds().height(), 0xFFFFFFFF);
-			GuiGraphicsHelper.resetColor(graphics);
+			graphics.fill(0, logicY, size.bounds().width(), logicY + 1);
+			graphics.fill(0, logicY + component.size().heightPixels() - 1, size.bounds().width(), logicY + component.size().heightPixels());
+			graphics.fill(logicX, 0, logicX + 1, size.bounds().height());
+			graphics.fill(logicX + component.size().widthPixels() - 1, 0, logicX + component.size().widthPixels(), size.bounds().height());
+			graphics.resetColor();
 		}
 	}
 	
-	private void renderCircuitBg(GuiGraphics graphics, int mouseX, int mouseY, float partialTicks)
+	private void renderCircuitBg(TesseractGuiGraphics graphics, int mouseX, int mouseY, float partialTicks)
 	{
-		GuiGraphicsHelper.setColor(graphics, LBRColors.circuitboard(widget.menu().color()));
-		graphics.blit(CIRCUIT_BACKGROUND, 0, 0, 0, 0, widget.width, widget.height, 64, 64);
-		GuiGraphicsHelper.resetColor(graphics);
+		graphics.setColor(LBRColors.circuitboard(widget.menu().color()));
+		graphics.setTexture(CIRCUIT_BACKGROUND);
+		graphics.blit(0, 0, 0, 0, widget.width, widget.height, 64, 64);
+		graphics.resetColor();
 	}
 	
-	public void render(GuiGraphics graphics, int mouseX, int mouseY, float partialTicks)
+	public void render(GuiGraphics vanilla, int mouseX, int mouseY, float partialTicks)
 	{
-		graphics.pose().pushPose();
-		graphics.pose().translate(widget.x, widget.y, 0);
-		graphics.pose().scale(widget.microchip().size().scale(), widget.microchip().size().scale(), widget.microchip().size().scale());
+		vanilla.pose().pushPose();
+		vanilla.pose().translate(widget.x, widget.y, 0);
+		vanilla.pose().scale(widget.microchip().size().scale(), widget.microchip().size().scale(), widget.microchip().size().scale());
+		
+		var graphics = new TesseractGuiGraphics(vanilla);
+		graphics.enableBatching();
 		
 		this.renderCircuitBg(graphics, mouseX, mouseY, partialTicks);
 		this.renderLogicGridSnappingOverlay(graphics, mouseX, mouseY, partialTicks);
 		this.renderLogic(graphics, mouseX, mouseY, partialTicks);
 		widget.wires.renderWires(graphics, mouseX, mouseY, partialTicks);
 		
-		graphics.pose().popPose();
+		graphics.drawBatches();
+		
+		vanilla.pose().popPose();
 		
 		this.renderTooltip(graphics, mouseX, mouseY, partialTicks);
 	}

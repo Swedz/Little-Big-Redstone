@@ -341,11 +341,11 @@ public final class MicrochipWidget implements GuiEventListener, Renderable, Narr
 	}
 	
 	@Override
-	public void render(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick)
+	public void render(GuiGraphics graphics, int mouseX, int mouseY, float partialTick)
 	{
 		context = MicrochipWidgetContext.test(this, wires, mouseX, mouseY, context);
 		
-		renderer.render(guiGraphics, mouseX, mouseY, partialTick);
+		renderer.render(graphics, mouseX, mouseY, partialTick);
 	}
 	
 	@Override

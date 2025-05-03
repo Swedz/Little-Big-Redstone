@@ -1,14 +1,13 @@
 package net.swedz.little_big_redstone.gui.microchip.widget;
 
 import com.google.common.collect.Lists;
-import net.minecraft.client.gui.GuiGraphics;
 import net.swedz.little_big_redstone.LBR;
 import net.swedz.little_big_redstone.LBRColors;
 import net.swedz.little_big_redstone.api.Bounds;
 import net.swedz.little_big_redstone.gui.microchip.MicrochipScreen;
 import net.swedz.little_big_redstone.gui.microchip.wire.WirePathing;
 import net.swedz.little_big_redstone.helper.ColorConversions;
-import net.swedz.little_big_redstone.helper.GuiGraphicsHelper;
+import net.swedz.little_big_redstone.helper.guigraphics.TesseractGuiGraphics;
 import net.swedz.little_big_redstone.microchip.LogicEntry;
 import net.swedz.little_big_redstone.microchip.logic.LogicComponent;
 import net.swedz.little_big_redstone.microchip.wire.Wire;
@@ -68,7 +67,7 @@ public final class MicrochipWidgetWires
 		return null;
 	}
 	
-	public void renderWires(GuiGraphics graphics, int mouseX, int mouseY, float partialTicks)
+	public void renderWires(TesseractGuiGraphics graphics, int mouseX, int mouseY, float partialTicks)
 	{
 		for(var wire : widget.microchip().wires())
 		{
@@ -93,7 +92,7 @@ public final class MicrochipWidgetWires
 		}
 	}
 	
-	private void renderWire(GuiGraphics graphics, Wire wire, boolean hovered, int mouseX, int mouseY, float partialTicks)
+	private void renderWire(TesseractGuiGraphics graphics, Wire wire, boolean hovered, int mouseX, int mouseY, float partialTicks)
 	{
 		LogicEntry outputLogic = widget.microchip().components().get(wire.output().slot());
 		LogicEntry inputLogic = widget.microchip().components().get(wire.input().slot());
@@ -125,7 +124,7 @@ public final class MicrochipWidgetWires
 		return LBRColors.componentForeground(((LogicComponent<?, ?>) outputLogic.component()).color().orElse(widget.color()));
 	}
 	
-	private void renderWire(GuiGraphics graphics, Wire wire, boolean hovered, LogicEntry outputLogic, LogicEntry inputLogic, int outputIndex, int inputIndex, float partialTicks)
+	private void renderWire(TesseractGuiGraphics graphics, Wire wire, boolean hovered, LogicEntry outputLogic, LogicEntry inputLogic, int outputIndex, int inputIndex, float partialTicks)
 	{
 		int startX = this.getWireStartX(outputLogic);
 		int startY = this.getWireStartY(outputLogic, outputIndex);
@@ -139,7 +138,7 @@ public final class MicrochipWidgetWires
 		this.renderWire(graphics, wire, hovered, startX, startY, endX, endY, true, powered, argb, partialTicks);
 	}
 	
-	private void renderWire(GuiGraphics graphics, LogicEntry outputLogic, int mouseX, int mouseY, int outputIndex, float partialTicks)
+	private void renderWire(TesseractGuiGraphics graphics, LogicEntry outputLogic, int mouseX, int mouseY, int outputIndex, float partialTicks)
 	{
 		int startX = this.getWireStartX(outputLogic);
 		int startY = this.getWireStartY(outputLogic, outputIndex);
@@ -167,7 +166,7 @@ public final class MicrochipWidgetWires
 		this.renderWire(graphics, null, true, startX, startY, endX, endY, usePadding, powered, argb, partialTicks);
 	}
 	
-	private void renderWire(GuiGraphics graphics, Wire wire, boolean hovered, int startX, int startY, int endX, int endY, boolean usePadding, boolean powered, int argb, float partialTicks)
+	private void renderWire(TesseractGuiGraphics graphics, Wire wire, boolean hovered, int startX, int startY, int endX, int endY, boolean usePadding, boolean powered, int argb, float partialTicks)
 	{
 		int portPadding = usePadding ? wirePortPadding : 0;
 		
@@ -178,26 +177,26 @@ public final class MicrochipWidgetWires
 		
 		var path = pathing.get(wire, startX + portPadding, startY, endX - portPadding - wireSize, endY);
 		
-		var batch = GuiGraphicsHelper.batchBlit(graphics, LBR.id("textures/gui/container/microchip/wire_%s.png".formatted(powered ? "on" : "off")));
-		batch.add(startX, startY, startX, startY, portPadding, wireSize, 16, 16, red, green, blue, 1);
-		batch.add(endX - portPadding, endY, endX - portPadding, endY, portPadding, wireSize, 16, 16, red, green, blue, 1);
+		graphics.setColor(red, green, blue, 1);
+		graphics.setTexture(LBR.id("textures/gui/container/microchip/wire_%s.png".formatted(powered ? "on" : "off")));
+		graphics.blit(startX, startY, startX, startY, portPadding, wireSize, 16, 16);
+		graphics.blit(endX - portPadding, endY, endX - portPadding, endY, portPadding, wireSize, 16, 16);
 		for(var position : path)
 		{
-			batch.add(position.x(), position.y(), position.x(), position.y(), wireSize, wireSize, 16, 16, red, green, blue, 1);
+			graphics.blit(position.x(), position.y(), position.x(), position.y(), wireSize, wireSize, 16, 16);
 		}
-		batch.end();
 		
 		// TODO get pulsing working again. this does not work because we arent adding the next wire pieces on top of this to avoid overlapping overlay pieces (and cant because of batching)
 		if(hovered)
 		{
-			batch = GuiGraphicsHelper.batchBlit(graphics, LBR.id("textures/gui/container/microchip/wire_hover_overlay.png"), 1, 1, 1, 1);
-			batch.add(startX, startY, startX, startY, portPadding, wireSize, 16, 16);
-			batch.add(endX - portPadding, endY, endX - portPadding, endY, portPadding, wireSize, 16, 16);
+			graphics.setColor(1, 1, 1, 1);
+			graphics.setTexture(LBR.id("textures/gui/container/microchip/wire_hover_overlay.png"));
+			graphics.fill(startX, startY, startX + portPadding, startY + wireSize);
+			graphics.fill(endX - portPadding, endY, endX, endY + wireSize);
 			for(var position : path)
 			{
-				batch.add(position.x(), position.y(), position.x(), position.y(), wireSize, wireSize, 16, 16);
+				graphics.fill(position.x(), position.y(), position.x() + wireSize, position.y() + wireSize);
 			}
-			batch.end();
 		}
 	}
 }
