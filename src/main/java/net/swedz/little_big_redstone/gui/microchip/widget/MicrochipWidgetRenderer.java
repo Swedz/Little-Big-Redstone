@@ -113,7 +113,7 @@ public final class MicrochipWidgetRenderer
 			int logicX = MicrochipScreen.getGridSnappedCoord(boardX - component.size().centerX() + 8);
 			int logicY = MicrochipScreen.getGridSnappedCoord(boardY - component.size().centerY() + 8);
 			
-			graphics.setColor(1, 1, 1, MicrochipScreen.getPulsingAlpha(partialTicks));
+			graphics.setColor(1f, 1f, 1f, MicrochipScreen.getPulsingAlpha(partialTicks));
 			graphics.fill(0, logicY, size.bounds().width(), logicY + 1);
 			graphics.fill(0, logicY + component.size().heightPixels() - 1, size.bounds().width(), logicY + component.size().heightPixels());
 			graphics.fill(logicX, 0, logicX + 1, size.bounds().height());
@@ -132,21 +132,21 @@ public final class MicrochipWidgetRenderer
 	
 	public void render(GuiGraphics vanilla, int mouseX, int mouseY, float partialTicks)
 	{
-		vanilla.pose().pushPose();
-		vanilla.pose().translate(widget.x, widget.y, 0);
-		vanilla.pose().scale(widget.microchip().size().scale(), widget.microchip().size().scale(), widget.microchip().size().scale());
-		
 		var graphics = new TesseractGuiGraphics(vanilla);
-		graphics.enableBatching();
+		
+		graphics.pose().pushPose();
+		graphics.pose().translate(widget.x, widget.y, 0);
+		graphics.pose().scale(widget.microchip().size().scale(), widget.microchip().size().scale(), widget.microchip().size().scale());
 		
 		this.renderCircuitBg(graphics, mouseX, mouseY, partialTicks);
 		this.renderLogicGridSnappingOverlay(graphics, mouseX, mouseY, partialTicks);
+		
+		graphics.enableBatching();
 		this.renderLogic(graphics, mouseX, mouseY, partialTicks);
 		widget.wires.renderWires(graphics, mouseX, mouseY, partialTicks);
-		
 		graphics.drawBatches();
 		
-		vanilla.pose().popPose();
+		graphics.pose().popPose();
 		
 		this.renderTooltip(graphics, mouseX, mouseY, partialTicks);
 	}

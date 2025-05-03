@@ -1,7 +1,6 @@
 package net.swedz.little_big_redstone.helper.guigraphics;
 
 import net.minecraft.util.FastColor;
-import net.swedz.little_big_redstone.helper.ColorConversions;
 
 public interface ColoredGuiGraphics
 {
@@ -16,10 +15,10 @@ public interface ColoredGuiGraphics
 	default void setColor(int argb)
 	{
 		this.setColor(
-				ColorConversions.redFloat(argb),
-				ColorConversions.greenFloat(argb),
-				ColorConversions.blueFloat(argb),
-				ColorConversions.alphaFloat(argb)
+				FastColor.ARGB32.red(argb),
+				FastColor.ARGB32.green(argb),
+				FastColor.ARGB32.blue(argb),
+				FastColor.ARGB32.alpha(argb)
 		);
 	}
 	
@@ -37,6 +36,6 @@ public interface ColoredGuiGraphics
 	
 	default void resetColor()
 	{
-		this.setColor(1, 1, 1, 1);
+		this.setColor(255, 255, 255, 255);
 	}
 }

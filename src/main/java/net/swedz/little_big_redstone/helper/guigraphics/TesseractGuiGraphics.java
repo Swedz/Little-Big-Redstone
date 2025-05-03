@@ -21,8 +21,9 @@ public final class TesseractGuiGraphics implements BlitGuiGraphics, FillGuiGraph
 	private final GuiGraphics vanilla;
 	
 	private boolean                                 batching;
-	private List<ResourceLocation>                  batchOrder = Lists.newArrayList();
-	private Map<ResourceLocation, List<DrawAction>> batches    = Maps.newHashMap();
+	private List<ResourceLocation>                  batchOrder     = Lists.newArrayList();
+	private Map<ResourceLocation, List<DrawAction>> batches        = Maps.newHashMap();
+	private List<Runnable>                          delayedRenders = Lists.newArrayList();
 	
 	private int[] color = new int[]{255, 255, 255, 255};
 	
@@ -56,11 +57,15 @@ public final class TesseractGuiGraphics implements BlitGuiGraphics, FillGuiGraph
 		batching = false;
 		batchOrder = Lists.newArrayList();
 		batches = Maps.newHashMap();
+		delayedRenders = Lists.newArrayList();
 	}
 	
 	public void drawBatches()
 	{
 		Assert.that(batching, "Batching has not been enabled");
+		
+		// Set batching to false so that any delayed renders that contain batching conditionals do not try to add to a batch that no longer exists
+		batching = false;
 		
 		for(var texture : batchOrder)
 		{
@@ -71,6 +76,11 @@ public final class TesseractGuiGraphics implements BlitGuiGraphics, FillGuiGraph
 				draw.addVertexes(batch);
 			}
 			batch.end();
+		}
+		
+		for(var render : delayedRenders)
+		{
+			render.run();
 		}
 		
 		this.disableBatching();
@@ -120,6 +130,18 @@ public final class TesseractGuiGraphics implements BlitGuiGraphics, FillGuiGraph
 		this.font = font;
 	}
 	
+	public void delayed(Runnable runnable)
+	{
+		if(batching)
+		{
+			delayedRenders.add(runnable);
+		}
+		else
+		{
+			runnable.run();
+		}
+	}
+	
 	@ApiStatus.Internal
 	@Override
 	public void innerBlit(int x1, int x2, int y1, int y2, int blitOffset, float minU, float maxU, float minV, float maxV)
@@ -161,7 +183,8 @@ public final class TesseractGuiGraphics implements BlitGuiGraphics, FillGuiGraph
 	@Override
 	public void fill(RenderType renderType, int minX, int minY, int maxX, int maxY, int z)
 	{
-		vanilla.fill(renderType, minX, minY, maxX, maxY, z, this.getColorARGB());
+		int color = this.getColorARGB();
+		this.delayed(() -> vanilla.fill(renderType, minX, minY, maxX, maxY, z, color));
 	}
 	
 	@Override
