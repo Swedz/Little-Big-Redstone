@@ -44,7 +44,7 @@ public final class MultiLogicGateConfig extends LogicConfig<MultiLogicGateConfig
 	@Override
 	public IntRange inputsAllowed()
 	{
-		return new IntRange(2, 8);
+		return new IntRange(2, 10);
 	}
 	
 	@Override
