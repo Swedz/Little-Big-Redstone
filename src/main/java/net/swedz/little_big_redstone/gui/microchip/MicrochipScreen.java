@@ -1,10 +1,12 @@
 package net.swedz.little_big_redstone.gui.microchip;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.Mth;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.item.ItemStack;
 import net.swedz.little_big_redstone.LBR;
@@ -25,6 +27,8 @@ public final class MicrochipScreen extends AbstractContainerScreen<MicrochipMenu
 	}
 	
 	private MicrochipWidget microchipWidget;
+	
+	private float partialTick;
 	
 	public MicrochipScreen(MicrochipMenu menu, Inventory playerInventory, Component title)
 	{
@@ -90,7 +94,18 @@ public final class MicrochipScreen extends AbstractContainerScreen<MicrochipMenu
 			{
 				vanilla.pose().pushPose();
 				vanilla.pose().scale(size.scale(), size.scale(), size.scale());
+				if(!microchipWidget.context().hasPort())
+				{
+					// TODO convert this to a shader?
+					float gameTime = ((Minecraft.getInstance().level.getGameTime() % 24000L) + partialTick) / 24000f;
+					float interval = 30;
+					float t = Mth.frac(gameTime * (24000f / interval));
+					float wave = (float) ((Math.sin(t * 6.28318f) + 1) / 2f);
+					float alpha = 0.25f * (1 - wave) + 0.5f * wave;
+					vanilla.setColor(1, 1, 1, alpha);
+				}
 				super.renderFloatingItem(vanilla, stack, mouseX - 8, mouseY - 8, text);
+				vanilla.setColor(1, 1, 1, 1);
 				vanilla.pose().popPose();
 				return;
 			}
@@ -106,8 +121,10 @@ public final class MicrochipScreen extends AbstractContainerScreen<MicrochipMenu
 	}
 	
 	@Override
-	protected void renderBg(GuiGraphics graphics, float partialTicks, int mouseX, int mouseY)
+	protected void renderBg(GuiGraphics graphics, float partialTick, int mouseX, int mouseY)
 	{
+		this.partialTick = partialTick;
+		
 		graphics.blit(INVENTORY_BACKGROUND, leftPos, topPos, 0, 0, 256, 256);
 	}
 }
