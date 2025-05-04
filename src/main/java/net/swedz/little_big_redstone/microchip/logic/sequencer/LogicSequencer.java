@@ -27,8 +27,8 @@ public final class LogicSequencer extends LogicComponent<LogicSequencer, LogicSe
 			.group(
 					LogicSequencerConfig.CODEC.fieldOf("config").forGetter(LogicSequencer::config),
 					DyeColor.CODEC.optionalFieldOf("color").forGetter(LogicSequencer::color),
-					Codec.LONG.fieldOf("processed_ticks").forGetter(LogicSequencer::processedTicks),
-					Codec.BOOL.fieldOf("output").forGetter(LogicSequencer::output)
+					Codec.LONG.optionalFieldOf("processed_ticks", 1L).forGetter(LogicSequencer::processedTicks),
+					Codec.BOOL.optionalFieldOf("output", false).forGetter(LogicSequencer::output)
 			)
 			.apply(instance, LogicSequencer::new));
 	

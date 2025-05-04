@@ -29,7 +29,7 @@ public final class LogicIO extends LogicComponent<LogicIO, LogicIOConfig> implem
 			.group(
 					LogicIOConfig.CODEC.fieldOf("config").forGetter(LogicIO::config),
 					DyeColor.CODEC.optionalFieldOf("color").forGetter(LogicIO::color),
-					Codec.BOOL.fieldOf("output").forGetter(LogicIO::output)
+					Codec.BOOL.optionalFieldOf("output", false).forGetter(LogicIO::output)
 			)
 			.apply(instance, LogicIO::new));
 	

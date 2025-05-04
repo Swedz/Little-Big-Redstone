@@ -25,7 +25,7 @@ public final class RSNORLatch extends LogicComponent<RSNORLatch, RSNORLatchConfi
 	public static final MapCodec<RSNORLatch> CODEC = RecordCodecBuilder.mapCodec((instance) -> instance
 			.group(
 					DyeColor.CODEC.optionalFieldOf("color").forGetter(RSNORLatch::color),
-					Codec.BOOL.fieldOf("output").forGetter(RSNORLatch::output)
+					Codec.BOOL.optionalFieldOf("output", false).forGetter(RSNORLatch::output)
 			)
 			.apply(instance, RSNORLatch::new));
 	

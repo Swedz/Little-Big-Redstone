@@ -27,9 +27,9 @@ public final class LogicReaderConfig extends LogicConfig<LogicReaderConfig>
 {
 	public static final MapCodec<LogicReaderConfig> CODEC = RecordCodecBuilder.mapCodec((instance) -> instance
 			.group(
-					CodecHelper.forLowercaseEnum(LogicReaderMode.class).fieldOf("mode").forGetter((config) -> config.mode),
-					Direction.CODEC.fieldOf("direction").forGetter((config) -> config.direction),
-					Codec.FLOAT.fieldOf("fill_threshold").forGetter((config) -> config.fillThreshold)
+					CodecHelper.forLowercaseEnum(LogicReaderMode.class).optionalFieldOf("mode", LogicReaderMode.ITEM).forGetter((config) -> config.mode),
+					Direction.CODEC.optionalFieldOf("direction", Direction.NORTH).forGetter((config) -> config.direction),
+					Codec.FLOAT.optionalFieldOf("fill_threshold", 0.5f).forGetter((config) -> config.fillThreshold)
 			)
 			.apply(instance, LogicReaderConfig::new));
 	

@@ -28,9 +28,9 @@ public final class LogicIOConfig extends LogicConfig<LogicIOConfig>
 {
 	public static final MapCodec<LogicIOConfig> CODEC = RecordCodecBuilder.mapCodec((instance) -> instance
 			.group(
-					Codec.BOOL.fieldOf("input").forGetter((config) -> config.input),
-					Direction.CODEC.fieldOf("direction").forGetter((config) -> config.direction),
-					Codec.intRange(1, 15).fieldOf("signal_strength").forGetter((config) -> config.signalStrength)
+					Codec.BOOL.optionalFieldOf("input", true).forGetter((config) -> config.input),
+					Direction.CODEC.optionalFieldOf("direction", Direction.NORTH).forGetter((config) -> config.direction),
+					Codec.intRange(1, 15).optionalFieldOf("signal_strength", 1).forGetter((config) -> config.signalStrength)
 			)
 			.apply(instance, (input, direction, signalStrength) -> new LogicIOConfig(true, input, direction, signalStrength)));
 	

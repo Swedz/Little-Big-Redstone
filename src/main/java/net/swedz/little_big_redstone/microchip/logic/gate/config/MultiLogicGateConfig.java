@@ -20,7 +20,7 @@ public final class MultiLogicGateConfig extends LogicConfig<MultiLogicGateConfig
 {
 	public static final Codec<MultiLogicGateConfig> CODEC = RecordCodecBuilder.create((instance) -> instance
 			.group(
-					Codec.INT.fieldOf("input_count").forGetter((config) -> config.inputs)
+					Codec.INT.optionalFieldOf("input_count", 2).forGetter((config) -> config.inputs)
 			)
 			.apply(instance, MultiLogicGateConfig::new));
 	

@@ -25,8 +25,8 @@ public final class TFlipFlop extends LogicComponent<TFlipFlop, TFlipFlopConfig>
 	public static final MapCodec<TFlipFlop> CODEC = RecordCodecBuilder.mapCodec((instance) -> instance
 			.group(
 					DyeColor.CODEC.optionalFieldOf("color").forGetter(TFlipFlop::color),
-					Codec.BOOL.fieldOf("last_input").forGetter(TFlipFlop::lastInput),
-					Codec.BOOL.fieldOf("output").forGetter(TFlipFlop::output)
+					Codec.BOOL.optionalFieldOf("last_input", false).forGetter(TFlipFlop::lastInput),
+					Codec.BOOL.optionalFieldOf("output", false).forGetter(TFlipFlop::output)
 			)
 			.apply(instance, TFlipFlop::new));
 	

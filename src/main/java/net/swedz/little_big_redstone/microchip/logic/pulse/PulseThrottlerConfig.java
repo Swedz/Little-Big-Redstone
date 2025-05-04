@@ -21,7 +21,7 @@ public final class PulseThrottlerConfig extends LogicConfig<PulseThrottlerConfig
 {
 	public static final MapCodec<PulseThrottlerConfig> CODEC = RecordCodecBuilder.mapCodec((instance) -> instance
 			.group(
-					Codec.LONG.fieldOf("duration").forGetter((config) -> config.outputDuration)
+					Codec.LONG.optionalFieldOf("duration", 1L).forGetter((config) -> config.outputDuration)
 			)
 			.apply(instance, PulseThrottlerConfig::new));
 	

@@ -27,7 +27,7 @@ public final class LogicSelector extends LogicComponent<LogicSelector, LogicSele
 			.group(
 					LogicSelectorConfig.CODEC.fieldOf("config").forGetter(LogicSelector::config),
 					DyeColor.CODEC.optionalFieldOf("color").forGetter(LogicSelector::color),
-					Codec.INT.fieldOf("selected").forGetter(LogicSelector::selected)
+					Codec.INT.optionalFieldOf("selected", 0).forGetter(LogicSelector::selected)
 			)
 			.apply(instance, LogicSelector::new));
 	

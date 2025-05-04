@@ -26,9 +26,9 @@ public final class PulseThrottler extends LogicComponent<PulseThrottler, PulseTh
 			.group(
 					PulseThrottlerConfig.CODEC.fieldOf("config").forGetter(PulseThrottler::config),
 					DyeColor.CODEC.optionalFieldOf("color").forGetter(PulseThrottler::color),
-					Codec.BOOL.fieldOf("last_input").forGetter(PulseThrottler::lastInput),
-					Codec.LONG.fieldOf("processed_ticks").forGetter(PulseThrottler::processedTicks),
-					Codec.BOOL.fieldOf("output").forGetter(PulseThrottler::output)
+					Codec.BOOL.optionalFieldOf("last_input", false).forGetter(PulseThrottler::lastInput),
+					Codec.LONG.optionalFieldOf("processed_ticks", 0L).forGetter(PulseThrottler::processedTicks),
+					Codec.BOOL.optionalFieldOf("output", false).forGetter(PulseThrottler::output)
 			)
 			.apply(instance, PulseThrottler::new));
 	

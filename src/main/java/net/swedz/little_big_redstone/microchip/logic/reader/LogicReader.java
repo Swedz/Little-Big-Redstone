@@ -30,7 +30,7 @@ public final class LogicReader extends LogicComponent<LogicReader, LogicReaderCo
 			.group(
 					LogicReaderConfig.CODEC.fieldOf("config").forGetter(LogicReader::config),
 					DyeColor.CODEC.optionalFieldOf("color").forGetter(LogicReader::color),
-					Codec.BOOL.fieldOf("output").forGetter(LogicReader::output)
+					Codec.BOOL.optionalFieldOf("output", false).forGetter(LogicReader::output)
 			)
 			.apply(instance, LogicReader::new));
 	

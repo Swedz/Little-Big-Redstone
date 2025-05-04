@@ -26,8 +26,8 @@ public final class LogicSelectorConfig extends LogicConfig<LogicSelectorConfig>
 {
 	public static final MapCodec<LogicSelectorConfig> CODEC = RecordCodecBuilder.mapCodec((instance) -> instance
 			.group(
-					CodecHelper.forLowercaseEnum(LogicSelectorMode.class).fieldOf("mode").forGetter((config) -> config.mode),
-					Codec.intRange(2, 10).fieldOf("outputs").forGetter((config) -> config.outputs)
+					CodecHelper.forLowercaseEnum(LogicSelectorMode.class).optionalFieldOf("mode", LogicSelectorMode.COUNTER).forGetter((config) -> config.mode),
+					Codec.intRange(2, 10).optionalFieldOf("outputs", 2).forGetter((config) -> config.outputs)
 			)
 			.apply(instance, LogicSelectorConfig::new));
 	

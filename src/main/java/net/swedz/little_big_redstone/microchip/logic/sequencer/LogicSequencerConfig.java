@@ -26,10 +26,10 @@ public final class LogicSequencerConfig extends LogicConfig<LogicSequencerConfig
 {
 	public static final MapCodec<LogicSequencerConfig> CODEC = RecordCodecBuilder.mapCodec((instance) -> instance
 			.group(
-					CodecHelper.forLowercaseEnum(LogicSequencerMode.class).fieldOf("mode").forGetter((config) -> config.mode),
-					Codec.LONG.fieldOf("delay").forGetter((config) -> config.outputDelay),
-					Codec.BOOL.fieldOf("auto_reset").forGetter((config) -> config.autoReset),
-					Codec.BOOL.fieldOf("reset_port").forGetter((config) -> config.resetPort)
+					CodecHelper.forLowercaseEnum(LogicSequencerMode.class).optionalFieldOf("mode", LogicSequencerMode.WEAK).forGetter((config) -> config.mode),
+					Codec.LONG.optionalFieldOf("delay", 20L).forGetter((config) -> config.outputDelay),
+					Codec.BOOL.optionalFieldOf("auto_reset", false).forGetter((config) -> config.autoReset),
+					Codec.BOOL.optionalFieldOf("reset_port", false).forGetter((config) -> config.resetPort)
 			)
 			.apply(instance, LogicSequencerConfig::new));
 	
