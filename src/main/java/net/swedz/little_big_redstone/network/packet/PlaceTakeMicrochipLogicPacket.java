@@ -14,7 +14,7 @@ import net.swedz.little_big_redstone.network.LBRCustomPacket;
 import net.swedz.tesseract.neoforge.packet.PacketContext;
 
 public record PlaceTakeMicrochipLogicPacket(
-		int containerId, int x, int y, boolean place, boolean leftClick
+		int containerId, int x, int y, boolean place, boolean leftClick, boolean shift
 ) implements LBRCustomPacket
 {
 	public static final StreamCodec<ByteBuf, PlaceTakeMicrochipLogicPacket> STREAM_CODEC = StreamCodec.composite(
@@ -23,6 +23,7 @@ public record PlaceTakeMicrochipLogicPacket(
 			ByteBufCodecs.VAR_INT, PlaceTakeMicrochipLogicPacket::y,
 			ByteBufCodecs.BOOL, PlaceTakeMicrochipLogicPacket::place,
 			ByteBufCodecs.BOOL, PlaceTakeMicrochipLogicPacket::leftClick,
+			ByteBufCodecs.BOOL, PlaceTakeMicrochipLogicPacket::shift,
 			PlaceTakeMicrochipLogicPacket::new
 	);
 	
@@ -77,7 +78,11 @@ public record PlaceTakeMicrochipLogicPacket(
 							ItemHandlerHelper.giveItemToPlayer(player, new ItemStack(LBRItems.REDSTONE_BIT, wiresPopped));
 						}
 						microchip.markDirty();
-						menu.setCarried(component.toStack());
+						var stack = component.toStack();
+						if(!shift || !menu.moveItemStackTo(stack, 0, 36, true))
+						{
+							menu.setCarried(stack);
+						}
 					}
 					else
 					{

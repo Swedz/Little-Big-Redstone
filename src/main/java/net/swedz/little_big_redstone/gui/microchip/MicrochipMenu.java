@@ -66,6 +66,12 @@ public final class MicrochipMenu extends BaseContainerMenu
 	}
 	
 	@Override
+	public boolean moveItemStackTo(ItemStack stack, int startIndex, int endIndex, boolean reverseDirection)
+	{
+		return super.moveItemStackTo(stack, startIndex, endIndex, reverseDirection);
+	}
+	
+	@Override
 	public boolean stillValid(Player player)
 	{
 		return validChecker == null || validChecker.apply(player);

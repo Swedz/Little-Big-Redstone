@@ -192,6 +192,7 @@ public final class MicrochipWidget implements GuiEventListener, Renderable, Narr
 		var carried = menu.getCarried();
 		var logic = context.logic();
 		
+		boolean shift = Screen.hasShiftDown();
 		if(button == InputConstants.MOUSE_BUTTON_LEFT &&
 		   context.shouldInteractLogic() &&
 		   carried.isEmpty())
@@ -199,8 +200,12 @@ public final class MicrochipWidget implements GuiEventListener, Renderable, Narr
 			microchip.components().remove(logic);
 			microchip.markDirty();
 			wires.rebuildPaths();
-			menu.setCarried(logic.toStack());
-			new PlaceTakeMicrochipLogicPacket(menu.containerId, x, y, false, true).sendToServer();
+			var stack = logic.toStack();
+			if(!shift || !menu.moveItemStackTo(stack, 0, 36, true))
+			{
+				menu.setCarried(stack);
+			}
+			new PlaceTakeMicrochipLogicPacket(menu.containerId, x, y, false, true, shift).sendToServer();
 			return true;
 		}
 		
@@ -246,7 +251,9 @@ public final class MicrochipWidget implements GuiEventListener, Renderable, Narr
 		var carried = menu.getCarried();
 		var player = screen.getMinecraft().player;
 		
-		if((button == InputConstants.MOUSE_BUTTON_LEFT || button == InputConstants.MOUSE_BUTTON_RIGHT) &&
+		boolean leftClick = button == InputConstants.MOUSE_BUTTON_LEFT;
+		boolean rightClick = button == InputConstants.MOUSE_BUTTON_RIGHT;
+		if((leftClick || rightClick) &&
 		   carried.has(LBRComponents.LOGIC) &&
 		   context.shouldInteractBoard())
 		{
@@ -259,11 +266,11 @@ public final class MicrochipWidget implements GuiEventListener, Renderable, Narr
 			{
 				microchip.markDirty();
 				wires.rebuildPaths();
-				if(!player.hasInfiniteMaterials() || button == InputConstants.MOUSE_BUTTON_LEFT)
+				if(!player.hasInfiniteMaterials() || leftClick)
 				{
 					carried.shrink(1);
 				}
-				new PlaceTakeMicrochipLogicPacket(menu.containerId, placeX, placeY, true, button == InputConstants.MOUSE_BUTTON_LEFT).sendToServer();
+				new PlaceTakeMicrochipLogicPacket(menu.containerId, placeX, placeY, true, leftClick, Screen.hasShiftDown()).sendToServer();
 				return true;
 			}
 		}
