@@ -103,7 +103,7 @@ public final class LogicReaderConfig extends LogicConfig<LogicReaderConfig>
 		
 		builder.addCycleButton(LBRText.LOGIC_CONFIG_BUTTON_LABEL_DIRECTION.text(), LBRText.LOGIC_CONFIG_BUTTON_TOOLTIP_READER_DIRECTION.text(), 0, 23, 160, 18, false, direction, Arrays.asList(Direction.values()), LBRTooltips.DIRECTION_PARSER::parse, (value) -> direction = value);
 		
-		builder.addSlider(LBRText.LOGIC_CONFIG_BUTTON_LABEL_READER_FILL_THRESHOLD.text(), Component.literal("%"), LBRText.LOGIC_CONFIG_BUTTON_TOOLTIP_READER_FILL_THRESHOLD.text(), 0, 23 * 2, 160, 18, 0, 100, fillThreshold * 100, 1, 0, true, (value) -> fillThreshold = (float) (value / 100f));
+		builder.addSlider(LBRText.LOGIC_CONFIG_BUTTON_LABEL_READER_FILL_THRESHOLD.text(), Component.literal("%"), LBRText.LOGIC_CONFIG_BUTTON_TOOLTIP_READER_FILL_THRESHOLD.text(), 0, 23 * 2, 160, 18, 0, 100, fillThreshold * 100, 1, 0, (value) -> fillThreshold = (float) (value / 100f));
 	}
 	
 	@Override

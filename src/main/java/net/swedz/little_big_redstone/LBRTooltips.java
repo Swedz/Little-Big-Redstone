@@ -7,6 +7,7 @@ import net.minecraft.network.chat.TextColor;
 import net.swedz.little_big_redstone.microchip.logic.reader.LogicReaderMode;
 import net.swedz.little_big_redstone.microchip.logic.selector.LogicSelectorMode;
 import net.swedz.little_big_redstone.microchip.logic.sequencer.LogicSequencerMode;
+import net.swedz.tesseract.neoforge.tooltip.BiParser;
 import net.swedz.tesseract.neoforge.tooltip.Parser;
 import net.swedz.tesseract.neoforge.tooltip.TooltipAttachment;
 
@@ -56,6 +57,14 @@ public final class LBRTooltips
 	public static final Parser<LogicSequencerMode> SEQUENCER_MODE_PARSER = (value) -> value.label().text().withStyle(HIGHLIGHT_STYLE);
 	
 	public static final Parser<LogicSelectorMode> SELECTOR_MODE_PARSER = (value) -> value.label().text().withStyle(HIGHLIGHT_STYLE);
+	
+	private static LBRText ticksAndSecondsText(Number value)
+	{
+		return value.intValue() != 1 ? LBRText.LOGIC_CONFIG_BUTTON_LABEL_TICKS_AND_SECONDS : LBRText.LOGIC_CONFIG_BUTTON_LABEL_TICKS_AND_SECONDS_SINGULAR;
+	}
+	
+	public static final Parser<Long>             TICKS_AND_SECONDS_PARSER        = (value) -> ticksAndSecondsText(value).text(value, String.format("%.2f", value / 20f)).withStyle(LBRTooltips.HIGHLIGHT_STYLE);
+	public static final BiParser<Double, String> TICKS_AND_SECONDS_SLIDER_PARSER = (value, string) -> ticksAndSecondsText(value).text(string, String.format("%.2f", value / 20));
 	
 	public static final Parser<Object> DEFAULT_PARSER = (value) ->
 	{

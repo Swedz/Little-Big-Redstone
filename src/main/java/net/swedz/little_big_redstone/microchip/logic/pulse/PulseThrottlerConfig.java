@@ -8,6 +8,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.swedz.little_big_redstone.LBRText;
+import net.swedz.little_big_redstone.LBRTooltips;
 import net.swedz.little_big_redstone.api.IntRange;
 import net.swedz.little_big_redstone.microchip.logic.config.LogicConfig;
 import net.swedz.little_big_redstone.microchip.logic.config.LogicConfigMenuBuilder;
@@ -69,7 +70,7 @@ public final class PulseThrottlerConfig extends LogicConfig<PulseThrottlerConfig
 	@Override
 	public void appendHoverText(List<Component> lines)
 	{
-		lines.add(line(LBRText.LOGIC_CONFIG_TOOLTIP_DURATION).arg(outputDuration));
+		lines.add(line(LBRText.LOGIC_CONFIG_TOOLTIP_DURATION).arg(outputDuration, LBRTooltips.TICKS_AND_SECONDS_PARSER));
 	}
 	
 	@Override
@@ -81,7 +82,7 @@ public final class PulseThrottlerConfig extends LogicConfig<PulseThrottlerConfig
 	@Override
 	public void buildMenu(LogicConfigMenuBuilder builder)
 	{
-		builder.addSlider(LBRText.LOGIC_CONFIG_BUTTON_LABEL_DURATION.text(), Component.empty(), LBRText.LOGIC_CONFIG_BUTTON_TOOLTIP_DURATION.text(), 0, 0, 160, 18, 1, 60 * 20, outputDuration, 1, 0, true, (value) -> outputDuration = value.intValue());
+		builder.addSlider(LBRText.LOGIC_CONFIG_BUTTON_LABEL_DURATION.text(), Component.empty(), LBRText.LOGIC_CONFIG_BUTTON_TOOLTIP_DURATION.text(), 0, 0, 160, 18, 1, 60 * 20, outputDuration, 1, 0, LBRTooltips.TICKS_AND_SECONDS_SLIDER_PARSER::parse, (value) -> outputDuration = value.intValue());
 	}
 	
 	@Override

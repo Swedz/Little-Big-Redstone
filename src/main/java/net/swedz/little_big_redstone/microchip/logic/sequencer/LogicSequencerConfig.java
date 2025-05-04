@@ -89,7 +89,7 @@ public final class LogicSequencerConfig extends LogicConfig<LogicSequencerConfig
 	public void appendHoverText(List<Component> lines)
 	{
 		lines.add(line(LBRText.LOGIC_CONFIG_TOOLTIP_MODE).arg(mode, LBRTooltips.SEQUENCER_MODE_PARSER));
-		lines.add(line(LBRText.LOGIC_CONFIG_TOOLTIP_SEQUENCER_DELAY).arg(outputDelay));
+		lines.add(line(LBRText.LOGIC_CONFIG_TOOLTIP_SEQUENCER_DELAY).arg(outputDelay, LBRTooltips.TICKS_AND_SECONDS_PARSER));
 		lines.add(line(LBRText.LOGIC_CONFIG_TOOLTIP_SEQUENCER_AUTO_RESET).arg(autoReset, LBRTooltips.BOOLEAN_YES_NO_PARSER));
 		lines.add(line(LBRText.LOGIC_CONFIG_TOOLTIP_SEQUENCER_RESET_PORT).arg(resetPort, LBRTooltips.BOOLEAN_YES_NO_PARSER));
 	}
@@ -111,7 +111,7 @@ public final class LogicSequencerConfig extends LogicConfig<LogicSequencerConfig
 			modeButton.get().setTooltip(mode.tooltip().text());
 		}));
 		
-		builder.addSlider(LBRText.LOGIC_CONFIG_BUTTON_LABEL_SEQUENCER_DELAY.text(), Component.empty(), LBRText.LOGIC_CONFIG_BUTTON_TOOLTIP_SEQUENCER_DELAY.text(), 0, 23, 160, 18, 1, 60 * 20, outputDelay, 1, 0, true, (value) -> outputDelay = value.intValue());
+		builder.addSlider(LBRText.LOGIC_CONFIG_BUTTON_LABEL_SEQUENCER_DELAY.text(), Component.empty(), LBRText.LOGIC_CONFIG_BUTTON_TOOLTIP_SEQUENCER_DELAY.text(), 0, 23, 160, 18, 1, 60 * 20, outputDelay, 1, 0, LBRTooltips.TICKS_AND_SECONDS_SLIDER_PARSER::parse, (value) -> outputDelay = value.intValue());
 		
 		builder.addCheckbox(LBRText.LOGIC_CONFIG_BUTTON_LABEL_SEQUENCER_AUTO_RESET.text().withColor(0x3E3E3E), LBRText.LOGIC_CONFIG_BUTTON_TOOLTIP_SEQUENCER_AUTO_RESET.text(), 0, 23 * 2, autoReset, (value) -> autoReset = value);
 		

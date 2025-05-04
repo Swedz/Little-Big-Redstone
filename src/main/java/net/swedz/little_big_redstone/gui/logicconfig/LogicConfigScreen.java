@@ -21,6 +21,7 @@ import net.swedz.little_big_redstone.network.packet.WriteLogicConfigPacket;
 
 import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
+import java.util.function.BiFunction;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
@@ -79,14 +80,14 @@ public final class LogicConfigScreen extends AbstractContainerScreen<LogicConfig
 	}
 	
 	@Override
-	public LogicConfigButtonReference addSlider(Component prefix, Component suffix, Component tooltip, int x, int y, int width, int height, double minValue, double maxValue, double currentValue, double stepSize, int precision, boolean drawString, Consumer<Double> onChange)
+	public LogicConfigButtonReference addSlider(Component prefix, Component suffix, Component tooltip, int x, int y, int width, int height, double minValue, double maxValue, double currentValue, double stepSize, int precision, BiFunction<Double, String, Component> valueStringifier, Consumer<Double> onChange)
 	{
-		var widget = new ExtendedSlider(configX + x, configY + y, width, height, prefix, suffix, minValue, maxValue, currentValue, stepSize, precision, drawString)
+		var widget = new ExtendedSlider(configX + x, configY + y, width, height, prefix, suffix, minValue, maxValue, currentValue, stepSize, precision, true)
 		{
 			@Override
 			protected void updateMessage()
 			{
-				super.updateMessage();
+				this.setMessage(Component.literal("").append(prefix).append(valueStringifier.apply(this.getValue(), this.getValueString())).append(suffix));
 				onChange.accept(minValue + (value * (maxValue - minValue)));
 			}
 		};
