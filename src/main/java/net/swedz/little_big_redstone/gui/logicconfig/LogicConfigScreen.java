@@ -6,6 +6,7 @@ import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.Checkbox;
 import net.minecraft.client.gui.components.CycleButton;
 import net.minecraft.client.gui.components.Tooltip;
+import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -18,6 +19,7 @@ import net.swedz.little_big_redstone.microchip.logic.config.LogicConfigButtonRef
 import net.swedz.little_big_redstone.microchip.logic.config.LogicConfigMenuBuilder;
 import net.swedz.little_big_redstone.network.packet.RequestMicrochipMenuPacket;
 import net.swedz.little_big_redstone.network.packet.WriteLogicConfigPacket;
+import org.lwjgl.glfw.GLFW;
 
 import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
@@ -89,6 +91,57 @@ public final class LogicConfigScreen extends AbstractContainerScreen<LogicConfig
 			{
 				this.setMessage(Component.literal("").append(prefix).append(valueStringifier.apply(this.getValue(), this.getValueString())).append(suffix));
 				onChange.accept(minValue + (value * (maxValue - minValue)));
+			}
+			
+			@Override
+			public boolean keyPressed(int keyCode, int scanCode, int modifiers)
+			{
+				// We cannot support stepSizes of <= 0 because ExtendedSlider#setSliderValue is private
+				if(stepSize <= 0D)
+				{
+					return false;
+				}
+				
+				boolean left = keyCode == GLFW.GLFW_KEY_LEFT;
+				if(left || keyCode == GLFW.GLFW_KEY_RIGHT)
+				{
+					if(minValue > maxValue)
+					{
+						left = !left;
+					}
+					float step = left ? -1 : 1;
+					if(Screen.hasShiftDown())
+					{
+						step *= 10;
+					}
+					this.setValue(this.getValue() + step * stepSize);
+				}
+				
+				return false;
+			}
+			
+			@Override
+			public boolean mouseScrolled(double mouseX, double mouseY, double scrollX, double scrollY)
+			{
+				// We cannot support stepSizes of <= 0 because ExtendedSlider#setSliderValue is private
+				if(stepSize <= 0)
+				{
+					return false;
+				}
+				
+				boolean left = scrollY < 0;
+				if(minValue > maxValue)
+				{
+					left = !left;
+				}
+				float step = left ? -1 : 1;
+				if(Screen.hasShiftDown())
+				{
+					step *= 10;
+				}
+				this.setValue(this.getValue() + step * stepSize);
+				
+				return true;
 			}
 		};
 		widget.setTooltip(Tooltip.create(tooltip));
