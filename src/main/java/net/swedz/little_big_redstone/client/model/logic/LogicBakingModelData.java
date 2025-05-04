@@ -7,12 +7,16 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.JsonOps;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.mojang.serialization.codecs.UnboundedMapCodec;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.DyeColor;
 import net.neoforged.neoforge.client.model.generators.CustomLoaderBuilder;
 import net.neoforged.neoforge.client.model.generators.ModelBuilder;
 import net.neoforged.neoforge.client.model.generators.ModelProvider;
 import net.neoforged.neoforge.common.data.ExistingFileHelper;
+import net.swedz.little_big_redstone.LBR;
+import net.swedz.little_big_redstone.microchip.logic.LogicComponent;
 import net.swedz.tesseract.neoforge.api.Assert;
 import net.swedz.tesseract.neoforge.helper.CodecHelper;
 
@@ -31,6 +35,11 @@ public final class LogicBakingModelData
 			)
 			.apply(instance, LogicBakingModelData::new));
 	
+	public static LogicBakingModelData get(LogicComponent<?, ?> component)
+	{
+		return ((LogicBakedModel) Minecraft.getInstance().getModelManager().getModel(ModelResourceLocation.inventory(LBR.id(component.type().id())))).getData();
+	}
+	
 	private final Map<DyeColor, LogicModelColorSet> colorPalette;
 	private final Map<String, ResourceLocation>     itemTextures;
 	private final Map<String, ResourceLocation>     boardTextures;
@@ -47,6 +56,11 @@ public final class LogicBakingModelData
 	public LogicModelColorSet getColorSet(DyeColor color)
 	{
 		return colorPalette.getOrDefault(color, LogicModelColorSet.DEFAULT);
+	}
+	
+	public LogicModelColorSet getColorSet(LogicComponent<?, ?> component, DyeColor fallback)
+	{
+		return this.getColorSet(component.color().orElse(fallback));
 	}
 	
 	public ResourceLocation getItemTexture(String texture)

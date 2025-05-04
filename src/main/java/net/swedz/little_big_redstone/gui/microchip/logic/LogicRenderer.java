@@ -1,11 +1,9 @@
 package net.swedz.little_big_redstone.gui.microchip.logic;
 
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.DyeColor;
 import net.swedz.little_big_redstone.LBR;
-import net.swedz.little_big_redstone.client.model.logic.LogicBakedModel;
+import net.swedz.little_big_redstone.client.model.logic.LogicBakingModelData;
 import net.swedz.little_big_redstone.client.model.logic.LogicModelColorSet;
 import net.swedz.little_big_redstone.helper.guigraphics.TesseractGuiGraphics;
 import net.swedz.little_big_redstone.microchip.logic.LogicComponent;
@@ -118,11 +116,8 @@ public abstract class LogicRenderer<L extends LogicComponent>
 	{
 		public static Context create(DyeColor menuColor, LogicComponent<?, ?> component, boolean isCarried, boolean hasSelectedPort, boolean isCarryingWire)
 		{
-			var type = component.type();
-			var modelData = ((LogicBakedModel) Minecraft.getInstance().getModelManager().getModel(ModelResourceLocation.inventory(LBR.id(type.id())))).getData();
-			var color = (DyeColor) component.color().orElse(menuColor);
-			var colorPalette = modelData.getColorSet(color);
-			return new Context(colorPalette, modelData::getBoardTextureLocation, isCarried, hasSelectedPort, isCarryingWire);
+			var modelData = LogicBakingModelData.get(component);
+			return new Context(modelData.getColorSet(component, menuColor), modelData::getBoardTextureLocation, isCarried, hasSelectedPort, isCarryingWire);
 		}
 		
 		public ResourceLocation getTexture(String key)

@@ -6,6 +6,8 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.screens.inventory.tooltip.ClientTooltipComponent;
+import net.minecraft.client.gui.screens.inventory.tooltip.TooltipRenderUtil;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.texture.MissingTextureAtlasSprite;
 import net.minecraft.resources.ResourceLocation;
@@ -16,7 +18,8 @@ import org.jetbrains.annotations.ApiStatus;
 import java.util.List;
 import java.util.Map;
 
-public final class TesseractGuiGraphics implements BlitGuiGraphics, FillGuiGraphics, StringGuiGraphics
+// TODO move to Tesseract
+public final class TesseractGuiGraphics implements BlitGuiGraphics, FillGuiGraphics, StringGuiGraphics, TooltipGuiGraphics
 {
 	private final TesseractGuiGraphics parent;
 	private final GuiGraphics          vanilla;
@@ -60,6 +63,18 @@ public final class TesseractGuiGraphics implements BlitGuiGraphics, FillGuiGraph
 	public GuiGraphics vanilla()
 	{
 		return vanilla;
+	}
+	
+	@Override
+	public int guiWidth()
+	{
+		return vanilla.guiWidth();
+	}
+	
+	@Override
+	public int guiHeight()
+	{
+		return vanilla.guiHeight();
 	}
 	
 	public PoseStack pose()
@@ -269,5 +284,26 @@ public final class TesseractGuiGraphics implements BlitGuiGraphics, FillGuiGraph
 	public int drawString(FormattedCharSequence text, float x, float y, boolean dropShadow)
 	{
 		return vanilla.drawString(font, text, x, y, this.getColorARGB(), dropShadow);
+	}
+	
+	@ApiStatus.Internal
+	@Override
+	public void renderTooltipInternal(List<ClientTooltipComponent> lines, int x, int y, int width, int height, int backgroundTopColor, int backgroundBottomColor, int borderTopColor, int borderBottomColor)
+	{
+		TooltipRenderUtil.renderTooltipBackground(vanilla, x, y, width, height, 400, backgroundTopColor, backgroundBottomColor, borderTopColor, borderBottomColor);
+		
+		vanilla.pose().pushPose();
+		vanilla.pose().translate(0, 0, 400);
+		
+		int textY = y;
+		int lineIndex = 0;
+		for(var line : lines)
+		{
+			line.renderText(font, x, textY, vanilla.pose().last().pose(), vanilla.bufferSource());
+			textY += line.getHeight() + (lineIndex == 0 ? 2 : 0);
+			lineIndex++;
+		}
+		
+		vanilla.pose().popPose();
 	}
 }

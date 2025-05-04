@@ -1,7 +1,6 @@
 package net.swedz.little_big_redstone.gui.microchip.widget;
 
 import com.google.common.collect.Lists;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
@@ -13,6 +12,7 @@ import net.swedz.little_big_redstone.LBRComponents;
 import net.swedz.little_big_redstone.LBRItems;
 import net.swedz.little_big_redstone.LBRText;
 import net.swedz.little_big_redstone.LBRTooltips;
+import net.swedz.little_big_redstone.client.model.logic.LogicBakingModelData;
 import net.swedz.little_big_redstone.gui.microchip.MicrochipScreen;
 import net.swedz.little_big_redstone.gui.microchip.logic.LogicRenderer;
 import net.swedz.little_big_redstone.gui.microchip.logic.LogicRenderers;
@@ -50,7 +50,16 @@ public final class MicrochipWidgetRenderer
 					lines.add(Component.empty());
 					lines.add(LBRText.LOGIC_CONFIG_TOOLTIP_CLICK_TO_OPEN.text().withStyle(LBRTooltips.DEFAULT_STYLE));
 				}
-				graphics.vanilla().renderComponentTooltip(Minecraft.getInstance().font, lines, mouseX, mouseY);
+				
+				var colorSet = LogicBakingModelData.get(component).getColorSet(component, widget.color());
+				int backgroundColor = colorSet.background();
+				int borderColor = colorSet.foreground();
+				graphics.renderTooltip(
+						lines,
+						widget.x + widget.microchip().size().scale(widget.microchip().size().bounds().width()) + 10 + 4,
+						widget.y + 4,
+						backgroundColor, backgroundColor, borderColor, borderColor
+				);
 			}
 		}
 	}
