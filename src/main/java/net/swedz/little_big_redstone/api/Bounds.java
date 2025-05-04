@@ -37,6 +37,28 @@ public record Bounds(int minX, int minY, int width, int height)
 	}
 	
 	/**
+	 * Gets the x coordinate relative to the origin x of this bounds.
+	 *
+	 * @param x the x coordinate to compare to
+	 * @return the relative x coordinate
+	 */
+	public int relativeX(int x)
+	{
+		return x - minX;
+	}
+	
+	/**
+	 * Gets the y coordinate relative to the origin y of this bounds.
+	 *
+	 * @param y the y coordinate to compare to
+	 * @return the relative y coordinate
+	 */
+	public int relativeY(int y)
+	{
+		return y - minY;
+	}
+	
+	/**
 	 * Checks if the position is within the bounds.
 	 *
 	 * @param x the x coordinate
@@ -88,6 +110,18 @@ public record Bounds(int minX, int minY, int width, int height)
 	public Bounds normalize()
 	{
 		return new Bounds(0, 0, width, height);
+	}
+	
+	/**
+	 * Creates a new bounds instance with the origin x and y of this bounds plus the input x and y.
+	 *
+	 * @param x the x to move the bounds by
+	 * @param y the y to move the bounds by
+	 * @return the moved bounds
+	 */
+	public Bounds move(int x, int y)
+	{
+		return new Bounds(minX + x, minY + y, width, height);
 	}
 	
 	/**
