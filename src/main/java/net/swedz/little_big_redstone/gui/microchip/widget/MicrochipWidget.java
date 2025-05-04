@@ -200,7 +200,7 @@ public final class MicrochipWidget implements GuiEventListener, Renderable, Narr
 			microchip.markDirty();
 			wires.rebuildPaths();
 			menu.setCarried(logic.toStack());
-			new PlaceTakeMicrochipLogicPacket(menu.containerId, x, y, false).sendToServer();
+			new PlaceTakeMicrochipLogicPacket(menu.containerId, x, y, false, true).sendToServer();
 			return true;
 		}
 		
@@ -244,8 +244,9 @@ public final class MicrochipWidget implements GuiEventListener, Renderable, Narr
 	{
 		var menu = this.menu();
 		var carried = menu.getCarried();
+		var player = screen.getMinecraft().player;
 		
-		if(button == InputConstants.MOUSE_BUTTON_LEFT &&
+		if((button == InputConstants.MOUSE_BUTTON_LEFT || button == InputConstants.MOUSE_BUTTON_RIGHT) &&
 		   carried.has(LBRComponents.LOGIC) &&
 		   context.shouldInteractBoard())
 		{
@@ -258,8 +259,11 @@ public final class MicrochipWidget implements GuiEventListener, Renderable, Narr
 			{
 				microchip.markDirty();
 				wires.rebuildPaths();
-				carried.consume(1, screen.getMinecraft().player);
-				new PlaceTakeMicrochipLogicPacket(menu.containerId, placeX, placeY, true).sendToServer();
+				if(!player.hasInfiniteMaterials() || button == InputConstants.MOUSE_BUTTON_LEFT)
+				{
+					carried.shrink(1);
+				}
+				new PlaceTakeMicrochipLogicPacket(menu.containerId, placeX, placeY, true, button == InputConstants.MOUSE_BUTTON_LEFT).sendToServer();
 				return true;
 			}
 		}

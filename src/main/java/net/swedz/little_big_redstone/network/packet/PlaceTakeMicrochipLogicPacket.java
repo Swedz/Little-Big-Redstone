@@ -13,13 +13,16 @@ import net.swedz.little_big_redstone.gui.microchip.MicrochipMenu;
 import net.swedz.little_big_redstone.network.LBRCustomPacket;
 import net.swedz.tesseract.neoforge.packet.PacketContext;
 
-public record PlaceTakeMicrochipLogicPacket(int containerId, int x, int y, boolean place) implements LBRCustomPacket
+public record PlaceTakeMicrochipLogicPacket(
+		int containerId, int x, int y, boolean place, boolean leftClick
+) implements LBRCustomPacket
 {
 	public static final StreamCodec<ByteBuf, PlaceTakeMicrochipLogicPacket> STREAM_CODEC = StreamCodec.composite(
 			ByteBufCodecs.VAR_INT, PlaceTakeMicrochipLogicPacket::containerId,
 			ByteBufCodecs.VAR_INT, PlaceTakeMicrochipLogicPacket::x,
 			ByteBufCodecs.VAR_INT, PlaceTakeMicrochipLogicPacket::y,
 			ByteBufCodecs.BOOL, PlaceTakeMicrochipLogicPacket::place,
+			ByteBufCodecs.BOOL, PlaceTakeMicrochipLogicPacket::leftClick,
 			PlaceTakeMicrochipLogicPacket::new
 	);
 	
@@ -46,7 +49,10 @@ public record PlaceTakeMicrochipLogicPacket(int containerId, int x, int y, boole
 					{
 						microchip.components().updateValidity();
 						microchip.markDirty();
-						heldItem.consume(1, player);
+						if(!player.hasInfiniteMaterials() || leftClick)
+						{
+							heldItem.shrink(1);
+						}
 					}
 					else
 					{
