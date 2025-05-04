@@ -96,7 +96,10 @@ public final class MicrochipWidgetRenderer
 		
 		if(widget.context().hasLogic())
 		{
+			graphics = graphics.inner();
+			graphics.enableBatching();
 			this.renderLogic(graphics, widget.context().logic());
+			graphics.end();
 		}
 	}
 	
@@ -142,8 +145,8 @@ public final class MicrochipWidgetRenderer
 		this.renderLogicGridSnappingOverlay(graphics, mouseX, mouseY, partialTicks);
 		
 		graphics.enableBatching();
-		this.renderLogic(graphics, mouseX, mouseY, partialTicks);
 		widget.wires.renderWires(graphics, mouseX, mouseY, partialTicks);
+		this.renderLogic(graphics, mouseX, mouseY, partialTicks);
 		graphics.drawBatches();
 		
 		graphics.pose().popPose();

@@ -80,9 +80,11 @@ public final class MicrochipWidgetWires
 			this.renderWire(graphics, wire, false, mouseX, mouseY, partialTicks);
 		}
 		
+		graphics = graphics.inner();
+		graphics.enableBatching();
 		for(var wire : widget.context().topLayerWires())
 		{
-			this.renderWire(graphics, wire, !widget.hasSelectedPort() && widget.context().wire() == wire, mouseX, mouseY, partialTicks);
+			this.renderWire(graphics, wire, !widget.hasSelectedPort() && (widget.context().wire() == null || widget.context().wire() == wire), mouseX, mouseY, partialTicks);
 		}
 		
 		if(widget.hasSelectedPort() &&
@@ -92,6 +94,7 @@ public final class MicrochipWidgetWires
 			var selectedPort = widget.getSelectedPort();
 			this.renderWire(graphics, selectedPort.entry(), mouseX, mouseY, selectedPort.index(), partialTicks);
 		}
+		graphics.end();
 	}
 	
 	private void renderWire(TesseractGuiGraphics graphics, Wire wire, boolean hovered, int mouseX, int mouseY, float partialTicks)
