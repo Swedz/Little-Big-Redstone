@@ -66,7 +66,7 @@ public record PlaceTakeMicrochipLogicPacket(int containerId, int x, int y, boole
 					if(component != null)
 					{
 						int wiresPopped = components.remove(component);
-						if(wiresPopped > 0)
+						if(wiresPopped > 0 && !player.hasInfiniteMaterials())
 						{
 							ItemHandlerHelper.giveItemToPlayer(player, new ItemStack(LBRItems.REDSTONE_BIT, wiresPopped));
 						}
