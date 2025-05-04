@@ -1,12 +1,15 @@
 package net.swedz.little_big_redstone.gui.microchip.widget;
 
 import com.google.common.collect.Lists;
+import com.mojang.blaze3d.vertex.DefaultVertexFormat;
+import com.mojang.blaze3d.vertex.VertexFormat;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.Style;
 import net.minecraft.resources.ResourceLocation;
 import net.swedz.little_big_redstone.LBR;
+import net.swedz.little_big_redstone.LBRClientShaders;
 import net.swedz.little_big_redstone.LBRColors;
 import net.swedz.little_big_redstone.LBRComponents;
 import net.swedz.little_big_redstone.LBRItems;
@@ -125,12 +128,16 @@ public final class MicrochipWidgetRenderer
 			int logicX = MicrochipScreen.getGridSnappedCoord(boardX - component.size().centerX() + 8);
 			int logicY = MicrochipScreen.getGridSnappedCoord(boardY - component.size().centerY() + 8);
 			
-			graphics.setColor(1f, 1f, 1f, MicrochipScreen.getPulsingAlpha(partialTicks));
-			graphics.fill(0, logicY, size.bounds().width(), logicY + 1);
-			graphics.fill(0, logicY + component.size().heightPixels() - 1, size.bounds().width(), logicY + component.size().heightPixels());
-			graphics.fill(logicX, 0, logicX + 1, size.bounds().height());
-			graphics.fill(logicX + component.size().widthPixels() - 1, 0, logicX + component.size().widthPixels(), size.bounds().height());
+			graphics.enableBatching();
 			graphics.resetColor();
+			graphics.setTexture(LBR.id("textures/gui/container/microchip/grid_snapping_overlay.png"));
+			graphics.setTextureShader(LBRClientShaders::microchipGridSnappingOverlay, VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_COLOR);
+			graphics.blit(0, logicY, 0, logicY, size.bounds().width(), 1, 16, 16);
+			graphics.blit(0, logicY + component.size().heightPixels() - 1, 0, logicY + component.size().heightPixels() - 1, size.bounds().width(), 1, 16, 16);
+			graphics.blit(logicX, 0, logicX, 0, 1, size.bounds().height(), 16, 16);
+			graphics.blit(logicX + component.size().widthPixels() - 1, 0, logicX + component.size().widthPixels() - 1, 0, 1, size.bounds().height(), 16, 16);
+			graphics.resetTextureShader();
+			graphics.drawBatches();
 		}
 	}
 	

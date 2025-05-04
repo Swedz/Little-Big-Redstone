@@ -1,6 +1,5 @@
 package net.swedz.little_big_redstone.gui.microchip;
 
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
@@ -23,15 +22,6 @@ public final class MicrochipScreen extends AbstractContainerScreen<MicrochipMenu
 	public static int getGridSnappedCoord(int coord)
 	{
 		return (coord / 16) * 16;
-	}
-	
-	// TODO replace this with a shader
-	public static float getPulsingAlpha(float partialTicks)
-	{
-		float speed = 8;
-		float ticks = Minecraft.getInstance().level.getGameTime() + partialTicks;
-		float interpolate = ((float) Math.sin(Math.toRadians((ticks * speed) % 360f)) + 3f) / 4f;
-		return interpolate / 2f;
 	}
 	
 	private MicrochipWidget microchipWidget;
