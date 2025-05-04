@@ -33,13 +33,14 @@ public final class MicrochipWidgetWires
 		this.wireSize = 2;
 		this.wirePadding = 1;
 		this.wirePortPadding = 3;
-		int componentMargin = wirePortPadding + 1;
+		int boardPadding = wirePortPadding * 2;
+		int componentPadding = wirePortPadding + 1;
 		this.pathing = new WirePathing(
 				widget.microchip(),
-				wirePortPadding * 2,
+				boardPadding,
 				(b) -> new Bounds(
-						b.minX() - componentMargin, b.minY() - componentMargin,
-						b.width() + (componentMargin * 2) - 1, b.height() + (componentMargin * 2) - 1
+						b.minX() - componentPadding, b.minY() - componentPadding,
+						b.width() + (componentPadding * 2) - 1, b.height() + (componentPadding * 2) - 1
 				)
 		);
 	}

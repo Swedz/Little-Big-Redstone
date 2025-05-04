@@ -2,8 +2,7 @@ package net.swedz.little_big_redstone.gui.microchip.wire;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
-import com.google.common.collect.Queues;
-import com.google.common.collect.Sets;
+import it.unimi.dsi.fastutil.objects.ObjectHeapPriorityQueue;
 import net.swedz.little_big_redstone.api.Bounds;
 import net.swedz.little_big_redstone.microchip.Microchip;
 import net.swedz.little_big_redstone.microchip.wire.Wire;
@@ -12,8 +11,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-import java.util.PriorityQueue;
-import java.util.Set;
 import java.util.function.Function;
 
 public final class WirePathing
@@ -83,60 +80,77 @@ public final class WirePathing
 	 */
 	private static List<Position> path(int startX, int startY, int endX, int endY, Microchip microchip, int areaPaddingXY, Function<Bounds, Bounds> componentBoundMutator)
 	{
-		var start = new Node(startX, startY);
-		var end = new Node(endX, endY);
-		var bounds = microchip.size().bounds().normalize().grow(areaPaddingXY, areaPaddingXY);
+		var innerBounds = microchip.size().bounds().normalize();
+		var bounds = innerBounds.grow(areaPaddingXY, areaPaddingXY);
+		var nodes = new NodeGrid(bounds);
 		
-		List<Bounds> avoidAreas = Lists.newArrayList();
+		var start = nodes.get(startX, startY);
+		var end = nodes.get(endX, endY);
+		
+		int heavyAvoidWeight = innerBounds.width() / 2;
+		var avoidAreas = new AvoidGrid(bounds);
+		for(int x = bounds.minX(); x <= bounds.maxX(); x++)
+		{
+			for(int y = bounds.minY(); y <= bounds.maxY(); y++)
+			{
+				if(!innerBounds.contains(x, y))
+				{
+					avoidAreas.setWeight(x, y, heavyAvoidWeight);
+				}
+			}
+		}
 		for(var entry : microchip.components())
 		{
-			avoidAreas.add(componentBoundMutator.apply(entry.toBounds()));
+			var entryBounds = componentBoundMutator.apply(entry.toBounds());
+			for(int x = entryBounds.minX(); x <= entryBounds.maxX(); x++)
+			{
+				for(int y = entryBounds.minY(); y <= entryBounds.maxY(); y++)
+				{
+					avoidAreas.setWeight(x, y, heavyAvoidWeight);
+				}
+			}
 		}
 		
-		PriorityQueue<Node> open = Queues.newPriorityQueue();
-		Set<Node> closed = Sets.newHashSet();
+		ObjectHeapPriorityQueue<Node> open = new ObjectHeapPriorityQueue<>();
 		
-		open.add(start);
+		open.enqueue(start);
+		start.open = true;
 		
 		while(!open.isEmpty())
 		{
-			var current = open.poll();
+			var current = open.dequeue();
+			if(current.closed)
+			{
+				continue;
+			}
+			current.open = false;
 			
 			if(current.equals(end))
 			{
 				return retrace(current);
 			}
 			
-			closed.add(current);
+			current.closed = true;
 			
-			for(var neighbor : neighbors(current, bounds))
+			for(var neighbor : neighbors(nodes, current))
 			{
-				if(closed.contains(neighbor))
+				if(neighbor == null || neighbor.closed)
 				{
 					continue;
 				}
 				
-				int g = current.g + 1;
-				for(var area : avoidAreas)
-				{
-					if(area.contains(neighbor.x, neighbor.y))
-					{
-						g += 1000;
-						break;
-					}
-				}
+				int g = current.g + 1 + avoidAreas.getWeight(neighbor.x, neighbor.y);
 				
-				boolean openContains = open.contains(neighbor);
-				if(!openContains || g < neighbor.g)
+				boolean notOpen = !neighbor.open;
+				boolean betterPath = g < neighbor.g;
+				if(notOpen || betterPath)
 				{
 					neighbor.g = g;
 					neighbor.h = neighbor.distanceTo(end);
 					neighbor.parent = current;
 					
-					if(!openContains)
-					{
-						open.add(neighbor);
-					}
+					open.enqueue(neighbor);
+					neighbor.open = true;
 				}
 			}
 		}
@@ -144,22 +158,20 @@ public final class WirePathing
 		return List.of();
 	}
 	
-	private static List<Node> neighbors(Node current, Bounds bounds)
+	private static final int[][] NEIGHBOR_DIRECTIONS = {{-1, 0}, {0, 1}, {1, 0}, {0, -1}};
+	
+	private static Node[] neighbors(NodeGrid nodes, Node current)
 	{
-		List<Node> neighbors = Lists.newArrayList();
-		int[][] directions = {{-1, 0}, {0, 1}, {1, 0}, {0, -1}};
-		for(int[] direction : directions)
+		Node[] neighbors = new Node[4];
+		int index = 0;
+		for(int[] direction : NEIGHBOR_DIRECTIONS)
 		{
 			int x = current.x + direction[0];
 			int y = current.y + direction[1];
-			var neighbor = new Node(x, y);
-			if(!bounds.contains(x, y))
-			{
-				continue;
-			}
-			neighbors.add(neighbor);
+			neighbors[index] = nodes.get(x, y);
+			index++;
 		}
-		return Collections.unmodifiableList(neighbors);
+		return neighbors;
 	}
 	
 	private static List<Position> retrace(Node end)
@@ -185,7 +197,8 @@ public final class WirePathing
 		
 		private int g, h;
 		
-		private Node parent;
+		private Node    parent;
+		private boolean open, closed;
 		
 		public Node(int x, int y)
 		{
@@ -233,6 +246,73 @@ public final class WirePathing
 		public int hashCode()
 		{
 			return Objects.hash(x, y);
+		}
+	}
+	
+	private static final class NodeGrid
+	{
+		private final Bounds bounds;
+		
+		private final Node[] nodes;
+		
+		public NodeGrid(Bounds bounds)
+		{
+			this.bounds = bounds;
+			nodes = new Node[bounds.width() * bounds.height()];
+		}
+		
+		public int indexOf(int x, int y)
+		{
+			return bounds.relativeX(x) + bounds.relativeY(y) * bounds.width();
+		}
+		
+		public Node get(int x, int y)
+		{
+			int index = this.indexOf(x, y);
+			if(index < 0 || index >= nodes.length)
+			{
+				return null;
+			}
+			var node = nodes[index];
+			if(node == null)
+			{
+				node = new Node(x, y);
+				nodes[index] = node;
+			}
+			return node;
+		}
+	}
+	
+	private static final class AvoidGrid
+	{
+		private final Bounds bounds;
+		
+		private final int[] avoids;
+		
+		public AvoidGrid(Bounds bounds)
+		{
+			this.bounds = bounds;
+			avoids = new int[bounds.width() * bounds.height()];
+		}
+		
+		public int indexOf(int x, int y)
+		{
+			return bounds.relativeX(x) + bounds.relativeY(y) * bounds.width();
+		}
+		
+		public void setWeight(int x, int y, int weight)
+		{
+			avoids[this.indexOf(x, y)] = weight;
+		}
+		
+		public int getWeight(int x, int y)
+		{
+			int index = this.indexOf(x, y);
+			if(index < 0 || index >= avoids.length)
+			{
+				return 0;
+			}
+			return avoids[index];
 		}
 	}
 }
