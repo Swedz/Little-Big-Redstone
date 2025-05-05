@@ -25,4 +25,10 @@ public record WirePort(int slot, int index) implements PortReference
 	{
 		this(port.slot(), port.index());
 	}
+	
+	@Override
+	public String toString()
+	{
+		return slot + "#" + index;
+	}
 }

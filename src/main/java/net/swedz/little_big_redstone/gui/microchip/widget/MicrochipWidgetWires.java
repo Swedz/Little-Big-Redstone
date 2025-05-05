@@ -3,6 +3,7 @@ package net.swedz.little_big_redstone.gui.microchip.widget;
 import com.google.common.collect.Lists;
 import com.mojang.blaze3d.vertex.DefaultVertexFormat;
 import com.mojang.blaze3d.vertex.VertexFormat;
+import com.mojang.datafixers.util.Either;
 import net.swedz.little_big_redstone.LBR;
 import net.swedz.little_big_redstone.LBRClientShaders;
 import net.swedz.little_big_redstone.LBRColors;
@@ -43,6 +44,11 @@ public final class MicrochipWidgetWires
 						b.width() + (componentPadding * 2) - 1, b.height() + (componentPadding * 2) - 1
 				)
 		);
+	}
+	
+	public WirePathing pathing()
+	{
+		return pathing;
 	}
 	
 	public void rebuildPaths()
@@ -104,37 +110,57 @@ public final class MicrochipWidgetWires
 		this.renderWire(graphics, wire, hovered, outputLogic, inputLogic, wire.output().index(), wire.input().index(), partialTicks);
 	}
 	
-	private int getWireStartX(LogicEntry outputLogic)
+	public static int getWireStartX(int x, LogicComponent<?, ?> component)
 	{
-		return outputLogic.x() + outputLogic.component().size().widthPixels();
+		return x + component.size().widthPixels();
 	}
 	
-	private int getWireStartY(LogicEntry outputLogic, int outputIndex)
+	public static int getWireStartX(LogicEntry outputLogic)
 	{
-		return outputLogic.component().size().portTopLeftCornerY(outputLogic.y(), false, outputIndex, outputLogic.component().outputs()) + 8 - 1;
+		return getWireStartX(outputLogic.x(), outputLogic.component());
 	}
 	
-	private int getWireEndX(LogicEntry inputLogic)
+	public static int getWireStartY(int y, LogicComponent<?, ?> component, int outputIndex)
 	{
-		return inputLogic.x();
+		return component.size().portTopLeftCornerY(y, false, outputIndex, component.outputs()) + 8 - 1;
 	}
 	
-	private int getWireEndY(LogicEntry inputLogic, int inputIndex)
+	public static int getWireStartY(LogicEntry outputLogic, int outputIndex)
 	{
-		return inputLogic.component().size().portTopLeftCornerY(inputLogic.y(), true, inputIndex, inputLogic.component().inputs()) + 8 - 1;
+		return getWireStartY(outputLogic.y(), outputLogic.component(), outputIndex);
 	}
 	
-	private int getWireColor(LogicEntry outputLogic)
+	public static int getWireEndX(int x)
+	{
+		return x;
+	}
+	
+	public static int getWireEndX(LogicEntry inputLogic)
+	{
+		return getWireEndX(inputLogic.x());
+	}
+	
+	public static int getWireEndY(int y, LogicComponent<?, ?> component, int inputIndex)
+	{
+		return component.size().portTopLeftCornerY(y, true, inputIndex, component.inputs()) + 8 - 1;
+	}
+	
+	public static int getWireEndY(LogicEntry inputLogic, int inputIndex)
+	{
+		return getWireEndY(inputLogic.y(), inputLogic.component(), inputIndex);
+	}
+	
+	public int getWireColor(LogicEntry outputLogic)
 	{
 		return LBRColors.componentForeground(((LogicComponent<?, ?>) outputLogic.component()).color().orElse(widget.color()));
 	}
 	
 	private void renderWire(TesseractGuiGraphics graphics, Wire wire, boolean hovered, LogicEntry outputLogic, LogicEntry inputLogic, int outputIndex, int inputIndex, float partialTicks)
 	{
-		int startX = this.getWireStartX(outputLogic);
-		int startY = this.getWireStartY(outputLogic, outputIndex);
-		int endX = this.getWireEndX(inputLogic);
-		int endY = this.getWireEndY(inputLogic, inputIndex);
+		int startX = getWireStartX(outputLogic);
+		int startY = getWireStartY(outputLogic, outputIndex);
+		int endX = getWireEndX(inputLogic);
+		int endY = getWireEndY(inputLogic, inputIndex);
 		
 		boolean powered = outputLogic.component().output(outputIndex);
 		
@@ -145,16 +171,16 @@ public final class MicrochipWidgetWires
 	
 	private void renderWire(TesseractGuiGraphics graphics, LogicEntry outputLogic, int mouseX, int mouseY, int outputIndex, float partialTicks)
 	{
-		int startX = this.getWireStartX(outputLogic);
-		int startY = this.getWireStartY(outputLogic, outputIndex);
+		int startX = getWireStartX(outputLogic);
+		int startY = getWireStartY(outputLogic, outputIndex);
 		int endX;
 		int endY;
 		boolean usePadding;
 		if(widget.context().shouldInteractPort() && widget.context().isPortInput() && widget.context().isPortEmpty())
 		{
 			var inputLogic = widget.context().logic();
-			endX = this.getWireEndX(inputLogic);
-			endY = this.getWireEndY(inputLogic, widget.context().port().index());
+			endX = getWireEndX(inputLogic);
+			endY = getWireEndY(inputLogic, widget.context().port().index());
 			usePadding = true;
 		}
 		else
@@ -168,14 +194,22 @@ public final class MicrochipWidgetWires
 		
 		int argb = this.getWireColor(outputLogic);
 		
-		this.renderWire(graphics, null, true, startX, startY, endX, endY, usePadding, powered, argb, partialTicks);
+		this.renderWire(graphics, Either.left(null), true, startX, startY, endX, endY, usePadding, powered, argb, partialTicks);
 	}
 	
 	private void renderWire(TesseractGuiGraphics graphics, Wire wire, boolean hovered, int startX, int startY, int endX, int endY, boolean usePadding, boolean powered, int argb, float partialTicks)
 	{
+		this.renderWire(graphics, Either.left(wire), hovered, startX, startY, endX, endY, usePadding, powered, argb, partialTicks);
+	}
+	
+	public void renderWire(TesseractGuiGraphics graphics, Either<Wire, List<Bounds>> eitherWireOrBounds, boolean hovered, int startX, int startY, int endX, int endY, boolean usePadding, boolean powered, int argb, float partialTicks)
+	{
 		int portPadding = usePadding ? wirePortPadding : 0;
 		
-		var path = pathing.get(wire, startX + portPadding, startY, endX - portPadding - wireSize, endY);
+		var path = eitherWireOrBounds.map(
+				(wire) -> pathing.get(wire, startX + portPadding, startY, endX - portPadding - wireSize, endY),
+				(avoidBounds) -> pathing.build(startX + portPadding, startY, endX - portPadding - wireSize, endY, avoidBounds)
+		);
 		
 		if(hovered)
 		{

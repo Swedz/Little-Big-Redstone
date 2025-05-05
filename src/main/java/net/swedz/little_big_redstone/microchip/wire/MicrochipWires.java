@@ -180,18 +180,18 @@ public final class MicrochipWires implements Iterable<Wire>
 		return this.remove(new Wire(outputSlot, outputPort, inputSlot, inputPort));
 	}
 	
-	public int removeAllOutputs(int outputSlot)
+	public List<Wire> removeAllOutputs(int outputSlot)
 	{
 		var wires = this.getByOutputSlot(outputSlot);
 		wires.forEach(this::remove);
-		return wires.size();
+		return wires;
 	}
 	
-	public int removeAllInputs(int inputSlot)
+	public List<Wire> removeAllInputs(int inputSlot)
 	{
 		var wires = this.getByInputSlot(inputSlot);
 		wires.forEach(this::remove);
-		return wires.size();
+		return wires;
 	}
 	
 	public int cleanup(LogicEntry entry)

@@ -69,7 +69,7 @@ public final class MicrochipWidgetRenderer
 	
 	private void renderLogic(TesseractGuiGraphics graphics, LogicEntry entry)
 	{
-		var context = LogicRenderer.Context.create(widget.menu().color(), entry.component(), false, widget.hasSelectedPort(), widget.menu().getCarried().is(LBRItems.REDSTONE_BIT.asItem()));
+		var context = LogicRenderer.Context.create(widget.menu().color(), entry.component(), true, widget.hasSelectedPort(), widget.menu().getCarried().is(LBRItems.REDSTONE_BIT.asItem()));
 		LogicRenderers.render(context, graphics, entry.component(), entry.x(), entry.y());
 		
 		if(widget.microchip().isDebug())
@@ -161,7 +161,7 @@ public final class MicrochipWidgetRenderer
 		this.renderLogicGridSnappingOverlay(graphics, mouseX, mouseY, partialTicks);
 		
 		graphics.enableBatching();
-		widget.wires.renderWires(graphics, mouseX, mouseY, partialTicks);
+		widget.wireRenderer().renderWires(graphics, mouseX, mouseY, partialTicks);
 		this.renderLogic(graphics, mouseX, mouseY, partialTicks);
 		graphics.drawBatches();
 		

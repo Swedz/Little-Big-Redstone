@@ -30,8 +30,8 @@ public final class MicrochipWidget implements GuiEventListener, Renderable, Narr
 	private final MicrochipScreen screen;
 	private final Microchip       microchip;
 	
-	final MicrochipWidgetRenderer renderer;
-	final MicrochipWidgetWires    wires;
+	private final MicrochipWidgetRenderer renderer;
+	private final MicrochipWidgetWires    wires;
 	
 	private MicrochipWidgetContext context = MicrochipWidgetContext.NOTHING;
 	
@@ -65,6 +65,11 @@ public final class MicrochipWidget implements GuiEventListener, Renderable, Narr
 	public Microchip microchip()
 	{
 		return microchip;
+	}
+	
+	public MicrochipWidgetWires wireRenderer()
+	{
+		return wires;
 	}
 	
 	public MicrochipWidgetContext context()
@@ -197,13 +202,14 @@ public final class MicrochipWidget implements GuiEventListener, Renderable, Narr
 		   context.shouldInteractLogic() &&
 		   carried.isEmpty())
 		{
-			microchip.components().remove(logic);
+			var wiresPopped = microchip.components().remove(logic);
 			microchip.markDirty();
 			wires.rebuildPaths();
 			var stack = logic.toStack();
 			if(!shift || !menu.moveItemStackTo(stack, 0, 36, true))
 			{
 				menu.setCarried(stack);
+				menu.setCarriedWires(logic.slot(), wiresPopped);
 			}
 			new PlaceTakeMicrochipLogicPacket(menu.containerId, x, y, false, true, shift).sendToServer();
 			return true;
@@ -261,17 +267,21 @@ public final class MicrochipWidget implements GuiEventListener, Renderable, Narr
 			int placeX = Screen.hasControlDown() ? MicrochipScreen.getGridSnappedCoord(x - component.size().centerX() + 8) : component.size().topLeftCornerX(x);
 			int placeY = Screen.hasControlDown() ? MicrochipScreen.getGridSnappedCoord(y - component.size().centerY() + 8) : component.size().topLeftCornerY(y);
 			
-			if(microchip.size().bounds().normalize().contains(component.size().toBounds(placeX, placeY)) &&
-			   microchip.components().add(placeX, placeY, component) != null)
+			if(microchip.size().bounds().normalize().contains(component.size().toBounds(placeX, placeY)))
 			{
-				microchip.markDirty();
-				wires.rebuildPaths();
-				if(!player.hasInfiniteMaterials() || leftClick)
+				var logic = microchip.components().add(placeX, placeY, component);
+				if(logic != null)
 				{
-					carried.shrink(1);
+					menu.placeCarriedWires(logic.slot());
+					microchip.markDirty();
+					wires.rebuildPaths();
+					if(!player.hasInfiniteMaterials() || leftClick)
+					{
+						carried.shrink(1);
+					}
+					new PlaceTakeMicrochipLogicPacket(menu.containerId, placeX, placeY, true, leftClick, Screen.hasShiftDown()).sendToServer();
+					return true;
 				}
-				new PlaceTakeMicrochipLogicPacket(menu.containerId, placeX, placeY, true, leftClick, Screen.hasShiftDown()).sendToServer();
-				return true;
 			}
 		}
 		

@@ -41,7 +41,7 @@ public abstract class LogicRenderer<L extends LogicComponent>
 	
 	protected void renderAllPorts(Context context, TesseractGuiGraphics graphics, int x, int y, L component, float red, float green, float blue)
 	{
-		if(!context.isCarried())
+		if(context.showPorts())
 		{
 			var size = component.size();
 			
@@ -111,13 +111,13 @@ public abstract class LogicRenderer<L extends LogicComponent>
 	public record Context(
 			LogicModelColorSet colorPalette,
 			Function<String, ResourceLocation> textureGetter,
-			boolean isCarried, boolean hasSelectedPort, boolean isCarryingWire
+			boolean showPorts, boolean hasSelectedPort, boolean isCarryingWire
 	)
 	{
-		public static Context create(DyeColor menuColor, LogicComponent<?, ?> component, boolean isCarried, boolean hasSelectedPort, boolean isCarryingWire)
+		public static Context create(DyeColor menuColor, LogicComponent<?, ?> component, boolean showPorts, boolean hasSelectedPort, boolean isCarryingWire)
 		{
 			var modelData = LogicBakingModelData.get(component);
-			return new Context(modelData.getColorSet(component, menuColor), modelData::getBoardTextureLocation, isCarried, hasSelectedPort, isCarryingWire);
+			return new Context(modelData.getColorSet(component, menuColor), modelData::getBoardTextureLocation, showPorts, hasSelectedPort, isCarryingWire);
 		}
 		
 		public ResourceLocation getTexture(String key)

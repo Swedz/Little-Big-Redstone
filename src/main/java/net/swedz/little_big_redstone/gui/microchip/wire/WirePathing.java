@@ -30,6 +30,11 @@ public final class WirePathing
 		this.componentBoundMutator = componentBoundMutator;
 	}
 	
+	public Bounds mutateComponentBound(Bounds bounds)
+	{
+		return componentBoundMutator.apply(bounds);
+	}
+	
 	public List<Position> get(Wire wire, int startX, int startY, int endX, int endY)
 	{
 		return wire == null ?
@@ -37,9 +42,19 @@ public final class WirePathing
 				paths.computeIfAbsent(wire, (__) -> this.build(startX, startY, endX, endY));
 	}
 	
-	private List<Position> build(int startX, int startY, int endX, int endY)
+	public List<Position> build(int startX, int startY, int endX, int endY, List<Bounds> avoidBounds)
 	{
-		return path(startX, startY, endX, endY, microchip, areaPaddingXY, componentBoundMutator);
+		avoidBounds = Lists.newArrayList(avoidBounds);
+		for(var entry : microchip.components())
+		{
+			avoidBounds.add(this.mutateComponentBound(entry.toBounds()));
+		}
+		return path(startX, startY, endX, endY, microchip, areaPaddingXY, avoidBounds);
+	}
+	
+	public List<Position> build(int startX, int startY, int endX, int endY)
+	{
+		return this.build(startX, startY, endX, endY, List.of());
 	}
 	
 	public boolean contains(Wire wire, int x, int y, int wireSectionSize, int wireSectionPadding)
@@ -78,7 +93,7 @@ public final class WirePathing
 	 * @param componentBoundMutator the function used to create the bounds for components
 	 * @return the list of positions that construct the best path between the points
 	 */
-	private static List<Position> path(int startX, int startY, int endX, int endY, Microchip microchip, int areaPaddingXY, Function<Bounds, Bounds> componentBoundMutator)
+	private static List<Position> path(int startX, int startY, int endX, int endY, Microchip microchip, int areaPaddingXY, List<Bounds> avoidBounds)
 	{
 		var innerBounds = microchip.size().bounds().normalize();
 		var bounds = innerBounds.grow(areaPaddingXY, areaPaddingXY);
@@ -86,6 +101,11 @@ public final class WirePathing
 		
 		var start = nodes.get(startX, startY);
 		var end = nodes.get(endX, endY);
+		
+		if(start == null || end == null)
+		{
+			return List.of();
+		}
 		
 		int heavyAvoidWeight = innerBounds.width() / 2;
 		var avoidAreas = new AvoidGrid(bounds);
@@ -99,12 +119,11 @@ public final class WirePathing
 				}
 			}
 		}
-		for(var entry : microchip.components())
+		for(var avoidBoundsEntry : avoidBounds)
 		{
-			var entryBounds = componentBoundMutator.apply(entry.toBounds());
-			for(int x = entryBounds.minX(); x <= entryBounds.maxX(); x++)
+			for(int x = avoidBoundsEntry.minX(); x <= avoidBoundsEntry.maxX(); x++)
 			{
-				for(int y = entryBounds.minY(); y <= entryBounds.maxY(); y++)
+				for(int y = avoidBoundsEntry.minY(); y <= avoidBoundsEntry.maxY(); y++)
 				{
 					avoidAreas.setWeight(x, y, heavyAvoidWeight);
 				}
@@ -302,7 +321,12 @@ public final class WirePathing
 		
 		public void setWeight(int x, int y, int weight)
 		{
-			avoids[this.indexOf(x, y)] = weight;
+			int index = this.indexOf(x, y);
+			if(index < 0 || index >= avoids.length)
+			{
+				return;
+			}
+			avoids[index] = weight;
 		}
 		
 		public int getWeight(int x, int y)

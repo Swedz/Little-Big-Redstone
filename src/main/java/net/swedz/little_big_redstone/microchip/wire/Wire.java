@@ -24,4 +24,10 @@ public record Wire(WirePort output, WirePort input)
 	{
 		this(new WirePort(outputSlot, outputPort), new WirePort(inputSlot, inputPort));
 	}
+	
+	@Override
+	public String toString()
+	{
+		return output.toString() + " -> " + input.toString();
+	}
 }

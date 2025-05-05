@@ -10,7 +10,9 @@ import net.swedz.little_big_redstone.LBR;
 import net.swedz.little_big_redstone.microchip.LogicEntry;
 import net.swedz.little_big_redstone.microchip.LogicSelectedPort;
 import net.swedz.little_big_redstone.microchip.Microchip;
+import net.swedz.little_big_redstone.microchip.wire.Wire;
 
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -168,19 +170,20 @@ public final class LogicComponents implements Iterable<LogicEntry>
 		return null;
 	}
 	
-	public int remove(int slot)
+	public List<Wire> remove(int slot)
 	{
+		List<Wire> wiresRemoved = Lists.newArrayList();
 		var original = components.remove(slot);
-		int wiresRemoved = microchip.wires().removeAllOutputs(slot);
-		wiresRemoved += microchip.wires().removeAllInputs(slot);
+		wiresRemoved.addAll(microchip.wires().removeAllOutputs(slot));
+		wiresRemoved.addAll(microchip.wires().removeAllInputs(slot));
 		if(original.component().type() == LogicTypes.DEBUGGER)
 		{
 			debug = false;
 		}
-		return wiresRemoved;
+		return Collections.unmodifiableList(wiresRemoved);
 	}
 	
-	public int remove(LogicEntry entry)
+	public List<Wire> remove(LogicEntry entry)
 	{
 		return this.remove(entry.slot());
 	}

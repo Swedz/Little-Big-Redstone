@@ -45,14 +45,22 @@ public record PlaceTakeMicrochipLogicPacket(
 				if(heldItem.has(LBRComponents.LOGIC))
 				{
 					var component = heldItem.get(LBRComponents.LOGIC);
-					if(microchip.size().bounds().normalize().contains(component.size().toBounds(x, y)) &&
-					   components.add(x, y, component) != null)
+					if(microchip.size().bounds().normalize().contains(component.size().toBounds(x, y)))
 					{
-						microchip.components().updateValidity();
-						microchip.markDirty();
-						if(!player.hasInfiniteMaterials() || leftClick)
+						var logic = components.add(x, y, component);
+						if(logic != null)
 						{
-							heldItem.shrink(1);
+							microchip.components().updateValidity();
+							menu.placeCarriedWires(logic.slot());
+							microchip.markDirty();
+							if(!player.hasInfiniteMaterials() || leftClick)
+							{
+								heldItem.shrink(1);
+							}
+						}
+						else
+						{
+							LBR.LOGGER.warn("Received PlaceTakeLogicPacket from {} and failed to add the logic component, discarding", playerName);
 						}
 					}
 					else
@@ -69,20 +77,21 @@ public record PlaceTakeMicrochipLogicPacket(
 			{
 				if(heldItem.isEmpty())
 				{
-					var component = components.findAt(x, y);
-					if(component != null)
+					var logic = components.findAt(x, y);
+					if(logic != null)
 					{
-						int wiresPopped = components.remove(component);
-						if(wiresPopped > 0 && !player.hasInfiniteMaterials())
-						{
-							ItemHandlerHelper.giveItemToPlayer(player, new ItemStack(LBRItems.REDSTONE_BIT, wiresPopped));
-						}
-						microchip.markDirty();
-						var stack = component.toStack();
+						var wiresPopped = components.remove(logic);
+						var stack = logic.toStack();
 						if(!shift || !menu.moveItemStackTo(stack, 0, 36, true))
 						{
 							menu.setCarried(stack);
+							menu.setCarriedWires(logic.slot(), wiresPopped);
 						}
+						else if(!player.hasInfiniteMaterials() && !wiresPopped.isEmpty())
+						{
+							ItemHandlerHelper.giveItemToPlayer(player, new ItemStack(LBRItems.REDSTONE_BIT, wiresPopped.size()));
+						}
+						microchip.markDirty();
 					}
 					else
 					{

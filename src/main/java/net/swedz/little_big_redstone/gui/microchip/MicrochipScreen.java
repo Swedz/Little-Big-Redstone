@@ -1,5 +1,6 @@
 package net.swedz.little_big_redstone.gui.microchip;
 
+import com.mojang.datafixers.util.Either;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.Screen;
@@ -10,12 +11,18 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.item.ItemStack;
 import net.swedz.little_big_redstone.LBR;
+import net.swedz.little_big_redstone.LBRColors;
 import net.swedz.little_big_redstone.LBRComponents;
 import net.swedz.little_big_redstone.LBRItems;
+import net.swedz.little_big_redstone.api.Bounds;
 import net.swedz.little_big_redstone.gui.microchip.logic.LogicRenderer;
 import net.swedz.little_big_redstone.gui.microchip.logic.LogicRenderers;
 import net.swedz.little_big_redstone.gui.microchip.widget.MicrochipWidget;
+import net.swedz.little_big_redstone.gui.microchip.widget.MicrochipWidgetWires;
 import net.swedz.little_big_redstone.helper.guigraphics.TesseractGuiGraphics;
+import net.swedz.little_big_redstone.microchip.logic.LogicComponent;
+
+import java.util.List;
 
 public final class MicrochipScreen extends AbstractContainerScreen<MicrochipMenu>
 {
@@ -28,7 +35,7 @@ public final class MicrochipScreen extends AbstractContainerScreen<MicrochipMenu
 	
 	private MicrochipWidget microchipWidget;
 	
-	private float partialTick;
+	private float partialTicks;
 	
 	public MicrochipScreen(MicrochipMenu menu, Inventory playerInventory, Component title)
 	{
@@ -67,7 +74,8 @@ public final class MicrochipScreen extends AbstractContainerScreen<MicrochipMenu
 	@Override
 	public void renderFloatingItem(GuiGraphics vanilla, ItemStack stack, int x, int y, String text)
 	{
-		var size = menu.microchip().size();
+		var microchip = menu.microchip();
+		var size = microchip.size();
 		int mouseX = size.boardX(x + 8);
 		int mouseY = size.boardY(y + 8);
 		
@@ -76,17 +84,17 @@ public final class MicrochipScreen extends AbstractContainerScreen<MicrochipMenu
 			if(stack.has(LBRComponents.LOGIC))
 			{
 				var component = stack.get(LBRComponents.LOGIC);
-				int logicX = Screen.hasControlDown() ? getGridSnappedCoord(mouseX - size.bounds().minX() - component.size().centerX() + 8) + size.boardX(8) : component.size().topLeftCornerX(mouseX);
-				int logicY = Screen.hasControlDown() ? getGridSnappedCoord(mouseY - size.bounds().minY() - component.size().centerY() + 8) + size.boardY(8) : component.size().topLeftCornerY(mouseY);
-				var context = LogicRenderer.Context.create(menu.color(), component, true, microchipWidget.hasSelectedPort(), false);
+				var context = LogicRenderer.Context.create(menu.color(), component, menu.getCarriedWires() != null, microchipWidget.hasSelectedPort(), false);
 				
-				vanilla.pose().pushPose();
-				vanilla.pose().scale(size.scale(), size.scale(), size.scale());
 				var graphics = new TesseractGuiGraphics(vanilla);
-				graphics.enableBatching();
-				LogicRenderers.render(context, graphics, component, logicX, logicY);
-				graphics.drawBatches();
-				vanilla.pose().popPose();
+				
+				graphics.pose().pushPose();
+				graphics.pose().scale(size.scale(), size.scale(), size.scale());
+				
+				this.renderCarriedWires(graphics, mouseX, mouseY, context, component);
+				this.renderCarriedLogic(graphics, mouseX, mouseY, context, component);
+				
+				graphics.pose().popPose();
 				
 				return;
 			}
@@ -97,7 +105,7 @@ public final class MicrochipScreen extends AbstractContainerScreen<MicrochipMenu
 				if(!microchipWidget.context().hasPort())
 				{
 					// TODO convert this to a shader?
-					float gameTime = ((Minecraft.getInstance().level.getGameTime() % 24000L) + partialTick) / 24000f;
+					float gameTime = ((Minecraft.getInstance().level.getGameTime() % 24000L) + partialTicks) / 24000f;
 					float interval = 30;
 					float t = Mth.frac(gameTime * (24000f / interval));
 					float wave = (float) ((Math.sin(t * 6.28318f) + 1) / 2f);
@@ -114,6 +122,68 @@ public final class MicrochipScreen extends AbstractContainerScreen<MicrochipMenu
 		super.renderFloatingItem(vanilla, stack, x, y, text);
 	}
 	
+	private void renderCarriedWires(TesseractGuiGraphics graphics, int mouseX, int mouseY, LogicRenderer.Context context, LogicComponent<?, ?> component)
+	{
+		if(menu.getCarriedWires() != null)
+		{
+			var microchip = menu.microchip();
+			var size = microchip.size();
+			
+			int logicX = Screen.hasControlDown() ? getGridSnappedCoord(mouseX - size.bounds().minX() - component.size().centerX() + 8) : (component.size().topLeftCornerX(mouseX) - size.boardX(8));
+			int logicY = Screen.hasControlDown() ? getGridSnappedCoord(mouseY - size.bounds().minY() - component.size().centerY() + 8) : (component.size().topLeftCornerY(mouseY) - size.boardX(8));
+			
+			graphics.pose().pushPose();
+			graphics.pose().translate(size.boardX(8), size.boardY(8), 0);
+			graphics.enableBatching();
+			
+			for(var wire : menu.getCarriedWires())
+			{
+				boolean isOutput = wire.output().slot() == menu.getCarriedComponentSlot();
+				var outputLogic = isOutput ? null : microchip.components().get(wire.output().slot());
+				var outputLogicComponent = isOutput ? component : outputLogic.component();
+				int outputX = isOutput ? logicX : outputLogic.x();
+				int outputY = isOutput ? logicY : outputLogic.y();
+				
+				boolean isInput = wire.input().slot() == menu.getCarriedComponentSlot();
+				var inputLogic = isInput ? null : microchip.components().get(wire.input().slot());
+				var inputLogicComponent = isInput ? component : inputLogic.component();
+				int inputX = isInput ? logicX : inputLogic.x();
+				int inputY = isInput ? logicY : inputLogic.y();
+				
+				int startX = MicrochipWidgetWires.getWireStartX(outputX, outputLogicComponent);
+				int startY = MicrochipWidgetWires.getWireStartY(outputY, outputLogicComponent, wire.output().index());
+				int endX = MicrochipWidgetWires.getWireEndX(inputX);
+				int endY = MicrochipWidgetWires.getWireEndY(inputY, inputLogicComponent, wire.input().index());
+				
+				boolean powered = outputLogic != null && outputLogicComponent.output(wire.output().index());
+				
+				int argb = LBRColors.componentForeground(component.color().orElse(menu.color()));
+				
+				List<Bounds> avoidBounds = List.of(microchipWidget.wireRenderer().pathing().mutateComponentBound(component.size().toBounds(logicX, logicY)));
+				
+				microchipWidget.wireRenderer().renderWire(graphics, Either.right(avoidBounds), true, startX, startY, endX, endY, true, powered, argb, partialTicks);
+			}
+			
+			graphics.drawBatches();
+			graphics.pose().popPose();
+		}
+	}
+	
+	private void renderCarriedLogic(TesseractGuiGraphics graphics, int mouseX, int mouseY, LogicRenderer.Context context, LogicComponent<?, ?> component)
+	{
+		var microchip = menu.microchip();
+		var size = microchip.size();
+		
+		int logicX = Screen.hasControlDown() ? getGridSnappedCoord(mouseX - size.bounds().minX() - component.size().centerX() + 8) + size.boardX(8) : component.size().topLeftCornerX(mouseX);
+		int logicY = Screen.hasControlDown() ? getGridSnappedCoord(mouseY - size.bounds().minY() - component.size().centerY() + 8) + size.boardY(8) : component.size().topLeftCornerY(mouseY);
+		
+		graphics.enableBatching();
+		
+		LogicRenderers.render(context, graphics, component, logicX, logicY);
+		
+		graphics.drawBatches();
+	}
+	
 	@Override
 	protected void renderLabels(GuiGraphics graphics, int mouseX, int mouseY)
 	{
@@ -121,9 +191,9 @@ public final class MicrochipScreen extends AbstractContainerScreen<MicrochipMenu
 	}
 	
 	@Override
-	protected void renderBg(GuiGraphics graphics, float partialTick, int mouseX, int mouseY)
+	protected void renderBg(GuiGraphics graphics, float partialTicks, int mouseX, int mouseY)
 	{
-		this.partialTick = partialTick;
+		this.partialTicks = partialTicks;
 		
 		graphics.blit(INVENTORY_BACKGROUND, leftPos, topPos, 0, 0, 256, 256);
 	}
