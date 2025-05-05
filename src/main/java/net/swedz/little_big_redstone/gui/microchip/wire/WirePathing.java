@@ -107,28 +107,7 @@ public final class WirePathing
 			return List.of();
 		}
 		
-		int heavyAvoidWeight = innerBounds.width() / 2;
-		var avoidAreas = new AvoidGrid(bounds);
-		for(int x = bounds.minX(); x <= bounds.maxX(); x++)
-		{
-			for(int y = bounds.minY(); y <= bounds.maxY(); y++)
-			{
-				if(!innerBounds.contains(x, y))
-				{
-					avoidAreas.setWeight(x, y, heavyAvoidWeight);
-				}
-			}
-		}
-		for(var avoidBoundsEntry : avoidBounds)
-		{
-			for(int x = avoidBoundsEntry.minX(); x <= avoidBoundsEntry.maxX(); x++)
-			{
-				for(int y = avoidBoundsEntry.minY(); y <= avoidBoundsEntry.maxY(); y++)
-				{
-					avoidAreas.setWeight(x, y, heavyAvoidWeight);
-				}
-			}
-		}
+		var avoidAreas = buildAvoidGrid(innerBounds, bounds, avoidBounds);
 		
 		ObjectHeapPriorityQueue<Node> open = new ObjectHeapPriorityQueue<>();
 		
@@ -175,6 +154,34 @@ public final class WirePathing
 		}
 		
 		return List.of();
+	}
+	
+	private static AvoidGrid buildAvoidGrid(Bounds innerBounds, Bounds bounds, List<Bounds> avoidBounds)
+	{
+		var avoidAreas = new AvoidGrid(bounds);
+		int mediumAvoidWeight = innerBounds.width() / 3;
+		for(int x = bounds.minX(); x <= bounds.maxX(); x++)
+		{
+			for(int y = bounds.minY(); y <= bounds.maxY(); y++)
+			{
+				if(!innerBounds.contains(x, y))
+				{
+					avoidAreas.setWeight(x, y, mediumAvoidWeight);
+				}
+			}
+		}
+		int heavyAvoidWeight = innerBounds.width() / 2;
+		for(var avoidBoundsEntry : avoidBounds)
+		{
+			for(int x = avoidBoundsEntry.minX(); x <= avoidBoundsEntry.maxX(); x++)
+			{
+				for(int y = avoidBoundsEntry.minY(); y <= avoidBoundsEntry.maxY(); y++)
+				{
+					avoidAreas.setWeight(x, y, heavyAvoidWeight);
+				}
+			}
+		}
+		return avoidAreas;
 	}
 	
 	private static final int[][] NEIGHBOR_DIRECTIONS = {{-1, 0}, {0, 1}, {1, 0}, {0, -1}};
