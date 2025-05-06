@@ -9,12 +9,16 @@ import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
 import net.neoforged.neoforge.client.event.EntityRenderersEvent;
 import net.neoforged.neoforge.client.event.ModelEvent;
+import net.neoforged.neoforge.client.event.RegisterClientTooltipComponentFactoriesEvent;
 import net.neoforged.neoforge.client.event.RegisterMenuScreensEvent;
 import net.swedz.little_big_redstone.client.entity.StickyNoteEntityRenderer;
 import net.swedz.little_big_redstone.client.model.logic.LogicUnbakedModel;
 import net.swedz.little_big_redstone.client.model.microchip.MicrochipUnbakedModel;
+import net.swedz.little_big_redstone.gui.logicarray.LogicArrayScreen;
 import net.swedz.little_big_redstone.gui.logicconfig.LogicConfigScreen;
 import net.swedz.little_big_redstone.gui.microchip.MicrochipScreen;
+import net.swedz.little_big_redstone.item.logicarray.LogicArrayClientTooltip;
+import net.swedz.little_big_redstone.item.logicarray.LogicArrayTooltipData;
 import net.swedz.tesseract.neoforge.registry.holder.ItemHolder;
 
 @Mod(value = LBR.ID, dist = Dist.CLIENT)
@@ -33,10 +37,17 @@ public final class LBRClient
 	}
 	
 	@SubscribeEvent
+	private static void registerClientTooltipComponents(RegisterClientTooltipComponentFactoriesEvent event)
+	{
+		event.register(LogicArrayTooltipData.class, (data) -> new LogicArrayClientTooltip(data.storage()));
+	}
+	
+	@SubscribeEvent
 	private static void registerScreens(RegisterMenuScreensEvent event)
 	{
 		event.register(LBRMenus.MICROCHIP.get(), MicrochipScreen::new);
 		event.register(LBRMenus.LOGIC_CONFIG.get(), LogicConfigScreen::new);
+		event.register(LBRMenus.LOGIC_ARRAY.get(), LogicArrayScreen::new);
 	}
 	
 	@SubscribeEvent

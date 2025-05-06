@@ -9,6 +9,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
 import net.swedz.little_big_redstone.LBR;
 import net.swedz.little_big_redstone.LBRColors;
@@ -17,6 +18,7 @@ import net.swedz.little_big_redstone.LBRItems;
 import net.swedz.little_big_redstone.api.Bounds;
 import net.swedz.little_big_redstone.gui.microchip.logic.LogicRenderer;
 import net.swedz.little_big_redstone.gui.microchip.logic.LogicRenderers;
+import net.swedz.little_big_redstone.gui.logicarray.slot.LogicArrayPlayerSlot;
 import net.swedz.little_big_redstone.gui.microchip.widget.MicrochipWidget;
 import net.swedz.little_big_redstone.gui.microchip.widget.MicrochipWidgetWires;
 import net.swedz.little_big_redstone.helper.guigraphics.TesseractGuiGraphics;
@@ -26,7 +28,8 @@ import java.util.List;
 
 public final class MicrochipScreen extends AbstractContainerScreen<MicrochipMenu>
 {
-	private static final ResourceLocation INVENTORY_BACKGROUND = LBR.id("textures/gui/container/microchip/inventory_background.png");
+	private static final ResourceLocation MICROCHIP_BACKGROUND   = LBR.id("textures/gui/container/microchip/inventory_background.png");
+	private static final ResourceLocation LOGIC_ARRAY_BACKGROUND = LBR.id("textures/gui/container/logic_array/inventory_background.png");
 	
 	public static int getGridSnappedCoord(int coord)
 	{
@@ -69,6 +72,31 @@ public final class MicrochipScreen extends AbstractContainerScreen<MicrochipMenu
 		super.render(graphics, mouseX, mouseY, partialTicks);
 		
 		this.renderTooltip(graphics, mouseX, mouseY);
+	}
+	
+	@Override
+	protected void renderSlot(GuiGraphics vanilla, Slot slot)
+	{
+		var graphics = new TesseractGuiGraphics(vanilla);
+		
+		if(slot instanceof LogicArrayPlayerSlot && !slot.allowModification(Minecraft.getInstance().player))
+		{
+			graphics.pose().pushPose();
+			graphics.pose().translate(0, 0, 100);
+			
+			this.renderSlotContents(vanilla, slot.getItem(), slot, null);
+			
+			graphics.setColor(LBRColors.circuitboard(menu.color()));
+			graphics.setTexture(LBR.id("textures/gui/container/logic_array/slot_atlas.png"));
+			graphics.blit(slot.x - 1, slot.y - 1, 18, 0, 18, 18, 256, 256);
+			graphics.resetColor();
+			
+			graphics.pose().popPose();
+			
+			return;
+		}
+		
+		super.renderSlot(vanilla, slot);
 	}
 	
 	@Override
@@ -195,6 +223,8 @@ public final class MicrochipScreen extends AbstractContainerScreen<MicrochipMenu
 	{
 		this.partialTicks = partialTicks;
 		
-		graphics.blit(INVENTORY_BACKGROUND, leftPos, topPos, 0, 0, 256, 256);
+		graphics.blit(MICROCHIP_BACKGROUND, leftPos, topPos, 0, 0, 256, 256);
+		
+		graphics.blit(LOGIC_ARRAY_BACKGROUND, leftPos - 83, topPos, 0, 0, 256, 256);
 	}
 }

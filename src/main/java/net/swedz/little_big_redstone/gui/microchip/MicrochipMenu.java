@@ -2,6 +2,8 @@ package net.swedz.little_big_redstone.gui.microchip;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.world.Container;
+import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.ClickType;
@@ -12,6 +14,8 @@ import net.swedz.little_big_redstone.LBR;
 import net.swedz.little_big_redstone.LBRItems;
 import net.swedz.little_big_redstone.LBRMenus;
 import net.swedz.little_big_redstone.gui.BaseContainerMenu;
+import net.swedz.little_big_redstone.gui.logicarray.LogicArrayMenu;
+import net.swedz.little_big_redstone.gui.logicarray.slot.LogicArrayPlayerSlot;
 import net.swedz.little_big_redstone.microchip.Microchip;
 import net.swedz.little_big_redstone.microchip.wire.Wire;
 import net.swedz.little_big_redstone.microchip.wire.WirePort;
@@ -30,6 +34,8 @@ public final class MicrochipMenu extends BaseContainerMenu
 	private int        carriedComponentSlot = -1;
 	private List<Wire> carriedWires;
 	
+	private final Container logicArrayContainer;
+	
 	public MicrochipMenu(int containerId, Inventory playerInventory,
 						 BlockPos blockPos, Function<Player, Boolean> validChecker, Microchip microchip, DyeColor color)
 	{
@@ -40,7 +46,9 @@ public final class MicrochipMenu extends BaseContainerMenu
 		this.microchip = microchip;
 		this.color = color;
 		
-		this.setupPlayerInventory(playerInventory, 48, 145);
+		this.logicArrayContainer = this.createLogicArrayInventory();
+		
+		this.setupInventory(playerInventory);
 	}
 	
 	public MicrochipMenu(int containerId, Inventory playerInventory, RegistryFriendlyByteBuf buf)
@@ -52,7 +60,22 @@ public final class MicrochipMenu extends BaseContainerMenu
 		this.microchip = Microchip.STREAM_CODEC.decode(buf);
 		this.color = DyeColor.STREAM_CODEC.decode(buf);
 		
-		this.setupPlayerInventory(playerInventory, 48, 145);
+		this.logicArrayContainer = this.createLogicArrayInventory();
+		
+		this.setupInventory(playerInventory);
+	}
+	
+	private Container createLogicArrayInventory()
+	{
+		// TODO Logic Array: pull the inventory from the item...
+		return new SimpleContainer(4 * 7);
+	}
+	
+	private void setupInventory(Inventory playerInventory)
+	{
+		LogicArrayMenu.setupLogicArrayInventory(logicArrayContainer, this::addSlot, -75, 10, LogicArrayMenu.COLUMNS, LogicArrayMenu.ROWS);
+		
+		this.setupPlayerInventory(playerInventory, 48, 145, LogicArrayPlayerSlot::new);
 	}
 	
 	public BlockPos blockPos()

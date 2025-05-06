@@ -8,6 +8,7 @@ import net.neoforged.neoforge.client.model.generators.ModelFile;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import net.swedz.little_big_redstone.item.LogicItem;
 import net.swedz.little_big_redstone.item.StickyNoteItem;
+import net.swedz.little_big_redstone.item.logicarray.LogicArrayItem;
 import net.swedz.little_big_redstone.microchip.logic.LogicType;
 import net.swedz.little_big_redstone.microchip.logic.LogicTypes;
 import net.swedz.tesseract.neoforge.api.Assert;
@@ -68,6 +69,8 @@ public final class LBRItems
 		Assert.notNull(color);
 		return STICKY_NOTES.get(color);
 	}
+	
+	public static final ItemHolder<LogicArrayItem> LOGIC_ARRAY = create("logic_array", "Logic Array", LogicArrayItem::new, LBRSortOrder.TOOLS).withModelBuilder(CommonModelBuilders::generated).register();
 	
 	public static Set<ItemHolder> values()
 	{

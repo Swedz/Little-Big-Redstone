@@ -27,8 +27,7 @@ import java.util.function.Consumer;
 
 public final class MicrochipWidgetRenderer
 {
-	private static final ResourceLocation SHADOW_HOVER_OVERLAY = LBR.id("textures/gui/container/microchip/shadow_hover_overlay.png");
-	private static final ResourceLocation CIRCUIT_BACKGROUND   = LBR.id("textures/gui/container/microchip/circuit_background.png");
+	private static final ResourceLocation CIRCUIT_BACKGROUND = LBR.id("textures/gui/container/microchip/circuit_background.png");
 	
 	private final MicrochipWidget widget;
 	

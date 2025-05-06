@@ -12,18 +12,28 @@ public abstract class BaseContainerMenu extends AbstractContainerMenu
 		super(menuType, containerId);
 	}
 	
-	protected void setupPlayerInventory(Inventory playerInventory, int startX, int startY)
+	protected void setupPlayerInventory(Inventory playerInventory, int startX, int startY, SlotFactory slotFactory)
 	{
 		for(int row = 0; row < 3; ++row)
 		{
 			for(int column = 0; column < 9; ++column)
 			{
-				this.addSlot(new Slot(playerInventory, column + row * 9 + 9, startX + column * 18, row * 18 + startY));
+				this.addSlot(slotFactory.create(playerInventory, column + row * 9 + 9, startX + column * 18, row * 18 + startY));
 			}
 		}
 		for(int column = 0; column < 9; ++column)
 		{
-			this.addSlot(new Slot(playerInventory, column, startX + column * 18, 58 + startY));
+			this.addSlot(slotFactory.create(playerInventory, column, startX + column * 18, 58 + startY));
 		}
+	}
+	
+	protected void setupPlayerInventory(Inventory playerInventory, int startX, int startY)
+	{
+		this.setupPlayerInventory(playerInventory, startX, startY, Slot::new);
+	}
+	
+	public interface SlotFactory
+	{
+		Slot create(Inventory container, int slot, int x, int y);
 	}
 }
