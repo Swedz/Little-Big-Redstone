@@ -88,7 +88,7 @@ public final class MicrochipScreen extends AbstractContainerScreen<MicrochipMenu
 			
 			graphics.setColor(LBRColors.circuitboard(menu.color()));
 			graphics.setTexture(LBR.id("textures/gui/container/logic_array/slot_atlas.png"));
-			graphics.blit(slot.x - 1, slot.y - 1, 18, 0, 18, 18, 256, 256);
+			graphics.blit(slot.x - 1, slot.y - 1, 18, 0, 18, 18);
 			graphics.resetColor();
 			
 			graphics.pose().popPose();

@@ -78,7 +78,7 @@ public final class LogicArrayClientTooltip implements ClientTooltipComponent
 	private void renderSlot(TesseractGuiGraphics graphics, Font font, int x, int y, int itemIndex)
 	{
 		graphics.setTexture(SLOT_ATLAS);
-		graphics.blit(x, y, 0, 0, 18, 18, 256, 256);
+		graphics.blit(x, y, 0, 0, 18, 18);
 		
 		if(itemIndex < storage.getSlots())
 		{
