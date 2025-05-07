@@ -7,9 +7,12 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.MenuProvider;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.SlotAccess;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.ClickAction;
+import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.inventory.tooltip.TooltipComponent;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -20,6 +23,7 @@ import net.neoforged.neoforge.capabilities.Capabilities;
 import net.swedz.little_big_redstone.LBRComponents;
 import net.swedz.little_big_redstone.gui.logicarray.LogicArrayMenu;
 import net.swedz.little_big_redstone.item.logicarray.tooltip.LogicArrayTooltipData;
+import net.swedz.tesseract.neoforge.helper.TransferHelper;
 
 import java.util.List;
 import java.util.Optional;
@@ -63,6 +67,70 @@ public final class LogicArrayItem extends Item
 		);
 		
 		return InteractionResultHolder.sidedSuccess(stack, level.isClientSide());
+	}
+	
+	private boolean overrideStackedOn(ItemStack stack, ItemStack other, Slot slot, ClickAction action, Player player, SlotAccess access)
+	{
+		var capability = stack.getCapability(Capabilities.ItemHandler.ITEM);
+		if(capability != null)
+		{
+			if(other.isEmpty())
+			{
+				var extracted = TransferHelper.extractFirst(capability, 64);
+				if(!extracted.isEmpty())
+				{
+					if(access == null)
+					{
+						slot.safeInsert(extracted);
+					}
+					else
+					{
+						access.set(extracted);
+					}
+					playRemoveOneSound(player);
+				}
+			}
+			else
+			{
+				var inserted = TransferHelper.insert(capability, other);
+				if(inserted > 0)
+				{
+					other.shrink(inserted);
+					playInsertSound(player);
+				}
+			}
+			return true;
+		}
+		return false;
+	}
+	
+	@Override
+	public boolean overrideStackedOnOther(ItemStack stack, Slot slot, ClickAction action, Player player)
+	{
+		if(stack.getCount() != 1)
+		{
+			return false;
+		}
+		if(action == ClickAction.SECONDARY && slot.allowModification(player) && slot.mayPlace(stack))
+		{
+			var other = slot.getItem();
+			return this.overrideStackedOn(stack, other, slot, action, player, null);
+		}
+		return false;
+	}
+	
+	@Override
+	public boolean overrideOtherStackedOnMe(ItemStack stack, ItemStack other, Slot slot, ClickAction action, Player player, SlotAccess access)
+	{
+		if(stack.getCount() != 1)
+		{
+			return false;
+		}
+		if(action == ClickAction.SECONDARY && slot.allowModification(player) && slot.mayPlace(other))
+		{
+			return this.overrideStackedOn(stack, other, slot, action, player, access);
+		}
+		return false;
 	}
 	
 	@Override
