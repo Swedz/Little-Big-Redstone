@@ -99,7 +99,7 @@ public final class MicrochipScreen extends AbstractContainerScreen<MicrochipMenu
 	{
 		var graphics = new TesseractGuiGraphics(vanilla);
 		
-		if(slot instanceof LogicArrayPlayerSlot && menu.getLogicArrayItemHandler().getSelectedSlot() == slot.index)
+		if(slot instanceof LogicArrayPlayerSlot && slot.index == menu.getLogicArrayItemHandler().getSelectedSlot())
 		{
 			graphics.pose().pushPose();
 			graphics.pose().translate(0, 0, 100);

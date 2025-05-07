@@ -41,21 +41,26 @@ public final class LogicArrayItem extends Item
 		var stack = player.getItemInHand(hand);
 		var storage = stack.get(LBRComponents.LOGIC_ARRAY_STORAGE);
 		
+		int logicArraySlot = player.getInventory().selected;
+		
 		player.awardStat(Stats.ITEM_USED.get(this));
-		player.openMenu(new MenuProvider()
-		{
-			@Override
-			public Component getDisplayName()
-			{
-				return LogicArrayItem.this.getDescription();
-			}
-			
-			@Override
-			public AbstractContainerMenu createMenu(int containerId, Inventory playerInventory, Player player)
-			{
-				return new LogicArrayMenu(containerId, playerInventory, stack.getCapability(Capabilities.ItemHandler.ITEM));
-			}
-		});
+		player.openMenu(
+				new MenuProvider()
+				{
+					@Override
+					public Component getDisplayName()
+					{
+						return LogicArrayItem.this.getDescription();
+					}
+					
+					@Override
+					public AbstractContainerMenu createMenu(int containerId, Inventory playerInventory, Player player)
+					{
+						return new LogicArrayMenu(containerId, playerInventory, stack.getCapability(Capabilities.ItemHandler.ITEM), logicArraySlot);
+					}
+				},
+				(buf) -> buf.writeVarInt(logicArraySlot)
+		);
 		
 		return InteractionResultHolder.sidedSuccess(stack, level.isClientSide());
 	}

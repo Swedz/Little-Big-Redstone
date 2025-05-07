@@ -6,7 +6,9 @@ import net.minecraft.client.gui.screens.inventory.MenuAccess;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.inventory.Slot;
 import net.swedz.little_big_redstone.LBR;
+import net.swedz.little_big_redstone.gui.logicarray.slot.LogicArrayPlayerSlot;
 
 public final class LogicArrayScreen extends AbstractContainerScreen<LogicArrayMenu> implements MenuAccess<LogicArrayMenu>
 {
@@ -25,6 +27,26 @@ public final class LogicArrayScreen extends AbstractContainerScreen<LogicArrayMe
 	{
 		super.render(graphics, mouseX, mouseY, partialTick);
 		this.renderTooltip(graphics, mouseX, mouseY);
+	}
+	
+	@Override
+	protected void renderSlot(GuiGraphics graphics, Slot slot)
+	{
+		if(slot instanceof LogicArrayPlayerSlot && slot.getSlotIndex() == menu.getLogicArraySlot())
+		{
+			graphics.pose().pushPose();
+			graphics.pose().translate(0, 0, 100);
+			
+			graphics.blit(LBR.id("textures/gui/container/logic_array/slot_atlas.png"), slot.x - 1, slot.y - 1, 18, 0, 18, 18);
+			
+			this.renderSlotContents(graphics, slot.getItem(), slot, null);
+			
+			graphics.pose().popPose();
+			
+			return;
+		}
+		
+		super.renderSlot(graphics, slot);
 	}
 	
 	@Override

@@ -34,13 +34,7 @@ public final class LogicArraySlot extends SlotItemHandler
 	@Override
 	public ItemStack getItem()
 	{
-		if(this.isCreative())
-		{
-			/*var items = LBRCreativeTabs.getLogicComponentItems();
-			return index < items.size() ? items.get(index).copy() : ItemStack.EMPTY;*/
-			return ItemStack.EMPTY;
-		}
-		return super.getItem();
+		return this.isCreative() ? ItemStack.EMPTY : super.getItem();
 	}
 	
 	@Override
@@ -67,12 +61,6 @@ public final class LogicArraySlot extends SlotItemHandler
 	@Override
 	public ItemStack remove(int amount)
 	{
-		if(this.isCreative())
-		{
-			/*var items = LBRCreativeTabs.getLogicComponentItems();
-			return index < items.size() ? items.get(index).copyWithCount(amount) : ItemStack.EMPTY;*/
-			return ItemStack.EMPTY;
-		}
-		return super.remove(amount);
+		return this.isCreative() ? ItemStack.EMPTY : super.remove(amount);
 	}
 }

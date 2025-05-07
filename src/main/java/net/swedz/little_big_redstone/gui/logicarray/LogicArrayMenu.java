@@ -1,5 +1,6 @@
 package net.swedz.little_big_redstone.gui.logicarray;
 
+import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.Slot;
@@ -16,18 +17,22 @@ import java.util.function.Supplier;
 
 public final class LogicArrayMenu extends BaseContainerMenu
 {
-	public LogicArrayMenu(int containerId, Inventory playerInventory, IItemHandler itemHandler)
+	private final int logicArraySlot;
+	
+	public LogicArrayMenu(int containerId, Inventory playerInventory, IItemHandler itemHandler, int logicArraySlot)
 	{
 		super(LBRMenus.LOGIC_ARRAY.get(), containerId);
 		
+		this.logicArraySlot = logicArraySlot;
+		
 		setupLogicArrayInventory(itemHandler, this::addSlot, 26, 18, LogicArrayItem.ROWS, LogicArrayItem.COLUMNS);
 		
-		this.setupPlayerInventory(playerInventory, 8, 104, LogicArrayPlayerSlot::new);
+		this.setupPlayerInventory(playerInventory, 8, 104, (container, slot, x, y) -> new LogicArrayPlayerSlot(container, slot, x, y, () -> slot == logicArraySlot));
 	}
 	
-	public LogicArrayMenu(int containerId, Inventory playerInventory)
+	public LogicArrayMenu(int containerId, Inventory playerInventory, RegistryFriendlyByteBuf buf)
 	{
-		this(containerId, playerInventory, new ItemStackHandler(LogicArrayItem.MAX_SLOTS));
+		this(containerId, playerInventory, new ItemStackHandler(LogicArrayItem.MAX_SLOTS), buf.readVarInt());
 	}
 	
 	public static void setupLogicArrayInventory(IItemHandler itemHandler, SlotAdder slotAdder, Supplier<Boolean> isActive, Supplier<Boolean> isCreative, int startX, int startY, int rows, int columns)
@@ -49,6 +54,11 @@ public final class LogicArrayMenu extends BaseContainerMenu
 	public interface SlotAdder
 	{
 		void addSlot(Slot slot);
+	}
+	
+	public int getLogicArraySlot()
+	{
+		return logicArraySlot;
 	}
 	
 	@Override
