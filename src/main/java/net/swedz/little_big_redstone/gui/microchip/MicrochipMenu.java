@@ -5,15 +5,18 @@ import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.ClickType;
+import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.neoforge.items.ItemHandlerHelper;
 import net.swedz.little_big_redstone.LBR;
+import net.swedz.little_big_redstone.LBRCreativeTabs;
 import net.swedz.little_big_redstone.LBRItems;
 import net.swedz.little_big_redstone.LBRMenus;
 import net.swedz.little_big_redstone.gui.BaseContainerMenu;
 import net.swedz.little_big_redstone.gui.logicarray.LogicArrayMenu;
 import net.swedz.little_big_redstone.gui.logicarray.slot.LogicArrayPlayerSlot;
+import net.swedz.little_big_redstone.gui.logicarray.slot.LogicArraySlot;
 import net.swedz.little_big_redstone.gui.microchip.logicarray.MicrochipLogicArrayItemHandler;
 import net.swedz.little_big_redstone.item.logicarray.LogicArrayItem;
 import net.swedz.little_big_redstone.microchip.Microchip;
@@ -46,7 +49,7 @@ public final class MicrochipMenu extends BaseContainerMenu
 		this.microchip = microchip;
 		this.color = color;
 		
-		logicArrayItemHandler = new MicrochipLogicArrayItemHandler(this);
+		logicArrayItemHandler = new MicrochipLogicArrayItemHandler(this, playerInventory.player);
 		this.setupInventory(playerInventory);
 		logicArrayItemHandler.pickLogicArrayFromInventory();
 	}
@@ -60,14 +63,14 @@ public final class MicrochipMenu extends BaseContainerMenu
 		this.microchip = Microchip.STREAM_CODEC.decode(buf);
 		this.color = DyeColor.STREAM_CODEC.decode(buf);
 		
-		logicArrayItemHandler = new MicrochipLogicArrayItemHandler(this);
+		logicArrayItemHandler = new MicrochipLogicArrayItemHandler(this, playerInventory.player);
 		this.setupInventory(playerInventory);
 		logicArrayItemHandler.pickLogicArrayFromInventory();
 	}
 	
 	private void setupInventory(Inventory playerInventory)
 	{
-		LogicArrayMenu.setupLogicArrayInventory(logicArrayItemHandler, this::addSlot, logicArrayItemHandler::hasSelectedSlot, -75, 10, LogicArrayItem.COLUMNS, LogicArrayItem.ROWS);
+		LogicArrayMenu.setupLogicArrayInventory(logicArrayItemHandler, this::addSlot, logicArrayItemHandler::shouldDisplay, logicArrayItemHandler::isCreativeMode, -75, 10, LogicArrayItem.COLUMNS, LogicArrayItem.ROWS);
 		
 		this.setupPlayerInventory(playerInventory, 48, 145, LogicArrayPlayerSlot::new);
 	}
@@ -180,12 +183,63 @@ public final class MicrochipMenu extends BaseContainerMenu
 		return false;
 	}
 	
+	private boolean creativeClickLogicArraySlot(int slotId, int button, ClickType clickType, Player player)
+	{
+		var carried = this.getCarried();
+		
+		if(slotId >= 0 && logicArrayItemHandler.isCreativeMode() && slots.get(slotId) instanceof LogicArraySlot slot)
+		{
+			var items = LBRCreativeTabs.getLogicComponentItems();
+			if(slotId < items.size())
+			{
+				var stack = items.get(slotId);
+				if(clickType == ClickType.PICKUP || clickType == ClickType.PICKUP_ALL || clickType == ClickType.QUICK_MOVE)
+				{
+					if(button == 0 || button == 1)
+					{
+						if(carried.isEmpty())
+						{
+							this.setCarried(stack.copyWithCount(clickType == ClickType.QUICK_MOVE ? 64 : 1));
+						}
+						else if(ItemStack.isSameItemSameComponents(carried, stack))
+						{
+							if(clickType == ClickType.QUICK_MOVE)
+							{
+								carried.setCount(64);
+							}
+							else
+							{
+								carried.grow(button == 0 ? 1 : -1);
+								carried.limitSize(64);
+							}
+						}
+						else if(button == 1)
+						{
+							carried.shrink(1);
+						}
+						else
+						{
+							this.setCarried(ItemStack.EMPTY);
+						}
+					}
+				}
+				return true;
+			}
+		}
+		
+		return false;
+	}
+	
 	@Override
 	public void clicked(int slotId, int button, ClickType clickType, Player player)
 	{
 		this.dropCarriedWires(slotId, button, clickType, player);
 		
 		if(this.pickLogicArray(slotId, button, clickType, player))
+		{
+			return;
+		}
+		else if(this.creativeClickLogicArraySlot(slotId, button, clickType, player))
 		{
 			return;
 		}
@@ -196,7 +250,33 @@ public final class MicrochipMenu extends BaseContainerMenu
 	@Override
 	public ItemStack quickMoveStack(Player player, int slotId)
 	{
-		return ItemStack.EMPTY;
+		ItemStack stack = ItemStack.EMPTY;
+		Slot slot = slots.get(slotId);
+		if(slot != null && slot.hasItem())
+		{
+			stack = slot.getItem().copy();
+			if(slotId < LogicArrayItem.MAX_SLOTS)
+			{
+				if(!this.moveItemStackTo(stack, LogicArrayItem.MAX_SLOTS, slots.size(), true))
+				{
+					return ItemStack.EMPTY;
+				}
+			}
+			else if(!this.moveItemStackTo(stack, 0, LogicArrayItem.MAX_SLOTS, false))
+			{
+				return ItemStack.EMPTY;
+			}
+			
+			if(stack.isEmpty())
+			{
+				slot.setByPlayer(ItemStack.EMPTY);
+			}
+			else
+			{
+				slot.setChanged();
+			}
+		}
+		return stack;
 	}
 	
 	@Override

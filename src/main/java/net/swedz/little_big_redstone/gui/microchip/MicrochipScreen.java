@@ -14,11 +14,13 @@ import net.minecraft.world.item.ItemStack;
 import net.swedz.little_big_redstone.LBR;
 import net.swedz.little_big_redstone.LBRColors;
 import net.swedz.little_big_redstone.LBRComponents;
+import net.swedz.little_big_redstone.LBRCreativeTabs;
 import net.swedz.little_big_redstone.LBRItems;
 import net.swedz.little_big_redstone.api.Bounds;
+import net.swedz.little_big_redstone.gui.logicarray.slot.LogicArrayPlayerSlot;
+import net.swedz.little_big_redstone.gui.logicarray.slot.LogicArraySlot;
 import net.swedz.little_big_redstone.gui.microchip.logic.LogicRenderer;
 import net.swedz.little_big_redstone.gui.microchip.logic.LogicRenderers;
-import net.swedz.little_big_redstone.gui.logicarray.slot.LogicArrayPlayerSlot;
 import net.swedz.little_big_redstone.gui.microchip.widget.MicrochipWidget;
 import net.swedz.little_big_redstone.gui.microchip.widget.MicrochipWidgetWires;
 import net.swedz.little_big_redstone.helper.guigraphics.TesseractGuiGraphics;
@@ -75,6 +77,24 @@ public final class MicrochipScreen extends AbstractContainerScreen<MicrochipMenu
 	}
 	
 	@Override
+	protected void renderTooltip(GuiGraphics vanilla, int x, int y)
+	{
+		if(menu.getCarried().isEmpty() && hoveredSlot instanceof LogicArraySlot && menu.getLogicArrayItemHandler().isCreativeMode())
+		{
+			var items = LBRCreativeTabs.getLogicComponentItems();
+			if(hoveredSlot.index < items.size())
+			{
+				vanilla.pose().pushPose();
+				vanilla.renderTooltip(Minecraft.getInstance().font, items.get(hoveredSlot.index), x, y);
+				vanilla.pose().popPose();
+				return;
+			}
+		}
+		
+		super.renderTooltip(vanilla, x, y);
+	}
+	
+	@Override
 	protected void renderSlot(GuiGraphics vanilla, Slot slot)
 	{
 		var graphics = new TesseractGuiGraphics(vanilla);
@@ -84,15 +104,27 @@ public final class MicrochipScreen extends AbstractContainerScreen<MicrochipMenu
 			graphics.pose().pushPose();
 			graphics.pose().translate(0, 0, 100);
 			
-			this.renderSlotContents(vanilla, slot.getItem(), slot, null);
-			
-			graphics.setColor(LBRColors.circuitboard(menu.color()));
 			graphics.setTexture(LBR.id("textures/gui/container/logic_array/slot_atlas.png"));
 			graphics.blit(slot.x - 1, slot.y - 1, 18, 0, 18, 18);
-			graphics.resetColor();
+			
+			this.renderSlotContents(vanilla, slot.getItem(), slot, null);
 			
 			graphics.pose().popPose();
 			
+			return;
+		}
+		else if(slot instanceof LogicArraySlot && menu.getLogicArrayItemHandler().isCreativeMode())
+		{
+			var items = LBRCreativeTabs.getLogicComponentItems();
+			if(slot.index < items.size())
+			{
+				graphics.pose().pushPose();
+				graphics.pose().translate(0, 0, 100);
+				
+				vanilla.renderItem(items.get(slot.index), slot.x, slot.y);
+				
+				graphics.pose().popPose();
+			}
 			return;
 		}
 		
@@ -225,7 +257,7 @@ public final class MicrochipScreen extends AbstractContainerScreen<MicrochipMenu
 		
 		graphics.blit(MICROCHIP_BACKGROUND, leftPos, topPos, 0, 0, 256, 256);
 		
-		if(menu.getLogicArrayItemHandler().hasSelectedSlot())
+		if(menu.getLogicArrayItemHandler().shouldDisplay())
 		{
 			graphics.blit(LOGIC_ARRAY_BACKGROUND, leftPos - 83, topPos, 0, 0, 256, 256);
 		}

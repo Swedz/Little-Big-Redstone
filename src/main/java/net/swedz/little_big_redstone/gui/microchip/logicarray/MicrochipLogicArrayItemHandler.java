@@ -1,5 +1,6 @@
 package net.swedz.little_big_redstone.gui.microchip.logicarray;
 
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.neoforge.capabilities.Capabilities;
@@ -12,13 +13,15 @@ import java.util.Optional;
 public final class MicrochipLogicArrayItemHandler implements IItemHandlerModifiable
 {
 	private final AbstractContainerMenu menu;
+	private final Player                player;
 	
 	private int                              logicArraySlot = -1;
 	private Optional<IItemHandlerModifiable> logicArray     = Optional.empty();
 	
-	public MicrochipLogicArrayItemHandler(AbstractContainerMenu menu)
+	public MicrochipLogicArrayItemHandler(AbstractContainerMenu menu, Player player)
 	{
 		this.menu = menu;
+		this.player = player;
 	}
 	
 	public int getSelectedSlot()
@@ -29,6 +32,16 @@ public final class MicrochipLogicArrayItemHandler implements IItemHandlerModifia
 	public boolean hasSelectedSlot()
 	{
 		return logicArraySlot != -1;
+	}
+	
+	public boolean isCreativeMode()
+	{
+		return !this.hasSelectedSlot() && player.hasInfiniteMaterials();
+	}
+	
+	public boolean shouldDisplay()
+	{
+		return this.hasSelectedSlot() || player.hasInfiniteMaterials();
 	}
 	
 	private boolean setPickedLogicArray(int slotId, ItemStack stack)
@@ -62,6 +75,10 @@ public final class MicrochipLogicArrayItemHandler implements IItemHandlerModifia
 	
 	public void pickLogicArrayFromInventory()
 	{
+		if(this.isCreativeMode())
+		{
+			return;
+		}
 		for(int i = menu.slots.size() - 1; i >= 0; i--)
 		{
 			var stack = menu.slots.get(i).getItem();
