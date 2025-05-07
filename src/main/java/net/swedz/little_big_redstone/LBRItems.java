@@ -4,11 +4,13 @@ import com.google.common.collect.Maps;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.Item;
 import net.neoforged.bus.api.IEventBus;
+import net.neoforged.neoforge.capabilities.Capabilities;
 import net.neoforged.neoforge.client.model.generators.ModelFile;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import net.swedz.little_big_redstone.item.LogicItem;
 import net.swedz.little_big_redstone.item.StickyNoteItem;
 import net.swedz.little_big_redstone.item.logicarray.LogicArrayItem;
+import net.swedz.little_big_redstone.item.logicarray.LogicArrayItemHandler;
 import net.swedz.little_big_redstone.microchip.logic.LogicType;
 import net.swedz.little_big_redstone.microchip.logic.LogicTypes;
 import net.swedz.tesseract.neoforge.api.Assert;
@@ -70,7 +72,11 @@ public final class LBRItems
 		return STICKY_NOTES.get(color);
 	}
 	
-	public static final ItemHolder<LogicArrayItem> LOGIC_ARRAY = create("logic_array", "Logic Array", LogicArrayItem::new, LBRSortOrder.TOOLS).withModelBuilder(CommonModelBuilders::generated).register();
+	public static final ItemHolder<LogicArrayItem> LOGIC_ARRAY = create("logic_array", "Logic Array", LogicArrayItem::new, LBRSortOrder.TOOLS)
+			.withCapabilities((item, event) ->
+					event.registerItem(Capabilities.ItemHandler.ITEM, (stack, __) -> new LogicArrayItemHandler(stack), item))
+			.withModelBuilder(CommonModelBuilders::generated)
+			.register();
 	
 	public static Set<ItemHolder> values()
 	{

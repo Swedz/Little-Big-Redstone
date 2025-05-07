@@ -2,8 +2,6 @@ package net.swedz.little_big_redstone.gui.microchip;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.RegistryFriendlyByteBuf;
-import net.minecraft.world.Container;
-import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.ClickType;
@@ -16,6 +14,8 @@ import net.swedz.little_big_redstone.LBRMenus;
 import net.swedz.little_big_redstone.gui.BaseContainerMenu;
 import net.swedz.little_big_redstone.gui.logicarray.LogicArrayMenu;
 import net.swedz.little_big_redstone.gui.logicarray.slot.LogicArrayPlayerSlot;
+import net.swedz.little_big_redstone.gui.microchip.logicarray.MicrochipLogicArrayItemHandler;
+import net.swedz.little_big_redstone.item.logicarray.LogicArrayItem;
 import net.swedz.little_big_redstone.microchip.Microchip;
 import net.swedz.little_big_redstone.microchip.wire.Wire;
 import net.swedz.little_big_redstone.microchip.wire.WirePort;
@@ -31,10 +31,10 @@ public final class MicrochipMenu extends BaseContainerMenu
 	private final Microchip                 microchip;
 	private final DyeColor                  color;
 	
+	private final MicrochipLogicArrayItemHandler logicArrayItemHandler;
+	
 	private int        carriedComponentSlot = -1;
 	private List<Wire> carriedWires;
-	
-	private final Container logicArrayContainer;
 	
 	public MicrochipMenu(int containerId, Inventory playerInventory,
 						 BlockPos blockPos, Function<Player, Boolean> validChecker, Microchip microchip, DyeColor color)
@@ -46,9 +46,9 @@ public final class MicrochipMenu extends BaseContainerMenu
 		this.microchip = microchip;
 		this.color = color;
 		
-		this.logicArrayContainer = this.createLogicArrayInventory();
-		
+		logicArrayItemHandler = new MicrochipLogicArrayItemHandler(this);
 		this.setupInventory(playerInventory);
+		logicArrayItemHandler.pickLogicArrayFromInventory();
 	}
 	
 	public MicrochipMenu(int containerId, Inventory playerInventory, RegistryFriendlyByteBuf buf)
@@ -60,20 +60,14 @@ public final class MicrochipMenu extends BaseContainerMenu
 		this.microchip = Microchip.STREAM_CODEC.decode(buf);
 		this.color = DyeColor.STREAM_CODEC.decode(buf);
 		
-		this.logicArrayContainer = this.createLogicArrayInventory();
-		
+		logicArrayItemHandler = new MicrochipLogicArrayItemHandler(this);
 		this.setupInventory(playerInventory);
-	}
-	
-	private Container createLogicArrayInventory()
-	{
-		// TODO Logic Array: pull the inventory from the item...
-		return new SimpleContainer(4 * 7);
+		logicArrayItemHandler.pickLogicArrayFromInventory();
 	}
 	
 	private void setupInventory(Inventory playerInventory)
 	{
-		LogicArrayMenu.setupLogicArrayInventory(logicArrayContainer, this::addSlot, -75, 10, LogicArrayMenu.COLUMNS, LogicArrayMenu.ROWS);
+		LogicArrayMenu.setupLogicArrayInventory(logicArrayItemHandler, this::addSlot, logicArrayItemHandler::hasSelectedSlot, -75, 10, LogicArrayItem.COLUMNS, LogicArrayItem.ROWS);
 		
 		this.setupPlayerInventory(playerInventory, 48, 145, LogicArrayPlayerSlot::new);
 	}
@@ -91,6 +85,11 @@ public final class MicrochipMenu extends BaseContainerMenu
 	public DyeColor color()
 	{
 		return color;
+	}
+	
+	public MicrochipLogicArrayItemHandler getLogicArrayItemHandler()
+	{
+		return logicArrayItemHandler;
 	}
 	
 	public int getCarriedComponentSlot()
@@ -141,11 +140,8 @@ public final class MicrochipMenu extends BaseContainerMenu
 		}
 	}
 	
-	@Override
-	public void clicked(int slotId, int button, ClickType clickType, Player player)
+	private void dropCarriedWires(int slotId, int button, ClickType clickType, Player player)
 	{
-		super.clicked(slotId, button, clickType, player);
-		
 		if(carriedComponentSlot != -1 && carriedWires != null)
 		{
 			if(slotId >= 0 || slotId == -999)
@@ -161,6 +157,40 @@ public final class MicrochipMenu extends BaseContainerMenu
 				carriedWires = null;
 			}
 		}
+	}
+	
+	private boolean pickLogicArray(int slotId, int button, ClickType clickType, Player player)
+	{
+		if(slotId >= 0)
+		{
+			var slot = slots.get(slotId);
+			if(slot instanceof LogicArrayPlayerSlot playerSlot && playerSlot.containsLogicArray())
+			{
+				if(slotId == logicArrayItemHandler.getSelectedSlot())
+				{
+					logicArrayItemHandler.deselectPickedLogicArray();
+				}
+				else
+				{
+					logicArrayItemHandler.setPickedLogicArray(slotId);
+				}
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	@Override
+	public void clicked(int slotId, int button, ClickType clickType, Player player)
+	{
+		this.dropCarriedWires(slotId, button, clickType, player);
+		
+		if(this.pickLogicArray(slotId, button, clickType, player))
+		{
+			return;
+		}
+		
+		super.clicked(slotId, button, clickType, player);
 	}
 	
 	@Override

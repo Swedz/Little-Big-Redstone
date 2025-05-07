@@ -1,21 +1,22 @@
-package net.swedz.little_big_redstone.item.logicarray;
+package net.swedz.little_big_redstone.item.logicarray.tooltip;
 
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.tooltip.ClientTooltipComponent;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.component.ItemContainerContents;
 import net.swedz.little_big_redstone.LBR;
-import net.swedz.little_big_redstone.gui.logicarray.LogicArrayMenu;
 import net.swedz.little_big_redstone.helper.guigraphics.TesseractGuiGraphics;
+import net.swedz.little_big_redstone.item.logicarray.LogicArrayItem;
 
 public final class LogicArrayClientTooltip implements ClientTooltipComponent
 {
 	private static final ResourceLocation BACKGROUND = LBR.id("textures/gui/container/logic_array/background.png");
 	private static final ResourceLocation SLOT_ATLAS = LBR.id("textures/gui/container/logic_array/slot_atlas.png");
 	
-	private final LogicArrayStorage storage;
+	private final ItemContainerContents storage;
 	
-	public LogicArrayClientTooltip(LogicArrayStorage storage)
+	public LogicArrayClientTooltip(ItemContainerContents storage)
 	{
 		this.storage = storage;
 	}
@@ -23,13 +24,13 @@ public final class LogicArrayClientTooltip implements ClientTooltipComponent
 	@Override
 	public int getHeight()
 	{
-		return storage.isEmpty() ? 0 : (this.backgroundHeight() + 4);
+		return storage.getSlots() == 0 ? 0 : (this.backgroundHeight() + 4);
 	}
 	
 	@Override
 	public int getWidth(Font font)
 	{
-		return storage.isEmpty() ? 0 : this.backgroundWidth();
+		return storage.getSlots() == 0 ? 0 : this.backgroundWidth();
 	}
 	
 	private int backgroundHeight()
@@ -44,12 +45,12 @@ public final class LogicArrayClientTooltip implements ClientTooltipComponent
 	
 	private int gridSizeX()
 	{
-		return Math.min(LogicArrayMenu.COLUMNS, storage.getSlots());
+		return Math.min(LogicArrayItem.COLUMNS, storage.getSlots() + 1);
 	}
 	
 	private int gridSizeY()
 	{
-		return Math.min(LogicArrayMenu.ROWS, storage.isEmpty() ? 0 : (int) Math.ceil(((double) storage.getSlots() + 1) / (double) this.gridSizeX()));
+		return Math.min(LogicArrayItem.ROWS, storage.getSlots() == 0 ? 0 : (int) Math.ceil(((double) storage.getSlots() + 1) / (double) this.gridSizeX()));
 	}
 	
 	@Override
@@ -57,7 +58,7 @@ public final class LogicArrayClientTooltip implements ClientTooltipComponent
 	{
 		var graphics = new TesseractGuiGraphics(vanilla);
 		
-		if(!storage.isEmpty())
+		if(storage.getSlots() != 0)
 		{
 			graphics.setTexture(BACKGROUND);
 			graphics.nineSlice(x, y, this.backgroundWidth(), this.backgroundHeight(), 32, 32, 4);

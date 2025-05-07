@@ -29,7 +29,7 @@ import java.util.List;
 public final class MicrochipScreen extends AbstractContainerScreen<MicrochipMenu>
 {
 	private static final ResourceLocation MICROCHIP_BACKGROUND   = LBR.id("textures/gui/container/microchip/inventory_background.png");
-	private static final ResourceLocation LOGIC_ARRAY_BACKGROUND = LBR.id("textures/gui/container/logic_array/inventory_background.png");
+	private static final ResourceLocation LOGIC_ARRAY_BACKGROUND = LBR.id("textures/gui/container/logic_array/microchip_inventory_background.png");
 	
 	public static int getGridSnappedCoord(int coord)
 	{
@@ -79,7 +79,7 @@ public final class MicrochipScreen extends AbstractContainerScreen<MicrochipMenu
 	{
 		var graphics = new TesseractGuiGraphics(vanilla);
 		
-		if(slot instanceof LogicArrayPlayerSlot && !slot.allowModification(Minecraft.getInstance().player))
+		if(slot instanceof LogicArrayPlayerSlot && menu.getLogicArrayItemHandler().getSelectedSlot() == slot.index)
 		{
 			graphics.pose().pushPose();
 			graphics.pose().translate(0, 0, 100);
@@ -225,6 +225,9 @@ public final class MicrochipScreen extends AbstractContainerScreen<MicrochipMenu
 		
 		graphics.blit(MICROCHIP_BACKGROUND, leftPos, topPos, 0, 0, 256, 256);
 		
-		graphics.blit(LOGIC_ARRAY_BACKGROUND, leftPos - 83, topPos, 0, 0, 256, 256);
+		if(menu.getLogicArrayItemHandler().hasSelectedSlot())
+		{
+			graphics.blit(LOGIC_ARRAY_BACKGROUND, leftPos - 83, topPos, 0, 0, 256, 256);
+		}
 	}
 }

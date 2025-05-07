@@ -17,8 +17,8 @@ import net.swedz.little_big_redstone.client.model.microchip.MicrochipUnbakedMode
 import net.swedz.little_big_redstone.gui.logicarray.LogicArrayScreen;
 import net.swedz.little_big_redstone.gui.logicconfig.LogicConfigScreen;
 import net.swedz.little_big_redstone.gui.microchip.MicrochipScreen;
-import net.swedz.little_big_redstone.item.logicarray.LogicArrayClientTooltip;
-import net.swedz.little_big_redstone.item.logicarray.LogicArrayTooltipData;
+import net.swedz.little_big_redstone.item.logicarray.tooltip.LogicArrayClientTooltip;
+import net.swedz.little_big_redstone.item.logicarray.tooltip.LogicArrayTooltipData;
 import net.swedz.tesseract.neoforge.registry.holder.ItemHolder;
 
 @Mod(value = LBR.ID, dist = Dist.CLIENT)

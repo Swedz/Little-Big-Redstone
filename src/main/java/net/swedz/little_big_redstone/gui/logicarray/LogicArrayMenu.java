@@ -1,50 +1,56 @@
 package net.swedz.little_big_redstone.gui.logicarray;
 
-import net.minecraft.world.Container;
-import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
+import net.neoforged.neoforge.items.IItemHandler;
+import net.neoforged.neoforge.items.ItemStackHandler;
+import net.neoforged.neoforge.items.SlotItemHandler;
 import net.swedz.little_big_redstone.LBRMenus;
 import net.swedz.little_big_redstone.gui.BaseContainerMenu;
 import net.swedz.little_big_redstone.gui.logicarray.slot.LogicArrayPlayerSlot;
-import net.swedz.little_big_redstone.gui.logicarray.slot.LogicArraySlot;
+import net.swedz.little_big_redstone.item.logicarray.LogicArrayItem;
+
+import java.util.function.Supplier;
 
 public final class LogicArrayMenu extends BaseContainerMenu
 {
-	public static final int ROWS       = 4;
-	public static final int COLUMNS    = 7;
-	public static final int SLOT_COUNT = ROWS * COLUMNS;
-	
-	private final Container container;
-	
-	public LogicArrayMenu(int containerId, Inventory playerInventory, Container container)
+	public LogicArrayMenu(int containerId, Inventory playerInventory, IItemHandler itemHandler)
 	{
 		super(LBRMenus.LOGIC_ARRAY.get(), containerId);
 		
-		this.container = container;
-		container.startOpen(playerInventory.player);
-		
-		setupLogicArrayInventory(container, this::addSlot, 26, 18, ROWS, COLUMNS);
+		setupLogicArrayInventory(itemHandler, this::addSlot, 26, 18, LogicArrayItem.ROWS, LogicArrayItem.COLUMNS);
 		
 		this.setupPlayerInventory(playerInventory, 8, 104, LogicArrayPlayerSlot::new);
 	}
 	
 	public LogicArrayMenu(int containerId, Inventory playerInventory)
 	{
-		this(containerId, playerInventory, new SimpleContainer(SLOT_COUNT));
+		this(containerId, playerInventory, new ItemStackHandler(LogicArrayItem.MAX_SLOTS));
 	}
 	
-	public static void setupLogicArrayInventory(Container container, SlotAdder slotAdder, int startX, int startY, int rows, int columns)
+	public static void setupLogicArrayInventory(IItemHandler itemHandler, SlotAdder slotAdder, Supplier<Boolean> isActive, int startX, int startY, int rows, int columns)
 	{
 		for(int row = 0; row < rows; row++)
 		{
 			for(int column = 0; column < columns; column++)
 			{
-				slotAdder.addSlot(new LogicArraySlot(container, column + row * columns, startX + column * 18, row * 18 + startY));
+				slotAdder.addSlot(new SlotItemHandler(itemHandler, column + row * columns, startX + column * 18, row * 18 + startY)
+				{
+					@Override
+					public boolean isActive()
+					{
+						return isActive == null || isActive.get();
+					}
+				});
 			}
 		}
+	}
+	
+	public static void setupLogicArrayInventory(IItemHandler itemHandler, SlotAdder slotAdder, int startX, int startY, int rows, int columns)
+	{
+		setupLogicArrayInventory(itemHandler, slotAdder, null, startX, startY, rows, columns);
 	}
 	
 	public interface SlotAdder
@@ -60,14 +66,14 @@ public final class LogicArrayMenu extends BaseContainerMenu
 		if(slot != null && slot.hasItem())
 		{
 			stack = slot.getItem().copy();
-			if(index < SLOT_COUNT)
+			if(index < LogicArrayItem.MAX_SLOTS)
 			{
-				if(!this.moveItemStackTo(stack, SLOT_COUNT, slots.size(), true))
+				if(!this.moveItemStackTo(stack, LogicArrayItem.MAX_SLOTS, slots.size(), true))
 				{
 					return ItemStack.EMPTY;
 				}
 			}
-			else if(!this.moveItemStackTo(stack, 0, SLOT_COUNT, false))
+			else if(!this.moveItemStackTo(stack, 0, LogicArrayItem.MAX_SLOTS, false))
 			{
 				return ItemStack.EMPTY;
 			}
@@ -88,13 +94,6 @@ public final class LogicArrayMenu extends BaseContainerMenu
 	@Override
 	public boolean stillValid(Player player)
 	{
-		return container.stillValid(player);
-	}
-	
-	@Override
-	public void removed(Player player)
-	{
-		super.removed(player);
-		container.stopOpen(player);
+		return true;
 	}
 }
