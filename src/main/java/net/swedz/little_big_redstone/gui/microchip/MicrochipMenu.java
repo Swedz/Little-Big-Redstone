@@ -189,7 +189,7 @@ public final class MicrochipMenu extends BaseContainerMenu
 		
 		if(slotId >= 0 && logicArrayItemHandler.isCreativeMode() && slots.get(slotId) instanceof LogicArraySlot slot)
 		{
-			var items = LBRCreativeTabs.getLogicComponentItems();
+			var items = LBRCreativeTabs.getLogicArrayItems();
 			if(slotId < items.size())
 			{
 				var stack = items.get(slotId);

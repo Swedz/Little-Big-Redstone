@@ -81,7 +81,7 @@ public final class MicrochipScreen extends AbstractContainerScreen<MicrochipMenu
 	{
 		if(menu.getCarried().isEmpty() && hoveredSlot instanceof LogicArraySlot && menu.getLogicArrayItemHandler().isCreativeMode())
 		{
-			var items = LBRCreativeTabs.getLogicComponentItems();
+			var items = LBRCreativeTabs.getLogicArrayItems();
 			if(hoveredSlot.index < items.size())
 			{
 				vanilla.pose().pushPose();
@@ -115,7 +115,7 @@ public final class MicrochipScreen extends AbstractContainerScreen<MicrochipMenu
 		}
 		else if(slot instanceof LogicArraySlot && menu.getLogicArrayItemHandler().isCreativeMode())
 		{
-			var items = LBRCreativeTabs.getLogicComponentItems();
+			var items = LBRCreativeTabs.getLogicArrayItems();
 			if(slot.index < items.size())
 			{
 				graphics.pose().pushPose();

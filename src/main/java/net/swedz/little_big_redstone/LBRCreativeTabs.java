@@ -35,9 +35,10 @@ public final class LBRCreativeTabs
 			})
 			.build());
 	
-	private static final Supplier<List<ItemStack>> LOGIC_COMPONENT_ITEMS = Suppliers.memoize(() ->
+	private static final Supplier<List<ItemStack>> LOGIC_ARRAY_ITEMS = Suppliers.memoize(() ->
 	{
 		List<ItemStack> items = Lists.newArrayList();
+		items.add(LBRItems.REDSTONE_BIT.asItem().getDefaultInstance());
 		for(LogicType type : LogicTypes.values())
 		{
 			var stack = type.toStack(type.defaultFactory().create());
@@ -46,9 +47,9 @@ public final class LBRCreativeTabs
 		return Collections.unmodifiableList(items);
 	});
 	
-	public static List<ItemStack> getLogicComponentItems()
+	public static List<ItemStack> getLogicArrayItems()
 	{
-		return LOGIC_COMPONENT_ITEMS.get();
+		return LOGIC_ARRAY_ITEMS.get();
 	}
 	
 	public static void init(IEventBus bus)
