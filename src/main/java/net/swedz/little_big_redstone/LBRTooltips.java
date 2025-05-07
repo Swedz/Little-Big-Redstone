@@ -11,6 +11,10 @@ import net.swedz.tesseract.neoforge.tooltip.BiParser;
 import net.swedz.tesseract.neoforge.tooltip.Parser;
 import net.swedz.tesseract.neoforge.tooltip.TooltipAttachment;
 
+import java.util.List;
+
+import static net.swedz.little_big_redstone.LBRTextLine.*;
+
 public final class LBRTooltips
 {
 	public static final Style DEFAULT_STYLE   = Style.EMPTY.withColor(TextColor.fromRgb(0xA9A9A9)).withItalic(false);
@@ -66,6 +70,8 @@ public final class LBRTooltips
 	public static final Parser<Long>             TICKS_AND_SECONDS_PARSER        = (value) -> ticksAndSecondsText(value).text(value, String.format("%.2f", value / 20f)).withStyle(LBRTooltips.HIGHLIGHT_STYLE);
 	public static final BiParser<Double, String> TICKS_AND_SECONDS_SLIDER_PARSER = (value, string) -> ticksAndSecondsText(value).text(string, String.format("%.2f", value / 20));
 	
+	public static final Parser<String> KEYBIND_PARSER = Parser.KEYBIND.withStyle(HIGHLIGHT_STYLE);
+	
 	public static final Parser<Object> DEFAULT_PARSER = (value) ->
 	{
 		var style = DEFAULT_STYLE;
@@ -103,6 +109,17 @@ public final class LBRTooltips
 				var logicComponent = stack.get(LBRComponents.LOGIC);
 				return logicComponent.type().tooltip(logicComponent, true, true);
 			}
+	);
+	
+	public static final TooltipAttachment LOGIC_ARRAY = TooltipAttachment.multilines(
+			LBRItems.LOGIC_ARRAY,
+			List.of(
+					line(LBRText.LOGIC_ARRAY_HELP_1),
+					line(LBRText.LOGIC_ARRAY_HELP_2),
+					Component.empty(),
+					line(LBRText.LOGIC_ARRAY_HELP_3).arg("use", KEYBIND_PARSER),
+					line(LBRText.LOGIC_ARRAY_HELP_4).arg("use", KEYBIND_PARSER)
+			)
 	);
 	
 	public static void init()
