@@ -8,6 +8,7 @@ in vec4 vertexColor;
 
 uniform float GameTime;
 uniform vec4 ColorModulator;
+uniform vec2 LogicUV;
 
 out vec4 fragColor;
 
@@ -17,7 +18,9 @@ vec2 transformScanlineUV(vec2 uv)
 	vec2 motion = vec2(0, 150);
 	vec2 translation = vec2(GameTime) * motion;
 	transformedUV += translation;
-	transformedUV *= 8;
+	transformedUV.x *= LogicUV.x / 16.0;
+	transformedUV.y *= LogicUV.y / 16.0;
+	transformedUV *= 8.0;
 	return fract(transformedUV);
 }
 

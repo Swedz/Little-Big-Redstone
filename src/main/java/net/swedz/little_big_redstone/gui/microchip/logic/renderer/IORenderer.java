@@ -21,7 +21,10 @@ public final class IORenderer extends LogicRenderer<LogicIO>
 		this.renderBackground(context, graphics, x, y, component);
 		
 		graphics.setColor(context.foregroundColor());
-		graphics.setTextureShader(LBRClientShaders::logicScanlineInstance);
+		graphics.setTextureShader(
+				LBRClientShaders::logicScanlineInstance,
+				(shader) -> shader.getUniform("LogicUV").set(16f, 16f)
+		);
 		graphics.setTextures(
 				context.getTexture(component.config().input ? "input" : "output"),
 				LBR.id("textures/logic/scanline.png")

@@ -21,7 +21,10 @@ public final class ReaderRenderer extends LogicRenderer<LogicReader>
 		this.renderBackground(context, graphics, x, y, component);
 		
 		graphics.setColor(context.foregroundColor());
-		graphics.setTextureShader(LBRClientShaders::logicScanlineInstance);
+		graphics.setTextureShader(
+				LBRClientShaders::logicScanlineInstance,
+				(shader) -> shader.getUniform("LogicUV").set(16f, 16f)
+		);
 		graphics.setTextures(
 				context.getTexture("icon"),
 				LBR.id("textures/logic/scanline.png")
