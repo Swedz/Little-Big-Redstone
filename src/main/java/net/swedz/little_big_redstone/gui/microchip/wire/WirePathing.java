@@ -160,27 +160,35 @@ public final class WirePathing
 	{
 		var avoidAreas = new AvoidGrid(bounds);
 		int mediumAvoidWeight = innerBounds.width() / 3;
-		for(int x = bounds.minX(); x <= bounds.maxX(); x++)
+		int heavyAvoidWeight = innerBounds.width() / 2;
+		
+		int index = 0;
+		for(int y = bounds.minY(); y <= bounds.maxY(); y++)
 		{
-			for(int y = bounds.minY(); y <= bounds.maxY(); y++)
+			for(int x = bounds.minX(); x <= bounds.maxX(); x++)
 			{
 				if(!innerBounds.contains(x, y))
 				{
-					avoidAreas.setWeight(x, y, mediumAvoidWeight);
+					avoidAreas.setWeight(index, mediumAvoidWeight);
 				}
+				index++;
 			}
 		}
-		int heavyAvoidWeight = innerBounds.width() / 2;
+		
 		for(var avoidBoundsEntry : avoidBounds)
 		{
-			for(int x = avoidBoundsEntry.minX(); x <= avoidBoundsEntry.maxX(); x++)
+			index = Node.indexOf(bounds, avoidBoundsEntry.minX(), avoidBoundsEntry.minY());
+			for(int y = avoidBoundsEntry.minY(); y <= avoidBoundsEntry.maxY(); y++)
 			{
-				for(int y = avoidBoundsEntry.minY(); y <= avoidBoundsEntry.maxY(); y++)
+				for(int x = avoidBoundsEntry.minX(); x <= avoidBoundsEntry.maxX(); x++)
 				{
-					avoidAreas.setWeight(x, y, heavyAvoidWeight);
+					avoidAreas.setWeight(index, heavyAvoidWeight);
+					index++;
 				}
+				index += (bounds.width() - avoidBoundsEntry.width());
 			}
 		}
+		
 		return avoidAreas;
 	}
 	
@@ -331,6 +339,11 @@ public final class WirePathing
 		public void setWeight(int x, int y, int weight)
 		{
 			int index = Node.indexOf(bounds, x, y);
+			this.setWeight(index, weight);
+		}
+		
+		public void setWeight(int index, int weight)
+		{
 			if(index < 0 || index >= avoids.length)
 			{
 				return;
