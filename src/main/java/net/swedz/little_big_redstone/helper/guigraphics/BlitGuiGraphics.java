@@ -28,9 +28,14 @@ public interface BlitGuiGraphics extends ColoredGuiGraphics
 		this.setTextureShader(TextureShaderConfiguration.DEFAULT);
 	}
 	
-	ResourceLocation getTexture();
+	ResourceLocation[] getTextures();
 	
-	void setTexture(ResourceLocation texture);
+	void setTextures(ResourceLocation... textures);
+	
+	default void setTexture(ResourceLocation texture)
+	{
+		this.setTextures(texture);
+	}
 	
 	//
 	

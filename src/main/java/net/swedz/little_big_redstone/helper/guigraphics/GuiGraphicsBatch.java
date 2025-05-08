@@ -37,15 +37,28 @@ public final class GuiGraphicsBatch
 		return new GuiGraphicsBatch(pose, buffer);
 	}
 	
+	public static GuiGraphicsBatch start(GuiGraphics graphics, ResourceLocation[] textures, Supplier<ShaderInstance> shader, VertexFormat.Mode mode, VertexFormat format)
+	{
+		for(int i = 0; i < textures.length; i++)
+		{
+			RenderSystem.setShaderTexture(i, textures[i]);
+		}
+		return start(graphics, shader, mode, format);
+	}
+	
 	public static GuiGraphicsBatch start(GuiGraphics graphics, ResourceLocation texture, Supplier<ShaderInstance> shader, VertexFormat.Mode mode, VertexFormat format)
 	{
-		RenderSystem.setShaderTexture(0, texture);
-		return start(graphics, shader, mode, format);
+		return start(graphics, new ResourceLocation[]{texture}, shader, mode, format);
+	}
+	
+	public static GuiGraphicsBatch start(GuiGraphics graphics, ResourceLocation[] textures)
+	{
+		return start(graphics, textures, GameRenderer::getPositionTexColorShader, VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX_COLOR);
 	}
 	
 	public static GuiGraphicsBatch start(GuiGraphics graphics, ResourceLocation texture)
 	{
-		return start(graphics, texture, GameRenderer::getPositionTexColorShader, VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX_COLOR);
+		return start(graphics, new ResourceLocation[]{texture});
 	}
 	
 	public Matrix4f pose()
