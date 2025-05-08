@@ -112,7 +112,7 @@ public final class LBRTooltips
 	);
 	
 	public static final TooltipAttachment LOGIC_ARRAY = TooltipAttachment.multilines(
-			LBRItems.LOGIC_ARRAY,
+			(stack, item) -> stack.is(LBRTags.Items.LOGIC_ARRAYS),
 			List.of(
 					line(LBRText.LOGIC_ARRAY_HELP_1),
 					line(LBRText.LOGIC_ARRAY_HELP_2),

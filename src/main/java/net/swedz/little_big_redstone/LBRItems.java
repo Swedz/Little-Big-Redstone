@@ -50,6 +50,8 @@ public final class LBRItems
 	
 	private static final Map<DyeColor, ItemHolder<StickyNoteItem>> STICKY_NOTES;
 	
+	private static final Map<DyeColor, ItemHolder<LogicArrayItem>> LOGIC_ARRAYS;
+	
 	static
 	{
 		{
@@ -64,6 +66,11 @@ public final class LBRItems
 		LBRColors.forEachIndexed((color, colorName, index) ->
 				stickyNotes.put(color, createStickyNote(color, colorName, index).register()));
 		STICKY_NOTES = Collections.unmodifiableMap(stickyNotes);
+		
+		Map<DyeColor, ItemHolder<LogicArrayItem>> logicArrays = Maps.newHashMap();
+		LBRColors.forEachIndexed((color, colorName, index) ->
+				logicArrays.put(color, createLogicArray(color, colorName, index).register()));
+		LOGIC_ARRAYS = Collections.unmodifiableMap(logicArrays);
 	}
 	
 	public static ItemHolder<StickyNoteItem> stickyNote(DyeColor color)
@@ -72,11 +79,11 @@ public final class LBRItems
 		return STICKY_NOTES.get(color);
 	}
 	
-	public static final ItemHolder<LogicArrayItem> LOGIC_ARRAY = create("logic_array", "Logic Array", LogicArrayItem::new, LBRSortOrder.TOOLS)
-			.withCapabilities((item, event) ->
-					event.registerItem(Capabilities.ItemHandler.ITEM, (stack, __) -> new LogicArrayItemHandler(stack), item))
-			.withModelBuilder(CommonModelBuilders::generated)
-			.register();
+	public static ItemHolder<LogicArrayItem> logicArray(DyeColor color)
+	{
+		Assert.notNull(color);
+		return LOGIC_ARRAYS.get(color);
+	}
 	
 	public static Set<ItemHolder> values()
 	{
@@ -115,5 +122,20 @@ public final class LBRItems
 						provider.getBuilder(holder.identifier().id())
 								.parent(new ModelFile.UncheckedModelFile("item/generated"))
 								.texture("layer0", LBR.id("item/sticky_note_%s".formatted(colorId))));
+	}
+	
+	private static ItemHolder<LogicArrayItem> createLogicArray(DyeColor color, String colorEnglishName, int order)
+	{
+		final String colorId = color.getName();
+		final String id = "%s_logic_array".formatted(colorId);
+		final String englishName = "%s Logic Array".formatted(colorEnglishName);
+		return create(id, englishName, LogicArrayItem::new, LBRSortOrder.TOOLS.and(order))
+				.tag(LBRTags.Items.LOGIC_ARRAYS)
+				.withCapabilities((item, event) ->
+						event.registerItem(Capabilities.ItemHandler.ITEM, (stack, __) -> new LogicArrayItemHandler(stack), item))
+				.withModel((holder) -> (provider) ->
+						provider.getBuilder(holder.identifier().id())
+								.parent(new ModelFile.UncheckedModelFile("item/generated"))
+								.texture("layer0", LBR.id("item/logic_array_%s".formatted(colorId))));
 	}
 }

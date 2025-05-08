@@ -4,7 +4,7 @@ import net.minecraft.world.Container;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
-import net.swedz.little_big_redstone.LBRItems;
+import net.swedz.little_big_redstone.LBRTags;
 
 import java.util.function.Supplier;
 
@@ -31,7 +31,7 @@ public final class LogicArrayPlayerSlot extends Slot
 	
 	public boolean containsLogicArray()
 	{
-		return this.getItem().is(LBRItems.LOGIC_ARRAY.get());
+		return this.getItem().is(LBRTags.Items.LOGIC_ARRAYS);
 	}
 	
 	@Override
