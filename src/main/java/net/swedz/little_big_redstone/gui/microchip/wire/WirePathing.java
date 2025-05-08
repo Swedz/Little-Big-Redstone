@@ -137,7 +137,7 @@ public final class WirePathing
 					continue;
 				}
 				
-				int g = current.g + 1 + avoidAreas.getWeight(neighbor.x, neighbor.y);
+				int g = current.g + 1 + avoidAreas.getWeight(neighbor);
 				
 				boolean notOpen = !neighbor.open;
 				boolean betterPath = g < neighbor.g;
@@ -219,6 +219,12 @@ public final class WirePathing
 	
 	private static final class Node implements Comparable<Node>
 	{
+		public static int indexOf(Bounds bounds, int x, int y)
+		{
+			return bounds.relativeX(x) + bounds.relativeY(y) * bounds.width();
+		}
+		
+		private final int index;
 		private final int x, y;
 		
 		private int g, h;
@@ -226,10 +232,16 @@ public final class WirePathing
 		private Node    parent;
 		private boolean open, closed;
 		
-		public Node(int x, int y)
+		public Node(int index, int x, int y)
 		{
+			this.index = index;
 			this.x = x;
 			this.y = y;
+		}
+		
+		public Node(Bounds bounds, int x, int y)
+		{
+			this(indexOf(bounds, x, y), x, y);
 		}
 		
 		public int f()
@@ -287,14 +299,9 @@ public final class WirePathing
 			nodes = new Node[bounds.width() * bounds.height()];
 		}
 		
-		public int indexOf(int x, int y)
-		{
-			return bounds.relativeX(x) + bounds.relativeY(y) * bounds.width();
-		}
-		
 		public Node get(int x, int y)
 		{
-			int index = this.indexOf(x, y);
+			int index = Node.indexOf(bounds, x, y);
 			if(index < 0 || index >= nodes.length)
 			{
 				return null;
@@ -302,7 +309,7 @@ public final class WirePathing
 			var node = nodes[index];
 			if(node == null)
 			{
-				node = new Node(x, y);
+				node = new Node(index, x, y);
 				nodes[index] = node;
 			}
 			return node;
@@ -321,14 +328,9 @@ public final class WirePathing
 			avoids = new int[bounds.width() * bounds.height()];
 		}
 		
-		public int indexOf(int x, int y)
-		{
-			return bounds.relativeX(x) + bounds.relativeY(y) * bounds.width();
-		}
-		
 		public void setWeight(int x, int y, int weight)
 		{
-			int index = this.indexOf(x, y);
+			int index = Node.indexOf(bounds, x, y);
 			if(index < 0 || index >= avoids.length)
 			{
 				return;
@@ -336,9 +338,9 @@ public final class WirePathing
 			avoids[index] = weight;
 		}
 		
-		public int getWeight(int x, int y)
+		public int getWeight(Node node)
 		{
-			int index = this.indexOf(x, y);
+			int index = node.index;
 			if(index < 0 || index >= avoids.length)
 			{
 				return 0;
