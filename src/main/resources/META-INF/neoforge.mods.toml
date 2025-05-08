@@ -28,3 +28,10 @@ type = "required"
 versionRange = "${tesseract_version_range}"
 ordering = "AFTER"
 side = "BOTH"
+
+[[dependencies.${ mod_id }]]
+modId = "emi"
+type = "optional"
+versionRange = "${emi_version_range}"
+ordering = "AFTER"
+side = "CLIENT"
