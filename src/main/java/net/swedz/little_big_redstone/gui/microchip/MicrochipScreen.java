@@ -219,7 +219,7 @@ public final class MicrochipScreen extends AbstractContainerScreen<MicrochipMenu
 				
 				int argb = LBRColors.componentForeground(component.color().orElse(menu.color()));
 				
-				List<Bounds> avoidBounds = List.of(microchipWidget.wireRenderer().pathing().mutateComponentBound(component.size().toBounds(logicX, logicY)));
+				List<Bounds> avoidBounds = List.of(microchipWidget.wireRenderer().pathing().mutateComponentBounds(component.size().toBounds(logicX, logicY)));
 				
 				microchipWidget.wireRenderer().renderWire(graphics, Either.right(avoidBounds), true, startX, startY, endX, endY, true, powered, argb, partialTicks);
 			}

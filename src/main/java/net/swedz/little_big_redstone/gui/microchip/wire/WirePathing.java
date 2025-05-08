@@ -30,7 +30,7 @@ public final class WirePathing
 		this.componentBoundMutator = componentBoundMutator;
 	}
 	
-	public Bounds mutateComponentBound(Bounds bounds)
+	public Bounds mutateComponentBounds(Bounds bounds)
 	{
 		return componentBoundMutator.apply(bounds);
 	}
@@ -47,7 +47,7 @@ public final class WirePathing
 		avoidBounds = Lists.newArrayList(avoidBounds);
 		for(var entry : microchip.components())
 		{
-			avoidBounds.add(this.mutateComponentBound(entry.toBounds()));
+			avoidBounds.add(this.mutateComponentBounds(entry.toBounds()));
 		}
 		return path(startX, startY, endX, endY, microchip, areaPaddingXY, avoidBounds);
 	}
