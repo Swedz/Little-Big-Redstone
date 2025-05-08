@@ -24,7 +24,7 @@ public final class SimpleLogicRenderer<G extends LogicComponent<?, ?>> extends L
 		
 		graphics.setColor(context.foregroundColor());
 		graphics.setTextureShader(
-				LBRClientShaders::logicScanlineInstance,
+				LBRClientShaders::logicScanline,
 				(shader) -> shader.getUniform("LogicUV").set(16f, 16f)
 		);
 		graphics.setTextures(

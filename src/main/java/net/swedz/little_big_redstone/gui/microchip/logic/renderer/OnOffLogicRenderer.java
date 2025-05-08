@@ -24,7 +24,7 @@ public final class OnOffLogicRenderer<L extends LogicComponent<?, ?>> extends Lo
 		
 		graphics.setColor(context.foregroundColor());
 		graphics.setTextureShader(
-				LBRClientShaders::logicScanlineInstance,
+				LBRClientShaders::logicScanline,
 				(shader) -> shader.getUniform("LogicUV").set(16f, 16f)
 		);
 		graphics.setTextures(

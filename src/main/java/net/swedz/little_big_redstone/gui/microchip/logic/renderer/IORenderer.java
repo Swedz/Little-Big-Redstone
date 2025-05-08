@@ -22,7 +22,7 @@ public final class IORenderer extends LogicRenderer<LogicIO>
 		
 		graphics.setColor(context.foregroundColor());
 		graphics.setTextureShader(
-				LBRClientShaders::logicScanlineInstance,
+				LBRClientShaders::logicScanline,
 				(shader) -> shader.getUniform("LogicUV").set(16f, 16f)
 		);
 		graphics.setTextures(

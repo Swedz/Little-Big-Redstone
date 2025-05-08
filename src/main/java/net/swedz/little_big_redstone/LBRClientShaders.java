@@ -16,7 +16,7 @@ public final class LBRClientShaders
 {
 	private static ShaderInstance LOGIC_SCANLINE_INSTANCE;
 	
-	public static ShaderInstance logicScanlineInstance()
+	public static ShaderInstance logicScanline()
 	{
 		return LOGIC_SCANLINE_INSTANCE;
 	}
@@ -35,7 +35,7 @@ public final class LBRClientShaders
 		return MICROCHIP_WIRE_HOVERED_INSTANCE;
 	}
 	
-	public static final RenderStateShard.ShaderStateShard LOGIC_SCANLINE                  = new RenderStateShard.ShaderStateShard(LBRClientShaders::logicScanlineInstance);
+	public static final RenderStateShard.ShaderStateShard LOGIC_SCANLINE                  = new RenderStateShard.ShaderStateShard(LBRClientShaders::logicScanline);
 	public static final RenderStateShard.ShaderStateShard MICROCHIP_GRID_SNAPPING_OVERLAY = new RenderStateShard.ShaderStateShard(LBRClientShaders::microchipGridSnappingOverlay);
 	public static final RenderStateShard.ShaderStateShard MICROCHIP_WIRE_HOVERED          = new RenderStateShard.ShaderStateShard(LBRClientShaders::microchipWireHovered);
 	

@@ -27,7 +27,7 @@ public final class SequencerRenderer extends LogicRenderer<LogicSequencer>
 		
 		graphics.setColor(context.foregroundColor());
 		graphics.setTextureShader(
-				LBRClientShaders::logicScanlineInstance,
+				LBRClientShaders::logicScanline,
 				(shader) -> shader.getUniform("LogicUV").set((float) fillWidth, (float) fillHeight)
 		);
 		graphics.setTextures(
