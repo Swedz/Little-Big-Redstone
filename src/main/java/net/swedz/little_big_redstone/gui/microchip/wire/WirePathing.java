@@ -7,6 +7,7 @@ import net.swedz.little_big_redstone.api.Bounds;
 import net.swedz.little_big_redstone.microchip.Microchip;
 import net.swedz.little_big_redstone.microchip.wire.Wire;
 
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -158,21 +159,20 @@ public final class WirePathing
 	
 	private static AvoidGrid buildAvoidGrid(Bounds innerBounds, Bounds bounds, List<Bounds> avoidBounds)
 	{
-		var avoidAreas = new AvoidGrid(bounds);
 		int mediumAvoidWeight = innerBounds.width() / 3;
 		int heavyAvoidWeight = innerBounds.width() / 2;
 		
-		int index = 0;
-		for(int y = bounds.minY(); y <= bounds.maxY(); y++)
+		var avoidAreas = new AvoidGrid(bounds, mediumAvoidWeight);
+		
+		int index = Node.indexOf(bounds, innerBounds.minX(), innerBounds.minY());
+		for(int y = innerBounds.minY(); y <= innerBounds.maxY(); y++)
 		{
-			for(int x = bounds.minX(); x <= bounds.maxX(); x++)
+			for(int x = innerBounds.minX(); x <= innerBounds.maxX(); x++)
 			{
-				if(!innerBounds.contains(x, y))
-				{
-					avoidAreas.setWeight(index, mediumAvoidWeight);
-				}
+				avoidAreas.setWeight(index, 0);
 				index++;
 			}
+			index += (bounds.width() - innerBounds.width());
 		}
 		
 		for(var avoidBoundsEntry : avoidBounds)
@@ -330,10 +330,14 @@ public final class WirePathing
 		
 		private final int[] avoids;
 		
-		public AvoidGrid(Bounds bounds)
+		public AvoidGrid(Bounds bounds, int defaultValue)
 		{
 			this.bounds = bounds;
 			avoids = new int[bounds.width() * bounds.height()];
+			if(defaultValue != 0)
+			{
+				Arrays.fill(avoids, defaultValue);
+			}
 		}
 		
 		public void setWeight(int x, int y, int weight)
@@ -353,12 +357,7 @@ public final class WirePathing
 		
 		public int getWeight(Node node)
 		{
-			int index = node.index;
-			if(index < 0 || index >= avoids.length)
-			{
-				return 0;
-			}
-			return avoids[index];
+			return avoids[node.index];
 		}
 	}
 }
