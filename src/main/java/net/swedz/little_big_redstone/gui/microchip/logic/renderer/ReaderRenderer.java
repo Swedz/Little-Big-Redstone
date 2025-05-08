@@ -1,5 +1,7 @@
 package net.swedz.little_big_redstone.gui.microchip.logic.renderer;
 
+import net.swedz.little_big_redstone.LBR;
+import net.swedz.little_big_redstone.LBRClientShaders;
 import net.swedz.little_big_redstone.gui.microchip.logic.LogicRenderer;
 import net.swedz.little_big_redstone.gui.microchip.logic.LogicRendererProvider;
 import net.swedz.little_big_redstone.helper.guigraphics.TesseractGuiGraphics;
@@ -19,8 +21,13 @@ public final class ReaderRenderer extends LogicRenderer<LogicReader>
 		this.renderBackground(context, graphics, x, y, component);
 		
 		graphics.setColor(context.foregroundColor());
-		graphics.setTexture(context.getTexture("icon"));
+		graphics.setTextureShader(LBRClientShaders::logicScanlineInstance);
+		graphics.setTextures(
+				context.getTexture("icon"),
+				LBR.id("textures/logic/scanline.png")
+		);
 		graphics.blit(x, y, 0, 0, 16, 16, 16, 16);
+		graphics.resetTextureShader();
 		graphics.resetColor();
 	}
 }

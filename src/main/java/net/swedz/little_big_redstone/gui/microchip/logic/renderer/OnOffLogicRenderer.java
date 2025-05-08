@@ -1,5 +1,7 @@
 package net.swedz.little_big_redstone.gui.microchip.logic.renderer;
 
+import net.swedz.little_big_redstone.LBR;
+import net.swedz.little_big_redstone.LBRClientShaders;
 import net.swedz.little_big_redstone.gui.microchip.logic.LogicRenderer;
 import net.swedz.little_big_redstone.gui.microchip.logic.LogicRendererProvider;
 import net.swedz.little_big_redstone.helper.guigraphics.TesseractGuiGraphics;
@@ -21,10 +23,15 @@ public final class OnOffLogicRenderer<L extends LogicComponent<?, ?>> extends Lo
 		this.renderBackground(context, graphics, x, y, component);
 		
 		graphics.setColor(context.foregroundColor());
+		graphics.setTextureShader(LBRClientShaders::logicScanlineInstance);
+		graphics.setTextures(
+				context.getTexture(component.output(0) ? "on" : "off"),
+				LBR.id("textures/logic/scanline.png")
+		);
 		int centerX = x + size.centerX() - 8;
 		int centerY = y + size.centerY() - 8;
-		graphics.setTexture(context.getTexture(component.output(0) ? "on" : "off"));
 		graphics.blit(centerX, centerY, 0, 0, 16, 16, 16, 16);
+		graphics.resetTextureShader();
 		graphics.resetColor();
 	}
 }
