@@ -1,6 +1,7 @@
 #version 150
 
-uniform sampler2D Sampler0;
+uniform sampler2D Sampler0; // logic texture
+uniform sampler2D Sampler1; // scanline texture
 
 in vec2 texCoord0;
 in vec4 vertexColor;
@@ -10,20 +11,21 @@ uniform vec4 ColorModulator;
 
 out vec4 fragColor;
 
-float pulsingAlpha()
+vec2 transformScanlineUV(vec2 uv)
 {
-	float interval = 30.0;
-	float t = fract(GameTime * (24000.0 / interval));
-	float wave = (sin(t * 6.28318) + 1.0) / 2.0;
-	return mix(0.25, 0.5, wave);
+	vec2 transformedUV = uv;
+	vec2 motion = vec2(0, 150);
+	vec2 translation = vec2(GameTime) * motion;
+	transformedUV += translation;
+	transformedUV *= 8;
+	return fract(transformedUV);
 }
 
 void main()
 {
 	vec4 color = texture(Sampler0, texCoord0) * vertexColor;
-	vec4 overlay = vec4(1.0, 1.0, 1.0, pulsingAlpha());
-	vec3 shiftedColor = mix(color.rgb, overlay.rgb, overlay.a);
-	color = vec4(shiftedColor, color.a);
+	vec4 scanline = texture(Sampler1, transformScanlineUV(texCoord0));
+	color *= scanline;
 	if (color.a == 0.0)
 	{
 		discard;
