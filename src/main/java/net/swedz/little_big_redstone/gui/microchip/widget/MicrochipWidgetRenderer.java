@@ -62,6 +62,18 @@ public final class MicrochipWidgetRenderer
 						widget.y + 4,
 						backgroundColor, backgroundColor, borderColor, borderColor
 				);
+				
+				if(widget.microchip().isDebug())
+				{
+					graphics.pose().pushPose();
+					graphics.pose().translate(widget.x + 211, widget.y + 139, 0);
+					graphics.pose().scale(2, 2, 2);
+					graphics.enableBatching();
+					var context = LogicRenderer.Context.create(widget.color(), component, widget.menu().getCarriedWires() != null, widget.hasSelectedPort(), false);
+					LogicRenderers.render(context, graphics, component, 0, 0);
+					graphics.drawBatches();
+					graphics.pose().popPose();
+				}
 			}
 		}
 	}
