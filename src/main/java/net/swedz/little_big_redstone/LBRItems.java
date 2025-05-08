@@ -7,6 +7,7 @@ import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.capabilities.Capabilities;
 import net.neoforged.neoforge.client.model.generators.ModelFile;
 import net.neoforged.neoforge.registries.DeferredRegister;
+import net.swedz.little_big_redstone.item.FloppyDiskItem;
 import net.swedz.little_big_redstone.item.LogicItem;
 import net.swedz.little_big_redstone.item.StickyNoteItem;
 import net.swedz.little_big_redstone.item.logicarray.LogicArrayItem;
@@ -48,9 +49,9 @@ public final class LBRItems
 	
 	public static final ItemHolder<Item> REDSTONE_BIT = create("redstone_bit", "Redstone Bit", Item::new, LBRSortOrder.RESOURCES).withModelBuilder(CommonModelBuilders::generated).register();
 	
-	private static final Map<DyeColor, ItemHolder<StickyNoteItem>> STICKY_NOTES;
-	
 	private static final Map<DyeColor, ItemHolder<LogicArrayItem>> LOGIC_ARRAYS;
+	private static final Map<DyeColor, ItemHolder<FloppyDiskItem>> FLOPPY_DISKS;
+	private static final Map<DyeColor, ItemHolder<StickyNoteItem>> STICKY_NOTES;
 	
 	static
 	{
@@ -62,27 +63,36 @@ public final class LBRItems
 			}
 		}
 		
+		Map<DyeColor, ItemHolder<LogicArrayItem>> logicArrays = Maps.newHashMap();
+		Map<DyeColor, ItemHolder<FloppyDiskItem>> floppyDisks = Maps.newHashMap();
 		Map<DyeColor, ItemHolder<StickyNoteItem>> stickyNotes = Maps.newHashMap();
 		LBRColors.forEachIndexed((color, colorName, index) ->
-				stickyNotes.put(color, createStickyNote(color, colorName, index).register()));
-		STICKY_NOTES = Collections.unmodifiableMap(stickyNotes);
-		
-		Map<DyeColor, ItemHolder<LogicArrayItem>> logicArrays = Maps.newHashMap();
-		LBRColors.forEachIndexed((color, colorName, index) ->
-				logicArrays.put(color, createLogicArray(color, colorName, index).register()));
+		{
+			logicArrays.put(color, createLogicArray(color, colorName, index).register());
+			floppyDisks.put(color, createFloppyDisk(color, colorName, index).register());
+			stickyNotes.put(color, createStickyNote(color, colorName, index).register());
+		});
 		LOGIC_ARRAYS = Collections.unmodifiableMap(logicArrays);
-	}
-	
-	public static ItemHolder<StickyNoteItem> stickyNote(DyeColor color)
-	{
-		Assert.notNull(color);
-		return STICKY_NOTES.get(color);
+		FLOPPY_DISKS = Collections.unmodifiableMap(floppyDisks);
+		STICKY_NOTES = Collections.unmodifiableMap(stickyNotes);
 	}
 	
 	public static ItemHolder<LogicArrayItem> logicArray(DyeColor color)
 	{
 		Assert.notNull(color);
 		return LOGIC_ARRAYS.get(color);
+	}
+	
+	public static ItemHolder<FloppyDiskItem> floppyDisk(DyeColor color)
+	{
+		Assert.notNull(color);
+		return FLOPPY_DISKS.get(color);
+	}
+	
+	public static ItemHolder<StickyNoteItem> stickyNote(DyeColor color)
+	{
+		Assert.notNull(color);
+		return STICKY_NOTES.get(color);
 	}
 	
 	public static Set<ItemHolder> values()
@@ -111,6 +121,34 @@ public final class LBRItems
 		return create(id, englishName, (p) -> new LogicItem(p, type), LBRSortOrder.LOGIC.and(order));
 	}
 	
+	private static ItemHolder<LogicArrayItem> createLogicArray(DyeColor color, String colorEnglishName, int order)
+	{
+		final String colorId = color.getName();
+		final String id = "%s_logic_array".formatted(colorId);
+		final String englishName = "%s Logic Array".formatted(colorEnglishName);
+		return create(id, englishName, LogicArrayItem::new, LBRSortOrder.LOGIC_ARRAYS.and(order))
+				.tag(LBRTags.Items.LOGIC_ARRAYS)
+				.withCapabilities((item, event) ->
+						event.registerItem(Capabilities.ItemHandler.ITEM, (stack, __) -> new LogicArrayItemHandler(stack), item))
+				.withModel((holder) -> (provider) ->
+						provider.getBuilder(holder.identifier().id())
+								.parent(new ModelFile.UncheckedModelFile("item/generated"))
+								.texture("layer0", LBR.id("item/logic_array_%s".formatted(colorId))));
+	}
+	
+	private static ItemHolder<FloppyDiskItem> createFloppyDisk(DyeColor color, String colorEnglishName, int order)
+	{
+		final String colorId = color.getName();
+		final String id = "%s_floppy_disk".formatted(colorId);
+		final String englishName = "%s Floppy Disk".formatted(colorEnglishName);
+		return create(id, englishName, FloppyDiskItem::new, LBRSortOrder.FLOPPY_DISKS.and(order))
+				.tag(LBRTags.Items.FLOPPY_DISKS)
+				.withModel((holder) -> (provider) ->
+						provider.getBuilder(holder.identifier().id())
+								.parent(new ModelFile.UncheckedModelFile("item/generated"))
+								.texture("layer0", LBR.id("item/floppy_disk_%s".formatted(colorId))));
+	}
+	
 	private static ItemHolder<StickyNoteItem> createStickyNote(DyeColor color, String colorEnglishName, int order)
 	{
 		final String colorId = color.getName();
@@ -122,20 +160,5 @@ public final class LBRItems
 						provider.getBuilder(holder.identifier().id())
 								.parent(new ModelFile.UncheckedModelFile("item/generated"))
 								.texture("layer0", LBR.id("item/sticky_note_%s".formatted(colorId))));
-	}
-	
-	private static ItemHolder<LogicArrayItem> createLogicArray(DyeColor color, String colorEnglishName, int order)
-	{
-		final String colorId = color.getName();
-		final String id = "%s_logic_array".formatted(colorId);
-		final String englishName = "%s Logic Array".formatted(colorEnglishName);
-		return create(id, englishName, LogicArrayItem::new, LBRSortOrder.TOOLS.and(order))
-				.tag(LBRTags.Items.LOGIC_ARRAYS)
-				.withCapabilities((item, event) ->
-						event.registerItem(Capabilities.ItemHandler.ITEM, (stack, __) -> new LogicArrayItemHandler(stack), item))
-				.withModel((holder) -> (provider) ->
-						provider.getBuilder(holder.identifier().id())
-								.parent(new ModelFile.UncheckedModelFile("item/generated"))
-								.texture("layer0", LBR.id("item/logic_array_%s".formatted(colorId))));
 	}
 }
