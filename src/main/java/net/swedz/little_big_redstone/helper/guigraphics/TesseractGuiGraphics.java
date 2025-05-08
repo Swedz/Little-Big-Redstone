@@ -125,7 +125,7 @@ public final class TesseractGuiGraphics implements BlitGuiGraphics, FillGuiGraph
 			if(!draws.isEmpty())
 			{
 				var shader = batchInstance.shader();
-				var batch = GuiGraphicsBatch.start(vanilla, batchInstance.textures(), shader.shader(), shader.mode(), shader.format());
+				var batch = GuiGraphicsBatch.start(vanilla, batchInstance.textures(), shader.shader(), shader.mode(), shader.format(), shader.extraSetup());
 				for(var draw : draws)
 				{
 					draw.addVertexes(batch);
@@ -273,7 +273,7 @@ public final class TesseractGuiGraphics implements BlitGuiGraphics, FillGuiGraph
 		}
 		else
 		{
-			var batch = GuiGraphicsBatch.start(vanilla, textures, textureShader.shader(), textureShader.mode(), textureShader.format());
+			var batch = GuiGraphicsBatch.start(vanilla, textures, textureShader.shader(), textureShader.mode(), textureShader.format(), textureShader.extraSetup());
 			draw.addVertexes(batch);
 			batch.end();
 		}

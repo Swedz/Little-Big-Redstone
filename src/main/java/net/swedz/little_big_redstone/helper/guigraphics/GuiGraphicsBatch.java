@@ -13,6 +13,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.swedz.tesseract.neoforge.api.Assert;
 import org.joml.Matrix4f;
 
+import java.util.function.Consumer;
 import java.util.function.Supplier;
 
 public final class GuiGraphicsBatch
@@ -28,32 +29,57 @@ public final class GuiGraphicsBatch
 		this.buffer = buffer;
 	}
 	
-	public static GuiGraphicsBatch start(GuiGraphics graphics, Supplier<ShaderInstance> shader, VertexFormat.Mode mode, VertexFormat format)
+	public static GuiGraphicsBatch start(GuiGraphics graphics, Supplier<ShaderInstance> shader, VertexFormat.Mode mode, VertexFormat format, Consumer<ShaderInstance> extraSetup)
 	{
 		RenderSystem.setShader(shader);
 		RenderSystem.enableBlend();
+		if(extraSetup != null)
+		{
+			extraSetup.accept(shader.get());
+		}
 		var pose = graphics.pose().last().pose();
 		var buffer = Tesselator.getInstance().begin(mode, format);
 		return new GuiGraphicsBatch(pose, buffer);
 	}
 	
-	public static GuiGraphicsBatch start(GuiGraphics graphics, ResourceLocation[] textures, Supplier<ShaderInstance> shader, VertexFormat.Mode mode, VertexFormat format)
+	public static GuiGraphicsBatch start(GuiGraphics graphics, Supplier<ShaderInstance> shader, VertexFormat.Mode mode, VertexFormat format)
+	{
+		return start(graphics, shader, mode, format, null);
+	}
+	
+	//
+	
+	public static GuiGraphicsBatch start(GuiGraphics graphics, ResourceLocation[] textures, Supplier<ShaderInstance> shader, VertexFormat.Mode mode, VertexFormat format, Consumer<ShaderInstance> extraSetup)
 	{
 		for(int i = 0; i < textures.length; i++)
 		{
 			RenderSystem.setShaderTexture(i, textures[i]);
 		}
-		return start(graphics, shader, mode, format);
+		return start(graphics, shader, mode, format, extraSetup);
+	}
+	
+	public static GuiGraphicsBatch start(GuiGraphics graphics, ResourceLocation[] textures, Supplier<ShaderInstance> shader, VertexFormat.Mode mode, VertexFormat format)
+	{
+		return start(graphics, textures, shader, mode, format, null);
+	}
+	
+	//
+	
+	public static GuiGraphicsBatch start(GuiGraphics graphics, ResourceLocation texture, Supplier<ShaderInstance> shader, VertexFormat.Mode mode, VertexFormat format, Consumer<ShaderInstance> extraSetup)
+	{
+		return start(graphics, new ResourceLocation[]{texture}, shader, mode, format, extraSetup);
 	}
 	
 	public static GuiGraphicsBatch start(GuiGraphics graphics, ResourceLocation texture, Supplier<ShaderInstance> shader, VertexFormat.Mode mode, VertexFormat format)
 	{
-		return start(graphics, new ResourceLocation[]{texture}, shader, mode, format);
+		return start(graphics, texture, shader, mode, format, null);
 	}
+	
+	//
 	
 	public static GuiGraphicsBatch start(GuiGraphics graphics, ResourceLocation[] textures)
 	{
-		return start(graphics, textures, GameRenderer::getPositionTexColorShader, VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX_COLOR);
+		return start(graphics, textures, GameRenderer::getPositionTexColorShader, VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX_COLOR, null);
 	}
 	
 	public static GuiGraphicsBatch start(GuiGraphics graphics, ResourceLocation texture)

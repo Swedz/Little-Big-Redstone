@@ -5,6 +5,7 @@ import net.minecraft.client.renderer.ShaderInstance;
 import net.minecraft.resources.ResourceLocation;
 import org.jetbrains.annotations.ApiStatus;
 
+import java.util.function.Consumer;
 import java.util.function.Supplier;
 
 public interface BlitGuiGraphics extends ColoredGuiGraphics
@@ -13,14 +14,24 @@ public interface BlitGuiGraphics extends ColoredGuiGraphics
 	
 	void setTextureShader(TextureShaderConfiguration textureShader);
 	
+	default void setTextureShader(Supplier<ShaderInstance> shader, VertexFormat.Mode mode, VertexFormat format, Consumer<ShaderInstance> extraSetup)
+	{
+		this.setTextureShader(new TextureShaderConfiguration(shader, mode, format, extraSetup));
+	}
+	
 	default void setTextureShader(Supplier<ShaderInstance> shader, VertexFormat.Mode mode, VertexFormat format)
 	{
-		this.setTextureShader(new TextureShaderConfiguration(shader, mode, format));
+		this.setTextureShader(shader, mode, format, null);
+	}
+	
+	default void setTextureShader(Supplier<ShaderInstance> shader, Consumer<ShaderInstance> extraSetup)
+	{
+		this.setTextureShader(shader, TextureShaderConfiguration.DEFAULT.mode(), TextureShaderConfiguration.DEFAULT.format(), extraSetup);
 	}
 	
 	default void setTextureShader(Supplier<ShaderInstance> shader)
 	{
-		this.setTextureShader(shader, TextureShaderConfiguration.DEFAULT.mode(), TextureShaderConfiguration.DEFAULT.format());
+		this.setTextureShader(shader, null);
 	}
 	
 	default void resetTextureShader()
