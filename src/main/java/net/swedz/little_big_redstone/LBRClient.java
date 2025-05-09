@@ -1,5 +1,7 @@
 package net.swedz.little_big_redstone;
 
+import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer;
+import net.minecraft.world.item.Item;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.bus.api.SubscribeEvent;
@@ -11,12 +13,16 @@ import net.neoforged.neoforge.client.event.EntityRenderersEvent;
 import net.neoforged.neoforge.client.event.ModelEvent;
 import net.neoforged.neoforge.client.event.RegisterClientTooltipComponentFactoriesEvent;
 import net.neoforged.neoforge.client.event.RegisterMenuScreensEvent;
+import net.neoforged.neoforge.client.extensions.common.IClientItemExtensions;
+import net.neoforged.neoforge.client.extensions.common.RegisterClientExtensionsEvent;
 import net.swedz.little_big_redstone.client.entity.StickyNoteEntityRenderer;
+import net.swedz.little_big_redstone.client.item.LogicItemRenderer;
 import net.swedz.little_big_redstone.client.model.logic.LogicUnbakedModel;
 import net.swedz.little_big_redstone.client.model.microchip.MicrochipUnbakedModel;
 import net.swedz.little_big_redstone.gui.logicarray.LogicArrayScreen;
 import net.swedz.little_big_redstone.gui.logicconfig.LogicConfigScreen;
 import net.swedz.little_big_redstone.gui.microchip.MicrochipScreen;
+import net.swedz.little_big_redstone.item.LogicItem;
 import net.swedz.little_big_redstone.item.logicarray.tooltip.LogicArrayClientTooltip;
 import net.swedz.little_big_redstone.item.logicarray.tooltip.LogicArrayTooltipData;
 import net.swedz.tesseract.neoforge.registry.holder.ItemHolder;
@@ -28,6 +34,22 @@ public final class LBRClient
 	public LBRClient(IEventBus bus, ModContainer container)
 	{
 		LBRTooltips.init();
+	}
+	
+	@SubscribeEvent
+	private static void registerClientExtensions(RegisterClientExtensionsEvent event)
+	{
+		event.registerItem(
+				new IClientItemExtensions()
+				{
+					@Override
+					public BlockEntityWithoutLevelRenderer getCustomRenderer()
+					{
+						return new LogicItemRenderer();
+					}
+				},
+				LBRItems.values().stream().filter((i) -> i.get() instanceof LogicItem).map(ItemHolder::get).toArray(Item[]::new)
+		);
 	}
 	
 	@SubscribeEvent

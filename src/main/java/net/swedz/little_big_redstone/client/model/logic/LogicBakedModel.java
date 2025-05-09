@@ -42,16 +42,21 @@ public final class LogicBakedModel implements IDynamicBakedModel
 		return bakingModelData;
 	}
 	
+	public BakedModel getModel(LogicComponent<?, ?> component)
+	{
+		if(component == null)
+		{
+			return fallback;
+		}
+		var color = component.color().orElse(DyeColor.WHITE);
+		return itemModels.getOrDefault(color, fallback);
+	}
+	
 	@Override
 	public List<BakedModel> getRenderPasses(ItemStack stack, boolean fabulous)
 	{
-		LogicComponent<?, ?> component = stack.get(LBRComponents.LOGIC);
-		if(component == null)
-		{
-			return List.of(fallback);
-		}
-		var color = component.color().orElse(DyeColor.WHITE);
-		return List.of(itemModels.getOrDefault(color, fallback));
+		var component = stack.get(LBRComponents.LOGIC);
+		return List.of(this.getModel(component));
 	}
 	
 	@Override
@@ -82,7 +87,7 @@ public final class LogicBakedModel implements IDynamicBakedModel
 	@Override
 	public boolean isCustomRenderer()
 	{
-		return false;
+		return true;
 	}
 	
 	@SuppressWarnings("deprecation")

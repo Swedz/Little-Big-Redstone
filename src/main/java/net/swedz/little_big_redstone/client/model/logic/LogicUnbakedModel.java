@@ -23,6 +23,7 @@ import net.neoforged.neoforge.client.model.geometry.IGeometryLoader;
 import net.neoforged.neoforge.client.model.geometry.IUnbakedGeometry;
 import net.neoforged.neoforge.client.model.geometry.UnbakedGeometryHelper;
 import net.swedz.little_big_redstone.LBR;
+import net.swedz.little_big_redstone.LBRClientRenderTypes;
 
 import java.util.Map;
 import java.util.function.Function;
@@ -33,7 +34,8 @@ public final class LogicUnbakedModel implements IUnbakedGeometry<LogicUnbakedMod
 	public static final IGeometryLoader<LogicUnbakedModel> LOADER = (json, context) ->
 			new LogicUnbakedModel(LogicBakingModelData.CODEC.parse(JsonOps.INSTANCE, json).getOrThrow(JsonParseException::new));
 	
-	private static final RenderTypeGroup RENDER_TYPES = new RenderTypeGroup(RenderType.translucent(), NeoForgeRenderTypes.ITEM_UNSORTED_TRANSLUCENT.get());
+	private static final RenderTypeGroup NORMAL_RENDER_TYPES   = new RenderTypeGroup(RenderType.translucent(), NeoForgeRenderTypes.ITEM_UNSORTED_TRANSLUCENT.get());
+	private static final RenderTypeGroup SCANLINE_RENDER_TYPES = new RenderTypeGroup(RenderType.translucent(), LBRClientRenderTypes.logicScanline());
 	
 	private final LogicBakingModelData bakingModelData;
 	
@@ -42,12 +44,15 @@ public final class LogicUnbakedModel implements IUnbakedGeometry<LogicUnbakedMod
 		this.bakingModelData = bakingModelData;
 	}
 	
-	private void bakeLayer(CompositeModel.Baked.Builder builder, int index, String texture, ExtraFaceData faceData, Function<Material, TextureAtlasSprite> spriteGetter, ModelState modelState)
+	private void bakeLayer(IGeometryBakingContext context, TextureAtlasSprite particle, ItemOverrides overrides,
+						   CompositeModel.Baked.Builder builder, int index, String texture, ExtraFaceData faceData, Function<Material, TextureAtlasSprite> spriteGetter, ModelState modelState)
 	{
+		var innerBuilder = CompositeModel.Baked.builder(context, particle, overrides, context.getTransforms());
 		var sprite = spriteGetter.apply(new Material(InventoryMenu.BLOCK_ATLAS, bakingModelData.getItemTexture(texture)));
 		var unbaked = UnbakedGeometryHelper.createUnbakedItemElements(index, sprite, faceData);
 		var quads = UnbakedGeometryHelper.bakeElements(unbaked, (__) -> sprite, modelState);
-		builder.addQuads(RENDER_TYPES, quads);
+		innerBuilder.addQuads(NORMAL_RENDER_TYPES, quads);
+		builder.addLayer(innerBuilder.build());
 	}
 	
 	@Override
@@ -67,9 +72,9 @@ public final class LogicUnbakedModel implements IUnbakedGeometry<LogicUnbakedMod
 			{
 				var colorSet = bakingModelData.getColorSet(dyeColor);
 				var builder = CompositeModel.Baked.builder(context, particle, overrides, context.getTransforms());
-				this.bakeLayer(builder, 0, "background", colorSet.backgroundFaceData(), spriteGetter, modelState);
-				this.bakeLayer(builder, 1, "border", colorSet.foregroundFaceData(), spriteGetter, modelState);
-				this.bakeLayer(builder, 2, "icon", colorSet.foregroundFaceData(), spriteGetter, modelState);
+				this.bakeLayer(context, particle, overrides, builder, 0, "background", colorSet.backgroundFaceData(), spriteGetter, modelState);
+				this.bakeLayer(context, particle, overrides, builder, 1, "border", colorSet.foregroundFaceData(), spriteGetter, modelState);
+				this.bakeLayer(context, particle, overrides, builder, 2, "icon", colorSet.foregroundFaceData(), spriteGetter, modelState);
 				itemModels.put(dyeColor, builder.build());
 			}
 			return new LogicBakedModel(bakingModelData, itemModels);
