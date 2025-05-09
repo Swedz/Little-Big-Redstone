@@ -145,7 +145,7 @@ public final class LBRItems
 				.tag(LBRTags.Items.FLOPPY_DISKS)
 				.withModel((holder) -> (provider) ->
 						provider.getBuilder(holder.identifier().id())
-								.parent(new ModelFile.UncheckedModelFile("item/generated"))
+								.parent(new ModelFile.UncheckedModelFile(LBR.id("item/floppy_disk")))
 								.texture("layer0", LBR.id("item/floppy_disk_%s".formatted(colorId))));
 	}
 	

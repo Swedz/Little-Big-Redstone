@@ -1,5 +1,5 @@
 {
-  "parent": "minecraft:item/generated",
+  "parent": "little_big_redstone:item/floppy_disk",
   "textures": {
     "layer0": "little_big_redstone:item/floppy_disk_orange"
   }
