@@ -9,6 +9,7 @@ import net.minecraft.world.item.component.ItemContainerContents;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
+import net.swedz.little_big_redstone.microchip.Microchip;
 import net.swedz.little_big_redstone.microchip.logic.LogicComponent;
 
 import java.util.function.Supplier;
@@ -19,6 +20,7 @@ public final class LBRComponents
 	
 	public static final Supplier<DataComponentType<LogicComponent>>        LOGIC               = create("logic", LogicComponent.CODEC, LogicComponent.STREAM_CODEC);
 	public static final Supplier<DataComponentType<ItemContainerContents>> LOGIC_ARRAY_STORAGE = create("logic_array_storage", ItemContainerContents.CODEC, ItemContainerContents.STREAM_CODEC);
+	public static final Supplier<DataComponentType<Microchip.Immutable>>   FLOPPY_DISK         = create("floppy_disk", Microchip.Immutable.CODEC, Microchip.Immutable.STREAM_CODEC);
 	
 	public static void init(IEventBus bus)
 	{

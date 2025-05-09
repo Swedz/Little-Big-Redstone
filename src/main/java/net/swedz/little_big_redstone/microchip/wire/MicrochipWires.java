@@ -221,9 +221,9 @@ public final class MicrochipWires implements Iterable<Wire>
 	
 	public void loadFrom(MicrochipWires other)
 	{
-		wires = other.wires;
-		wiresByOutputSlot = other.wiresByOutputSlot;
-		wiresByInputSlot = other.wiresByInputSlot;
+		wires = Lists.newArrayList(other.wires);
+		wiresByOutputSlot = Maps.newHashMap(other.wiresByOutputSlot);
+		wiresByInputSlot = Maps.newHashMap(other.wiresByInputSlot);
 	}
 	
 	public void clear()
@@ -231,5 +231,18 @@ public final class MicrochipWires implements Iterable<Wire>
 		wires.clear();
 		wiresByOutputSlot.clear();
 		wiresByInputSlot.clear();
+	}
+	
+	@Override
+	public int hashCode()
+	{
+		return wires.hashCode();
+	}
+	
+	@Override
+	public boolean equals(Object o)
+	{
+		return this == o ||
+			   (o instanceof MicrochipWires other && this.hashCode() == other.hashCode());
 	}
 }

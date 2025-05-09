@@ -210,7 +210,9 @@ public final class LogicComponents implements Iterable<LogicEntry>
 	
 	public void loadFrom(LogicComponents other)
 	{
-		components = other.components;
+		Map<Integer, LogicEntry> copiedComponents = Maps.newHashMap();
+		other.components.forEach((slot, entry) -> copiedComponents.put(slot, new LogicEntry(entry.slot(), entry.x(), entry.y(), entry.component().copy())));
+		components = copiedComponents;
 		debug = other.debug;
 	}
 	
@@ -219,5 +221,18 @@ public final class LogicComponents implements Iterable<LogicEntry>
 		components.clear();
 		traversalOrder = List.of();
 		debug = false;
+	}
+	
+	@Override
+	public int hashCode()
+	{
+		return components.hashCode();
+	}
+	
+	@Override
+	public boolean equals(Object o)
+	{
+		return this == o ||
+			   (o instanceof LogicComponents other && this.hashCode() == other.hashCode());
 	}
 }

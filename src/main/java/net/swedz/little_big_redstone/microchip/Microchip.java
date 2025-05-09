@@ -9,6 +9,8 @@ import net.swedz.little_big_redstone.microchip.logic.LogicComponents;
 import net.swedz.little_big_redstone.microchip.logic.LogicContext;
 import net.swedz.little_big_redstone.microchip.wire.MicrochipWires;
 
+import java.util.Objects;
+
 public final class Microchip
 {
 	public static final Codec<Microchip> CODEC = RecordCodecBuilder.create((instance) -> instance
@@ -90,6 +92,18 @@ public final class Microchip
 		this.markDirty();
 	}
 	
+	public void loadFrom(Immutable other)
+	{
+		components.loadFrom(other.components);
+		wires.loadFrom(other.wires);
+		this.markDirty();
+	}
+	
+	public Immutable immutable()
+	{
+		return new Immutable(this);
+	}
+	
 	public void clear()
 	{
 		components.clear();
@@ -138,6 +152,97 @@ public final class Microchip
 				}
 			}
 			entry.component().processTick(context, inputs);
+		}
+	}
+	
+	@Override
+	public int hashCode()
+	{
+		return Objects.hash(components, wires);
+	}
+	
+	@Override
+	public boolean equals(Object o)
+	{
+		return this == o ||
+			   (o instanceof Immutable other && components.equals(other.components) && wires.equals(other.wires));
+	}
+	
+	/**
+	 * <p>An immutable copy of a {@link Microchip}. Used for storing a program in a
+	 * {@link net.swedz.little_big_redstone.item.FloppyDiskItem}.</p>
+	 */
+	public static final class Immutable
+	{
+		public static final Codec<Immutable> CODEC = RecordCodecBuilder.create((instance) -> instance
+				.group(
+						LogicComponents.CODEC.fieldOf("components").forGetter((m) -> m.components),
+						MicrochipWires.CODEC.fieldOf("wires").forGetter((m) -> m.wires)
+				)
+				.apply(instance, Immutable::new));
+		
+		public static final StreamCodec<ByteBuf, Immutable> STREAM_CODEC = StreamCodec.composite(
+				LogicComponents.STREAM_CODEC, (m) -> m.components,
+				MicrochipWires.STREAM_CODEC, (m) -> m.wires,
+				Immutable::new
+		);
+		
+		private final LogicComponents components;
+		private final MicrochipWires  wires;
+		
+		/**
+		 * Should only be used by codecs.
+		 */
+		private Immutable(LogicComponents components, MicrochipWires wires)
+		{
+			this.components = components;
+			this.wires = wires;
+		}
+		
+		/**
+		 * Creates an immutable deep copy of a {@link Microchip}.
+		 *
+		 * @param microchip the {@link Microchip} to copy
+		 */
+		private Immutable(Microchip microchip)
+		{
+			Microchip copy = new Microchip(microchip.size());
+			components = new LogicComponents(copy);
+			components.loadFrom(microchip.components);
+			wires = new MicrochipWires(copy);
+			wires.loadFrom(microchip.wires);
+		}
+		
+		/**
+		 * <p>Gets an iterable instance of the components on this immutable {@link Microchip}.</p>
+		 *
+		 * <p><b>IMPORTANT:</b> The entries yielded by this iterable contain logic components that <i>MUST NOT</i> be
+		 * modified. Since this object is a data component, we must respect the promise that data components are
+		 * immutable, but logic components cannot be immutable.</p>
+		 *
+		 * @return the iterable instance
+		 */
+		public Iterable<LogicEntry> components()
+		{
+			return components;
+		}
+		
+		public int wireCount()
+		{
+			return wires.values().size();
+		}
+		
+		@Override
+		public int hashCode()
+		{
+			return Objects.hash(components, wires);
+		}
+		
+		@Override
+		public boolean equals(Object o)
+		{
+			return this == o ||
+				   (o instanceof Immutable other && components.equals(other.components) && wires.equals(other.wires));
 		}
 	}
 }
