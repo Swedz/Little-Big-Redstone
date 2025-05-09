@@ -187,4 +187,10 @@ public final class FloppyDiskItem extends Item
 		}
 		return super.use(level, player, usedHand);
 	}
+	
+	@Override
+	public boolean shouldCauseReequipAnimation(ItemStack oldStack, ItemStack newStack, boolean slotChanged)
+	{
+		return !newStack.is(oldStack.getItem());
+	}
 }
