@@ -187,44 +187,50 @@ public final class MicrochipMenu extends BaseContainerMenu
 	{
 		var carried = this.getCarried();
 		
-		if(slotId >= 0 && logicArrayItemHandler.isCreativeMode() && slots.get(slotId) instanceof LogicArraySlot slot)
+		if(slotId >= 0 && logicArrayItemHandler.isCreativeMode() && slots.get(slotId) instanceof LogicArraySlot slot &&
+		   clickType != ClickType.QUICK_CRAFT)
 		{
+			boolean shift = clickType == ClickType.QUICK_MOVE;
 			var items = LBRCreativeTabs.getLogicArrayItems();
 			if(slotId < items.size())
 			{
 				var stack = items.get(slotId);
-				if(clickType == ClickType.PICKUP || clickType == ClickType.PICKUP_ALL || clickType == ClickType.QUICK_MOVE)
+				if(!carried.isEmpty() && !stack.isEmpty() && ItemStack.isSameItemSameComponents(carried, stack))
 				{
-					if(button == 0 || button == 1)
+					if(button == 0)
 					{
-						if(carried.isEmpty())
+						if(shift)
 						{
-							this.setCarried(stack.copyWithCount(clickType == ClickType.QUICK_MOVE ? 64 : 1));
+							carried.setCount(stack.getMaxStackSize());
 						}
-						else if(ItemStack.isSameItemSameComponents(carried, stack))
+						else if(carried.getCount() < carried.getMaxStackSize())
 						{
-							if(clickType == ClickType.QUICK_MOVE)
-							{
-								carried.setCount(64);
-							}
-							else
-							{
-								carried.grow(button == 0 ? 1 : -1);
-								carried.limitSize(64);
-							}
-						}
-						else if(button == 1)
-						{
-							carried.shrink(1);
-						}
-						else
-						{
-							this.setCarried(ItemStack.EMPTY);
+							carried.grow(1);
 						}
 					}
+					else
+					{
+						carried.shrink(1);
+					}
 				}
-				return true;
+				else if(carried.isEmpty() && !stack.isEmpty())
+				{
+					this.setCarried(stack.copyWithCount(shift ? stack.getMaxStackSize() : 1));
+				}
+				else if(button == 0)
+				{
+					this.setCarried(ItemStack.EMPTY);
+				}
+				else if(!carried.isEmpty())
+				{
+					carried.shrink(1);
+				}
 			}
+			else
+			{
+				this.setCarried(ItemStack.EMPTY);
+			}
+			return true;
 		}
 		
 		return false;
@@ -283,6 +289,12 @@ public final class MicrochipMenu extends BaseContainerMenu
 	public boolean moveItemStackTo(ItemStack stack, int startIndex, int endIndex, boolean reverseDirection)
 	{
 		return super.moveItemStackTo(stack, startIndex, endIndex, reverseDirection);
+	}
+	
+	@Override
+	public boolean canDragTo(Slot slot)
+	{
+		return !(slot instanceof LogicArraySlot logicArraySlot) || !logicArraySlot.isCreative();
 	}
 	
 	@Override
