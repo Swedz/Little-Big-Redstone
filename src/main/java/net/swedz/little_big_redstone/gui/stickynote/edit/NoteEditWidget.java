@@ -1,26 +1,18 @@
 package net.swedz.little_big_redstone.gui.stickynote.edit;
 
-import com.google.common.collect.Lists;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Renderable;
 import net.minecraft.client.gui.components.events.GuiEventListener;
-import net.minecraft.client.gui.font.TextFieldHelper;
 import net.minecraft.client.gui.narration.NarratableEntry;
 import net.minecraft.client.gui.narration.NarrationElementOutput;
 import net.minecraft.client.gui.navigation.ScreenRectangle;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.network.chat.Style;
-import net.minecraft.util.StringUtil;
-import net.swedz.little_big_redstone.LBR;
 import net.swedz.little_big_redstone.helper.guigraphics.TesseractGuiGraphics;
-import net.swedz.tesseract.neoforge.api.tuple.Pair;
 import org.apache.commons.lang3.mutable.MutableInt;
 import org.apache.commons.lang3.mutable.MutableObject;
-
-import java.util.List;
 
 import static com.mojang.blaze3d.platform.InputConstants.*;
 
@@ -31,8 +23,6 @@ public final class NoteEditWidget implements GuiEventListener, Renderable, Narra
 	private final int x, y, width, height;
 	
 	private final StickyNoteEdit note;
-	
-	private final TextFieldHelper editor;
 	
 	private int     tick;
 	private boolean focused;
@@ -47,12 +37,7 @@ public final class NoteEditWidget implements GuiEventListener, Renderable, Narra
 		this.width = width;
 		this.height = height;
 		
-		note = new StickyNoteEdit(text);
-		editor = new TextFieldHelper(
-				note::text, note::setText,
-				NoteEditWidget::getClipboard, NoteEditWidget::setClipboard,
-				(input) -> font.wordWrapHeight(input, width) <= height
-		);
+		note = new StickyNoteEdit(font, width, height, text);
 	}
 	
 	public NoteEditWidget(Font font, int x, int y, int width, int height,
@@ -66,17 +51,6 @@ public final class NoteEditWidget implements GuiEventListener, Renderable, Narra
 		this.height = height;
 		
 		note = previous.note;
-		editor = previous.editor;
-	}
-	
-	private static String getClipboard()
-	{
-		return TextFieldHelper.getClipboardContents(Minecraft.getInstance());
-	}
-	
-	private static void setClipboard(String text)
-	{
-		TextFieldHelper.setClipboardContents(Minecraft.getInstance(), text);
 	}
 	
 	public StickyNoteEdit note()
@@ -101,7 +75,7 @@ public final class NoteEditWidget implements GuiEventListener, Renderable, Narra
 		{
 			int localMouseX = (int) (mouseX - x);
 			int localMouseY = (int) (mouseY - y);
-			this.jumpTo(localMouseX, localMouseY);
+			note.jumpTo(localMouseX, localMouseY);
 			return true;
 		}
 		
@@ -113,62 +87,63 @@ public final class NoteEditWidget implements GuiEventListener, Renderable, Narra
 	{
 		if(Screen.isSelectAll(keyCode))
 		{
-			editor.selectAll();
+			note.selectAll();
 			return true;
 		}
 		else if(Screen.isCopy(keyCode))
 		{
-			editor.copy();
+			note.copy();
 			return true;
 		}
 		else if(Screen.isPaste(keyCode))
 		{
-			editor.paste();
+			note.paste();
 			return true;
 		}
 		else if(Screen.isCut(keyCode))
 		{
-			editor.cut();
+			note.cut();
 			return true;
 		}
 		else
 		{
-			var step = Screen.hasControlDown() ? TextFieldHelper.CursorStep.WORD : TextFieldHelper.CursorStep.CHARACTER;
+			boolean ctrl = Screen.hasControlDown();
+			boolean shift = Screen.hasShiftDown();
 			return switch (keyCode)
 			{
 				case KEY_RETURN, KEY_NUMPADENTER ->
 				{
-					editor.insertText("\n");
+					note.insertNewLine();
 					yield true;
 				}
 				case KEY_BACKSPACE ->
 				{
-					editor.removeFromCursor(-1, step);
+					note.backspace(ctrl);
 					yield true;
 				}
 				case KEY_DELETE ->
 				{
-					editor.removeFromCursor(1, step);
-					yield true;
-				}
-				case KEY_RIGHT ->
-				{
-					editor.moveBy(1, Screen.hasShiftDown(), step);
+					note.delete(ctrl);
 					yield true;
 				}
 				case KEY_LEFT ->
 				{
-					editor.moveBy(-1, Screen.hasShiftDown(), step);
+					note.moveLeft(shift, ctrl);
+					yield true;
+				}
+				case KEY_RIGHT ->
+				{
+					note.moveRight(shift, ctrl);
 					yield true;
 				}
 				case KEY_UP ->
 				{
-					this.moveLine(-1);
+					note.moveUp(shift);
 					yield true;
 				}
 				case KEY_DOWN ->
 				{
-					this.moveLine(1);
+					note.moveDown(shift);
 					yield true;
 				}
 				default -> false;
@@ -177,136 +152,9 @@ public final class NoteEditWidget implements GuiEventListener, Renderable, Narra
 	}
 	
 	@Override
-	public boolean charTyped(char codePoint, int modifiers)
+	public boolean charTyped(char character, int modifiers)
 	{
-		if(StringUtil.isAllowedChatCharacter(codePoint))
-		{
-			editor.insertText(Character.toString(codePoint));
-			return true;
-		}
-		return false;
-	}
-	
-	private int findClosestCharCursorPos(String text, int desiredWidth)
-	{
-		if(desiredWidth == 0)
-		{
-			return 0;
-		}
-		
-		int lineWidth = font.width(text);
-		
-		if(lineWidth <= desiredWidth)
-		{
-			return text.length();
-		}
-		
-		int lastWidth = 0;
-		String traversed = "";
-		for(int i = 0; i < text.length(); i++)
-		{
-			traversed += text.charAt(i);
-			int width = font.width(traversed);
-			if(desiredWidth == width)
-			{
-				return i + 1;
-			}
-			else if(desiredWidth < width && desiredWidth > lastWidth)
-			{
-				int distToWidth = Math.abs(width - desiredWidth);
-				int distToLastWidth = Math.abs(lastWidth - desiredWidth);
-				if(distToWidth <= distToLastWidth)
-				{
-					return i + 1;
-				}
-				else
-				{
-					return i;
-				}
-			}
-			lastWidth = width;
-		}
-		
-		return 0;
-	}
-	
-	private int findNewCursorPosForLineDifference(int lineChange)
-	{
-		int cursorPos = editor.getCursorPos();
-		
-		List<Pair<Integer, Integer>> lines = Lists.newArrayList();
-		font.getSplitter().splitLines(note.text(), width, Style.EMPTY, false, (__, start, end) -> lines.add(new Pair<>(start, end)));
-		
-		int index = 0;
-		for(var line : lines)
-		{
-			int start = line.a();
-			int end = line.b();
-			
-			String text = note.text().substring(start, end);
-			int lineWidth = font.width(text);
-			
-			if(cursorPos >= start && cursorPos <= end)
-			{
-				if(index == 0 && lineChange < 0)
-				{
-					return 0;
-				}
-				if(index == lines.size() - 1 && lineChange > 0)
-				{
-					return note.text().length();
-				}
-				var targetLine = lines.get(index + lineChange);
-				int lineCursorX = font.width(text.substring(0, cursorPos - start));
-				String targetText = note.text().substring(targetLine.a(), targetLine.b());
-				int targetTextIndex = this.findClosestCharCursorPos(targetText, lineCursorX);
-				return targetLine.a() + targetTextIndex;
-			}
-			
-			index++;
-		}
-		
-		LBR.LOGGER.warn("Failed to find desirable cursor pos");
-		return cursorPos;
-	}
-	
-	private void moveLine(int lineChange)
-	{
-		editor.setCursorPos(this.findNewCursorPosForLineDifference(lineChange), Screen.hasShiftDown());
-	}
-	
-	private int findNewCursorPosForMouseClick(int mouseX, int mouseY)
-	{
-		List<Pair<Integer, Integer>> lines = Lists.newArrayList();
-		font.getSplitter().splitLines(note.text(), width, Style.EMPTY, false, (__, start, end) -> lines.add(new Pair<>(start, end)));
-		
-		int targetLineIndex = mouseY / font.lineHeight;
-		if(targetLineIndex < 0)
-		{
-			return 0;
-		}
-		if(targetLineIndex >= lines.size())
-		{
-			return note.text().length();
-		}
-		if(targetLineIndex >= 0 && targetLineIndex < lines.size())
-		{
-			var line = lines.get(targetLineIndex);
-			String text = note.text().substring(line.a(), line.b());
-			int lineCursorIndex = this.findClosestCharCursorPos(text, mouseX);
-			return line.a() + lineCursorIndex;
-		}
-		
-		return -1;
-	}
-	
-	private void jumpTo(int mouseX, int mouseY)
-	{
-		int cursorPos = this.findNewCursorPosForMouseClick(mouseX, mouseY);
-		if(cursorPos != -1)
-		{
-			editor.setCursorPos(cursorPos, Screen.hasShiftDown());
-		}
+		return note.type(character);
 	}
 	
 	@Override
@@ -351,7 +199,7 @@ public final class NoteEditWidget implements GuiEventListener, Renderable, Narra
 	
 	private void renderLine(TesseractGuiGraphics graphics, int index, int start, int end, MutableObject<Runnable> cursorRenderer)
 	{
-		int cursorPos = editor.getCursorPos();
+		int cursorPos = note.editor().getCursorPos();
 		
 		int y = index * font.lineHeight;
 		
@@ -366,7 +214,7 @@ public final class NoteEditWidget implements GuiEventListener, Renderable, Narra
 			cursorRenderer.setValue(() -> this.renderCursor(graphics, lineCursorX, y, cursorPos == end));
 		}
 		
-		if(editor.isSelecting())
+		if(note.editor().isSelecting())
 		{
 			this.renderHighight(graphics, 0, y, text, lineWidth, start, end);
 		}
@@ -389,11 +237,8 @@ public final class NoteEditWidget implements GuiEventListener, Renderable, Narra
 	
 	private void renderHighight(TesseractGuiGraphics graphics, int x, int y, String text, int lineWidth, int start, int end)
 	{
-		int cursorPos = editor.getCursorPos();
-		int selectionPos = editor.getSelectionPos();
-		
-		int highlightStartPos = Math.min(cursorPos, selectionPos);
-		int highlightEndPos = Math.max(cursorPos, selectionPos);
+		int highlightStartPos = note.getHighlightStartPos();
+		int highlightEndPos = note.getHighlightEndPos();
 		
 		// End point is before this line
 		if(highlightEndPos < start ||
