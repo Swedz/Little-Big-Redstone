@@ -149,7 +149,7 @@ public final class TesseractGuiGraphics implements BlitGuiGraphics, FillGuiGraph
 	}
 	
 	@Override
-	public void setColor(int red, int green, int blue, int alpha)
+	public void setColorInt(int red, int green, int blue, int alpha)
 	{
 		color = new int[]{red, green, blue, alpha};
 	}
