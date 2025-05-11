@@ -1,4 +1,4 @@
-package net.swedz.little_big_redstone.item;
+package net.swedz.little_big_redstone.item.stickynote;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;

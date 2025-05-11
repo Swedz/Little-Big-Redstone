@@ -9,7 +9,7 @@ import net.neoforged.neoforge.client.model.generators.ModelFile;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import net.swedz.little_big_redstone.item.FloppyDiskItem;
 import net.swedz.little_big_redstone.item.LogicItem;
-import net.swedz.little_big_redstone.item.StickyNoteItem;
+import net.swedz.little_big_redstone.item.stickynote.StickyNoteItem;
 import net.swedz.little_big_redstone.item.logicarray.LogicArrayItem;
 import net.swedz.little_big_redstone.item.logicarray.LogicArrayItemHandler;
 import net.swedz.little_big_redstone.microchip.logic.LogicType;

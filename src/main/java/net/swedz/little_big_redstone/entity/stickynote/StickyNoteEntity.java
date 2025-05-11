@@ -3,6 +3,7 @@ package net.swedz.little_big_redstone.entity.stickynote;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.NbtOps;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.network.protocol.game.ClientboundAddEntityPacket;
@@ -10,8 +11,11 @@ import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerEntity;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.Mth;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.decoration.HangingEntity;
@@ -22,8 +26,11 @@ import net.minecraft.world.level.GameRules;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
+import net.swedz.little_big_redstone.LBR;
 import net.swedz.little_big_redstone.LBREntities;
 import net.swedz.little_big_redstone.LBRItems;
+import net.swedz.little_big_redstone.item.stickynote.StickyNote;
+import net.swedz.little_big_redstone.network.packet.StickyNotePacket;
 import net.swedz.tesseract.neoforge.api.Assert;
 
 public final class StickyNoteEntity extends HangingEntity
@@ -37,6 +44,8 @@ public final class StickyNoteEntity extends HangingEntity
 	
 	private Direction facing = Direction.SOUTH;
 	private DyeColor  color  = DyeColor.WHITE;
+	
+	private StickyNote note = StickyNote.EMPTY;
 	
 	public StickyNoteEntity(EntityType<? extends StickyNoteEntity> type, Level level)
 	{
@@ -153,6 +162,33 @@ public final class StickyNoteEntity extends HangingEntity
 		entityData.set(DATA_COLOR, color.getId());
 	}
 	
+	public StickyNote getNote()
+	{
+		return note;
+	}
+	
+	public void setNote(StickyNote note)
+	{
+		Assert.notNull(note);
+		
+		this.note = note;
+	}
+	
+	@Override
+	public InteractionResult interact(Player player, InteractionHand hand)
+	{
+		if(!this.level().isClientSide())
+		{
+			var action = player.isShiftKeyDown() ? StickyNotePacket.Action.OPEN_EDIT : StickyNotePacket.Action.OPEN_VIEW;
+			new StickyNotePacket(this.getId(), action, note.text()).sendToClient((ServerPlayer) player);
+			return InteractionResult.CONSUME;
+		}
+		else
+		{
+			return InteractionResult.SUCCESS;
+		}
+	}
+	
 	@Override
 	public Packet<ClientGamePacketListener> getAddEntityPacket(ServerEntity entity)
 	{
@@ -180,6 +216,7 @@ public final class StickyNoteEntity extends HangingEntity
 		compound.putByte("AttachedFace", (byte) direction.get3DDataValue());
 		compound.putByte("Facing", (byte) facing.get2DDataValue());
 		compound.putByte("Color", (byte) color.getId());
+		compound.put("StickyNote", StickyNote.CODEC.encodeStart(NbtOps.INSTANCE, note).getOrThrow());
 	}
 	
 	@Override
@@ -190,5 +227,9 @@ public final class StickyNoteEntity extends HangingEntity
 		this.setDirection(Direction.from3DDataValue(compound.getByte("AttachedFace")));
 		this.setFacing(Direction.from2DDataValue(compound.getByte("Facing")));
 		this.setColor(DyeColor.byId(compound.getByte("Color")));
+		StickyNote.CODEC.parse(NbtOps.INSTANCE, compound.getCompound("StickyNote"))
+				.ifSuccess(this::setNote)
+				.ifError((error) ->
+						LBR.LOGGER.error("Failed to load sticky note data at {}: {}", pos.toShortString(), error.message()));
 	}
 }

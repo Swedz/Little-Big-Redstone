@@ -10,6 +10,7 @@ import net.swedz.little_big_redstone.network.packet.OpenLogicConfigPacket;
 import net.swedz.little_big_redstone.network.packet.PlaceTakeMicrochipLogicPacket;
 import net.swedz.little_big_redstone.network.packet.PlaceTakeMicrochipWirePacket;
 import net.swedz.little_big_redstone.network.packet.RequestMicrochipMenuPacket;
+import net.swedz.little_big_redstone.network.packet.StickyNotePacket;
 import net.swedz.little_big_redstone.network.packet.UpdateComponentsMicrochipPacket;
 import net.swedz.little_big_redstone.network.packet.UpdateMicrochipPacket;
 import net.swedz.little_big_redstone.network.packet.WriteLogicConfigPacket;
@@ -36,6 +37,7 @@ public final class LBRPackets
 		create("place_take_microchip_wire", PlaceTakeMicrochipWirePacket.class, PlaceTakeMicrochipWirePacket.STREAM_CODEC);
 		create("place_take_microchip_logic", PlaceTakeMicrochipLogicPacket.class, PlaceTakeMicrochipLogicPacket.STREAM_CODEC);
 		create("request_microchip_menu", RequestMicrochipMenuPacket.class, RequestMicrochipMenuPacket.STREAM_CODEC);
+		create("sticky_note", StickyNotePacket.class, StickyNotePacket.STREAM_CODEC);
 		create("update_components_microchip", UpdateComponentsMicrochipPacket.class, UpdateComponentsMicrochipPacket.STREAM_CODEC);
 		create("update_microchip", UpdateMicrochipPacket.class, UpdateMicrochipPacket.STREAM_CODEC);
 		create("write_logic_config", WriteLogicConfigPacket.class, WriteLogicConfigPacket.STREAM_CODEC);

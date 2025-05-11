@@ -17,6 +17,14 @@ repositories {
 			includeGroup "dev.emi"
 		}
 	}
+	maven {
+		name "Sonatype OSS"
+		url = "https://s01.oss.sonatype.org/content/repositories/snapshots/"
+		content {
+			// Adventure
+			includeGroup "net.kyori"
+		}
+	}
 }
 
 dependencies {
@@ -33,5 +41,18 @@ dependencies {
 		localImplementation "dev.emi:emi-neoforge:${emi_version}"
 	} else {
 		compileOnly "dev.emi:emi-neoforge:${emi_version}"
+	}
+
+	jarJar(implementation("net.kyori:adventure-platform-neoforge:${adventure_version}")) {
+		version {
+			strictly adventure_version_range
+			prefer adventure_version
+		}
+	}
+	jarJar(implementation("net.kyori:adventure-text-minimessage:${minimessage_version}")) {
+		version {
+			strictly minimessage_version_range
+			prefer minimessage_version
+		}
 	}
 }
