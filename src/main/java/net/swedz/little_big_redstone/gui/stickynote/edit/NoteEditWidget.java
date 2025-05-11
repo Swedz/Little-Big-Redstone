@@ -226,7 +226,7 @@ public final class NoteEditWidget implements GuiEventListener, Renderable, Narra
 		{
 			if(endOfLine)
 			{
-				graphics.drawString("_", x, y);
+				graphics.drawString("_", x, y, false);
 			}
 			else
 			{
