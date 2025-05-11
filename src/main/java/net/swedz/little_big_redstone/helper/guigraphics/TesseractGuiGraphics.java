@@ -34,7 +34,8 @@ public final class TesseractGuiGraphics implements BlitGuiGraphics, FillGuiGraph
 	{
 	}
 	
-	private int[] color = new int[]{255, 255, 255, 255};
+	private int[] color     = new int[]{255, 255, 255, 255};
+	private int[] lastColor = new int[]{255, 255, 255, 255};
 	
 	private TextureShaderConfiguration textureShader = TextureShaderConfiguration.DEFAULT;
 	private ResourceLocation[]         textures      = new ResourceLocation[]{MissingTextureAtlasSprite.getLocation()};
@@ -151,7 +152,15 @@ public final class TesseractGuiGraphics implements BlitGuiGraphics, FillGuiGraph
 	@Override
 	public void setColorInt(int red, int green, int blue, int alpha)
 	{
+		lastColor = color;
 		color = new int[]{red, green, blue, alpha};
+	}
+	
+	@Override
+	public void revertColor()
+	{
+		color = lastColor;
+		lastColor = new int[]{255, 255, 255, 255};
 	}
 	
 	@Override

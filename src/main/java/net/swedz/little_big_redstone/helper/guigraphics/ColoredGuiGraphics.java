@@ -34,6 +34,8 @@ public interface ColoredGuiGraphics
 	
 	void setColorInt(int red, int green, int blue, int alpha);
 	
+	void revertColor();
+	
 	default void resetColor()
 	{
 		this.setColorInt(255, 255, 255, 255);
