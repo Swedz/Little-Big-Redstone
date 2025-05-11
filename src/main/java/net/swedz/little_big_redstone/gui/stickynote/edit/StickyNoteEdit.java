@@ -4,11 +4,10 @@ import com.google.common.collect.Lists;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.font.TextFieldHelper;
-import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Style;
 import net.minecraft.util.StringUtil;
-import net.swedz.little_big_redstone.LBR;
-import net.swedz.tesseract.neoforge.api.tuple.Pair;
+import net.swedz.little_big_redstone.api.Bounds;
+import org.apache.commons.lang3.mutable.MutableInt;
 
 import java.util.List;
 
@@ -20,7 +19,8 @@ public final class StickyNoteEdit
 	private final TextFieldHelper editor;
 	
 	private String text;
-	private boolean dirty;
+	
+	private Display display;
 	
 	public StickyNoteEdit(Font font, int width, int height, String text)
 	{
@@ -41,16 +41,6 @@ public final class StickyNoteEdit
 		return editor;
 	}
 	
-	public int getHighlightStartPos()
-	{
-		return Math.min(editor.getCursorPos(), editor.getSelectionPos());
-	}
-	
-	public int getHighlightEndPos()
-	{
-		return Math.max(editor.getCursorPos(), editor.getSelectionPos());
-	}
-	
 	public String text()
 	{
 		return text;
@@ -62,19 +52,24 @@ public final class StickyNoteEdit
 		this.markDirty();
 	}
 	
-	public void markDirty()
+	public Display getDisplay()
 	{
-		dirty = true;
+		if(display == null)
+		{
+			display = new Display();
+		}
+		return display;
 	}
 	
-	public boolean isDirty()
+	private void markDirty()
 	{
-		return dirty;
+		display = null;
 	}
 	
 	public void selectAll()
 	{
 		editor.selectAll();
+		this.markDirty();
 	}
 	
 	public void copy()
@@ -115,16 +110,28 @@ public final class StickyNoteEdit
 	public void moveLeft(boolean shift, boolean ctrl)
 	{
 		editor.moveBy(-1, shift, this.getStep(ctrl));
+		this.markDirty();
 	}
 	
 	public void moveRight(boolean shift, boolean ctrl)
 	{
 		editor.moveBy(1, shift, this.getStep(ctrl));
+		this.markDirty();
 	}
 	
 	private void moveVertically(int direction, boolean shift)
 	{
-		editor.setCursorPos(this.findNewCursorPosForLineDifference(direction), shift);
+		var display = this.getDisplay();
+		int targetLineX = display.cursorX();
+		int targetLineY = display.cursorY() + direction;
+		if(targetLineY >= 0 && targetLineY < display.lines().length)
+		{
+			var line = display.lines()[targetLineY];
+			targetLineX = line.findIndex(font, display.cursorScreenX());
+		}
+		int newCursorPos = display.toGlobalCursorPos(targetLineX, targetLineY);
+		editor.setCursorPos(newCursorPos, shift);
+		this.markDirty();
 	}
 	
 	public void moveUp(boolean shift)
@@ -147,120 +154,219 @@ public final class StickyNoteEdit
 		return false;
 	}
 	
-	public void jumpTo(int mouseX, int mouseY)
+	public void jumpTo(int mouseX, int mouseY, boolean shift)
 	{
-		int cursorPos = this.findNewCursorPosForMouseClick(mouseX, mouseY);
-		if(cursorPos != -1)
+		var display = this.getDisplay();
+		int targetLineX = display.cursorX();
+		int targetLineY = mouseY / display.lineHeight();
+		if(targetLineY >= 0 && targetLineY < display.lines().length)
 		{
-			editor.setCursorPos(cursorPos, Screen.hasShiftDown());
+			var line = display.lines()[targetLineY];
+			targetLineX = line.findIndex(font, mouseX);
+		}
+		int newCursorPos = display.toGlobalCursorPos(targetLineX, targetLineY);
+		editor.setCursorPos(newCursorPos, shift);
+		this.markDirty();
+	}
+	
+	public final class Display
+	{
+		private final String fullText;
+		private final DisplayLine[] lines;
+		private final int lineHeight;
+		
+		private final int cursorX, cursorY;
+		private final int cursorScreenX, cursorScreenY;
+		private final boolean cursorAtEndOfLine;
+		
+		private final Bounds[] highlightedAreas;
+		
+		private Display()
+		{
+			this.fullText = text;
+			this.lineHeight = font.lineHeight;
+			
+			int cursorIndex = editor.getCursorPos();
+			int selectionIndex = editor.getSelectionPos();
+			
+			int highlightStartIndex = Math.min(cursorIndex, selectionIndex);
+			int highlightEndIndex = Math.max(cursorIndex, selectionIndex);
+			boolean hasHighlight = editor.isSelecting();
+			
+			var lineIndex = new MutableInt();
+			List<DisplayLine> lines = Lists.newArrayList();
+			font.getSplitter().splitLines(fullText, width, Style.EMPTY, false, (__, start, end) ->
+			{
+				int index = lineIndex.getAndIncrement();
+				String lineText = fullText.substring(start, end);
+				lines.add(new DisplayLine(index, lineText, index * lineHeight, font.width(lineText), start, end));
+			});
+			if(fullText.endsWith("\n"))
+			{
+				int index = lineIndex.getAndIncrement();
+				int length = fullText.length();
+				lines.add(new DisplayLine(index, "", index * lineHeight, 0, length, length));
+			}
+			
+			int cursorX = 0;
+			int cursorY = 0;
+			int cursorScreenX = 0;
+			int cursorScreenY = 0;
+			boolean cursorAtEndOfLine = false;
+			List<Bounds> highlightedAreas = Lists.newArrayList();
+			for(int index = 0; index < lines.size(); index++)
+			{
+				var line = lines.get(index);
+				int start = line.startIndex();
+				int end = line.endIndex();
+				
+				if(cursorIndex >= start && cursorIndex <= end)
+				{
+					cursorX = cursorIndex - start;
+					cursorY = index;
+					cursorScreenX = font.width(line.text().substring(0, cursorX));
+					cursorScreenY = line.y();
+					cursorAtEndOfLine = cursorIndex == end;
+				}
+				
+				if(hasHighlight)
+				{
+					// Highlight involves this line
+					if(highlightStartIndex <= end && highlightEndIndex >= start)
+					{
+						int highlightStartX = 0;
+						// Starting point is on this line
+						if(highlightStartIndex >= start && highlightStartIndex <= end)
+						{
+							highlightStartX = font.width(line.text().substring(0, highlightStartIndex - start));
+						}
+						// End point is on or after this line
+						if(highlightEndIndex >= start)
+						{
+							int highlightEndX = highlightEndIndex <= end ? font.width(line.text().substring(0, highlightEndIndex - start)) : line.width();
+							if(highlightStartX != highlightEndX)
+							{
+								highlightedAreas.add(new Bounds(highlightStartX, line.y(), highlightEndX - highlightStartX, lineHeight));
+							}
+						}
+					}
+				}
+			}
+			
+			this.lines = lines.toArray(DisplayLine[]::new);
+			this.cursorX = cursorX;
+			this.cursorY = cursorY;
+			this.cursorScreenX = cursorScreenX;
+			this.cursorScreenY = cursorScreenY;
+			this.cursorAtEndOfLine = cursorAtEndOfLine;
+			this.highlightedAreas = highlightedAreas.toArray(Bounds[]::new);
+		}
+		
+		public String fullText()
+		{
+			return fullText;
+		}
+		
+		public DisplayLine[] lines()
+		{
+			return lines;
+		}
+		
+		public int lineHeight()
+		{
+			return lineHeight;
+		}
+		
+		public int cursorX()
+		{
+			return cursorX;
+		}
+		
+		public int cursorY()
+		{
+			return cursorY;
+		}
+		
+		public int cursorScreenX()
+		{
+			return cursorScreenX;
+		}
+		
+		public int cursorScreenY()
+		{
+			return cursorScreenY;
+		}
+		
+		public boolean isCursorAtEndOfLine()
+		{
+			return cursorAtEndOfLine;
+		}
+		
+		public Bounds[] highlightedAreas()
+		{
+			return highlightedAreas;
+		}
+		
+		public int toGlobalCursorPos(int cursorX, int cursorY)
+		{
+			if(cursorY < 0)
+			{
+				return 0;
+			}
+			else if(cursorY < lines.length)
+			{
+				var line = lines[cursorY];
+				return line.startIndex() + cursorX;
+			}
+			else
+			{
+				return fullText.length();
+			}
 		}
 	}
 	
-	private int findClosestCharCursorPos(String text, int desiredWidth)
+	public record DisplayLine(int index, String text, int y, int width, int startIndex, int endIndex)
 	{
-		if(desiredWidth == 0)
-		{
-			return 0;
-		}
-		
-		int lineWidth = font.width(text);
-		
-		if(lineWidth <= desiredWidth)
+		public int length()
 		{
 			return text.length();
 		}
 		
-		int lastWidth = 0;
-		String traversed = "";
-		for(int i = 0; i < text.length(); i++)
+		public int findIndex(Font font, int desiredWidth)
 		{
-			traversed += text.charAt(i);
-			int width = font.width(traversed);
-			if(desiredWidth == width)
+			if(desiredWidth == 0)
 			{
-				return i + 1;
+				return 0;
 			}
-			else if(desiredWidth < width && desiredWidth > lastWidth)
+			if(width <= desiredWidth)
 			{
-				int distToWidth = Math.abs(width - desiredWidth);
-				int distToLastWidth = Math.abs(lastWidth - desiredWidth);
-				if(distToWidth <= distToLastWidth)
+				return text.length();
+			}
+			int lastWidth = 0;
+			int traversedWidth = 0;
+			for(int i = 0; i < text.length(); i++)
+			{
+				traversedWidth += font.width(String.valueOf(text.charAt(i)));
+				if(desiredWidth == traversedWidth)
 				{
 					return i + 1;
 				}
-				else
+				else if(desiredWidth < traversedWidth && desiredWidth > lastWidth)
 				{
-					return i;
+					int distToWidth = Math.abs(traversedWidth - desiredWidth);
+					int distToLastWidth = Math.abs(lastWidth - desiredWidth);
+					if(distToWidth <= distToLastWidth)
+					{
+						return i + 1;
+					}
+					else
+					{
+						return i;
+					}
 				}
+				lastWidth = traversedWidth;
 			}
-			lastWidth = width;
-		}
-		
-		return 0;
-	}
-	
-	private int findNewCursorPosForLineDifference(int lineChange)
-	{
-		int cursorPos = editor.getCursorPos();
-		
-		List<Pair<Integer, Integer>> lines = Lists.newArrayList();
-		font.getSplitter().splitLines(text, width, Style.EMPTY, false, (__, start, end) -> lines.add(new Pair<>(start, end)));
-		
-		int index = 0;
-		for(var line : lines)
-		{
-			int start = line.a();
-			int end = line.b();
-			
-			String lineText = text.substring(start, end);
-			int lineWidth = font.width(lineText);
-			
-			if(cursorPos >= start && cursorPos <= end)
-			{
-				if(index == 0 && lineChange < 0)
-				{
-					return 0;
-				}
-				if(index == lines.size() - 1 && lineChange > 0)
-				{
-					return text.length();
-				}
-				var targetLine = lines.get(index + lineChange);
-				int lineCursorX = font.width(lineText.substring(0, cursorPos - start));
-				String targetText = text.substring(targetLine.a(), targetLine.b());
-				int targetTextIndex = this.findClosestCharCursorPos(targetText, lineCursorX);
-				return targetLine.a() + targetTextIndex;
-			}
-			
-			index++;
-		}
-		
-		LBR.LOGGER.warn("Failed to find desirable cursor pos");
-		return cursorPos;
-	}
-	
-	private int findNewCursorPosForMouseClick(int mouseX, int mouseY)
-	{
-		List<Pair<Integer, Integer>> lines = Lists.newArrayList();
-		font.getSplitter().splitLines(text, width, Style.EMPTY, false, (__, start, end) -> lines.add(new Pair<>(start, end)));
-		
-		int targetLineIndex = mouseY / font.lineHeight;
-		if(targetLineIndex < 0)
-		{
 			return 0;
 		}
-		if(targetLineIndex >= lines.size())
-		{
-			return text.length();
-		}
-		if(targetLineIndex >= 0 && targetLineIndex < lines.size())
-		{
-			var line = lines.get(targetLineIndex);
-			String lineText = text.substring(line.a(), line.b());
-			int lineCursorIndex = this.findClosestCharCursorPos(lineText, mouseX);
-			return line.a() + lineCursorIndex;
-		}
-		
-		return -1;
 	}
 }

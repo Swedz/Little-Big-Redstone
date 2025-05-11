@@ -9,10 +9,8 @@ import net.minecraft.client.gui.narration.NarrationElementOutput;
 import net.minecraft.client.gui.navigation.ScreenRectangle;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.renderer.RenderType;
-import net.minecraft.network.chat.Style;
+import net.swedz.little_big_redstone.api.Bounds;
 import net.swedz.little_big_redstone.helper.guigraphics.TesseractGuiGraphics;
-import org.apache.commons.lang3.mutable.MutableInt;
-import org.apache.commons.lang3.mutable.MutableObject;
 
 import static com.mojang.blaze3d.platform.InputConstants.*;
 
@@ -75,7 +73,7 @@ public final class StickyNoteEditWidget implements GuiEventListener, Renderable,
 		{
 			int localMouseX = (int) (mouseX - x);
 			int localMouseY = (int) (mouseY - y);
-			note.jumpTo(localMouseX, localMouseY);
+			note.jumpTo(localMouseX, localMouseY, Screen.hasShiftDown());
 			return true;
 		}
 		
@@ -166,6 +164,8 @@ public final class StickyNoteEditWidget implements GuiEventListener, Renderable,
 		graphics.pose().translate(x, y, 0);
 		
 		this.renderLines(graphics);
+		this.renderCursor(graphics);
+		this.renderHighlights(graphics);
 		
 		graphics.setColor(1, 0, 0, 0.25f);
 		graphics.fill(0, 0, width, height);
@@ -176,93 +176,47 @@ public final class StickyNoteEditWidget implements GuiEventListener, Renderable,
 	private void renderLines(TesseractGuiGraphics graphics)
 	{
 		graphics.setColor(0, 0, 0, 1);
-		if(note.text().isEmpty())
+		var display = note.getDisplay();
+		for(var line : display.lines())
 		{
-			if(this.isFocused())
-			{
-				this.renderCursor(graphics, 0, 0, true);
-			}
-		}
-		else
-		{
-			var index = new MutableInt();
-			var cursorRenderer = new MutableObject<Runnable>();
-			font.getSplitter().splitLines(note.text(), width, Style.EMPTY, false, (__, start, end) ->
-					this.renderLine(graphics, index.getAndIncrement(), start, end, cursorRenderer));
-			if(cursorRenderer.getValue() != null)
-			{
-				cursorRenderer.getValue().run();
-			}
+			graphics.drawString(line.text(), 0, line.y(), false);
 		}
 		graphics.resetColor();
 	}
 	
-	private void renderLine(TesseractGuiGraphics graphics, int index, int start, int end, MutableObject<Runnable> cursorRenderer)
+	private void renderCursor(TesseractGuiGraphics graphics)
 	{
-		int cursorPos = note.editor().getCursorPos();
-		
-		int y = index * font.lineHeight;
-		
-		String text = note.text().substring(start, end);
-		
-		int lineWidth = graphics.drawString(text, 0, y, false);
-		
-		if(this.isFocused() && cursorPos >= start && cursorPos <= end)
+		if(this.isFocused() && (tick / 6) % 2 == 0)
 		{
-			int lineCursorPos = cursorPos - start;
-			int lineCursorX = font.width(text.substring(0, lineCursorPos));
-			cursorRenderer.setValue(() -> this.renderCursor(graphics, lineCursorX, y, cursorPos == end));
-		}
-		
-		if(note.editor().isSelecting())
-		{
-			this.renderHighight(graphics, 0, y, text, lineWidth, start, end);
-		}
-	}
-	
-	private void renderCursor(TesseractGuiGraphics graphics, int x, int y, boolean endOfLine)
-	{
-		if((tick / 6) % 2 == 0)
-		{
-			if(endOfLine)
+			graphics.setColor(0, 0, 0, 1);
+			var display = note.getDisplay();
+			int x = display.cursorScreenX();
+			int y = display.cursorScreenY();
+			if(display.isCursorAtEndOfLine())
 			{
 				graphics.drawString("_", x, y, false);
 			}
 			else
 			{
-				graphics.fill(x, y - 1, x + 1, y + font.lineHeight);
+				graphics.fill(x, y - 1, x + 1, y + display.lineHeight());
 			}
+			graphics.resetColor();
 		}
 	}
 	
-	private void renderHighight(TesseractGuiGraphics graphics, int x, int y, String text, int lineWidth, int start, int end)
+	private void renderHighlights(TesseractGuiGraphics graphics)
 	{
-		int highlightStartPos = note.getHighlightStartPos();
-		int highlightEndPos = note.getHighlightEndPos();
-		
-		// End point is before this line
-		if(highlightEndPos < start ||
-		   // Start point is after this line
-		   highlightStartPos > end)
+		for(var area : note.getDisplay().highlightedAreas())
 		{
-			return;
+			this.renderHighlight(graphics, area);
 		}
-		
-		int highlightStartX = 0;
-		// Starting point is on this line
-		if(highlightStartPos >= start && highlightStartPos <= end)
-		{
-			highlightStartX = font.width(text.substring(0, highlightStartPos - start));
-		}
-		// End point is on or after this line
-		if(highlightEndPos >= start)
-		{
-			int highlightEndX = highlightEndPos <= end ? font.width(text.substring(0, highlightEndPos - start)) : lineWidth;
-			
-			graphics.setColor(0, 0, 1, 1);
-			graphics.fill(RenderType.guiTextHighlight(), x + highlightStartX, y, x + highlightEndX, y + font.lineHeight);
-			graphics.revertColor();
-		}
+	}
+	
+	private void renderHighlight(TesseractGuiGraphics graphics, Bounds area)
+	{
+		graphics.setColor(0, 0, 1, 1);
+		graphics.fill(RenderType.guiTextHighlight(), area.minX(), area.minY(), area.maxX(), area.maxY());
+		graphics.revertColor();
 	}
 	
 	@Override
