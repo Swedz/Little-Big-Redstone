@@ -16,7 +16,7 @@ import org.apache.commons.lang3.mutable.MutableObject;
 
 import static com.mojang.blaze3d.platform.InputConstants.*;
 
-public final class NoteEditWidget implements GuiEventListener, Renderable, NarratableEntry
+public final class StickyNoteEditWidget implements GuiEventListener, Renderable, NarratableEntry
 {
 	private final Font font;
 	
@@ -27,8 +27,8 @@ public final class NoteEditWidget implements GuiEventListener, Renderable, Narra
 	private int     tick;
 	private boolean focused;
 	
-	public NoteEditWidget(Font font, int x, int y, int width, int height,
-						  String text)
+	public StickyNoteEditWidget(Font font, int x, int y, int width, int height,
+								String text)
 	{
 		this.font = font;
 		
@@ -40,8 +40,8 @@ public final class NoteEditWidget implements GuiEventListener, Renderable, Narra
 		note = new StickyNoteEdit(font, width, height, text);
 	}
 	
-	public NoteEditWidget(Font font, int x, int y, int width, int height,
-						  NoteEditWidget previous)
+	public StickyNoteEditWidget(Font font, int x, int y, int width, int height,
+								StickyNoteEditWidget previous)
 	{
 		this.font = font;
 		

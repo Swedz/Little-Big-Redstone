@@ -19,7 +19,7 @@ public final class StickyNoteEditScreen extends Screen
 		this.initialText = text;
 	}
 	
-	private NoteEditWidget editWidget;
+	private StickyNoteEditWidget editWidget;
 	
 	@Override
 	protected void init()
@@ -27,11 +27,11 @@ public final class StickyNoteEditScreen extends Screen
 		this.addRenderableWidget(editWidget = this.createNoteEditWidget(60, 60, 100, font.lineHeight * 10));
 	}
 	
-	private NoteEditWidget createNoteEditWidget(int x, int y, int width, int height)
+	private StickyNoteEditWidget createNoteEditWidget(int x, int y, int width, int height)
 	{
 		return editWidget != null ?
-				new NoteEditWidget(font, x, y, width, height, editWidget) :
-				new NoteEditWidget(font, x, y, width, height, initialText);
+				new StickyNoteEditWidget(font, x, y, width, height, editWidget) :
+				new StickyNoteEditWidget(font, x, y, width, height, initialText);
 	}
 	
 	@Override
