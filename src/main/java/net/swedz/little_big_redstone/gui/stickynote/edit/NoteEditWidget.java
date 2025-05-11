@@ -281,6 +281,14 @@ public final class NoteEditWidget implements GuiEventListener, Renderable, Narra
 		font.getSplitter().splitLines(note.text(), width, Style.EMPTY, false, (__, start, end) -> lines.add(new Pair<>(start, end)));
 		
 		int targetLineIndex = mouseY / font.lineHeight;
+		if(targetLineIndex < 0)
+		{
+			return 0;
+		}
+		if(targetLineIndex >= lines.size())
+		{
+			return note.text().length();
+		}
 		if(targetLineIndex >= 0 && targetLineIndex < lines.size())
 		{
 			var line = lines.get(targetLineIndex);
