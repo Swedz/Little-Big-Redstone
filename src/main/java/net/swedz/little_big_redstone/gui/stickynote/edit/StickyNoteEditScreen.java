@@ -24,7 +24,14 @@ public final class StickyNoteEditScreen extends Screen
 	@Override
 	protected void init()
 	{
-		this.addRenderableWidget(editWidget = new NoteEditWidget(font, 60, 60, 100, font.lineHeight * 10, initialText));
+		this.addRenderableWidget(editWidget = this.createNoteEditWidget(60, 60, 100, font.lineHeight * 10));
+	}
+	
+	private NoteEditWidget createNoteEditWidget(int x, int y, int width, int height)
+	{
+		return editWidget != null ?
+				new NoteEditWidget(font, x, y, width, height, editWidget) :
+				new NoteEditWidget(font, x, y, width, height, initialText);
 	}
 	
 	@Override

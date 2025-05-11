@@ -30,12 +30,12 @@ public final class NoteEditWidget implements GuiEventListener, Renderable, Narra
 	
 	private final int x, y, width, height;
 	
-	private final StickyNoteEdit edit;
+	private final StickyNoteEdit note;
 	
 	private final TextFieldHelper editor;
 	
-	private boolean focused;
 	private int     tick;
+	private boolean focused;
 	
 	public NoteEditWidget(Font font, int x, int y, int width, int height,
 						  String text)
@@ -47,12 +47,26 @@ public final class NoteEditWidget implements GuiEventListener, Renderable, Narra
 		this.width = width;
 		this.height = height;
 		
-		edit = new StickyNoteEdit(text);
+		note = new StickyNoteEdit(text);
 		editor = new TextFieldHelper(
-				edit::text, edit::setText,
+				note::text, note::setText,
 				NoteEditWidget::getClipboard, NoteEditWidget::setClipboard,
 				(input) -> font.wordWrapHeight(input, width) <= height
 		);
+	}
+	
+	public NoteEditWidget(Font font, int x, int y, int width, int height,
+						  NoteEditWidget previous)
+	{
+		this.font = font;
+		
+		this.x = x;
+		this.y = y;
+		this.width = width;
+		this.height = height;
+		
+		note = previous.note;
+		editor = previous.editor;
 	}
 	
 	private static String getClipboard()
@@ -63,6 +77,11 @@ public final class NoteEditWidget implements GuiEventListener, Renderable, Narra
 	private static void setClipboard(String text)
 	{
 		TextFieldHelper.setClipboardContents(Minecraft.getInstance(), text);
+	}
+	
+	public StickyNoteEdit note()
+	{
+		return note;
 	}
 	
 	public void tick()
@@ -216,7 +235,7 @@ public final class NoteEditWidget implements GuiEventListener, Renderable, Narra
 		int cursorPos = editor.getCursorPos();
 		
 		List<Pair<Integer, Integer>> lines = Lists.newArrayList();
-		font.getSplitter().splitLines(edit.text(), width, Style.EMPTY, false, (__, start, end) -> lines.add(new Pair<>(start, end)));
+		font.getSplitter().splitLines(note.text(), width, Style.EMPTY, false, (__, start, end) -> lines.add(new Pair<>(start, end)));
 		
 		int index = 0;
 		for(var line : lines)
@@ -224,7 +243,7 @@ public final class NoteEditWidget implements GuiEventListener, Renderable, Narra
 			int start = line.a();
 			int end = line.b();
 			
-			String text = edit.text().substring(start, end);
+			String text = note.text().substring(start, end);
 			int lineWidth = font.width(text);
 			
 			if(cursorPos >= start && cursorPos <= end)
@@ -235,11 +254,11 @@ public final class NoteEditWidget implements GuiEventListener, Renderable, Narra
 				}
 				if(index == lines.size() - 1 && lineChange > 0)
 				{
-					return edit.text().length();
+					return note.text().length();
 				}
 				var targetLine = lines.get(index + lineChange);
 				int lineCursorX = font.width(text.substring(0, cursorPos - start));
-				String targetText = edit.text().substring(targetLine.a(), targetLine.b());
+				String targetText = note.text().substring(targetLine.a(), targetLine.b());
 				int targetTextIndex = this.findClosestCharCursorPos(targetText, lineCursorX);
 				return targetLine.a() + targetTextIndex;
 			}
@@ -259,13 +278,13 @@ public final class NoteEditWidget implements GuiEventListener, Renderable, Narra
 	private int findNewCursorPosForMouseClick(int mouseX, int mouseY)
 	{
 		List<Pair<Integer, Integer>> lines = Lists.newArrayList();
-		font.getSplitter().splitLines(edit.text(), width, Style.EMPTY, false, (__, start, end) -> lines.add(new Pair<>(start, end)));
+		font.getSplitter().splitLines(note.text(), width, Style.EMPTY, false, (__, start, end) -> lines.add(new Pair<>(start, end)));
 		
 		int targetLineIndex = mouseY / font.lineHeight;
 		if(targetLineIndex >= 0 && targetLineIndex < lines.size())
 		{
 			var line = lines.get(targetLineIndex);
-			String text = edit.text().substring(line.a(), line.b());
+			String text = note.text().substring(line.a(), line.b());
 			int lineCursorIndex = this.findClosestCharCursorPos(text, mouseX);
 			return line.a() + lineCursorIndex;
 		}
@@ -301,7 +320,7 @@ public final class NoteEditWidget implements GuiEventListener, Renderable, Narra
 	private void renderLines(TesseractGuiGraphics graphics)
 	{
 		graphics.setColor(0, 0, 0, 1);
-		if(edit.text().isEmpty())
+		if(note.text().isEmpty())
 		{
 			if(this.isFocused())
 			{
@@ -312,7 +331,7 @@ public final class NoteEditWidget implements GuiEventListener, Renderable, Narra
 		{
 			var index = new MutableInt();
 			var cursorRenderer = new MutableObject<Runnable>();
-			font.getSplitter().splitLines(edit.text(), width, Style.EMPTY, false, (__, start, end) ->
+			font.getSplitter().splitLines(note.text(), width, Style.EMPTY, false, (__, start, end) ->
 					this.renderLine(graphics, index.getAndIncrement(), start, end, cursorRenderer));
 			if(cursorRenderer.getValue() != null)
 			{
@@ -328,7 +347,7 @@ public final class NoteEditWidget implements GuiEventListener, Renderable, Narra
 		
 		int y = index * font.lineHeight;
 		
-		String text = edit.text().substring(start, end);
+		String text = note.text().substring(start, end);
 		
 		int lineWidth = graphics.drawString(text, 0, y, false);
 		
