@@ -16,6 +16,7 @@ public final class StickyNoteEdit
 {
 	private final Font font;
 	private final int  width, height;
+	
 	private final TextFieldHelper editor;
 	
 	private String text;
