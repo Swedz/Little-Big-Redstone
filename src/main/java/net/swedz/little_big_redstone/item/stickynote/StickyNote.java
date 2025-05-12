@@ -23,7 +23,18 @@ public record StickyNote(String text)
 			.tags(TagResolver.builder()
 					.resolver(StandardTags.decorations())
 					.build())
+			.preProcessor(StickyNote::preProcess)
 			.build();
+	
+	private static String preProcess(String string)
+	{
+		return string
+				.replaceAll("\\*\\*\\*(.+?)\\*\\*\\*", "<i><b>$1</b></i>")
+				.replaceAll("\\*\\*(.+?)\\*\\*", "<b>$1</b>")
+				.replaceAll("\\*(.+?)\\*", "<i>$1</i>")
+				.replaceAll("~~(.+?)~~", "<st>$1</st>")
+				.replaceAll("__(.+?)__", "<u>$1</u>");
+	}
 	
 	public static Component parse(String text)
 	{
