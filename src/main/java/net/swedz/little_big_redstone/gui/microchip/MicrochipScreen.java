@@ -12,11 +12,11 @@ import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
 import net.swedz.little_big_redstone.LBR;
-import net.swedz.little_big_redstone.LBRColors;
 import net.swedz.little_big_redstone.LBRComponents;
 import net.swedz.little_big_redstone.LBRCreativeTabs;
 import net.swedz.little_big_redstone.LBRItems;
 import net.swedz.little_big_redstone.api.Bounds;
+import net.swedz.little_big_redstone.client.model.logic.LogicBakingModelData;
 import net.swedz.little_big_redstone.gui.logicarray.slot.LogicArrayPlayerSlot;
 import net.swedz.little_big_redstone.gui.logicarray.slot.LogicArraySlot;
 import net.swedz.little_big_redstone.gui.microchip.logic.LogicRenderer;
@@ -217,7 +217,7 @@ public final class MicrochipScreen extends AbstractContainerScreen<MicrochipMenu
 				
 				boolean powered = outputLogic != null && outputLogicComponent.output(wire.output().index());
 				
-				int argb = LBRColors.componentForeground(component.color().orElse(menu.color()));
+				int argb = LogicBakingModelData.get(component).getColorSet(component.color().orElse(menu.color())).foreground();
 				
 				List<Bounds> avoidBounds = List.of(microchipWidget.wireRenderer().pathing().mutateComponentBounds(component.size().toBounds(logicX, logicY)));
 				

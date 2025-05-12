@@ -40,14 +40,11 @@ public final class LBRColors
 	
 	public static int componentBackground(DyeColor color)
 	{
-		if(color == DyeColor.BLACK || color == DyeColor.GRAY)
+		return switch (color)
 		{
-			return 0xFFFFFFFF;
-		}
-		else
-		{
-			return 0xFF000000;
-		}
+			case GRAY, BLACK -> 0xFFFFFFFF;
+			default -> 0xFF000000;
+		};
 	}
 	
 	public static int microchipItem(DyeColor color)
