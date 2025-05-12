@@ -5,7 +5,6 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.world.item.DyeColor;
 import net.swedz.little_big_redstone.LBR;
-import net.swedz.little_big_redstone.LBRColors;
 import net.swedz.little_big_redstone.helper.guigraphics.TesseractGuiGraphics;
 
 public abstract class StickyNoteScreen extends Screen
@@ -54,15 +53,11 @@ public abstract class StickyNoteScreen extends Screen
 		graphics.pose().pushPose();
 		graphics.pose().translate(leftPos, topPos, 0);
 		
-		graphics.setColor(LBRColors.stickyNoteBackground(color));
-		graphics.setTexture(LBR.id("textures/gui/sticky_note.png"));
+		graphics.setTexture(LBR.id("textures/gui/sticky_note/background_%s.png".formatted(color.getName())));
 		graphics.blit(0, 0, 0, 0, 256, 256);
 		
-		graphics.setColor(LBRColors.stickyNotePin(color));
-		graphics.setTexture(LBR.id("textures/gui/sticky_note_pin.png"));
+		graphics.setTexture(LBR.id("textures/gui/sticky_note/pin_%s.png".formatted(color.getName())));
 		graphics.blit(0, 0, 0, 0, 256, 256);
-		
-		graphics.resetColor();
 		
 		graphics.pose().popPose();
 	}
