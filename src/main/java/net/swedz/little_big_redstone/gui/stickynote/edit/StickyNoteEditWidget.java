@@ -188,8 +188,8 @@ public final class StickyNoteEditWidget implements GuiEventListener, Renderable,
 		graphics.pose().translate(x, y, 0);
 		
 		this.renderLines(graphics);
-		this.renderCursor(graphics);
 		this.renderHighlights(graphics);
+		this.renderCursor(graphics);
 		
 		graphics.pose().popPose();
 	}
