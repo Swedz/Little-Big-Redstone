@@ -1,9 +1,7 @@
 package net.swedz.little_big_redstone.gui.stickynote;
 
-import net.minecraft.client.GameNarrator;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
-import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.CommonComponents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.DyeColor;
@@ -14,21 +12,14 @@ import net.swedz.little_big_redstone.gui.stickynote.edit.StickyNoteEditScreen;
 import net.swedz.little_big_redstone.helper.guigraphics.TesseractGuiGraphics;
 import net.swedz.little_big_redstone.item.stickynote.StickyNote;
 
-public final class StickyNoteViewScreen extends Screen
+public final class StickyNoteViewScreen extends StickyNoteScreen
 {
-	private final int      entityId;
-	private final DyeColor color;
-	
-	private final String    rawText;
 	private final Component text;
 	
 	public StickyNoteViewScreen(int entityId, DyeColor color, String text)
 	{
-		super(GameNarrator.NO_TITLE);
+		super(entityId, color, text);
 		
-		this.entityId = entityId;
-		this.color = color;
-		this.rawText = text;
 		this.text = StickyNote.parse(text);
 	}
 	
@@ -38,9 +29,11 @@ public final class StickyNoteViewScreen extends Screen
 	@Override
 	protected void init()
 	{
-		doneButton = this.addRenderableWidget(Button.builder(CommonComponents.GUI_DONE, (b) -> this.close()).bounds(width / 2 - 87 - 3, 196, 87, 20).build());
+		super.init();
 		
-		editButton = this.addRenderableWidget(Button.builder(LBRText.STICKY_NOTE_EDIT.text(), (b) -> this.edit()).bounds(width / 2 + 3, 196, 87, 20).build());
+		doneButton = this.addRenderableWidget(Button.builder(CommonComponents.GUI_DONE, (b) -> this.close()).bounds(leftPos, topPos + uiHeight - 20, 87, 20).build());
+		
+		editButton = this.addRenderableWidget(Button.builder(LBRText.STICKY_NOTE_EDIT.text(), (b) -> this.edit()).bounds(leftPos + 87 + 6, topPos + uiHeight - 20, 87, 20).build());
 	}
 	
 	private void close()
@@ -50,7 +43,7 @@ public final class StickyNoteViewScreen extends Screen
 	
 	private void edit()
 	{
-		minecraft.setScreen(new StickyNoteEditScreen(entityId, color, rawText, true));
+		minecraft.setScreen(new StickyNoteEditScreen(entityId, color, initialText, true));
 	}
 	
 	@Override
@@ -61,7 +54,7 @@ public final class StickyNoteViewScreen extends Screen
 		var graphics = new TesseractGuiGraphics(vanilla);
 		
 		graphics.pose().pushPose();
-		graphics.pose().translate(width / 2f - 180 / 2f, 2, 0);
+		graphics.pose().translate(leftPos, topPos, 0);
 		
 		graphics.setColor(LBRColors.stickyNoteBackground(color));
 		graphics.setTexture(LBR.id("textures/gui/sticky_note.png"));
@@ -84,11 +77,12 @@ public final class StickyNoteViewScreen extends Screen
 		var graphics = new TesseractGuiGraphics(vanilla);
 		
 		graphics.pose().pushPose();
-		graphics.pose().translate(width / 2f - 180 / 2f + 5, 27, 0);
+		graphics.pose().translate(leftPos, topPos, 0);
+		graphics.pose().translate(contentLeftPos, contentTopPos, 0);
 		
 		graphics.setColor(LBRColors.stickyNoteText(color));
 		int index = 0;
-		for(var line : font.split(text, 170))
+		for(var line : font.split(text, maxContentWidth))
 		{
 			int y = index * font.lineHeight;
 			graphics.drawString(line, 0, y, false);

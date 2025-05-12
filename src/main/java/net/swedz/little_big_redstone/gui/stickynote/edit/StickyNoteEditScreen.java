@@ -1,34 +1,26 @@
 package net.swedz.little_big_redstone.gui.stickynote.edit;
 
-import net.minecraft.client.GameNarrator;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
-import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.CommonComponents;
 import net.minecraft.world.item.DyeColor;
 import net.swedz.little_big_redstone.LBR;
 import net.swedz.little_big_redstone.LBRColors;
+import net.swedz.little_big_redstone.gui.stickynote.StickyNoteScreen;
 import net.swedz.little_big_redstone.gui.stickynote.StickyNoteViewScreen;
 import net.swedz.little_big_redstone.helper.guigraphics.TesseractGuiGraphics;
 import net.swedz.little_big_redstone.network.packet.StickyNotePacket;
 
 import java.util.function.Supplier;
 
-public final class StickyNoteEditScreen extends Screen
+public final class StickyNoteEditScreen extends StickyNoteScreen
 {
-	private final int      entityId;
-	private final DyeColor color;
-	private final String   initialText;
-	
 	private final boolean shouldReturnToView;
 	
 	public StickyNoteEditScreen(int entityId, DyeColor color, String text, boolean shouldReturnToView)
 	{
-		super(GameNarrator.NO_TITLE);
+		super(entityId, color, text);
 		
-		this.entityId = entityId;
-		this.color = color;
-		this.initialText = text;
 		this.shouldReturnToView = shouldReturnToView;
 	}
 	
@@ -38,9 +30,11 @@ public final class StickyNoteEditScreen extends Screen
 	@Override
 	protected void init()
 	{
-		editWidget = this.addRenderableWidget(this.createNoteEditWidget((width / 2) - (180 / 2) + 5, 27, 170, font.lineHeight * 14, () -> LBRColors.stickyNoteText(color)));
+		super.init();
 		
-		doneButton = this.addRenderableWidget(Button.builder(CommonComponents.GUI_DONE, (b) -> this.done()).bounds(width / 2 - 180 / 2, 196, 180, 20).build());
+		editWidget = this.addRenderableWidget(this.createNoteEditWidget(leftPos + contentLeftPos, topPos + contentTopPos, maxContentWidth, maxContentHeight, () -> LBRColors.stickyNoteText(color)));
+		
+		doneButton = this.addRenderableWidget(Button.builder(CommonComponents.GUI_DONE, (b) -> this.done()).bounds(leftPos, topPos + uiHeight - 20, uiWidth, 20).build());
 	}
 	
 	private StickyNoteEditWidget createNoteEditWidget(int x, int y, int width, int height, Supplier<Integer> color)
@@ -79,7 +73,7 @@ public final class StickyNoteEditScreen extends Screen
 		var graphics = new TesseractGuiGraphics(vanilla);
 		
 		graphics.pose().pushPose();
-		graphics.pose().translate(width / 2f - 180 / 2f, 2, 0);
+		graphics.pose().translate(leftPos, topPos, 0);
 		
 		graphics.setColor(LBRColors.stickyNoteBackground(color));
 		graphics.setTexture(LBR.id("textures/gui/sticky_note.png"));
