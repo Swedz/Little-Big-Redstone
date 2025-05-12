@@ -3,18 +3,21 @@ package net.swedz.little_big_redstone.gui.stickynote;
 import net.minecraft.client.GameNarrator;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
+import net.minecraft.world.item.DyeColor;
 import net.swedz.little_big_redstone.item.stickynote.StickyNote;
 
 public final class StickyNoteViewScreen extends Screen
 {
-	private final int entityId;
+	private final int      entityId;
+	private final DyeColor color;
 	
 	private final Component text;
 	
-	public StickyNoteViewScreen(int entityId, String text)
+	public StickyNoteViewScreen(int entityId, DyeColor color, String text)
 	{
 		super(GameNarrator.NO_TITLE);
 		this.entityId = entityId;
+		this.color = color;
 		this.text = StickyNote.parse(text);
 	}
 	

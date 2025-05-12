@@ -3,7 +3,9 @@ package net.swedz.little_big_redstone.proxy;
 import net.kyori.adventure.platform.modcommon.MinecraftClientAudiences;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.Component;
+import net.minecraft.world.item.DyeColor;
 import net.swedz.little_big_redstone.LBR;
+import net.swedz.little_big_redstone.entity.stickynote.StickyNoteEntity;
 import net.swedz.little_big_redstone.gui.microchip.MicrochipScreen;
 import net.swedz.little_big_redstone.gui.stickynote.edit.StickyNoteEditScreen;
 import net.swedz.little_big_redstone.gui.stickynote.StickyNoteViewScreen;
@@ -68,13 +70,26 @@ public class LBRClientProxy extends LBRProxy
 	public void handleStickyNotePacket(StickyNotePacket packet)
 	{
 		var minecraft = Minecraft.getInstance();
+		
+		DyeColor color;
+		var entity = minecraft.level.getEntity(packet.entityId());
+		if(entity instanceof StickyNoteEntity stickyNote)
+		{
+			color = stickyNote.getColor();
+		}
+		else
+		{
+			LBR.LOGGER.warn("Received StickyNotePacket with an entity id of a non-sticky note entity ({}), discarding", packet.entityId());
+			return;
+		}
+		
 		if(packet.action() == StickyNotePacket.Action.OPEN_EDIT)
 		{
-			minecraft.setScreen(new StickyNoteEditScreen(packet.entityId(), packet.text()));
+			minecraft.setScreen(new StickyNoteEditScreen(packet.entityId(), color, packet.text()));
 		}
 		else if(packet.action() == StickyNotePacket.Action.OPEN_VIEW)
 		{
-			minecraft.setScreen(new StickyNoteViewScreen(packet.entityId(), packet.text()));
+			minecraft.setScreen(new StickyNoteViewScreen(packet.entityId(), color, packet.text()));
 		}
 		else
 		{

@@ -18,7 +18,8 @@ public final class StickyNoteEdit
 	
 	private final TextFieldHelper editor;
 	
-	private String text;
+	private String  text;
+	private boolean textModified = false;
 	
 	private Display display;
 	
@@ -49,7 +50,13 @@ public final class StickyNoteEdit
 	public void setText(String text)
 	{
 		this.text = text;
+		textModified = true;
 		this.markDirty();
+	}
+	
+	public boolean isTextModified()
+	{
+		return textModified;
 	}
 	
 	public Display getDisplay()
@@ -171,9 +178,9 @@ public final class StickyNoteEdit
 	
 	public final class Display
 	{
-		private final String fullText;
+		private final String        fullText;
 		private final DisplayLine[] lines;
-		private final int lineHeight;
+		private final int           lineHeight;
 		
 		private final int cursorX, cursorY;
 		private final int cursorScreenX, cursorScreenY;

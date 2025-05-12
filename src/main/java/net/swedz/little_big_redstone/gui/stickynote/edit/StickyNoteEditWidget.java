@@ -12,6 +12,8 @@ import net.minecraft.client.renderer.RenderType;
 import net.swedz.little_big_redstone.api.Bounds;
 import net.swedz.little_big_redstone.helper.guigraphics.TesseractGuiGraphics;
 
+import java.util.function.Supplier;
+
 import static com.mojang.blaze3d.platform.InputConstants.*;
 
 public final class StickyNoteEditWidget implements GuiEventListener, Renderable, NarratableEntry
@@ -20,13 +22,14 @@ public final class StickyNoteEditWidget implements GuiEventListener, Renderable,
 	
 	private final int x, y, width, height;
 	
-	private final StickyNoteEdit note;
+	private final StickyNoteEdit    note;
+	private final Supplier<Integer> color;
 	
 	private int     tick;
 	private boolean focused;
 	
 	public StickyNoteEditWidget(Font font, int x, int y, int width, int height,
-								String text)
+								String text, Supplier<Integer> color)
 	{
 		this.font = font;
 		
@@ -35,11 +38,12 @@ public final class StickyNoteEditWidget implements GuiEventListener, Renderable,
 		this.width = width;
 		this.height = height;
 		
-		note = new StickyNoteEdit(font, width, height, text);
+		this.note = new StickyNoteEdit(font, width, height, text);
+		this.color = color;
 	}
 	
 	public StickyNoteEditWidget(Font font, int x, int y, int width, int height,
-								StickyNoteEditWidget previous)
+								StickyNoteEditWidget previous, Supplier<Integer> color)
 	{
 		this.font = font;
 		
@@ -48,7 +52,8 @@ public final class StickyNoteEditWidget implements GuiEventListener, Renderable,
 		this.width = width;
 		this.height = height;
 		
-		note = previous.note;
+		this.note = previous.note;
+		this.color = color;
 	}
 	
 	public StickyNoteEdit note()
@@ -167,15 +172,12 @@ public final class StickyNoteEditWidget implements GuiEventListener, Renderable,
 		this.renderCursor(graphics);
 		this.renderHighlights(graphics);
 		
-		graphics.setColor(1, 0, 0, 0.25f);
-		graphics.fill(0, 0, width, height);
-		
 		graphics.pose().popPose();
 	}
 	
 	private void renderLines(TesseractGuiGraphics graphics)
 	{
-		graphics.setColor(0, 0, 0, 1);
+		graphics.setColor(color.get());
 		var display = note.getDisplay();
 		for(var line : display.lines())
 		{
@@ -188,7 +190,7 @@ public final class StickyNoteEditWidget implements GuiEventListener, Renderable,
 	{
 		if(this.isFocused() && (tick / 6) % 2 == 0)
 		{
-			graphics.setColor(0, 0, 0, 1);
+			graphics.setColor(color.get());
 			var display = note.getDisplay();
 			int x = display.cursorScreenX();
 			int y = display.cursorScreenY();
