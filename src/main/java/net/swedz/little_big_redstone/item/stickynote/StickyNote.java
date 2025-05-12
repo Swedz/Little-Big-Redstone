@@ -3,11 +3,13 @@ package net.swedz.little_big_redstone.item.stickynote;
 import com.mojang.serialization.Codec;
 import io.netty.buffer.ByteBuf;
 import net.kyori.adventure.text.minimessage.MiniMessage;
+import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
 import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
 import net.kyori.adventure.text.minimessage.tag.standard.StandardTags;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
+import net.swedz.little_big_redstone.microchip.logic.LogicTypes;
 import net.swedz.little_big_redstone.proxy.LBRProxy;
 import net.swedz.tesseract.neoforge.proxy.Proxies;
 
@@ -19,12 +21,25 @@ public record StickyNote(String text)
 	
 	public static final StreamCodec<ByteBuf, StickyNote> STREAM_CODEC = ByteBufCodecs.STRING_UTF8.map(StickyNote::new, StickyNote::text);
 	
-	private static final MiniMessage PARSER = MiniMessage.builder()
-			.tags(TagResolver.builder()
-					.resolver(StandardTags.decorations())
-					.build())
-			.preProcessor(StickyNote::preProcess)
-			.build();
+	private static final MiniMessage PARSER;
+	
+	static
+	{
+		var proxy = Proxies.get(LBRProxy.class);
+		
+		var builder = MiniMessage.builder();
+		
+		var tags = TagResolver.builder();
+		tags.resolver(StandardTags.decorations());
+		for(var type : LogicTypes.values())
+		{
+			tags.resolver(Placeholder.component(type.id(), proxy.nativeToAdventure(type.displaySymbol())));
+		}
+		builder.tags(tags.build());
+		
+		builder.preProcessor(StickyNote::preProcess);
+		PARSER = builder.build();
+	}
 	
 	private static String preProcess(String string)
 	{

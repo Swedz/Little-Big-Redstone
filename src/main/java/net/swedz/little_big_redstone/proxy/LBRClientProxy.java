@@ -102,4 +102,10 @@ public class LBRClientProxy extends LBRProxy
 	{
 		return clientAudiences.asNative(adventure);
 	}
+	
+	@Override
+	public net.kyori.adventure.text.Component nativeToAdventure(Component vanilla)
+	{
+		return clientAudiences.asAdventure(vanilla);
+	}
 }

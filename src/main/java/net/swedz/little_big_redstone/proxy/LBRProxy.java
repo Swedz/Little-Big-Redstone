@@ -41,4 +41,9 @@ public class LBRProxy implements Proxy
 	{
 		return serverAudiences.asNative(adventure);
 	}
+	
+	public net.kyori.adventure.text.Component nativeToAdventure(Component vanilla)
+	{
+		return serverAudiences.asAdventure(vanilla);
+	}
 }

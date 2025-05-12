@@ -24,6 +24,7 @@ import net.swedz.little_big_redstone.microchip.logic.randomizer.LogicRandomizer;
 import net.swedz.little_big_redstone.microchip.logic.reader.LogicReader;
 import net.swedz.little_big_redstone.microchip.logic.selector.LogicSelector;
 import net.swedz.little_big_redstone.microchip.logic.sequencer.LogicSequencer;
+import org.apache.commons.lang3.mutable.MutableInt;
 
 import java.util.Collections;
 import java.util.List;
@@ -33,6 +34,8 @@ public final class LogicTypes
 {
 	private static final List<LogicType<?>>        LOGICS     = Lists.newArrayList();
 	private static final Map<String, LogicType<?>> LOGICS_MAP = Maps.newHashMap();
+	
+	private static final MutableInt SYMBOL = new MutableInt();
 	
 	static final Codec<LogicComponent> CODEC = Codec.STRING
 			.comapFlatMap(LogicTypes::getMaybe, LogicType::id)
@@ -85,7 +88,7 @@ public final class LogicTypes
 			LogicFactory defaultFactory
 	)
 	{
-		var type = new LogicType<>(id, englishName, codec, streamCodec, defaultFactory);
+		var type = new LogicType<>(id, englishName, Character.forDigit(SYMBOL.getAndIncrement(), 16), codec, streamCodec, defaultFactory);
 		LOGICS.add(type);
 		LOGICS_MAP.put(id, type);
 		return type;

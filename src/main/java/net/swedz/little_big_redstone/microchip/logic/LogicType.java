@@ -5,6 +5,7 @@ import com.mojang.serialization.MapCodec;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.network.chat.Style;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -19,7 +20,7 @@ import java.util.Optional;
 import static net.swedz.little_big_redstone.LBRTextLine.*;
 
 public record LogicType<L extends LogicComponent>(
-		String id, String englishName,
+		String id, String englishName, char symbol,
 		MapCodec<L> codec, StreamCodec<ByteBuf, L> streamCodec,
 		LogicFactory defaultFactory
 )
@@ -27,6 +28,11 @@ public record LogicType<L extends LogicComponent>(
 	public MutableComponent displayName()
 	{
 		return Component.translatable(LBR.id(id).toLanguageKey("item"));
+	}
+	
+	public MutableComponent displaySymbol()
+	{
+		return Component.literal(String.valueOf(symbol)).withStyle(Style.EMPTY.withFont(LBR.id("logic_component")));
 	}
 	
 	public Optional<List<Component>> tooltip(L component, boolean shift, boolean config, boolean configHeader)
