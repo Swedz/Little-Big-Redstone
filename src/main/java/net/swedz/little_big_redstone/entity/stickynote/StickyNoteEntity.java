@@ -27,6 +27,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.swedz.little_big_redstone.LBR;
+import net.swedz.little_big_redstone.LBRComponents;
 import net.swedz.little_big_redstone.LBREntities;
 import net.swedz.little_big_redstone.LBRItems;
 import net.swedz.little_big_redstone.item.stickynote.StickyNote;
@@ -87,7 +88,9 @@ public final class StickyNoteEntity extends HangingEntity
 			{
 				return;
 			}
-			this.spawnAtLocation(LBRItems.stickyNote(color));
+			var stack = LBRItems.stickyNote(color).get().getDefaultInstance();
+			stack.set(LBRComponents.STICKY_NOTE, note);
+			this.spawnAtLocation(stack);
 		}
 	}
 	

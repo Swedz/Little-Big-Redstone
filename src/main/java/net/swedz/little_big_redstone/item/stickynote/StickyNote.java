@@ -45,4 +45,9 @@ public record StickyNote(String text)
 	{
 		return parse(text);
 	}
+	
+	public boolean isEmpty()
+	{
+		return text.isEmpty();
+	}
 }

@@ -12,6 +12,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.component.CustomData;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.gameevent.GameEvent;
+import net.swedz.little_big_redstone.LBRComponents;
 import net.swedz.little_big_redstone.entity.stickynote.StickyNoteEntity;
 
 public final class StickyNoteItem extends Item
@@ -20,7 +21,7 @@ public final class StickyNoteItem extends Item
 	
 	public StickyNoteItem(Properties properties, DyeColor color)
 	{
-		super(properties);
+		super(properties.component(LBRComponents.STICKY_NOTE, StickyNote.EMPTY));
 		this.color = color;
 	}
 	
@@ -50,6 +51,12 @@ public final class StickyNoteItem extends Item
 		if(!customData.isEmpty())
 		{
 			EntityType.updateCustomEntityTag(level, player, entity, customData);
+		}
+		
+		var note = stack.getOrDefault(LBRComponents.STICKY_NOTE, StickyNote.EMPTY);
+		if(!note.isEmpty())
+		{
+			entity.setNote(note);
 		}
 		
 		if(entity.survives())
