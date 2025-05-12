@@ -85,7 +85,7 @@ public class LBRClientProxy extends LBRProxy
 		
 		if(packet.action() == StickyNotePacket.Action.OPEN_EDIT)
 		{
-			minecraft.setScreen(new StickyNoteEditScreen(packet.entityId(), color, packet.text()));
+			minecraft.setScreen(new StickyNoteEditScreen(packet.entityId(), color, packet.text(), false));
 		}
 		else if(packet.action() == StickyNotePacket.Action.OPEN_VIEW)
 		{

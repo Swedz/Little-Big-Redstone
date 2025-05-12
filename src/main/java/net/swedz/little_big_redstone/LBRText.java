@@ -104,6 +104,7 @@ public enum LBRText implements TranslatableTextEnum
 	NO("No"),
 	OUTPUT("Output"),
 	STICKY_NOTE("Sticky Note"),
+	STICKY_NOTE_EDIT("Edit"),
 	YES("Yes");
 	
 	private final String englishText;

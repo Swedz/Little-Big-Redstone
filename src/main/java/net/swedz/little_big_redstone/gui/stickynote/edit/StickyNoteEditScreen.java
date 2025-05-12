@@ -8,6 +8,7 @@ import net.minecraft.network.chat.CommonComponents;
 import net.minecraft.world.item.DyeColor;
 import net.swedz.little_big_redstone.LBR;
 import net.swedz.little_big_redstone.LBRColors;
+import net.swedz.little_big_redstone.gui.stickynote.StickyNoteViewScreen;
 import net.swedz.little_big_redstone.helper.guigraphics.TesseractGuiGraphics;
 import net.swedz.little_big_redstone.network.packet.StickyNotePacket;
 
@@ -19,13 +20,16 @@ public final class StickyNoteEditScreen extends Screen
 	private final DyeColor color;
 	private final String   initialText;
 	
-	public StickyNoteEditScreen(int entityId, DyeColor color, String text)
+	private final boolean shouldReturnToView;
+	
+	public StickyNoteEditScreen(int entityId, DyeColor color, String text, boolean shouldReturnToView)
 	{
 		super(GameNarrator.NO_TITLE);
 		
 		this.entityId = entityId;
 		this.color = color;
 		this.initialText = text;
+		this.shouldReturnToView = shouldReturnToView;
 	}
 	
 	private StickyNoteEditWidget editWidget;
@@ -36,7 +40,7 @@ public final class StickyNoteEditScreen extends Screen
 	{
 		editWidget = this.addRenderableWidget(this.createNoteEditWidget((width / 2) - (180 / 2) + 5, 27, 170, font.lineHeight * 14, () -> LBRColors.stickyNoteText(color)));
 		
-		doneButton = this.addRenderableWidget(Button.builder(CommonComponents.GUI_DONE, (b) -> this.done()).bounds(width / 2 - 98 / 2, 196, 98, 20).build());
+		doneButton = this.addRenderableWidget(Button.builder(CommonComponents.GUI_DONE, (b) -> this.done()).bounds(width / 2 - 180 / 2, 196, 180, 20).build());
 	}
 	
 	private StickyNoteEditWidget createNoteEditWidget(int x, int y, int width, int height, Supplier<Integer> color)
@@ -48,7 +52,7 @@ public final class StickyNoteEditScreen extends Screen
 	
 	private void close()
 	{
-		minecraft.setScreen(null);
+		minecraft.setScreen(shouldReturnToView ? new StickyNoteViewScreen(entityId, color, editWidget.note().text()) : null);
 	}
 	
 	private void done()

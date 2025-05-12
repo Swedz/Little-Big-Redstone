@@ -9,6 +9,8 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.DyeColor;
 import net.swedz.little_big_redstone.LBR;
 import net.swedz.little_big_redstone.LBRColors;
+import net.swedz.little_big_redstone.LBRText;
+import net.swedz.little_big_redstone.gui.stickynote.edit.StickyNoteEditScreen;
 import net.swedz.little_big_redstone.helper.guigraphics.TesseractGuiGraphics;
 import net.swedz.little_big_redstone.item.stickynote.StickyNote;
 
@@ -17,6 +19,7 @@ public final class StickyNoteViewScreen extends Screen
 	private final int      entityId;
 	private final DyeColor color;
 	
+	private final String    rawText;
 	private final Component text;
 	
 	public StickyNoteViewScreen(int entityId, DyeColor color, String text)
@@ -25,20 +28,29 @@ public final class StickyNoteViewScreen extends Screen
 		
 		this.entityId = entityId;
 		this.color = color;
+		this.rawText = text;
 		this.text = StickyNote.parse(text);
 	}
 	
 	private Button doneButton;
+	private Button editButton;
 	
 	@Override
 	protected void init()
 	{
-		doneButton = this.addRenderableWidget(Button.builder(CommonComponents.GUI_DONE, (b) -> this.close()).bounds(width / 2 - 98 / 2, 196, 98, 20).build());
+		doneButton = this.addRenderableWidget(Button.builder(CommonComponents.GUI_DONE, (b) -> this.close()).bounds(width / 2 - 87 - 3, 196, 87, 20).build());
+		
+		editButton = this.addRenderableWidget(Button.builder(LBRText.STICKY_NOTE_EDIT.text(), (b) -> this.edit()).bounds(width / 2 + 3, 196, 87, 20).build());
 	}
 	
 	private void close()
 	{
 		minecraft.setScreen(null);
+	}
+	
+	private void edit()
+	{
+		minecraft.setScreen(new StickyNoteEditScreen(entityId, color, rawText, true));
 	}
 	
 	@Override
