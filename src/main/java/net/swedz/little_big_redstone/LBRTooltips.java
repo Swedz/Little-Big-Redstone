@@ -122,6 +122,16 @@ public final class LBRTooltips
 			)
 	);
 	
+	public static final TooltipAttachment FLOPPY_DISK = TooltipAttachment.multilines(
+			(stack, item) -> stack.is(LBRTags.Items.FLOPPY_DISKS),
+			List.of(
+					line(LBRText.FLOPPY_DISK_HELP_1),
+					Component.empty(),
+					line(LBRText.FLOPPY_DISK_HELP_2).arg("sneak", KEYBIND_PARSER).arg("use", KEYBIND_PARSER),
+					line(LBRText.FLOPPY_DISK_HELP_3).arg("use", KEYBIND_PARSER)
+			)
+	);
+	
 	public static void init()
 	{
 	}

@@ -16,7 +16,6 @@ import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.inventory.tooltip.TooltipComponent;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.component.ItemContainerContents;
 import net.minecraft.world.level.Level;
 import net.neoforged.neoforge.capabilities.Capabilities;
@@ -25,7 +24,6 @@ import net.swedz.little_big_redstone.gui.logicarray.LogicArrayMenu;
 import net.swedz.little_big_redstone.item.logicarray.tooltip.LogicArrayTooltipData;
 import net.swedz.tesseract.neoforge.helper.TransferHelper;
 
-import java.util.List;
 import java.util.Optional;
 
 public final class LogicArrayItem extends Item
@@ -139,12 +137,6 @@ public final class LogicArrayItem extends Item
 		return !stack.has(DataComponents.HIDE_TOOLTIP) && !stack.has(DataComponents.HIDE_ADDITIONAL_TOOLTIP) ?
 				Optional.ofNullable(stack.get(LBRComponents.LOGIC_ARRAY_STORAGE)).map(LogicArrayTooltipData::new) :
 				Optional.empty();
-	}
-	
-	@Override
-	public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> lines, TooltipFlag flag)
-	{
-		// TODO Logic Array:
 	}
 	
 	private static void playRemoveOneSound(Entity entity)
