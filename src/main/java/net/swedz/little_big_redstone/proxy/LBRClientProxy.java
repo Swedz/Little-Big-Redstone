@@ -8,7 +8,7 @@ import net.swedz.little_big_redstone.LBR;
 import net.swedz.little_big_redstone.entity.stickynote.StickyNoteEntity;
 import net.swedz.little_big_redstone.gui.microchip.MicrochipScreen;
 import net.swedz.little_big_redstone.gui.stickynote.edit.StickyNoteEditScreen;
-import net.swedz.little_big_redstone.gui.stickynote.StickyNoteViewScreen;
+import net.swedz.little_big_redstone.gui.stickynote.view.StickyNoteViewScreen;
 import net.swedz.little_big_redstone.microchip.LogicEntry;
 import net.swedz.little_big_redstone.microchip.Microchip;
 import net.swedz.little_big_redstone.network.packet.StickyNotePacket;

@@ -7,7 +7,7 @@ import net.minecraft.world.item.DyeColor;
 import net.swedz.little_big_redstone.LBR;
 import net.swedz.little_big_redstone.LBRColors;
 import net.swedz.little_big_redstone.gui.stickynote.StickyNoteScreen;
-import net.swedz.little_big_redstone.gui.stickynote.StickyNoteViewScreen;
+import net.swedz.little_big_redstone.gui.stickynote.view.StickyNoteViewScreen;
 import net.swedz.little_big_redstone.helper.guigraphics.TesseractGuiGraphics;
 import net.swedz.little_big_redstone.network.packet.StickyNotePacket;
 

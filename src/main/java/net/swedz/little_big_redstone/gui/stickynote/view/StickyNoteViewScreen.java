@@ -1,4 +1,4 @@
-package net.swedz.little_big_redstone.gui.stickynote;
+package net.swedz.little_big_redstone.gui.stickynote.view;
 
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
@@ -8,6 +8,7 @@ import net.minecraft.world.item.DyeColor;
 import net.swedz.little_big_redstone.LBR;
 import net.swedz.little_big_redstone.LBRColors;
 import net.swedz.little_big_redstone.LBRText;
+import net.swedz.little_big_redstone.gui.stickynote.StickyNoteScreen;
 import net.swedz.little_big_redstone.gui.stickynote.edit.StickyNoteEditScreen;
 import net.swedz.little_big_redstone.helper.guigraphics.TesseractGuiGraphics;
 import net.swedz.little_big_redstone.item.stickynote.StickyNote;
