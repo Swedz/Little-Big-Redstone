@@ -5,7 +5,6 @@ import net.minecraft.client.gui.components.Button;
 import net.minecraft.network.chat.CommonComponents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.DyeColor;
-import net.swedz.little_big_redstone.LBR;
 import net.swedz.little_big_redstone.LBRColors;
 import net.swedz.little_big_redstone.LBRText;
 import net.swedz.little_big_redstone.gui.stickynote.StickyNoteScreen;
@@ -45,29 +44,6 @@ public final class StickyNoteViewScreen extends StickyNoteScreen
 	private void edit()
 	{
 		minecraft.setScreen(new StickyNoteEditScreen(entityId, color, initialText, true));
-	}
-	
-	@Override
-	public void renderBackground(GuiGraphics vanilla, int mouseX, int mouseY, float partialTick)
-	{
-		super.renderBackground(vanilla, mouseX, mouseY, partialTick);
-		
-		var graphics = new TesseractGuiGraphics(vanilla);
-		
-		graphics.pose().pushPose();
-		graphics.pose().translate(leftPos, topPos, 0);
-		
-		graphics.setColor(LBRColors.stickyNoteBackground(color));
-		graphics.setTexture(LBR.id("textures/gui/sticky_note.png"));
-		graphics.blit(0, 0, 0, 0, 256, 256);
-		
-		graphics.setColor(LBRColors.stickyNotePin(color));
-		graphics.setTexture(LBR.id("textures/gui/sticky_note_pin.png"));
-		graphics.blit(0, 0, 0, 0, 256, 256);
-		
-		graphics.resetColor();
-		
-		graphics.pose().popPose();
 	}
 	
 	@Override
