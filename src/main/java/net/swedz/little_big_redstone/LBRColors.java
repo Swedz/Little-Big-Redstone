@@ -56,6 +56,47 @@ public final class LBRColors
 		return ColorHelper.getVibrantColor(color);
 	}
 	
+	public static int stickyNoteBackground(DyeColor color)
+	{
+		return switch (color)
+		{
+			case WHITE -> 0xFFCED4D5;
+			case ORANGE -> 0xFFE06100;
+			case MAGENTA -> 0xFFA9309F;
+			case LIGHT_BLUE -> 0xFF2389C7;
+			case YELLOW -> 0xFFEFAE15;
+			case LIME -> 0xFF5FA919;
+			case PINK -> 0xFFD5668F;
+			case GRAY -> 0xFF36393D;
+			case LIGHT_GRAY -> 0xFF7D7D73;
+			case CYAN -> 0xFF167889;
+			case PURPLE -> 0xFF641F9C;
+			case BLUE -> 0xFF2C2E8F;
+			case BROWN -> 0xFF5F3B1F;
+			case GREEN -> 0xFF495B24;
+			case RED -> 0xFF8E2121;
+			case BLACK -> 0xFF080A0F;
+		};
+	}
+	
+	public static int stickyNotePin(DyeColor color)
+	{
+		return switch (color)
+		{
+			case WHITE -> 0xFF696868;
+			default -> 0xFFD1CFCF;
+		};
+	}
+	
+	public static int stickyNoteText(DyeColor color)
+	{
+		return switch (color)
+		{
+			case GRAY, BLACK -> 0xFFFFFFFF;
+			default -> 0xFF000000;
+		};
+	}
+	
 	private static final List<DyeColor> COLORS = List.of(
 			DyeColor.WHITE,
 			DyeColor.LIGHT_GRAY,
