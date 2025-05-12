@@ -161,7 +161,7 @@ public final class StickyNoteEdit
 		return false;
 	}
 	
-	public void jumpTo(int mouseX, int mouseY, boolean shift)
+	private int cursorPosAt(int mouseX, int mouseY)
 	{
 		var display = this.getDisplay();
 		int targetLineX = display.cursorX();
@@ -171,8 +171,12 @@ public final class StickyNoteEdit
 			var line = display.lines()[targetLineY];
 			targetLineX = line.findIndex(font, mouseX);
 		}
-		int newCursorPos = display.toGlobalCursorPos(targetLineX, targetLineY);
-		editor.setCursorPos(newCursorPos, shift);
+		return display.toGlobalCursorPos(targetLineX, targetLineY);
+	}
+	
+	public void jumpTo(int mouseX, int mouseY, boolean shift)
+	{
+		editor.setCursorPos(this.cursorPosAt(mouseX, mouseY), shift);
 		this.markDirty();
 	}
 	

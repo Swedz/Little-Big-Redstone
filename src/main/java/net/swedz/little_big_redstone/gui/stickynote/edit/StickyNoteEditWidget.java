@@ -86,6 +86,25 @@ public final class StickyNoteEditWidget implements GuiEventListener, Renderable,
 	}
 	
 	@Override
+	public boolean mouseDragged(double mouseX, double mouseY, int button, double dragX, double dragY)
+	{
+		if(!this.isMouseOver(mouseX, mouseY))
+		{
+			return false;
+		}
+		
+		if(button == 0)
+		{
+			int localMouseX = (int) (mouseX - x);
+			int localMouseY = (int) (mouseY - y);
+			note.jumpTo(localMouseX, localMouseY, true);
+			return true;
+		}
+		
+		return false;
+	}
+	
+	@Override
 	public boolean keyPressed(int keyCode, int scanCode, int modifiers)
 	{
 		if(Screen.isSelectAll(keyCode))
