@@ -227,7 +227,7 @@ public final class StickyNoteEntity extends HangingEntity
 		this.setDirection(Direction.from3DDataValue(compound.getByte("AttachedFace")));
 		this.setFacing(Direction.from2DDataValue(compound.getByte("Facing")));
 		this.setColor(DyeColor.byId(compound.getByte("Color")));
-		StickyNote.CODEC.parse(NbtOps.INSTANCE, compound.getCompound("StickyNote"))
+		StickyNote.CODEC.parse(NbtOps.INSTANCE, compound.get("StickyNote"))
 				.ifSuccess(this::setNote)
 				.ifError((error) ->
 						LBR.LOGGER.error("Failed to load sticky note data at {}: {}", pos.toShortString(), error.message()));
