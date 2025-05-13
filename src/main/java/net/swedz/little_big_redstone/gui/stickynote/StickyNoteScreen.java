@@ -11,7 +11,7 @@ public abstract class StickyNoteScreen extends Screen
 {
 	protected final int      entityId;
 	protected final DyeColor color, textColor;
-	protected final String   initialText;
+	protected final String initialText;
 	
 	protected int uiWidth, uiHeight;
 	protected int leftPos, topPos;
@@ -35,6 +35,11 @@ public abstract class StickyNoteScreen extends Screen
 		contentTopPos = 27;
 		maxContentWidth = 170;
 		maxContentHeight = 126;
+	}
+	
+	public boolean hasEntity()
+	{
+		return entityId != -1;
 	}
 	
 	@Override

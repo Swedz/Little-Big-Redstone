@@ -36,25 +36,21 @@ public record StickyNotePacket(int entityId, Action action, String text) impleme
 		var player = context.getPlayer();
 		var playerName = player.getGameProfile().getName();
 		
-		if(action.isClientbound())
+		var entity = player.level().getEntity(entityId);
+		if(entity instanceof StickyNoteEntity stickyNote)
 		{
-			Proxies.get(LBRProxy.class).handleStickyNotePacket(this);
-		}
-		else if(action == Action.DONE_EDIT)
-		{
-			var entity = player.level().getEntity(entityId);
-			if(entity instanceof StickyNoteEntity stickyNote)
+			if(action.isClientbound())
+			{
+				Proxies.get(LBRProxy.class).openStickyNote(entityId, stickyNote.getColor(), stickyNote.getTextColor(), text, action == Action.OPEN_EDIT);
+			}
+			else if(action == Action.DONE_EDIT)
 			{
 				stickyNote.setNote(new StickyNote(text));
-			}
-			else
-			{
-				LBR.LOGGER.warn("Received StickyNotePacket from {} with an entity id ({}) targeting a non-sticky note entity, discarding", playerName, entityId);
 			}
 		}
 		else
 		{
-			LBR.LOGGER.warn("Received StickyNotePacket from {} with an invalid action type {}, discarding", playerName, action);
+			LBR.LOGGER.warn("Received StickyNotePacket from {} with an entity id ({}) targeting a non-sticky note entity, discarding", playerName, entityId);
 		}
 	}
 	

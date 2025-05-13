@@ -5,13 +5,11 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.DyeColor;
 import net.swedz.little_big_redstone.LBR;
-import net.swedz.little_big_redstone.entity.stickynote.StickyNoteEntity;
 import net.swedz.little_big_redstone.gui.microchip.MicrochipScreen;
 import net.swedz.little_big_redstone.gui.stickynote.edit.StickyNoteEditScreen;
 import net.swedz.little_big_redstone.gui.stickynote.view.StickyNoteViewScreen;
 import net.swedz.little_big_redstone.microchip.LogicEntry;
 import net.swedz.little_big_redstone.microchip.Microchip;
-import net.swedz.little_big_redstone.network.packet.StickyNotePacket;
 import net.swedz.tesseract.neoforge.proxy.ProxyEntrypoint;
 import net.swedz.tesseract.neoforge.proxy.ProxyEnvironment;
 
@@ -67,34 +65,16 @@ public class LBRClientProxy extends LBRProxy
 	}
 	
 	@Override
-	public void handleStickyNotePacket(StickyNotePacket packet)
+	public void openStickyNote(int entityId, DyeColor color, DyeColor textColor, String text, boolean edit)
 	{
 		var minecraft = Minecraft.getInstance();
-		
-		DyeColor color, textColor;
-		var entity = minecraft.level.getEntity(packet.entityId());
-		if(entity instanceof StickyNoteEntity stickyNote)
+		if(edit)
 		{
-			color = stickyNote.getColor();
-			textColor = stickyNote.getTextColor();
+			minecraft.setScreen(new StickyNoteEditScreen(entityId, color, textColor, text, false));
 		}
 		else
 		{
-			LBR.LOGGER.warn("Received StickyNotePacket with an entity id of a non-sticky note entity ({}), discarding", packet.entityId());
-			return;
-		}
-		
-		if(packet.action() == StickyNotePacket.Action.OPEN_EDIT)
-		{
-			minecraft.setScreen(new StickyNoteEditScreen(packet.entityId(), color, textColor, packet.text(), false));
-		}
-		else if(packet.action() == StickyNotePacket.Action.OPEN_VIEW)
-		{
-			minecraft.setScreen(new StickyNoteViewScreen(packet.entityId(), color, textColor, packet.text()));
-		}
-		else
-		{
-			LBR.LOGGER.warn("Received StickyNotePacket with an invalid clientbound action {}, discarding", packet.action());
+			minecraft.setScreen(new StickyNoteViewScreen(entityId, color, textColor, text));
 		}
 	}
 	

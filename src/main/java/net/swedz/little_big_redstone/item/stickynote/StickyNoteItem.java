@@ -3,7 +3,9 @@ package net.swedz.little_big_redstone.item.stickynote;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.component.DataComponents;
+import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
+import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.DyeColor;
@@ -11,9 +13,12 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.component.CustomData;
 import net.minecraft.world.item.context.UseOnContext;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.gameevent.GameEvent;
 import net.swedz.little_big_redstone.LBRComponents;
 import net.swedz.little_big_redstone.entity.stickynote.StickyNoteEntity;
+import net.swedz.little_big_redstone.proxy.LBRProxy;
+import net.swedz.tesseract.neoforge.proxy.Proxies;
 
 public final class StickyNoteItem extends Item
 {
@@ -34,6 +39,19 @@ public final class StickyNoteItem extends Item
 	{
 		return !player.level().isOutsideBuildHeight(pos) &&
 			   player.mayUseItemAt(pos, direction, itemStack);
+	}
+	
+	@Override
+	public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand)
+	{
+		var stack = player.getItemInHand(hand);
+		if(level.isClientSide())
+		{
+			var note = stack.getOrDefault(LBRComponents.STICKY_NOTE, StickyNote.EMPTY);
+			var textColor = stack.getOrDefault(LBRComponents.STICKY_NOTE_TEXT_COLOR, StickyNoteEntity.getDefaultTextColor(color));
+			Proxies.get(LBRProxy.class).openStickyNote(-1, color, textColor, note.text(), false);
+		}
+		return InteractionResultHolder.sidedSuccess(stack, level.isClientSide());
 	}
 	
 	@Override

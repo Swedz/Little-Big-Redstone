@@ -2,12 +2,12 @@ package net.swedz.little_big_redstone.proxy;
 
 import net.kyori.adventure.platform.modcommon.MinecraftServerAudiences;
 import net.minecraft.network.chat.Component;
+import net.minecraft.world.item.DyeColor;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.server.ServerAboutToStartEvent;
 import net.neoforged.neoforge.event.server.ServerStoppedEvent;
 import net.swedz.little_big_redstone.microchip.LogicEntry;
 import net.swedz.little_big_redstone.microchip.Microchip;
-import net.swedz.little_big_redstone.network.packet.StickyNotePacket;
 import net.swedz.tesseract.neoforge.proxy.Proxy;
 import net.swedz.tesseract.neoforge.proxy.ProxyEntrypoint;
 
@@ -33,7 +33,7 @@ public class LBRProxy implements Proxy
 	{
 	}
 	
-	public void handleStickyNotePacket(StickyNotePacket packet)
+	public void openStickyNote(int entityId, DyeColor color, DyeColor textColor, String text, boolean edit)
 	{
 	}
 	
