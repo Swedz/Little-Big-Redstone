@@ -3,7 +3,9 @@ package net.swedz.little_big_redstone.client.hud;
 import net.minecraft.client.DeltaTracker;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.core.BlockPos;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.phys.BlockHitResult;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
@@ -11,6 +13,7 @@ import net.neoforged.neoforge.client.event.ClientTickEvent;
 import net.neoforged.neoforge.client.event.RenderGuiLayerEvent;
 import net.neoforged.neoforge.client.gui.VanillaGuiLayers;
 import net.swedz.little_big_redstone.LBR;
+import net.swedz.little_big_redstone.LBRTags;
 import net.swedz.little_big_redstone.LBRText;
 import net.swedz.little_big_redstone.helper.guigraphics.TesseractGuiGraphics;
 
@@ -19,13 +22,19 @@ import java.util.List;
 @EventBusSubscriber(modid = LBR.ID, value = Dist.CLIENT)
 public final class FloppyDiskMissingItemsGuiOverlay
 {
+	private static boolean         SHOULD_FADE;
+	private static int             DISK_SLOT;
+	private static BlockPos        MICROCHIP_POSITION;
 	private static List<ItemStack> MISSING_ITEMS;
 	private static int             MISSING_ITEMS_TIME;
 	
-	public static void displayMissingItems(List<ItemStack> missingItems)
+	public static void displayMissingItems(int diskSlot, BlockPos microchipPosition, List<ItemStack> missingItems)
 	{
+		SHOULD_FADE = false;
+		DISK_SLOT = diskSlot;
+		MICROCHIP_POSITION = microchipPosition;
 		MISSING_ITEMS = missingItems;
-		MISSING_ITEMS_TIME = 6 * 20;
+		MISSING_ITEMS_TIME = 60;
 	}
 	
 	private static void renderItems(TesseractGuiGraphics graphics, DeltaTracker delta, float alpha)
@@ -99,15 +108,33 @@ public final class FloppyDiskMissingItemsGuiOverlay
 		}
 	}
 	
+	private static boolean hasTargetChanged()
+	{
+		var player = Minecraft.getInstance().player;
+		return player.getInventory().selected != DISK_SLOT ||
+			   !player.getInventory().getItem(DISK_SLOT).is(LBRTags.Items.FLOPPY_DISKS) ||
+			   (Minecraft.getInstance().hitResult instanceof BlockHitResult hitResult && !hitResult.getBlockPos().equals(MICROCHIP_POSITION));
+	}
+	
 	@SubscribeEvent
 	private static void tick(ClientTickEvent.Post event)
 	{
 		if(MISSING_ITEMS_TIME > 0)
 		{
-			MISSING_ITEMS_TIME--;
+			if(SHOULD_FADE)
+			{
+				MISSING_ITEMS_TIME--;
+			}
+			else if(hasTargetChanged())
+			{
+				SHOULD_FADE = true;
+			}
 		}
 		else if(MISSING_ITEMS != null)
 		{
+			SHOULD_FADE = false;
+			DISK_SLOT = 0;
+			MICROCHIP_POSITION = null;
 			MISSING_ITEMS = null;
 		}
 	}

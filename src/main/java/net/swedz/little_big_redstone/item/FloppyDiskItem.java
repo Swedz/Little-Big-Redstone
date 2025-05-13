@@ -41,7 +41,7 @@ public final class FloppyDiskItem extends Item
 		super(properties.stacksTo(1).component(LBRComponents.FLOPPY_DISK, null));
 	}
 	
-	private static List<ItemStack> consumeItems(Player player, Microchip.Immutable microchip, boolean simulate)
+	public static List<ItemStack> consumeItems(Player player, Microchip.Immutable microchip, boolean simulate)
 	{
 		if(player.hasInfiniteMaterials())
 		{
@@ -137,7 +137,7 @@ public final class FloppyDiskItem extends Item
 						}
 						else
 						{
-							new FloppyDiskMissingItemsPacket(missingItems).sendToClient(player);
+							new FloppyDiskMissingItemsPacket(40, event.getPos(), missingItems).sendToClient(player);
 						}
 					}
 				}
@@ -180,7 +180,7 @@ public final class FloppyDiskItem extends Item
 								}
 								else
 								{
-									new FloppyDiskMissingItemsPacket(missingItems).sendToClient((ServerPlayer) player);
+									new FloppyDiskMissingItemsPacket(player.getInventory().selected, context.getClickedPos(), missingItems).sendToClient((ServerPlayer) player);
 								}
 							}
 						}

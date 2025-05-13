@@ -1,5 +1,6 @@
 package net.swedz.little_big_redstone.network.packet;
 
+import net.minecraft.core.BlockPos;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
@@ -11,17 +12,22 @@ import net.swedz.tesseract.neoforge.proxy.Proxies;
 
 import java.util.List;
 
-public record FloppyDiskMissingItemsPacket(List<ItemStack> itemsMissing) implements LBRCustomPacket
+public record FloppyDiskMissingItemsPacket(
+		int diskSlot, BlockPos microchipPosition, List<ItemStack> itemsMissing
+) implements LBRCustomPacket
 {
-	public static final StreamCodec<RegistryFriendlyByteBuf, FloppyDiskMissingItemsPacket> STREAM_CODEC = ItemStack.STREAM_CODEC
-			.apply(ByteBufCodecs.list())
-			.map(FloppyDiskMissingItemsPacket::new, FloppyDiskMissingItemsPacket::itemsMissing);
+	public static final StreamCodec<RegistryFriendlyByteBuf, FloppyDiskMissingItemsPacket> STREAM_CODEC = StreamCodec.composite(
+			ByteBufCodecs.VAR_INT, FloppyDiskMissingItemsPacket::diskSlot,
+			BlockPos.STREAM_CODEC, FloppyDiskMissingItemsPacket::microchipPosition,
+			ItemStack.STREAM_CODEC.apply(ByteBufCodecs.list()), FloppyDiskMissingItemsPacket::itemsMissing,
+			FloppyDiskMissingItemsPacket::new
+	);
 	
 	@Override
 	public void handle(PacketContext context)
 	{
 		context.assertClientbound();
 		
-		Proxies.get(LBRProxy.class).displayMissingItems(itemsMissing);
+		Proxies.get(LBRProxy.class).displayMissingItems(diskSlot, microchipPosition, itemsMissing);
 	}
 }
