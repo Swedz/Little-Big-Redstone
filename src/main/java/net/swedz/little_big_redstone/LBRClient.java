@@ -31,6 +31,8 @@ import net.swedz.little_big_redstone.item.logicarray.tooltip.LogicArrayTooltipDa
 import net.swedz.little_big_redstone.item.stickynote.StickyNoteItem;
 import net.swedz.tesseract.neoforge.registry.holder.ItemHolder;
 
+import java.util.function.Supplier;
+
 @Mod(value = LBR.ID, dist = Dist.CLIENT)
 @EventBusSubscriber(value = Dist.CLIENT, modid = LBR.ID, bus = EventBusSubscriber.Bus.MOD)
 public final class LBRClient
@@ -40,8 +42,7 @@ public final class LBRClient
 		LBRTooltips.init();
 	}
 	
-	@SubscribeEvent
-	private static void registerClientExtensions(RegisterClientExtensionsEvent event)
+	private static void registerCustomItemRenderer(RegisterClientExtensionsEvent event, Supplier<BlockEntityWithoutLevelRenderer> renderer, Class<?> itemType)
 	{
 		event.registerItem(
 				new IClientItemExtensions()
@@ -49,23 +50,18 @@ public final class LBRClient
 					@Override
 					public BlockEntityWithoutLevelRenderer getCustomRenderer()
 					{
-						return new LogicItemRenderer();
+						return renderer.get();
 					}
 				},
-				LBRItems.values().stream().filter((i) -> i.get() instanceof LogicItem).map(ItemHolder::get).toArray(Item[]::new)
+				LBRItems.values().stream().filter((i) -> i.get().getClass() == itemType).map(ItemHolder::get).toArray(Item[]::new)
 		);
-		
-		event.registerItem(
-				new IClientItemExtensions()
-				{
-					@Override
-					public BlockEntityWithoutLevelRenderer getCustomRenderer()
-					{
-						return new StickyNoteItemRenderer();
-					}
-				},
-				LBRItems.values().stream().filter((i) -> i.get() instanceof StickyNoteItem).map(ItemHolder::get).toArray(Item[]::new)
-		);
+	}
+	
+	@SubscribeEvent
+	private static void registerClientExtensions(RegisterClientExtensionsEvent event)
+	{
+		registerCustomItemRenderer(event, LogicItemRenderer::new, LogicItem.class);
+		registerCustomItemRenderer(event, StickyNoteItemRenderer::new, StickyNoteItem.class);
 	}
 	
 	@SubscribeEvent
