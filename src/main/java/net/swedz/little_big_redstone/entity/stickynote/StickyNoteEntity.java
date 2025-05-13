@@ -2,8 +2,10 @@ package net.swedz.little_big_redstone.entity.stickynote;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtOps;
+import net.minecraft.network.chat.Component;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.network.protocol.game.ClientboundAddEntityPacket;
@@ -53,6 +55,8 @@ public final class StickyNoteEntity extends HangingEntity
 	private DyeColor  textColor;
 	
 	private StickyNote note = StickyNote.EMPTY;
+	
+	private Component itemName;
 	
 	public StickyNoteEntity(EntityType<? extends StickyNoteEntity> type, Level level)
 	{
@@ -106,6 +110,10 @@ public final class StickyNoteEntity extends HangingEntity
 			if(textColor != null)
 			{
 				stack.set(LBRComponents.STICKY_NOTE_TEXT_COLOR, textColor);
+			}
+			if(itemName != null)
+			{
+				stack.set(DataComponents.CUSTOM_NAME, itemName);
 			}
 			this.spawnAtLocation(stack);
 		}
@@ -216,6 +224,11 @@ public final class StickyNoteEntity extends HangingEntity
 		this.note = note;
 	}
 	
+	public void setItemName(Component itemName)
+	{
+		this.itemName = itemName;
+	}
+	
 	@Override
 	public InteractionResult interact(Player player, InteractionHand hand)
 	{
@@ -284,6 +297,10 @@ public final class StickyNoteEntity extends HangingEntity
 		{
 			compound.putByte("TextColor", (byte) textColor.getId());
 		}
+		if(itemName != null)
+		{
+			compound.putString("ItemName", Component.Serializer.toJson(itemName, this.registryAccess()));
+		}
 		compound.put("StickyNote", StickyNote.CODEC.encodeStart(NbtOps.INSTANCE, note).getOrThrow());
 	}
 	
@@ -298,6 +315,10 @@ public final class StickyNoteEntity extends HangingEntity
 		if(compound.contains("TextColor"))
 		{
 			this.setTextColor(DyeColor.byId(compound.getByte("TextColor")));
+		}
+		if(compound.contains("ItemName"))
+		{
+			this.setItemName(Component.Serializer.fromJson(compound.getString("ItemName"), this.registryAccess()));
 		}
 		StickyNote.CODEC.parse(NbtOps.INSTANCE, compound.get("StickyNote"))
 				.ifSuccess(this::setNote)

@@ -88,6 +88,12 @@ public final class StickyNoteItem extends Item
 			entity.setTextColor(textColor);
 		}
 		
+		var itemName = stack.get(DataComponents.CUSTOM_NAME);
+		if(itemName != null)
+		{
+			entity.setItemName(itemName);
+		}
+		
 		if(entity.survives())
 		{
 			if(!level.isClientSide())
