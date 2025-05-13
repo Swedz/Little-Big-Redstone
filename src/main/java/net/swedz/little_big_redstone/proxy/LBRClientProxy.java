@@ -4,7 +4,9 @@ import net.kyori.adventure.platform.modcommon.MinecraftClientAudiences;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.DyeColor;
+import net.minecraft.world.item.ItemStack;
 import net.swedz.little_big_redstone.LBR;
+import net.swedz.little_big_redstone.client.hud.FloppyDiskMissingItemsGuiOverlay;
 import net.swedz.little_big_redstone.gui.microchip.MicrochipScreen;
 import net.swedz.little_big_redstone.gui.stickynote.edit.StickyNoteEditScreen;
 import net.swedz.little_big_redstone.gui.stickynote.view.StickyNoteViewScreen;
@@ -76,6 +78,12 @@ public class LBRClientProxy extends LBRProxy
 		{
 			minecraft.setScreen(new StickyNoteViewScreen(entityId, color, textColor, text));
 		}
+	}
+	
+	@Override
+	public void displayMissingItems(List<ItemStack> missingItems)
+	{
+		FloppyDiskMissingItemsGuiOverlay.displayMissingItems(missingItems);
 	}
 	
 	@Override

@@ -12,10 +12,13 @@ import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
 import net.neoforged.neoforge.client.event.EntityRenderersEvent;
 import net.neoforged.neoforge.client.event.ModelEvent;
 import net.neoforged.neoforge.client.event.RegisterClientTooltipComponentFactoriesEvent;
+import net.neoforged.neoforge.client.event.RegisterGuiLayersEvent;
 import net.neoforged.neoforge.client.event.RegisterMenuScreensEvent;
 import net.neoforged.neoforge.client.extensions.common.IClientItemExtensions;
 import net.neoforged.neoforge.client.extensions.common.RegisterClientExtensionsEvent;
+import net.neoforged.neoforge.client.gui.VanillaGuiLayers;
 import net.swedz.little_big_redstone.client.entity.StickyNoteEntityRenderer;
+import net.swedz.little_big_redstone.client.hud.FloppyDiskMissingItemsGuiOverlay;
 import net.swedz.little_big_redstone.client.item.LogicItemRenderer;
 import net.swedz.little_big_redstone.client.item.StickyNoteItemRenderer;
 import net.swedz.little_big_redstone.client.model.logic.LogicUnbakedModel;
@@ -62,6 +65,12 @@ public final class LBRClient
 	{
 		registerCustomItemRenderer(event, LogicItemRenderer::new, LogicItem.class);
 		registerCustomItemRenderer(event, StickyNoteItemRenderer::new, StickyNoteItem.class);
+	}
+	
+	@SubscribeEvent
+	private static void register(RegisterGuiLayersEvent event)
+	{
+		event.registerAbove(VanillaGuiLayers.OVERLAY_MESSAGE, LBR.id("floppy_disk_missing_items"), FloppyDiskMissingItemsGuiOverlay::render);
 	}
 	
 	@SubscribeEvent

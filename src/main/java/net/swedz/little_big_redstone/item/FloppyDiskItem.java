@@ -1,6 +1,8 @@
 package net.swedz.little_big_redstone.item;
 
+import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.InteractionResultHolder;
@@ -12,20 +14,26 @@ import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
 import net.neoforged.bus.api.EventPriority;
 import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.level.BlockEvent;
 import net.neoforged.neoforge.items.ItemHandlerHelper;
+import net.swedz.little_big_redstone.LBR;
 import net.swedz.little_big_redstone.LBRComponents;
 import net.swedz.little_big_redstone.LBRItems;
 import net.swedz.little_big_redstone.LBRText;
 import net.swedz.little_big_redstone.block.microchip.MicrochipBlockEntity;
 import net.swedz.little_big_redstone.microchip.Microchip;
 import net.swedz.little_big_redstone.microchip.logic.LogicType;
+import net.swedz.little_big_redstone.network.packet.FloppyDiskMissingItemsPacket;
 import net.swedz.tesseract.neoforge.helper.TransferHelper;
 
+import java.util.Collections;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.function.Predicate;
 
+@EventBusSubscriber(modid = LBR.ID)
 public final class FloppyDiskItem extends Item
 {
 	public FloppyDiskItem(Properties properties)
@@ -33,17 +41,19 @@ public final class FloppyDiskItem extends Item
 		super(properties.stacksTo(1).component(LBRComponents.FLOPPY_DISK, null));
 	}
 	
-	private static boolean consumeItems(Player player, Microchip.Immutable microchip, boolean simulate)
+	private static List<ItemStack> consumeItems(Player player, Microchip.Immutable microchip, boolean simulate)
 	{
 		if(player.hasInfiniteMaterials())
 		{
-			return true;
+			return List.of();
 		}
+		
+		List<ItemStack> missingItems = Lists.newArrayList();
 		
 		int extracted = TransferHelper.extractAny(player.getInventory(), (item) -> item.is(LBRItems.REDSTONE_BIT.get()), microchip.wireCount(), true, simulate);
 		if(extracted != microchip.wireCount())
 		{
-			return false;
+			missingItems.add(new ItemStack(LBRItems.REDSTONE_BIT.get(), microchip.wireCount() - extracted));
 		}
 		
 		Map<LogicType<?>, Map<Optional<DyeColor>, Integer>> componentsNeeded = Maps.newHashMap();
@@ -63,7 +73,7 @@ public final class FloppyDiskItem extends Item
 		}
 		for(var typeEntry : componentsNeeded.entrySet())
 		{
-			var type = typeEntry.getKey();
+			LogicType type = typeEntry.getKey();
 			for(var dyeEntry : typeEntry.getValue().entrySet())
 			{
 				var dye = dyeEntry.getKey();
@@ -81,12 +91,16 @@ public final class FloppyDiskItem extends Item
 				extracted = TransferHelper.extractAny(player.getInventory(), predicate, count, true, simulate);
 				if(extracted != count)
 				{
-					return false;
+					var component = type.defaultFactory().create();
+					component.setColor(dye);
+					var stack = type.toStack(component);
+					stack.setCount(count - extracted);
+					missingItems.add(stack);
 				}
 			}
 		}
 		
-		return true;
+		return Collections.unmodifiableList(missingItems);
 	}
 	
 	private static void dropAll(Player player, Microchip microchip)
@@ -102,7 +116,7 @@ public final class FloppyDiskItem extends Item
 	@SubscribeEvent(priority = EventPriority.LOWEST)
 	private static void onPlaceMicrochipWithFloppyDisk(BlockEvent.EntityPlaceEvent event)
 	{
-		if(event.getEntity() instanceof Player player)
+		if(event.getEntity() instanceof ServerPlayer player)
 		{
 			var offhand = player.getItemInHand(InteractionHand.OFF_HAND);
 			if(offhand.has(LBRComponents.FLOPPY_DISK))
@@ -113,7 +127,8 @@ public final class FloppyDiskItem extends Item
 					var blockEntity = event.getLevel().getBlockEntity(event.getPos());
 					if(blockEntity instanceof MicrochipBlockEntity microchipBlockEntity)
 					{
-						if(consumeItems(player, microchip, true))
+						var missingItems = consumeItems(player, microchip, true);
+						if(missingItems.isEmpty())
 						{
 							consumeItems(player, microchip, false);
 							dropAll(player, microchipBlockEntity.microchip());
@@ -122,7 +137,7 @@ public final class FloppyDiskItem extends Item
 						}
 						else
 						{
-							player.displayClientMessage(LBRText.FLOPPY_DISK_APPLY_FAILURE.text(), true);
+							new FloppyDiskMissingItemsPacket(missingItems).sendToClient(player);
 						}
 					}
 				}
@@ -155,7 +170,8 @@ public final class FloppyDiskItem extends Item
 							var microchip = itemStack.get(LBRComponents.FLOPPY_DISK);
 							if(microchip != null)
 							{
-								if(consumeItems(player, microchip, true))
+								var missingItems = consumeItems(player, microchip, true);
+								if(missingItems.isEmpty())
 								{
 									consumeItems(player, microchip, false);
 									dropAll(player, microchipBlockEntity.microchip());
@@ -164,7 +180,7 @@ public final class FloppyDiskItem extends Item
 								}
 								else
 								{
-									player.displayClientMessage(LBRText.FLOPPY_DISK_APPLY_FAILURE.text(), true);
+									new FloppyDiskMissingItemsPacket(missingItems).sendToClient((ServerPlayer) player);
 								}
 							}
 						}
