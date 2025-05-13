@@ -7,9 +7,9 @@
 			"to": [3.5, 3.5, 0.25],
 			"rotation": {"angle": 0, "axis": "y", "origin": [2, 1, 0.25]},
 			"faces": {
-				"north": {"uv": [5, 5, 0, 0], "rotation": 180, "texture": "#texture"},
+				"north": {"uv": [7, 7, 0, 0], "rotation": 180, "texture": "#texture"},
 				"east": {"uv": [0, 0, 5, 0], "rotation": 90, "texture": "#texture"},
-				"south": {"uv": [5, 5, 0, 10], "texture": "#texture"},
+				"south": {"uv": [0, 7, 7, 14], "texture": "#texture"},
 				"west": {"uv": [0, 0, 5, 0], "rotation": 270, "texture": "#texture"},
 				"up": {"uv": [0, 0, 5, 0], "texture": "#texture"},
 				"down": {"uv": [0, 0, 5, 0], "rotation": 180, "texture": "#texture"}
