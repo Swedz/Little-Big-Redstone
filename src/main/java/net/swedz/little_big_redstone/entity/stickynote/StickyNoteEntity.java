@@ -13,6 +13,7 @@ import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerEntity;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
+import net.minecraft.stats.Stats;
 import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -21,15 +22,18 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.decoration.HangingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.DyeColor;
+import net.minecraft.world.item.DyeItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.GameRules;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
+import net.neoforged.neoforge.client.model.data.ModelData;
 import net.swedz.little_big_redstone.LBR;
 import net.swedz.little_big_redstone.LBRComponents;
 import net.swedz.little_big_redstone.LBREntities;
 import net.swedz.little_big_redstone.LBRItems;
+import net.swedz.little_big_redstone.client.model.stickynote.StickyNoteModelData;
 import net.swedz.little_big_redstone.item.stickynote.StickyNote;
 import net.swedz.little_big_redstone.network.packet.StickyNotePacket;
 import net.swedz.tesseract.neoforge.api.Assert;
@@ -40,11 +44,13 @@ public final class StickyNoteEntity extends HangingEntity
 	public static final double WIDTH           = 10D / 16D;
 	public static final double POSITION_OFFSET = 0.5 - (DEPTH / 2);
 	
-	private static final EntityDataAccessor<Integer> DATA_FACING = SynchedEntityData.defineId(StickyNoteEntity.class, EntityDataSerializers.INT);
-	private static final EntityDataAccessor<Integer> DATA_COLOR  = SynchedEntityData.defineId(StickyNoteEntity.class, EntityDataSerializers.INT);
+	private static final EntityDataAccessor<Integer> DATA_FACING     = SynchedEntityData.defineId(StickyNoteEntity.class, EntityDataSerializers.INT);
+	private static final EntityDataAccessor<Integer> DATA_COLOR      = SynchedEntityData.defineId(StickyNoteEntity.class, EntityDataSerializers.INT);
+	private static final EntityDataAccessor<Integer> DATA_TEXT_COLOR = SynchedEntityData.defineId(StickyNoteEntity.class, EntityDataSerializers.INT);
 	
 	private Direction facing = Direction.SOUTH;
 	private DyeColor  color  = DyeColor.WHITE;
+	private DyeColor  textColor;
 	
 	private StickyNote note = StickyNote.EMPTY;
 	
@@ -59,6 +65,13 @@ public final class StickyNoteEntity extends HangingEntity
 		this.setDirection(direction);
 		this.setFacing(facing);
 		this.setColor(color);
+	}
+	
+	public ModelData getModelData()
+	{
+		return ModelData.builder()
+				.with(StickyNoteModelData.KEY, new StickyNoteModelData(color, this.getTextColor()))
+				.build();
 	}
 	
 	@Override
@@ -90,6 +103,10 @@ public final class StickyNoteEntity extends HangingEntity
 			}
 			var stack = LBRItems.stickyNote(color).get().getDefaultInstance();
 			stack.set(LBRComponents.STICKY_NOTE, note);
+			if(textColor != null)
+			{
+				stack.set(LBRComponents.STICKY_NOTE_TEXT_COLOR, textColor);
+			}
 			this.spawnAtLocation(stack);
 		}
 	}
@@ -105,6 +122,7 @@ public final class StickyNoteEntity extends HangingEntity
 	{
 		builder.define(DATA_FACING, Direction.SOUTH.get2DDataValue());
 		builder.define(DATA_COLOR, DyeColor.WHITE.getId());
+		builder.define(DATA_TEXT_COLOR, getDefaultTextColor(DyeColor.WHITE).getId());
 	}
 	
 	@Override
@@ -165,6 +183,27 @@ public final class StickyNoteEntity extends HangingEntity
 		entityData.set(DATA_COLOR, color.getId());
 	}
 	
+	public static DyeColor getDefaultTextColor(DyeColor color)
+	{
+		return switch (color)
+		{
+			case GRAY, BLACK -> DyeColor.WHITE;
+			default -> DyeColor.BLACK;
+		};
+	}
+	
+	public DyeColor getTextColor()
+	{
+		return textColor != null ? textColor : getDefaultTextColor(color);
+	}
+	
+	public void setTextColor(DyeColor textColor)
+	{
+		this.textColor = textColor;
+		
+		entityData.set(DATA_TEXT_COLOR, this.getTextColor().getId());
+	}
+	
 	public StickyNote getNote()
 	{
 		return note;
@@ -182,6 +221,17 @@ public final class StickyNoteEntity extends HangingEntity
 	{
 		if(!this.level().isClientSide())
 		{
+			var stack = player.getItemInHand(hand);
+			if(stack.getItem() instanceof DyeItem dyeItem &&
+			   dyeItem.getDyeColor() != this.getTextColor())
+			{
+				player.awardStat(Stats.ITEM_USED.get(stack.getItem()));
+				this.playSound(SoundEvents.DYE_USE);
+				this.setTextColor(dyeItem.getDyeColor());
+				stack.consume(1, player);
+				return InteractionResult.CONSUME;
+			}
+			
 			var action = player.isShiftKeyDown() ? StickyNotePacket.Action.OPEN_EDIT : StickyNotePacket.Action.OPEN_VIEW;
 			new StickyNotePacket(this.getId(), action, note.text()).sendToClient((ServerPlayer) player);
 			return InteractionResult.CONSUME;
@@ -197,7 +247,8 @@ public final class StickyNoteEntity extends HangingEntity
 	{
 		int data = (direction.get3DDataValue() & 0xFFF) |
 				   ((facing.get2DDataValue() & 0xFF) << 8) |
-				   ((color.getId() & 0xFF) << 16);
+				   ((color.getId() & 0xFF) << 16) |
+				   ((this.getTextColor().getId() & 0xFF) << 24);
 		return new ClientboundAddEntityPacket(this, data, this.getPos());
 	}
 	
@@ -209,6 +260,16 @@ public final class StickyNoteEntity extends HangingEntity
 		this.setDirection(Direction.from3DDataValue(data & 0xFF));
 		this.setFacing(Direction.from2DDataValue((data >> 8) & 0xFF));
 		this.setColor(DyeColor.byId((data >> 16) & 0xFF));
+		this.setTextColor(DyeColor.byId((data >> 24) & 0xFF));
+	}
+	
+	@Override
+	public void onSyncedDataUpdated(EntityDataAccessor<?> key)
+	{
+		if(key.equals(DATA_TEXT_COLOR))
+		{
+			textColor = DyeColor.byId(this.getEntityData().get(DATA_TEXT_COLOR));
+		}
 	}
 	
 	@Override
@@ -219,6 +280,10 @@ public final class StickyNoteEntity extends HangingEntity
 		compound.putByte("AttachedFace", (byte) direction.get3DDataValue());
 		compound.putByte("Facing", (byte) facing.get2DDataValue());
 		compound.putByte("Color", (byte) color.getId());
+		if(textColor != null)
+		{
+			compound.putByte("TextColor", (byte) textColor.getId());
+		}
 		compound.put("StickyNote", StickyNote.CODEC.encodeStart(NbtOps.INSTANCE, note).getOrThrow());
 	}
 	
@@ -230,6 +295,10 @@ public final class StickyNoteEntity extends HangingEntity
 		this.setDirection(Direction.from3DDataValue(compound.getByte("AttachedFace")));
 		this.setFacing(Direction.from2DDataValue(compound.getByte("Facing")));
 		this.setColor(DyeColor.byId(compound.getByte("Color")));
+		if(compound.contains("TextColor"))
+		{
+			this.setTextColor(DyeColor.byId(compound.getByte("TextColor")));
+		}
 		StickyNote.CODEC.parse(NbtOps.INSTANCE, compound.get("StickyNote"))
 				.ifSuccess(this::setNote)
 				.ifError((error) ->

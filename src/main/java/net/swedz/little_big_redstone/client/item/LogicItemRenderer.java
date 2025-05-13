@@ -6,19 +6,18 @@ import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.resources.model.ModelResourceLocation;
-import net.minecraft.util.FastColor;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.neoforge.client.NeoForgeRenderTypes;
 import net.neoforged.neoforge.client.RenderTypeGroup;
 import net.neoforged.neoforge.client.model.CompositeModel;
-import net.neoforged.neoforge.client.model.IQuadTransformer;
 import net.neoforged.neoforge.client.model.data.ModelData;
 import net.swedz.little_big_redstone.LBR;
 import net.swedz.little_big_redstone.LBRClientRenderTypes;
 import net.swedz.little_big_redstone.LBRComponents;
 import net.swedz.little_big_redstone.client.model.logic.LogicBakedModel;
+import net.swedz.little_big_redstone.helper.QuadColorFix;
 
 import java.util.Collection;
 
@@ -53,20 +52,7 @@ public final class LogicItemRenderer extends BlockEntityWithoutLevelRenderer
 			var buffer = bufferSource.getBuffer(renderType);
 			for(var quad : modelLayer.getQuads(null, null, random, ModelData.EMPTY, null))
 			{
-				float red = 1f;
-				float green = 1f;
-				float blue = 1f;
-				float alpha = 1f;
-				if(quad.isTinted())
-				{
-					int tintIndex = quad.getTintIndex();
-					int abgr = quad.getVertices()[tintIndex * IQuadTransformer.STRIDE + IQuadTransformer.COLOR];
-					red = FastColor.ABGR32.red(abgr) / 255f;
-					green = FastColor.ABGR32.green(abgr) / 255f;
-					blue = FastColor.ABGR32.blue(abgr) / 255f;
-					alpha = FastColor.ABGR32.alpha(abgr) / 255f;
-				}
-				buffer.putBulkData(poseStack.last(), quad, red, green, blue, alpha, packedLight, packedOverlay);
+				QuadColorFix.putBulkData(buffer, poseStack.last(), quad, packedLight, packedOverlay);
 			}
 			index++;
 		}

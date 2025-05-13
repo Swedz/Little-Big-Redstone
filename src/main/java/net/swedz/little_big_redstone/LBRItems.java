@@ -7,11 +7,12 @@ import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.capabilities.Capabilities;
 import net.neoforged.neoforge.client.model.generators.ModelFile;
 import net.neoforged.neoforge.registries.DeferredRegister;
+import net.swedz.little_big_redstone.client.model.BasicCustomLoaderBuilder;
 import net.swedz.little_big_redstone.item.FloppyDiskItem;
 import net.swedz.little_big_redstone.item.LogicItem;
-import net.swedz.little_big_redstone.item.stickynote.StickyNoteItem;
 import net.swedz.little_big_redstone.item.logicarray.LogicArrayItem;
 import net.swedz.little_big_redstone.item.logicarray.LogicArrayItemHandler;
+import net.swedz.little_big_redstone.item.stickynote.StickyNoteItem;
 import net.swedz.little_big_redstone.microchip.logic.LogicType;
 import net.swedz.little_big_redstone.microchip.logic.LogicTypes;
 import net.swedz.tesseract.neoforge.api.Assert;
@@ -159,6 +160,8 @@ public final class LBRItems
 				.withModel((holder) -> (provider) ->
 						provider.getBuilder(holder.identifier().id())
 								.parent(new ModelFile.UncheckedModelFile("item/generated"))
-								.texture("layer0", LBR.id("item/sticky_note_%s".formatted(colorId))));
+								.customLoader((parent, efh) -> new BasicCustomLoaderBuilder<>(LBR.id("sticky_note_item"), parent, efh)).end()
+								.texture("layer0", LBR.id("item/sticky_note_%s".formatted(colorId)))
+								.texture("layer1", LBR.id("item/sticky_note_text")));
 	}
 }

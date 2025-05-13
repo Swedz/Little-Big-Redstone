@@ -71,11 +71,12 @@ public class LBRClientProxy extends LBRProxy
 	{
 		var minecraft = Minecraft.getInstance();
 		
-		DyeColor color;
+		DyeColor color, textColor;
 		var entity = minecraft.level.getEntity(packet.entityId());
 		if(entity instanceof StickyNoteEntity stickyNote)
 		{
 			color = stickyNote.getColor();
+			textColor = stickyNote.getTextColor();
 		}
 		else
 		{
@@ -85,11 +86,11 @@ public class LBRClientProxy extends LBRProxy
 		
 		if(packet.action() == StickyNotePacket.Action.OPEN_EDIT)
 		{
-			minecraft.setScreen(new StickyNoteEditScreen(packet.entityId(), color, packet.text(), false));
+			minecraft.setScreen(new StickyNoteEditScreen(packet.entityId(), color, textColor, packet.text(), false));
 		}
 		else if(packet.action() == StickyNotePacket.Action.OPEN_VIEW)
 		{
-			minecraft.setScreen(new StickyNoteViewScreen(packet.entityId(), color, packet.text()));
+			minecraft.setScreen(new StickyNoteViewScreen(packet.entityId(), color, textColor, packet.text()));
 		}
 		else
 		{

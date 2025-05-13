@@ -5,7 +5,6 @@ import net.minecraft.client.gui.components.Button;
 import net.minecraft.network.chat.CommonComponents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.DyeColor;
-import net.swedz.little_big_redstone.LBRColors;
 import net.swedz.little_big_redstone.LBRText;
 import net.swedz.little_big_redstone.gui.stickynote.StickyNoteScreen;
 import net.swedz.little_big_redstone.gui.stickynote.edit.StickyNoteEditScreen;
@@ -16,9 +15,9 @@ public final class StickyNoteViewScreen extends StickyNoteScreen
 {
 	private final Component text;
 	
-	public StickyNoteViewScreen(int entityId, DyeColor color, String text)
+	public StickyNoteViewScreen(int entityId, DyeColor color, DyeColor textColor, String text)
 	{
-		super(entityId, color, text);
+		super(entityId, color, textColor, text);
 		
 		this.text = StickyNote.parse(text);
 	}
@@ -43,7 +42,7 @@ public final class StickyNoteViewScreen extends StickyNoteScreen
 	
 	private void edit()
 	{
-		minecraft.setScreen(new StickyNoteEditScreen(entityId, color, initialText, true));
+		minecraft.setScreen(new StickyNoteEditScreen(entityId, color, textColor, initialText, true));
 	}
 	
 	@Override
@@ -57,7 +56,7 @@ public final class StickyNoteViewScreen extends StickyNoteScreen
 		graphics.pose().translate(leftPos, topPos, 0);
 		graphics.pose().translate(contentLeftPos, contentTopPos, 0);
 		
-		graphics.setColor(LBRColors.stickyNoteText(color));
+		graphics.setColor(textColor.getTextColor());
 		int index = 0;
 		for(var line : font.split(text, maxContentWidth))
 		{

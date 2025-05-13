@@ -25,6 +25,11 @@ public final class StickyNoteItem extends Item
 		this.color = color;
 	}
 	
+	public DyeColor color()
+	{
+		return color;
+	}
+	
 	private boolean mayPlace(Player player, Direction direction, ItemStack itemStack, BlockPos pos)
 	{
 		return !player.level().isOutsideBuildHeight(pos) &&
@@ -57,6 +62,12 @@ public final class StickyNoteItem extends Item
 		if(!note.isEmpty())
 		{
 			entity.setNote(note);
+		}
+		
+		var textColor = stack.get(LBRComponents.STICKY_NOTE_TEXT_COLOR);
+		if(textColor != null)
+		{
+			entity.setTextColor(textColor);
 		}
 		
 		if(entity.survives())

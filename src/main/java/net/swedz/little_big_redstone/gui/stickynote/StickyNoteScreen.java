@@ -10,7 +10,7 @@ import net.swedz.little_big_redstone.helper.guigraphics.TesseractGuiGraphics;
 public abstract class StickyNoteScreen extends Screen
 {
 	protected final int      entityId;
-	protected final DyeColor color;
+	protected final DyeColor color, textColor;
 	protected final String   initialText;
 	
 	protected int uiWidth, uiHeight;
@@ -19,12 +19,13 @@ public abstract class StickyNoteScreen extends Screen
 	protected int contentLeftPos, contentTopPos;
 	protected int maxContentWidth, maxContentHeight;
 	
-	protected StickyNoteScreen(int entityId, DyeColor color, String text)
+	protected StickyNoteScreen(int entityId, DyeColor color, DyeColor textColor, String text)
 	{
 		super(GameNarrator.NO_TITLE);
 		
 		this.entityId = entityId;
 		this.color = color;
+		this.textColor = textColor;
 		this.initialText = text;
 		
 		uiWidth = 180;

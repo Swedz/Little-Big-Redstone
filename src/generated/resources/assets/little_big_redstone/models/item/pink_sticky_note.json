@@ -1,6 +1,8 @@
 {
   "parent": "minecraft:item/generated",
+  "loader": "little_big_redstone:sticky_note_item",
   "textures": {
-    "layer0": "little_big_redstone:item/sticky_note_pink"
+    "layer0": "little_big_redstone:item/sticky_note_pink",
+    "layer1": "little_big_redstone:item/sticky_note_text"
   }
 }

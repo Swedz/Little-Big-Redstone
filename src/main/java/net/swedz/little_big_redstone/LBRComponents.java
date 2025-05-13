@@ -5,6 +5,7 @@ import net.minecraft.core.component.DataComponentType;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.component.ItemContainerContents;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.registries.DeferredHolder;
@@ -19,10 +20,11 @@ public final class LBRComponents
 {
 	private static final DeferredRegister.DataComponents COMPONENTS = DeferredRegister.createDataComponents(Registries.DATA_COMPONENT_TYPE, LBR.ID);
 	
-	public static final Supplier<DataComponentType<LogicComponent>>        LOGIC               = create("logic", LogicComponent.CODEC, LogicComponent.STREAM_CODEC);
-	public static final Supplier<DataComponentType<ItemContainerContents>> LOGIC_ARRAY_STORAGE = create("logic_array_storage", ItemContainerContents.CODEC, ItemContainerContents.STREAM_CODEC);
-	public static final Supplier<DataComponentType<Microchip.Immutable>>   FLOPPY_DISK         = create("floppy_disk", Microchip.Immutable.CODEC, Microchip.Immutable.STREAM_CODEC);
-	public static final Supplier<DataComponentType<StickyNote>>            STICKY_NOTE         = create("sticky_note", StickyNote.CODEC, StickyNote.STREAM_CODEC);
+	public static final Supplier<DataComponentType<LogicComponent>>        LOGIC                  = create("logic", LogicComponent.CODEC, LogicComponent.STREAM_CODEC);
+	public static final Supplier<DataComponentType<ItemContainerContents>> LOGIC_ARRAY_STORAGE    = create("logic_array_storage", ItemContainerContents.CODEC, ItemContainerContents.STREAM_CODEC);
+	public static final Supplier<DataComponentType<Microchip.Immutable>>   FLOPPY_DISK            = create("floppy_disk", Microchip.Immutable.CODEC, Microchip.Immutable.STREAM_CODEC);
+	public static final Supplier<DataComponentType<StickyNote>>            STICKY_NOTE            = create("sticky_note", StickyNote.CODEC, StickyNote.STREAM_CODEC);
+	public static final Supplier<DataComponentType<DyeColor>>              STICKY_NOTE_TEXT_COLOR = create("sticky_note_text_color", DyeColor.CODEC, DyeColor.STREAM_CODEC);
 	
 	public static void init(IEventBus bus)
 	{

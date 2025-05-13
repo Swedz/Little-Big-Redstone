@@ -17,14 +17,18 @@ import net.neoforged.neoforge.client.extensions.common.IClientItemExtensions;
 import net.neoforged.neoforge.client.extensions.common.RegisterClientExtensionsEvent;
 import net.swedz.little_big_redstone.client.entity.StickyNoteEntityRenderer;
 import net.swedz.little_big_redstone.client.item.LogicItemRenderer;
+import net.swedz.little_big_redstone.client.item.StickyNoteItemRenderer;
 import net.swedz.little_big_redstone.client.model.logic.LogicUnbakedModel;
 import net.swedz.little_big_redstone.client.model.microchip.MicrochipUnbakedModel;
+import net.swedz.little_big_redstone.client.model.stickynote.entity.StickyNoteEntityUnbakedModel;
+import net.swedz.little_big_redstone.client.model.stickynote.item.StickyNoteItemUnbakedModel;
 import net.swedz.little_big_redstone.gui.logicarray.LogicArrayScreen;
 import net.swedz.little_big_redstone.gui.logicconfig.LogicConfigScreen;
 import net.swedz.little_big_redstone.gui.microchip.MicrochipScreen;
 import net.swedz.little_big_redstone.item.LogicItem;
 import net.swedz.little_big_redstone.item.logicarray.tooltip.LogicArrayClientTooltip;
 import net.swedz.little_big_redstone.item.logicarray.tooltip.LogicArrayTooltipData;
+import net.swedz.little_big_redstone.item.stickynote.StickyNoteItem;
 import net.swedz.tesseract.neoforge.registry.holder.ItemHolder;
 
 @Mod(value = LBR.ID, dist = Dist.CLIENT)
@@ -49,6 +53,18 @@ public final class LBRClient
 					}
 				},
 				LBRItems.values().stream().filter((i) -> i.get() instanceof LogicItem).map(ItemHolder::get).toArray(Item[]::new)
+		);
+		
+		event.registerItem(
+				new IClientItemExtensions()
+				{
+					@Override
+					public BlockEntityWithoutLevelRenderer getCustomRenderer()
+					{
+						return new StickyNoteItemRenderer();
+					}
+				},
+				LBRItems.values().stream().filter((i) -> i.get() instanceof StickyNoteItem).map(ItemHolder::get).toArray(Item[]::new)
 		);
 	}
 	
@@ -83,5 +99,7 @@ public final class LBRClient
 	{
 		event.register(LogicUnbakedModel.ID, LogicUnbakedModel.LOADER);
 		event.register(MicrochipUnbakedModel.ID, MicrochipUnbakedModel.LOADER);
+		event.register(StickyNoteEntityUnbakedModel.ID, StickyNoteEntityUnbakedModel.LOADER);
+		event.register(StickyNoteItemUnbakedModel.ID, StickyNoteItemUnbakedModel.LOADER);
 	}
 }
