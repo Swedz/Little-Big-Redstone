@@ -1,5 +1,6 @@
 package net.swedz.little_big_redstone.item;
 
+import com.google.common.collect.Iterators;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import net.minecraft.server.level.ServerPlayer;
@@ -24,10 +25,11 @@ import net.swedz.little_big_redstone.LBRText;
 import net.swedz.little_big_redstone.block.microchip.MicrochipBlockEntity;
 import net.swedz.little_big_redstone.microchip.Microchip;
 import net.swedz.little_big_redstone.microchip.logic.LogicType;
-import net.swedz.little_big_redstone.network.packet.FloppyDiskMissingItemsPacket;
+import net.swedz.little_big_redstone.network.packet.ForceFloppyDiskGuiOverlayUpdatePacket;
 import net.swedz.tesseract.neoforge.helper.TransferHelper;
 
 import java.util.Collections;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -41,19 +43,24 @@ public final class FloppyDiskItem extends Item
 		super(properties.stacksTo(1).component(LBRComponents.FLOPPY_DISK, null));
 	}
 	
-	public static List<ItemStack> consumeItems(Player player, Microchip.Immutable microchip, boolean simulate)
+	public static ConsumeResult consumeItems(Player player, Microchip.Immutable microchip, boolean simulate)
 	{
 		if(player.hasInfiniteMaterials())
 		{
-			return List.of();
+			return new ConsumeResult();
 		}
 		
+		List<ItemStack> presentItems = Lists.newArrayList();
 		List<ItemStack> missingItems = Lists.newArrayList();
 		
 		int extracted = TransferHelper.extractAny(player.getInventory(), (item) -> item.is(LBRItems.REDSTONE_BIT.get()), microchip.wireCount(), true, simulate);
 		if(extracted != microchip.wireCount())
 		{
 			missingItems.add(new ItemStack(LBRItems.REDSTONE_BIT.get(), microchip.wireCount() - extracted));
+		}
+		if(extracted > 0)
+		{
+			presentItems.add(new ItemStack(LBRItems.REDSTONE_BIT.get(), extracted));
 		}
 		
 		Map<LogicType<?>, Map<Optional<DyeColor>, Integer>> componentsNeeded = Maps.newHashMap();
@@ -78,6 +85,7 @@ public final class FloppyDiskItem extends Item
 			{
 				var dye = dyeEntry.getKey();
 				int count = dyeEntry.getValue();
+				
 				Predicate<ItemStack> predicate = (item) ->
 				{
 					if(item.has(LBRComponents.LOGIC))
@@ -89,6 +97,7 @@ public final class FloppyDiskItem extends Item
 					return false;
 				};
 				extracted = TransferHelper.extractAny(player.getInventory(), predicate, count, true, simulate);
+				
 				if(extracted != count)
 				{
 					var component = type.defaultFactory().create();
@@ -97,10 +106,48 @@ public final class FloppyDiskItem extends Item
 					stack.setCount(count - extracted);
 					missingItems.add(stack);
 				}
+				if(extracted > 0)
+				{
+					var component = type.defaultFactory().create();
+					component.setColor(dye);
+					var stack = type.toStack(component);
+					stack.setCount(extracted);
+					presentItems.add(stack);
+				}
 			}
 		}
 		
-		return Collections.unmodifiableList(missingItems);
+		return new ConsumeResult(presentItems, missingItems);
+	}
+	
+	public record ConsumeResult(List<ItemStack> present, List<ItemStack> missing) implements Iterable<ItemStack>
+	{
+		public ConsumeResult
+		{
+			present = Collections.unmodifiableList(present);
+			missing = Collections.unmodifiableList(missing);
+		}
+		
+		public ConsumeResult()
+		{
+			this(List.of(), List.of());
+		}
+		
+		public boolean isSuccess()
+		{
+			return missing.isEmpty();
+		}
+		
+		public int size()
+		{
+			return present.size() + missing.size();
+		}
+		
+		@Override
+		public Iterator<ItemStack> iterator()
+		{
+			return Iterators.concat(present.iterator(), missing.iterator());
+		}
 	}
 	
 	private static void dropAll(Player player, Microchip microchip)
@@ -128,7 +175,7 @@ public final class FloppyDiskItem extends Item
 					if(blockEntity instanceof MicrochipBlockEntity microchipBlockEntity)
 					{
 						var missingItems = consumeItems(player, microchip, true);
-						if(missingItems.isEmpty())
+						if(missingItems.isSuccess())
 						{
 							consumeItems(player, microchip, false);
 							dropAll(player, microchipBlockEntity.microchip());
@@ -137,8 +184,9 @@ public final class FloppyDiskItem extends Item
 						}
 						else
 						{
-							new FloppyDiskMissingItemsPacket(40, event.getPos(), missingItems).sendToClient(player);
+							player.displayClientMessage(LBRText.FLOPPY_DISK_APPLY_FAILURE.text(), true);
 						}
+						new ForceFloppyDiskGuiOverlayUpdatePacket().sendToClient(player);
 					}
 				}
 			}
@@ -171,7 +219,7 @@ public final class FloppyDiskItem extends Item
 							if(microchip != null)
 							{
 								var missingItems = consumeItems(player, microchip, true);
-								if(missingItems.isEmpty())
+								if(missingItems.isSuccess())
 								{
 									consumeItems(player, microchip, false);
 									dropAll(player, microchipBlockEntity.microchip());
@@ -180,8 +228,9 @@ public final class FloppyDiskItem extends Item
 								}
 								else
 								{
-									new FloppyDiskMissingItemsPacket(player.getInventory().selected, context.getClickedPos(), missingItems).sendToClient((ServerPlayer) player);
+									player.displayClientMessage(LBRText.FLOPPY_DISK_APPLY_FAILURE.text(), true);
 								}
+								new ForceFloppyDiskGuiOverlayUpdatePacket().sendToClient((ServerPlayer) player);
 							}
 						}
 					}

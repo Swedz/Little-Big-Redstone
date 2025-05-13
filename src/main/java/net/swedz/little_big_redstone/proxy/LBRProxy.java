@@ -1,10 +1,8 @@
 package net.swedz.little_big_redstone.proxy;
 
 import net.kyori.adventure.platform.modcommon.MinecraftServerAudiences;
-import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.DyeColor;
-import net.minecraft.world.item.ItemStack;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.server.ServerAboutToStartEvent;
 import net.neoforged.neoforge.event.server.ServerStoppedEvent;
@@ -39,7 +37,7 @@ public class LBRProxy implements Proxy
 	{
 	}
 	
-	public void displayMissingItems(int diskSlot, BlockPos microchipPosition, List<ItemStack> missingItems)
+	public void forceFloppyDiskGuiOverlayUpdate()
 	{
 	}
 	

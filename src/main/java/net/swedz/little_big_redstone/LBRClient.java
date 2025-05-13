@@ -18,7 +18,7 @@ import net.neoforged.neoforge.client.extensions.common.IClientItemExtensions;
 import net.neoforged.neoforge.client.extensions.common.RegisterClientExtensionsEvent;
 import net.neoforged.neoforge.client.gui.VanillaGuiLayers;
 import net.swedz.little_big_redstone.client.entity.StickyNoteEntityRenderer;
-import net.swedz.little_big_redstone.client.hud.FloppyDiskMissingItemsGuiOverlay;
+import net.swedz.little_big_redstone.client.hud.FloppyDiskConsumeItemsGuiOverlay;
 import net.swedz.little_big_redstone.client.item.LogicItemRenderer;
 import net.swedz.little_big_redstone.client.item.StickyNoteItemRenderer;
 import net.swedz.little_big_redstone.client.model.logic.LogicUnbakedModel;
@@ -70,7 +70,7 @@ public final class LBRClient
 	@SubscribeEvent
 	private static void register(RegisterGuiLayersEvent event)
 	{
-		event.registerAbove(VanillaGuiLayers.OVERLAY_MESSAGE, LBR.id("floppy_disk_missing_items"), FloppyDiskMissingItemsGuiOverlay::render);
+		event.registerAbove(VanillaGuiLayers.OVERLAY_MESSAGE, LBR.id("floppy_disk_missing_items"), FloppyDiskConsumeItemsGuiOverlay::render);
 	}
 	
 	@SubscribeEvent

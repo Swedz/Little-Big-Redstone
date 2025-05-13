@@ -6,7 +6,7 @@ import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
 import net.swedz.little_big_redstone.LBR;
 import net.swedz.little_big_redstone.network.packet.DyeMicrochipLogicPacket;
-import net.swedz.little_big_redstone.network.packet.FloppyDiskMissingItemsPacket;
+import net.swedz.little_big_redstone.network.packet.ForceFloppyDiskGuiOverlayUpdatePacket;
 import net.swedz.little_big_redstone.network.packet.OpenLogicConfigPacket;
 import net.swedz.little_big_redstone.network.packet.PlaceTakeMicrochipLogicPacket;
 import net.swedz.little_big_redstone.network.packet.PlaceTakeMicrochipWirePacket;
@@ -34,7 +34,7 @@ public final class LBRPackets
 	static
 	{
 		create("dye_microchip_logic", DyeMicrochipLogicPacket.class, DyeMicrochipLogicPacket.STREAM_CODEC);
-		create("floppy_disk_missing_items", FloppyDiskMissingItemsPacket.class, FloppyDiskMissingItemsPacket.STREAM_CODEC);
+		create("force_floppy_disk_gui_overlay_update", ForceFloppyDiskGuiOverlayUpdatePacket.class, ForceFloppyDiskGuiOverlayUpdatePacket.STREAM_CODEC);
 		create("open_logic_config", OpenLogicConfigPacket.class, OpenLogicConfigPacket.STREAM_CODEC);
 		create("place_take_microchip_wire", PlaceTakeMicrochipWirePacket.class, PlaceTakeMicrochipWirePacket.STREAM_CODEC);
 		create("place_take_microchip_logic", PlaceTakeMicrochipLogicPacket.class, PlaceTakeMicrochipLogicPacket.STREAM_CODEC);

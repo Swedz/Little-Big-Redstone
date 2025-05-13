@@ -19,6 +19,7 @@ public enum LBRText implements TranslatableTextEnum
 	FLOPPY_DISK_HELP_1("Can save, copy & paste Microchip programs."),
 	FLOPPY_DISK_HELP_2("Press %s + %s on a Microchip to save it to the disk."),
 	FLOPPY_DISK_HELP_3("Use %s on a Microchip to install the program. This does require that you have all the components and wires needed available in your inventory."),
+	FLOPPY_DISK_MORE_ITEMS("+%s"),
 	FLOPPY_DISK_SAVE("Saved microchip program to the floppy disk."),
 	INPUT("Input"),
 	LOGIC_ARRAY_HELP_1("Stores all of your redstone bits and logic components!"),

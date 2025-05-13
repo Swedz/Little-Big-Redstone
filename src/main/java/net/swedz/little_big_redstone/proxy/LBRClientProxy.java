@@ -2,12 +2,10 @@ package net.swedz.little_big_redstone.proxy;
 
 import net.kyori.adventure.platform.modcommon.MinecraftClientAudiences;
 import net.minecraft.client.Minecraft;
-import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.DyeColor;
-import net.minecraft.world.item.ItemStack;
 import net.swedz.little_big_redstone.LBR;
-import net.swedz.little_big_redstone.client.hud.FloppyDiskMissingItemsGuiOverlay;
+import net.swedz.little_big_redstone.client.hud.FloppyDiskConsumeItemsGuiOverlay;
 import net.swedz.little_big_redstone.gui.microchip.MicrochipScreen;
 import net.swedz.little_big_redstone.gui.stickynote.edit.StickyNoteEditScreen;
 import net.swedz.little_big_redstone.gui.stickynote.view.StickyNoteViewScreen;
@@ -82,9 +80,9 @@ public class LBRClientProxy extends LBRProxy
 	}
 	
 	@Override
-	public void displayMissingItems(int diskSlot, BlockPos microchipPosition, List<ItemStack> missingItems)
+	public void forceFloppyDiskGuiOverlayUpdate()
 	{
-		FloppyDiskMissingItemsGuiOverlay.displayMissingItems(diskSlot, microchipPosition, missingItems);
+		FloppyDiskConsumeItemsGuiOverlay.forceUpdate();
 	}
 	
 	@Override
