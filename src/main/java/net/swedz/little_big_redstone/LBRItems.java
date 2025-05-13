@@ -159,7 +159,7 @@ public final class LBRItems
 				.tag(LBRTags.Items.STICKY_NOTES)
 				.withModel((holder) -> (provider) ->
 						provider.getBuilder(holder.identifier().id())
-								.parent(new ModelFile.UncheckedModelFile("item/generated"))
+								.parent(new ModelFile.UncheckedModelFile(LBR.id("item/sticky_note")))
 								.customLoader((parent, efh) -> new BasicCustomLoaderBuilder<>(LBR.id("sticky_note_item"), parent, efh)).end()
 								.texture("layer0", LBR.id("item/sticky_note_%s".formatted(colorId)))
 								.texture("layer1", LBR.id("item/sticky_note_text")));
