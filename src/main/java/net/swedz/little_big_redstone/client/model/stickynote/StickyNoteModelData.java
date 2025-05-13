@@ -3,7 +3,7 @@ package net.swedz.little_big_redstone.client.model.stickynote;
 import net.minecraft.world.item.DyeColor;
 import net.neoforged.neoforge.client.model.data.ModelData;
 import net.neoforged.neoforge.client.model.data.ModelProperty;
-import net.swedz.little_big_redstone.entity.stickynote.StickyNoteEntity;
+import net.swedz.little_big_redstone.item.stickynote.StickyNoteItem;
 import net.swedz.tesseract.neoforge.api.Assert;
 
 import java.util.Objects;
@@ -12,7 +12,7 @@ public final class StickyNoteModelData
 {
 	public static final ModelProperty<StickyNoteModelData> KEY = new ModelProperty<>();
 	
-	public static final StickyNoteModelData DEFAULT = new StickyNoteModelData(DyeColor.WHITE, StickyNoteEntity.getDefaultTextColor(DyeColor.WHITE), false);
+	public static final StickyNoteModelData DEFAULT = new StickyNoteModelData(DyeColor.WHITE, StickyNoteItem.getDefaultTextColor(DyeColor.WHITE), false);
 	
 	public static StickyNoteModelData get(ModelData modelData)
 	{

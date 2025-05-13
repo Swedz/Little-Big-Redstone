@@ -42,6 +42,7 @@ import net.swedz.little_big_redstone.LBRItems;
 import net.swedz.little_big_redstone.client.model.stickynote.StickyNoteModelData;
 import net.swedz.little_big_redstone.helper.DirectionHelper;
 import net.swedz.little_big_redstone.item.stickynote.StickyNote;
+import net.swedz.little_big_redstone.item.stickynote.StickyNoteItem;
 import net.swedz.little_big_redstone.network.packet.StickyNotePacket;
 import net.swedz.tesseract.neoforge.api.Assert;
 
@@ -73,8 +74,8 @@ public final class StickyNoteEntity extends HangingEntity
 	private Direction facing   = Direction.SOUTH;
 	private Quadrant  quadrant = Quadrant.TOP_LEFT;
 	
-	private DyeColor color = DyeColor.WHITE;
-	private DyeColor textColor;
+	private DyeColor color     = DyeColor.WHITE;
+	private DyeColor textColor = StickyNoteItem.getDefaultTextColor(DyeColor.WHITE);
 	
 	private StickyNote note = StickyNote.EMPTY;
 	
@@ -85,7 +86,7 @@ public final class StickyNoteEntity extends HangingEntity
 		super(type, level);
 	}
 	
-	public StickyNoteEntity(Level level, BlockPos pos, Direction direction, Direction facing, Quadrant quadrant, DyeColor color)
+	public StickyNoteEntity(Level level, BlockPos pos, Direction direction, Direction facing, Quadrant quadrant, DyeColor color, DyeColor textColor)
 	{
 		super(LBREntities.STICKY_NOTE.get(), level, pos);
 		
@@ -93,6 +94,7 @@ public final class StickyNoteEntity extends HangingEntity
 		this.setFacing(facing);
 		this.setQuadrant(quadrant);
 		this.setColor(color);
+		this.setTextColor(textColor);
 		
 		this.recalculateBoundingBox();
 	}
@@ -134,10 +136,7 @@ public final class StickyNoteEntity extends HangingEntity
 			}
 			var stack = LBRItems.stickyNote(color).get().getDefaultInstance();
 			stack.set(LBRComponents.STICKY_NOTE, note);
-			if(textColor != null)
-			{
-				stack.set(LBRComponents.STICKY_NOTE_TEXT_COLOR, textColor);
-			}
+			stack.set(LBRComponents.STICKY_NOTE_TEXT_COLOR, textColor);
 			if(itemName != null)
 			{
 				stack.set(DataComponents.CUSTOM_NAME, itemName);
@@ -158,7 +157,7 @@ public final class StickyNoteEntity extends HangingEntity
 		builder.define(DATA_FACING, Direction.SOUTH.get2DDataValue());
 		builder.define(DATA_QUADRANT, 0);
 		builder.define(DATA_COLOR, DyeColor.WHITE.getId());
-		builder.define(DATA_TEXT_COLOR, getDefaultTextColor(DyeColor.WHITE).getId());
+		builder.define(DATA_TEXT_COLOR, StickyNoteItem.getDefaultTextColor(DyeColor.WHITE).getId());
 		builder.define(DATA_HAS_TEXT, false);
 	}
 	
@@ -253,25 +252,16 @@ public final class StickyNoteEntity extends HangingEntity
 		entityData.set(DATA_COLOR, color.getId());
 	}
 	
-	public static DyeColor getDefaultTextColor(DyeColor color)
-	{
-		return switch (color)
-		{
-			case GRAY, BLACK -> DyeColor.WHITE;
-			default -> DyeColor.BLACK;
-		};
-	}
-	
 	public DyeColor getTextColor()
 	{
-		return textColor != null ? textColor : getDefaultTextColor(color);
+		return textColor;
 	}
 	
 	public void setTextColor(DyeColor textColor)
 	{
-		this.textColor = textColor;
+		this.textColor = textColor == null ? StickyNoteItem.getDefaultTextColor(color) : textColor;
 		
-		entityData.set(DATA_TEXT_COLOR, this.getTextColor().getId());
+		entityData.set(DATA_TEXT_COLOR, textColor.getId());
 	}
 	
 	public StickyNote getNote()
@@ -400,10 +390,7 @@ public final class StickyNoteEntity extends HangingEntity
 		compound.putByte("Facing", (byte) facing.get2DDataValue());
 		compound.putByte("Quadrant", (byte) quadrant.id());
 		compound.putByte("Color", (byte) color.getId());
-		if(textColor != null)
-		{
-			compound.putByte("TextColor", (byte) textColor.getId());
-		}
+		compound.putByte("TextColor", (byte) textColor.getId());
 		if(itemName != null)
 		{
 			compound.putString("ItemName", Component.Serializer.toJson(itemName, this.registryAccess()));
@@ -420,10 +407,7 @@ public final class StickyNoteEntity extends HangingEntity
 		this.setFacing(Direction.from2DDataValue(compound.getByte("Facing")));
 		this.setQuadrant(Quadrant.byId(compound.getByte("Quadrant")));
 		this.setColor(DyeColor.byId(compound.getByte("Color")));
-		if(compound.contains("TextColor"))
-		{
-			this.setTextColor(DyeColor.byId(compound.getByte("TextColor")));
-		}
+		this.setTextColor(DyeColor.byId(compound.getByte("TextColor")));
 		if(compound.contains("ItemName"))
 		{
 			this.setItemName(Component.Serializer.fromJson(compound.getString("ItemName"), this.registryAccess()));

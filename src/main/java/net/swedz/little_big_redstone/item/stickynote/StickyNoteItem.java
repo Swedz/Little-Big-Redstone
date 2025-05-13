@@ -24,11 +24,22 @@ import net.swedz.tesseract.neoforge.proxy.Proxies;
 
 public final class StickyNoteItem extends Item
 {
+	public static DyeColor getDefaultTextColor(DyeColor color)
+	{
+		return switch (color)
+		{
+			case GRAY, BLACK -> DyeColor.WHITE;
+			default -> DyeColor.BLACK;
+		};
+	}
+	
 	private final DyeColor color;
 	
 	public StickyNoteItem(Properties properties, DyeColor color)
 	{
-		super(properties.component(LBRComponents.STICKY_NOTE, StickyNote.EMPTY));
+		super(properties
+				.component(LBRComponents.STICKY_NOTE, StickyNote.EMPTY)
+				.component(LBRComponents.STICKY_NOTE_TEXT_COLOR, getDefaultTextColor(color)));
 		this.color = color;
 	}
 	
@@ -50,7 +61,7 @@ public final class StickyNoteItem extends Item
 		if(level.isClientSide())
 		{
 			var note = stack.getOrDefault(LBRComponents.STICKY_NOTE, StickyNote.EMPTY);
-			var textColor = stack.getOrDefault(LBRComponents.STICKY_NOTE_TEXT_COLOR, StickyNoteEntity.getDefaultTextColor(color));
+			var textColor = stack.get(LBRComponents.STICKY_NOTE_TEXT_COLOR);
 			Proxies.get(LBRProxy.class).openStickyNote(-1, color, textColor, note.text(), false);
 		}
 		return InteractionResultHolder.sidedSuccess(stack, level.isClientSide());
@@ -99,8 +110,10 @@ public final class StickyNoteItem extends Item
 		
 		var quadrant = findClosestQuadrant(context.getClickedPos(), direction, facing, context.getClickLocation());
 		
+		var textColor = stack.get(LBRComponents.STICKY_NOTE_TEXT_COLOR);
+		
 		var level = context.getLevel();
-		var entity = new StickyNoteEntity(level, placePos, direction, facing, quadrant, color);
+		var entity = new StickyNoteEntity(level, placePos, direction, facing, quadrant, color, textColor);
 		
 		CustomData customData = stack.getOrDefault(DataComponents.ENTITY_DATA, CustomData.EMPTY);
 		if(!customData.isEmpty())
@@ -112,12 +125,6 @@ public final class StickyNoteItem extends Item
 		if(!note.isEmpty())
 		{
 			entity.setNote(note);
-		}
-		
-		var textColor = stack.get(LBRComponents.STICKY_NOTE_TEXT_COLOR);
-		if(textColor != null)
-		{
-			entity.setTextColor(textColor);
 		}
 		
 		var itemName = stack.get(DataComponents.CUSTOM_NAME);

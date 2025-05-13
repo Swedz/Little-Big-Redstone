@@ -12,7 +12,6 @@ import net.neoforged.neoforge.client.NeoForgeRenderTypes;
 import net.neoforged.neoforge.client.model.data.ModelData;
 import net.swedz.little_big_redstone.LBRComponents;
 import net.swedz.little_big_redstone.client.model.stickynote.StickyNoteModelData;
-import net.swedz.little_big_redstone.entity.stickynote.StickyNoteEntity;
 import net.swedz.little_big_redstone.helper.QuadColorFix;
 import net.swedz.little_big_redstone.item.stickynote.StickyNote;
 import net.swedz.little_big_redstone.item.stickynote.StickyNoteItem;
@@ -37,9 +36,9 @@ public final class StickyNoteItemRenderer extends BlockEntityWithoutLevelRendere
 			return;
 		}
 		
-		var note = stack.getOrDefault(LBRComponents.STICKY_NOTE, StickyNote.EMPTY);
+		var note = stack.get(LBRComponents.STICKY_NOTE);
 		var color = stickyNoteItem.color();
-		var textColor = stack.getOrDefault(LBRComponents.STICKY_NOTE_TEXT_COLOR, StickyNoteEntity.getDefaultTextColor(color));
+		var textColor = stack.get(LBRComponents.STICKY_NOTE_TEXT_COLOR);
 		var modelData = ModelData.builder()
 				.with(StickyNoteModelData.KEY, new StickyNoteModelData(color, textColor, !note.isEmpty()))
 				.build();
