@@ -54,13 +54,16 @@ public final class StickyNoteEntityBakedModel implements IDynamicBakedModel
 		{
 			quads.addAll(model.getQuads(state, side, random, modelData, renderType));
 		}
-		for(var model : textLayer)
+		if(data.hasText())
 		{
-			for(var quad : model.getQuads(state, side, random, modelData, renderType))
+			for(var model : textLayer)
 			{
-				var copy = new BakedQuad(quad.getVertices(), 0, quad.getDirection(), quad.getSprite(), quad.isShade(), quad.hasAmbientOcclusion());
-				QuadTransformers.applyingColor(0xFF000000 | data.textColor().getTextColor()).processInPlace(copy);
-				quads.add(copy);
+				for(var quad : model.getQuads(state, side, random, modelData, renderType))
+				{
+					var copy = new BakedQuad(quad.getVertices(), 0, quad.getDirection(), quad.getSprite(), quad.isShade(), quad.hasAmbientOcclusion());
+					QuadTransformers.applyingColor(0xFF000000 | data.textColor().getTextColor()).processInPlace(copy);
+					quads.add(copy);
+				}
 			}
 		}
 		return quads;

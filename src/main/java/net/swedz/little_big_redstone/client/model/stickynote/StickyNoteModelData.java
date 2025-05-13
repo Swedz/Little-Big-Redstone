@@ -12,7 +12,7 @@ public final class StickyNoteModelData
 {
 	public static final ModelProperty<StickyNoteModelData> KEY = new ModelProperty<>();
 	
-	public static final StickyNoteModelData DEFAULT = new StickyNoteModelData(DyeColor.WHITE, StickyNoteEntity.getDefaultTextColor(DyeColor.WHITE));
+	public static final StickyNoteModelData DEFAULT = new StickyNoteModelData(DyeColor.WHITE, StickyNoteEntity.getDefaultTextColor(DyeColor.WHITE), false);
 	
 	public static StickyNoteModelData get(ModelData modelData)
 	{
@@ -21,12 +21,14 @@ public final class StickyNoteModelData
 	}
 	
 	private final DyeColor color, textColor;
+	private final boolean hasText;
 	
-	public StickyNoteModelData(DyeColor color, DyeColor textColor)
+	public StickyNoteModelData(DyeColor color, DyeColor textColor, boolean hasText)
 	{
 		Assert.noneNull(color, textColor);
 		this.color = color;
 		this.textColor = textColor;
+		this.hasText = hasText;
 	}
 	
 	public DyeColor color()
@@ -39,16 +41,21 @@ public final class StickyNoteModelData
 		return textColor;
 	}
 	
+	public boolean hasText()
+	{
+		return hasText;
+	}
+	
 	@Override
 	public int hashCode()
 	{
-		return Objects.hash(color, textColor);
+		return Objects.hash(color, textColor, hasText);
 	}
 	
 	@Override
 	public boolean equals(Object o)
 	{
 		return this == o ||
-			   (o instanceof StickyNoteModelData other && Objects.equals(color, other.color) && Objects.equals(textColor, other.textColor));
+			   (o instanceof StickyNoteModelData other && Objects.equals(color, other.color) && Objects.equals(textColor, other.textColor) && Objects.equals(hasText, other.hasText));
 	}
 }

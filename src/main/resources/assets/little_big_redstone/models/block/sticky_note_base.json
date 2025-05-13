@@ -3,9 +3,9 @@
 	"elements": [
 		{
 			"name": "paper",
-			"from": [3, 3, 15.75],
-			"to": [13, 13, 15.75],
-			"rotation": {"angle": 0, "axis": "x", "origin": [-2, 6, 12.5]},
+			"from": [-3.5, -3.5, 0.25],
+			"to": [3.5, 3.5, 0.25],
+			"rotation": {"angle": 0, "axis": "y", "origin": [2, 1, 0.25]},
 			"faces": {
 				"north": {"uv": [5, 5, 0, 0], "rotation": 180, "texture": "#texture"},
 				"east": {"uv": [0, 0, 5, 0], "rotation": 90, "texture": "#texture"},
@@ -17,9 +17,9 @@
 		},
 		{
 			"name": "pin",
-			"from": [8.25, 9.5, 15.25],
-			"to": [9.25, 10.5, 16],
-			"rotation": {"angle": 45, "axis": "z", "origin": [7.5, 9.5, 15.75]},
+			"from": [-0.47411, 1.84816, -0.05],
+			"to": [0.22589, 2.54816, 0.475],
+			"rotation": {"angle": 45, "axis": "z", "origin": [0.02589, 2.34816, 0.325]},
 			"faces": {
 				"north": {"uv": [5.5, 1.5, 5, 1], "rotation": 180, "texture": "#texture"},
 				"east": {"uv": [5, 0.5, 5.5, 1], "rotation": 90, "texture": "#texture"},

@@ -16,6 +16,7 @@ import net.minecraft.server.level.ServerEntity;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.stats.Stats;
+import net.minecraft.util.ByIdMap;
 import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -28,6 +29,9 @@ import net.minecraft.world.item.DyeItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.GameRules;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.DiodeBlock;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.client.model.data.ModelData;
@@ -36,23 +40,41 @@ import net.swedz.little_big_redstone.LBRComponents;
 import net.swedz.little_big_redstone.LBREntities;
 import net.swedz.little_big_redstone.LBRItems;
 import net.swedz.little_big_redstone.client.model.stickynote.StickyNoteModelData;
+import net.swedz.little_big_redstone.helper.DirectionHelper;
 import net.swedz.little_big_redstone.item.stickynote.StickyNote;
 import net.swedz.little_big_redstone.network.packet.StickyNotePacket;
 import net.swedz.tesseract.neoforge.api.Assert;
 
+import java.util.function.IntFunction;
+
 public final class StickyNoteEntity extends HangingEntity
 {
-	public static final double DEPTH           = 1D / 16D;
-	public static final double WIDTH           = 10D / 16D;
-	public static final double POSITION_OFFSET = 0.5 - (DEPTH / 2);
+	public static double boundsDepth()
+	{
+		return 1D / 16D;
+	}
+	
+	public static double boundsWidth()
+	{
+		return 7D / 16D;
+	}
+	
+	public static double boundsPositionOffset()
+	{
+		return 0.5 - (boundsDepth() / 2);
+	}
 	
 	private static final EntityDataAccessor<Integer> DATA_FACING     = SynchedEntityData.defineId(StickyNoteEntity.class, EntityDataSerializers.INT);
+	private static final EntityDataAccessor<Integer> DATA_QUADRANT   = SynchedEntityData.defineId(StickyNoteEntity.class, EntityDataSerializers.INT);
 	private static final EntityDataAccessor<Integer> DATA_COLOR      = SynchedEntityData.defineId(StickyNoteEntity.class, EntityDataSerializers.INT);
 	private static final EntityDataAccessor<Integer> DATA_TEXT_COLOR = SynchedEntityData.defineId(StickyNoteEntity.class, EntityDataSerializers.INT);
+	private static final EntityDataAccessor<Boolean> DATA_HAS_TEXT   = SynchedEntityData.defineId(StickyNoteEntity.class, EntityDataSerializers.BOOLEAN);
 	
-	private Direction facing = Direction.SOUTH;
-	private DyeColor  color  = DyeColor.WHITE;
-	private DyeColor  textColor;
+	private Direction facing   = Direction.SOUTH;
+	private Quadrant  quadrant = Quadrant.TOP_LEFT;
+	
+	private DyeColor color = DyeColor.WHITE;
+	private DyeColor textColor;
 	
 	private StickyNote note = StickyNote.EMPTY;
 	
@@ -63,29 +85,34 @@ public final class StickyNoteEntity extends HangingEntity
 		super(type, level);
 	}
 	
-	public StickyNoteEntity(Level level, BlockPos pos, Direction direction, Direction facing, DyeColor color)
+	public StickyNoteEntity(Level level, BlockPos pos, Direction direction, Direction facing, Quadrant quadrant, DyeColor color)
 	{
 		super(LBREntities.STICKY_NOTE.get(), level, pos);
+		
 		this.setDirection(direction);
 		this.setFacing(facing);
+		this.setQuadrant(quadrant);
 		this.setColor(color);
+		
+		this.recalculateBoundingBox();
 	}
 	
 	public ModelData getModelData()
 	{
 		return ModelData.builder()
-				.with(StickyNoteModelData.KEY, new StickyNoteModelData(color, this.getTextColor()))
+				.with(StickyNoteModelData.KEY, new StickyNoteModelData(color, this.getTextColor(), entityData.get(DATA_HAS_TEXT)))
 				.build();
 	}
 	
 	@Override
 	protected AABB calculateBoundingBox(BlockPos pos, Direction direction)
 	{
-		Vec3 center = Vec3.atCenterOf(pos).relative(direction, -POSITION_OFFSET);
+		Vec3 center = Vec3.atCenterOf(pos).relative(direction, -boundsPositionOffset());
+		center = quadrant.relative(this, center, (boundsWidth() / 2) + (0.5 / 16));
 		Direction.Axis axis = direction.getAxis();
-		double dx = axis == Direction.Axis.X ? DEPTH : WIDTH;
-		double dy = axis == Direction.Axis.Y ? DEPTH : WIDTH;
-		double dz = axis == Direction.Axis.Z ? DEPTH : WIDTH;
+		double dx = axis == Direction.Axis.X ? boundsDepth() : boundsWidth();
+		double dy = axis == Direction.Axis.Y ? boundsDepth() : boundsWidth();
+		double dz = axis == Direction.Axis.Z ? boundsDepth() : boundsWidth();
 		return AABB.ofSize(center, dx, dy, dz);
 	}
 	
@@ -129,8 +156,10 @@ public final class StickyNoteEntity extends HangingEntity
 	protected void defineSynchedData(SynchedEntityData.Builder builder)
 	{
 		builder.define(DATA_FACING, Direction.SOUTH.get2DDataValue());
+		builder.define(DATA_QUADRANT, 0);
 		builder.define(DATA_COLOR, DyeColor.WHITE.getId());
 		builder.define(DATA_TEXT_COLOR, getDefaultTextColor(DyeColor.WHITE).getId());
+		builder.define(DATA_HAS_TEXT, false);
 	}
 	
 	@Override
@@ -152,7 +181,6 @@ public final class StickyNoteEntity extends HangingEntity
 		
 		xRotO = this.getXRot();
 		yRotO = this.getYRot();
-		this.recalculateBoundingBox();
 	}
 	
 	@Override
@@ -160,6 +188,26 @@ public final class StickyNoteEntity extends HangingEntity
 	{
 		int offset = direction.getAxis().isVertical() ? 90 * direction.getAxisDirection().getStep() : 0;
 		return (float) Mth.wrapDegrees(180 + direction.get2DDataValue() * 90 + offset);
+	}
+	
+	public Direction directionRelativeUp()
+	{
+		return DirectionHelper.relativeUp(direction, facing);
+	}
+	
+	public Direction directionRelativeDown()
+	{
+		return DirectionHelper.relativeDown(direction, facing);
+	}
+	
+	public Direction directionRelativeLeft()
+	{
+		return DirectionHelper.relativeLeft(direction, facing);
+	}
+	
+	public Direction directionRelativeRight()
+	{
+		return DirectionHelper.relativeRight(direction, facing);
 	}
 	
 	public Direction getFacing()
@@ -175,6 +223,20 @@ public final class StickyNoteEntity extends HangingEntity
 		this.facing = facing;
 		
 		entityData.set(DATA_FACING, facing.get2DDataValue());
+	}
+	
+	public Quadrant getQuadrant()
+	{
+		return quadrant;
+	}
+	
+	public void setQuadrant(Quadrant quadrant)
+	{
+		Assert.notNull(quadrant);
+		
+		this.quadrant = quadrant;
+		
+		entityData.set(DATA_QUADRANT, quadrant.id());
 	}
 	
 	public DyeColor getColor()
@@ -222,11 +284,48 @@ public final class StickyNoteEntity extends HangingEntity
 		Assert.notNull(note);
 		
 		this.note = note;
+		
+		entityData.set(DATA_HAS_TEXT, !note.isEmpty());
 	}
 	
 	public void setItemName(Component itemName)
 	{
 		this.itemName = itemName;
+	}
+	
+	@SuppressWarnings("deprecation")
+	@Override
+	public boolean survives()
+	{
+		if(!this.level().noCollision(this))
+		{
+			return false;
+		}
+		boolean notInsideBlock = BlockPos.betweenClosedStream(this.calculateSupportBox())
+				.filter((pos) -> !Block.canSupportCenter(this.level(), pos, this.direction))
+				.allMatch((pos) ->
+				{
+					BlockState blockstate = this.level().getBlockState(pos);
+					return blockstate.isSolid() || DiodeBlock.isDiode(blockstate);
+				});
+		boolean notInsideHangingEntity = this.level().getEntities(this, this.getBoundingBox(), (other) ->
+		{
+			if(other instanceof HangingEntity)
+			{
+				if(other instanceof StickyNoteEntity otherNote)
+				{
+					return direction == otherNote.getDirection() &&
+						   facing == otherNote.getFacing() &&
+						   quadrant == otherNote.getQuadrant();
+				}
+				else
+				{
+					return true;
+				}
+			}
+			return false;
+		}).isEmpty();
+		return notInsideBlock && notInsideHangingEntity;
 	}
 	
 	@Override
@@ -258,10 +357,12 @@ public final class StickyNoteEntity extends HangingEntity
 	@Override
 	public Packet<ClientGamePacketListener> getAddEntityPacket(ServerEntity entity)
 	{
-		int data = (direction.get3DDataValue() & 0xFFF) |
-				   ((facing.get2DDataValue() & 0xFF) << 8) |
-				   ((color.getId() & 0xFF) << 16) |
-				   ((this.getTextColor().getId() & 0xFF) << 24);
+		int data = (direction.get3DDataValue() & 0x7) |
+				   (((facing.get2DDataValue() + 1) & 0x7) << 3) |
+				   ((quadrant.id() & 0x3) << 6) |
+				   ((color.getId() & 0xF) << 8) |
+				   ((this.getTextColor().getId() & 0xF) << 12) |
+				   ((!note.isEmpty() ? 1 : 0) << 16);
 		return new ClientboundAddEntityPacket(this, data, this.getPos());
 	}
 	
@@ -270,10 +371,15 @@ public final class StickyNoteEntity extends HangingEntity
 	{
 		super.recreateFromPacket(packet);
 		int data = packet.getData();
-		this.setDirection(Direction.from3DDataValue(data & 0xFF));
-		this.setFacing(Direction.from2DDataValue((data >> 8) & 0xFF));
-		this.setColor(DyeColor.byId((data >> 16) & 0xFF));
-		this.setTextColor(DyeColor.byId((data >> 24) & 0xFF));
+		
+		this.setDirection(Direction.from3DDataValue(data & 0x7));
+		this.setFacing(Direction.from2DDataValue(((data >> 3) & 0x7) - 1));
+		this.setQuadrant(Quadrant.byId((data >> 6) & 0x3));
+		this.setColor(DyeColor.byId((data >> 8) & 0xF));
+		this.setTextColor(DyeColor.byId((data >> 12) & 0xF));
+		entityData.set(DATA_HAS_TEXT, ((data >> 16) & 0x1) != 0);
+		
+		this.recalculateBoundingBox();
 	}
 	
 	@Override
@@ -292,6 +398,7 @@ public final class StickyNoteEntity extends HangingEntity
 		
 		compound.putByte("AttachedFace", (byte) direction.get3DDataValue());
 		compound.putByte("Facing", (byte) facing.get2DDataValue());
+		compound.putByte("Quadrant", (byte) quadrant.id());
 		compound.putByte("Color", (byte) color.getId());
 		if(textColor != null)
 		{
@@ -311,6 +418,7 @@ public final class StickyNoteEntity extends HangingEntity
 		
 		this.setDirection(Direction.from3DDataValue(compound.getByte("AttachedFace")));
 		this.setFacing(Direction.from2DDataValue(compound.getByte("Facing")));
+		this.setQuadrant(Quadrant.byId(compound.getByte("Quadrant")));
 		this.setColor(DyeColor.byId(compound.getByte("Color")));
 		if(compound.contains("TextColor"))
 		{
@@ -324,5 +432,77 @@ public final class StickyNoteEntity extends HangingEntity
 				.ifSuccess(this::setNote)
 				.ifError((error) ->
 						LBR.LOGGER.error("Failed to load sticky note data at {}: {}", pos.toShortString(), error.message()));
+		
+		this.recalculateBoundingBox();
+	}
+	
+	public enum Quadrant
+	{
+		TOP_LEFT(0)
+				{
+					@Override
+					public Vec3 relative(Direction up, Direction down, Direction left, Direction right, Vec3 pos, double distance)
+					{
+						pos = pos.add(up.getStepX() * distance, up.getStepY() * distance, up.getStepZ() * distance);
+						pos = pos.add(left.getStepX() * distance, left.getStepY() * distance, left.getStepZ() * distance);
+						return pos;
+					}
+				},
+		TOP_RIGHT(1)
+				{
+					@Override
+					public Vec3 relative(Direction up, Direction down, Direction left, Direction right, Vec3 pos, double distance)
+					{
+						pos = pos.add(up.getStepX() * distance, up.getStepY() * distance, up.getStepZ() * distance);
+						pos = pos.add(right.getStepX() * distance, right.getStepY() * distance, right.getStepZ() * distance);
+						return pos;
+					}
+				},
+		BOTTOM_LEFT(2)
+				{
+					@Override
+					public Vec3 relative(Direction up, Direction down, Direction left, Direction right, Vec3 pos, double distance)
+					{
+						pos = pos.add(down.getStepX() * distance, down.getStepY() * distance, down.getStepZ() * distance);
+						pos = pos.add(left.getStepX() * distance, left.getStepY() * distance, left.getStepZ() * distance);
+						return pos;
+					}
+				},
+		BOTTOM_RIGHT(3)
+				{
+					@Override
+					public Vec3 relative(Direction up, Direction down, Direction left, Direction right, Vec3 pos, double distance)
+					{
+						pos = pos.add(down.getStepX() * distance, down.getStepY() * distance, down.getStepZ() * distance);
+						pos = pos.add(right.getStepX() * distance, right.getStepY() * distance, right.getStepZ() * distance);
+						return pos;
+					}
+				};
+		
+		private static final IntFunction<Quadrant> BY_ID = ByIdMap.continuous(Quadrant::id, values(), ByIdMap.OutOfBoundsStrategy.WRAP);
+		
+		private final int id;
+		
+		Quadrant(int id)
+		{
+			this.id = id;
+		}
+		
+		public int id()
+		{
+			return id;
+		}
+		
+		public abstract Vec3 relative(Direction up, Direction down, Direction left, Direction right, Vec3 pos, double distance);
+		
+		public Vec3 relative(StickyNoteEntity entity, Vec3 pos, double distance)
+		{
+			return this.relative(entity.directionRelativeUp(), entity.directionRelativeDown(), entity.directionRelativeLeft(), entity.directionRelativeRight(), pos, distance);
+		}
+		
+		public static Quadrant byId(int id)
+		{
+			return BY_ID.apply(id);
+		}
 	}
 }

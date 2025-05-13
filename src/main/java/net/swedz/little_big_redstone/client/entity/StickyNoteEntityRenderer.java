@@ -42,28 +42,18 @@ public final class StickyNoteEntityRenderer extends EntityRenderer<StickyNoteEnt
 	{
 		super.render(entity, entityYaw, partialTick, poseStack, bufferSource, packedLight);
 		
-		poseStack.pushPose();
+		var attachedFace = entity.getDirection();
 		
-		Direction attachedFace = entity.getDirection();
-		poseStack.translate(attachedFace.getStepX() * StickyNoteEntity.POSITION_OFFSET, attachedFace.getStepY() * StickyNoteEntity.POSITION_OFFSET, attachedFace.getStepZ() * StickyNoteEntity.POSITION_OFFSET);
+		poseStack.pushPose();
 		
 		poseStack.mulPose(Axis.XP.rotationDegrees(entity.getXRot()));
 		poseStack.mulPose(Axis.YP.rotationDegrees(180 - entity.getYRot()));
-		
-		poseStack.translate(-0.5, -0.5, -0.5);
 		
 		if(attachedFace.getAxis().isVertical())
 		{
 			boolean up = attachedFace == Direction.UP;
 			Direction facing = entity.getFacing();
-			
 			poseStack.mulPose(Axis.ZP.rotationDegrees(facing.toYRot() * (up ? 1 : -1)));
-			
-			Direction directionX = up ? Direction.EAST : Direction.WEST;
-			Direction directionY = directionX.getOpposite();
-			int ox = (facing == directionX || facing == Direction.NORTH) ? -1 : 0;
-			int oy = (facing == Direction.NORTH || facing == directionY) ? -1 : 0;
-			poseStack.translate(ox, oy, 0);
 		}
 		
 		var buffer = bufferSource.getBuffer(Sheets.cutoutBlockSheet());

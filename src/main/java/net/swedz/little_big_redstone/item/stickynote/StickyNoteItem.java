@@ -15,8 +15,10 @@ import net.minecraft.world.item.component.CustomData;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.gameevent.GameEvent;
+import net.minecraft.world.phys.Vec3;
 import net.swedz.little_big_redstone.LBRComponents;
 import net.swedz.little_big_redstone.entity.stickynote.StickyNoteEntity;
+import net.swedz.little_big_redstone.helper.DirectionHelper;
 import net.swedz.little_big_redstone.proxy.LBRProxy;
 import net.swedz.tesseract.neoforge.proxy.Proxies;
 
@@ -54,6 +56,32 @@ public final class StickyNoteItem extends Item
 		return InteractionResultHolder.sidedSuccess(stack, level.isClientSide());
 	}
 	
+	private static StickyNoteEntity.Quadrant findClosestQuadrant(BlockPos blockPos, Direction side, Direction facing, Vec3 pos)
+	{
+		var faceCenter = blockPos.getCenter().subtract(blockPos.getX(), blockPos.getY(), blockPos.getZ()).relative(side, 0.5);
+		pos = pos.subtract(blockPos.getX(), blockPos.getY(), blockPos.getZ());
+		
+		var up = DirectionHelper.relativeUp(side, facing);
+		var down = DirectionHelper.relativeDown(side, facing);
+		var left = DirectionHelper.relativeLeft(side, facing);
+		var right = DirectionHelper.relativeRight(side, facing);
+		
+		StickyNoteEntity.Quadrant closestQuadrant = null;
+		double closestQuadrantDistance = Double.MAX_VALUE;
+		for(var quadrant : StickyNoteEntity.Quadrant.values())
+		{
+			var corner = quadrant.relative(up, down, left, right, faceCenter, 0.5);
+			var distance = pos.distanceTo(corner);
+			if(distance < closestQuadrantDistance)
+			{
+				closestQuadrant = quadrant;
+				closestQuadrantDistance = distance;
+			}
+		}
+		
+		return closestQuadrant;
+	}
+	
 	@Override
 	public InteractionResult useOn(UseOnContext context)
 	{
@@ -67,8 +95,12 @@ public final class StickyNoteItem extends Item
 			return InteractionResult.FAIL;
 		}
 		
+		var facing = direction.getAxis().isVertical() ? Direction.fromYRot(player.getYRot()).getOpposite() : Direction.SOUTH;
+		
+		var quadrant = findClosestQuadrant(context.getClickedPos(), direction, facing, context.getClickLocation());
+		
 		var level = context.getLevel();
-		var entity = new StickyNoteEntity(level, placePos, direction, direction.getAxis().isVertical() ? Direction.fromYRot(player.getYRot()).getOpposite() : Direction.SOUTH, color);
+		var entity = new StickyNoteEntity(level, placePos, direction, facing, quadrant, color);
 		
 		CustomData customData = stack.getOrDefault(DataComponents.ENTITY_DATA, CustomData.EMPTY);
 		if(!customData.isEmpty())
