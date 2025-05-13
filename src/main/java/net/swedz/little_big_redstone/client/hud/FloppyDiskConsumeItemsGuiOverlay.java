@@ -135,7 +135,7 @@ public final class FloppyDiskConsumeItemsGuiOverlay
 	
 	private static boolean update(Level level, Player player, BlockPos targetBlock)
 	{
-		if(level.getBlockEntity(targetBlock) instanceof MicrochipBlockEntity)
+		if(targetBlock != null && level.getBlockEntity(targetBlock) instanceof MicrochipBlockEntity)
 		{
 			for(var hand : InteractionHand.values())
 			{
