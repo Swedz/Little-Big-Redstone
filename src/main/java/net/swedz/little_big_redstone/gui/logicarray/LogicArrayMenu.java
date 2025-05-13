@@ -7,22 +7,26 @@ import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.neoforge.items.IItemHandler;
 import net.neoforged.neoforge.items.ItemStackHandler;
+import net.neoforged.neoforge.items.wrapper.PlayerInvWrapper;
 import net.swedz.little_big_redstone.LBRMenus;
 import net.swedz.little_big_redstone.gui.BaseContainerMenu;
 import net.swedz.little_big_redstone.gui.logicarray.slot.LogicArrayPlayerSlot;
 import net.swedz.little_big_redstone.gui.logicarray.slot.LogicArraySlot;
 import net.swedz.little_big_redstone.item.logicarray.LogicArrayItem;
+import net.swedz.tesseract.neoforge.helper.TransferHelper;
 
 import java.util.function.Supplier;
 
 public final class LogicArrayMenu extends BaseContainerMenu
 {
-	private final int logicArraySlot;
+	private final IItemHandler itemHandler;
+	private final int          logicArraySlot;
 	
 	public LogicArrayMenu(int containerId, Inventory playerInventory, IItemHandler itemHandler, int logicArraySlot)
 	{
 		super(LBRMenus.LOGIC_ARRAY.get(), containerId);
 		
+		this.itemHandler = itemHandler;
 		this.logicArraySlot = logicArraySlot;
 		
 		setupLogicArrayInventory(itemHandler, this::addSlot, 26, 18, LogicArrayItem.ROWS, LogicArrayItem.COLUMNS);
@@ -64,19 +68,20 @@ public final class LogicArrayMenu extends BaseContainerMenu
 	@Override
 	public ItemStack quickMoveStack(Player player, int index)
 	{
-		ItemStack stack = ItemStack.EMPTY;
+		ItemStack originalStack = ItemStack.EMPTY;
 		Slot slot = slots.get(index);
 		if(slot != null && slot.hasItem())
 		{
-			stack = slot.getItem().copy();
-			if(index < LogicArrayItem.MAX_SLOTS)
+			var stack = slot.getItem();
+			originalStack = stack.copy();
+			
+			var target = index < LogicArrayItem.MAX_SLOTS ? new PlayerInvWrapper(player.getInventory()) : itemHandler;
+			int inserted = TransferHelper.insert(target, stack);
+			if(inserted > 0)
 			{
-				if(!this.moveItemStackTo(stack, LogicArrayItem.MAX_SLOTS, slots.size(), true))
-				{
-					return ItemStack.EMPTY;
-				}
+				stack.shrink(inserted);
 			}
-			else if(!this.moveItemStackTo(stack, 0, LogicArrayItem.MAX_SLOTS, false))
+			else
 			{
 				return ItemStack.EMPTY;
 			}
@@ -90,7 +95,7 @@ public final class LogicArrayMenu extends BaseContainerMenu
 				slot.setChanged();
 			}
 		}
-		return stack;
+		return originalStack;
 	}
 	
 	@Override

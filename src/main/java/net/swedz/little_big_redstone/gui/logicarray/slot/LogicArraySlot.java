@@ -34,7 +34,7 @@ public final class LogicArraySlot extends SlotItemHandler
 	@Override
 	public ItemStack getItem()
 	{
-		return this.isCreative() ? ItemStack.EMPTY : super.getItem();
+		return this.isCreative() ? ItemStack.EMPTY : super.getItem().copy();
 	}
 	
 	@Override
