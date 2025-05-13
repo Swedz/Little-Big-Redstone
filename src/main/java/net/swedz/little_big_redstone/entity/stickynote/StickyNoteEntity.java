@@ -348,7 +348,7 @@ public final class StickyNoteEntity extends HangingEntity
 	public Packet<ClientGamePacketListener> getAddEntityPacket(ServerEntity entity)
 	{
 		int data = (direction.get3DDataValue() & 0x7) |
-				   (((facing.get2DDataValue() + 1) & 0x7) << 3) |
+				   ((facing.get2DDataValue() & 0x7) << 3) |
 				   ((quadrant.id() & 0x3) << 6) |
 				   ((color.getId() & 0xF) << 8) |
 				   ((this.getTextColor().getId() & 0xF) << 12) |
@@ -363,7 +363,7 @@ public final class StickyNoteEntity extends HangingEntity
 		int data = packet.getData();
 		
 		this.setDirection(Direction.from3DDataValue(data & 0x7));
-		this.setFacing(Direction.from2DDataValue(((data >> 3) & 0x7) - 1));
+		this.setFacing(Direction.from2DDataValue((data >> 3) & 0x7));
 		this.setQuadrant(Quadrant.byId((data >> 6) & 0x3));
 		this.setColor(DyeColor.byId((data >> 8) & 0xF));
 		this.setTextColor(DyeColor.byId((data >> 12) & 0xF));
