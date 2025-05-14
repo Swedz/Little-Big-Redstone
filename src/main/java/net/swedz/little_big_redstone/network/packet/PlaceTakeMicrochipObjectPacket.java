@@ -9,7 +9,11 @@ import net.neoforged.neoforge.items.ItemHandlerHelper;
 import net.swedz.little_big_redstone.LBR;
 import net.swedz.little_big_redstone.LBRComponents;
 import net.swedz.little_big_redstone.LBRItems;
+import net.swedz.little_big_redstone.api.Bounds;
 import net.swedz.little_big_redstone.gui.microchip.MicrochipMenu;
+import net.swedz.little_big_redstone.item.stickynote.StickyNoteItem;
+import net.swedz.little_big_redstone.microchip.object.logic.LogicEntry;
+import net.swedz.little_big_redstone.microchip.object.note.StickyNoteEntry;
 import net.swedz.little_big_redstone.network.LBRCustomPacket;
 import net.swedz.tesseract.neoforge.packet.PacketContext;
 
@@ -45,7 +49,30 @@ public record PlaceTakeMicrochipObjectPacket(
 			ItemStack heldItem = menu.getCarried();
 			if(place)
 			{
-				if(heldItem.has(LBRComponents.LOGIC))
+				if(heldItem.getItem() instanceof StickyNoteItem)
+				{
+					if(microchip.size().bounds().normalize().contains(new Bounds(x, y, 16, 16)))
+					{
+						var stickyNote = microchip.stickyNotes().add(x, y, heldItem);
+						if(stickyNote != null)
+						{
+							microchip.markDirty();
+							if(!player.hasInfiniteMaterials() || leftClick)
+							{
+								heldItem.shrink(1);
+							}
+						}
+						else
+						{
+							LBR.LOGGER.warn("Received PlaceTakeMicrochipObjectPacket from {} and failed to add the sticky note, discarding", playerName);
+						}
+					}
+					else
+					{
+						LBR.LOGGER.warn("Received PlaceTakeMicrochipObjectPacket from {} with an invalid placement position, discarding", playerName);
+					}
+				}
+				else if(heldItem.has(LBRComponents.LOGIC))
 				{
 					var component = heldItem.get(LBRComponents.LOGIC);
 					if(microchip.size().bounds().normalize().contains(component.size().toBounds(x, y)))
@@ -73,15 +100,25 @@ public record PlaceTakeMicrochipObjectPacket(
 				}
 				else
 				{
-					LBR.LOGGER.warn("Received PlaceTakeMicrochipObjectPacket from {} while not carrying a logic component in their cursor, discarding", playerName);
+					LBR.LOGGER.warn("Received PlaceTakeMicrochipObjectPacket from {} while not carrying a valid item in their cursor ({}), discarding", playerName, heldItem.getItem());
 				}
 			}
 			else
 			{
 				if(heldItem.isEmpty())
 				{
-					var logic = components.findAt(x, y);
-					if(logic != null)
+					var object = microchip.findAt(x, y);
+					if(object instanceof StickyNoteEntry note)
+					{
+						microchip.stickyNotes().remove(note);
+						var stack = note.toStack();
+						if(!shift || !menu.moveItemStackTo(stack, 0, 36, true))
+						{
+							menu.setCarried(stack);
+						}
+						microchip.markDirty();
+					}
+					else if(object instanceof LogicEntry logic)
 					{
 						var wiresPopped = components.remove(logic);
 						var stack = logic.toStack();

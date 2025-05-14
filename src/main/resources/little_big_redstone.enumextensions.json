@@ -1,0 +1,10 @@
+{
+    "entries": [
+        {
+            "enum": "net/minecraft/world/item/ItemDisplayContext",
+            "name": "LITTLE_BIG_REDSTONE_MICROCHIP_GUI",
+            "constructor": "(ILjava/lang/String;Ljava/lang/String;)V",
+            "parameters": [ -1, "little_big_redstone:microchip_gui", null ]
+        }
+    ]
+}

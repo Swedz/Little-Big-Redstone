@@ -1,8 +1,10 @@
 package net.swedz.little_big_redstone.client.model.stickynote;
 
 import net.minecraft.world.item.DyeColor;
+import net.minecraft.world.item.ItemStack;
 import net.neoforged.neoforge.client.model.data.ModelData;
 import net.neoforged.neoforge.client.model.data.ModelProperty;
+import net.swedz.little_big_redstone.LBRComponents;
 import net.swedz.little_big_redstone.item.stickynote.StickyNoteItem;
 import net.swedz.tesseract.neoforge.api.Assert;
 
@@ -16,8 +18,20 @@ public final class StickyNoteModelData
 	
 	public static StickyNoteModelData get(ModelData modelData)
 	{
-		var data = modelData.get(StickyNoteModelData.KEY);
-		return data != null ? data : StickyNoteModelData.DEFAULT;
+		var data = modelData.get(KEY);
+		return data != null ? data : DEFAULT;
+	}
+	
+	public static StickyNoteModelData of(ItemStack stack)
+	{
+		if(stack.getItem() instanceof StickyNoteItem stickyNoteItem)
+		{
+			var note = stack.get(LBRComponents.STICKY_NOTE);
+			var color = stickyNoteItem.color();
+			var textColor = stack.get(LBRComponents.STICKY_NOTE_TEXT_COLOR);
+			return new StickyNoteModelData(color, textColor, !note.isEmpty());
+		}
+		throw new IllegalArgumentException("Cannot get sticky note model data of non-sticky note item stack");
 	}
 	
 	private final DyeColor color, textColor;

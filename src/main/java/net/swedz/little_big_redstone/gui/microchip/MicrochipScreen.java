@@ -14,6 +14,7 @@ import net.minecraft.world.item.ItemStack;
 import net.swedz.little_big_redstone.LBR;
 import net.swedz.little_big_redstone.LBRComponents;
 import net.swedz.little_big_redstone.LBRCreativeTabs;
+import net.swedz.little_big_redstone.LBRItemDisplayContext;
 import net.swedz.little_big_redstone.LBRItems;
 import net.swedz.little_big_redstone.api.Bounds;
 import net.swedz.little_big_redstone.client.model.logic.LogicBakingModelData;
@@ -24,6 +25,7 @@ import net.swedz.little_big_redstone.gui.microchip.logic.LogicRenderers;
 import net.swedz.little_big_redstone.gui.microchip.widget.MicrochipWidget;
 import net.swedz.little_big_redstone.gui.microchip.widget.MicrochipWidgetWires;
 import net.swedz.little_big_redstone.helper.guigraphics.TesseractGuiGraphics;
+import net.swedz.little_big_redstone.item.stickynote.StickyNoteItem;
 import net.swedz.little_big_redstone.microchip.object.logic.LogicComponent;
 
 import java.util.List;
@@ -141,7 +143,22 @@ public final class MicrochipScreen extends AbstractContainerScreen<MicrochipMenu
 		
 		if(this.isWithinBoard(mouseX, mouseY))
 		{
-			if(stack.has(LBRComponents.LOGIC))
+			if(stack.getItem() instanceof StickyNoteItem)
+			{
+				int itemX = Screen.hasControlDown() ? getGridSnappedCoord(mouseX - size.bounds().minX()) + size.boardX(8) : (mouseX - 8);
+				int itemY = Screen.hasControlDown() ? getGridSnappedCoord(mouseY - size.bounds().minY()) + size.boardY(8) : (mouseY - 8);
+				vanilla.pose().pushPose();
+				vanilla.pose().scale(size.scale(), size.scale(), size.scale());
+				vanilla.pose().translate(0, 0, 232);
+				
+				var graphics = new TesseractGuiGraphics(vanilla);
+				
+				graphics.renderItem(stack, LBRItemDisplayContext.MICROCHIP_GUI, itemX, itemY);
+				
+				vanilla.pose().popPose();
+				return;
+			}
+			else if(stack.has(LBRComponents.LOGIC))
 			{
 				var component = stack.get(LBRComponents.LOGIC);
 				var context = LogicRenderer.Context.create(menu.color(), component, menu.getCarriedWires() != null, microchipWidget.hasSelectedPort(), false);

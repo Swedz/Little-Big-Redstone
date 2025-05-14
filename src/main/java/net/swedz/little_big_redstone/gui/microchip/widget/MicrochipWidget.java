@@ -12,11 +12,13 @@ import net.minecraft.world.item.DyeColor;
 import net.swedz.little_big_redstone.LBR;
 import net.swedz.little_big_redstone.LBRComponents;
 import net.swedz.little_big_redstone.LBRItems;
+import net.swedz.little_big_redstone.api.Bounds;
 import net.swedz.little_big_redstone.gui.microchip.MicrochipMenu;
 import net.swedz.little_big_redstone.gui.microchip.MicrochipScreen;
 import net.swedz.little_big_redstone.gui.microchip.logic.DyeComponentResult;
-import net.swedz.little_big_redstone.microchip.object.logic.LogicSelectedPort;
+import net.swedz.little_big_redstone.item.stickynote.StickyNoteItem;
 import net.swedz.little_big_redstone.microchip.Microchip;
+import net.swedz.little_big_redstone.microchip.object.logic.LogicSelectedPort;
 import net.swedz.little_big_redstone.microchip.wire.Wire;
 import net.swedz.little_big_redstone.network.packet.DyeMicrochipLogicPacket;
 import net.swedz.little_big_redstone.network.packet.OpenLogicConfigPacket;
@@ -129,6 +131,31 @@ public final class MicrochipWidget implements GuiEventListener, Renderable, Narr
 		return false;
 	}
 	
+	private boolean pickupNote(int x, int y, int button)
+	{
+		var menu = this.menu();
+		var carried = menu.getCarried();
+		var note = context.note();
+		
+		boolean shift = Screen.hasShiftDown();
+		if(button == InputConstants.MOUSE_BUTTON_LEFT &&
+		   context.shouldInteractNote() &&
+		   carried.isEmpty())
+		{
+			microchip.stickyNotes().remove(note);
+			microchip.markDirty();
+			var stack = note.toStack();
+			if(!shift || !menu.moveItemStackTo(stack, 0, 36, true))
+			{
+				menu.setCarried(stack);
+			}
+			new PlaceTakeMicrochipObjectPacket(menu.containerId, x, y, false, true, shift).sendToServer();
+			return true;
+		}
+		
+		return false;
+	}
+	
 	private boolean pickupWire(Wire wire)
 	{
 		var menu = this.menu();
@@ -213,6 +240,40 @@ public final class MicrochipWidget implements GuiEventListener, Renderable, Narr
 			}
 			new PlaceTakeMicrochipObjectPacket(menu.containerId, x, y, false, true, shift).sendToServer();
 			return true;
+		}
+		
+		return false;
+	}
+	
+	private boolean placeNote(int x, int y, int button)
+	{
+		var menu = this.menu();
+		var carried = menu.getCarried();
+		var player = screen.getMinecraft().player;
+		
+		boolean leftClick = button == InputConstants.MOUSE_BUTTON_LEFT;
+		boolean rightClick = button == InputConstants.MOUSE_BUTTON_RIGHT;
+		if((leftClick || rightClick) &&
+		   carried.getItem() instanceof StickyNoteItem &&
+		   context.shouldInteractBoard())
+		{
+			int placeX = Screen.hasControlDown() ? MicrochipScreen.getGridSnappedCoord(x) : (x - 8);
+			int placeY = Screen.hasControlDown() ? MicrochipScreen.getGridSnappedCoord(y) : (y - 8);
+			
+			if(microchip.size().bounds().normalize().contains(new Bounds(placeX, placeY, 16, 16)))
+			{
+				var stickyNote = microchip.stickyNotes().add(placeX, placeY, carried);
+				if(stickyNote != null)
+				{
+					microchip.markDirty();
+					if(!player.hasInfiniteMaterials() || leftClick)
+					{
+						carried.shrink(1);
+					}
+					new PlaceTakeMicrochipObjectPacket(menu.containerId, placeX, placeY, true, leftClick, Screen.hasShiftDown()).sendToServer();
+					return true;
+				}
+			}
 		}
 		
 		return false;
@@ -317,11 +378,19 @@ public final class MicrochipWidget implements GuiEventListener, Renderable, Narr
 		{
 			return false;
 		}
+		else if(this.pickupNote(boardX, boardY, button))
+		{
+			return false;
+		}
 		else if(this.pickupWire(boardX, boardY, button))
 		{
 			return false;
 		}
 		else if(this.pickupLogic(boardX, boardY, button))
+		{
+			return false;
+		}
+		else if(this.placeNote(boardX, boardY, button))
 		{
 			return false;
 		}

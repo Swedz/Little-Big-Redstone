@@ -4,9 +4,10 @@ import com.google.common.collect.Lists;
 import net.minecraft.world.item.ItemStack;
 import net.swedz.little_big_redstone.LBRItems;
 import net.swedz.little_big_redstone.gui.microchip.logic.DyeComponentResult;
+import net.swedz.little_big_redstone.microchip.object.MicrochipObject;
 import net.swedz.little_big_redstone.microchip.object.logic.LogicEntry;
 import net.swedz.little_big_redstone.microchip.object.logic.LogicSelectedPort;
-import net.swedz.little_big_redstone.microchip.object.MicrochipObject;
+import net.swedz.little_big_redstone.microchip.object.note.StickyNoteEntry;
 import net.swedz.little_big_redstone.microchip.wire.Wire;
 
 import java.util.Collections;
@@ -14,7 +15,7 @@ import java.util.List;
 
 public final class MicrochipWidgetContext
 {
-	public static final MicrochipWidgetContext NOTHING = new MicrochipWidgetContext(ItemStack.EMPTY, null, null, null, true, null, List.of());
+	public static final MicrochipWidgetContext NOTHING = new MicrochipWidgetContext(ItemStack.EMPTY, null, null, null, null, true, null, List.of());
 	
 	public static boolean canInteractWire(ItemStack stack)
 	{
@@ -43,43 +44,42 @@ public final class MicrochipWidgetContext
 		
 		MicrochipObject object = microchip.findAt(boardMouseX, boardMouseY);
 		
+		StickyNoteEntry note = carriedStack.isEmpty() && object instanceof StickyNoteEntry o ? o : null;
+		
 		// Find the hovered logic component, if any
 		LogicEntry logic = canInteractLogic(carriedStack) && object instanceof LogicEntry o ? o : null;
 		LogicSelectedPort port = null;
 		boolean portInput = true;
 		Wire wire = null;
 		
-		if(canInteractWire(carriedStack))
+		if(canInteractWire(carriedStack) && object == null)
 		{
-			// If no logic component was found, try to find the hovered port, if any
-			if(logic == null)
+			// Try to find the hovered port, if any
+			port = microchip.components().findPortAt(boardMouseX, boardMouseY, true);
+			if(port == null)
 			{
-				port = microchip.components().findPortAt(boardMouseX, boardMouseY, true);
-				if(port == null)
+				port = microchip.components().findPortAt(boardMouseX, boardMouseY, false);
+				if(port != null)
 				{
-					port = microchip.components().findPortAt(boardMouseX, boardMouseY, false);
-					if(port != null)
+					portInput = false;
+					// Only allow selecting the wire in the output port if no item is held in the cursor
+					if(carriedStack.isEmpty())
 					{
-						portInput = false;
-						// Only allow selecting the wire in the output port if no item is held in the cursor
-						if(carriedStack.isEmpty())
+						var wires = microchip.wires().getByOutputSlot(port);
+						if(!wires.isEmpty())
 						{
-							var wires = microchip.wires().getByOutputSlot(port);
-							if(!wires.isEmpty())
-							{
-								wire = wires.getLast();
-							}
+							wire = wires.getLast();
 						}
 					}
 				}
-				else
-				{
-					wire = microchip.wires().getByInputSlot(port);
-				}
-				if(port != null)
-				{
-					logic = microchip.components().get(port.slot());
-				}
+			}
+			else
+			{
+				wire = microchip.wires().getByInputSlot(port);
+			}
+			if(port != null)
+			{
+				logic = microchip.components().get(port.slot());
 			}
 			
 			// If no port was found and no port is selected, try to find the hovered wire, if any
@@ -117,12 +117,13 @@ public final class MicrochipWidgetContext
 			}
 		}
 		
-		return new MicrochipWidgetContext(carriedStack, object, logic, port, portInput, wire, topLayerWires);
+		return new MicrochipWidgetContext(carriedStack, object, note, logic, port, portInput, wire, topLayerWires);
 	}
 	
 	private final ItemStack carriedStack;
 	
 	private final MicrochipObject   object;
+	private final StickyNoteEntry   note;
 	private final LogicEntry        logic;
 	private final LogicSelectedPort port;
 	private final boolean           portInput;
@@ -131,12 +132,13 @@ public final class MicrochipWidgetContext
 	private final List<Wire> topLayerWires;
 	
 	private MicrochipWidgetContext(ItemStack carriedStack,
-								   MicrochipObject object, LogicEntry logic,
+								   MicrochipObject object, StickyNoteEntry note, LogicEntry logic,
 								   LogicSelectedPort port, boolean portInput,
 								   Wire wire, List<Wire> topLayerWires)
 	{
 		this.carriedStack = carriedStack;
 		this.object = object;
+		this.note = note;
 		this.logic = logic;
 		this.port = port;
 		this.portInput = portInput;
@@ -157,6 +159,16 @@ public final class MicrochipWidgetContext
 	public boolean hasObject()
 	{
 		return object != null;
+	}
+	
+	public StickyNoteEntry note()
+	{
+		return note;
+	}
+	
+	public boolean hasNote()
+	{
+		return note != null;
 	}
 	
 	public LogicEntry logic()
@@ -212,6 +224,11 @@ public final class MicrochipWidgetContext
 	public boolean shouldRenderTooltip()
 	{
 		return this.hasObject() && !this.hasPort() && !this.hasWire() && carriedStack.isEmpty();
+	}
+	
+	public boolean shouldInteractNote()
+	{
+		return this.hasNote() && !this.hasPort() && !this.hasWire() && carriedStack.isEmpty();
 	}
 	
 	public boolean shouldInteractLogic()

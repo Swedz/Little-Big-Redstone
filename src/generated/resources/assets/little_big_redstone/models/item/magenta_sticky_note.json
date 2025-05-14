@@ -1,8 +1,12 @@
 {
   "parent": "little_big_redstone:item/sticky_note",
+  "item_textures": {
+    "layer0": "little_big_redstone:item/sticky_note/magenta",
+    "layer1": "little_big_redstone:item/sticky_note/text"
+  },
   "loader": "little_big_redstone:sticky_note_item",
-  "textures": {
-    "layer0": "little_big_redstone:item/sticky_note_magenta",
-    "layer1": "little_big_redstone:item/sticky_note_text"
+  "microchip_textures": {
+    "layer0": "little_big_redstone:item/sticky_note/microchip/magenta",
+    "layer1": "little_big_redstone:item/sticky_note/microchip/text"
   }
 }

@@ -11,6 +11,7 @@ authors = "${mod_authors}"
 description = '''${mod_description}'''
 logoFile = "assets/${mod_id}/logo.png"
 displayURL = "${mod_github}"
+enumExtensions = "${mod_id}.enumextensions.json"
 
 [[accessTransformers]]
 file = "${mod_id}.accesstransformer.cfg"

@@ -12,23 +12,28 @@ import net.swedz.little_big_redstone.microchip.object.logic.LogicComponent;
 import net.swedz.little_big_redstone.microchip.object.logic.LogicComponents;
 import net.swedz.little_big_redstone.microchip.object.logic.LogicContext;
 import net.swedz.little_big_redstone.microchip.object.logic.LogicEntry;
+import net.swedz.little_big_redstone.microchip.object.note.MicrochipStickyNotes;
+import net.swedz.little_big_redstone.microchip.object.note.StickyNoteEntry;
 import net.swedz.little_big_redstone.microchip.wire.MicrochipWires;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 public final class Microchip
 {
 	public static final Codec<Microchip> CODEC = RecordCodecBuilder.create((instance) -> instance
 			.group(
 					MicrochipSize.CODEC.fieldOf("size").forGetter(Microchip::size),
-					LogicComponents.CODEC.fieldOf("components").forGetter(Microchip::components),
-					MicrochipWires.CODEC.fieldOf("wires").forGetter(Microchip::wires)
+					MicrochipStickyNotes.CODEC.optionalFieldOf("sticky_notes").forGetter((m) -> Optional.of(m.stickyNotes())),
+					LogicComponents.CODEC.optionalFieldOf("components").forGetter((m) -> Optional.of(m.components())),
+					MicrochipWires.CODEC.optionalFieldOf("wires").forGetter((m) -> Optional.of(m.wires()))
 			)
-			.apply(instance, Microchip::new));
+			.apply(instance, (size, notes, components, wires) -> new Microchip(size, notes.orElse(null), components.orElse(null), wires.orElse(null))));
 	
 	public static final StreamCodec<ByteBuf, Microchip> STREAM_CODEC = StreamCodec.composite(
 			MicrochipSize.STREAM_CODEC, Microchip::size,
+			MicrochipStickyNotes.STREAM_CODEC, Microchip::stickyNotes,
 			LogicComponents.STREAM_CODEC, Microchip::components,
 			MicrochipWires.STREAM_CODEC, Microchip::wires,
 			Microchip::new
@@ -36,19 +41,21 @@ public final class Microchip
 	
 	private final MicrochipSize size;
 	
-	private final LogicComponents components;
-	private final MicrochipWires  wires;
+	private final MicrochipStickyNotes stickyNotes;
+	private final LogicComponents      components;
+	private final MicrochipWires       wires;
 	
 	private final MicrochipAwarenesses awarenesses;
 	
 	private boolean dirty;
 	
-	private Microchip(MicrochipSize size, LogicComponents components, MicrochipWires wires)
+	private Microchip(MicrochipSize size, MicrochipStickyNotes stickyNotes, LogicComponents components, MicrochipWires wires)
 	{
 		this.size = size;
-		this.components = components.with(this);
+		this.stickyNotes = stickyNotes != null ? stickyNotes.with(this) : new MicrochipStickyNotes(this);
+		this.components = components != null ? components.with(this) : new LogicComponents(this);
 		this.components.updateValidity();
-		this.wires = wires.with(this);
+		this.wires = wires != null ? wires.with(this) : new MicrochipWires(this);
 		this.components.rebuildTraversal();
 		this.awarenesses = new MicrochipAwarenesses();
 		this.awarenesses.rebuild(this);
@@ -58,6 +65,7 @@ public final class Microchip
 	public Microchip(MicrochipSize size)
 	{
 		this.size = size;
+		this.stickyNotes = new MicrochipStickyNotes(this);
 		this.components = new LogicComponents(this);
 		this.components.updateValidity();
 		this.wires = new MicrochipWires(this);
@@ -69,6 +77,11 @@ public final class Microchip
 	public MicrochipSize size()
 	{
 		return size;
+	}
+	
+	public MicrochipStickyNotes stickyNotes()
+	{
+		return stickyNotes;
 	}
 	
 	public LogicComponents components()
@@ -93,7 +106,7 @@ public final class Microchip
 	
 	private List<MicrochipObjectContainer<?, ?>> objectContainers()
 	{
-		return List.of(components);
+		return List.of(stickyNotes, components);
 	}
 	
 	public boolean canFit(Bounds bounds)
@@ -128,6 +141,7 @@ public final class Microchip
 	
 	public void loadFrom(Microchip other)
 	{
+		stickyNotes.loadFrom(other.stickyNotes());
 		components.loadFrom(other.components());
 		wires.loadFrom(other.wires());
 		this.markDirty();
@@ -135,6 +149,7 @@ public final class Microchip
 	
 	public void loadFrom(Immutable other)
 	{
+		stickyNotes.loadFrom(other.stickyNotes);
 		components.loadFrom(other.components);
 		wires.loadFrom(other.wires);
 		this.markDirty();
@@ -147,6 +162,7 @@ public final class Microchip
 	
 	public void clear()
 	{
+		stickyNotes.clear();
 		components.clear();
 		wires.clear();
 		this.markDirty();
@@ -199,14 +215,14 @@ public final class Microchip
 	@Override
 	public int hashCode()
 	{
-		return Objects.hash(components, wires);
+		return Objects.hash(stickyNotes, components, wires);
 	}
 	
 	@Override
 	public boolean equals(Object o)
 	{
 		return this == o ||
-			   (o instanceof Immutable other && components.equals(other.components) && wires.equals(other.wires));
+			   (o instanceof Immutable other && stickyNotes.equals(other.stickyNotes) && components.equals(other.components) && wires.equals(other.wires));
 	}
 	
 	/**
@@ -217,27 +233,31 @@ public final class Microchip
 	{
 		public static final Codec<Immutable> CODEC = RecordCodecBuilder.create((instance) -> instance
 				.group(
-						LogicComponents.CODEC.fieldOf("components").forGetter((m) -> m.components),
-						MicrochipWires.CODEC.fieldOf("wires").forGetter((m) -> m.wires)
+						MicrochipStickyNotes.CODEC.optionalFieldOf("sticky_notes").forGetter((m) -> Optional.of(m.stickyNotes)),
+						LogicComponents.CODEC.optionalFieldOf("components").forGetter((m) -> Optional.of(m.components)),
+						MicrochipWires.CODEC.optionalFieldOf("wires").forGetter((m) -> Optional.of(m.wires))
 				)
-				.apply(instance, Immutable::new));
+				.apply(instance, (notes, components, wires) -> new Immutable(notes.orElse(null), components.orElse(null), wires.orElse(null))));
 		
 		public static final StreamCodec<ByteBuf, Immutable> STREAM_CODEC = StreamCodec.composite(
+				MicrochipStickyNotes.STREAM_CODEC, (m) -> m.stickyNotes,
 				LogicComponents.STREAM_CODEC, (m) -> m.components,
 				MicrochipWires.STREAM_CODEC, (m) -> m.wires,
 				Immutable::new
 		);
 		
-		private final LogicComponents components;
-		private final MicrochipWires  wires;
+		private final MicrochipStickyNotes stickyNotes;
+		private final LogicComponents      components;
+		private final MicrochipWires       wires;
 		
 		/**
 		 * Should only be used by codecs.
 		 */
-		private Immutable(LogicComponents components, MicrochipWires wires)
+		private Immutable(MicrochipStickyNotes stickyNotes, LogicComponents components, MicrochipWires wires)
 		{
-			this.components = components;
-			this.wires = wires;
+			this.stickyNotes = stickyNotes != null ? stickyNotes : new MicrochipStickyNotes(null);
+			this.components = components != null ? components : new LogicComponents(null);
+			this.wires = wires != null ? wires : new MicrochipWires(null);
 		}
 		
 		/**
@@ -248,10 +268,22 @@ public final class Microchip
 		private Immutable(Microchip microchip)
 		{
 			Microchip copy = new Microchip(microchip.size());
+			stickyNotes = new MicrochipStickyNotes(copy);
+			stickyNotes.loadFrom(microchip.stickyNotes);
 			components = new LogicComponents(copy);
 			components.loadFrom(microchip.components);
 			wires = new MicrochipWires(copy);
 			wires.loadFrom(microchip.wires);
+		}
+		
+		/**
+		 * Gets an iterable instance of the sticky notes on this immutable {@link Microchip}.
+		 *
+		 * @return the iterable instance
+		 */
+		public Iterable<StickyNoteEntry> stickyNotes()
+		{
+			return stickyNotes;
 		}
 		
 		/**
@@ -276,14 +308,14 @@ public final class Microchip
 		@Override
 		public int hashCode()
 		{
-			return Objects.hash(components, wires);
+			return Objects.hash(stickyNotes, components, wires);
 		}
 		
 		@Override
 		public boolean equals(Object o)
 		{
 			return this == o ||
-				   (o instanceof Immutable other && components.equals(other.components) && wires.equals(other.wires));
+				   (o instanceof Immutable other && stickyNotes.equals(other.stickyNotes) && components.equals(other.components) && wires.equals(other.wires));
 		}
 	}
 }

@@ -12,6 +12,7 @@ import net.swedz.little_big_redstone.LBR;
 import net.swedz.little_big_redstone.LBRClientShaders;
 import net.swedz.little_big_redstone.LBRColors;
 import net.swedz.little_big_redstone.LBRComponents;
+import net.swedz.little_big_redstone.LBRItemDisplayContext;
 import net.swedz.little_big_redstone.LBRItems;
 import net.swedz.little_big_redstone.LBRText;
 import net.swedz.little_big_redstone.LBRTooltips;
@@ -20,7 +21,9 @@ import net.swedz.little_big_redstone.gui.microchip.MicrochipScreen;
 import net.swedz.little_big_redstone.gui.microchip.logic.LogicRenderer;
 import net.swedz.little_big_redstone.gui.microchip.logic.LogicRenderers;
 import net.swedz.little_big_redstone.helper.guigraphics.TesseractGuiGraphics;
+import net.swedz.little_big_redstone.item.stickynote.StickyNoteItem;
 import net.swedz.little_big_redstone.microchip.object.logic.LogicEntry;
+import net.swedz.little_big_redstone.microchip.object.note.StickyNoteEntry;
 
 import java.util.List;
 import java.util.function.Consumer;
@@ -40,7 +43,11 @@ public final class MicrochipWidgetRenderer
 	{
 		if(widget.context().shouldRenderTooltip())
 		{
-			if(widget.context().hasLogic())
+			if(widget.context().hasNote())
+			{
+				// TODO render note tooltip
+			}
+			else if(widget.context().hasLogic())
 			{
 				var component = widget.context().logic().component();
 				List<Component> lines = Lists.newArrayList();
@@ -125,29 +132,79 @@ public final class MicrochipWidgetRenderer
 		}
 	}
 	
+	private void renderNote(TesseractGuiGraphics graphics, StickyNoteEntry entry)
+	{
+		graphics.pose().pushPose();
+		
+		// TODO stack creation is slow?
+		var stack = entry.toStack();
+		graphics.renderItem(stack, LBRItemDisplayContext.MICROCHIP_GUI, entry.x(), entry.y());
+		
+		graphics.pose().popPose();
+	}
+	
+	private void renderNotes(TesseractGuiGraphics graphics, int mouseX, int mouseY, float partialTicks)
+	{
+		for(var entry : widget.microchip().stickyNotes())
+		{
+			if(entry == widget.context().note())
+			{
+				continue;
+			}
+			this.renderNote(graphics, entry);
+		}
+		
+		if(widget.context().hasNote())
+		{
+			graphics = graphics.inner();
+			graphics.enableBatching();
+			this.renderNote(graphics, widget.context().note());
+			graphics.end();
+		}
+	}
+	
 	private void renderLogicGridSnappingOverlay(TesseractGuiGraphics graphics, int mouseX, int mouseY, float partialTicks)
 	{
 		var carried = widget.menu().getCarried();
 		var size = widget.microchip().size();
 		
-		if(Screen.hasControlDown() && carried.has(LBRComponents.LOGIC) && widget.isMouseOver(mouseX, mouseY))
+		if(Screen.hasControlDown() && widget.isMouseOver(mouseX, mouseY))
 		{
-			var component = carried.get(LBRComponents.LOGIC);
 			int boardX = size.boardX(widget.toLocalX(mouseX));
 			int boardY = size.boardY(widget.toLocalY(mouseY));
-			int logicX = MicrochipScreen.getGridSnappedCoord(boardX - component.size().centerX() + 8);
-			int logicY = MicrochipScreen.getGridSnappedCoord(boardY - component.size().centerY() + 8);
 			
-			graphics.enableBatching();
-			graphics.resetColor();
-			graphics.setTexture(LBR.id("textures/gui/container/microchip/grid_snapping_overlay.png"));
-			graphics.setTextureShader(LBRClientShaders::microchipGridSnappingOverlay, VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_COLOR);
-			graphics.blit(0, logicY, 0, logicY, size.bounds().width(), 1, 16, 16);
-			graphics.blit(0, logicY + component.size().heightPixels() - 1, 0, logicY + component.size().heightPixels() - 1, size.bounds().width(), 1, 16, 16);
-			graphics.blit(logicX, 0, logicX, 0, 1, size.bounds().height(), 16, 16);
-			graphics.blit(logicX + component.size().widthPixels() - 1, 0, logicX + component.size().widthPixels() - 1, 0, 1, size.bounds().height(), 16, 16);
-			graphics.resetTextureShader();
-			graphics.drawBatches();
+			boolean isStickyNote = carried.getItem() instanceof StickyNoteItem;
+			boolean isLogic = carried.has(LBRComponents.LOGIC);
+			if(isStickyNote || isLogic)
+			{
+				int x, y;
+				int width, height;
+				if(isStickyNote)
+				{
+					x = MicrochipScreen.getGridSnappedCoord(boardX);
+					y = MicrochipScreen.getGridSnappedCoord(boardY);
+					width = 16;
+					height = 16;
+				}
+				else
+				{
+					var component = carried.get(LBRComponents.LOGIC);
+					x = MicrochipScreen.getGridSnappedCoord(boardX - component.size().centerX() + 8);
+					y = MicrochipScreen.getGridSnappedCoord(boardY - component.size().centerY() + 8);
+					width = component.size().widthPixels();
+					height = component.size().heightPixels();
+				}
+				graphics.enableBatching();
+				graphics.resetColor();
+				graphics.setTexture(LBR.id("textures/gui/container/microchip/grid_snapping_overlay.png"));
+				graphics.setTextureShader(LBRClientShaders::microchipGridSnappingOverlay, VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_COLOR);
+				graphics.blit(0, y, 0, y, size.bounds().width(), 1, 16, 16);
+				graphics.blit(0, y + height - 1, 0, y + height - 1, size.bounds().width(), 1, 16, 16);
+				graphics.blit(x, 0, x, 0, 1, size.bounds().height(), 16, 16);
+				graphics.blit(x + width - 1, 0, x + width - 1, 0, 1, size.bounds().height(), 16, 16);
+				graphics.resetTextureShader();
+				graphics.drawBatches();
+			}
 		}
 	}
 	
@@ -174,6 +231,8 @@ public final class MicrochipWidgetRenderer
 		widget.wireRenderer().renderWires(graphics, mouseX, mouseY, partialTicks);
 		this.renderLogic(graphics, mouseX, mouseY, partialTicks);
 		graphics.drawBatches();
+		
+		this.renderNotes(graphics, mouseX, mouseY, partialTicks);
 		
 		graphics.pose().popPose();
 		
