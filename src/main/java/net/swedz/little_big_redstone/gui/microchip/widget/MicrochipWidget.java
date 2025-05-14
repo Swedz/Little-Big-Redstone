@@ -20,7 +20,7 @@ import net.swedz.little_big_redstone.item.stickynote.StickyNoteItem;
 import net.swedz.little_big_redstone.microchip.Microchip;
 import net.swedz.little_big_redstone.microchip.object.logic.LogicSelectedPort;
 import net.swedz.little_big_redstone.microchip.wire.Wire;
-import net.swedz.little_big_redstone.network.packet.DyeMicrochipLogicPacket;
+import net.swedz.little_big_redstone.network.packet.DyeMicrochipObjectPacket;
 import net.swedz.little_big_redstone.network.packet.OpenLogicConfigPacket;
 import net.swedz.little_big_redstone.network.packet.PlaceTakeMicrochipObjectPacket;
 import net.swedz.little_big_redstone.network.packet.PlaceTakeMicrochipWirePacket;
@@ -108,23 +108,26 @@ public final class MicrochipWidget implements GuiEventListener, Renderable, Narr
 	{
 		var menu = this.menu();
 		var carried = menu.getCarried();
-		var logic = context.logic();
+		var entry = context.object();
 		
 		if(button == InputConstants.MOUSE_BUTTON_RIGHT &&
-		   context.shouldInteractLogic())
+		   context.shouldDyeObject())
 		{
-			var result = DyeComponentResult.test(menu, carried, logic);
+			int slot = entry.slot();
+			var result = DyeComponentResult.test(carried, entry.color());
 			if(result.success())
 			{
-				logic.component().setColor(result.color());
-				microchip.markDirty();
-				if(result.consume())
+				if(entry.setColor(result.color()))
 				{
-					carried.consume(1, screen.getMinecraft().player);
+					microchip.markDirty();
+					if(result.consume())
+					{
+						carried.consume(1, screen.getMinecraft().player);
+					}
+					result.playSound(screen.getMinecraft().player);
+					new DyeMicrochipObjectPacket(menu.containerId, entry.containerType(), slot).sendToServer();
+					return true;
 				}
-				result.playSound(screen.getMinecraft().player);
-				new DyeMicrochipLogicPacket(menu.containerId, logic.slot()).sendToServer();
-				return true;
 			}
 		}
 		

@@ -22,7 +22,7 @@ public final class MicrochipWidgetContext
 		return stack.isEmpty() || stack.is(LBRItems.REDSTONE_BIT.asItem());
 	}
 	
-	public static boolean canInteractLogic(ItemStack stack)
+	public static boolean canInteractDyeableObject(ItemStack stack)
 	{
 		return stack.isEmpty() || DyeComponentResult.is(stack);
 	}
@@ -44,10 +44,10 @@ public final class MicrochipWidgetContext
 		
 		MicrochipObject object = microchip.findAt(boardMouseX, boardMouseY);
 		
-		StickyNoteEntry note = carriedStack.isEmpty() && object instanceof StickyNoteEntry o ? o : null;
+		StickyNoteEntry note = canInteractDyeableObject(carriedStack) && object instanceof StickyNoteEntry o ? o : null;
 		
 		// Find the hovered logic component, if any
-		LogicEntry logic = canInteractLogic(carriedStack) && object instanceof LogicEntry o ? o : null;
+		LogicEntry logic = canInteractDyeableObject(carriedStack) && object instanceof LogicEntry o ? o : null;
 		LogicSelectedPort port = null;
 		boolean portInput = true;
 		Wire wire = null;
@@ -226,14 +226,19 @@ public final class MicrochipWidgetContext
 		return this.hasObject() && !this.hasPort() && !this.hasWire() && carriedStack.isEmpty();
 	}
 	
+	public boolean shouldDyeObject()
+	{
+		return this.hasObject() && !this.hasPort() && !this.hasWire() && canInteractDyeableObject(carriedStack);
+	}
+	
 	public boolean shouldInteractNote()
 	{
-		return this.hasNote() && !this.hasPort() && !this.hasWire() && carriedStack.isEmpty();
+		return this.hasNote() && !this.hasPort() && !this.hasWire() && canInteractDyeableObject(carriedStack);
 	}
 	
 	public boolean shouldInteractLogic()
 	{
-		return this.hasLogic() && !this.hasPort() && !this.hasWire() && canInteractLogic(carriedStack);
+		return this.hasLogic() && !this.hasPort() && !this.hasWire() && canInteractDyeableObject(carriedStack);
 	}
 	
 	public boolean shouldInteractPort()

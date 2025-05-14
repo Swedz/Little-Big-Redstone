@@ -8,8 +8,6 @@ import net.minecraft.world.item.DyeItem;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.neoforge.common.Tags;
 import net.swedz.little_big_redstone.LBRTags;
-import net.swedz.little_big_redstone.gui.microchip.MicrochipMenu;
-import net.swedz.little_big_redstone.microchip.object.logic.LogicEntry;
 
 import java.util.Optional;
 
@@ -34,7 +32,7 @@ public record DyeComponentResult(Result result, Action action, Optional<DyeColor
 			   stack.is(LBRTags.Items.DYE_WASHER);
 	}
 	
-	public static DyeComponentResult test(MicrochipMenu menu, ItemStack carried, LogicEntry entry)
+	public static DyeComponentResult test(ItemStack carried, Optional<DyeColor> currentColor)
 	{
 		Result result;
 		Action action;
@@ -57,7 +55,7 @@ public record DyeComponentResult(Result result, Action action, Optional<DyeColor
 		{
 			return new DyeComponentResult(Result.WRONG_ITEM, null, Optional.empty(), false);
 		}
-		if(entry.component().color().equals(color))
+		if(currentColor.equals(color))
 		{
 			return new DyeComponentResult(Result.NO_CHANGE, null, Optional.empty(), false);
 		}

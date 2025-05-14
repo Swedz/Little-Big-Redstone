@@ -5,9 +5,13 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.ItemStack;
 import net.swedz.little_big_redstone.api.Bounds;
 import net.swedz.little_big_redstone.microchip.object.MicrochipObject;
+import net.swedz.little_big_redstone.microchip.object.MicrochipObjectContainerType;
+
+import java.util.Optional;
 
 public record LogicEntry(int slot, int x, int y, LogicComponent component) implements MicrochipObject
 {
@@ -34,6 +38,12 @@ public record LogicEntry(int slot, int x, int y, LogicComponent component) imple
 	}
 	
 	@Override
+	public MicrochipObjectContainerType containerType()
+	{
+		return MicrochipObjectContainerType.LOGIC_COMPONENT;
+	}
+	
+	@Override
 	public ItemStack toStack()
 	{
 		return component.type().toStack(component);
@@ -43,5 +53,19 @@ public record LogicEntry(int slot, int x, int y, LogicComponent component) imple
 	public Bounds toBounds()
 	{
 		return new Bounds(x, y, component.size().widthPixels(), component.size().heightPixels());
+	}
+	
+	@Override
+	public Optional<DyeColor> color()
+	{
+		return component.color();
+	}
+	
+	@Override
+	public boolean setColor(Optional<DyeColor> color)
+	{
+		var original = component.color();
+		component.setColor(color);
+		return !original.equals(color);
 	}
 }

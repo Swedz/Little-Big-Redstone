@@ -1,7 +1,10 @@
 package net.swedz.little_big_redstone.microchip.object;
 
+import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.ItemStack;
 import net.swedz.little_big_redstone.api.Bounds;
+
+import java.util.Optional;
 
 public interface MicrochipObject
 {
@@ -25,6 +28,13 @@ public interface MicrochipObject
 	 * @return the y position
 	 */
 	int y();
+	
+	/**
+	 * Get the container type for this object.
+	 *
+	 * @return the {@link MicrochipObjectContainerType} of this object
+	 */
+	MicrochipObjectContainerType containerType();
 	
 	/**
 	 * <p>Creates an {@link ItemStack} that represents the object. This should mean that if this {@link ItemStack} were
@@ -54,4 +64,22 @@ public interface MicrochipObject
 	{
 		return this.toBounds().overlaps(other);
 	}
+	
+	/**
+	 * Gets the color value for this object. While this instance cannot be modified because it is an {@link Optional},
+	 * this color relates to the mutable color of the object. Some objects may have multiple colors relating to them,
+	 * but an object <i>should</i> only have one mutable color so that it works properly with the right-click to dye
+	 * feature.
+	 *
+	 * @return the optional {@link DyeColor} of this object
+	 */
+	Optional<DyeColor> color();
+	
+	/**
+	 * Sets the color value for this object.
+	 *
+	 * @param color the optional {@link DyeColor}
+	 * @return true if the color changed, false otherwise
+	 */
+	boolean setColor(Optional<DyeColor> color);
 }

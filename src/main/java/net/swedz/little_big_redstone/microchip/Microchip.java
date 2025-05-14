@@ -5,9 +5,11 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.network.codec.StreamCodec;
 import net.swedz.little_big_redstone.api.Bounds;
+import net.swedz.little_big_redstone.item.FloppyDiskItem;
 import net.swedz.little_big_redstone.microchip.awareness.MicrochipAwarenesses;
 import net.swedz.little_big_redstone.microchip.object.MicrochipObject;
 import net.swedz.little_big_redstone.microchip.object.MicrochipObjectContainer;
+import net.swedz.little_big_redstone.microchip.object.MicrochipObjectContainerType;
 import net.swedz.little_big_redstone.microchip.object.logic.LogicComponent;
 import net.swedz.little_big_redstone.microchip.object.logic.LogicComponents;
 import net.swedz.little_big_redstone.microchip.object.logic.LogicContext;
@@ -109,6 +111,20 @@ public final class Microchip
 		return List.of(stickyNotes, components);
 	}
 	
+	private MicrochipObjectContainer<?, ?> getContainer(MicrochipObjectContainerType containerType)
+	{
+		return switch (containerType)
+		{
+			case STICKY_NOTE -> stickyNotes;
+			case LOGIC_COMPONENT -> components;
+		};
+	}
+	
+	public MicrochipObject get(int slot, MicrochipObjectContainerType containerType)
+	{
+		return this.getContainer(containerType).get(slot);
+	}
+	
 	public boolean canFit(Bounds bounds)
 	{
 		for(var container : this.objectContainers())
@@ -137,6 +153,11 @@ public final class Microchip
 			}
 		}
 		return null;
+	}
+	
+	public MicrochipObject findAt(int x, int y, MicrochipObjectContainerType containerType)
+	{
+		return this.getContainer(containerType).findAt(x, y);
 	}
 	
 	public void loadFrom(Microchip other)
@@ -227,7 +248,7 @@ public final class Microchip
 	
 	/**
 	 * <p>An immutable copy of a {@link Microchip}. Used for storing a program in a
-	 * {@link net.swedz.little_big_redstone.item.FloppyDiskItem}.</p>
+	 * {@link FloppyDiskItem}.</p>
 	 */
 	public static final class Immutable
 	{
