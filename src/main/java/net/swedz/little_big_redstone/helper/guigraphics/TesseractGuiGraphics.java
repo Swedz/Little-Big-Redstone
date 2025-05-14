@@ -2,16 +2,24 @@ package net.swedz.little_big_redstone.helper.guigraphics;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+import com.mojang.blaze3d.platform.Lighting;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.tooltip.ClientTooltipComponent;
 import net.minecraft.client.gui.screens.inventory.tooltip.TooltipRenderUtil;
+import net.minecraft.client.renderer.LightTexture;
+import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.texture.MissingTextureAtlasSprite;
+import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.FormattedCharSequence;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.item.ItemDisplayContext;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
 import net.swedz.tesseract.neoforge.api.Assert;
 import org.jetbrains.annotations.ApiStatus;
 
@@ -20,7 +28,7 @@ import java.util.List;
 import java.util.Map;
 
 // TODO move to Tesseract
-public final class TesseractGuiGraphics implements BlitGuiGraphics, FillGuiGraphics, StringGuiGraphics, TooltipGuiGraphics
+public final class TesseractGuiGraphics implements BlitGuiGraphics, FillGuiGraphics, StringGuiGraphics, TooltipGuiGraphics, ItemGuiGraphics
 {
 	private final TesseractGuiGraphics parent;
 	private final GuiGraphics          vanilla;
@@ -82,6 +90,11 @@ public final class TesseractGuiGraphics implements BlitGuiGraphics, FillGuiGraph
 	public PoseStack pose()
 	{
 		return vanilla.pose();
+	}
+	
+	public MultiBufferSource.BufferSource bufferSource()
+	{
+		return vanilla.bufferSource();
 	}
 	
 	public TesseractGuiGraphics inner()
@@ -326,5 +339,33 @@ public final class TesseractGuiGraphics implements BlitGuiGraphics, FillGuiGraph
 		}
 		
 		vanilla.pose().popPose();
+	}
+	
+	@Override
+	public void renderItem(Level level, LivingEntity entity, ItemStack stack, ItemDisplayContext displayContext, int x, int y, int guiOffset)
+	{
+		if(!stack.isEmpty())
+		{
+			var model = Minecraft.getInstance().getItemRenderer().getModel(stack, level, entity, 0);
+			
+			this.pose().pushPose();
+			this.pose().translate(x + 8, y + 8, 150 + (model.isGui3d() ? guiOffset : 0));
+			this.pose().scale(16, -16, 16);
+			
+			if(!model.usesBlockLight())
+			{
+				Lighting.setupForFlatItems();
+			}
+			
+			Minecraft.getInstance().getItemRenderer().render(stack, displayContext, false, this.pose(), this.bufferSource(), LightTexture.FULL_BRIGHT, OverlayTexture.NO_OVERLAY, model);
+			vanilla.flush();
+			
+			if(!model.usesBlockLight())
+			{
+				Lighting.setupFor3DItems();
+			}
+			
+			this.pose().popPose();
+		}
 	}
 }
