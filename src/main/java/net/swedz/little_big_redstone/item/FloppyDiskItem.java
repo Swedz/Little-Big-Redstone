@@ -29,6 +29,7 @@ import net.swedz.little_big_redstone.network.packet.ForceFloppyDiskGuiOverlayUpd
 import net.swedz.tesseract.neoforge.helper.TransferHelper;
 
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -122,10 +123,14 @@ public final class FloppyDiskItem extends Item
 	
 	public record ConsumeResult(List<ItemStack> present, List<ItemStack> missing) implements Iterable<ItemStack>
 	{
-		public ConsumeResult
+		public ConsumeResult(List<ItemStack> present, List<ItemStack> missing)
 		{
-			present = Collections.unmodifiableList(present);
-			missing = Collections.unmodifiableList(missing);
+			present = Lists.newArrayList(present);
+			missing = Lists.newArrayList(missing);
+			present.sort(Comparator.comparingInt(ItemStack::getCount).reversed());
+			missing.sort(Comparator.comparingInt(ItemStack::getCount).reversed());
+			this.present = Collections.unmodifiableList(present);
+			this.missing = Collections.unmodifiableList(missing);
 		}
 		
 		public ConsumeResult()
