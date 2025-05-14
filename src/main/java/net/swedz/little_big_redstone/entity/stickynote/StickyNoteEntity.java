@@ -39,6 +39,7 @@ import net.swedz.little_big_redstone.LBR;
 import net.swedz.little_big_redstone.LBRComponents;
 import net.swedz.little_big_redstone.LBREntities;
 import net.swedz.little_big_redstone.LBRItems;
+import net.swedz.little_big_redstone.LBRTags;
 import net.swedz.little_big_redstone.client.model.stickynote.StickyNoteModelData;
 import net.swedz.little_big_redstone.helper.DirectionHelper;
 import net.swedz.little_big_redstone.item.stickynote.StickyNote;
@@ -332,6 +333,21 @@ public final class StickyNoteEntity extends HangingEntity
 				this.setTextColor(dyeItem.getDyeColor());
 				stack.consume(1, player);
 				return InteractionResult.CONSUME;
+			}
+			else if(stack.is(LBRTags.Items.DYE_WASHER))
+			{
+				var defaultColor = StickyNoteItem.getDefaultTextColor(color);
+				if(textColor != defaultColor)
+				{
+					player.awardStat(Stats.ITEM_USED.get(stack.getItem()));
+					this.playSound(SoundEvents.BUCKET_EMPTY);
+					this.setTextColor(defaultColor);
+					if(stack.is(LBRTags.Items.DYE_WASHER_CONSUMED))
+					{
+						stack.consume(1, player);
+					}
+					return InteractionResult.CONSUME;
+				}
 			}
 			
 			var action = player.isShiftKeyDown() ? StickyNotePacket.Action.OPEN_EDIT : StickyNotePacket.Action.OPEN_VIEW;
