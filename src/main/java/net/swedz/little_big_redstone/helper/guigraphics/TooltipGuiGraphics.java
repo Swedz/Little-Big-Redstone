@@ -271,6 +271,9 @@ public interface TooltipGuiGraphics extends ColoredGuiGraphics, StringGuiGraphic
 		{
 			var graphics = new TesseractGuiGraphics(internal);
 			
+			graphics.pose().pushPose();
+			graphics.pose().translate(0, 0, 400);
+			
 			graphics.setTexture(asset);
 			graphics.nineSlice(
 					x - padding.left(), y - padding.top(),
@@ -278,6 +281,8 @@ public interface TooltipGuiGraphics extends ColoredGuiGraphics, StringGuiGraphic
 					height + padding.top() + padding.bottom(),
 					textureWidth, textureHeight, border
 			);
+			
+			graphics.pose().popPose();
 		}
 	}
 }
