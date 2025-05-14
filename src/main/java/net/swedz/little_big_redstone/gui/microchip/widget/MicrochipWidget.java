@@ -16,6 +16,7 @@ import net.swedz.little_big_redstone.api.Bounds;
 import net.swedz.little_big_redstone.gui.microchip.MicrochipMenu;
 import net.swedz.little_big_redstone.gui.microchip.MicrochipScreen;
 import net.swedz.little_big_redstone.gui.microchip.logic.DyeComponentResult;
+import net.swedz.little_big_redstone.item.logicarray.LogicArrayItem;
 import net.swedz.little_big_redstone.item.stickynote.StickyNoteItem;
 import net.swedz.little_big_redstone.microchip.Microchip;
 import net.swedz.little_big_redstone.microchip.object.logic.LogicSelectedPort;
@@ -148,7 +149,7 @@ public final class MicrochipWidget implements GuiEventListener, Renderable, Narr
 			microchip.stickyNotes().remove(note);
 			microchip.markDirty();
 			var stack = note.toStack();
-			if(!shift || !menu.moveItemStackTo(stack, 0, 36, true))
+			if(!shift || !menu.moveItemStackTo(stack, LogicArrayItem.MAX_SLOTS, menu.slots.size(), true))
 			{
 				menu.setCarried(stack);
 			}
@@ -236,7 +237,7 @@ public final class MicrochipWidget implements GuiEventListener, Renderable, Narr
 			microchip.markDirty();
 			wires.rebuildPaths();
 			var stack = logic.toStack();
-			if(!shift || !menu.moveItemStackTo(stack, 0, 36, true))
+			if(!shift || !menu.moveItemStackTo(stack, LogicArrayItem.MAX_SLOTS, menu.slots.size(), true))
 			{
 				menu.setCarried(stack);
 				menu.setCarriedWires(logic.slot(), wiresPopped);

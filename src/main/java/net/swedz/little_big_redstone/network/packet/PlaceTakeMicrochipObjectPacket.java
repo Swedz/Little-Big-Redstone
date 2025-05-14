@@ -11,6 +11,7 @@ import net.swedz.little_big_redstone.LBRComponents;
 import net.swedz.little_big_redstone.LBRItems;
 import net.swedz.little_big_redstone.api.Bounds;
 import net.swedz.little_big_redstone.gui.microchip.MicrochipMenu;
+import net.swedz.little_big_redstone.item.logicarray.LogicArrayItem;
 import net.swedz.little_big_redstone.item.stickynote.StickyNoteItem;
 import net.swedz.little_big_redstone.microchip.object.logic.LogicEntry;
 import net.swedz.little_big_redstone.microchip.object.note.StickyNoteEntry;
@@ -112,7 +113,7 @@ public record PlaceTakeMicrochipObjectPacket(
 					{
 						microchip.stickyNotes().remove(note);
 						var stack = note.toStack();
-						if(!shift || !menu.moveItemStackTo(stack, 0, 36, true))
+						if(!shift || !menu.moveItemStackTo(stack, LogicArrayItem.MAX_SLOTS, menu.slots.size(), true))
 						{
 							menu.setCarried(stack);
 						}
@@ -122,7 +123,7 @@ public record PlaceTakeMicrochipObjectPacket(
 					{
 						var wiresPopped = components.remove(logic);
 						var stack = logic.toStack();
-						if(!shift || !menu.moveItemStackTo(stack, 0, 36, true))
+						if(!shift || !menu.moveItemStackTo(stack, LogicArrayItem.MAX_SLOTS, menu.slots.size(), true))
 						{
 							menu.setCarried(stack);
 							menu.setCarriedWires(logic.slot(), wiresPopped);
