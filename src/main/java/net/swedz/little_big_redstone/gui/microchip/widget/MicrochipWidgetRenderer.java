@@ -158,11 +158,7 @@ public final class MicrochipWidgetRenderer
 	private void renderNote(TesseractGuiGraphics graphics, StickyNoteEntry entry)
 	{
 		graphics.pose().pushPose();
-		
-		// TODO stack creation is slow?
-		var stack = entry.toStack();
-		graphics.renderItem(stack, LBRItemDisplayContext.MICROCHIP_GUI, entry.x(), entry.y());
-		
+		graphics.renderItem(entry.toStack(), LBRItemDisplayContext.MICROCHIP_GUI, entry.x(), entry.y());
 		graphics.pose().popPose();
 	}
 	
