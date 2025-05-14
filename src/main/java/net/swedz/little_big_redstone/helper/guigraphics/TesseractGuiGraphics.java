@@ -2,22 +2,15 @@ package net.swedz.little_big_redstone.helper.guigraphics;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
-import com.mojang.blaze3d.platform.Lighting;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.client.renderer.LightTexture;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.texture.MissingTextureAtlasSprite;
-import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.FormattedCharSequence;
-import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.item.ItemDisplayContext;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.Level;
 import net.swedz.tesseract.neoforge.api.Assert;
 import org.jetbrains.annotations.ApiStatus;
 
@@ -51,7 +44,7 @@ public final class TesseractGuiGraphics implements BlitGuiGraphics, FillGuiGraph
 	
 	private boolean textDropShadow = true;
 	
-	private boolean           tooltipFirstLinePadded = true;
+	private boolean           tooltipFirstLinePadded   = true;
 	private BackgroundPadding tooltipBackgroundPadding = new BackgroundPadding();
 	
 	private TesseractGuiGraphics(TesseractGuiGraphics parent, GuiGraphics internal)
@@ -358,33 +351,5 @@ public final class TesseractGuiGraphics implements BlitGuiGraphics, FillGuiGraph
 	public int drawString(FormattedCharSequence text, float x, float y)
 	{
 		return internal.drawString(font, text, x, y, this.getColorARGB(), this.isStringDropShadow());
-	}
-	
-	@Override
-	public void renderItem(Level level, LivingEntity entity, ItemStack stack, ItemDisplayContext displayContext, int x, int y, int guiOffset)
-	{
-		if(!stack.isEmpty())
-		{
-			var model = Minecraft.getInstance().getItemRenderer().getModel(stack, level, entity, 0);
-			
-			this.pose().pushPose();
-			this.pose().translate(x + 8, y + 8, 150 + (model.isGui3d() ? guiOffset : 0));
-			this.pose().scale(16, -16, 16);
-			
-			if(!model.usesBlockLight())
-			{
-				Lighting.setupForFlatItems();
-			}
-			
-			Minecraft.getInstance().getItemRenderer().render(stack, displayContext, false, this.pose(), this.bufferSource(), LightTexture.FULL_BRIGHT, OverlayTexture.NO_OVERLAY, model);
-			internal.flush();
-			
-			if(!model.usesBlockLight())
-			{
-				Lighting.setupFor3DItems();
-			}
-			
-			this.pose().popPose();
-		}
 	}
 }

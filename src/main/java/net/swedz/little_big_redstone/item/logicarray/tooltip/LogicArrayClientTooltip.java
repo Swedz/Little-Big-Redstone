@@ -80,8 +80,8 @@ public final class LogicArrayClientTooltip implements ClientTooltipComponent
 		if(itemIndex < storage.getSlots())
 		{
 			var stack = storage.getStackInSlot(itemIndex);
-			graphics.internal().renderItem(stack, x + 1, y + 1, itemIndex);
-			graphics.internal().renderItemDecorations(font, stack, x + 1, y + 1);
+			graphics.renderItem(stack, x + 1, y + 1, itemIndex);
+			graphics.renderItemDecorations(stack, x + 1, y + 1);
 		}
 	}
 }
