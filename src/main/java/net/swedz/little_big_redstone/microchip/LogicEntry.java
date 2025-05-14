@@ -7,10 +7,10 @@ import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.world.item.ItemStack;
 import net.swedz.little_big_redstone.api.Bounds;
-import net.swedz.little_big_redstone.microchip.logic.LogicComponent;
-import net.swedz.little_big_redstone.microchip.logic.LogicGridSize;
+import net.swedz.little_big_redstone.microchip.object.MicrochipObject;
+import net.swedz.little_big_redstone.microchip.object.logic.LogicComponent;
 
-public record LogicEntry(int slot, int x, int y, LogicComponent component)
+public record LogicEntry(int slot, int x, int y, LogicComponent component) implements MicrochipObject
 {
 	public static final Codec<LogicEntry> CODEC = RecordCodecBuilder.create((instance) -> instance
 			.group(
@@ -34,23 +34,15 @@ public record LogicEntry(int slot, int x, int y, LogicComponent component)
 		component = component.copy();
 	}
 	
+	@Override
 	public ItemStack toStack()
 	{
 		return component.type().toStack(component);
 	}
 	
+	@Override
 	public Bounds toBounds()
 	{
 		return new Bounds(x, y, component.size().widthPixels(), component.size().heightPixels());
-	}
-	
-	public boolean contains(int x, int y)
-	{
-		return this.toBounds().contains(x, y);
-	}
-	
-	public boolean contains(int x, int y, LogicGridSize size)
-	{
-		return this.toBounds().overlaps(new Bounds(x, y, size.widthPixels(), size.heightPixels()));
 	}
 }

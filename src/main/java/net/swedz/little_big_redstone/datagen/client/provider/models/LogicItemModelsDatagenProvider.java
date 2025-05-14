@@ -9,8 +9,8 @@ import net.neoforged.neoforge.data.event.GatherDataEvent;
 import net.swedz.little_big_redstone.LBR;
 import net.swedz.little_big_redstone.LBRColors;
 import net.swedz.little_big_redstone.client.model.logic.LogicBakingModelData;
-import net.swedz.little_big_redstone.microchip.logic.LogicType;
-import net.swedz.little_big_redstone.microchip.logic.LogicTypes;
+import net.swedz.little_big_redstone.microchip.object.logic.LogicType;
+import net.swedz.little_big_redstone.microchip.object.logic.LogicTypes;
 
 import java.util.Locale;
 import java.util.Set;

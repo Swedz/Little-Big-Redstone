@@ -16,7 +16,7 @@ import net.neoforged.neoforge.client.model.IDynamicBakedModel;
 import net.neoforged.neoforge.client.model.data.ModelData;
 import net.swedz.little_big_redstone.LBR;
 import net.swedz.little_big_redstone.LBRComponents;
-import net.swedz.little_big_redstone.microchip.logic.LogicComponent;
+import net.swedz.little_big_redstone.microchip.object.logic.LogicComponent;
 
 import java.util.Collections;
 import java.util.List;

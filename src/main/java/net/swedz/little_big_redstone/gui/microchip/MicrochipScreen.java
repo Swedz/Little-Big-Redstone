@@ -24,7 +24,7 @@ import net.swedz.little_big_redstone.gui.microchip.logic.LogicRenderers;
 import net.swedz.little_big_redstone.gui.microchip.widget.MicrochipWidget;
 import net.swedz.little_big_redstone.gui.microchip.widget.MicrochipWidgetWires;
 import net.swedz.little_big_redstone.helper.guigraphics.TesseractGuiGraphics;
-import net.swedz.little_big_redstone.microchip.logic.LogicComponent;
+import net.swedz.little_big_redstone.microchip.object.logic.LogicComponent;
 
 import java.util.List;
 

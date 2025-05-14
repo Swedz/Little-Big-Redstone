@@ -5,7 +5,7 @@ import net.swedz.little_big_redstone.LBRClientShaders;
 import net.swedz.little_big_redstone.gui.microchip.logic.LogicRenderer;
 import net.swedz.little_big_redstone.gui.microchip.logic.LogicRendererProvider;
 import net.swedz.little_big_redstone.helper.guigraphics.TesseractGuiGraphics;
-import net.swedz.little_big_redstone.microchip.logic.io.LogicIO;
+import net.swedz.little_big_redstone.microchip.object.logic.io.LogicIO;
 
 public final class IORenderer extends LogicRenderer<LogicIO>
 {

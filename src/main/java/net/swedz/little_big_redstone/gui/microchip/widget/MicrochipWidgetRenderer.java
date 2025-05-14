@@ -40,8 +40,7 @@ public final class MicrochipWidgetRenderer
 	{
 		if(widget.context().shouldRenderTooltip())
 		{
-			var carried = widget.menu().getCarried();
-			if(carried.isEmpty())
+			if(widget.context().hasLogic())
 			{
 				var component = widget.context().logic().component();
 				List<Component> lines = Lists.newArrayList();

@@ -2,7 +2,7 @@ package net.swedz.little_big_redstone.item;
 
 import net.minecraft.world.item.Item;
 import net.swedz.little_big_redstone.LBRComponents;
-import net.swedz.little_big_redstone.microchip.logic.LogicType;
+import net.swedz.little_big_redstone.microchip.object.logic.LogicType;
 
 public final class LogicItem extends Item
 {

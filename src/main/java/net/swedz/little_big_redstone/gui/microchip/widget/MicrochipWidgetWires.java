@@ -11,7 +11,7 @@ import net.swedz.little_big_redstone.client.model.logic.LogicBakingModelData;
 import net.swedz.little_big_redstone.gui.microchip.wire.WirePathing;
 import net.swedz.little_big_redstone.helper.guigraphics.TesseractGuiGraphics;
 import net.swedz.little_big_redstone.microchip.LogicEntry;
-import net.swedz.little_big_redstone.microchip.logic.LogicComponent;
+import net.swedz.little_big_redstone.microchip.object.logic.LogicComponent;
 import net.swedz.little_big_redstone.microchip.wire.Wire;
 
 import java.util.Collections;
@@ -95,7 +95,7 @@ public final class MicrochipWidgetWires
 		
 		if(widget.hasSelectedPort() &&
 		   widget.isMouseOver(mouseX, mouseY) &&
-		   widget.microchip().components().findAt(widget.microchip().size().boardX(widget.toLocalX(mouseX)), widget.microchip().size().boardY(widget.toLocalY(mouseY))) == null)
+		   widget.microchip().findAt(widget.microchip().size().boardX(widget.toLocalX(mouseX)), widget.microchip().size().boardY(widget.toLocalY(mouseY))) == null)
 		{
 			var selectedPort = widget.getSelectedPort();
 			this.renderWire(graphics, selectedPort.entry(), mouseX, mouseY, selectedPort.index(), partialTicks);

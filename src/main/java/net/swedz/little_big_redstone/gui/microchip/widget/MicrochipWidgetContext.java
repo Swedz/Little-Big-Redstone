@@ -6,6 +6,7 @@ import net.swedz.little_big_redstone.LBRItems;
 import net.swedz.little_big_redstone.gui.microchip.logic.DyeComponentResult;
 import net.swedz.little_big_redstone.microchip.LogicEntry;
 import net.swedz.little_big_redstone.microchip.LogicSelectedPort;
+import net.swedz.little_big_redstone.microchip.object.MicrochipObject;
 import net.swedz.little_big_redstone.microchip.wire.Wire;
 
 import java.util.Collections;
@@ -13,7 +14,7 @@ import java.util.List;
 
 public final class MicrochipWidgetContext
 {
-	public static final MicrochipWidgetContext NOTHING = new MicrochipWidgetContext(ItemStack.EMPTY, null, null, true, null, List.of());
+	public static final MicrochipWidgetContext NOTHING = new MicrochipWidgetContext(ItemStack.EMPTY, null, null, null, true, null, List.of());
 	
 	public static boolean canInteractWire(ItemStack stack)
 	{
@@ -40,8 +41,10 @@ public final class MicrochipWidgetContext
 		
 		List<Wire> topLayerWires = Lists.newArrayList();
 		
+		MicrochipObject object = microchip.findAt(boardMouseX, boardMouseY);
+		
 		// Find the hovered logic component, if any
-		LogicEntry logic = canInteractLogic(carriedStack) ? microchip.components().findAt(boardMouseX, boardMouseY) : null;
+		LogicEntry logic = canInteractLogic(carriedStack) && object instanceof LogicEntry o ? o : null;
 		LogicSelectedPort port = null;
 		boolean portInput = true;
 		Wire wire = null;
@@ -114,11 +117,12 @@ public final class MicrochipWidgetContext
 			}
 		}
 		
-		return new MicrochipWidgetContext(carriedStack, logic, port, portInput, wire, topLayerWires);
+		return new MicrochipWidgetContext(carriedStack, object, logic, port, portInput, wire, topLayerWires);
 	}
 	
 	private final ItemStack carriedStack;
 	
+	private final MicrochipObject   object;
 	private final LogicEntry        logic;
 	private final LogicSelectedPort port;
 	private final boolean           portInput;
@@ -126,9 +130,13 @@ public final class MicrochipWidgetContext
 	
 	private final List<Wire> topLayerWires;
 	
-	private MicrochipWidgetContext(ItemStack carriedStack, LogicEntry logic, LogicSelectedPort port, boolean portInput, Wire wire, List<Wire> topLayerWires)
+	private MicrochipWidgetContext(ItemStack carriedStack,
+								   MicrochipObject object, LogicEntry logic,
+								   LogicSelectedPort port, boolean portInput,
+								   Wire wire, List<Wire> topLayerWires)
 	{
 		this.carriedStack = carriedStack;
+		this.object = object;
 		this.logic = logic;
 		this.port = port;
 		this.portInput = portInput;
@@ -139,6 +147,16 @@ public final class MicrochipWidgetContext
 	public ItemStack getCarriedStack()
 	{
 		return carriedStack;
+	}
+	
+	public MicrochipObject object()
+	{
+		return object;
+	}
+	
+	public boolean hasObject()
+	{
+		return object != null;
 	}
 	
 	public LogicEntry logic()
@@ -191,14 +209,14 @@ public final class MicrochipWidgetContext
 		return topLayerWires;
 	}
 	
+	public boolean shouldRenderTooltip()
+	{
+		return this.hasObject() && !this.hasPort() && !this.hasWire() && carriedStack.isEmpty();
+	}
+	
 	public boolean shouldInteractLogic()
 	{
 		return this.hasLogic() && !this.hasPort() && !this.hasWire() && canInteractLogic(carriedStack);
-	}
-	
-	public boolean shouldRenderTooltip()
-	{
-		return this.shouldInteractLogic() && carriedStack.isEmpty();
 	}
 	
 	public boolean shouldInteractPort()

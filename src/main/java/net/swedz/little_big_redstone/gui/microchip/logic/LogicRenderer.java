@@ -6,8 +6,8 @@ import net.swedz.little_big_redstone.LBR;
 import net.swedz.little_big_redstone.client.model.logic.LogicBakingModelData;
 import net.swedz.little_big_redstone.client.model.logic.LogicModelColorSet;
 import net.swedz.little_big_redstone.helper.guigraphics.TesseractGuiGraphics;
-import net.swedz.little_big_redstone.microchip.logic.LogicComponent;
-import net.swedz.little_big_redstone.microchip.logic.LogicGridSize;
+import net.swedz.little_big_redstone.microchip.object.logic.LogicComponent;
+import net.swedz.little_big_redstone.microchip.object.logic.LogicGridSize;
 
 import java.util.function.Function;
 

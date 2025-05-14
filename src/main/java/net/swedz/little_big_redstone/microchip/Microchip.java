@@ -4,11 +4,16 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.network.codec.StreamCodec;
+import net.swedz.little_big_redstone.api.Bounds;
 import net.swedz.little_big_redstone.microchip.awareness.MicrochipAwarenesses;
-import net.swedz.little_big_redstone.microchip.logic.LogicComponents;
-import net.swedz.little_big_redstone.microchip.logic.LogicContext;
+import net.swedz.little_big_redstone.microchip.object.MicrochipObject;
+import net.swedz.little_big_redstone.microchip.object.MicrochipObjectContainer;
+import net.swedz.little_big_redstone.microchip.object.logic.LogicComponent;
+import net.swedz.little_big_redstone.microchip.object.logic.LogicComponents;
+import net.swedz.little_big_redstone.microchip.object.logic.LogicContext;
 import net.swedz.little_big_redstone.microchip.wire.MicrochipWires;
 
+import java.util.List;
 import java.util.Objects;
 
 public final class Microchip
@@ -83,6 +88,41 @@ public final class Microchip
 	public MicrochipAwarenesses awarenesses()
 	{
 		return awarenesses;
+	}
+	
+	private List<MicrochipObjectContainer<?, ?>> objectContainers()
+	{
+		return List.of(components);
+	}
+	
+	public boolean canFit(Bounds bounds)
+	{
+		for(var container : this.objectContainers())
+		{
+			if(!container.canFit(bounds))
+			{
+				return false;
+			}
+		}
+		return true;
+	}
+	
+	public boolean canFit(int x, int y, LogicComponent component)
+	{
+		return this.canFit(component.size().toBounds(x, y));
+	}
+	
+	public MicrochipObject findAt(int x, int y)
+	{
+		for(var container : this.objectContainers())
+		{
+			var found = container.findAt(x, y);
+			if(found != null)
+			{
+				return found;
+			}
+		}
+		return null;
 	}
 	
 	public void loadFrom(Microchip other)

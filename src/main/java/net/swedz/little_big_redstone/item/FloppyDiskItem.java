@@ -24,7 +24,7 @@ import net.swedz.little_big_redstone.LBRItems;
 import net.swedz.little_big_redstone.LBRText;
 import net.swedz.little_big_redstone.block.microchip.MicrochipBlockEntity;
 import net.swedz.little_big_redstone.microchip.Microchip;
-import net.swedz.little_big_redstone.microchip.logic.LogicType;
+import net.swedz.little_big_redstone.microchip.object.logic.LogicType;
 import net.swedz.little_big_redstone.network.packet.ForceFloppyDiskGuiOverlayUpdatePacket;
 import net.swedz.tesseract.neoforge.helper.TransferHelper;
 

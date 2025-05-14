@@ -20,7 +20,7 @@ import net.swedz.little_big_redstone.microchip.Microchip;
 import net.swedz.little_big_redstone.microchip.wire.Wire;
 import net.swedz.little_big_redstone.network.packet.DyeMicrochipLogicPacket;
 import net.swedz.little_big_redstone.network.packet.OpenLogicConfigPacket;
-import net.swedz.little_big_redstone.network.packet.PlaceTakeMicrochipLogicPacket;
+import net.swedz.little_big_redstone.network.packet.PlaceTakeMicrochipObjectPacket;
 import net.swedz.little_big_redstone.network.packet.PlaceTakeMicrochipWirePacket;
 
 public final class MicrochipWidget implements GuiEventListener, Renderable, NarratableEntry
@@ -211,7 +211,7 @@ public final class MicrochipWidget implements GuiEventListener, Renderable, Narr
 				menu.setCarried(stack);
 				menu.setCarriedWires(logic.slot(), wiresPopped);
 			}
-			new PlaceTakeMicrochipLogicPacket(menu.containerId, x, y, false, true, shift).sendToServer();
+			new PlaceTakeMicrochipObjectPacket(menu.containerId, x, y, false, true, shift).sendToServer();
 			return true;
 		}
 		
@@ -279,7 +279,7 @@ public final class MicrochipWidget implements GuiEventListener, Renderable, Narr
 					{
 						carried.shrink(1);
 					}
-					new PlaceTakeMicrochipLogicPacket(menu.containerId, placeX, placeY, true, leftClick, Screen.hasShiftDown()).sendToServer();
+					new PlaceTakeMicrochipObjectPacket(menu.containerId, placeX, placeY, true, leftClick, Screen.hasShiftDown()).sendToServer();
 					return true;
 				}
 			}

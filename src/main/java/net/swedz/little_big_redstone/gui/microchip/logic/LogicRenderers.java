@@ -2,7 +2,6 @@ package net.swedz.little_big_redstone.gui.microchip.logic;
 
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Maps;
-import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.util.Unit;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
@@ -15,9 +14,9 @@ import net.swedz.little_big_redstone.gui.microchip.logic.renderer.ReaderRenderer
 import net.swedz.little_big_redstone.gui.microchip.logic.renderer.SequencerRenderer;
 import net.swedz.little_big_redstone.gui.microchip.logic.renderer.SimpleLogicRenderer;
 import net.swedz.little_big_redstone.helper.guigraphics.TesseractGuiGraphics;
-import net.swedz.little_big_redstone.microchip.logic.LogicComponent;
-import net.swedz.little_big_redstone.microchip.logic.LogicType;
-import net.swedz.little_big_redstone.microchip.logic.LogicTypes;
+import net.swedz.little_big_redstone.microchip.object.logic.LogicComponent;
+import net.swedz.little_big_redstone.microchip.object.logic.LogicType;
+import net.swedz.little_big_redstone.microchip.object.logic.LogicTypes;
 
 import java.util.Map;
 

@@ -10,7 +10,7 @@ import net.swedz.little_big_redstone.microchip.awareness.AwarenessContext;
 import net.swedz.little_big_redstone.microchip.awareness.AwarenessType;
 import net.swedz.little_big_redstone.microchip.awareness.AwarenessTypes;
 import net.swedz.little_big_redstone.microchip.awareness.MicrochipAwareness;
-import net.swedz.little_big_redstone.microchip.logic.io.LogicIO;
+import net.swedz.little_big_redstone.microchip.object.logic.io.LogicIO;
 
 public final class RedstoneAwareness extends MicrochipAwareness<RedstoneAwareness>
 {
