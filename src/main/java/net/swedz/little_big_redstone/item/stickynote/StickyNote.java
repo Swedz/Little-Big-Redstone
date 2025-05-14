@@ -17,12 +17,6 @@ import java.util.Objects;
 
 public final class StickyNote
 {
-	public static final StickyNote EMPTY = new StickyNote("");
-	
-	public static final Codec<StickyNote> CODEC = Codec.STRING.xmap(StickyNote::new, StickyNote::text);
-	
-	public static final StreamCodec<ByteBuf, StickyNote> STREAM_CODEC = ByteBufCodecs.STRING_UTF8.map(StickyNote::new, StickyNote::text);
-	
 	private static final MiniMessage PARSER;
 	
 	static
@@ -57,6 +51,12 @@ public final class StickyNote
 	{
 		return Proxies.get(LBRProxy.class).adventureToNative(PARSER.deserialize(text));
 	}
+	
+	public static final StickyNote EMPTY = new StickyNote("");
+	
+	public static final Codec<StickyNote> CODEC = Codec.STRING.xmap(StickyNote::new, StickyNote::text);
+	
+	public static final StreamCodec<ByteBuf, StickyNote> STREAM_CODEC = ByteBufCodecs.STRING_UTF8.map(StickyNote::new, StickyNote::text);
 	
 	private final String    text;
 	private final Component parsed;
