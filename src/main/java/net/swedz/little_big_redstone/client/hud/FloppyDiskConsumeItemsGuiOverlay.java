@@ -44,7 +44,7 @@ public final class FloppyDiskConsumeItemsGuiOverlay
 		graphics.setTexture(LBR.id("textures/gui/slot_atlas.png"));
 		graphics.blit(x - 1, -1, 0, 0, 18, 18);
 		
-		var vanilla = graphics.vanilla();
+		var vanilla = graphics.internal();
 		vanilla.setColor(1, 1, 1, alpha);
 		vanilla.renderItem(stack, x, 0);
 		vanilla.renderItemDecorations(graphics.getFont(), stack, x, 0);
@@ -69,7 +69,9 @@ public final class FloppyDiskConsumeItemsGuiOverlay
 				graphics.blit(x.getValue() - 1, -1, 0, 18 * 2, 18, 18);
 				var text = LBRText.FLOPPY_DISK_MORE_ITEMS.text(ITEMS.size() - index.getValue());
 				graphics.setColor(1, 1, 1, alpha);
-				graphics.drawString(text, x.getValue() + 19 - 2 - graphics.getFont().width(text), 9, true);
+				graphics.setStringDropShadow(false);
+				graphics.drawString(text, x.getValue() + 19 - 2 - graphics.getFont().width(text), 9);
+				graphics.setStringDropShadow(true);
 				graphics.resetColor();
 				continue;
 			}

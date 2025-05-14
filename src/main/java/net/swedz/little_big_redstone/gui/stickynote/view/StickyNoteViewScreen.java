@@ -64,13 +64,15 @@ public final class StickyNoteViewScreen extends StickyNoteScreen
 		graphics.pose().translate(contentLeftPos, contentTopPos, 0);
 		
 		graphics.setColor(textColor.getTextColor());
+		graphics.setStringDropShadow(false);
 		int index = 0;
 		for(var line : font.split(text, maxContentWidth))
 		{
 			int y = index * font.lineHeight;
-			graphics.drawString(line, 0, y, false);
+			graphics.drawString(line, 0, y);
 			index++;
 		}
+		graphics.setStringDropShadow(true);
 		graphics.resetColor();
 		
 		graphics.pose().popPose();

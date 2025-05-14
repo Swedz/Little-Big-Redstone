@@ -43,9 +43,24 @@ public final class MicrochipWidgetRenderer
 	{
 		if(widget.context().shouldRenderTooltip())
 		{
+			int x = widget.x + widget.microchip().size().scale(widget.microchip().size().bounds().width()) + 10 + 4;
+			int y = widget.y + 4;
 			if(widget.context().hasNote())
 			{
-				// TODO render note tooltip
+				var entry = widget.context().note();
+				var note = entry.note();
+				if(!note.isEmpty())
+				{
+					graphics.setColor(entry.textColor().getTextColor());
+					graphics.setStringDropShadow(false);
+					graphics.setTooltipFirstLinePadded(false);
+					graphics.setTooltipBackgroundPadding(4, 21, 4, 4);
+					graphics.renderTooltip(List.of(note.parse()), x, y, LBR.id("textures/gui/tooltip/sticky_note/%s.png".formatted(entry.color().getName())), 64, 64, 21);
+					graphics.resetTooltipBackgroundPadding();
+					graphics.setTooltipFirstLinePadded(true);
+					graphics.setStringDropShadow(true);
+					graphics.resetColor();
+				}
 			}
 			else if(widget.context().hasLogic())
 			{

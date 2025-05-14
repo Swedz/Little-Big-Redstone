@@ -197,11 +197,13 @@ public final class StickyNoteEditWidget implements GuiEventListener, Renderable,
 	private void renderLines(TesseractGuiGraphics graphics)
 	{
 		graphics.setColor(color.get());
+		graphics.setStringDropShadow(false);
 		var display = note.getDisplay();
 		for(var line : display.lines())
 		{
-			graphics.drawString(line.text(), 0, line.y(), false);
+			graphics.drawString(line.text(), 0, line.y());
 		}
+		graphics.setStringDropShadow(true);
 		graphics.resetColor();
 	}
 	
@@ -215,7 +217,9 @@ public final class StickyNoteEditWidget implements GuiEventListener, Renderable,
 			int y = display.cursorScreenY();
 			if(display.isCursorAtEndOfLine())
 			{
-				graphics.drawString("_", x, y, false);
+				graphics.setStringDropShadow(false);
+				graphics.drawString("_", x, y);
+				graphics.setStringDropShadow(true);
 			}
 			else
 			{

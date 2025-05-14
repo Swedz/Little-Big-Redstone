@@ -56,6 +56,7 @@ public record StickyNote(String text)
 		return Proxies.get(LBRProxy.class).adventureToNative(PARSER.deserialize(text));
 	}
 	
+	// TODO cache this
 	public Component parse()
 	{
 		return parse(text);
