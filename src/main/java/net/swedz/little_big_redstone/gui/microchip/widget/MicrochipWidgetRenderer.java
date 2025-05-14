@@ -51,11 +51,19 @@ public final class MicrochipWidgetRenderer
 				var note = entry.note();
 				if(!note.isEmpty())
 				{
+					int minWidth = graphics.guiWidth() - x - 6;
 					graphics.setColor(entry.textColor().getTextColor());
 					graphics.setStringDropShadow(false);
 					graphics.setTooltipFirstLinePadded(false);
 					graphics.setTooltipBackgroundPadding(4, 21, 4, 4);
-					graphics.renderTooltip(List.of(note.parse()), x, y, LBR.id("textures/gui/tooltip/sticky_note/%s.png".formatted(entry.color().getName())), 64, 64, 21);
+					graphics.renderTooltipBounded(
+							List.of(note.parse()),
+							x, y,
+							minWidth, minWidth / 2,
+							graphics.guiWidth(), graphics.guiHeight(),
+							LBR.id("textures/gui/tooltip/sticky_note/%s.png".formatted(entry.color().getName())),
+							64, 64, 21
+					);
 					graphics.resetTooltipBackgroundPadding();
 					graphics.setTooltipFirstLinePadded(true);
 					graphics.setStringDropShadow(true);
