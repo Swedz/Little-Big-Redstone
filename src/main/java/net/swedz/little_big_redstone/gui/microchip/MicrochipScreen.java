@@ -104,8 +104,8 @@ public final class MicrochipScreen extends AbstractContainerScreen<MicrochipMenu
 			graphics.pose().pushPose();
 			graphics.pose().translate(0, 0, 100);
 			
-			graphics.setTexture(LBR.id("textures/gui/container/logic_array/slot_atlas.png"));
-			graphics.blit(slot.x - 1, slot.y - 1, 18, 0, 18, 18);
+			graphics.setTexture(LBR.id("textures/gui/slot_atlas.png"));
+			graphics.blit(slot.x - 1, slot.y - 1, 0, 18, 18, 18);
 			
 			this.renderSlotContents(vanilla, slot.getItem(), slot, null);
 			

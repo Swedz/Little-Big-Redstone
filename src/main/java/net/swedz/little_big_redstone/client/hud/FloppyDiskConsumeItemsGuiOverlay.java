@@ -41,7 +41,7 @@ public final class FloppyDiskConsumeItemsGuiOverlay
 	
 	private static void renderItem(TesseractGuiGraphics graphics, ItemStack stack, boolean isPresent, int x, float alpha)
 	{
-		graphics.setTexture(LBR.id("textures/gui/floppy_disk/slot_atlas.png"));
+		graphics.setTexture(LBR.id("textures/gui/slot_atlas.png"));
 		graphics.blit(x - 1, -1, 0, 0, 18, 18);
 		
 		var vanilla = graphics.vanilla();
@@ -52,7 +52,7 @@ public final class FloppyDiskConsumeItemsGuiOverlay
 		
 		graphics.pose().pushPose();
 		graphics.pose().translate(0, 0, 200);
-		graphics.blit(x - 1, -1, isPresent ? 18 : (18 * 2), 0, 18, 18);
+		graphics.blit(x - 1, -1, 18, isPresent ? 0 : 18, 18, 18);
 		graphics.pose().popPose();
 	}
 	
@@ -65,8 +65,8 @@ public final class FloppyDiskConsumeItemsGuiOverlay
 			if(index.getValue() == maxItems - 1 &&
 			   index.getValue() != ITEMS.size() - 1)
 			{
-				graphics.setTexture(LBR.id("textures/gui/floppy_disk/slot_atlas.png"));
-				graphics.blit(x.getValue() - 1, -1, 0, 18, 18, 18);
+				graphics.setTexture(LBR.id("textures/gui/slot_atlas.png"));
+				graphics.blit(x.getValue() - 1, -1, 0, 18 * 2, 18, 18);
 				var text = LBRText.FLOPPY_DISK_MORE_ITEMS.text(ITEMS.size() - index.getValue());
 				graphics.setColor(1, 1, 1, alpha);
 				graphics.drawString(text, x.getValue() + 19 - 2 - graphics.getFont().width(text), 9, true);
@@ -87,7 +87,7 @@ public final class FloppyDiskConsumeItemsGuiOverlay
 		int maxItems = 9;
 		int x = -(Math.min(ITEMS.size(), maxItems) * 18) / 2;
 		
-		graphics.setTexture(LBR.id("textures/gui/floppy_disk/background.png"));
+		graphics.setTexture(LBR.id("textures/gui/slot_background.png"));
 		graphics.nineSlice(x - 2, -2, Math.min(ITEMS.size(), maxItems) * 18 + 2, 20, 32, 32, 4);
 		
 		MutableInt index = new MutableInt();

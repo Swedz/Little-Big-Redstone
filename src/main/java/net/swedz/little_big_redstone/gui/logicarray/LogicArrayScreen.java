@@ -37,7 +37,7 @@ public final class LogicArrayScreen extends AbstractContainerScreen<LogicArrayMe
 			graphics.pose().pushPose();
 			graphics.pose().translate(0, 0, 100);
 			
-			graphics.blit(LBR.id("textures/gui/container/logic_array/slot_atlas.png"), slot.x - 1, slot.y - 1, 18, 0, 18, 18);
+			graphics.blit(LBR.id("textures/gui/slot_atlas.png"), slot.x - 1, slot.y - 1, 0, 18, 18, 18);
 			
 			this.renderSlotContents(graphics, slot.getItem(), slot, null);
 			

@@ -3,7 +3,6 @@ package net.swedz.little_big_redstone.item.logicarray.tooltip;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.tooltip.ClientTooltipComponent;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.component.ItemContainerContents;
 import net.swedz.little_big_redstone.LBR;
 import net.swedz.little_big_redstone.helper.guigraphics.TesseractGuiGraphics;
@@ -11,9 +10,6 @@ import net.swedz.little_big_redstone.item.logicarray.LogicArrayItem;
 
 public final class LogicArrayClientTooltip implements ClientTooltipComponent
 {
-	private static final ResourceLocation BACKGROUND = LBR.id("textures/gui/container/logic_array/background.png");
-	private static final ResourceLocation SLOT_ATLAS = LBR.id("textures/gui/container/logic_array/slot_atlas.png");
-	
 	private final ItemContainerContents storage;
 	
 	public LogicArrayClientTooltip(ItemContainerContents storage)
@@ -60,7 +56,7 @@ public final class LogicArrayClientTooltip implements ClientTooltipComponent
 		
 		if(storage.getSlots() != 0)
 		{
-			graphics.setTexture(BACKGROUND);
+			graphics.setTexture(LBR.id("textures/gui/slot_background.png"));
 			graphics.nineSlice(x, y, this.backgroundWidth(), this.backgroundHeight(), 32, 32, 4);
 		}
 		
@@ -78,7 +74,7 @@ public final class LogicArrayClientTooltip implements ClientTooltipComponent
 	
 	private void renderSlot(TesseractGuiGraphics graphics, Font font, int x, int y, int itemIndex)
 	{
-		graphics.setTexture(SLOT_ATLAS);
+		graphics.setTexture(LBR.id("textures/gui/slot_atlas.png"));
 		graphics.blit(x, y, 0, 0, 18, 18);
 		
 		if(itemIndex < storage.getSlots())
