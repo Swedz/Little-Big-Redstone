@@ -7,8 +7,6 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.client.gui.screens.inventory.tooltip.ClientTooltipComponent;
-import net.minecraft.client.gui.screens.inventory.tooltip.TooltipRenderUtil;
 import net.minecraft.client.renderer.LightTexture;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
@@ -31,7 +29,7 @@ import java.util.Map;
 public final class TesseractGuiGraphics implements BlitGuiGraphics, FillGuiGraphics, StringGuiGraphics, TooltipGuiGraphics, ItemGuiGraphics
 {
 	private final TesseractGuiGraphics parent;
-	private final GuiGraphics          vanilla;
+	private final GuiGraphics          internal;
 	
 	private boolean             batching;
 	private List<Integer>       batchOrder     = Lists.newArrayList();
@@ -51,15 +49,20 @@ public final class TesseractGuiGraphics implements BlitGuiGraphics, FillGuiGraph
 	
 	private Font font = Minecraft.getInstance().font;
 	
-	private TesseractGuiGraphics(TesseractGuiGraphics parent, GuiGraphics vanilla)
+	private boolean textDropShadow = true;
+	
+	private boolean           tooltipFirstLinePadded = true;
+	private BackgroundPadding tooltipBackgroundPadding = new BackgroundPadding();
+	
+	private TesseractGuiGraphics(TesseractGuiGraphics parent, GuiGraphics internal)
 	{
 		this.parent = parent;
-		this.vanilla = vanilla;
+		this.internal = internal;
 	}
 	
-	public TesseractGuiGraphics(GuiGraphics vanilla)
+	public TesseractGuiGraphics(GuiGraphics internal)
 	{
-		this(null, vanilla);
+		this(null, internal);
 	}
 	
 	/**
@@ -70,36 +73,37 @@ public final class TesseractGuiGraphics implements BlitGuiGraphics, FillGuiGraph
 	 * supported by this wrapper, add that support instead!
 	 */
 	@Deprecated
-	public GuiGraphics vanilla()
+	@Override
+	public GuiGraphics internal()
 	{
-		return vanilla;
+		return internal;
 	}
 	
 	@Override
 	public int guiWidth()
 	{
-		return vanilla.guiWidth();
+		return internal.guiWidth();
 	}
 	
 	@Override
 	public int guiHeight()
 	{
-		return vanilla.guiHeight();
+		return internal.guiHeight();
 	}
 	
 	public PoseStack pose()
 	{
-		return vanilla.pose();
+		return internal.pose();
 	}
 	
 	public MultiBufferSource.BufferSource bufferSource()
 	{
-		return vanilla.bufferSource();
+		return internal.bufferSource();
 	}
 	
 	public TesseractGuiGraphics inner()
 	{
-		return new TesseractGuiGraphics(this, vanilla);
+		return new TesseractGuiGraphics(this, internal);
 	}
 	
 	public TesseractGuiGraphics end()
@@ -139,7 +143,7 @@ public final class TesseractGuiGraphics implements BlitGuiGraphics, FillGuiGraph
 			if(!draws.isEmpty())
 			{
 				var shader = batchInstance.shader();
-				var batch = GuiGraphicsBatch.start(vanilla, batchInstance.textures(), shader.shader(), shader.mode(), shader.format(), shader.extraSetup());
+				var batch = GuiGraphicsBatch.start(internal, batchInstance.textures(), shader.shader(), shader.mode(), shader.format(), shader.extraSetup());
 				for(var draw : draws)
 				{
 					draw.addVertexes(batch);
@@ -260,6 +264,42 @@ public final class TesseractGuiGraphics implements BlitGuiGraphics, FillGuiGraph
 		this.font = font;
 	}
 	
+	@Override
+	public boolean isStringDropShadow()
+	{
+		return textDropShadow;
+	}
+	
+	@Override
+	public void setStringDropShadow(boolean textDropShadow)
+	{
+		this.textDropShadow = textDropShadow;
+	}
+	
+	@Override
+	public boolean isTooltipFirstLinePadded()
+	{
+		return tooltipFirstLinePadded;
+	}
+	
+	@Override
+	public void setTooltipFirstLinePadded(boolean padded)
+	{
+		tooltipFirstLinePadded = padded;
+	}
+	
+	@Override
+	public BackgroundPadding getTooltipBackgroundPadding()
+	{
+		return tooltipBackgroundPadding;
+	}
+	
+	@Override
+	public void setTooltipBackgroundPadding(BackgroundPadding padding)
+	{
+		tooltipBackgroundPadding = padding;
+	}
+	
 	public void delayed(Runnable runnable)
 	{
 		if(batching)
@@ -295,7 +335,7 @@ public final class TesseractGuiGraphics implements BlitGuiGraphics, FillGuiGraph
 		}
 		else
 		{
-			var batch = GuiGraphicsBatch.start(vanilla, textures, textureShader.shader(), textureShader.mode(), textureShader.format(), textureShader.extraSetup());
+			var batch = GuiGraphicsBatch.start(internal, textures, textureShader.shader(), textureShader.mode(), textureShader.format(), textureShader.extraSetup());
 			draw.addVertexes(batch);
 			batch.end();
 		}
@@ -305,40 +345,19 @@ public final class TesseractGuiGraphics implements BlitGuiGraphics, FillGuiGraph
 	public void fill(RenderType renderType, int minX, int minY, int maxX, int maxY, int z)
 	{
 		int color = this.getColorARGB();
-		this.delayed(() -> vanilla.fill(renderType, minX, minY, maxX, maxY, z, color));
+		this.delayed(() -> internal.fill(renderType, minX, minY, maxX, maxY, z, color));
 	}
 	
 	@Override
-	public int drawString(String text, float x, float y, boolean dropShadow)
+	public int drawString(String text, float x, float y)
 	{
-		return vanilla.drawString(font, text, x, y, this.getColorARGB(), dropShadow);
+		return internal.drawString(font, text, x, y, this.getColorARGB(), this.isStringDropShadow());
 	}
 	
 	@Override
-	public int drawString(FormattedCharSequence text, float x, float y, boolean dropShadow)
+	public int drawString(FormattedCharSequence text, float x, float y)
 	{
-		return vanilla.drawString(font, text, x, y, this.getColorARGB(), dropShadow);
-	}
-	
-	@ApiStatus.Internal
-	@Override
-	public void renderTooltipInternal(List<ClientTooltipComponent> lines, int x, int y, int width, int height, int backgroundTopColor, int backgroundBottomColor, int borderTopColor, int borderBottomColor)
-	{
-		TooltipRenderUtil.renderTooltipBackground(vanilla, x, y, width, height, 400, backgroundTopColor, backgroundBottomColor, borderTopColor, borderBottomColor);
-		
-		vanilla.pose().pushPose();
-		vanilla.pose().translate(0, 0, 400);
-		
-		int textY = y;
-		int lineIndex = 0;
-		for(var line : lines)
-		{
-			line.renderText(font, x, textY, vanilla.pose().last().pose(), vanilla.bufferSource());
-			textY += line.getHeight() + (lineIndex == 0 ? 2 : 0);
-			lineIndex++;
-		}
-		
-		vanilla.pose().popPose();
+		return internal.drawString(font, text, x, y, this.getColorARGB(), this.isStringDropShadow());
 	}
 	
 	@Override
@@ -358,7 +377,7 @@ public final class TesseractGuiGraphics implements BlitGuiGraphics, FillGuiGraph
 			}
 			
 			Minecraft.getInstance().getItemRenderer().render(stack, displayContext, false, this.pose(), this.bufferSource(), LightTexture.FULL_BRIGHT, OverlayTexture.NO_OVERLAY, model);
-			vanilla.flush();
+			internal.flush();
 			
 			if(!model.usesBlockLight())
 			{
