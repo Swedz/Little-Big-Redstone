@@ -2,7 +2,6 @@ package net.swedz.little_big_redstone.microchip.object.logic;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
-import net.swedz.little_big_redstone.microchip.LogicEntry;
 import net.swedz.little_big_redstone.microchip.Microchip;
 import net.swedz.little_big_redstone.microchip.wire.Wire;
 

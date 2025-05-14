@@ -9,7 +9,7 @@ import net.minecraft.world.item.ItemStack;
 import net.neoforged.neoforge.common.Tags;
 import net.swedz.little_big_redstone.LBRTags;
 import net.swedz.little_big_redstone.gui.microchip.MicrochipMenu;
-import net.swedz.little_big_redstone.microchip.LogicEntry;
+import net.swedz.little_big_redstone.microchip.object.logic.LogicEntry;
 
 import java.util.Optional;
 

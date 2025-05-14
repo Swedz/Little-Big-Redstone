@@ -6,8 +6,6 @@ import com.mojang.serialization.Codec;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
-import net.swedz.little_big_redstone.microchip.LogicEntry;
-import net.swedz.little_big_redstone.microchip.LogicSelectedPort;
 import net.swedz.little_big_redstone.microchip.Microchip;
 import net.swedz.little_big_redstone.microchip.object.MicrochipObjectContainer;
 import net.swedz.little_big_redstone.microchip.wire.Wire;

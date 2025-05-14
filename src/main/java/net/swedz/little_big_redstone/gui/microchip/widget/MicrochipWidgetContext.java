@@ -4,8 +4,8 @@ import com.google.common.collect.Lists;
 import net.minecraft.world.item.ItemStack;
 import net.swedz.little_big_redstone.LBRItems;
 import net.swedz.little_big_redstone.gui.microchip.logic.DyeComponentResult;
-import net.swedz.little_big_redstone.microchip.LogicEntry;
-import net.swedz.little_big_redstone.microchip.LogicSelectedPort;
+import net.swedz.little_big_redstone.microchip.object.logic.LogicEntry;
+import net.swedz.little_big_redstone.microchip.object.logic.LogicSelectedPort;
 import net.swedz.little_big_redstone.microchip.object.MicrochipObject;
 import net.swedz.little_big_redstone.microchip.wire.Wire;
 

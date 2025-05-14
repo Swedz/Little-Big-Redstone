@@ -4,7 +4,6 @@ import com.google.common.collect.Lists;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.Level;
 import net.swedz.little_big_redstone.block.microchip.MicrochipBlockEntity;
-import net.swedz.little_big_redstone.microchip.LogicEntry;
 import net.swedz.little_big_redstone.microchip.awareness.AwarenessType;
 import net.swedz.little_big_redstone.microchip.awareness.MicrochipAwareness;
 

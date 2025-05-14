@@ -1,4 +1,4 @@
-package net.swedz.little_big_redstone.microchip;
+package net.swedz.little_big_redstone.microchip.object.logic;
 
 import net.swedz.little_big_redstone.microchip.wire.PortReference;
 

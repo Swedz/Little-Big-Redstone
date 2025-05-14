@@ -12,7 +12,7 @@ import net.swedz.little_big_redstone.LBR;
 import net.swedz.little_big_redstone.block.microchip.MicrochipBlockEntity;
 import net.swedz.little_big_redstone.gui.logicconfig.LogicConfigMenu;
 import net.swedz.little_big_redstone.gui.microchip.MicrochipMenu;
-import net.swedz.little_big_redstone.microchip.LogicEntry;
+import net.swedz.little_big_redstone.microchip.object.logic.LogicEntry;
 import net.swedz.little_big_redstone.network.LBRCustomPacket;
 import net.swedz.tesseract.neoforge.packet.PacketContext;
 

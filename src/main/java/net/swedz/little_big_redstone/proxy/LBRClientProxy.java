@@ -9,7 +9,7 @@ import net.swedz.little_big_redstone.client.hud.FloppyDiskConsumeItemsGuiOverlay
 import net.swedz.little_big_redstone.gui.microchip.MicrochipScreen;
 import net.swedz.little_big_redstone.gui.stickynote.edit.StickyNoteEditScreen;
 import net.swedz.little_big_redstone.gui.stickynote.view.StickyNoteViewScreen;
-import net.swedz.little_big_redstone.microchip.LogicEntry;
+import net.swedz.little_big_redstone.microchip.object.logic.LogicEntry;
 import net.swedz.little_big_redstone.microchip.Microchip;
 import net.swedz.tesseract.neoforge.proxy.ProxyEntrypoint;
 import net.swedz.tesseract.neoforge.proxy.ProxyEnvironment;

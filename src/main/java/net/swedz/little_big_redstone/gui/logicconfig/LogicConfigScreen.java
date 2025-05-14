@@ -14,7 +14,7 @@ import net.minecraft.world.entity.player.Inventory;
 import net.neoforged.neoforge.client.gui.widget.ExtendedSlider;
 import net.swedz.little_big_redstone.LBR;
 import net.swedz.little_big_redstone.LBRText;
-import net.swedz.little_big_redstone.microchip.LogicEntry;
+import net.swedz.little_big_redstone.microchip.object.logic.LogicEntry;
 import net.swedz.little_big_redstone.microchip.object.logic.config.LogicConfigButtonReference;
 import net.swedz.little_big_redstone.microchip.object.logic.config.LogicConfigMenuBuilder;
 import net.swedz.little_big_redstone.network.packet.RequestMicrochipMenuPacket;

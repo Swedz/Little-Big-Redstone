@@ -20,7 +20,7 @@ import net.swedz.little_big_redstone.gui.microchip.MicrochipScreen;
 import net.swedz.little_big_redstone.gui.microchip.logic.LogicRenderer;
 import net.swedz.little_big_redstone.gui.microchip.logic.LogicRenderers;
 import net.swedz.little_big_redstone.helper.guigraphics.TesseractGuiGraphics;
-import net.swedz.little_big_redstone.microchip.LogicEntry;
+import net.swedz.little_big_redstone.microchip.object.logic.LogicEntry;
 
 import java.util.List;
 import java.util.function.Consumer;

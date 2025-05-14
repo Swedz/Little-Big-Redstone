@@ -15,7 +15,7 @@ import net.swedz.little_big_redstone.LBRItems;
 import net.swedz.little_big_redstone.gui.microchip.MicrochipMenu;
 import net.swedz.little_big_redstone.gui.microchip.MicrochipScreen;
 import net.swedz.little_big_redstone.gui.microchip.logic.DyeComponentResult;
-import net.swedz.little_big_redstone.microchip.LogicSelectedPort;
+import net.swedz.little_big_redstone.microchip.object.logic.LogicSelectedPort;
 import net.swedz.little_big_redstone.microchip.Microchip;
 import net.swedz.little_big_redstone.microchip.wire.Wire;
 import net.swedz.little_big_redstone.network.packet.DyeMicrochipLogicPacket;

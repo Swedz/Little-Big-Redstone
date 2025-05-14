@@ -7,7 +7,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.swedz.little_big_redstone.LBRMenus;
 import net.swedz.little_big_redstone.gui.BaseContainerMenu;
-import net.swedz.little_big_redstone.microchip.LogicEntry;
+import net.swedz.little_big_redstone.microchip.object.logic.LogicEntry;
 
 import java.util.function.Supplier;
 

@@ -11,6 +11,7 @@ import net.swedz.little_big_redstone.microchip.object.MicrochipObjectContainer;
 import net.swedz.little_big_redstone.microchip.object.logic.LogicComponent;
 import net.swedz.little_big_redstone.microchip.object.logic.LogicComponents;
 import net.swedz.little_big_redstone.microchip.object.logic.LogicContext;
+import net.swedz.little_big_redstone.microchip.object.logic.LogicEntry;
 import net.swedz.little_big_redstone.microchip.wire.MicrochipWires;
 
 import java.util.List;

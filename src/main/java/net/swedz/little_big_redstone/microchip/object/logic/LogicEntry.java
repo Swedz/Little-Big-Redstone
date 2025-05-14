@@ -1,4 +1,4 @@
-package net.swedz.little_big_redstone.microchip;
+package net.swedz.little_big_redstone.microchip.object.logic;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
@@ -8,7 +8,6 @@ import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.world.item.ItemStack;
 import net.swedz.little_big_redstone.api.Bounds;
 import net.swedz.little_big_redstone.microchip.object.MicrochipObject;
-import net.swedz.little_big_redstone.microchip.object.logic.LogicComponent;
 
 public record LogicEntry(int slot, int x, int y, LogicComponent component) implements MicrochipObject
 {
