@@ -4,8 +4,18 @@ import net.minecraft.util.FastColor;
 
 public interface ColoredGuiGraphics
 {
+	/**
+	 * Gets the color values as RGBA integer format (0-255).
+	 *
+	 * @return the color array
+	 */
 	int[] getColor();
 	
+	/**
+	 * Gets the color values packed as an ARGB integer.
+	 *
+	 * @return the packed ARGB color integer
+	 */
 	default int getColorARGB()
 	{
 		int[] color = this.getColor();
