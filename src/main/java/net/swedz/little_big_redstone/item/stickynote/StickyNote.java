@@ -13,7 +13,9 @@ import net.swedz.little_big_redstone.microchip.object.logic.LogicTypes;
 import net.swedz.little_big_redstone.proxy.LBRProxy;
 import net.swedz.tesseract.neoforge.proxy.Proxies;
 
-public record StickyNote(String text)
+import java.util.Objects;
+
+public final class StickyNote
 {
 	public static final StickyNote EMPTY = new StickyNote("");
 	
@@ -56,14 +58,48 @@ public record StickyNote(String text)
 		return Proxies.get(LBRProxy.class).adventureToNative(PARSER.deserialize(text));
 	}
 	
-	// TODO cache this
-	public Component parse()
+	private final String    text;
+	private final Component parsed;
+	
+	public StickyNote(String text)
 	{
-		return parse(text);
+		this.text = text;
+		this.parsed = parse(text);
+	}
+	
+	public String text()
+	{
+		return text;
 	}
 	
 	public boolean isEmpty()
 	{
 		return text.isEmpty();
+	}
+	
+	public Component parsed()
+	{
+		return parsed;
+	}
+	
+	@Override
+	public boolean equals(Object o)
+	{
+		if(o == this)
+		{
+			return true;
+		}
+		if(o == null || o.getClass() != this.getClass())
+		{
+			return false;
+		}
+		var other = (StickyNote) o;
+		return Objects.equals(text, other.text);
+	}
+	
+	@Override
+	public int hashCode()
+	{
+		return Objects.hash(text);
 	}
 }

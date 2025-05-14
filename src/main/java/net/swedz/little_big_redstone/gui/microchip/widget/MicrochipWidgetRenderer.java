@@ -57,7 +57,7 @@ public final class MicrochipWidgetRenderer
 					graphics.setTooltipFirstLinePadded(false);
 					graphics.setTooltipBackgroundPadding(4, 21, 4, 4);
 					graphics.renderTooltipBounded(
-							List.of(note.parse()),
+							List.of(note.parsed()),
 							x, y,
 							minWidth, minWidth / 2,
 							graphics.guiWidth(), graphics.guiHeight(),
