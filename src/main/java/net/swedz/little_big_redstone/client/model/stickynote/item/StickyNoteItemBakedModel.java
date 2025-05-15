@@ -21,7 +21,6 @@ import net.neoforged.neoforge.client.model.ExtraFaceData;
 import net.neoforged.neoforge.client.model.IDynamicBakedModel;
 import net.neoforged.neoforge.client.model.data.ModelData;
 import net.neoforged.neoforge.client.model.geometry.UnbakedGeometryHelper;
-import net.swedz.little_big_redstone.client.model.MicrochipGuiContextModelData;
 import net.swedz.little_big_redstone.client.model.stickynote.StickyNoteModelData;
 
 import java.util.List;
@@ -37,12 +36,11 @@ public final class StickyNoteItemBakedModel implements IDynamicBakedModel
 	private final ModelState     modelState;
 	
 	private final TextureAtlasSprite       particle;
-	private final List<TextureAtlasSprite> itemLayers, microchipLayers;
+	private final List<TextureAtlasSprite> layers;
 	
 	StickyNoteItemBakedModel(ItemTransforms transforms, boolean useAmbientOcclusion, boolean isGui3d, boolean usesBlockLight, ModelState modelState,
 							 TextureAtlasSprite particle,
-							 List<TextureAtlasSprite> itemLayers,
-							 List<TextureAtlasSprite> microchipLayers)
+							 List<TextureAtlasSprite> layers)
 	{
 		this.transforms = transforms;
 		this.useAmbientOcclusion = useAmbientOcclusion;
@@ -51,16 +49,13 @@ public final class StickyNoteItemBakedModel implements IDynamicBakedModel
 		this.modelState = modelState;
 		
 		this.particle = particle;
-		this.itemLayers = itemLayers;
-		this.microchipLayers = microchipLayers;
+		this.layers = layers;
 	}
 	
 	@Override
 	public List<BakedQuad> getQuads(BlockState state, Direction direction, RandomSource random, ModelData modelData, RenderType renderType)
 	{
 		var data = StickyNoteModelData.get(modelData);
-		
-		var layers = MicrochipGuiContextModelData.get(modelData).isInMicrochip() ? microchipLayers : itemLayers;
 		
 		List<BakedQuad> quads = Lists.newArrayList();
 		

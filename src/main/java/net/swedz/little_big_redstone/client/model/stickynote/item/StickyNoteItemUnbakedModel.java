@@ -15,24 +15,20 @@ import net.neoforged.neoforge.client.model.geometry.UnbakedGeometryHelper;
 import net.swedz.little_big_redstone.LBR;
 import net.swedz.little_big_redstone.helper.ModelHelper;
 
-import java.util.Collection;
 import java.util.List;
 import java.util.function.Function;
 
 public final class StickyNoteItemUnbakedModel implements IUnbakedGeometry<StickyNoteItemUnbakedModel>
 {
 	public static final ResourceLocation                            ID     = LBR.id("sticky_note_item");
-	public static final IGeometryLoader<StickyNoteItemUnbakedModel> LOADER = (json, context) -> new StickyNoteItemUnbakedModel(
-			ModelHelper.gatherTextures(json, "item_textures").values(),
-			ModelHelper.gatherTextures(json, "microchip_textures").values()
-	);
+	public static final IGeometryLoader<StickyNoteItemUnbakedModel> LOADER = (json, context) ->
+			new StickyNoteItemUnbakedModel(ModelHelper.gatherLayerTextures(json, "textures"));
 	
-	private final Collection<Material> itemTextureLayers, microchipTextureLayers;
+	private final List<Material> textureLayers;
 	
-	private StickyNoteItemUnbakedModel(Collection<Material> itemTextureLayers, Collection<Material> microchipTextureLayers)
+	private StickyNoteItemUnbakedModel(List<Material> textureLayers)
 	{
-		this.itemTextureLayers = itemTextureLayers;
-		this.microchipTextureLayers = microchipTextureLayers;
+		this.textureLayers = textureLayers;
 	}
 	
 	@Override
@@ -46,15 +42,10 @@ public final class StickyNoteItemUnbakedModel implements IUnbakedGeometry<Sticky
 		
 		var particle = spriteGetter.apply(context.getMaterial("particle"));
 		
-		List<TextureAtlasSprite> itemSpriteLayers = Lists.newArrayList();
-		for(var textureLayer : itemTextureLayers)
+		List<TextureAtlasSprite> spriteLayers = Lists.newArrayList();
+		for(var textureLayer : textureLayers)
 		{
-			itemSpriteLayers.add(spriteGetter.apply(textureLayer));
-		}
-		List<TextureAtlasSprite> microchipSpriteLayers = Lists.newArrayList();
-		for(var textureLayer : microchipTextureLayers)
-		{
-			microchipSpriteLayers.add(spriteGetter.apply(textureLayer));
+			spriteLayers.add(spriteGetter.apply(textureLayer));
 		}
 		
 		return new StickyNoteItemBakedModel(
@@ -64,8 +55,7 @@ public final class StickyNoteItemUnbakedModel implements IUnbakedGeometry<Sticky
 				context.useBlockLight(),
 				modelState,
 				particle,
-				itemSpriteLayers,
-				microchipSpriteLayers
+				spriteLayers
 		);
 	}
 }
