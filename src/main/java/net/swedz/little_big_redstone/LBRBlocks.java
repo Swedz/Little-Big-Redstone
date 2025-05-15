@@ -121,7 +121,8 @@ public final class LBRBlocks
 		final String colorId = color.getName();
 		final String id = "%s_microchip".formatted(colorId);
 		final String englishName = "%s Microchip".formatted(colorEnglishName);
-		return create(id, englishName, (p) -> new MicrochipBlock(p, color), BlockItem::new, LBRSortOrder.MICROCHIP.and(order))
+		var holder = create(id, englishName, (p) -> new MicrochipBlock(p, color), BlockItem::new, LBRSortOrder.MICROCHIP.and(order));
+		holder
 				.withProperties((p) -> p
 						.mapColor(MapColor.STONE)
 						.destroyTime(4f)
@@ -147,5 +148,7 @@ public final class LBRBlocks
 							.customLoader((parent, efh) -> ItemLayerModelBuilder.begin(parent, efh)
 									.color(LBRColors.microchipItem(color), 0));
 				});
+		holder.item().tag(LBRTags.Items.MICROCHIPS);
+		return holder;
 	}
 }

@@ -119,7 +119,8 @@ public final class LBRItems
 	
 	private static ItemHolder<LogicItem> createLogic(String id, String englishName, LogicType<?> type, int order)
 	{
-		return create(id, englishName, (p) -> new LogicItem(p, type), LBRSortOrder.LOGIC.and(order));
+		return create(id, englishName, (p) -> new LogicItem(p, type), LBRSortOrder.LOGIC.and(order))
+				.tag(LBRTags.Items.LOGIC_COMPONENTS);
 	}
 	
 	private static ItemHolder<LogicArrayItem> createLogicArray(DyeColor color, String colorEnglishName, int order)
@@ -127,7 +128,7 @@ public final class LBRItems
 		final String colorId = color.getName();
 		final String id = "%s_logic_array".formatted(colorId);
 		final String englishName = "%s Logic Array".formatted(colorEnglishName);
-		return create(id, englishName, LogicArrayItem::new, LBRSortOrder.LOGIC_ARRAYS.and(order))
+		return create(id, englishName, (p) -> new LogicArrayItem(p, color), LBRSortOrder.LOGIC_ARRAYS.and(order))
 				.tag(LBRTags.Items.LOGIC_ARRAYS)
 				.withCapabilities((item, event) ->
 						event.registerItem(Capabilities.ItemHandler.ITEM, (stack, __) -> new LogicArrayItemHandler(stack), item))
@@ -142,7 +143,7 @@ public final class LBRItems
 		final String colorId = color.getName();
 		final String id = "%s_floppy_disk".formatted(colorId);
 		final String englishName = "%s Floppy Disk".formatted(colorEnglishName);
-		return create(id, englishName, FloppyDiskItem::new, LBRSortOrder.FLOPPY_DISKS.and(order))
+		return create(id, englishName, (p) -> new FloppyDiskItem(p, color), LBRSortOrder.FLOPPY_DISKS.and(order))
 				.tag(LBRTags.Items.FLOPPY_DISKS)
 				.withModel((holder) -> (provider) ->
 						provider.getBuilder(holder.identifier().id())

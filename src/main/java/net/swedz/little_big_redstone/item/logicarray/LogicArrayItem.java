@@ -14,6 +14,7 @@ import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.ClickAction;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.inventory.tooltip.TooltipComponent;
+import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.component.ItemContainerContents;
@@ -21,20 +22,30 @@ import net.minecraft.world.level.Level;
 import net.neoforged.neoforge.capabilities.Capabilities;
 import net.swedz.little_big_redstone.LBRComponents;
 import net.swedz.little_big_redstone.gui.logicarray.LogicArrayMenu;
+import net.swedz.little_big_redstone.item.DyeColoredItem;
 import net.swedz.little_big_redstone.item.logicarray.tooltip.LogicArrayTooltipData;
 import net.swedz.tesseract.neoforge.helper.TransferHelper;
 
 import java.util.Optional;
 
-public final class LogicArrayItem extends Item
+public final class LogicArrayItem extends Item implements DyeColoredItem
 {
 	public static final int ROWS      = 4;
 	public static final int COLUMNS   = 7;
 	public static final int MAX_SLOTS = ROWS * COLUMNS;
 	
-	public LogicArrayItem(Properties properties)
+	private final DyeColor color;
+	
+	public LogicArrayItem(Properties properties, DyeColor color)
 	{
 		super(properties.stacksTo(1).component(LBRComponents.LOGIC_ARRAY_STORAGE, ItemContainerContents.EMPTY));
+		this.color = color;
+	}
+	
+	@Override
+	public DyeColor color()
+	{
+		return color;
 	}
 	
 	@Override

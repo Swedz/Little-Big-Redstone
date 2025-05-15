@@ -37,11 +37,20 @@ import java.util.Optional;
 import java.util.function.Predicate;
 
 @EventBusSubscriber(modid = LBR.ID)
-public final class FloppyDiskItem extends Item
+public final class FloppyDiskItem extends Item implements DyeColoredItem
 {
-	public FloppyDiskItem(Properties properties)
+	private final DyeColor color;
+	
+	public FloppyDiskItem(Properties properties, DyeColor color)
 	{
 		super(properties.stacksTo(1).component(LBRComponents.FLOPPY_DISK, null));
+		this.color = color;
+	}
+	
+	@Override
+	public DyeColor color()
+	{
+		return color;
 	}
 	
 	public static ConsumeResult consumeItems(Player player, Microchip.Immutable microchip, boolean simulate)

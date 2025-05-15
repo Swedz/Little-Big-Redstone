@@ -1,0 +1,19 @@
+{
+  "values": [
+    "little_big_redstone:and_gate",
+    "little_big_redstone:debugger",
+    "little_big_redstone:io",
+    "little_big_redstone:nand_gate",
+    "little_big_redstone:nor_gate",
+    "little_big_redstone:not_gate",
+    "little_big_redstone:or_gate",
+    "little_big_redstone:pulse_throttler",
+    "little_big_redstone:randomizer",
+    "little_big_redstone:reader",
+    "little_big_redstone:rs_nor_latch",
+    "little_big_redstone:selector",
+    "little_big_redstone:sequencer",
+    "little_big_redstone:t_flip_flop",
+    "little_big_redstone:xor_gate"
+  ]
+}

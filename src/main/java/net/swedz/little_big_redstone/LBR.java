@@ -40,6 +40,7 @@ public final class LBR
 		LBREntities.init(bus);
 		LBRCreativeTabs.init(bus);
 		LBRMenus.init(bus);
+		LBRRecipeTypes.init(bus);
 		
 		bus.addListener(RegisterPayloadHandlersEvent.class, LBRPackets::init);
 		

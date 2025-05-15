@@ -18,10 +18,11 @@ import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.phys.BlockHitResult;
 import net.swedz.little_big_redstone.LBRItems;
 import net.swedz.little_big_redstone.api.TickableBlock;
+import net.swedz.little_big_redstone.item.DyeColoredItem;
 import net.swedz.little_big_redstone.microchip.awareness.AwarenessContext;
 import net.swedz.little_big_redstone.microchip.awareness.AwarenessTypes;
 
-public final class MicrochipBlock extends Block implements TickableBlock
+public final class MicrochipBlock extends Block implements TickableBlock, DyeColoredItem
 {
 	public static final BooleanProperty UP    = BooleanProperty.create("up");
 	public static final BooleanProperty DOWN  = BooleanProperty.create("down");
@@ -60,6 +61,7 @@ public final class MicrochipBlock extends Block implements TickableBlock
 				.setValue(WEST, false));
 	}
 	
+	@Override
 	public DyeColor color()
 	{
 		return color;
