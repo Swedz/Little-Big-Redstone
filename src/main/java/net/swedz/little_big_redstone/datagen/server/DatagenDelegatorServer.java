@@ -7,6 +7,8 @@ import net.minecraft.data.loot.LootTableSubProvider;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
 import net.neoforged.neoforge.data.event.GatherDataEvent;
 import net.swedz.little_big_redstone.datagen.server.provider.loottable.BlockLootTableDatagenProvider;
+import net.swedz.little_big_redstone.datagen.server.provider.recipes.ItemRecipesDatagenProvider;
+import net.swedz.little_big_redstone.datagen.server.provider.recipes.LogicRecipesDatagenProvider;
 import net.swedz.little_big_redstone.datagen.server.provider.tags.BlockTagDatagenProvider;
 import net.swedz.little_big_redstone.datagen.server.provider.tags.ItemTagDatagenProvider;
 
@@ -19,6 +21,9 @@ public final class DatagenDelegatorServer
 	public static void configure(GatherDataEvent event)
 	{
 		addLootTable(event, BlockLootTableDatagenProvider::new);
+		
+		add(event, ItemRecipesDatagenProvider::new);
+		add(event, LogicRecipesDatagenProvider::new);
 		
 		add(event, BlockTagDatagenProvider::new);
 		add(event, ItemTagDatagenProvider::new);

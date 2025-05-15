@@ -1,0 +1,27 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "E": {
+      "item": "minecraft:repeater"
+    },
+    "G": {
+      "tag": "c:ingots/gold"
+    },
+    "R": {
+      "tag": "c:dusts/redstone"
+    },
+    "r": {
+      "item": "little_big_redstone:redstone_bit"
+    }
+  },
+  "pattern": [
+    "EGR",
+    "ErR",
+    "EGR"
+  ],
+  "result": {
+    "count": 1,
+    "id": "little_big_redstone:selector"
+  }
+}

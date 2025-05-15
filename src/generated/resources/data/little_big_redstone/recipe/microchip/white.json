@@ -1,0 +1,27 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "F": {
+      "item": "little_big_redstone:white_floppy_disk"
+    },
+    "I": {
+      "tag": "c:storage_blocks/iron"
+    },
+    "N": {
+      "tag": "c:ingots/netherite"
+    },
+    "R": {
+      "tag": "c:dusts/redstone"
+    }
+  },
+  "pattern": [
+    "III",
+    "RFR",
+    "INI"
+  ],
+  "result": {
+    "count": 1,
+    "id": "little_big_redstone:white_microchip"
+  }
+}

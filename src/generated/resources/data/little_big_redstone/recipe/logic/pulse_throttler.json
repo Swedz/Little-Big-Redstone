@@ -1,0 +1,23 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "P": {
+      "item": "minecraft:sticky_piston"
+    },
+    "R": {
+      "tag": "c:dusts/redstone"
+    },
+    "r": {
+      "item": "little_big_redstone:redstone_bit"
+    }
+  },
+  "pattern": [
+    "RrR",
+    " P "
+  ],
+  "result": {
+    "count": 1,
+    "id": "little_big_redstone:pulse_throttler"
+  }
+}

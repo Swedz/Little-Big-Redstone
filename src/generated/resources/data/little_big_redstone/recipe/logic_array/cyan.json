@@ -1,0 +1,27 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "C": {
+      "tag": "c:chests/wooden"
+    },
+    "D": {
+      "tag": "c:dyes/cyan"
+    },
+    "I": {
+      "tag": "c:storage_blocks/iron"
+    },
+    "Q": {
+      "tag": "c:gems/quartz"
+    }
+  },
+  "pattern": [
+    "III",
+    "DCQ",
+    "III"
+  ],
+  "result": {
+    "count": 1,
+    "id": "little_big_redstone:cyan_logic_array"
+  }
+}
