@@ -40,7 +40,7 @@ public final class ItemRecipesDatagenProvider extends RecipeProvider
 				.pattern("III")
 				.pattern("DCQ")
 				.pattern("III")
-				.define('I', Tags.Items.STORAGE_BLOCKS_IRON)
+				.define('I', Tags.Items.INGOTS_IRON)
 				.define('D', color.getTag())
 				.define('C', Tags.Items.CHESTS_WOODEN)
 				.define('Q', Tags.Items.GEMS_QUARTZ)
