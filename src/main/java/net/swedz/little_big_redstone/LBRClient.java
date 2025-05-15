@@ -70,7 +70,7 @@ public final class LBRClient
 	@SubscribeEvent
 	private static void register(RegisterGuiLayersEvent event)
 	{
-		event.registerAbove(VanillaGuiLayers.OVERLAY_MESSAGE, LBR.id("floppy_disk_missing_items"), FloppyDiskConsumeItemsGuiOverlay::render);
+		event.registerAbove(VanillaGuiLayers.OVERLAY_MESSAGE, LBR.id("floppy_disk_consume_items"), FloppyDiskConsumeItemsGuiOverlay::render);
 	}
 	
 	@SubscribeEvent
