@@ -9,6 +9,7 @@ import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.neoforge.items.ItemHandlerHelper;
+import net.neoforged.neoforge.items.SlotItemHandler;
 import net.swedz.little_big_redstone.LBR;
 import net.swedz.little_big_redstone.LBRCreativeTabs;
 import net.swedz.little_big_redstone.LBRItems;
@@ -285,10 +286,125 @@ public final class MicrochipMenu extends BaseContainerMenu
 		return stack;
 	}
 	
+	/**
+	 * <p>So, because of how vanilla's
+	 * {@link net.minecraft.world.inventory.AbstractContainerMenu#moveItemStackTo(ItemStack, int, int, boolean)}
+	 * implementation works, it causes items to get voided (and possibly duped?) when moving stacks into a
+	 * {@link SlotItemHandler} slot. The vanilla method would mutate the stacks returned by the handler (which is VERY
+	 * bad for us) and then just assume the slot is okay with this and call {@link Slot#setChanged()}. Instead of this,
+	 * because we are using an item handler, we must not mutate the returned stacks and then apply changes using
+	 * {@link Slot#set(ItemStack)}.</p>
+	 *
+	 * <p>All changes made from the vanilla implementation are noted below in comments.</p>
+	 */
 	@Override
 	public boolean moveItemStackTo(ItemStack stack, int startIndex, int endIndex, boolean reverseDirection)
 	{
-		return super.moveItemStackTo(stack, startIndex, endIndex, reverseDirection);
+		boolean itemMoved = false;
+		int index = startIndex;
+		if(reverseDirection)
+		{
+			index = endIndex - 1;
+		}
+		
+		Slot slot;
+		ItemStack slotStack;
+		if(stack.isStackable())
+		{
+			while(!stack.isEmpty())
+			{
+				if(reverseDirection)
+				{
+					if(index < startIndex)
+					{
+						break;
+					}
+				}
+				else if(index >= endIndex)
+				{
+					break;
+				}
+				slot = slots.get(index);
+				// Change made here - we use a copy to avoid modifying the actual stack
+				slotStack = slot.getItem().copy();
+				if(!slotStack.isEmpty() && ItemStack.isSameItemSameComponents(stack, slotStack))
+				{
+					int stackCount = slotStack.getCount() + stack.getCount();
+					int slotMaxSize = slot.getMaxStackSize(slotStack);
+					if(stackCount <= slotMaxSize)
+					{
+						stack.setCount(0);
+						slotStack.setCount(stackCount);
+						// Change made here - this used to just call slot.setChanged() instead of slot.set(...)
+						slot.set(slotStack);
+						itemMoved = true;
+					}
+					else if(slotStack.getCount() < slotMaxSize)
+					{
+						stack.shrink(slotMaxSize - slotStack.getCount());
+						slotStack.setCount(slotMaxSize);
+						// Change made here - this used to just call slot.setChanged() instead of slot.set(...)
+						slot.set(slotStack);
+						itemMoved = true;
+					}
+				}
+				if(reverseDirection)
+				{
+					--index;
+				}
+				else
+				{
+					++index;
+				}
+			}
+		}
+		
+		if(!stack.isEmpty())
+		{
+			if(reverseDirection)
+			{
+				index = endIndex - 1;
+			}
+			else
+			{
+				index = startIndex;
+			}
+			while(true)
+			{
+				if(reverseDirection)
+				{
+					if(index < startIndex)
+					{
+						break;
+					}
+				}
+				else if(index >= endIndex)
+				{
+					break;
+				}
+				slot = slots.get(index);
+				slotStack = slot.getItem();
+				if(slotStack.isEmpty() && slot.mayPlace(stack))
+				{
+					int slotMaxSize = slot.getMaxStackSize(stack);
+					slot.setByPlayer(stack.split(Math.min(stack.getCount(), slotMaxSize)));
+					// Change made here - this used to call slot.setChanged() which is not necessary because
+					// slot.setbyPlayer(...) already calls slot.setChanged()
+					itemMoved = true;
+					break;
+				}
+				if(reverseDirection)
+				{
+					--index;
+				}
+				else
+				{
+					++index;
+				}
+			}
+		}
+		
+		return itemMoved;
 	}
 	
 	@Override
