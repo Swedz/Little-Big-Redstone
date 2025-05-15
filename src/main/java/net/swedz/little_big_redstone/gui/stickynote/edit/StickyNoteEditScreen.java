@@ -59,5 +59,11 @@ public final class StickyNoteEditScreen extends StickyNoteScreen
 	public void tick()
 	{
 		editWidget.tick();
+		
+		var entity = minecraft.level.getEntity(entityId);
+		if(entity == null || entity.distanceTo(minecraft.player) > 16)
+		{
+			minecraft.setScreen(null);
+		}
 	}
 }

@@ -45,7 +45,14 @@ public record StickyNotePacket(int entityId, Action action, String text) impleme
 			}
 			else if(action == Action.DONE_EDIT)
 			{
-				stickyNote.setNote(new StickyNote(text));
+				if(entity.distanceTo(player) <= 16)
+				{
+					stickyNote.setNote(new StickyNote(text));
+				}
+				else
+				{
+					LBR.LOGGER.warn("Received StickyNotePacket from {} targeting a far away sticky note, discarding", playerName);
+				}
 			}
 		}
 		else
