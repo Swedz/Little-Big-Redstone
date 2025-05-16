@@ -94,6 +94,13 @@ public final class TesseractGuiGraphics implements BlitGuiGraphics, FillGuiGraph
 		return internal.bufferSource();
 	}
 	
+	public void reset()
+	{
+		this.resetColor();
+		this.resetTextureShader();
+		this.resetTooltipBackgroundPadding();
+	}
+	
 	public TesseractGuiGraphics inner()
 	{
 		return new TesseractGuiGraphics(this, internal);
