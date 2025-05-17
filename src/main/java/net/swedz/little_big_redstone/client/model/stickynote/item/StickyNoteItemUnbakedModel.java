@@ -13,7 +13,7 @@ import net.neoforged.neoforge.client.model.geometry.IGeometryLoader;
 import net.neoforged.neoforge.client.model.geometry.IUnbakedGeometry;
 import net.neoforged.neoforge.client.model.geometry.UnbakedGeometryHelper;
 import net.swedz.little_big_redstone.LBR;
-import net.swedz.tesseract.neoforge.helper.ModelHelper;
+import net.swedz.tesseract.neoforge.helper.model.ModelHelper;
 
 import java.util.List;
 import java.util.function.Function;

@@ -17,7 +17,7 @@ import net.minecraft.world.inventory.InventoryMenu;
 import net.minecraft.world.item.DyeColor;
 import net.swedz.little_big_redstone.LBRClientModels;
 import net.swedz.little_big_redstone.entity.stickynote.StickyNoteEntity;
-import net.swedz.tesseract.neoforge.helper.QuadColorFix;
+import net.swedz.tesseract.neoforge.helper.model.QuadColorFix;
 
 public final class StickyNoteEntityRenderer extends EntityRenderer<StickyNoteEntity>
 {
