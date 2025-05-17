@@ -25,7 +25,8 @@ import net.swedz.little_big_redstone.LBRText;
 import net.swedz.little_big_redstone.block.microchip.MicrochipBlockEntity;
 import net.swedz.little_big_redstone.microchip.Microchip;
 import net.swedz.little_big_redstone.microchip.object.logic.LogicType;
-import net.swedz.little_big_redstone.network.packet.ForceFloppyDiskGuiOverlayUpdatePacket;
+import net.swedz.little_big_redstone.network.packet.FloppyDiskGuiOverlayUpdatePacket;
+import net.swedz.tesseract.neoforge.event.PlayerInventoryChangeEvent;
 import net.swedz.tesseract.neoforge.helper.TransferHelper;
 
 import java.util.Collections;
@@ -200,7 +201,7 @@ public final class FloppyDiskItem extends Item implements DyeColoredItem
 						{
 							player.displayClientMessage(LBRText.FLOPPY_DISK_APPLY_FAILURE.text(), true);
 						}
-						new ForceFloppyDiskGuiOverlayUpdatePacket().sendToClient(player);
+						new FloppyDiskGuiOverlayUpdatePacket(true).sendToClient(player);
 					}
 				}
 			}
@@ -244,7 +245,7 @@ public final class FloppyDiskItem extends Item implements DyeColoredItem
 								{
 									player.displayClientMessage(LBRText.FLOPPY_DISK_APPLY_FAILURE.text(), true);
 								}
-								new ForceFloppyDiskGuiOverlayUpdatePacket().sendToClient((ServerPlayer) player);
+								new FloppyDiskGuiOverlayUpdatePacket(true).sendToClient((ServerPlayer) player);
 							}
 						}
 					}
@@ -271,5 +272,14 @@ public final class FloppyDiskItem extends Item implements DyeColoredItem
 	public boolean shouldCauseReequipAnimation(ItemStack oldStack, ItemStack newStack, boolean slotChanged)
 	{
 		return !newStack.is(oldStack.getItem());
+	}
+	
+	@SubscribeEvent
+	private static void onPlayerInventoryChange(PlayerInventoryChangeEvent event)
+	{
+		if(event.getEntity() instanceof ServerPlayer player)
+		{
+			new FloppyDiskGuiOverlayUpdatePacket(false).sendToClient(player);
+		}
 	}
 }

@@ -125,9 +125,12 @@ public final class FloppyDiskConsumeItemsGuiOverlay
 	private static BlockPos LAST_TARGET_BLOCK_POS;
 	private static boolean  SHOULD_FORCE_UPDATE;
 	
-	public static void forceUpdate()
+	public static void update(boolean force)
 	{
-		SHOULD_FORCE_UPDATE = true;
+		if(force || ITEMS != null)
+		{
+			SHOULD_FORCE_UPDATE = true;
+		}
 	}
 	
 	private static boolean update(Level level, Player player, BlockPos targetBlock)
@@ -163,12 +166,6 @@ public final class FloppyDiskConsumeItemsGuiOverlay
 		var player = Minecraft.getInstance().player;
 		int selectedSlot = player.getInventory().selected;
 		var targetBlock = Minecraft.getInstance().hitResult instanceof BlockHitResult hitResult ? hitResult.getBlockPos() : null;
-		
-		// TODO set force update to true when the inventory updates rather than just every second...
-		if(++TICK % 20 == 0)
-		{
-			SHOULD_FORCE_UPDATE = true;
-		}
 		
 		if(SHOULD_FORCE_UPDATE ||
 		   selectedSlot != LAST_SELECTED_SLOT ||

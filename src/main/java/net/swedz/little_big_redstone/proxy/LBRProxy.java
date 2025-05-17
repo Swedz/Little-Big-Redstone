@@ -37,7 +37,7 @@ public class LBRProxy implements Proxy
 	{
 	}
 	
-	public void forceFloppyDiskGuiOverlayUpdate()
+	public void floppyDiskGuiOverlayUpdate(boolean force)
 	{
 	}
 	

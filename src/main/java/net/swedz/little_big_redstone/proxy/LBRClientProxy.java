@@ -80,9 +80,9 @@ public class LBRClientProxy extends LBRProxy
 	}
 	
 	@Override
-	public void forceFloppyDiskGuiOverlayUpdate()
+	public void floppyDiskGuiOverlayUpdate(boolean force)
 	{
-		FloppyDiskConsumeItemsGuiOverlay.forceUpdate();
+		FloppyDiskConsumeItemsGuiOverlay.update(force);
 	}
 	
 	@Override
