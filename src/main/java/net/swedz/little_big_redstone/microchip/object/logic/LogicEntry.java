@@ -52,7 +52,7 @@ public record LogicEntry(int slot, int x, int y, LogicComponent component) imple
 	@Override
 	public Bounds toBounds()
 	{
-		return new Bounds(x, y, component.size().widthPixels(), component.size().heightPixels());
+		return new Bounds(x, y, this.size().widthPixels(), this.size().heightPixels());
 	}
 	
 	@Override
@@ -67,5 +67,10 @@ public record LogicEntry(int slot, int x, int y, LogicComponent component) imple
 		var original = component.color();
 		component.setColor(color);
 		return !original.equals(color);
+	}
+	
+	public LogicGridSize size()
+	{
+		return component.size();
 	}
 }

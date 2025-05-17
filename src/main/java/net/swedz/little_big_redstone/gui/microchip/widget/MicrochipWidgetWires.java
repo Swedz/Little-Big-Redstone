@@ -7,11 +7,9 @@ import com.mojang.datafixers.util.Either;
 import net.swedz.little_big_redstone.LBR;
 import net.swedz.little_big_redstone.LBRClientShaders;
 import net.swedz.little_big_redstone.api.Bounds;
-import net.swedz.little_big_redstone.client.model.logic.LogicBakingModelData;
+import net.swedz.little_big_redstone.gui.microchip.wire.WireEndpoints;
 import net.swedz.little_big_redstone.gui.microchip.wire.WirePathing;
 import net.swedz.little_big_redstone.helper.guigraphics.TesseractGuiGraphics;
-import net.swedz.little_big_redstone.microchip.object.logic.LogicEntry;
-import net.swedz.little_big_redstone.microchip.object.logic.LogicComponent;
 import net.swedz.little_big_redstone.microchip.wire.Wire;
 
 import java.util.Collections;
@@ -75,7 +73,7 @@ public final class MicrochipWidgetWires
 		return null;
 	}
 	
-	public void renderWires(TesseractGuiGraphics graphics, int mouseX, int mouseY, float partialTicks)
+	public void renderWires(TesseractGuiGraphics graphics, int boardMouseX, int boardMouseY, float partialTicks)
 	{
 		for(var wire : widget.microchip().wires())
 		{
@@ -83,126 +81,52 @@ public final class MicrochipWidgetWires
 			{
 				continue;
 			}
-			this.renderWire(graphics, wire, false, mouseX, mouseY, partialTicks);
+			this.renderWire(graphics, wire, false, partialTicks);
 		}
 		
 		graphics = graphics.inner();
 		graphics.enableBatching();
 		for(var wire : widget.context().topLayerWires())
 		{
-			this.renderWire(graphics, wire, !widget.hasSelectedPort() && (widget.context().wire() == null || widget.context().wire() == wire), mouseX, mouseY, partialTicks);
+			this.renderWire(graphics, wire, !widget.hasSelectedPort() && (widget.context().wire() == null || widget.context().wire() == wire), partialTicks);
 		}
 		
 		if(widget.hasSelectedPort() &&
-		   widget.isMouseOver(mouseX, mouseY) &&
-		   widget.microchip().findAt(widget.microchip().size().boardX(widget.toLocalX(mouseX)), widget.microchip().size().boardY(widget.toLocalY(mouseY))) == null)
+		   widget.context().isOnBoard() &&
+		   widget.microchip().findAt(boardMouseX, boardMouseY) == null)
 		{
-			var selectedPort = widget.getSelectedPort();
-			this.renderWire(graphics, selectedPort.entry(), mouseX, mouseY, selectedPort.index(), partialTicks);
+			var endpoints = WireEndpoints.heldWire(widget.context());
+			this.renderWire(graphics, endpoints, true, partialTicks);
 		}
 		graphics.end();
 	}
 	
-	private void renderWire(TesseractGuiGraphics graphics, Wire wire, boolean hovered, int mouseX, int mouseY, float partialTicks)
+	private void renderWire(TesseractGuiGraphics graphics, Wire wire, boolean hovered, float partialTicks)
 	{
-		LogicEntry outputLogic = widget.microchip().components().get(wire.output().slot());
-		LogicEntry inputLogic = widget.microchip().components().get(wire.input().slot());
-		this.renderWire(graphics, wire, hovered, outputLogic, inputLogic, wire.output().index(), wire.input().index(), partialTicks);
+		this.renderWire(graphics, wire, WireEndpoints.of(widget.context(), wire), hovered, partialTicks);
 	}
 	
-	public static int getWireStartX(int x, LogicComponent<?, ?> component)
+	public void renderWire(TesseractGuiGraphics graphics, WireEndpoints endpoints, boolean hovered, float partialTicks)
 	{
-		return x + component.size().widthPixels();
+		this.renderWire(graphics, Either.left(null), endpoints, hovered, partialTicks);
 	}
 	
-	public static int getWireStartX(LogicEntry outputLogic)
+	public void renderWire(TesseractGuiGraphics graphics, Wire wire, WireEndpoints endpoints, boolean hovered, float partialTicks)
 	{
-		return getWireStartX(outputLogic.x(), outputLogic.component());
+		this.renderWire(graphics, Either.left(wire), endpoints, hovered, partialTicks);
 	}
 	
-	public static int getWireStartY(int y, LogicComponent<?, ?> component, int outputIndex)
+	public void renderWire(TesseractGuiGraphics graphics, List<Bounds> avoidBounds, WireEndpoints endpoints, boolean hovered, float partialTicks)
 	{
-		return component.size().portTopLeftCornerY(y, false, outputIndex, component.outputs()) + 8 - 1;
+		this.renderWire(graphics, Either.right(avoidBounds), endpoints, hovered, partialTicks);
 	}
 	
-	public static int getWireStartY(LogicEntry outputLogic, int outputIndex)
+	private void renderWire(TesseractGuiGraphics graphics, Either<Wire, List<Bounds>> eitherWireOrBounds, WireEndpoints endpoints, boolean hovered, float partialTicks)
 	{
-		return getWireStartY(outputLogic.y(), outputLogic.component(), outputIndex);
+		this.renderWire(graphics, eitherWireOrBounds, endpoints.startX(), endpoints.startY(), endpoints.endX(), endpoints.endY(), hovered, endpoints.usePadding(), endpoints.powered(), endpoints.argb(), partialTicks);
 	}
 	
-	public static int getWireEndX(int x)
-	{
-		return x;
-	}
-	
-	public static int getWireEndX(LogicEntry inputLogic)
-	{
-		return getWireEndX(inputLogic.x());
-	}
-	
-	public static int getWireEndY(int y, LogicComponent<?, ?> component, int inputIndex)
-	{
-		return component.size().portTopLeftCornerY(y, true, inputIndex, component.inputs()) + 8 - 1;
-	}
-	
-	public static int getWireEndY(LogicEntry inputLogic, int inputIndex)
-	{
-		return getWireEndY(inputLogic.y(), inputLogic.component(), inputIndex);
-	}
-	
-	public int getWireColor(LogicEntry outputLogic)
-	{
-		return LogicBakingModelData.get(outputLogic.component()).getColorSet(((LogicComponent<?, ?>) outputLogic.component()).color().orElse(widget.color())).foreground();
-	}
-	
-	private void renderWire(TesseractGuiGraphics graphics, Wire wire, boolean hovered, LogicEntry outputLogic, LogicEntry inputLogic, int outputIndex, int inputIndex, float partialTicks)
-	{
-		int startX = getWireStartX(outputLogic);
-		int startY = getWireStartY(outputLogic, outputIndex);
-		int endX = getWireEndX(inputLogic);
-		int endY = getWireEndY(inputLogic, inputIndex);
-		
-		boolean powered = outputLogic.component().output(outputIndex);
-		
-		int argb = this.getWireColor(outputLogic);
-		
-		this.renderWire(graphics, wire, hovered, startX, startY, endX, endY, true, powered, argb, partialTicks);
-	}
-	
-	private void renderWire(TesseractGuiGraphics graphics, LogicEntry outputLogic, int mouseX, int mouseY, int outputIndex, float partialTicks)
-	{
-		int startX = getWireStartX(outputLogic);
-		int startY = getWireStartY(outputLogic, outputIndex);
-		int endX;
-		int endY;
-		boolean usePadding;
-		if(widget.context().shouldInteractPort() && widget.context().isPortInput() && widget.context().isPortEmpty())
-		{
-			var inputLogic = widget.context().logic();
-			endX = getWireEndX(inputLogic);
-			endY = getWireEndY(inputLogic, widget.context().port().index());
-			usePadding = true;
-		}
-		else
-		{
-			endX = widget.microchip().size().boardX(widget.toLocalX(mouseX)) + 1;
-			endY = widget.microchip().size().boardY(widget.toLocalY(mouseY)) - 1;
-			usePadding = false;
-		}
-		
-		boolean powered = outputLogic.component().output(outputIndex);
-		
-		int argb = this.getWireColor(outputLogic);
-		
-		this.renderWire(graphics, Either.left(null), true, startX, startY, endX, endY, usePadding, powered, argb, partialTicks);
-	}
-	
-	private void renderWire(TesseractGuiGraphics graphics, Wire wire, boolean hovered, int startX, int startY, int endX, int endY, boolean usePadding, boolean powered, int argb, float partialTicks)
-	{
-		this.renderWire(graphics, Either.left(wire), hovered, startX, startY, endX, endY, usePadding, powered, argb, partialTicks);
-	}
-	
-	public void renderWire(TesseractGuiGraphics graphics, Either<Wire, List<Bounds>> eitherWireOrBounds, boolean hovered, int startX, int startY, int endX, int endY, boolean usePadding, boolean powered, int argb, float partialTicks)
+	private void renderWire(TesseractGuiGraphics graphics, Either<Wire, List<Bounds>> eitherWireOrBounds, int startX, int startY, int endX, int endY, boolean hovered, boolean usePadding, boolean powered, int argb, float partialTicks)
 	{
 		int portPadding = usePadding ? wirePortPadding : 0;
 		

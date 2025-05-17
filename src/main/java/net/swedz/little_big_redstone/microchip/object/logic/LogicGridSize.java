@@ -69,4 +69,24 @@ public record LogicGridSize(int width, int height)
 		portY += 5;
 		return new Bounds(portX, portY, 6, 6);
 	}
+	
+	public int wireOutStartX(int x)
+	{
+		return x + this.widthPixels();
+	}
+	
+	public int wireOutStartY(int y, int portIndex, int totalPorts)
+	{
+		return this.portTopLeftCornerY(y, false, portIndex, totalPorts) + 8 - 1;
+	}
+	
+	public int wireInEndX(int x)
+	{
+		return x;
+	}
+	
+	public int wireInEndY(int y, int portIndex, int totalPorts)
+	{
+		return this.portTopLeftCornerY(y, true, portIndex, totalPorts) + 8 - 1;
+	}
 }

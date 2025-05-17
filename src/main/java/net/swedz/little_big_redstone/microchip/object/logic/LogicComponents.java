@@ -66,7 +66,7 @@ public final class LogicComponents extends MicrochipObjectContainer<LogicEntry, 
 	{
 		for(LogicEntry entry : this.values())
 		{
-			var size = entry.component().size();
+			var size = entry.size();
 			int totalPorts = input ? entry.component().inputs() : entry.component().outputs();
 			for(int index = 0; index < totalPorts; index++)
 			{

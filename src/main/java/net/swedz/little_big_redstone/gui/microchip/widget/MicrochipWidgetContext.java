@@ -15,8 +15,6 @@ import java.util.List;
 
 public final class MicrochipWidgetContext
 {
-	public static final MicrochipWidgetContext NOTHING = new MicrochipWidgetContext(ItemStack.EMPTY, null, null, null, null, true, null, List.of());
-	
 	public static boolean canInteractWire(ItemStack stack)
 	{
 		return stack.isEmpty() || stack.is(LBRItems.REDSTONE_BIT.asItem());
@@ -27,18 +25,15 @@ public final class MicrochipWidgetContext
 		return stack.isEmpty() || DyeComponentResult.is(stack);
 	}
 	
-	public static MicrochipWidgetContext test(MicrochipWidget widget, MicrochipWidgetWires widgetWires, int mouseX, int mouseY, MicrochipWidgetContext previous)
+	public static MicrochipWidgetContext test(MicrochipWidget widget, MicrochipWidgetWires widgetWires, int mouseX, int mouseY, int boardMouseX, int boardMouseY, MicrochipWidgetContext previous)
 	{
 		if(!widget.isMouseOver(mouseX, mouseY))
 		{
-			return NOTHING;
+			return new MicrochipWidgetContext(widget, boardMouseX, boardMouseY);
 		}
 		
 		var microchip = widget.microchip();
 		var carriedStack = widget.menu().getCarried();
-		
-		int boardMouseX = microchip.size().boardX(widget.toLocalX(mouseX));
-		int boardMouseY = microchip.size().boardY(widget.toLocalY(mouseY));
 		
 		List<Wire> topLayerWires = Lists.newArrayList();
 		
@@ -117,8 +112,13 @@ public final class MicrochipWidgetContext
 			}
 		}
 		
-		return new MicrochipWidgetContext(carriedStack, object, note, logic, port, portInput, wire, topLayerWires);
+		return new MicrochipWidgetContext(widget, boardMouseX, boardMouseY, carriedStack, object, note, logic, port, portInput, wire, topLayerWires);
 	}
+	
+	private final boolean onBoard;
+	
+	private final MicrochipWidget widget;
+	private final int             boardMouseX, boardMouseY;
 	
 	private final ItemStack carriedStack;
 	
@@ -131,11 +131,17 @@ public final class MicrochipWidgetContext
 	
 	private final List<Wire> topLayerWires;
 	
-	private MicrochipWidgetContext(ItemStack carriedStack,
+	private MicrochipWidgetContext(MicrochipWidget widget,
+								   int boardMouseX, int boardMouseY,
+								   ItemStack carriedStack,
 								   MicrochipObject object, StickyNoteEntry note, LogicEntry logic,
 								   LogicSelectedPort port, boolean portInput,
 								   Wire wire, List<Wire> topLayerWires)
 	{
+		this.onBoard = true;
+		this.widget = widget;
+		this.boardMouseX = boardMouseX;
+		this.boardMouseY = boardMouseY;
 		this.carriedStack = carriedStack;
 		this.object = object;
 		this.note = note;
@@ -144,6 +150,42 @@ public final class MicrochipWidgetContext
 		this.portInput = portInput;
 		this.wire = wire;
 		this.topLayerWires = Collections.unmodifiableList(topLayerWires);
+	}
+	
+	public MicrochipWidgetContext(MicrochipWidget widget, int boardMouseX, int boardMouseY)
+	{
+		this.onBoard = false;
+		this.widget = widget;
+		this.boardMouseX = boardMouseX;
+		this.boardMouseY = boardMouseY;
+		this.carriedStack = ItemStack.EMPTY;
+		this.object = null;
+		this.note = null;
+		this.logic = null;
+		this.port = null;
+		this.portInput = true;
+		this.wire = null;
+		this.topLayerWires = List.of();
+	}
+	
+	public boolean isOnBoard()
+	{
+		return onBoard;
+	}
+	
+	public MicrochipWidget widget()
+	{
+		return widget;
+	}
+	
+	public int boardMouseX()
+	{
+		return boardMouseX;
+	}
+	
+	public int boardMouseY()
+	{
+		return boardMouseY;
 	}
 	
 	public ItemStack getCarriedStack()
@@ -254,5 +296,10 @@ public final class MicrochipWidgetContext
 	public boolean shouldInteractBoard()
 	{
 		return !this.hasLogic() && !this.hasPort() && !this.hasWire();
+	}
+	
+	public boolean shouldInsertWireToPort()
+	{
+		return this.shouldInteractPort() && this.isPortInput() && this.isPortEmpty();
 	}
 }

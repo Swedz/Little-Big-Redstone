@@ -36,7 +36,7 @@ public final class MicrochipWidget implements GuiEventListener, Renderable, Narr
 	private final MicrochipWidgetRenderer renderer;
 	private final MicrochipWidgetWires    wires;
 	
-	private MicrochipWidgetContext context = MicrochipWidgetContext.NOTHING;
+	private MicrochipWidgetContext context = new MicrochipWidgetContext(this, 0, 0);
 	
 	private LogicSelectedPort selectedPort;
 	
@@ -329,8 +329,8 @@ public final class MicrochipWidget implements GuiEventListener, Renderable, Narr
 		   context.shouldInteractBoard())
 		{
 			var component = carried.get(LBRComponents.LOGIC);
-			int placeX = Screen.hasControlDown() ? MicrochipScreen.getGridSnappedCoord(x - component.size().centerX() + 8) : component.size().topLeftCornerX(x);
-			int placeY = Screen.hasControlDown() ? MicrochipScreen.getGridSnappedCoord(y - component.size().centerY() + 8) : component.size().topLeftCornerY(y);
+			int placeX = Screen.hasControlDown() ? MicrochipScreen.getGridSnappedCoord(component.size().topLeftCornerX(x) + 8) : component.size().topLeftCornerX(x);
+			int placeY = Screen.hasControlDown() ? MicrochipScreen.getGridSnappedCoord(component.size().topLeftCornerY(y) + 8) : component.size().topLeftCornerY(y);
 			
 			if(microchip.size().bounds().normalize().contains(component.size().toBounds(placeX, placeY)))
 			{
@@ -371,42 +371,39 @@ public final class MicrochipWidget implements GuiEventListener, Renderable, Narr
 		return false;
 	}
 	
-	private boolean mouseClickedOnBoard(int x, int y, int button)
+	private boolean mouseClickedOnBoard(int mouseX, int mouseY, int boardMouseX, int boardMouseY, int button)
 	{
-		int boardX = microchip.size().boardX(this.toLocalX(x));
-		int boardY = microchip.size().boardY(this.toLocalY(y));
+		context = MicrochipWidgetContext.test(this, wires, mouseX, mouseY, boardMouseX, boardMouseY, context);
 		
-		context = MicrochipWidgetContext.test(this, wires, x, y, context);
-		
-		if(this.dyeComponent(boardX, boardY, button))
+		if(this.dyeComponent(boardMouseX, boardMouseY, button))
 		{
 			return false;
 		}
-		else if(this.pickupNote(boardX, boardY, button))
+		else if(this.pickupNote(boardMouseX, boardMouseY, button))
 		{
 			return false;
 		}
-		else if(this.pickupWire(boardX, boardY, button))
+		else if(this.pickupWire(boardMouseX, boardMouseY, button))
 		{
 			return false;
 		}
-		else if(this.pickupLogic(boardX, boardY, button))
+		else if(this.pickupLogic(boardMouseX, boardMouseY, button))
 		{
 			return false;
 		}
-		else if(this.placeNote(boardX, boardY, button))
+		else if(this.placeNote(boardMouseX, boardMouseY, button))
 		{
 			return false;
 		}
-		else if(this.placeWire(boardX, boardY, button))
+		else if(this.placeWire(boardMouseX, boardMouseY, button))
 		{
 			return false;
 		}
-		else if(this.placeLogic(boardX, boardY, button))
+		else if(this.placeLogic(boardMouseX, boardMouseY, button))
 		{
 			return false;
 		}
-		else if(this.openLogicConfig(boardX, boardY, button))
+		else if(this.openLogicConfig(boardMouseX, boardMouseY, button))
 		{
 			return false;
 		}
@@ -421,7 +418,11 @@ public final class MicrochipWidget implements GuiEventListener, Renderable, Narr
 		int mouseY = (int) my;
 		if(this.isMouseOver(mouseX, mouseY))
 		{
-			return this.mouseClickedOnBoard(mouseX, mouseY, button);
+			var size = microchip.size();
+			int boardMouseX = size.boardCoord(this.toLocalX(mouseX));
+			int boardMouseY = size.boardCoord(this.toLocalY(mouseY));
+			
+			return this.mouseClickedOnBoard(mouseX, mouseY, boardMouseX, boardMouseY, button);
 		}
 		else
 		{
@@ -437,9 +438,13 @@ public final class MicrochipWidget implements GuiEventListener, Renderable, Narr
 	@Override
 	public void render(GuiGraphics graphics, int mouseX, int mouseY, float partialTick)
 	{
-		context = MicrochipWidgetContext.test(this, wires, mouseX, mouseY, context);
+		var size = microchip.size();
+		int boardMouseX = size.boardCoord(this.toLocalX(mouseX));
+		int boardMouseY = size.boardCoord(this.toLocalY(mouseY));
 		
-		renderer.render(graphics, mouseX, mouseY, partialTick);
+		context = MicrochipWidgetContext.test(this, wires, mouseX, mouseY, boardMouseX, boardMouseY, context);
+		
+		renderer.render(graphics, boardMouseX, boardMouseY, partialTick);
 	}
 	
 	@Override
