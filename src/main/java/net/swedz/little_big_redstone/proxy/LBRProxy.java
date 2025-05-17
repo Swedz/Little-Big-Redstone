@@ -6,8 +6,8 @@ import net.minecraft.world.item.DyeColor;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.server.ServerAboutToStartEvent;
 import net.neoforged.neoforge.event.server.ServerStoppedEvent;
-import net.swedz.little_big_redstone.microchip.object.logic.LogicEntry;
 import net.swedz.little_big_redstone.microchip.Microchip;
+import net.swedz.little_big_redstone.microchip.object.logic.LogicEntry;
 import net.swedz.tesseract.neoforge.proxy.Proxy;
 import net.swedz.tesseract.neoforge.proxy.ProxyEntrypoint;
 
