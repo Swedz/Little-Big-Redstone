@@ -3,9 +3,9 @@ package net.swedz.little_big_redstone.gui.microchip.wire;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import it.unimi.dsi.fastutil.objects.ObjectHeapPriorityQueue;
-import net.swedz.little_big_redstone.api.Bounds;
 import net.swedz.little_big_redstone.microchip.Microchip;
 import net.swedz.little_big_redstone.microchip.wire.Wire;
+import net.swedz.tesseract.neoforge.api.Bounds;
 
 import java.util.Arrays;
 import java.util.Collections;

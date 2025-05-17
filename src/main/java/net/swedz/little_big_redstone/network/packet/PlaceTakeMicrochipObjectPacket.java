@@ -9,13 +9,13 @@ import net.neoforged.neoforge.items.ItemHandlerHelper;
 import net.swedz.little_big_redstone.LBR;
 import net.swedz.little_big_redstone.LBRComponents;
 import net.swedz.little_big_redstone.LBRItems;
-import net.swedz.little_big_redstone.api.Bounds;
 import net.swedz.little_big_redstone.gui.microchip.MicrochipMenu;
 import net.swedz.little_big_redstone.item.logicarray.LogicArrayItem;
 import net.swedz.little_big_redstone.item.stickynote.StickyNoteItem;
 import net.swedz.little_big_redstone.microchip.object.logic.LogicEntry;
 import net.swedz.little_big_redstone.microchip.object.note.StickyNoteEntry;
 import net.swedz.little_big_redstone.network.LBRCustomPacket;
+import net.swedz.tesseract.neoforge.api.Bounds;
 import net.swedz.tesseract.neoforge.packet.PacketContext;
 
 public record PlaceTakeMicrochipObjectPacket(

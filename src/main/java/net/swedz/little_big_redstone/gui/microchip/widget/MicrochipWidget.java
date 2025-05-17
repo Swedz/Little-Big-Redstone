@@ -12,7 +12,6 @@ import net.minecraft.world.item.DyeColor;
 import net.swedz.little_big_redstone.LBR;
 import net.swedz.little_big_redstone.LBRComponents;
 import net.swedz.little_big_redstone.LBRItems;
-import net.swedz.little_big_redstone.api.Bounds;
 import net.swedz.little_big_redstone.gui.microchip.MicrochipMenu;
 import net.swedz.little_big_redstone.gui.microchip.MicrochipScreen;
 import net.swedz.little_big_redstone.gui.microchip.logic.DyeComponentResult;
@@ -25,6 +24,7 @@ import net.swedz.little_big_redstone.network.packet.DyeMicrochipObjectPacket;
 import net.swedz.little_big_redstone.network.packet.OpenLogicConfigPacket;
 import net.swedz.little_big_redstone.network.packet.PlaceTakeMicrochipObjectPacket;
 import net.swedz.little_big_redstone.network.packet.PlaceTakeMicrochipWirePacket;
+import net.swedz.tesseract.neoforge.api.Bounds;
 
 public final class MicrochipWidget implements GuiEventListener, Renderable, NarratableEntry
 {

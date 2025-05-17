@@ -1,6 +1,6 @@
 package net.swedz.little_big_redstone.microchip.object.logic;
 
-import net.swedz.little_big_redstone.api.Bounds;
+import net.swedz.tesseract.neoforge.api.Bounds;
 
 public record LogicGridSize(int width, int height)
 {

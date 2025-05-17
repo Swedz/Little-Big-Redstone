@@ -3,8 +3,8 @@ package net.swedz.little_big_redstone.microchip.object;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import net.swedz.little_big_redstone.LBR;
-import net.swedz.little_big_redstone.api.Bounds;
 import net.swedz.little_big_redstone.microchip.Microchip;
+import net.swedz.tesseract.neoforge.api.Bounds;
 
 import java.util.Iterator;
 import java.util.List;

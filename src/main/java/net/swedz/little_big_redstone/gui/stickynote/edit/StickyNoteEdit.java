@@ -6,7 +6,7 @@ import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.font.TextFieldHelper;
 import net.minecraft.network.chat.Style;
 import net.minecraft.util.StringUtil;
-import net.swedz.little_big_redstone.api.Bounds;
+import net.swedz.tesseract.neoforge.api.Bounds;
 import org.apache.commons.lang3.mutable.MutableInt;
 
 import java.util.List;

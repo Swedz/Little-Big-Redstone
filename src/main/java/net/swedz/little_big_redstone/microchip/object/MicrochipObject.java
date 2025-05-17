@@ -2,7 +2,7 @@ package net.swedz.little_big_redstone.microchip.object;
 
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.ItemStack;
-import net.swedz.little_big_redstone.api.Bounds;
+import net.swedz.tesseract.neoforge.api.Bounds;
 
 import java.util.Optional;
 

@@ -9,15 +9,15 @@ import net.neoforged.neoforge.items.IItemHandler;
 import net.neoforged.neoforge.items.ItemStackHandler;
 import net.neoforged.neoforge.items.wrapper.PlayerInvWrapper;
 import net.swedz.little_big_redstone.LBRMenus;
-import net.swedz.little_big_redstone.gui.BaseContainerMenu;
 import net.swedz.little_big_redstone.gui.logicarray.slot.LogicArrayPlayerSlot;
 import net.swedz.little_big_redstone.gui.logicarray.slot.LogicArraySlot;
 import net.swedz.little_big_redstone.item.logicarray.LogicArrayItem;
 import net.swedz.tesseract.neoforge.helper.TransferHelper;
+import net.swedz.tesseract.neoforge.helper.gui.PlayerInventoryContainerMenu;
 
 import java.util.function.Supplier;
 
-public final class LogicArrayMenu extends BaseContainerMenu
+public final class LogicArrayMenu extends PlayerInventoryContainerMenu
 {
 	private final IItemHandler itemHandler;
 	private final int          logicArraySlot;

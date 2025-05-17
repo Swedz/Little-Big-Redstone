@@ -41,11 +41,11 @@ import net.swedz.little_big_redstone.LBREntities;
 import net.swedz.little_big_redstone.LBRItems;
 import net.swedz.little_big_redstone.LBRTags;
 import net.swedz.little_big_redstone.client.model.stickynote.StickyNoteModelData;
-import net.swedz.little_big_redstone.helper.DirectionHelper;
 import net.swedz.little_big_redstone.item.stickynote.StickyNote;
 import net.swedz.little_big_redstone.item.stickynote.StickyNoteItem;
 import net.swedz.little_big_redstone.network.packet.StickyNotePacket;
 import net.swedz.tesseract.neoforge.api.Assert;
+import net.swedz.tesseract.neoforge.helper.DirectionHelper;
 
 import java.util.function.IntFunction;
 

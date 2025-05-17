@@ -8,8 +8,8 @@ import net.minecraft.world.item.DyeColor;
 import net.swedz.little_big_redstone.LBRText;
 import net.swedz.little_big_redstone.gui.stickynote.StickyNoteScreen;
 import net.swedz.little_big_redstone.gui.stickynote.edit.StickyNoteEditScreen;
-import net.swedz.little_big_redstone.helper.guigraphics.TesseractGuiGraphics;
 import net.swedz.little_big_redstone.item.stickynote.StickyNote;
+import net.swedz.tesseract.neoforge.helper.guigraphics.TesseractGuiGraphics;
 
 public final class StickyNoteViewScreen extends StickyNoteScreen
 {

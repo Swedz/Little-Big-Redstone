@@ -17,10 +17,10 @@ import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.phys.BlockHitResult;
 import net.swedz.little_big_redstone.LBRItems;
-import net.swedz.little_big_redstone.api.TickableBlock;
 import net.swedz.little_big_redstone.item.DyeColoredItem;
 import net.swedz.little_big_redstone.microchip.awareness.AwarenessContext;
 import net.swedz.little_big_redstone.microchip.awareness.AwarenessTypes;
+import net.swedz.tesseract.neoforge.api.TickableBlock;
 
 public final class MicrochipBlock extends Block implements TickableBlock, DyeColoredItem
 {

@@ -9,8 +9,8 @@ import net.minecraft.client.gui.narration.NarrationElementOutput;
 import net.minecraft.client.gui.navigation.ScreenRectangle;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.renderer.RenderType;
-import net.swedz.little_big_redstone.api.Bounds;
-import net.swedz.little_big_redstone.helper.guigraphics.TesseractGuiGraphics;
+import net.swedz.tesseract.neoforge.api.Bounds;
+import net.swedz.tesseract.neoforge.helper.guigraphics.TesseractGuiGraphics;
 
 import java.util.function.Supplier;
 

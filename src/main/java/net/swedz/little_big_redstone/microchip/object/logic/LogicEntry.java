@@ -7,9 +7,9 @@ import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.ItemStack;
-import net.swedz.little_big_redstone.api.Bounds;
 import net.swedz.little_big_redstone.microchip.object.MicrochipObject;
 import net.swedz.little_big_redstone.microchip.object.MicrochipObjectContainerType;
+import net.swedz.tesseract.neoforge.api.Bounds;
 
 import java.util.Optional;
 

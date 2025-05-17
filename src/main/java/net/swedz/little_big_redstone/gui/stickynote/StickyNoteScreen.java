@@ -5,7 +5,7 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.world.item.DyeColor;
 import net.swedz.little_big_redstone.LBR;
-import net.swedz.little_big_redstone.helper.guigraphics.TesseractGuiGraphics;
+import net.swedz.tesseract.neoforge.helper.guigraphics.TesseractGuiGraphics;
 
 public abstract class StickyNoteScreen extends Screen
 {

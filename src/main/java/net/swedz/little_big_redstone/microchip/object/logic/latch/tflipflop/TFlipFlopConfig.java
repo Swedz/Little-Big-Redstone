@@ -1,7 +1,7 @@
 package net.swedz.little_big_redstone.microchip.object.logic.latch.tflipflop;
 
-import net.swedz.little_big_redstone.api.IntRange;
 import net.swedz.little_big_redstone.microchip.object.logic.config.LogicConfig;
+import net.swedz.tesseract.neoforge.api.range.IntRange;
 
 public final class TFlipFlopConfig extends LogicConfig<TFlipFlopConfig>
 {

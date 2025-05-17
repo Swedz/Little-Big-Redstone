@@ -13,8 +13,8 @@ import net.neoforged.neoforge.client.model.data.ModelData;
 import net.swedz.little_big_redstone.LBRItemDisplayContext;
 import net.swedz.little_big_redstone.client.model.MicrochipGuiContextModelData;
 import net.swedz.little_big_redstone.client.model.stickynote.StickyNoteModelData;
-import net.swedz.little_big_redstone.helper.QuadColorFix;
 import net.swedz.little_big_redstone.item.stickynote.StickyNoteItem;
+import net.swedz.tesseract.neoforge.helper.QuadColorFix;
 
 public final class StickyNoteItemRenderer extends BlockEntityWithoutLevelRenderer
 {

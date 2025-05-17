@@ -18,8 +18,8 @@ import net.swedz.little_big_redstone.LBR;
 import net.swedz.little_big_redstone.LBRComponents;
 import net.swedz.little_big_redstone.LBRText;
 import net.swedz.little_big_redstone.block.microchip.MicrochipBlockEntity;
-import net.swedz.little_big_redstone.helper.guigraphics.TesseractGuiGraphics;
 import net.swedz.little_big_redstone.item.FloppyDiskItem;
+import net.swedz.tesseract.neoforge.helper.guigraphics.TesseractGuiGraphics;
 import org.apache.commons.lang3.mutable.MutableInt;
 
 import java.util.List;

@@ -4,7 +4,6 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.network.codec.StreamCodec;
-import net.swedz.little_big_redstone.api.Bounds;
 import net.swedz.little_big_redstone.item.FloppyDiskItem;
 import net.swedz.little_big_redstone.microchip.awareness.MicrochipAwarenesses;
 import net.swedz.little_big_redstone.microchip.object.MicrochipObject;
@@ -17,6 +16,7 @@ import net.swedz.little_big_redstone.microchip.object.logic.LogicEntry;
 import net.swedz.little_big_redstone.microchip.object.note.MicrochipStickyNotes;
 import net.swedz.little_big_redstone.microchip.object.note.StickyNoteEntry;
 import net.swedz.little_big_redstone.microchip.wire.MicrochipWires;
+import net.swedz.tesseract.neoforge.api.Bounds;
 
 import java.util.List;
 import java.util.Objects;

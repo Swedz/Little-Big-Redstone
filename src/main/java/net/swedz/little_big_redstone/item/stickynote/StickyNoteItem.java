@@ -18,9 +18,9 @@ import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.phys.Vec3;
 import net.swedz.little_big_redstone.LBRComponents;
 import net.swedz.little_big_redstone.entity.stickynote.StickyNoteEntity;
-import net.swedz.little_big_redstone.helper.DirectionHelper;
 import net.swedz.little_big_redstone.item.DyeColoredItem;
 import net.swedz.little_big_redstone.proxy.LBRProxy;
+import net.swedz.tesseract.neoforge.helper.DirectionHelper;
 import net.swedz.tesseract.neoforge.proxy.Proxies;
 
 public final class StickyNoteItem extends Item implements DyeColoredItem

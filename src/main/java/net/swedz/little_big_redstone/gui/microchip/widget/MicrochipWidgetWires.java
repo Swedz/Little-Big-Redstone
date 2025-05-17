@@ -4,11 +4,11 @@ import com.google.common.collect.Lists;
 import com.mojang.datafixers.util.Either;
 import net.swedz.little_big_redstone.LBR;
 import net.swedz.little_big_redstone.LBRClientShaders;
-import net.swedz.little_big_redstone.api.Bounds;
 import net.swedz.little_big_redstone.gui.microchip.wire.WireEndpoints;
 import net.swedz.little_big_redstone.gui.microchip.wire.WirePathing;
-import net.swedz.little_big_redstone.helper.guigraphics.TesseractGuiGraphics;
 import net.swedz.little_big_redstone.microchip.wire.Wire;
+import net.swedz.tesseract.neoforge.api.Bounds;
+import net.swedz.tesseract.neoforge.helper.guigraphics.TesseractGuiGraphics;
 
 import java.util.Collections;
 import java.util.List;

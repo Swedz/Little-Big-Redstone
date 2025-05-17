@@ -6,12 +6,12 @@ import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.swedz.little_big_redstone.LBRMenus;
-import net.swedz.little_big_redstone.gui.BaseContainerMenu;
 import net.swedz.little_big_redstone.microchip.object.logic.LogicEntry;
+import net.swedz.tesseract.neoforge.helper.gui.PlayerInventoryContainerMenu;
 
 import java.util.function.Supplier;
 
-public final class LogicConfigMenu extends BaseContainerMenu
+public final class LogicConfigMenu extends PlayerInventoryContainerMenu
 {
 	private final BlockPos          blockPos;
 	private final Supplier<Boolean> validChecker;

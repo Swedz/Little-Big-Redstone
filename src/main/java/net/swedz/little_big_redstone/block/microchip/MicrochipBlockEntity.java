@@ -21,7 +21,6 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.neoforge.client.model.data.ModelData;
 import net.swedz.little_big_redstone.LBR;
 import net.swedz.little_big_redstone.LBRBlocks;
-import net.swedz.little_big_redstone.api.Tickable;
 import net.swedz.little_big_redstone.client.model.microchip.MicrochipModelData;
 import net.swedz.little_big_redstone.gui.microchip.MicrochipMenu;
 import net.swedz.little_big_redstone.microchip.Microchip;
@@ -31,6 +30,7 @@ import net.swedz.little_big_redstone.microchip.awareness.AwarenessTypes;
 import net.swedz.little_big_redstone.microchip.object.logic.LogicContext;
 import net.swedz.little_big_redstone.network.packet.UpdateComponentsMicrochipPacket;
 import net.swedz.little_big_redstone.network.packet.UpdateMicrochipPacket;
+import net.swedz.tesseract.neoforge.api.Tickable;
 import net.swedz.tesseract.neoforge.packet.CustomPacket;
 
 import java.util.function.Function;

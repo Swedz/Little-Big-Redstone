@@ -17,7 +17,7 @@ import net.swedz.little_big_redstone.LBR;
 import net.swedz.little_big_redstone.LBRClientRenderTypes;
 import net.swedz.little_big_redstone.LBRComponents;
 import net.swedz.little_big_redstone.client.model.logic.LogicBakedModel;
-import net.swedz.little_big_redstone.helper.QuadColorFix;
+import net.swedz.tesseract.neoforge.helper.QuadColorFix;
 
 import java.util.Collection;
 

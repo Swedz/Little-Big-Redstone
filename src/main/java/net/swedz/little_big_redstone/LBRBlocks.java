@@ -17,8 +17,8 @@ import net.neoforged.neoforge.client.model.generators.loaders.ItemLayerModelBuil
 import net.neoforged.neoforge.registries.DeferredRegister;
 import net.swedz.little_big_redstone.block.microchip.MicrochipBlock;
 import net.swedz.little_big_redstone.block.microchip.MicrochipBlockEntity;
-import net.swedz.little_big_redstone.client.model.BasicCustomLoaderBuilder;
 import net.swedz.tesseract.neoforge.api.Assert;
+import net.swedz.tesseract.neoforge.helper.model.BasicCustomLoaderBuilder;
 import net.swedz.tesseract.neoforge.registry.SortOrder;
 import net.swedz.tesseract.neoforge.registry.common.CommonLootTableBuilders;
 import net.swedz.tesseract.neoforge.registry.holder.BlockHolder;

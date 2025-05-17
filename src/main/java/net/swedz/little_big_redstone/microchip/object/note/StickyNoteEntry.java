@@ -9,11 +9,11 @@ import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.ItemStack;
 import net.swedz.little_big_redstone.LBRComponents;
 import net.swedz.little_big_redstone.LBRItems;
-import net.swedz.little_big_redstone.api.Bounds;
 import net.swedz.little_big_redstone.item.stickynote.StickyNote;
 import net.swedz.little_big_redstone.item.stickynote.StickyNoteItem;
 import net.swedz.little_big_redstone.microchip.object.MicrochipObject;
 import net.swedz.little_big_redstone.microchip.object.MicrochipObjectContainerType;
+import net.swedz.tesseract.neoforge.api.Bounds;
 
 import java.util.Objects;
 import java.util.Optional;

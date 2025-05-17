@@ -13,10 +13,10 @@ import net.swedz.little_big_redstone.gui.microchip.logic.renderer.OnOffLogicRend
 import net.swedz.little_big_redstone.gui.microchip.logic.renderer.ReaderRenderer;
 import net.swedz.little_big_redstone.gui.microchip.logic.renderer.SequencerRenderer;
 import net.swedz.little_big_redstone.gui.microchip.logic.renderer.SimpleLogicRenderer;
-import net.swedz.little_big_redstone.helper.guigraphics.TesseractGuiGraphics;
 import net.swedz.little_big_redstone.microchip.object.logic.LogicComponent;
 import net.swedz.little_big_redstone.microchip.object.logic.LogicType;
 import net.swedz.little_big_redstone.microchip.object.logic.LogicTypes;
+import net.swedz.tesseract.neoforge.helper.guigraphics.TesseractGuiGraphics;
 
 import java.util.Map;
 

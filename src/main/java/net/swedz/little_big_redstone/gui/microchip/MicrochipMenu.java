@@ -14,7 +14,6 @@ import net.swedz.little_big_redstone.LBR;
 import net.swedz.little_big_redstone.LBRCreativeTabs;
 import net.swedz.little_big_redstone.LBRItems;
 import net.swedz.little_big_redstone.LBRMenus;
-import net.swedz.little_big_redstone.gui.BaseContainerMenu;
 import net.swedz.little_big_redstone.gui.logicarray.LogicArrayMenu;
 import net.swedz.little_big_redstone.gui.logicarray.slot.LogicArrayPlayerSlot;
 import net.swedz.little_big_redstone.gui.logicarray.slot.LogicArraySlot;
@@ -23,12 +22,13 @@ import net.swedz.little_big_redstone.item.logicarray.LogicArrayItem;
 import net.swedz.little_big_redstone.microchip.Microchip;
 import net.swedz.little_big_redstone.microchip.wire.Wire;
 import net.swedz.little_big_redstone.microchip.wire.WirePort;
+import net.swedz.tesseract.neoforge.helper.gui.PlayerInventoryContainerMenu;
 
 import java.util.Collections;
 import java.util.List;
 import java.util.function.Function;
 
-public final class MicrochipMenu extends BaseContainerMenu
+public final class MicrochipMenu extends PlayerInventoryContainerMenu
 {
 	private final BlockPos                  blockPos;
 	private final Function<Player, Boolean> validChecker;
