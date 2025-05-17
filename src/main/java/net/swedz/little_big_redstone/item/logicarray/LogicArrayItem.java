@@ -6,7 +6,6 @@ import net.minecraft.stats.Stats;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.MenuProvider;
-import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.SlotAccess;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
@@ -96,7 +95,6 @@ public final class LogicArrayItem extends Item implements DyeColoredItem
 					{
 						access.set(extracted);
 					}
-					playRemoveOneSound(player);
 				}
 			}
 			else
@@ -105,7 +103,6 @@ public final class LogicArrayItem extends Item implements DyeColoredItem
 				if(inserted > 0)
 				{
 					other.shrink(inserted);
-					playInsertSound(player);
 				}
 			}
 			return true;
@@ -148,20 +145,5 @@ public final class LogicArrayItem extends Item implements DyeColoredItem
 		return !stack.has(DataComponents.HIDE_TOOLTIP) && !stack.has(DataComponents.HIDE_ADDITIONAL_TOOLTIP) ?
 				Optional.ofNullable(stack.get(LBRComponents.LOGIC_ARRAY_STORAGE)).map(LogicArrayTooltipData::new) :
 				Optional.empty();
-	}
-	
-	private static void playRemoveOneSound(Entity entity)
-	{
-		// TODO Logic Array:
-	}
-	
-	private static void playInsertSound(Entity entity)
-	{
-		// TODO Logic Array:
-	}
-	
-	private static void playDropContentsSound(Entity entity)
-	{
-		// TODO Logic Array:
 	}
 }
