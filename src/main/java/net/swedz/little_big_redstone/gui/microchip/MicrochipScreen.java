@@ -6,11 +6,11 @@ import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.util.Mth;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
 import net.swedz.little_big_redstone.LBR;
+import net.swedz.little_big_redstone.LBRClientShaders;
 import net.swedz.little_big_redstone.LBRComponents;
 import net.swedz.little_big_redstone.LBRCreativeTabs;
 import net.swedz.little_big_redstone.LBRItemDisplayContext;
@@ -178,18 +178,15 @@ public final class MicrochipScreen extends AbstractContainerScreen<MicrochipMenu
 			}
 			else if(stack.is(LBRItems.REDSTONE_BIT.asItem()))
 			{
+				graphics.pose().translate(0, 0, 232);
+				
+				graphics.setTexture(LBR.id("textures/item/redstone_bit.png"));
 				if(!microchipWidget.context().hasPort())
 				{
-					// TODO convert this to a shader?
-					float gameTime = ((Minecraft.getInstance().level.getGameTime() % 24000L) + partialTicks) / 24000f;
-					float interval = 30;
-					float t = Mth.frac(gameTime * (24000f / interval));
-					float wave = (float) ((Math.sin(t * 6.28318f) + 1) / 2f);
-					float alpha = 0.25f * (1 - wave) + 0.5f * wave;
-					vanilla.setColor(1, 1, 1, alpha);
+					graphics.setTextureShader(LBRClientShaders::pulsingTextureAlpha);
 				}
-				super.renderFloatingItem(vanilla, stack, boardMouseX - 8, boardMouseY - 8, text);
-				vanilla.setColor(1, 1, 1, 1);
+				graphics.blit(boardMouseX - 8, boardMouseY - 8, 0, 0, 16, 16, 16, 16);
+				graphics.renderItemDecorations(stack, boardMouseX - 8, boardMouseY - 8);
 				
 				graphics.pose().popPose();
 				return;

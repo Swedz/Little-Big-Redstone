@@ -1,8 +1,7 @@
 {
-    "vertex": "little_big_redstone:microchip_wire_hovered",
-    "fragment": "little_big_redstone:microchip_wire_hovered",
+    "vertex": "little_big_redstone:pulsing_alpha",
+    "fragment": "little_big_redstone:pulsing_alpha",
     "samplers": [
-        { "name": "Sampler0" }
     ],
     "uniforms": [
         { "name": "ModelViewMat", "type": "matrix4x4", "count": 16, "values": [ 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0 ] },

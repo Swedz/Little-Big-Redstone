@@ -1,8 +1,6 @@
 package net.swedz.little_big_redstone.gui.microchip.widget;
 
 import com.google.common.collect.Lists;
-import com.mojang.blaze3d.vertex.DefaultVertexFormat;
-import com.mojang.blaze3d.vertex.VertexFormat;
 import com.mojang.datafixers.util.Either;
 import net.swedz.little_big_redstone.LBR;
 import net.swedz.little_big_redstone.LBRClientShaders;
@@ -139,7 +137,7 @@ public final class MicrochipWidgetWires
 		{
 			graphics = graphics.inner();
 			graphics.enableBatching();
-			graphics.setTextureShader(LBRClientShaders::microchipWireHovered, VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX_COLOR);
+			graphics.setTextureShader(LBRClientShaders::pulsingTextureLightness);
 		}
 		
 		graphics.setColor(argb);

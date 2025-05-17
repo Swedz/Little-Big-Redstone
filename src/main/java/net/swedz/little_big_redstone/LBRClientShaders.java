@@ -28,24 +28,32 @@ public final class LBRClientShaders
 		return LOGIC_SCANLINE_INSTANCE;
 	}
 	
-	private static ShaderInstance MICROCHIP_GRID_SNAPPING_OVERLAY_INSTANCE;
+	private static ShaderInstance PULSING_ALPHA_INSTANCE;
 	
-	public static ShaderInstance microchipGridSnappingOverlay()
+	public static ShaderInstance pulsingAlpha()
 	{
-		return MICROCHIP_GRID_SNAPPING_OVERLAY_INSTANCE;
+		return PULSING_ALPHA_INSTANCE;
 	}
 	
-	private static ShaderInstance MICROCHIP_WIRE_HOVERED_INSTANCE;
+	private static ShaderInstance PULSING_TEXTURE_LIGHTNESS_INSTANCE;
 	
-	public static ShaderInstance microchipWireHovered()
+	public static ShaderInstance pulsingTextureLightness()
 	{
-		return MICROCHIP_WIRE_HOVERED_INSTANCE;
+		return PULSING_TEXTURE_LIGHTNESS_INSTANCE;
 	}
 	
-	public static final RenderStateShard.ShaderStateShard LOGIC_ITEM_SCANLINE             = new RenderStateShard.ShaderStateShard(LBRClientShaders::logicItemScanline);
-	public static final RenderStateShard.ShaderStateShard LOGIC_SCANLINE                  = new RenderStateShard.ShaderStateShard(LBRClientShaders::logicScanline);
-	public static final RenderStateShard.ShaderStateShard MICROCHIP_GRID_SNAPPING_OVERLAY = new RenderStateShard.ShaderStateShard(LBRClientShaders::microchipGridSnappingOverlay);
-	public static final RenderStateShard.ShaderStateShard MICROCHIP_WIRE_HOVERED          = new RenderStateShard.ShaderStateShard(LBRClientShaders::microchipWireHovered);
+	private static ShaderInstance PULSING_TEXTURE_ALPHA_INSTANCE;
+	
+	public static ShaderInstance pulsingTextureAlpha()
+	{
+		return PULSING_TEXTURE_ALPHA_INSTANCE;
+	}
+	
+	public static final RenderStateShard.ShaderStateShard LOGIC_ITEM_SCANLINE       = new RenderStateShard.ShaderStateShard(LBRClientShaders::logicItemScanline);
+	public static final RenderStateShard.ShaderStateShard LOGIC_SCANLINE            = new RenderStateShard.ShaderStateShard(LBRClientShaders::logicScanline);
+	public static final RenderStateShard.ShaderStateShard PULSING_ALPHA             = new RenderStateShard.ShaderStateShard(LBRClientShaders::pulsingAlpha);
+	public static final RenderStateShard.ShaderStateShard PULSING_TEXTURE_LIGHTNESS = new RenderStateShard.ShaderStateShard(LBRClientShaders::pulsingTextureLightness);
+	public static final RenderStateShard.ShaderStateShard PULSING_TEXTURE_ALPHA     = new RenderStateShard.ShaderStateShard(LBRClientShaders::pulsingTextureAlpha);
 	
 	@SubscribeEvent
 	private static void registerShaders(RegisterShadersEvent event)
@@ -54,8 +62,9 @@ public final class LBRClientShaders
 		{
 			event.registerShader(new ShaderInstance(event.getResourceProvider(), LBR.id("logic_item_scanline"), NEW_ENTITY), (shader) -> LOGIC_ITEM_SCANLINE_INSTANCE = shader);
 			event.registerShader(new ShaderInstance(event.getResourceProvider(), LBR.id("logic_scanline"), POSITION_TEX_COLOR), (shader) -> LOGIC_SCANLINE_INSTANCE = shader);
-			event.registerShader(new ShaderInstance(event.getResourceProvider(), LBR.id("microchip_grid_snapping_overlay"), POSITION_COLOR), (shader) -> MICROCHIP_GRID_SNAPPING_OVERLAY_INSTANCE = shader);
-			event.registerShader(new ShaderInstance(event.getResourceProvider(), LBR.id("microchip_wire_hovered"), POSITION_TEX_COLOR), (shader) -> MICROCHIP_WIRE_HOVERED_INSTANCE = shader);
+			event.registerShader(new ShaderInstance(event.getResourceProvider(), LBR.id("pulsing_alpha"), POSITION_COLOR), (shader) -> PULSING_ALPHA_INSTANCE = shader);
+			event.registerShader(new ShaderInstance(event.getResourceProvider(), LBR.id("pulsing_texture_lightness"), POSITION_TEX_COLOR), (shader) -> PULSING_TEXTURE_LIGHTNESS_INSTANCE = shader);
+			event.registerShader(new ShaderInstance(event.getResourceProvider(), LBR.id("pulsing_texture_alpha"), POSITION_TEX_COLOR), (shader) -> PULSING_TEXTURE_ALPHA_INSTANCE = shader);
 		}
 		catch (IOException ex)
 		{

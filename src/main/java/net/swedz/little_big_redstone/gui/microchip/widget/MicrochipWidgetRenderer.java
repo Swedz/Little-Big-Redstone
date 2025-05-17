@@ -208,7 +208,7 @@ public final class MicrochipWidgetRenderer
 				graphics.enableBatching();
 				graphics.resetColor();
 				graphics.setTexture(LBR.id("textures/gui/container/microchip/grid_snapping_overlay.png"));
-				graphics.setTextureShader(LBRClientShaders::microchipGridSnappingOverlay, VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_COLOR);
+				graphics.setTextureShader(LBRClientShaders::pulsingAlpha, VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_COLOR);
 				if(y >= size.bounds().minY())
 				{
 					graphics.blit(0, y, 0, y, size.bounds().width(), 1, 16, 16);

@@ -1,7 +1,8 @@
 {
-    "vertex": "little_big_redstone:microchip_grid_snapping_overlay",
-    "fragment": "little_big_redstone:microchip_grid_snapping_overlay",
+    "vertex": "little_big_redstone:pulsing_texture_lightness",
+    "fragment": "little_big_redstone:pulsing_texture_lightness",
     "samplers": [
+        { "name": "Sampler0" }
     ],
     "uniforms": [
         { "name": "ModelViewMat", "type": "matrix4x4", "count": 16, "values": [ 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0 ] },
