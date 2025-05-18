@@ -9,9 +9,8 @@ import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.neoforge.items.ItemHandlerHelper;
-import net.neoforged.neoforge.items.SlotItemHandler;
+import net.neoforged.neoforge.items.wrapper.PlayerMainInvWrapper;
 import net.swedz.little_big_redstone.LBR;
-import net.swedz.little_big_redstone.LBRCreativeTabs;
 import net.swedz.little_big_redstone.LBRItems;
 import net.swedz.little_big_redstone.LBRMenus;
 import net.swedz.little_big_redstone.gui.logicarray.LogicArrayMenu;
@@ -22,6 +21,7 @@ import net.swedz.little_big_redstone.item.logicarray.LogicArrayItem;
 import net.swedz.little_big_redstone.microchip.Microchip;
 import net.swedz.little_big_redstone.microchip.wire.Wire;
 import net.swedz.little_big_redstone.microchip.wire.WirePort;
+import net.swedz.tesseract.neoforge.helper.TransferHelper;
 import net.swedz.tesseract.neoforge.helper.gui.PlayerInventoryContainerMenu;
 
 import java.util.Collections;
@@ -71,7 +71,7 @@ public final class MicrochipMenu extends PlayerInventoryContainerMenu
 	
 	private void setupInventory(Inventory playerInventory)
 	{
-		LogicArrayMenu.setupLogicArrayInventory(logicArrayItemHandler, this::addSlot, logicArrayItemHandler::shouldDisplay, logicArrayItemHandler::isCreativeMode, -75, 10, LogicArrayItem.COLUMNS, LogicArrayItem.ROWS);
+		LogicArrayMenu.setupLogicArrayInventory(logicArrayItemHandler, this::addSlot, logicArrayItemHandler::shouldDisplay, -75, 10, LogicArrayItem.COLUMNS, LogicArrayItem.ROWS);
 		
 		this.setupPlayerInventory(playerInventory, 48, 145, LogicArrayPlayerSlot::new);
 	}
@@ -184,69 +184,12 @@ public final class MicrochipMenu extends PlayerInventoryContainerMenu
 		return false;
 	}
 	
-	private boolean creativeClickLogicArraySlot(int slotId, int button, ClickType clickType, Player player)
-	{
-		var carried = this.getCarried();
-		
-		if(slotId >= 0 && logicArrayItemHandler.isCreativeMode() && slots.get(slotId) instanceof LogicArraySlot slot &&
-		   clickType != ClickType.QUICK_CRAFT)
-		{
-			boolean shift = clickType == ClickType.QUICK_MOVE;
-			var items = LBRCreativeTabs.getLogicArrayItems();
-			if(slotId < items.size())
-			{
-				var stack = items.get(slotId);
-				if(!carried.isEmpty() && !stack.isEmpty() && ItemStack.isSameItemSameComponents(carried, stack))
-				{
-					if(button == 0)
-					{
-						if(shift)
-						{
-							carried.setCount(stack.getMaxStackSize());
-						}
-						else if(carried.getCount() < carried.getMaxStackSize())
-						{
-							carried.grow(1);
-						}
-					}
-					else
-					{
-						carried.shrink(1);
-					}
-				}
-				else if(carried.isEmpty() && !stack.isEmpty())
-				{
-					this.setCarried(stack.copyWithCount(shift ? stack.getMaxStackSize() : 1));
-				}
-				else if(button == 0)
-				{
-					this.setCarried(ItemStack.EMPTY);
-				}
-				else if(!carried.isEmpty())
-				{
-					carried.shrink(1);
-				}
-			}
-			else
-			{
-				this.setCarried(ItemStack.EMPTY);
-			}
-			return true;
-		}
-		
-		return false;
-	}
-	
 	@Override
 	public void clicked(int slotId, int button, ClickType clickType, Player player)
 	{
 		this.dropCarriedWires(slotId, button, clickType, player);
 		
 		if(this.pickLogicArray(slotId, button, clickType, player))
-		{
-			return;
-		}
-		else if(this.creativeClickLogicArraySlot(slotId, button, clickType, player))
 		{
 			return;
 		}
@@ -257,19 +200,37 @@ public final class MicrochipMenu extends PlayerInventoryContainerMenu
 	@Override
 	public ItemStack quickMoveStack(Player player, int slotId)
 	{
-		ItemStack stack = ItemStack.EMPTY;
+		ItemStack originalStack = ItemStack.EMPTY;
 		Slot slot = slots.get(slotId);
 		if(slot != null && slot.hasItem())
 		{
-			stack = slot.getItem().copy();
-			if(slotId < LogicArrayItem.MAX_SLOTS)
+			var stack = slot.getItem();
+			
+			// Allow players to grab a full stack of items from the creative array menu
+			if(slot instanceof LogicArraySlot logicArraySlot && logicArrayItemHandler.isCreativeMode())
 			{
-				if(!this.moveItemStackTo(stack, LogicArrayItem.MAX_SLOTS, slots.size(), true))
+				if(this.getCarried().isEmpty() || slot.mayPlace(this.getCarried()))
 				{
-					return ItemStack.EMPTY;
+					this.setCarried(stack.copyWithCount(64));
 				}
+				return ItemStack.EMPTY;
 			}
-			else if(!this.moveItemStackTo(stack, 0, LogicArrayItem.MAX_SLOTS, false))
+			boolean clickedArrayInventory = slotId < LogicArrayItem.MAX_SLOTS;
+			// Prevent shift clicking items into the creative array menu to delete them
+			if(!clickedArrayInventory && logicArrayItemHandler.isCreativeMode())
+			{
+				return ItemStack.EMPTY;
+			}
+			
+			originalStack = stack.copy();
+			
+			var target = clickedArrayInventory ? new PlayerMainInvWrapper(player.getInventory()) : logicArrayItemHandler;
+			int inserted = TransferHelper.insert(target, stack);
+			if(inserted > 0)
+			{
+				stack.shrink(inserted);
+			}
+			else
 			{
 				return ItemStack.EMPTY;
 			}
@@ -280,137 +241,16 @@ public final class MicrochipMenu extends PlayerInventoryContainerMenu
 			}
 			else
 			{
-				slot.setChanged();
+				slot.setByPlayer(stack);
 			}
 		}
-		return stack;
-	}
-	
-	/**
-	 * <p>So, because of how vanilla's
-	 * {@link net.minecraft.world.inventory.AbstractContainerMenu#moveItemStackTo(ItemStack, int, int, boolean)}
-	 * implementation works, it causes items to get voided (and possibly duped?) when moving stacks into a
-	 * {@link SlotItemHandler} slot. The vanilla method would mutate the stacks returned by the handler (which is VERY
-	 * bad for us) and then just assume the slot is okay with this and call {@link Slot#setChanged()}. Instead of this,
-	 * because we are using an item handler, we must not mutate the returned stacks and then apply changes using
-	 * {@link Slot#set(ItemStack)}.</p>
-	 *
-	 * <p>All changes made from the vanilla implementation are noted below in comments.</p>
-	 */
-	@Override
-	public boolean moveItemStackTo(ItemStack stack, int startIndex, int endIndex, boolean reverseDirection)
-	{
-		boolean itemMoved = false;
-		int index = startIndex;
-		if(reverseDirection)
-		{
-			index = endIndex - 1;
-		}
-		
-		Slot slot;
-		ItemStack slotStack;
-		if(stack.isStackable())
-		{
-			while(!stack.isEmpty())
-			{
-				if(reverseDirection)
-				{
-					if(index < startIndex)
-					{
-						break;
-					}
-				}
-				else if(index >= endIndex)
-				{
-					break;
-				}
-				slot = slots.get(index);
-				// Change made here - we use a copy to avoid modifying the actual stack
-				slotStack = slot.getItem().copy();
-				if(!slotStack.isEmpty() && ItemStack.isSameItemSameComponents(stack, slotStack))
-				{
-					int stackCount = slotStack.getCount() + stack.getCount();
-					int slotMaxSize = slot.getMaxStackSize(slotStack);
-					if(stackCount <= slotMaxSize)
-					{
-						stack.setCount(0);
-						slotStack.setCount(stackCount);
-						// Change made here - this used to just call slot.setChanged() instead of slot.set(...)
-						slot.set(slotStack);
-						itemMoved = true;
-					}
-					else if(slotStack.getCount() < slotMaxSize)
-					{
-						stack.shrink(slotMaxSize - slotStack.getCount());
-						slotStack.setCount(slotMaxSize);
-						// Change made here - this used to just call slot.setChanged() instead of slot.set(...)
-						slot.set(slotStack);
-						itemMoved = true;
-					}
-				}
-				if(reverseDirection)
-				{
-					--index;
-				}
-				else
-				{
-					++index;
-				}
-			}
-		}
-		
-		if(!stack.isEmpty())
-		{
-			if(reverseDirection)
-			{
-				index = endIndex - 1;
-			}
-			else
-			{
-				index = startIndex;
-			}
-			while(true)
-			{
-				if(reverseDirection)
-				{
-					if(index < startIndex)
-					{
-						break;
-					}
-				}
-				else if(index >= endIndex)
-				{
-					break;
-				}
-				slot = slots.get(index);
-				slotStack = slot.getItem();
-				if(slotStack.isEmpty() && slot.mayPlace(stack))
-				{
-					int slotMaxSize = slot.getMaxStackSize(stack);
-					slot.setByPlayer(stack.split(Math.min(stack.getCount(), slotMaxSize)));
-					// Change made here - this used to call slot.setChanged() which is not necessary because
-					// slot.setbyPlayer(...) already calls slot.setChanged()
-					itemMoved = true;
-					break;
-				}
-				if(reverseDirection)
-				{
-					--index;
-				}
-				else
-				{
-					++index;
-				}
-			}
-		}
-		
-		return itemMoved;
+		return originalStack;
 	}
 	
 	@Override
 	public boolean canDragTo(Slot slot)
 	{
-		return !(slot instanceof LogicArraySlot logicArraySlot) || !logicArraySlot.isCreative();
+		return !(slot instanceof LogicArraySlot) || !logicArrayItemHandler.isCreativeMode();
 	}
 	
 	@Override

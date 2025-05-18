@@ -6,16 +6,17 @@ import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.neoforge.items.ItemHandlerHelper;
+import net.neoforged.neoforge.items.wrapper.PlayerMainInvWrapper;
 import net.swedz.little_big_redstone.LBR;
 import net.swedz.little_big_redstone.LBRComponents;
 import net.swedz.little_big_redstone.LBRItems;
 import net.swedz.little_big_redstone.gui.microchip.MicrochipMenu;
-import net.swedz.little_big_redstone.item.logicarray.LogicArrayItem;
 import net.swedz.little_big_redstone.item.stickynote.StickyNoteItem;
 import net.swedz.little_big_redstone.microchip.object.logic.LogicEntry;
 import net.swedz.little_big_redstone.microchip.object.note.StickyNoteEntry;
 import net.swedz.little_big_redstone.network.LBRCustomPacket;
 import net.swedz.tesseract.neoforge.api.Bounds;
+import net.swedz.tesseract.neoforge.helper.TransferHelper;
 import net.swedz.tesseract.neoforge.packet.PacketContext;
 
 public record PlaceTakeMicrochipObjectPacket(
@@ -113,7 +114,7 @@ public record PlaceTakeMicrochipObjectPacket(
 					{
 						microchip.stickyNotes().remove(note);
 						var stack = note.toStack();
-						if(!shift || !menu.moveItemStackTo(stack, LogicArrayItem.MAX_SLOTS, menu.slots.size(), true))
+						if(!shift || TransferHelper.insert(new PlayerMainInvWrapper(player.getInventory()), stack) <= 0)
 						{
 							menu.setCarried(stack);
 						}
@@ -123,7 +124,7 @@ public record PlaceTakeMicrochipObjectPacket(
 					{
 						var wiresPopped = components.remove(logic);
 						var stack = logic.toStack();
-						if(!shift || !menu.moveItemStackTo(stack, LogicArrayItem.MAX_SLOTS, menu.slots.size(), true))
+						if(!shift || TransferHelper.insert(new PlayerMainInvWrapper(player.getInventory()), stack) <= 0)
 						{
 							menu.setCarried(stack);
 							menu.setCarriedWires(logic.slot(), wiresPopped);

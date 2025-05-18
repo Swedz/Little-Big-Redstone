@@ -1,6 +1,7 @@
 package net.swedz.little_big_redstone.gui.microchip.widget;
 
 import com.mojang.blaze3d.platform.InputConstants;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Renderable;
 import net.minecraft.client.gui.components.events.GuiEventListener;
@@ -9,13 +10,13 @@ import net.minecraft.client.gui.narration.NarrationElementOutput;
 import net.minecraft.client.gui.navigation.ScreenRectangle;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.world.item.DyeColor;
+import net.neoforged.neoforge.items.wrapper.PlayerMainInvWrapper;
 import net.swedz.little_big_redstone.LBR;
 import net.swedz.little_big_redstone.LBRComponents;
 import net.swedz.little_big_redstone.LBRItems;
 import net.swedz.little_big_redstone.gui.microchip.MicrochipMenu;
 import net.swedz.little_big_redstone.gui.microchip.MicrochipScreen;
 import net.swedz.little_big_redstone.gui.microchip.logic.DyeComponentResult;
-import net.swedz.little_big_redstone.item.logicarray.LogicArrayItem;
 import net.swedz.little_big_redstone.item.stickynote.StickyNoteItem;
 import net.swedz.little_big_redstone.microchip.Microchip;
 import net.swedz.little_big_redstone.microchip.object.logic.LogicSelectedPort;
@@ -25,6 +26,7 @@ import net.swedz.little_big_redstone.network.packet.OpenLogicConfigPacket;
 import net.swedz.little_big_redstone.network.packet.PlaceTakeMicrochipObjectPacket;
 import net.swedz.little_big_redstone.network.packet.PlaceTakeMicrochipWirePacket;
 import net.swedz.tesseract.neoforge.api.Bounds;
+import net.swedz.tesseract.neoforge.helper.TransferHelper;
 
 public final class MicrochipWidget implements GuiEventListener, Renderable, NarratableEntry
 {
@@ -149,7 +151,7 @@ public final class MicrochipWidget implements GuiEventListener, Renderable, Narr
 			microchip.stickyNotes().remove(note);
 			microchip.markDirty();
 			var stack = note.toStack();
-			if(!shift || !menu.moveItemStackTo(stack, LogicArrayItem.MAX_SLOTS, menu.slots.size(), true))
+			if(!shift || TransferHelper.insert(new PlayerMainInvWrapper(Minecraft.getInstance().player.getInventory()), stack) <= 0)
 			{
 				menu.setCarried(stack);
 			}
@@ -237,7 +239,7 @@ public final class MicrochipWidget implements GuiEventListener, Renderable, Narr
 			microchip.markDirty();
 			wires.rebuildPaths();
 			var stack = logic.toStack();
-			if(!shift || !menu.moveItemStackTo(stack, LogicArrayItem.MAX_SLOTS, menu.slots.size(), true))
+			if(!shift || TransferHelper.insert(new PlayerMainInvWrapper(Minecraft.getInstance().player.getInventory()), stack) <= 0)
 			{
 				menu.setCarried(stack);
 				menu.setCarriedWires(logic.slot(), wiresPopped);

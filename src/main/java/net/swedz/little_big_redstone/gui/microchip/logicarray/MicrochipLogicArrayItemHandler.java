@@ -12,6 +12,8 @@ import java.util.Optional;
 
 public final class MicrochipLogicArrayItemHandler implements IItemHandlerModifiable
 {
+	private static final LogicCreativeItemHandler CREATIVE = new LogicCreativeItemHandler();
+	
 	private final AbstractContainerMenu menu;
 	private final Player                player;
 	
@@ -41,7 +43,12 @@ public final class MicrochipLogicArrayItemHandler implements IItemHandlerModifia
 	
 	public boolean shouldDisplay()
 	{
-		return this.hasSelectedSlot() || player.hasInfiniteMaterials();
+		return this.handler().isPresent();
+	}
+	
+	private Optional<IItemHandlerModifiable> handler()
+	{
+		return logicArray.isEmpty() && player.hasInfiniteMaterials() ? Optional.of(CREATIVE) : logicArray;
 	}
 	
 	private boolean setPickedLogicArray(int slotId, ItemStack stack)
@@ -93,42 +100,42 @@ public final class MicrochipLogicArrayItemHandler implements IItemHandlerModifia
 	@Override
 	public void setStackInSlot(int slot, ItemStack stack)
 	{
-		logicArray.ifPresent((h) -> h.setStackInSlot(slot, stack));
+		this.handler().ifPresent((h) -> h.setStackInSlot(slot, stack));
 	}
 	
 	@Override
 	public int getSlots()
 	{
-		return logicArray.map(IItemHandlerModifiable::getSlots).orElse(0);
+		return this.handler().map(IItemHandlerModifiable::getSlots).orElse(0);
 	}
 	
 	@Override
 	public ItemStack getStackInSlot(int slot)
 	{
-		return logicArray.map((h) -> h.getStackInSlot(slot)).orElse(ItemStack.EMPTY);
+		return this.handler().map((h) -> h.getStackInSlot(slot)).orElse(ItemStack.EMPTY);
 	}
 	
 	@Override
 	public ItemStack insertItem(int slot, ItemStack stack, boolean simulate)
 	{
-		return logicArray.map((h) -> h.insertItem(slot, stack, simulate)).orElse(ItemStack.EMPTY);
+		return this.handler().map((h) -> h.insertItem(slot, stack, simulate)).orElse(stack);
 	}
 	
 	@Override
 	public ItemStack extractItem(int slot, int amount, boolean simulate)
 	{
-		return logicArray.map((h) -> h.extractItem(slot, amount, simulate)).orElse(ItemStack.EMPTY);
+		return this.handler().map((h) -> h.extractItem(slot, amount, simulate)).orElse(ItemStack.EMPTY);
 	}
 	
 	@Override
 	public int getSlotLimit(int slot)
 	{
-		return logicArray.map((h) -> h.getSlotLimit(slot)).orElse(0);
+		return this.handler().map((h) -> h.getSlotLimit(slot)).orElse(0);
 	}
 	
 	@Override
 	public boolean isItemValid(int slot, ItemStack stack)
 	{
-		return logicArray.map((h) -> h.isItemValid(slot, stack)).orElse(false);
+		return this.handler().map((h) -> h.isItemValid(slot, stack)).orElse(false);
 	}
 }

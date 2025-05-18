@@ -1,6 +1,5 @@
 package net.swedz.little_big_redstone.gui.microchip;
 
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
@@ -12,11 +11,9 @@ import net.minecraft.world.item.ItemStack;
 import net.swedz.little_big_redstone.LBR;
 import net.swedz.little_big_redstone.LBRClientShaders;
 import net.swedz.little_big_redstone.LBRComponents;
-import net.swedz.little_big_redstone.LBRCreativeTabs;
 import net.swedz.little_big_redstone.LBRItemDisplayContext;
 import net.swedz.little_big_redstone.LBRItems;
 import net.swedz.little_big_redstone.gui.logicarray.slot.LogicArrayPlayerSlot;
-import net.swedz.little_big_redstone.gui.logicarray.slot.LogicArraySlot;
 import net.swedz.little_big_redstone.gui.microchip.logic.LogicRenderer;
 import net.swedz.little_big_redstone.gui.microchip.logic.LogicRenderers;
 import net.swedz.little_big_redstone.gui.microchip.widget.MicrochipWidget;
@@ -77,24 +74,6 @@ public final class MicrochipScreen extends AbstractContainerScreen<MicrochipMenu
 	}
 	
 	@Override
-	protected void renderTooltip(GuiGraphics vanilla, int x, int y)
-	{
-		if(menu.getCarried().isEmpty() && hoveredSlot instanceof LogicArraySlot && menu.getLogicArrayItemHandler().isCreativeMode())
-		{
-			var items = LBRCreativeTabs.getLogicArrayItems();
-			if(hoveredSlot.index < items.size())
-			{
-				vanilla.pose().pushPose();
-				vanilla.renderTooltip(Minecraft.getInstance().font, items.get(hoveredSlot.index), x, y);
-				vanilla.pose().popPose();
-				return;
-			}
-		}
-		
-		super.renderTooltip(vanilla, x, y);
-	}
-	
-	@Override
 	protected void renderSlot(GuiGraphics vanilla, Slot slot)
 	{
 		var graphics = new TesseractGuiGraphics(vanilla);
@@ -111,20 +90,6 @@ public final class MicrochipScreen extends AbstractContainerScreen<MicrochipMenu
 			
 			graphics.pose().popPose();
 			
-			return;
-		}
-		else if(slot instanceof LogicArraySlot && menu.getLogicArrayItemHandler().isCreativeMode())
-		{
-			var items = LBRCreativeTabs.getLogicArrayItems();
-			if(slot.index < items.size())
-			{
-				graphics.pose().pushPose();
-				graphics.pose().translate(0, 0, 100);
-				
-				vanilla.renderItem(items.get(slot.index), slot.x, slot.y);
-				
-				graphics.pose().popPose();
-			}
 			return;
 		}
 		
