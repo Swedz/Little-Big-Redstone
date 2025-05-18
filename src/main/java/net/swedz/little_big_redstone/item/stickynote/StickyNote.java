@@ -17,24 +17,28 @@ import java.util.Objects;
 
 public final class StickyNote
 {
-	private static final MiniMessage PARSER;
+	private static MiniMessage PARSER;
 	
-	static
+	private static MiniMessage getParser()
 	{
-		var proxy = Proxies.get(LBRProxy.class);
-		
-		var builder = MiniMessage.builder();
-		
-		var tags = TagResolver.builder();
-		tags.resolver(StandardTags.decorations());
-		for(var type : LogicTypes.values())
+		if(PARSER == null)
 		{
-			tags.resolver(Placeholder.component(type.id(), proxy.nativeToAdventure(type.displaySymbol())));
+			var proxy = Proxies.get(LBRProxy.class);
+			
+			var builder = MiniMessage.builder();
+			
+			var tags = TagResolver.builder();
+			tags.resolver(StandardTags.decorations());
+			for(var type : LogicTypes.values())
+			{
+				tags.resolver(Placeholder.component(type.id(), proxy.nativeToAdventure(type.displaySymbol())));
+			}
+			builder.tags(tags.build());
+			
+			builder.preProcessor(StickyNote::preProcess);
+			PARSER = builder.build();
 		}
-		builder.tags(tags.build());
-		
-		builder.preProcessor(StickyNote::preProcess);
-		PARSER = builder.build();
+		return PARSER;
 	}
 	
 	private static String preProcess(String string)
@@ -49,7 +53,7 @@ public final class StickyNote
 	
 	public static Component parse(String text)
 	{
-		return Proxies.get(LBRProxy.class).adventureToNative(PARSER.deserialize(text));
+		return Proxies.get(LBRProxy.class).adventureToNative(getParser().deserialize(text));
 	}
 	
 	public static final StickyNote EMPTY = new StickyNote("");
@@ -58,13 +62,13 @@ public final class StickyNote
 	
 	public static final StreamCodec<ByteBuf, StickyNote> STREAM_CODEC = ByteBufCodecs.STRING_UTF8.map(StickyNote::new, StickyNote::text);
 	
-	private final String    text;
-	private final Component parsed;
+	private final String text;
+	
+	private Component parsed;
 	
 	public StickyNote(String text)
 	{
 		this.text = text;
-		this.parsed = parse(text);
 	}
 	
 	public String text()
@@ -79,6 +83,10 @@ public final class StickyNote
 	
 	public Component parsed()
 	{
+		if(parsed == null)
+		{
+			parsed = parse(text);
+		}
 		return parsed;
 	}
 	
