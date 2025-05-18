@@ -28,6 +28,7 @@ import net.swedz.little_big_redstone.client.model.stickynote.item.StickyNoteItem
 import net.swedz.little_big_redstone.gui.logicarray.LogicArrayScreen;
 import net.swedz.little_big_redstone.gui.logicconfig.LogicConfigScreen;
 import net.swedz.little_big_redstone.gui.microchip.MicrochipScreen;
+import net.swedz.little_big_redstone.gui.microchip.logic.LogicRenderers;
 import net.swedz.little_big_redstone.item.LogicItem;
 import net.swedz.little_big_redstone.item.logicarray.tooltip.LogicArrayClientTooltip;
 import net.swedz.little_big_redstone.item.logicarray.tooltip.LogicArrayTooltipData;
@@ -43,6 +44,7 @@ public final class LBRClient
 	public LBRClient(IEventBus bus, ModContainer container)
 	{
 		LBRTooltips.init();
+		LogicRenderers.init();
 	}
 	
 	private static void registerCustomItemRenderer(RegisterClientExtensionsEvent event, Supplier<BlockEntityWithoutLevelRenderer> renderer, Class<?> itemType)

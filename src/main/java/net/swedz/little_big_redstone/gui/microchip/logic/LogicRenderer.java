@@ -22,10 +22,6 @@ public abstract class LogicRenderer<L extends LogicComponent>
 	public static final ResourceLocation PORT_INPUT  = LBR.id("textures/logic/port_input.png");
 	public static final ResourceLocation PORT_OUTPUT = LBR.id("textures/logic/port_output.png");
 	
-	public LogicRenderer(LogicRendererProvider.Context context)
-	{
-	}
-	
 	public abstract void render(Context context, TesseractGuiGraphics graphics, L component, int x, int y);
 	
 	protected void renderPort(TesseractGuiGraphics graphics, int x, int y, LogicGridSize size, boolean input, int index, int maxPorts, float red, float green, float blue, float alpha)

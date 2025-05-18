@@ -2,12 +2,6 @@ package net.swedz.little_big_redstone.gui.microchip.logic;
 
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Maps;
-import net.minecraft.util.Unit;
-import net.neoforged.api.distmarker.Dist;
-import net.neoforged.bus.api.SubscribeEvent;
-import net.neoforged.fml.common.EventBusSubscriber;
-import net.neoforged.neoforge.event.AddReloadListenerEvent;
-import net.swedz.little_big_redstone.LBR;
 import net.swedz.little_big_redstone.gui.microchip.logic.renderer.IORenderer;
 import net.swedz.little_big_redstone.gui.microchip.logic.renderer.OnOffLogicRenderer;
 import net.swedz.little_big_redstone.gui.microchip.logic.renderer.ReaderRenderer;
@@ -20,7 +14,6 @@ import net.swedz.tesseract.neoforge.helper.guigraphics.TesseractGuiGraphics;
 
 import java.util.Map;
 
-@EventBusSubscriber(modid = LBR.ID, value = Dist.CLIENT)
 public final class LogicRenderers
 {
 	private static final Map<LogicType<?>, LogicRendererProvider<?>> PROVIDERS = Maps.newConcurrentMap();
@@ -51,19 +44,24 @@ public final class LogicRenderers
 		register(LogicTypes.RS_NOR_LATCH, OnOffLogicRenderer::new);
 	}
 	
+	public static void init()
+	{
+		RENDERERS = createRenderers();
+	}
+	
 	private static <L extends LogicComponent> void register(LogicType<L> type, LogicRendererProvider<L> provider)
 	{
 		PROVIDERS.put(type, provider);
 	}
 	
-	private static Map<LogicType<?>, LogicRenderer<?>> createRenderers(LogicRendererProvider.Context context)
+	private static Map<LogicType<?>, LogicRenderer<?>> createRenderers()
 	{
 		ImmutableMap.Builder<LogicType<?>, LogicRenderer<?>> builder = ImmutableMap.builder();
 		PROVIDERS.forEach((type, provider) ->
 		{
 			try
 			{
-				builder.put(type, provider.create(context));
+				builder.put(type, provider.create());
 			}
 			catch (Exception ex)
 			{
@@ -71,17 +69,6 @@ public final class LogicRenderers
 			}
 		});
 		return builder.build();
-	}
-	
-	@SubscribeEvent
-	private static void addReloadListeners(AddReloadListenerEvent event)
-	{
-		event.addListener((stage, manager, preparationsProfiler, reloadProfiler, backgroundExecutor, gameExecutor) ->
-				stage.wait(Unit.INSTANCE).thenRunAsync(() ->
-				{
-					var context = new LogicRendererProvider.Context();
-					RENDERERS = createRenderers(context);
-				}));
 	}
 	
 	public static <L extends LogicComponent> void render(LogicRenderer.Context context, TesseractGuiGraphics graphics, L component, int x, int y)
