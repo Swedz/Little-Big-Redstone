@@ -4,7 +4,6 @@ import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Maps;
 import net.swedz.little_big_redstone.gui.microchip.logic.renderer.IORenderer;
 import net.swedz.little_big_redstone.gui.microchip.logic.renderer.OnOffLogicRenderer;
-import net.swedz.little_big_redstone.gui.microchip.logic.renderer.ReaderRenderer;
 import net.swedz.little_big_redstone.gui.microchip.logic.renderer.SequencerRenderer;
 import net.swedz.little_big_redstone.gui.microchip.logic.renderer.SimpleLogicRenderer;
 import net.swedz.little_big_redstone.microchip.object.logic.LogicComponent;
@@ -33,7 +32,7 @@ public final class LogicRenderers
 		register(LogicTypes.NOR, SimpleLogicRenderer::new);
 		register(LogicTypes.XOR, SimpleLogicRenderer::new);
 		
-		register(LogicTypes.READER, ReaderRenderer::new);
+		register(LogicTypes.READER, SimpleLogicRenderer::new);
 		
 		register(LogicTypes.SEQUENCER, SequencerRenderer::new);
 		register(LogicTypes.PULSE_THROTTLER, SimpleLogicRenderer::new);
