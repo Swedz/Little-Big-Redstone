@@ -7,7 +7,7 @@ import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.neoforge.items.IItemHandler;
 import net.neoforged.neoforge.items.ItemStackHandler;
-import net.neoforged.neoforge.items.wrapper.PlayerInvWrapper;
+import net.neoforged.neoforge.items.wrapper.PlayerMainInvWrapper;
 import net.swedz.little_big_redstone.LBRMenus;
 import net.swedz.little_big_redstone.gui.logicarray.slot.LogicArrayPlayerSlot;
 import net.swedz.little_big_redstone.gui.logicarray.slot.LogicArraySlot;
@@ -39,20 +39,20 @@ public final class LogicArrayMenu extends PlayerInventoryContainerMenu
 		this(containerId, playerInventory, new ItemStackHandler(LogicArrayItem.MAX_SLOTS), buf.readVarInt());
 	}
 	
-	public static void setupLogicArrayInventory(IItemHandler itemHandler, SlotAdder slotAdder, Supplier<Boolean> isActive, Supplier<Boolean> isCreative, int startX, int startY, int rows, int columns)
+	public static void setupLogicArrayInventory(IItemHandler itemHandler, SlotAdder slotAdder, Supplier<Boolean> isActive, int startX, int startY, int rows, int columns)
 	{
 		for(int row = 0; row < rows; row++)
 		{
 			for(int column = 0; column < columns; column++)
 			{
-				slotAdder.addSlot(new LogicArraySlot(itemHandler, column + row * columns, startX + column * 18, row * 18 + startY, isActive, isCreative));
+				slotAdder.addSlot(new LogicArraySlot(itemHandler, column + row * columns, startX + column * 18, row * 18 + startY, isActive));
 			}
 		}
 	}
 	
 	public static void setupLogicArrayInventory(IItemHandler itemHandler, SlotAdder slotAdder, int startX, int startY, int rows, int columns)
 	{
-		setupLogicArrayInventory(itemHandler, slotAdder, null, null, startX, startY, rows, columns);
+		setupLogicArrayInventory(itemHandler, slotAdder, null, startX, startY, rows, columns);
 	}
 	
 	public interface SlotAdder
@@ -75,7 +75,7 @@ public final class LogicArrayMenu extends PlayerInventoryContainerMenu
 			var stack = slot.getItem();
 			originalStack = stack.copy();
 			
-			var target = index < LogicArrayItem.MAX_SLOTS ? new PlayerInvWrapper(player.getInventory()) : itemHandler;
+			var target = index < LogicArrayItem.MAX_SLOTS ? new PlayerMainInvWrapper(player.getInventory()) : itemHandler;
 			int inserted = TransferHelper.insert(target, stack);
 			if(inserted > 0)
 			{
