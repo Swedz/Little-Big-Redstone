@@ -52,7 +52,7 @@ public final class MicrochipWidgetRenderer
 				if(!note.isEmpty())
 				{
 					int minWidth = graphics.guiWidth() - x - 6;
-					graphics.setColor(entry.textColor().getTextColor());
+					graphics.setColor(LBRColors.stickyNoteText(entry.textColor()));
 					graphics.setStringDropShadow(false);
 					graphics.setTooltipFirstLinePadded(false);
 					graphics.setTooltipBackgroundPadding(4, 21, 4, 4);

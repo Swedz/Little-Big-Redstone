@@ -55,11 +55,7 @@ public final class LBRColors
 	
 	public static int stickyNoteText(DyeColor color)
 	{
-		return switch (color)
-		{
-			case BLACK -> 0xFF333333;
-			default -> (0xFF000000 | color.getTextColor());
-		};
+		return 0xFF000000 | color.getTextColor();
 	}
 	
 	private static final List<DyeColor> COLORS = List.of(

@@ -5,6 +5,7 @@ import net.minecraft.client.gui.components.Button;
 import net.minecraft.network.chat.CommonComponents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.DyeColor;
+import net.swedz.little_big_redstone.LBRColors;
 import net.swedz.little_big_redstone.LBRText;
 import net.swedz.little_big_redstone.gui.stickynote.StickyNoteScreen;
 import net.swedz.little_big_redstone.gui.stickynote.edit.StickyNoteEditScreen;
@@ -63,7 +64,7 @@ public final class StickyNoteViewScreen extends StickyNoteScreen
 		graphics.pose().translate(leftPos, topPos, 0);
 		graphics.pose().translate(contentLeftPos, contentTopPos, 0);
 		
-		graphics.setColor(textColor.getTextColor());
+		graphics.setColor(LBRColors.stickyNoteText(textColor));
 		graphics.setStringDropShadow(false);
 		int index = 0;
 		for(var line : font.split(text, maxContentWidth))

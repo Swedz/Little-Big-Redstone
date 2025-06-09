@@ -3,6 +3,7 @@ package net.swedz.little_big_redstone.gui.stickynote.edit;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.network.chat.CommonComponents;
 import net.minecraft.world.item.DyeColor;
+import net.swedz.little_big_redstone.LBRColors;
 import net.swedz.little_big_redstone.gui.stickynote.StickyNoteScreen;
 import net.swedz.little_big_redstone.gui.stickynote.view.StickyNoteViewScreen;
 import net.swedz.little_big_redstone.network.packet.StickyNotePacket;
@@ -28,7 +29,7 @@ public final class StickyNoteEditScreen extends StickyNoteScreen
 	{
 		super.init();
 		
-		editWidget = this.addRenderableWidget(this.createNoteEditWidget(leftPos + contentLeftPos, topPos + contentTopPos, maxContentWidth, maxContentHeight, textColor::getTextColor));
+		editWidget = this.addRenderableWidget(this.createNoteEditWidget(leftPos + contentLeftPos, topPos + contentTopPos, maxContentWidth, maxContentHeight, () -> LBRColors.stickyNoteText(textColor)));
 		
 		doneButton = this.addRenderableWidget(Button.builder(CommonComponents.GUI_DONE, (b) -> this.done()).bounds(leftPos, topPos + uiHeight - 20, uiWidth, 20).build());
 	}

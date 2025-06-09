@@ -223,7 +223,7 @@ public final class StickyNoteEditWidget implements GuiEventListener, Renderable,
 			}
 			else
 			{
-				graphics.fill(x, y - 1, x + 1, y + display.lineHeight());
+				graphics.fill(x - 1, y - 1, x, y + display.lineHeight());
 			}
 			graphics.resetColor();
 		}
