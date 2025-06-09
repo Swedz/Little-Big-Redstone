@@ -4,3 +4,5 @@ This mod adds a new block called the Microchip that allows you to put together c
 redstone and item/fluid/energy storages!
 
 For any questions, please ask in the `#little-big-redstone` channel on [my discord](https://discord.gg/vNaqDzSNaB).
+
+![All of the blocks and items in the mod](src/main/resources/assets/little_big_redstone/readme/items.gif)
