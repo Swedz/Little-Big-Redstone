@@ -1,6 +1,6 @@
 {
-  "parent": "little_big_redstone:item/floppy_disk",
+  "parent": "minecraft:item/generated",
   "textures": {
-    "layer0": "little_big_redstone:item/floppy_disk_pink"
+    "layer0": "little_big_redstone:item/floppy_disk/pink"
   }
 }

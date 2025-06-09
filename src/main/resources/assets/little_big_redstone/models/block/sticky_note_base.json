@@ -14,20 +14,6 @@
 				"up": {"uv": [0, 0, 5, 0], "texture": "#texture"},
 				"down": {"uv": [0, 0, 5, 0], "rotation": 180, "texture": "#texture"}
 			}
-		},
-		{
-			"name": "pin",
-			"from": [-0.47411, 1.64816, -0.05],
-			"to": [0.22589, 2.34816, 0.475],
-			"rotation": {"angle": 45, "axis": "z", "origin": [0.02589, 2.14816, 0.325]},
-			"faces": {
-				"north": {"uv": [8, 3, 7, 2], "rotation": 180, "texture": "#texture"},
-				"east": {"uv": [8, 1, 9, 2], "rotation": 90, "texture": "#texture"},
-				"south": {"uv": [10, 0, 9, 1], "texture": "#texture"},
-				"west": {"uv": [7, 1, 8, 2], "rotation": 270, "texture": "#texture"},
-				"up": {"uv": [7, 0, 8, 1], "texture": "#texture"},
-				"down": {"uv": [8, 0, 9, 1], "rotation": 180, "texture": "#texture"}
-			}
 		}
 	]
 }

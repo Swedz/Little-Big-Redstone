@@ -3,7 +3,7 @@
     {
       "parent": "little_big_redstone:block/sticky_note_base",
       "textures": {
-        "texture": "little_big_redstone:block/sticky_note_brown"
+        "texture": "little_big_redstone:block/sticky_note/brown"
       }
     }
   ],
@@ -12,11 +12,11 @@
     {
       "parent": "little_big_redstone:block/sticky_note_text",
       "textures": {
-        "texture": "little_big_redstone:block/sticky_note_text"
+        "texture": "little_big_redstone:block/sticky_note/text"
       }
     }
   ],
   "textures": {
-    "particle": "little_big_redstone:block/sticky_note_brown"
+    "particle": "little_big_redstone:block/sticky_note/brown"
   }
 }

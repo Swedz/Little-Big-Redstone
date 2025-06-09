@@ -36,12 +36,12 @@ public final class BlockModelsDatagenProvider extends BlockStateProvider
 					.customLoader(StickyNoteEntityModelLoaderBuilder::begin)
 					.baseLayer(this.models().nested()
 							.parent(new ModelFile.UncheckedModelFile(LBR.id("block/sticky_note_base")))
-							.texture("texture", LBR.id("block/sticky_note_%s".formatted(colorId))))
+							.texture("texture", LBR.id("block/sticky_note/%s".formatted(colorId))))
 					.textLayer(this.models().nested()
 							.parent(new ModelFile.UncheckedModelFile(LBR.id("block/sticky_note_text")))
-							.texture("texture", LBR.id("block/sticky_note_text")))
+							.texture("texture", LBR.id("block/sticky_note/text")))
 					.end()
-					.texture("particle", LBR.id("block/sticky_note_%s".formatted(colorId)));
+					.texture("particle", LBR.id("block/sticky_note/%s".formatted(colorId)));
 		}
 	}
 	

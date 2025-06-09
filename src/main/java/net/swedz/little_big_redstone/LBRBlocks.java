@@ -13,7 +13,6 @@ import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.material.MapColor;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.client.model.generators.ModelFile;
-import net.neoforged.neoforge.client.model.generators.loaders.ItemLayerModelBuilder;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import net.swedz.little_big_redstone.block.microchip.MicrochipBlock;
 import net.swedz.little_big_redstone.block.microchip.MicrochipBlockEntity;
@@ -130,24 +129,15 @@ public final class LBRBlocks
 				.tag(LBRTags.Blocks.MICROCHIPS, BlockTags.MINEABLE_WITH_PICKAXE)
 				.withLootTable(CommonLootTableBuilders::self)
 				.withModel((block) -> (provider) ->
-				{
-					var blockModel = provider.models().getBuilder(block.identifier().id())
-							.parent(new ModelFile.UncheckedModelFile("block/block"))
-							.customLoader((parent, efh) -> new BasicCustomLoaderBuilder<>(LBR.id("microchip"), parent, efh)).end()
-							.texture("particle", LBR.id("block/microchip_%s".formatted(colorId)))
-							.texture("base", LBR.id("block/microchip_%s".formatted(colorId)));
-					blockModel.texture("signal_on_overlay", LBR.id("block/microchip_signal_on_overlay"));
-					blockModel.texture("signal_off_overlay", LBR.id("block/microchip_signal_off_overlay"));
-					
-					provider.simpleBlock(block.get(), blockModel);
-					
-					provider.itemModels().getBuilder(block.identifier().id())
-							.parent(new ModelFile.UncheckedModelFile("item/generated"))
-							.texture("layer0", LBR.id("item/microchip"))
-							.texture("layer1", LBR.id("item/microchip_overlay"))
-							.customLoader((parent, efh) -> ItemLayerModelBuilder.begin(parent, efh)
-									.color(LBRColors.microchipItem(color), 0));
-				});
+						provider.simpleBlockWithItem(block.get(), provider.models().getBuilder(block.identifier().id())
+								.parent(new ModelFile.UncheckedModelFile("block/block"))
+								.customLoader((parent, efh) -> new BasicCustomLoaderBuilder<>(LBR.id("microchip"), parent, efh)).end()
+								.texture("particle", LBR.id("block/microchip/side/%s".formatted(colorId)))
+								.texture("base_up", LBR.id("block/microchip/top/%s".formatted(colorId)))
+								.texture("base", LBR.id("block/microchip/side/%s".formatted(colorId)))
+								.texture("base_down", LBR.id("block/microchip/bottom/%s".formatted(colorId)))
+								.texture("signal_on_overlay", LBR.id("block/microchip/signal_on_overlay"))
+								.texture("signal_off_overlay", LBR.id("block/microchip/signal_off_overlay"))));
 		holder.item().tag(LBRTags.Items.MICROCHIPS);
 		return holder;
 	}

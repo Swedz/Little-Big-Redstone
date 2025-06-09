@@ -17,6 +17,7 @@ import net.neoforged.neoforge.client.ChunkRenderTypeSet;
 import net.neoforged.neoforge.client.model.IDynamicBakedModel;
 import net.neoforged.neoforge.client.model.QuadTransformers;
 import net.neoforged.neoforge.client.model.data.ModelData;
+import net.swedz.little_big_redstone.LBRColors;
 import net.swedz.little_big_redstone.client.model.stickynote.StickyNoteModelData;
 
 import java.util.List;
@@ -61,7 +62,7 @@ public final class StickyNoteEntityBakedModel implements IDynamicBakedModel
 				for(var quad : model.getQuads(state, side, random, modelData, renderType))
 				{
 					var copy = new BakedQuad(quad.getVertices(), 0, quad.getDirection(), quad.getSprite(), quad.isShade(), quad.hasAmbientOcclusion());
-					QuadTransformers.applyingColor(0xFF000000 | data.textColor().getTextColor()).processInPlace(copy);
+					QuadTransformers.applyingColor(LBRColors.stickyNoteText(data.textColor())).processInPlace(copy);
 					quads.add(copy);
 				}
 			}

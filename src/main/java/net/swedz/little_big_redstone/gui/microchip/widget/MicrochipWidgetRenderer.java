@@ -61,7 +61,7 @@ public final class MicrochipWidgetRenderer
 							x, y,
 							minWidth, minWidth / 2,
 							graphics.guiWidth(), graphics.guiHeight(),
-							LBR.id("textures/gui/tooltip/sticky_note/%s.png".formatted(entry.noteColor().getName())),
+							LBR.id("textures/gui/sticky_note/background_%s.png".formatted(entry.noteColor().getName())),
 							64, 64, 21
 					);
 					graphics.resetTooltipBackgroundPadding();

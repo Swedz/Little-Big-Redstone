@@ -60,10 +60,10 @@ public abstract class StickyNoteScreen extends Screen
 		graphics.pose().translate(leftPos, topPos, 0);
 		
 		graphics.setTexture(LBR.id("textures/gui/sticky_note/background_%s.png".formatted(color.getName())));
-		graphics.blit(0, 0, 0, 0, 256, 256);
+		graphics.nineSlice(0, 0, 180, 180, 64, 64, 21);
 		
 		graphics.setTexture(LBR.id("textures/gui/sticky_note/pin_%s.png".formatted(color.getName())));
-		graphics.blit(0, 0, 0, 0, 256, 256);
+		graphics.blit((180 / 2) - 9, 4, 0, 0, 32, 32, 32, 32);
 		
 		graphics.pose().popPose();
 	}

@@ -1,16 +1,3 @@
 {
-  "parent": "minecraft:item/generated",
-  "loader": "neoforge:item_layers",
-  "neoforge_data": {
-    "layers": {
-      "0": {
-        "color": "ff00ffff"
-      }
-    }
-  },
-  "render_types": {},
-  "textures": {
-    "layer0": "little_big_redstone:item/microchip",
-    "layer1": "little_big_redstone:item/microchip_overlay"
-  }
+  "parent": "little_big_redstone:block/light_blue_microchip"
 }

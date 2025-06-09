@@ -2,9 +2,11 @@
   "parent": "minecraft:block/block",
   "loader": "little_big_redstone:microchip",
   "textures": {
-    "base": "little_big_redstone:block/microchip_black",
-    "particle": "little_big_redstone:block/microchip_black",
-    "signal_off_overlay": "little_big_redstone:block/microchip_signal_off_overlay",
-    "signal_on_overlay": "little_big_redstone:block/microchip_signal_on_overlay"
+    "base": "little_big_redstone:block/microchip/side/black",
+    "base_down": "little_big_redstone:block/microchip/bottom/black",
+    "base_up": "little_big_redstone:block/microchip/top/black",
+    "particle": "little_big_redstone:block/microchip/side/black",
+    "signal_off_overlay": "little_big_redstone:block/microchip/signal_off_overlay",
+    "signal_on_overlay": "little_big_redstone:block/microchip/signal_on_overlay"
   }
 }

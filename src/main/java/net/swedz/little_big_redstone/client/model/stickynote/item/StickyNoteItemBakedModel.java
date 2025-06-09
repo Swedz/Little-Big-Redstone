@@ -21,6 +21,7 @@ import net.neoforged.neoforge.client.model.ExtraFaceData;
 import net.neoforged.neoforge.client.model.IDynamicBakedModel;
 import net.neoforged.neoforge.client.model.data.ModelData;
 import net.neoforged.neoforge.client.model.geometry.UnbakedGeometryHelper;
+import net.swedz.little_big_redstone.LBRColors;
 import net.swedz.little_big_redstone.client.model.stickynote.StickyNoteModelData;
 
 import java.util.List;
@@ -63,7 +64,7 @@ public final class StickyNoteItemBakedModel implements IDynamicBakedModel
 		{
 			var layer = layers.get(index);
 			
-			ExtraFaceData faceData = index == 0 ? null : new ExtraFaceData(0xFF000000 | data.textColor().getTextColor(), ExtraFaceData.DEFAULT.blockLight(), ExtraFaceData.DEFAULT.skyLight(), ExtraFaceData.DEFAULT.ambientOcclusion());
+			ExtraFaceData faceData = index == 0 ? null : new ExtraFaceData(LBRColors.stickyNoteText(data.textColor()), ExtraFaceData.DEFAULT.blockLight(), ExtraFaceData.DEFAULT.skyLight(), ExtraFaceData.DEFAULT.ambientOcclusion());
 			
 			var builder = CompositeModel.Baked.builder(useAmbientOcclusion, isGui3d, usesBlockLight, particle, this.getOverrides(), transforms);
 			var unbaked = UnbakedGeometryHelper.createUnbakedItemElements(index, layer, faceData);

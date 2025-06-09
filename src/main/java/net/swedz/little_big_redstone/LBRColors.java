@@ -57,8 +57,8 @@ public final class LBRColors
 	{
 		return switch (color)
 		{
-			case GRAY, BLACK -> 0xFFFFFFFF;
-			default -> 0xFF000000;
+			case BLACK -> 0xFF333333;
+			default -> (0xFF000000 | color.getTextColor());
 		};
 	}
 	

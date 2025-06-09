@@ -135,7 +135,7 @@ public final class LBRItems
 				.withModel((holder) -> (provider) ->
 						provider.getBuilder(holder.identifier().id())
 								.parent(new ModelFile.UncheckedModelFile("item/generated"))
-								.texture("layer0", LBR.id("item/logic_array_%s".formatted(colorId))));
+								.texture("layer0", LBR.id("item/logic_array/%s".formatted(colorId))));
 	}
 	
 	private static ItemHolder<FloppyDiskItem> createFloppyDisk(DyeColor color, String colorEnglishName, int order)
@@ -147,8 +147,8 @@ public final class LBRItems
 				.tag(LBRTags.Items.FLOPPY_DISKS)
 				.withModel((holder) -> (provider) ->
 						provider.getBuilder(holder.identifier().id())
-								.parent(new ModelFile.UncheckedModelFile(LBR.id("item/floppy_disk")))
-								.texture("layer0", LBR.id("item/floppy_disk_%s".formatted(colorId))));
+								.parent(new ModelFile.UncheckedModelFile("item/generated"))
+								.texture("layer0", LBR.id("item/floppy_disk/%s".formatted(colorId))));
 	}
 	
 	private static ItemHolder<StickyNoteItem> createStickyNote(DyeColor color, String colorEnglishName, int order)
