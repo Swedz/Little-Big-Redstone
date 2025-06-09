@@ -24,7 +24,7 @@ public final class LBRClientRenderTypes
 		String directionName = direction.toString().toLowerCase(Locale.ROOT);
 		return CubeOverlayRenderHelper.createRenderType(
 				"microchip_side_overlay_%s".formatted(directionName),
-				LBR.id("textures/block/microchip_side_overlay_%s.png".formatted(directionName))
+				LBR.id("textures/block/microchip/overlay_%s.png".formatted(directionName))
 		);
 	});
 	
