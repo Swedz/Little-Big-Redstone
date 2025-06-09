@@ -47,12 +47,6 @@ public final class LBRColors
 		};
 	}
 	
-	public static int microchipItem(DyeColor color)
-	{
-		// TODO replace this with separate textures
-		return ColorHelper.getVibrantColor(color);
-	}
-	
 	public static int stickyNoteText(DyeColor color)
 	{
 		return 0xFF000000 | color.getTextColor();
