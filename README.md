@@ -49,9 +49,8 @@ their contents and colors when broken and placed.
 <!-- Direct image link: ![Sticky notes placed on a wall](https://raw.githubusercontent.com/Swedz/Little-Big-Redstone/refs/heads/1.21.1/src/main/resources/assets/little_big_redstone/readme/sticky_note_placed.png) -->
 ![Sticky notes placed on a wall](src/main/resources/assets/little_big_redstone/readme/sticky_note_placed.png)
 
-When placed, you can interact with a sticky note  to view what is written on it, or write your own text. Sticky 
-notes support very rudimentary markdown formatting  such as `*italic*`, `**bold**`, `~~strikethrough~~`, and 
-`__underline__` text.
+When placed, you can interact with a sticky note to view what is written on it, or write your own text. Sticky 
+notes support very rudimentary markdown formatting.
 
 <!-- Direct image link: ![Sticky note gui](https://raw.githubusercontent.com/Swedz/Little-Big-Redstone/refs/heads/1.21.1/src/main/resources/assets/little_big_redstone/readme/sticky_note_gui.png) -->
 ![Sticky note gui](src/main/resources/assets/little_big_redstone/readme/sticky_note_gui.png)
