@@ -38,7 +38,10 @@ apply from: 'neoforge.gradle'
 
 java.toolchain.languageVersion = JavaLanguageVersion.of(21)
 
-sourceSets.main.resources { srcDir 'src/generated/resources' }
+sourceSets.main.resources {
+    srcDir 'src/generated/resources'
+    exclude 'assets/little_big_redstone/readme/**'
+}
 
 tasks.withType(JavaCompile).configureEach {
     options.encoding = 'UTF-8'
