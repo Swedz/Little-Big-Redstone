@@ -10,7 +10,6 @@ public final class LBRColors
 {
 	public static int circuitboard(DyeColor color)
 	{
-		// TODO replace this with separate textures
 		return 0xFF000000 | switch (color)
 		{
 			case WHITE -> 0xCCCCCC;
