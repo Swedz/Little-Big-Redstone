@@ -18,7 +18,7 @@ Mirochips are blocks that can have logic placed in their GUI in many different a
 to create connections between logic components in the GUI. All logic components have tooltips that describe what 
 their functions are.
 
-Below is a demonstration of how complex logic can get inside of the Microchip GUI. This is a seven segment display 
+Below is a demonstration of how complex logic can get inside of the microchip GUI. This is a seven segment display 
 created by bigfoott. While this microchip does not have a designated output, you can place any number of inputs and 
 outputs as you may need.
 
@@ -43,8 +43,7 @@ be present in your inventory for you to do so.
 
 Sticky notes are items that you can place into the world similar to item frames. On each face of a block, you can 
 place 4 sticky notes with any combination of colors and rotations. The text on sticky notes can also be colored by 
-interacting with dye (or with snowballs or water buckets to wash the color out) on a sticky note. Sticky notes retain 
-their contents and colors when broken and placed.
+interacting with dye on a sticky note. Sticky notes retain their contents and colors when broken and placed.
 
 <!-- Direct image link: ![Sticky notes placed on a wall](https://raw.githubusercontent.com/Swedz/Little-Big-Redstone/refs/heads/1.21.1/src/main/resources/assets/little_big_redstone/readme/sticky_note_placed.png) -->
 ![Sticky notes placed on a wall](src/main/resources/assets/little_big_redstone/readme/sticky_note_placed.png)
