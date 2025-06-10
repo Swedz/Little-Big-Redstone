@@ -19,8 +19,8 @@ to create connections between logic components in the GUI. All logic components 
 their functions are.
 
 Below is a demonstration of how complex logic can get inside of the Microchip GUI. This is a seven segment display 
-created by bigfoott, a friend of mine. While this microchip does not have a designated output, you can place any
-number of inputs and outputs as you may need.
+created by bigfoott. While this microchip does not have a designated output, you can place any number of inputs and 
+outputs as you may need.
 
 <!-- Direct image link: ![7 segment display demonstration using the microchip](https://raw.githubusercontent.com/Swedz/Little-Big-Redstone/refs/heads/1.21.1/src/main/resources/assets/little_big_redstone/readme/microchip.gif) -->
 ![7 segment display demonstration using the microchip](src/main/resources/assets/little_big_redstone/readme/microchip.gif)
