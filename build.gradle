@@ -41,6 +41,8 @@ java.toolchain.languageVersion = JavaLanguageVersion.of(21)
 sourceSets.main.resources {
     srcDir 'src/generated/resources'
     exclude 'assets/little_big_redstone/readme/**'
+    exclude 'assets/little_big_redstone/logo_alt.png'
+    exclude 'assets/little_big_redstone/logo_discord.png'
 }
 
 tasks.withType(JavaCompile).configureEach {
