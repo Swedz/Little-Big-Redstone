@@ -1,7 +1,6 @@
 package net.swedz.little_big_redstone;
 
 import net.minecraft.world.item.DyeColor;
-import net.swedz.tesseract.neoforge.helper.ColorHelper;
 import org.apache.commons.lang3.function.TriConsumer;
 
 import java.util.List;
@@ -12,38 +11,53 @@ public final class LBRColors
 	{
 		return 0xFF000000 | switch (color)
 		{
-			case WHITE -> 0xCCCCCC;
-			case ORANGE -> 0xFFBD7F;
-			case MAGENTA -> 0xFF7FFF;
-			case LIGHT_BLUE -> 0x7FFFFF;
-			case YELLOW -> 0xFFFF7F;
-			case LIME -> 0x7FFF7F;
-			case PINK -> 0xFFD8FF;
-			case GRAY -> 0x808080;
-			case LIGHT_GRAY -> 0xA6A6A6;
-			case CYAN -> 0x54A8A8;
-			case PURPLE -> 0xA854A8;
-			case BLUE -> 0x7F7FFF;
-			case BROWN -> 0x89664E;
-			case GREEN -> 0x54A854;
-			case RED -> 0xFF7F7F;
-			case BLACK -> 0x333333;
+			case WHITE -> 0x838C96;
+			case ORANGE -> 0x8D2E00;
+			case MAGENTA -> 0x922C8C;
+			case LIGHT_BLUE -> 0x27588B;
+			case YELLOW -> 0x876709;
+			case LIME -> 0x356008;
+			case PINK -> 0x9F215E;
+			case GRAY -> 0x53516B;
+			case LIGHT_GRAY -> 0x5F6A7B;
+			case CYAN -> 0x19636E;
+			case PURPLE -> 0x632285;
+			case BLUE -> 0x101DA1;
+			case BROWN -> 0x6A2E0F;
+			case GREEN -> 0x155912;
+			case RED -> 0x720000;
+			case BLACK -> 0x41334F;
 			default -> color.getTextColor() & 0x00FFFFFF;
 		};
 	}
 	
 	public static int componentForeground(DyeColor color)
 	{
-		return ColorHelper.getVibrantColor(color);
+		return 0xFF000000 | switch (color)
+		{
+			case WHITE -> 0xEFF5FF;
+			case ORANGE -> 0xFF920F;
+			case MAGENTA -> 0xFF80F7;
+			case LIGHT_BLUE -> 0x6AE4FF;
+			case YELLOW -> 0xFFE800;
+			case LIME -> 0xA4EB00;
+			case PINK -> 0xFFB8EA;
+			case GRAY -> 0xA8ABBF;
+			case LIGHT_GRAY -> 0xC5D2E0;
+			case CYAN -> 0x47D5AF;
+			case PURPLE -> 0xD857FF;
+			case BLUE -> 0x4BA6F1;
+			case BROWN -> 0xC66A1A;
+			case GREEN -> 0x18AF2F;
+			case RED -> 0xFF0000;
+			case BLACK -> 0x726D81;
+			default -> color.getTextColor() & 0x00FFFFFF;
+		};
 	}
 	
 	public static int componentBackground(DyeColor color)
 	{
-		return switch (color)
-		{
-			case GRAY, BLACK -> 0xFFFFFFFF;
-			default -> 0xFF000000;
-		};
+		return 0xFF000000;
 	}
 	
 	public static int stickyNoteText(DyeColor color)
