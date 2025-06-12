@@ -2,58 +2,76 @@ package net.swedz.little_big_redstone.item.stickynote;
 
 import com.mojang.serialization.Codec;
 import io.netty.buffer.ByteBuf;
-import net.kyori.adventure.text.minimessage.MiniMessage;
-import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
-import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
-import net.kyori.adventure.text.minimessage.tag.standard.StandardTags;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.network.chat.Style;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
-import net.swedz.little_big_redstone.microchip.object.logic.LogicTypes;
-import net.swedz.little_big_redstone.proxy.LBRProxy;
-import net.swedz.tesseract.neoforge.proxy.Proxies;
 
 import java.util.Objects;
+import java.util.regex.Pattern;
 
 public final class StickyNote
 {
-	private static MiniMessage PARSER;
+	private static final Pattern MARKDOWN_PATTERN = Pattern.compile(
+			"(?<!\\*)\\*\\*\\*(?<bolditalic>.+?)\\*\\*\\*(?!\\*)" +
+			"|(?<!\\*)\\*\\*(?<bold>.+?)\\*\\*(?!\\*)" +
+			"|(?<!\\*)\\*(?<italic>.+?)\\*(?!\\*)" +
+			"|(?<!_)__(?<underline>.+?)__(?!_)" +
+			"|(?<!~)~~(?<strikethrough>.+?)~~(?!~)"
+	);
 	
-	private static MiniMessage getParser()
+	public static MutableComponent parse(String text)
 	{
-		if(PARSER == null)
+		var result = Component.empty();
+		
+		var matcher = MARKDOWN_PATTERN.matcher(text);
+		int lastEndIndex = 0;
+		
+		while(matcher.find())
 		{
-			var proxy = Proxies.get(LBRProxy.class);
-			
-			var builder = MiniMessage.builder();
-			
-			var tags = TagResolver.builder();
-			tags.resolver(StandardTags.decorations());
-			for(var type : LogicTypes.values())
+			if(matcher.start() > lastEndIndex)
 			{
-				tags.resolver(Placeholder.component(type.id(), proxy.nativeToAdventure(type.displaySymbol())));
+				result = result.append(Component.literal(text.substring(lastEndIndex, matcher.start())));
 			}
-			builder.tags(tags.build());
 			
-			builder.preProcessor(StickyNote::preProcess);
-			PARSER = builder.build();
+			Style style = Style.EMPTY;
+			String matchedText;
+			if((matchedText = matcher.group("bolditalic")) != null)
+			{
+				style = style.withBold(true).withItalic(true);
+			}
+			else if((matchedText = matcher.group("bold")) != null)
+			{
+				style = style.withBold(true);
+			}
+			else if((matchedText = matcher.group("italic")) != null)
+			{
+				style = style.withItalic(true);
+			}
+			else if((matchedText = matcher.group("underline")) != null)
+			{
+				style = style.withUnderlined(true);
+			}
+			else if((matchedText = matcher.group("strikethrough")) != null)
+			{
+				style = style.withStrikethrough(true);
+			}
+			
+			if(matchedText != null)
+			{
+				result = result.append(parse(matchedText).withStyle(style));
+			}
+			
+			lastEndIndex = matcher.end();
 		}
-		return PARSER;
-	}
-	
-	private static String preProcess(String string)
-	{
-		return string
-				.replaceAll("\\*\\*\\*(.+?)\\*\\*\\*", "<i><b>$1</b></i>")
-				.replaceAll("\\*\\*(.+?)\\*\\*", "<b>$1</b>")
-				.replaceAll("\\*(.+?)\\*", "<i>$1</i>")
-				.replaceAll("~~(.+?)~~", "<st>$1</st>")
-				.replaceAll("__(.+?)__", "<u>$1</u>");
-	}
-	
-	public static Component parse(String text)
-	{
-		return Proxies.get(LBRProxy.class).adventureToNative(getParser().deserialize(text));
+		
+		if(lastEndIndex < text.length())
+		{
+			result = result.append(Component.literal(text.substring(lastEndIndex)));
+		}
+		
+		return result;
 	}
 	
 	public static final StickyNote EMPTY = new StickyNote("");
