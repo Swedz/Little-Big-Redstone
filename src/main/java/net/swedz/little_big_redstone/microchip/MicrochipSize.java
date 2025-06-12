@@ -24,9 +24,14 @@ public final class MicrochipSize
 	
 	private static final Bounds REAL_BOUNDS = new Bounds(0, 0, 240, 128);
 	
+	public static MicrochipSize create(Bounds bounds, float scale)
+	{
+		return new MicrochipSize(bounds.divideCeil(scale), scale);
+	}
+	
 	public static MicrochipSize create(float scale)
 	{
-		return new MicrochipSize(REAL_BOUNDS.divideCeil(scale), scale);
+		return create(REAL_BOUNDS, scale);
 	}
 	
 	private final Bounds bounds;

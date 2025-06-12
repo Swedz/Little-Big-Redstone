@@ -159,8 +159,10 @@ public final class WirePathing
 	
 	private static AvoidGrid buildAvoidGrid(Bounds innerBounds, Bounds bounds, List<Bounds> avoidBounds)
 	{
-		int mediumAvoidWeight = innerBounds.width() / 3;
-		int heavyAvoidWeight = innerBounds.width() / 2;
+		// These values are based on the standard microchip gui size and give decent results
+		// We dont use the size here because it will yield inconsistent results when rendering smaller microchips
+		int mediumAvoidWeight = 160; // 33% of a standard microchip
+		int heavyAvoidWeight = 240; // half a standard microchip
 		
 		var avoidAreas = new AvoidGrid(bounds, mediumAvoidWeight);
 		
