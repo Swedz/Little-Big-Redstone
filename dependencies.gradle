@@ -18,11 +18,11 @@ repositories {
 		}
 	}
 	maven {
-		name "Sonatype OSS"
-		url = "https://s01.oss.sonatype.org/content/repositories/snapshots/"
+		name "Sonatype"
+		url = "https://central.sonatype.com/repository/maven-snapshots/"
 		content {
-			// Adventure
-			includeGroup "net.kyori"
+			// GuideME
+			includeGroup "org.appliedenergistics"
 		}
 	}
 }
@@ -42,4 +42,6 @@ dependencies {
 	} else {
 		compileOnly "dev.emi:emi-neoforge:${emi_version}"
 	}
+
+	localImplementation "org.appliedenergistics:guideme:${guideme_version}"
 }
