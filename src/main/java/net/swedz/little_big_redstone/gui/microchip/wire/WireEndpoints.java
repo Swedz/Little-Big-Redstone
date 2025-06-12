@@ -3,6 +3,7 @@ package net.swedz.little_big_redstone.gui.microchip.wire;
 import net.minecraft.world.item.DyeColor;
 import net.swedz.little_big_redstone.client.model.logic.LogicBakingModelData;
 import net.swedz.little_big_redstone.gui.microchip.widget.MicrochipWidgetContext;
+import net.swedz.little_big_redstone.microchip.Microchip;
 import net.swedz.little_big_redstone.microchip.object.logic.LogicComponent;
 import net.swedz.little_big_redstone.microchip.object.logic.LogicEntry;
 import net.swedz.little_big_redstone.microchip.wire.Wire;
@@ -63,14 +64,18 @@ public record WireEndpoints(
 	
 	public static WireEndpoints of(MicrochipWidgetContext context, Wire wire)
 	{
-		var widget = context.widget();
-		LogicEntry output = widget.microchip().components().get(wire.output().slot());
-		LogicEntry input = widget.microchip().components().get(wire.input().slot());
+		return of(context.widget().color(), context.widget().microchip(), wire);
+	}
+	
+	public static WireEndpoints of(DyeColor color, Microchip microchip, Wire wire)
+	{
+		LogicEntry output = microchip.components().get(wire.output().slot());
+		LogicEntry input = microchip.components().get(wire.input().slot());
 		return of(
 				output, wire.output().index(),
 				input, wire.input().index(),
 				true,
-				widget.color()
+				color
 		);
 	}
 	

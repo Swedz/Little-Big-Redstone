@@ -1,5 +1,6 @@
 package net.swedz.little_big_redstone.gui.microchip.widget;
 
+import com.google.common.collect.Lists;
 import com.mojang.blaze3d.platform.InputConstants;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
@@ -9,14 +10,23 @@ import net.minecraft.client.gui.narration.NarratableEntry;
 import net.minecraft.client.gui.narration.NarrationElementOutput;
 import net.minecraft.client.gui.navigation.ScreenRectangle;
 import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.Style;
 import net.minecraft.world.item.DyeColor;
 import net.neoforged.neoforge.items.wrapper.PlayerMainInvWrapper;
 import net.swedz.little_big_redstone.LBR;
+import net.swedz.little_big_redstone.LBRColors;
 import net.swedz.little_big_redstone.LBRComponents;
 import net.swedz.little_big_redstone.LBRItems;
+import net.swedz.little_big_redstone.LBRText;
+import net.swedz.little_big_redstone.LBRTooltips;
+import net.swedz.little_big_redstone.client.model.logic.LogicBakingModelData;
 import net.swedz.little_big_redstone.gui.microchip.MicrochipMenu;
 import net.swedz.little_big_redstone.gui.microchip.MicrochipScreen;
 import net.swedz.little_big_redstone.gui.microchip.logic.DyeComponentResult;
+import net.swedz.little_big_redstone.gui.microchip.logic.LogicRenderer;
+import net.swedz.little_big_redstone.gui.microchip.logic.LogicRenderers;
+import net.swedz.little_big_redstone.gui.microchip.panel.MicrochipRenderBoardPanel;
 import net.swedz.little_big_redstone.item.stickynote.StickyNoteItem;
 import net.swedz.little_big_redstone.microchip.Microchip;
 import net.swedz.little_big_redstone.microchip.object.logic.LogicSelectedPort;
@@ -27,6 +37,10 @@ import net.swedz.little_big_redstone.network.packet.PlaceTakeMicrochipObjectPack
 import net.swedz.little_big_redstone.network.packet.PlaceTakeMicrochipWirePacket;
 import net.swedz.tesseract.neoforge.api.Bounds;
 import net.swedz.tesseract.neoforge.helper.TransferHelper;
+import net.swedz.tesseract.neoforge.helper.guigraphics.TesseractGuiGraphics;
+
+import java.util.List;
+import java.util.function.Consumer;
 
 public final class MicrochipWidget implements GuiEventListener, Renderable, NarratableEntry
 {
@@ -35,8 +49,7 @@ public final class MicrochipWidget implements GuiEventListener, Renderable, Narr
 	private final MicrochipScreen screen;
 	private final Microchip       microchip;
 	
-	private final MicrochipWidgetRenderer renderer;
-	private final MicrochipWidgetWires    wires;
+	private final MicrochipRenderBoardPanel panel;
 	
 	private MicrochipWidgetContext context = new MicrochipWidgetContext(this, 0, 0);
 	
@@ -47,8 +60,7 @@ public final class MicrochipWidget implements GuiEventListener, Renderable, Narr
 		this.screen = screen;
 		this.microchip = screen.getMenu().microchip();
 		
-		this.renderer = new MicrochipWidgetRenderer(this);
-		this.wires = new MicrochipWidgetWires(this);
+		panel = new MicrochipRenderBoardPanel(this.color(), microchip, () -> context);
 		
 		var bounds = microchip.size().bounds();
 		this.x = x + microchip.size().scale(bounds.minX());
@@ -72,9 +84,9 @@ public final class MicrochipWidget implements GuiEventListener, Renderable, Narr
 		return microchip;
 	}
 	
-	public MicrochipWidgetWires wireRenderer()
+	public MicrochipRenderBoardPanel panel()
 	{
-		return wires;
+		return panel;
 	}
 	
 	public MicrochipWidgetContext context()
@@ -104,7 +116,7 @@ public final class MicrochipWidget implements GuiEventListener, Renderable, Narr
 			}
 		}
 		
-		wires.rebuildPaths();
+		panel.wires().rebuildPaths();
 	}
 	
 	private boolean dyeComponent(int x, int y, int button)
@@ -237,7 +249,7 @@ public final class MicrochipWidget implements GuiEventListener, Renderable, Narr
 		{
 			var wiresPopped = microchip.components().remove(logic);
 			microchip.markDirty();
-			wires.rebuildPaths();
+			panel.wires().rebuildPaths();
 			var stack = logic.toStack();
 			if(!shift || TransferHelper.insert(new PlayerMainInvWrapper(Minecraft.getInstance().player.getInventory()), stack) <= 0)
 			{
@@ -341,7 +353,7 @@ public final class MicrochipWidget implements GuiEventListener, Renderable, Narr
 				{
 					menu.placeCarriedWires(logic.slot());
 					microchip.markDirty();
-					wires.rebuildPaths();
+					panel.wires().rebuildPaths();
 					if(!player.hasInfiniteMaterials() || leftClick)
 					{
 						carried.shrink(1);
@@ -375,7 +387,7 @@ public final class MicrochipWidget implements GuiEventListener, Renderable, Narr
 	
 	private boolean mouseClickedOnBoard(int mouseX, int mouseY, int boardMouseX, int boardMouseY, int button)
 	{
-		context = MicrochipWidgetContext.test(this, wires, mouseX, mouseY, boardMouseX, boardMouseY, context);
+		context = MicrochipWidgetContext.test(this, panel, mouseX, mouseY, boardMouseX, boardMouseY, context);
 		
 		if(this.dyeComponent(boardMouseX, boardMouseY, button))
 		{
@@ -438,15 +450,86 @@ public final class MicrochipWidget implements GuiEventListener, Renderable, Narr
 	}
 	
 	@Override
-	public void render(GuiGraphics graphics, int mouseX, int mouseY, float partialTick)
+	public void render(GuiGraphics vanilla, int mouseX, int mouseY, float partialTick)
 	{
 		var size = microchip.size();
 		int boardMouseX = size.boardCoord(this.toLocalX(mouseX));
 		int boardMouseY = size.boardCoord(this.toLocalY(mouseY));
 		
-		context = MicrochipWidgetContext.test(this, wires, mouseX, mouseY, boardMouseX, boardMouseY, context);
+		context = MicrochipWidgetContext.test(this, panel, mouseX, mouseY, boardMouseX, boardMouseY, context);
 		
-		renderer.render(graphics, boardMouseX, boardMouseY, partialTick);
+		var graphics = new TesseractGuiGraphics(vanilla);
+		
+		graphics.pose().pushPose();
+		graphics.pose().translate(x, y, 0);
+		graphics.pose().scale(microchip.size().scale(), microchip.size().scale(), microchip.size().scale());
+		panel.render(graphics);
+		graphics.pose().popPose();
+		
+		this.renderTooltip(graphics);
+	}
+	
+	private void renderTooltip(TesseractGuiGraphics graphics)
+	{
+		if(context.shouldRenderTooltip())
+		{
+			int x = this.x + microchip.size().scale(microchip.size().bounds().width()) + 10 + 4;
+			int y = this.y + 4;
+			if(context.hasNote())
+			{
+				var entry = context.note();
+				var note = entry.note();
+				if(!note.isEmpty())
+				{
+					int minWidth = graphics.guiWidth() - x - 6;
+					graphics.setColor(LBRColors.stickyNoteText(entry.textColor()));
+					graphics.setStringDropShadow(false);
+					graphics.setTooltipFirstLinePadded(false);
+					graphics.setTooltipBackgroundPadding(4, 21, 4, 4);
+					graphics.renderTooltipBounded(
+							List.of(note.parsed()),
+							x, y,
+							minWidth, minWidth / 2,
+							graphics.guiWidth(), graphics.guiHeight(),
+							LBR.id("textures/gui/sticky_note/background_%s.png".formatted(entry.noteColor().getName())),
+							64, 64, 21
+					);
+					graphics.resetTooltipBackgroundPadding();
+					graphics.setTooltipFirstLinePadded(true);
+					graphics.setStringDropShadow(true);
+					graphics.resetColor();
+				}
+			}
+			else if(context.hasLogic())
+			{
+				var component = context.logic().component();
+				List<Component> lines = Lists.newArrayList();
+				lines.add(component.type().displayName().withStyle(Style.EMPTY.withUnderlined(true)));
+				component.type().tooltip(component, false, true, false).ifPresent((Consumer<List<Component>>) lines::addAll);
+				if(component.config().hasMenu())
+				{
+					lines.add(Component.empty());
+					lines.add(LBRText.LOGIC_CONFIG_TOOLTIP_CLICK_TO_OPEN.text().withStyle(LBRTooltips.DEFAULT_STYLE));
+				}
+				
+				var colorSet = LogicBakingModelData.get(component).getColorSet(component, this.color());
+				int backgroundColor = colorSet.background();
+				int borderColor = colorSet.foreground();
+				graphics.renderTooltip(lines, x, y, backgroundColor, backgroundColor, borderColor, borderColor);
+				
+				if(microchip.isDebug())
+				{
+					graphics.pose().pushPose();
+					graphics.pose().translate(this.x + 211, this.y + 139, 0);
+					graphics.pose().scale(2, 2, 2);
+					graphics.enableBatching();
+					var context = LogicRenderer.Context.create(this.color(), component, this.menu().getCarriedWires() != null, this.hasSelectedPort(), false);
+					LogicRenderers.render(context, graphics, component, 0, 0);
+					graphics.drawBatches();
+					graphics.pose().popPose();
+				}
+			}
+		}
 	}
 	
 	@Override

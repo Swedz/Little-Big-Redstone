@@ -176,9 +176,9 @@ public final class MicrochipScreen extends AbstractContainerScreen<MicrochipMenu
 			for(var wire : menu.getCarriedWires())
 			{
 				var endpoints = WireEndpoints.carried(microchipWidget.context(), menu.getCarriedComponentSlot(), component, wire, logicX, logicY);
-				List<Bounds> avoidBounds = List.of(microchipWidget.wireRenderer().pathing().mutateComponentBounds(component.size().toBounds(logicX, logicY)));
+				List<Bounds> avoidBounds = List.of(microchipWidget.panel().wires().pathing().mutateComponentBounds(component.size().toBounds(logicX, logicY)));
 				
-				microchipWidget.wireRenderer().renderWire(graphics, avoidBounds, endpoints, true, partialTicks);
+				microchipWidget.panel().wires().renderWire(graphics, avoidBounds, endpoints, true);
 			}
 			
 			graphics.drawBatches();

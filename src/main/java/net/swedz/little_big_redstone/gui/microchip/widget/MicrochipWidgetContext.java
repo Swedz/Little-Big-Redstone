@@ -4,6 +4,7 @@ import com.google.common.collect.Lists;
 import net.minecraft.world.item.ItemStack;
 import net.swedz.little_big_redstone.LBRItems;
 import net.swedz.little_big_redstone.gui.microchip.logic.DyeComponentResult;
+import net.swedz.little_big_redstone.gui.microchip.panel.MicrochipRenderBoardPanel;
 import net.swedz.little_big_redstone.microchip.object.MicrochipObject;
 import net.swedz.little_big_redstone.microchip.object.logic.LogicEntry;
 import net.swedz.little_big_redstone.microchip.object.logic.LogicSelectedPort;
@@ -25,7 +26,7 @@ public final class MicrochipWidgetContext
 		return stack.isEmpty() || DyeComponentResult.is(stack);
 	}
 	
-	public static MicrochipWidgetContext test(MicrochipWidget widget, MicrochipWidgetWires widgetWires, int mouseX, int mouseY, int boardMouseX, int boardMouseY, MicrochipWidgetContext previous)
+	public static MicrochipWidgetContext test(MicrochipWidget widget, MicrochipRenderBoardPanel panel, int mouseX, int mouseY, int boardMouseX, int boardMouseY, MicrochipWidgetContext previous)
 	{
 		if(!widget.isMouseOver(mouseX, mouseY))
 		{
@@ -81,15 +82,15 @@ public final class MicrochipWidgetContext
 			if(logic == null && !widget.hasSelectedPort())
 			{
 				wire = previous.wire();
-				if(wire == null || !widgetWires.isHovering(wire, boardMouseX, boardMouseY))
+				if(wire == null || !panel.wires().isHovering(wire, boardMouseX, boardMouseY))
 				{
-					wire = widgetWires.findHoveredWire(boardMouseX, boardMouseY);
+					wire = panel.wires().findHoveredWire(boardMouseX, boardMouseY);
 					if(wire != null)
 					{
 						logic = microchip.components().get(wire.output().slot());
 					}
 				}
-				else if(wire != null && widgetWires.isHovering(wire, boardMouseX, boardMouseY))
+				else if(wire != null && panel.wires().isHovering(wire, boardMouseX, boardMouseY))
 				{
 					logic = microchip.components().get(wire.output().slot());
 				}
