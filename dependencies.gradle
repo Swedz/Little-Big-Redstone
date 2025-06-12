@@ -42,23 +42,4 @@ dependencies {
 	} else {
 		compileOnly "dev.emi:emi-neoforge:${emi_version}"
 	}
-
-	jarJar(implementation("net.kyori:adventure-api:${adventure_api_version}")) {
-		version {
-			strictly adventure_api_version_range
-			prefer adventure_api_version
-		}
-	}
-	jarJar(implementation("net.kyori:adventure-platform-neoforge:${adventure_platform_version}")) {
-		version {
-			strictly adventure_platform_version_range
-			prefer adventure_platform_version
-		}
-	}
-	jarJar(implementation("net.kyori:adventure-text-minimessage:${minimessage_version}")) {
-		version {
-			strictly minimessage_version_range
-			prefer minimessage_version
-		}
-	}
 }

@@ -1,8 +1,6 @@
 package net.swedz.little_big_redstone.proxy;
 
-import net.kyori.adventure.platform.modcommon.MinecraftClientAudiences;
 import net.minecraft.client.Minecraft;
-import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.DyeColor;
 import net.swedz.little_big_redstone.LBR;
 import net.swedz.little_big_redstone.client.hud.FloppyDiskConsumeItemsGuiOverlay;
@@ -19,15 +17,6 @@ import java.util.List;
 @ProxyEntrypoint(environment = ProxyEnvironment.CLIENT)
 public class LBRClientProxy extends LBRProxy
 {
-	protected MinecraftClientAudiences clientAudiences;
-	
-	@Override
-	public void init()
-	{
-		super.init();
-		clientAudiences = MinecraftClientAudiences.of();
-	}
-	
 	@Override
 	public void handleUpdateMicrochip(int containerId, Microchip microchip)
 	{
@@ -83,17 +72,5 @@ public class LBRClientProxy extends LBRProxy
 	public void floppyDiskGuiOverlayUpdate(boolean force)
 	{
 		FloppyDiskConsumeItemsGuiOverlay.update(force);
-	}
-	
-	@Override
-	public Component adventureToNative(net.kyori.adventure.text.Component adventure)
-	{
-		return clientAudiences.asNative(adventure);
-	}
-	
-	@Override
-	public net.kyori.adventure.text.Component nativeToAdventure(Component vanilla)
-	{
-		return clientAudiences.asAdventure(vanilla);
 	}
 }
