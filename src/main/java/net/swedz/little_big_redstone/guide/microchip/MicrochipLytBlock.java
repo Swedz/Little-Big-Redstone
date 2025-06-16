@@ -1,5 +1,6 @@
-package net.swedz.little_big_redstone.guide;
+package net.swedz.little_big_redstone.guide.microchip;
 
+import com.google.common.collect.Maps;
 import guideme.document.LytRect;
 import guideme.document.block.LytBlock;
 import guideme.layout.LayoutContext;
@@ -12,12 +13,20 @@ import net.swedz.little_big_redstone.LBR;
 import net.swedz.little_big_redstone.gui.microchip.panel.MicrochipRenderBoardPanel;
 import net.swedz.little_big_redstone.microchip.Microchip;
 import net.swedz.little_big_redstone.microchip.MicrochipSize;
+import net.swedz.little_big_redstone.microchip.object.logic.LogicComponent;
+import net.swedz.little_big_redstone.microchip.object.logic.LogicEntry;
+import net.swedz.little_big_redstone.microchip.object.logic.LogicType;
 import net.swedz.tesseract.neoforge.api.Bounds;
 import net.swedz.tesseract.neoforge.helper.guigraphics.TesseractGuiGraphics;
+
+import java.util.Map;
+import java.util.Optional;
 
 public final class MicrochipLytBlock extends LytBlock implements ExportableResourceProvider
 {
 	private final Microchip microchip;
+	
+	private final Map<String, LogicEntry> logic = Maps.newHashMap();
 	
 	private final MicrochipRenderBoardPanel panel;
 	
@@ -28,9 +37,24 @@ public final class MicrochipLytBlock extends LytBlock implements ExportableResou
 		panel = new MicrochipRenderBoardPanel(color, microchip);
 	}
 	
-	public Microchip microchip()
+	public LogicEntry getLogic(String name)
 	{
-		return microchip;
+		return logic.get(name);
+	}
+	
+	public void addLogic(String name, int x, int y, DyeColor color, LogicType<?> type)
+	{
+		LogicComponent<?, ?> component = type.defaultFactory().create();
+		component.setColor(Optional.ofNullable(color));
+		var entry = microchip.components().add(x, y, component);
+		logic.put(name, entry);
+	}
+	
+	public void addWire(String from, String to, int fromPort, int toPort)
+	{
+		var fromEntry = this.getLogic(from);
+		var toEntry = this.getLogic(to);
+		microchip.wires().add(fromEntry.slot(), fromPort, toEntry.slot(), toPort);
 	}
 	
 	@Override
