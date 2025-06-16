@@ -27,6 +27,8 @@ import java.util.Optional;
 
 public final class MicrochipLytBlock extends LytBlock implements ExportableResourceProvider
 {
+	private static final int PANEL_MARGIN = 5;
+	
 	private final Microchip microchip;
 	
 	private final Map<String, LogicEntry> logic = Maps.newHashMap();
@@ -65,7 +67,7 @@ public final class MicrochipLytBlock extends LytBlock implements ExportableResou
 	@Override
 	protected LytRect computeLayout(LayoutContext context, int x, int y, int availableWidth)
 	{
-		return new LytRect(x, y, microchip.size().bounds().width(), microchip.size().bounds().height());
+		return new LytRect(x, y, microchip.size().bounds().width() + (PANEL_MARGIN * 2), microchip.size().bounds().height() + (PANEL_MARGIN * 2));
 	}
 	
 	@Override
@@ -82,9 +84,15 @@ public final class MicrochipLytBlock extends LytBlock implements ExportableResou
 	public void render(RenderContext context)
 	{
 		var graphics = new TesseractGuiGraphics(context.guiGraphics());
+		
 		graphics.pose().pushPose();
-		graphics.pose().translate(bounds.x(), bounds.y(), 0);
+		
+		context.renderPanel(bounds);
+		
+		graphics.pose().translate(bounds.x() + PANEL_MARGIN, bounds.y() + PANEL_MARGIN, 0);
+		
 		panel.render(graphics);
+		
 		graphics.pose().popPose();
 	}
 	
