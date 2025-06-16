@@ -7,13 +7,16 @@ import guideme.layout.LayoutContext;
 import guideme.render.RenderContext;
 import guideme.siteexport.ExportableResourceProvider;
 import guideme.siteexport.ResourceExporter;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.core.BlockPos;
 import net.minecraft.world.item.DyeColor;
 import net.swedz.little_big_redstone.LBR;
 import net.swedz.little_big_redstone.gui.microchip.panel.MicrochipRenderBoardPanel;
 import net.swedz.little_big_redstone.microchip.Microchip;
 import net.swedz.little_big_redstone.microchip.MicrochipSize;
 import net.swedz.little_big_redstone.microchip.object.logic.LogicComponent;
+import net.swedz.little_big_redstone.microchip.object.logic.LogicContext;
 import net.swedz.little_big_redstone.microchip.object.logic.LogicEntry;
 import net.swedz.little_big_redstone.microchip.object.logic.LogicType;
 import net.swedz.tesseract.neoforge.api.Bounds;
@@ -57,6 +60,8 @@ public final class MicrochipLytBlock extends LytBlock implements ExportableResou
 		microchip.wires().add(fromEntry.slot(), fromPort, toEntry.slot(), toPort);
 	}
 	
+	// TODO awarenesses
+	
 	@Override
 	protected LytRect computeLayout(LayoutContext context, int x, int y, int availableWidth)
 	{
@@ -81,6 +86,26 @@ public final class MicrochipLytBlock extends LytBlock implements ExportableResou
 		graphics.pose().translate(bounds.x(), bounds.y(), 0);
 		panel.render(graphics);
 		graphics.pose().popPose();
+	}
+	
+	@Override
+	public void tick()
+	{
+		if(microchip.components().traversal().isEmpty())
+		{
+			microchip.components().rebuildTraversal();
+		}
+		
+		var context = new LogicContext(Minecraft.getInstance().level, new BlockPos(0, 0, 0), microchip);
+		
+		microchip.tickLogic(context);
+		
+		boolean microchipDirty = microchip.isDirty();
+		boolean contextDirty = context.isDirty();
+		if(microchipDirty || contextDirty)
+		{
+			microchip.markClean();
+		}
 	}
 	
 	@Override
