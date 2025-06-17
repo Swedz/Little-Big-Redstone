@@ -3,6 +3,8 @@ package net.swedz.little_big_redstone.guide.microchip;
 import com.google.common.collect.Maps;
 import guideme.document.LytRect;
 import guideme.document.block.LytBlock;
+import guideme.document.interaction.GuideTooltip;
+import guideme.document.interaction.InteractiveElement;
 import guideme.layout.LayoutContext;
 import guideme.render.RenderContext;
 import guideme.siteexport.ExportableResourceProvider;
@@ -13,6 +15,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.world.item.DyeColor;
 import net.swedz.little_big_redstone.LBR;
 import net.swedz.little_big_redstone.gui.microchip.panel.MicrochipRenderBoardPanel;
+import net.swedz.little_big_redstone.guide.microchip.element.MicrochipObjectGuideTooltip;
 import net.swedz.little_big_redstone.microchip.Microchip;
 import net.swedz.little_big_redstone.microchip.MicrochipSize;
 import net.swedz.little_big_redstone.microchip.object.logic.LogicComponent;
@@ -25,7 +28,7 @@ import net.swedz.tesseract.neoforge.helper.guigraphics.TesseractGuiGraphics;
 import java.util.Map;
 import java.util.Optional;
 
-public final class MicrochipLytBlock extends LytBlock implements ExportableResourceProvider
+public final class MicrochipLytBlock extends LytBlock implements ExportableResourceProvider, InteractiveElement
 {
 	private static final int PANEL_MARGIN = 5;
 	
@@ -94,6 +97,21 @@ public final class MicrochipLytBlock extends LytBlock implements ExportableResou
 		panel.render(graphics);
 		
 		graphics.pose().popPose();
+	}
+	
+	@Override
+	public Optional<GuideTooltip> getTooltip(float mouseX, float mouseY)
+	{
+		int x = (int) (mouseX - bounds.x() - PANEL_MARGIN);
+		int y = (int) (mouseY - bounds.y() - PANEL_MARGIN);
+		
+		var hovered = microchip.findAt(x, y);
+		if(hovered == null)
+		{
+			return Optional.empty();
+		}
+		
+		return Optional.of(new MicrochipObjectGuideTooltip(hovered));
 	}
 	
 	@Override
