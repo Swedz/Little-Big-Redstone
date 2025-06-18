@@ -2,7 +2,8 @@
 navigation:
   title: "NOT Gate"
   icon: "not_gate"
-  parent: little_big_redstone:logic/gate.md
+  parent: little_big_redstone:logic.md
+  position: 2
 item_ids:
   - little_big_redstone:not_gate
 ---

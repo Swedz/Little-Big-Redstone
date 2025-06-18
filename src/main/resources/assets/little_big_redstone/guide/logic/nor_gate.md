@@ -2,7 +2,8 @@
 navigation:
   title: "NOR Gate"
   icon: "nor_gate"
-  parent: little_big_redstone:logic/gate.md
+  parent: little_big_redstone:logic.md
+  position: 6
 item_ids:
   - little_big_redstone:nor_gate
 ---

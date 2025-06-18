@@ -1,6 +1,6 @@
 ---
 navigation:
-  title: "Microchip"
+  title: "Microchips"
   icon: "red_microchip"
 item_ids:
   - little_big_redstone:white_microchip
@@ -20,6 +20,8 @@ item_ids:
   - little_big_redstone:magenta_microchip
   - little_big_redstone:pink_microchip
 ---
+
+# Microchips
 
 <Row>
     <ItemImage id="white_microchip" scale="2" />

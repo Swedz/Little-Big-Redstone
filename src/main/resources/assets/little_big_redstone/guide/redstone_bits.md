@@ -6,6 +6,8 @@ item_ids:
   - little_big_redstone:redstone_bit
 ---
 
+# Redstone Bits
+
 <ItemImage id="redstone_bit" scale="2" />
 
 <RecipeFor id="redstone_bit" />
