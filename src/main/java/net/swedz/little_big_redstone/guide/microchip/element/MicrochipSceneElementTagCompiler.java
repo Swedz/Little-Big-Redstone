@@ -5,7 +5,7 @@ import guideme.document.LytErrorSink;
 import guideme.extensions.Extension;
 import guideme.extensions.ExtensionPoint;
 import guideme.libs.mdast.mdx.model.MdxJsxElementFields;
-import net.swedz.little_big_redstone.guide.microchip.MicrochipLytBlock;
+import net.swedz.little_big_redstone.guide.microchip.MicrochipGuidebookScene;
 
 import java.util.Set;
 
@@ -15,5 +15,5 @@ public interface MicrochipSceneElementTagCompiler extends Extension
 	
 	Set<String> getTagNames();
 	
-	void compile(MicrochipLytBlock microchip, PageCompiler compiler, LytErrorSink errorSink, MdxJsxElementFields el);
+	void compile(MicrochipGuidebookScene microchip, PageCompiler compiler, LytErrorSink errorSink, MdxJsxElementFields el);
 }

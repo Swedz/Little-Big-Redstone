@@ -32,8 +32,9 @@ public final class MicrochipSceneCompiler extends BlockTagCompiler
 		var width = MdxAttrs.getInt(compiler, parent, el, "width", 100);
 		var height = MdxAttrs.getInt(compiler, parent, el, "height", 100);
 		var color = LBRGuide.getDyeColor(compiler, parent, el, "color", DyeColor.RED);
+		var includeToolbar = MdxAttrs.getBoolean(compiler, parent, el, "includeToolbar", false);
 		
-		var block = new MicrochipLytBlock(color, width, height);
+		var block = new MicrochipGuidebookScene(color, width, height, includeToolbar);
 		
 		for(var child : el.children())
 		{

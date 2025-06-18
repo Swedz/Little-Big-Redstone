@@ -5,7 +5,7 @@ import guideme.compiler.tags.MdxAttrs;
 import guideme.document.LytErrorSink;
 import guideme.libs.mdast.mdx.model.MdxJsxElementFields;
 import net.swedz.little_big_redstone.guide.LBRGuide;
-import net.swedz.little_big_redstone.guide.microchip.MicrochipLytBlock;
+import net.swedz.little_big_redstone.guide.microchip.MicrochipGuidebookScene;
 
 import java.util.Set;
 
@@ -18,7 +18,7 @@ public final class LogicElementCompiler implements MicrochipSceneElementTagCompi
 	}
 	
 	@Override
-	public void compile(MicrochipLytBlock microchip, PageCompiler compiler, LytErrorSink errorSink, MdxJsxElementFields el)
+	public void compile(MicrochipGuidebookScene microchip, PageCompiler compiler, LytErrorSink errorSink, MdxJsxElementFields el)
 	{
 		var name = MdxAttrs.getString(compiler, errorSink, el, "name", null);
 		if(name == null)

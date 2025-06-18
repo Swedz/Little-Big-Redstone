@@ -3,9 +3,13 @@ package net.swedz.little_big_redstone.guide.microchip;
 import com.google.common.collect.Maps;
 import guideme.document.LytRect;
 import guideme.document.block.LytBlock;
+import guideme.document.block.LytBox;
+import guideme.document.block.LytVBox;
 import guideme.document.interaction.GuideTooltip;
 import guideme.document.interaction.InteractiveElement;
 import guideme.document.interaction.ItemTooltip;
+import guideme.document.interaction.LytWidget;
+import guideme.internal.screen.GuideIconButton;
 import guideme.layout.LayoutContext;
 import guideme.render.RenderContext;
 import guideme.siteexport.ExportableResourceProvider;
@@ -17,6 +21,7 @@ import net.minecraft.world.item.DyeColor;
 import net.swedz.little_big_redstone.LBR;
 import net.swedz.little_big_redstone.LBRItems;
 import net.swedz.little_big_redstone.gui.microchip.panel.MicrochipRenderBoardPanel;
+import net.swedz.little_big_redstone.guide.PausePlayGuideIconButton;
 import net.swedz.little_big_redstone.guide.microchip.element.MicrochipObjectGuideTooltip;
 import net.swedz.little_big_redstone.microchip.Microchip;
 import net.swedz.little_big_redstone.microchip.MicrochipSize;
@@ -30,7 +35,7 @@ import net.swedz.tesseract.neoforge.helper.guigraphics.TesseractGuiGraphics;
 import java.util.Map;
 import java.util.Optional;
 
-public final class MicrochipLytBlock extends LytBlock implements ExportableResourceProvider, InteractiveElement
+public final class MicrochipGuidebookScene extends LytBox implements ExportableResourceProvider, InteractiveElement
 {
 	private static final int PANEL_MARGIN = 5;
 	
@@ -40,11 +45,36 @@ public final class MicrochipLytBlock extends LytBlock implements ExportableResou
 	
 	private final MicrochipRenderBoardPanel panel;
 	
-	public MicrochipLytBlock(DyeColor color, int width, int height)
+	private final boolean includeToolbar;
+	
+	private final Viewport viewport = new Viewport();
+	private final LytVBox  toolbar  = new LytVBox();
+	
+	private final LytWidget resetButton;
+	private final LytWidget pausePlayButton;
+	
+	public MicrochipGuidebookScene(DyeColor color, int width, int height, boolean includeToolbar)
 	{
 		microchip = new Microchip(MicrochipSize.create(new Bounds(0, 0, width, height), 1));
 		
 		panel = new MicrochipRenderBoardPanel(color, microchip);
+		
+		this.includeToolbar = includeToolbar;
+		
+		this.append(viewport);
+		
+		toolbar.append(resetButton = new LytWidget(new GuideIconButton(0, 0, GuideIconButton.Role.RESET_VIEW, () ->
+		{
+			for(var entry : microchip.components())
+			{
+				entry.component().resetForPickup();
+			}
+		})));
+		toolbar.append(pausePlayButton = new LytWidget(new PausePlayGuideIconButton(0, 16, () -> {})));
+		if(includeToolbar)
+		{
+			this.append(toolbar);
+		}
 	}
 	
 	public LogicEntry getLogic(String name)
@@ -70,9 +100,20 @@ public final class MicrochipLytBlock extends LytBlock implements ExportableResou
 	// TODO awarenesses
 	
 	@Override
-	protected LytRect computeLayout(LayoutContext context, int x, int y, int availableWidth)
+	protected LytRect computeBoxLayout(LayoutContext context, int x, int y, int availableWidth)
 	{
-		return new LytRect(x, y, microchip.size().bounds().width() + (PANEL_MARGIN * 2), microchip.size().bounds().height() + (PANEL_MARGIN * 2));
+		var viewportBounds = new LytRect(x, y, microchip.size().bounds().width() + (PANEL_MARGIN * 2), microchip.size().bounds().height() + (PANEL_MARGIN * 2));
+		viewport.setBounds(viewportBounds);
+		
+		if(includeToolbar)
+		{
+			var toolbarBounds = toolbar.layout(context, x, y, 0);
+			toolbarBounds = toolbar.layout(context, x + viewportBounds.width(), y, availableWidth - viewportBounds.width());
+			
+			return LytRect.union(viewportBounds, toolbarBounds);
+		}
+		
+		return viewportBounds;
 	}
 	
 	@Override
@@ -88,17 +129,7 @@ public final class MicrochipLytBlock extends LytBlock implements ExportableResou
 	@Override
 	public void render(RenderContext context)
 	{
-		var graphics = new TesseractGuiGraphics(context.guiGraphics());
-		
-		graphics.pose().pushPose();
-		
-		context.renderPanel(bounds);
-		
-		graphics.pose().translate(bounds.x() + PANEL_MARGIN, bounds.y() + PANEL_MARGIN, 0);
-		
-		panel.render(graphics);
-		
-		graphics.pose().popPose();
+		super.render(context);
 	}
 	
 	@Override
@@ -125,6 +156,11 @@ public final class MicrochipLytBlock extends LytBlock implements ExportableResou
 	@Override
 	public void tick()
 	{
+		if(!((PausePlayGuideIconButton) pausePlayButton.getWidget()).isPlaying())
+		{
+			return;
+		}
+		
 		if(microchip.components().traversal().isEmpty())
 		{
 			microchip.components().rebuildTraversal();
@@ -147,5 +183,45 @@ public final class MicrochipLytBlock extends LytBlock implements ExportableResou
 	{
 		exporter.exportTexture(LBR.id("textures/gui/container/microchip/circuit_background.png"));
 		// TODO other textures for stuff...
+	}
+	
+	final class Viewport extends LytBlock
+	{
+		public void setBounds(LytRect bounds)
+		{
+			this.bounds = bounds;
+		}
+		
+		@Override
+		protected LytRect computeLayout(LayoutContext context, int x, int y, int availableWidth)
+		{
+			return bounds;
+		}
+		
+		@Override
+		protected void onLayoutMoved(int deltaX, int deltaY)
+		{
+		}
+		
+		@Override
+		public void renderBatch(RenderContext context, MultiBufferSource buffers)
+		{
+		}
+		
+		@Override
+		public void render(RenderContext context)
+		{
+			var graphics = new TesseractGuiGraphics(context.guiGraphics());
+			
+			graphics.pose().pushPose();
+			
+			context.renderPanel(bounds);
+			
+			graphics.pose().translate(bounds.x() + PANEL_MARGIN, bounds.y() + PANEL_MARGIN, 0);
+			
+			panel.render(graphics);
+			
+			graphics.pose().popPose();
+		}
 	}
 }

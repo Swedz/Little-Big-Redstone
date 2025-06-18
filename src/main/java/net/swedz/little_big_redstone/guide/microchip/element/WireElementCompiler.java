@@ -4,7 +4,7 @@ import guideme.compiler.PageCompiler;
 import guideme.compiler.tags.MdxAttrs;
 import guideme.document.LytErrorSink;
 import guideme.libs.mdast.mdx.model.MdxJsxElementFields;
-import net.swedz.little_big_redstone.guide.microchip.MicrochipLytBlock;
+import net.swedz.little_big_redstone.guide.microchip.MicrochipGuidebookScene;
 
 import java.util.Set;
 
@@ -17,7 +17,7 @@ public final class WireElementCompiler implements MicrochipSceneElementTagCompil
 	}
 	
 	@Override
-	public void compile(MicrochipLytBlock microchip, PageCompiler compiler, LytErrorSink errorSink, MdxJsxElementFields el)
+	public void compile(MicrochipGuidebookScene microchip, PageCompiler compiler, LytErrorSink errorSink, MdxJsxElementFields el)
 	{
 		var from = MdxAttrs.getString(compiler, errorSink, el, "from", null);
 		if(from == null)
@@ -43,8 +43,8 @@ public final class WireElementCompiler implements MicrochipSceneElementTagCompil
 			return;
 		}
 		
-		int fromPort = MdxAttrs.getInt(compiler, errorSink, el, "from_port", 0);
-		int toPort = MdxAttrs.getInt(compiler, errorSink, el, "to_port", 0);
+		int fromPort = MdxAttrs.getInt(compiler, errorSink, el, "fromPort", 0);
+		int toPort = MdxAttrs.getInt(compiler, errorSink, el, "toPort", 0);
 		
 		microchip.addWire(from, to, fromPort, toPort);
 	}

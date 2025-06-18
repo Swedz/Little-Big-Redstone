@@ -24,7 +24,7 @@ Below is an example of a NOT gate's output connecting to the first input of an O
 <MicrochipScene width="68" height="36" color="red">
     <Logic name="1" x="10" y="10" type="not_gate" />
     <Logic name="2" x="42" y="10" type="or_gate" />
-    <Wire from="1" from_port="0" to="2" to_port="0" />
+    <Wire from="1" fromPort="0" to="2" toPort="0" />
 </MicrochipScene>
 
 Where normally redstone may have a signal strength of 0 to 15, redstone bits only have a signal strength of 0 or 1. In
