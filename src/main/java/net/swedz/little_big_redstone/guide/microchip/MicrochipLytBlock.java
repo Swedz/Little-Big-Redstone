@@ -5,6 +5,7 @@ import guideme.document.LytRect;
 import guideme.document.block.LytBlock;
 import guideme.document.interaction.GuideTooltip;
 import guideme.document.interaction.InteractiveElement;
+import guideme.document.interaction.ItemTooltip;
 import guideme.layout.LayoutContext;
 import guideme.render.RenderContext;
 import guideme.siteexport.ExportableResourceProvider;
@@ -14,6 +15,7 @@ import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.item.DyeColor;
 import net.swedz.little_big_redstone.LBR;
+import net.swedz.little_big_redstone.LBRItems;
 import net.swedz.little_big_redstone.gui.microchip.panel.MicrochipRenderBoardPanel;
 import net.swedz.little_big_redstone.guide.microchip.element.MicrochipObjectGuideTooltip;
 import net.swedz.little_big_redstone.microchip.Microchip;
@@ -105,13 +107,19 @@ public final class MicrochipLytBlock extends LytBlock implements ExportableResou
 		int x = (int) (mouseX - bounds.x() - PANEL_MARGIN);
 		int y = (int) (mouseY - bounds.y() - PANEL_MARGIN);
 		
-		var hovered = microchip.findAt(x, y);
-		if(hovered == null)
+		var hoveredObject = microchip.findAt(x, y);
+		if(hoveredObject != null)
 		{
-			return Optional.empty();
+			return Optional.of(new MicrochipObjectGuideTooltip(hoveredObject));
 		}
 		
-		return Optional.of(new MicrochipObjectGuideTooltip(hovered));
+		var hoveredWire = panel.wires().findHoveredWire(x, y);
+		if(hoveredWire != null)
+		{
+			return Optional.of(new ItemTooltip(LBRItems.REDSTONE_BIT.asItem().getDefaultInstance()));
+		}
+		
+		return Optional.empty();
 	}
 	
 	@Override
