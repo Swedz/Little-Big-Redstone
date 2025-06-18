@@ -4,6 +4,8 @@ navigation:
   icon: "and_gate"
   parent: little_big_redstone:logic.md
   position: 3
+categories:
+  - logic
 item_ids:
   - little_big_redstone:and_gate
 ---

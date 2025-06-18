@@ -4,6 +4,8 @@ navigation:
   icon: "io"
   parent: little_big_redstone:logic.md
   position: 1
+categories:
+  - logic
 item_ids:
   - little_big_redstone:io
 ---

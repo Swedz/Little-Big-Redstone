@@ -4,6 +4,8 @@ navigation:
   icon: "sequencer"
   parent: little_big_redstone:logic.md
   position: 9
+categories:
+  - logic
 item_ids:
   - little_big_redstone:sequencer
 ---

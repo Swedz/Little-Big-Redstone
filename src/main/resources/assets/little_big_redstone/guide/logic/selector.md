@@ -4,6 +4,8 @@ navigation:
   icon: "selector"
   parent: little_big_redstone:logic.md
   position: 11
+categories:
+  - logic
 item_ids:
   - little_big_redstone:selector
 ---

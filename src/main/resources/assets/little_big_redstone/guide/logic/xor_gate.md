@@ -4,6 +4,8 @@ navigation:
   icon: "xor_gate"
   parent: little_big_redstone:logic.md
   position: 7
+categories:
+  - logic
 item_ids:
   - little_big_redstone:xor_gate
 ---

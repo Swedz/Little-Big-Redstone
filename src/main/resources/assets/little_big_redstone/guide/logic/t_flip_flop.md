@@ -4,6 +4,8 @@ navigation:
   icon: "t_flip_flop"
   parent: little_big_redstone:logic.md
   position: 13
+categories:
+  - logic
 item_ids:
   - little_big_redstone:t_flip_flop
 ---
