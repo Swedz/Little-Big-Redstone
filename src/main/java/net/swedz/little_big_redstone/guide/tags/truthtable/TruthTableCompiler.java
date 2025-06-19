@@ -1,4 +1,4 @@
-package net.swedz.little_big_redstone.guide.truthtable;
+package net.swedz.little_big_redstone.guide.tags.truthtable;
 
 import com.google.common.collect.Maps;
 import guideme.compiler.IndexingContext;
@@ -13,7 +13,7 @@ import guideme.document.block.table.LytTableRow;
 import guideme.document.flow.LytFlowText;
 import guideme.extensions.ExtensionCollection;
 import guideme.libs.mdast.mdx.model.MdxJsxElementFields;
-import net.swedz.little_big_redstone.guide.truthtable.element.TruthTableElementTagCompiler;
+import net.swedz.little_big_redstone.guide.tags.truthtable.element.TruthTableElementTagCompiler;
 
 import java.util.Map;
 import java.util.Set;

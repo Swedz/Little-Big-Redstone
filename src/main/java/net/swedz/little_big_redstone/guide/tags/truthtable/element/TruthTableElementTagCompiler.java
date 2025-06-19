@@ -1,4 +1,4 @@
-package net.swedz.little_big_redstone.guide.truthtable.element;
+package net.swedz.little_big_redstone.guide.tags.truthtable.element;
 
 import guideme.compiler.PageCompiler;
 import guideme.document.LytErrorSink;

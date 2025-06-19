@@ -1,4 +1,4 @@
-package net.swedz.little_big_redstone.guide.microchip;
+package net.swedz.little_big_redstone.guide.tags.microchip;
 
 import com.google.common.collect.Maps;
 import net.minecraft.core.Direction;

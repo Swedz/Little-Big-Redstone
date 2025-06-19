@@ -1,12 +1,11 @@
-package net.swedz.little_big_redstone.guide.microchip.element;
+package net.swedz.little_big_redstone.guide.tags.microchip.element;
 
 import guideme.compiler.PageCompiler;
 import guideme.compiler.tags.MdxAttrs;
 import guideme.document.LytErrorSink;
 import guideme.libs.mdast.mdx.model.MdxJsxElementFields;
 import net.minecraft.core.Direction;
-import net.swedz.little_big_redstone.guide.microchip.MicrochipGuidebookScene;
-import net.swedz.little_big_redstone.microchip.awareness.AwarenessTypes;
+import net.swedz.little_big_redstone.guide.tags.microchip.MicrochipGuidebookScene;
 
 import java.util.Set;
 

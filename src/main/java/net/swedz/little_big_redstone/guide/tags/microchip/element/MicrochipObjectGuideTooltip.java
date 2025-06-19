@@ -1,4 +1,4 @@
-package net.swedz.little_big_redstone.guide.microchip.element;
+package net.swedz.little_big_redstone.guide.tags.microchip.element;
 
 import com.google.common.collect.Lists;
 import guideme.document.interaction.GuideTooltip;
@@ -9,7 +9,6 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.Style;
 import net.minecraft.world.item.ItemStack;
 import net.swedz.little_big_redstone.microchip.object.MicrochipObject;
-import net.swedz.little_big_redstone.microchip.object.logic.LogicComponent;
 import net.swedz.little_big_redstone.microchip.object.logic.LogicEntry;
 
 import java.util.List;

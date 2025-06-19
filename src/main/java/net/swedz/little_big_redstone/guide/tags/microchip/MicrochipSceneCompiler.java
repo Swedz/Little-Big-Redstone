@@ -1,4 +1,4 @@
-package net.swedz.little_big_redstone.guide.microchip;
+package net.swedz.little_big_redstone.guide.tags.microchip;
 
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
@@ -12,7 +12,7 @@ import guideme.extensions.ExtensionCollection;
 import guideme.libs.mdast.mdx.model.MdxJsxElementFields;
 import net.minecraft.world.item.DyeColor;
 import net.swedz.little_big_redstone.guide.LBRGuide;
-import net.swedz.little_big_redstone.guide.microchip.element.MicrochipSceneElementTagCompiler;
+import net.swedz.little_big_redstone.guide.tags.microchip.element.MicrochipSceneElementTagCompiler;
 
 import java.util.Map;
 import java.util.Set;

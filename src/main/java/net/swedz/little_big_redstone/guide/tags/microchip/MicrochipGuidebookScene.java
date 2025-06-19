@@ -1,4 +1,4 @@
-package net.swedz.little_big_redstone.guide.microchip;
+package net.swedz.little_big_redstone.guide.tags.microchip;
 
 import com.google.common.collect.Maps;
 import com.mojang.serialization.DataResult;
@@ -29,7 +29,7 @@ import net.swedz.little_big_redstone.LBR;
 import net.swedz.little_big_redstone.LBRItems;
 import net.swedz.little_big_redstone.gui.microchip.panel.MicrochipRenderBoardPanel;
 import net.swedz.little_big_redstone.guide.PausePlayGuideIconButton;
-import net.swedz.little_big_redstone.guide.microchip.element.MicrochipObjectGuideTooltip;
+import net.swedz.little_big_redstone.guide.tags.microchip.element.MicrochipObjectGuideTooltip;
 import net.swedz.little_big_redstone.microchip.Microchip;
 import net.swedz.little_big_redstone.microchip.MicrochipSize;
 import net.swedz.little_big_redstone.microchip.awareness.AwarenessTypes;

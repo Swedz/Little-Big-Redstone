@@ -1,14 +1,14 @@
-package net.swedz.little_big_redstone.guide.block;
+package net.swedz.little_big_redstone.guide.tags.block;
 
 import guideme.document.LytRect;
-import guideme.document.block.LytHBox;
+import guideme.document.block.LytVBox;
 import guideme.layout.LayoutContext;
 
-public final class LytSizedHBox extends LytHBox
+public final class LytSizedVBox extends LytVBox
 {
 	private final int preferredWidth;
 	
-	public LytSizedHBox(int preferredWidth)
+	public LytSizedVBox(int preferredWidth)
 	{
 		super();
 		this.preferredWidth = preferredWidth;

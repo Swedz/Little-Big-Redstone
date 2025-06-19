@@ -1,11 +1,11 @@
-package net.swedz.little_big_redstone.guide.microchip.element;
+package net.swedz.little_big_redstone.guide.tags.microchip.element;
 
 import guideme.compiler.PageCompiler;
 import guideme.document.LytErrorSink;
 import guideme.extensions.Extension;
 import guideme.extensions.ExtensionPoint;
 import guideme.libs.mdast.mdx.model.MdxJsxElementFields;
-import net.swedz.little_big_redstone.guide.microchip.MicrochipGuidebookScene;
+import net.swedz.little_big_redstone.guide.tags.microchip.MicrochipGuidebookScene;
 
 import java.util.Set;
 

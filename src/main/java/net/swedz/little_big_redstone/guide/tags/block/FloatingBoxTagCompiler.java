@@ -1,4 +1,4 @@
-package net.swedz.little_big_redstone.guide.block;
+package net.swedz.little_big_redstone.guide.tags.block;
 
 import guideme.compiler.PageCompiler;
 import guideme.compiler.tags.BoxFlowDirection;
