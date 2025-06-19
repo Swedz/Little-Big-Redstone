@@ -12,6 +12,9 @@ import net.swedz.little_big_redstone.guide.microchip.MicrochipSceneCompiler;
 import net.swedz.little_big_redstone.guide.microchip.element.LogicElementCompiler;
 import net.swedz.little_big_redstone.guide.microchip.element.MicrochipSceneElementTagCompiler;
 import net.swedz.little_big_redstone.guide.microchip.element.WireElementCompiler;
+import net.swedz.little_big_redstone.guide.truthtable.TruthTableCompiler;
+import net.swedz.little_big_redstone.guide.truthtable.element.TruthTableElementTagCompiler;
+import net.swedz.little_big_redstone.guide.truthtable.element.TruthTableStateCompiler;
 import net.swedz.little_big_redstone.microchip.object.logic.LogicType;
 import net.swedz.little_big_redstone.microchip.object.logic.LogicTypes;
 
@@ -24,6 +27,8 @@ public final class LBRGuide
 				.extension(TagCompiler.EXTENSION_POINT, new MicrochipSceneCompiler())
 				.extension(MicrochipSceneElementTagCompiler.EXTENSION_POINT, new LogicElementCompiler())
 				.extension(MicrochipSceneElementTagCompiler.EXTENSION_POINT, new WireElementCompiler())
+				.extension(TagCompiler.EXTENSION_POINT, new TruthTableCompiler())
+				.extension(TruthTableElementTagCompiler.EXTENSION_POINT, new TruthTableStateCompiler())
 				.build();
 	}
 	
@@ -49,18 +54,29 @@ public final class LBRGuide
 	public static LogicType<?> getLogicType(PageCompiler compiler, LytErrorSink errorSink, MdxJsxElementFields el,
 											String name)
 	{
-		var logicId =  MdxAttrs.getString(compiler, errorSink, el, name, null);
+		var logicId = MdxAttrs.getString(compiler, errorSink, el, name, null);
 		if(logicId != null)
 		{
 			try
 			{
 				return LogicTypes.get(logicId.toLowerCase());
 			}
-			catch(Exception ignored)
+			catch (Exception ignored)
 			{
 				errorSink.appendError(compiler, "Logic type does not exist", el);
 				return null;
 			}
+		}
+		return null;
+	}
+	
+	public static String[] getStringArray(PageCompiler compiler, LytErrorSink errorSink, MdxJsxElementFields el,
+										  String name)
+	{
+		var rawInts = MdxAttrs.getString(compiler, errorSink, el, name, null);
+		if(rawInts != null)
+		{
+			return rawInts.split(",");
 		}
 		return null;
 	}
