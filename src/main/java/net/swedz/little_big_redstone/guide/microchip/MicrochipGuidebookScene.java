@@ -177,12 +177,26 @@ public final class MicrochipGuidebookScene extends LytBox implements ExportableR
 			errorSink.appendError(compiler, "Logic with name '" + from + "' does not exist", el);
 			return;
 		}
+		var fromLogic = microchip.components().get(fromSlot);
+		if(fromLogic.component().outputs() <= fromPort)
+		{
+			errorSink.appendError(compiler, "Logic with name '" + from + "' does not have an output port for that index", el);
+			return;
+		}
+		
 		var toSlot = this.getLogicSlot(to);
 		if(toSlot == null)
 		{
 			errorSink.appendError(compiler, "Logic with name '" + to + "' does not exist", el);
 			return;
 		}
+		var toLogic = microchip.components().get(toSlot);
+		if(toLogic.component().inputs() <= toPort)
+		{
+			errorSink.appendError(compiler, "Logic with name '" + from + "' does not have an input port for that index", el);
+			return;
+		}
+		
 		microchip.wires().add(fromSlot, fromPort, toSlot, toPort);
 	}
 	
