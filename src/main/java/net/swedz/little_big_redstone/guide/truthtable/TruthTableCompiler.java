@@ -28,7 +28,8 @@ public final class TruthTableCompiler extends BlockTagCompiler
 		return Set.of("TruthTable");
 	}
 	
-	private static final char[] ALPHABET = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".toCharArray();
+	private static final char[] INPUT_CHARS  = "ABCD".toCharArray();
+	private static final char[] OUTPUT_CHARS = "QXYZ".toCharArray();
 	
 	private static void header(LytTableRow row, String label)
 	{
@@ -61,12 +62,12 @@ public final class TruthTableCompiler extends BlockTagCompiler
 			var inputTableHeader = inputTable.appendRow();
 			for(int i = 0; i < inputs; i++)
 			{
-				header(inputTableHeader, String.valueOf(ALPHABET[i]));
+				header(inputTableHeader, String.valueOf(INPUT_CHARS[i]));
 			}
 			var outputTableHeader = outputTable.appendRow();
 			for(int i = 0; i < outputs; i++)
 			{
-				header(outputTableHeader, String.valueOf(ALPHABET[i]));
+				header(outputTableHeader, String.valueOf(OUTPUT_CHARS[i]));
 			}
 		}
 		
