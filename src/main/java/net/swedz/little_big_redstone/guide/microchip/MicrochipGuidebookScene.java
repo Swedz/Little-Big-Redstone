@@ -27,7 +27,6 @@ import net.swedz.little_big_redstone.microchip.Microchip;
 import net.swedz.little_big_redstone.microchip.MicrochipSize;
 import net.swedz.little_big_redstone.microchip.object.logic.LogicComponent;
 import net.swedz.little_big_redstone.microchip.object.logic.LogicContext;
-import net.swedz.little_big_redstone.microchip.object.logic.LogicEntry;
 import net.swedz.little_big_redstone.microchip.object.logic.LogicType;
 import net.swedz.tesseract.neoforge.api.Bounds;
 import net.swedz.tesseract.neoforge.helper.guigraphics.TesseractGuiGraphics;
@@ -35,17 +34,22 @@ import net.swedz.tesseract.neoforge.helper.guigraphics.TesseractGuiGraphics;
 import java.util.Map;
 import java.util.Optional;
 
-public final class MicrochipGuidebookScene extends LytBox implements ExportableResourceProvider, InteractiveElement
+public final class MicrochipGuidebookScene extends LytBox implements ExportableResourceProvider
 {
-	private static final int PANEL_MARGIN = 5;
+	public static final int PANEL_MARGIN = 5;
 	
-	private final Microchip microchip;
+	private final DyeColor color;
 	
-	private final Map<String, LogicEntry> logic = Maps.newHashMap();
+	private final int width, height;
+	private final boolean autoWidth, autoHeight;
 	
-	private final MicrochipRenderBoardPanel panel;
-	
+	private final int marginWidth, marginHeight;
 	private final boolean includeToolbar;
+	
+	private Microchip                 microchip;
+	private MicrochipRenderBoardPanel panel;
+	
+	private final Map<String, Integer> logic = Maps.newHashMap();
 	
 	private final Viewport viewport = new Viewport();
 	private final LytVBox  toolbar  = new LytVBox();
@@ -53,13 +57,21 @@ public final class MicrochipGuidebookScene extends LytBox implements ExportableR
 	private final LytWidget resetButton;
 	private final LytWidget pausePlayButton;
 	
-	public MicrochipGuidebookScene(DyeColor color, int width, int height, boolean includeToolbar)
+	public MicrochipGuidebookScene(DyeColor color,
+								   int width, int height,
+								   int marginWidth, int marginHeight,
+								   boolean includeToolbar)
 	{
-		microchip = new Microchip(MicrochipSize.create(new Bounds(0, 0, width, height), 1));
-		
-		panel = new MicrochipRenderBoardPanel(color, microchip);
-		
+		this.color = color;
+		this.width = width;
+		this.height = height;
+		this.autoWidth = width == -1;
+		this.autoHeight = height == -1;
+		this.marginWidth = marginWidth;
+		this.marginHeight = marginHeight;
 		this.includeToolbar = includeToolbar;
+		
+		this.rebuildMicrochip(autoWidth ? 0 : width, autoHeight ? 0 : height);
 		
 		this.append(viewport);
 		
@@ -70,14 +82,62 @@ public final class MicrochipGuidebookScene extends LytBox implements ExportableR
 				entry.component().resetForPickup();
 			}
 		})));
-		toolbar.append(pausePlayButton = new LytWidget(new PausePlayGuideIconButton(0, 16, () -> {})));
+		toolbar.append(pausePlayButton = new LytWidget(new PausePlayGuideIconButton(0, 0, () ->
+		{
+		})));
 		if(includeToolbar)
 		{
 			this.append(toolbar);
 		}
 	}
 	
-	public LogicEntry getLogic(String name)
+	private void rebuildMicrochip(int width, int height)
+	{
+		var previous = microchip;
+		microchip = new Microchip(MicrochipSize.create(new Bounds(0, 0, width, height), 1));
+		if(previous != null)
+		{
+			microchip.loadFrom(previous);
+		}
+		panel = new MicrochipRenderBoardPanel(color, microchip);
+	}
+	
+	public void adjustSize()
+	{
+		int evaluatedWidth = 0;
+		int evaluatedHeight = 0;
+		if(autoWidth || autoHeight)
+		{
+			for(var entry : microchip.components())
+			{
+				var bounds = entry.toBounds();
+				if(autoWidth)
+				{
+					int endX = bounds.maxX() + marginWidth + 1;
+					if(evaluatedWidth < endX)
+					{
+						evaluatedWidth = endX;
+					}
+				}
+				if(autoHeight)
+				{
+					int endY = bounds.maxY() + marginHeight + 1;
+					if(evaluatedHeight < endY)
+					{
+						evaluatedHeight = endY;
+					}
+				}
+			}
+		}
+		else
+		{
+			evaluatedWidth = width + (marginWidth * 2);
+			evaluatedHeight = height + (marginHeight * 2);
+		}
+		this.rebuildMicrochip(evaluatedWidth, evaluatedHeight);
+	}
+	
+	public Integer getLogicSlot(String name)
 	{
 		return logic.get(name);
 	}
@@ -86,18 +146,18 @@ public final class MicrochipGuidebookScene extends LytBox implements ExportableR
 	{
 		LogicComponent<?, ?> component = type.defaultFactory().create();
 		component.setColor(Optional.ofNullable(color));
-		var entry = microchip.components().add(x, y, component);
-		logic.put(name, entry);
+		var entry = microchip.components().add(x + marginWidth, y + marginHeight, component);
+		logic.put(name, entry.slot());
 	}
 	
 	public void addWire(String from, String to, int fromPort, int toPort)
 	{
-		var fromEntry = this.getLogic(from);
-		var toEntry = this.getLogic(to);
-		microchip.wires().add(fromEntry.slot(), fromPort, toEntry.slot(), toPort);
+		var fromSlot = this.getLogicSlot(from);
+		var toSlot = this.getLogicSlot(to);
+		microchip.wires().add(fromSlot, fromPort, toSlot, toPort);
 	}
 	
-	// TODO awarenesses
+	// TODO awarenesses, maybe use a game scene's level?
 	
 	@Override
 	protected LytRect computeBoxLayout(LayoutContext context, int x, int y, int availableWidth)
@@ -107,50 +167,12 @@ public final class MicrochipGuidebookScene extends LytBox implements ExportableR
 		
 		if(includeToolbar)
 		{
-			var toolbarBounds = toolbar.layout(context, x, y, 0);
-			toolbarBounds = toolbar.layout(context, x + viewportBounds.width(), y, availableWidth - viewportBounds.width());
+			var toolbarBounds = toolbar.layout(context, x + viewportBounds.width(), y, availableWidth - viewportBounds.width());
 			
 			return LytRect.union(viewportBounds, toolbarBounds);
 		}
 		
 		return viewportBounds;
-	}
-	
-	@Override
-	protected void onLayoutMoved(int deltaX, int deltaY)
-	{
-	}
-	
-	@Override
-	public void renderBatch(RenderContext context, MultiBufferSource buffers)
-	{
-	}
-	
-	@Override
-	public void render(RenderContext context)
-	{
-		super.render(context);
-	}
-	
-	@Override
-	public Optional<GuideTooltip> getTooltip(float mouseX, float mouseY)
-	{
-		int x = (int) (mouseX - bounds.x() - PANEL_MARGIN);
-		int y = (int) (mouseY - bounds.y() - PANEL_MARGIN);
-		
-		var hoveredObject = microchip.findAt(x, y);
-		if(hoveredObject != null)
-		{
-			return Optional.of(new MicrochipObjectGuideTooltip(hoveredObject));
-		}
-		
-		var hoveredWire = panel.wires().findHoveredWire(x, y);
-		if(hoveredWire != null)
-		{
-			return Optional.of(new ItemTooltip(LBRItems.REDSTONE_BIT.asItem().getDefaultInstance()));
-		}
-		
-		return Optional.empty();
 	}
 	
 	@Override
@@ -185,7 +207,7 @@ public final class MicrochipGuidebookScene extends LytBox implements ExportableR
 		// TODO other textures for stuff...
 	}
 	
-	final class Viewport extends LytBlock
+	final class Viewport extends LytBlock implements InteractiveElement
 	{
 		public void setBounds(LytRect bounds)
 		{
@@ -222,6 +244,27 @@ public final class MicrochipGuidebookScene extends LytBox implements ExportableR
 			panel.render(graphics);
 			
 			graphics.pose().popPose();
+		}
+		
+		@Override
+		public Optional<GuideTooltip> getTooltip(float mouseX, float mouseY)
+		{
+			int x = (int) (mouseX - bounds.x() - PANEL_MARGIN);
+			int y = (int) (mouseY - bounds.y() - PANEL_MARGIN);
+			
+			var hoveredObject = microchip.findAt(x, y);
+			if(hoveredObject != null)
+			{
+				return Optional.of(new MicrochipObjectGuideTooltip(hoveredObject));
+			}
+			
+			var hoveredWire = panel.wires().findHoveredWire(x, y);
+			if(hoveredWire != null)
+			{
+				return Optional.of(new ItemTooltip(LBRItems.REDSTONE_BIT.asItem().getDefaultInstance()));
+			}
+			
+			return Optional.empty();
 		}
 	}
 }

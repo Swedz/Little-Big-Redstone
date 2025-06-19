@@ -50,8 +50,8 @@ Microchips are blocks that can have [logic](logic.md) placed inside of it to cre
 [Wires](redstone_bits.md) can be placed between logic to allow signals to be carried from one logic component to
 another.
 
-<MicrochipScene width="250" height="100" color="red" includeToolbar={true}>
-    <Logic name="1" x="10" y="10" type="not_gate" />
-    <Logic name="2" x="58" y="10" type="sequencer" />
+<MicrochipScene color="red" includeToolbar={true}>
+    <Logic name="1" x="0" y="0" type="not_gate" />
+    <Logic name="2" x="32" y="0" type="sequencer" />
     <Wire from="1" fromPort="0" to="2" toPort="0" />
 </MicrochipScene>

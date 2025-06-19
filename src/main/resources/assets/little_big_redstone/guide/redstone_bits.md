@@ -21,9 +21,9 @@ using left-click.
 
 Below is an example of a NOT gate's output connecting to the first input of an OR gate.
 
-<MicrochipScene width="68" height="36" color="red">
-    <Logic name="1" x="10" y="10" type="not_gate" />
-    <Logic name="2" x="42" y="10" type="or_gate" />
+<MicrochipScene color="red">
+    <Logic name="1" x="0" y="0" type="not_gate" />
+    <Logic name="2" x="32" y="0" type="or_gate" />
     <Wire from="1" fromPort="0" to="2" toPort="0" />
 </MicrochipScene>
 

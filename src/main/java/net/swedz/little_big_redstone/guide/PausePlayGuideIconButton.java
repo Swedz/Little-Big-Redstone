@@ -53,11 +53,11 @@ public final class PausePlayGuideIconButton extends Button
 		var graphics = new TesseractGuiGraphics(vanilla);
 		
 		var color = SymbolicColor.ICON_BUTTON_NORMAL;
-		if(!isActive())
+		if(!this.isActive())
 		{
 			color = SymbolicColor.ICON_BUTTON_DISABLED;
 		}
-		else if(isHovered())
+		else if(this.isHovered())
 		{
 			color = SymbolicColor.ICON_BUTTON_HOVER;
 		}

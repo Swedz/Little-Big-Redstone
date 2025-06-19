@@ -26,7 +26,7 @@ public final class LogicElementCompiler implements MicrochipSceneElementTagCompi
 			errorSink.appendError(compiler, "No name provided for logic element", el);
 			return;
 		}
-		else if(microchip.getLogic(name) != null)
+		else if(microchip.getLogicSlot(name) != null)
 		{
 			errorSink.appendError(compiler, "Logic element already exists for that name", el);
 			return;
