@@ -1,6 +1,9 @@
 package net.swedz.little_big_redstone.guide.microchip;
 
 import com.google.common.collect.Maps;
+import com.mojang.serialization.DataResult;
+import guideme.compiler.PageCompiler;
+import guideme.document.LytErrorSink;
 import guideme.document.LytRect;
 import guideme.document.block.LytBlock;
 import guideme.document.block.LytBox;
@@ -11,12 +14,15 @@ import guideme.document.interaction.ItemTooltip;
 import guideme.document.interaction.LytWidget;
 import guideme.internal.screen.GuideIconButton;
 import guideme.layout.LayoutContext;
+import guideme.libs.mdast.mdx.model.MdxJsxElementFields;
 import guideme.render.RenderContext;
 import guideme.siteexport.ExportableResourceProvider;
 import guideme.siteexport.ResourceExporter;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.core.BlockPos;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.NbtOps;
 import net.minecraft.world.item.DyeColor;
 import net.swedz.little_big_redstone.LBR;
 import net.swedz.little_big_redstone.LBRItems;
@@ -142,18 +148,41 @@ public final class MicrochipGuidebookScene extends LytBox implements ExportableR
 		return logic.get(name);
 	}
 	
-	public void addLogic(String name, int x, int y, DyeColor color, LogicType<?> type)
+	public void addLogic(String name, int x, int y, DyeColor color, LogicType<?> type, CompoundTag data,
+						 PageCompiler compiler, LytErrorSink errorSink, MdxJsxElementFields el)
 	{
-		LogicComponent<?, ?> component = type.defaultFactory().create();
+		DataResult<? extends LogicComponent> result = type.codec().codec().parse(NbtOps.INSTANCE, data);
+		if(result.isError())
+		{
+			errorSink.appendError(compiler, "Failed to parse data: " + result.error().orElseThrow().message(), el);
+			return;
+		}
+		LogicComponent<?, ?> component = result.getOrThrow();
 		component.setColor(Optional.ofNullable(color));
 		var entry = microchip.components().add(x + marginWidth, y + marginHeight, component);
+		if(entry == null)
+		{
+			errorSink.appendError(compiler, "Logic cannot fit", el);
+			return;
+		}
 		logic.put(name, entry.slot());
 	}
 	
-	public void addWire(String from, String to, int fromPort, int toPort)
+	public void addWire(String from, String to, int fromPort, int toPort,
+						PageCompiler compiler, LytErrorSink errorSink, MdxJsxElementFields el)
 	{
 		var fromSlot = this.getLogicSlot(from);
+		if(fromSlot == null)
+		{
+			errorSink.appendError(compiler, "Logic with name '" + from + "' does not exist", el);
+			return;
+		}
 		var toSlot = this.getLogicSlot(to);
+		if(toSlot == null)
+		{
+			errorSink.appendError(compiler, "Logic with name '" + to + "' does not exist", el);
+			return;
+		}
 		microchip.wires().add(fromSlot, fromPort, toSlot, toPort);
 	}
 	

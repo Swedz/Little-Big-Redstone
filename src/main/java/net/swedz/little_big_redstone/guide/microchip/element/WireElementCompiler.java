@@ -25,11 +25,6 @@ public final class WireElementCompiler implements MicrochipSceneElementTagCompil
 			errorSink.appendError(compiler, "Missing 'from' attribute", el);
 			return;
 		}
-		else if(microchip.getLogicSlot(from) == null)
-		{
-			errorSink.appendError(compiler, "No logic exists for that name", el);
-			return;
-		}
 		
 		var to = MdxAttrs.getString(compiler, errorSink, el, "to", null);
 		if(to == null)
@@ -37,15 +32,10 @@ public final class WireElementCompiler implements MicrochipSceneElementTagCompil
 			errorSink.appendError(compiler, "Missing 'to' attribute", el);
 			return;
 		}
-		else if(microchip.getLogicSlot(to) == null)
-		{
-			errorSink.appendError(compiler, "No logic exists for that name", el);
-			return;
-		}
 		
 		int fromPort = MdxAttrs.getInt(compiler, errorSink, el, "fromPort", 0);
 		int toPort = MdxAttrs.getInt(compiler, errorSink, el, "toPort", 0);
 		
-		microchip.addWire(from, to, fromPort, toPort);
+		microchip.addWire(from, to, fromPort, toPort, compiler, errorSink, el);
 	}
 }

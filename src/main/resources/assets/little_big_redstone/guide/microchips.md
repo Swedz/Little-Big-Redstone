@@ -52,6 +52,8 @@ another.
 
 <MicrochipScene color="red" includeToolbar={true}>
     <Logic name="1" x="0" y="0" type="not_gate" />
-    <Logic name="2" x="32" y="0" type="sequencer" />
+    <Logic name="2" x="32" y="0" type="sequencer" data="{config:{auto_reset:true}}" />
+    <Logic name="3" x="80" y="0" type="io" data="{config:{input:false}}" />
     <Wire from="1" fromPort="0" to="2" toPort="0" />
+    <Wire from="2" fromPort="0" to="3" toPort="0" />
 </MicrochipScene>

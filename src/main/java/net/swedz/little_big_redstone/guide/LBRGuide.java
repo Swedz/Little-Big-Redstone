@@ -58,7 +58,7 @@ public final class LBRGuide
 			}
 			catch(Exception ignored)
 			{
-				errorSink.appendError(compiler, "Logic type id does not exist", el);
+				errorSink.appendError(compiler, "Logic type does not exist", el);
 				return null;
 			}
 		}

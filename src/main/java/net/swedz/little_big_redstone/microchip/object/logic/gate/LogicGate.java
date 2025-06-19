@@ -24,7 +24,7 @@ public abstract class LogicGate<G extends LogicGate<G, C>, C extends LogicConfig
 				.group(
 						configCodec.fieldOf("config").forGetter(LogicComponent::config),
 						DyeColor.CODEC.optionalFieldOf("color").forGetter(LogicComponent::color),
-						Codec.BOOL.fieldOf("output").forGetter(LogicGate::output)
+						Codec.BOOL.optionalFieldOf("output", false).forGetter(LogicGate::output)
 				)
 				.apply(instance, function));
 	}
@@ -34,7 +34,7 @@ public abstract class LogicGate<G extends LogicGate<G, C>, C extends LogicConfig
 		return RecordCodecBuilder.mapCodec((instance) -> instance
 				.group(
 						DyeColor.CODEC.optionalFieldOf("color").forGetter(LogicComponent::color),
-						Codec.BOOL.fieldOf("output").forGetter(LogicGate::output)
+						Codec.BOOL.optionalFieldOf("output", false).forGetter(LogicGate::output)
 				)
 				.apply(instance, creator));
 	}
