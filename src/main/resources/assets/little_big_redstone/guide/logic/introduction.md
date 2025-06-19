@@ -7,4 +7,26 @@ navigation:
 
 # Introduction to Logic
 
-Placeholder
+Logic components, or what are also sometimes referred to as logic gates, are what drives your circuit. All logic 
+components will either have input or output ports. These ports are how you pass and modify signals to get the results
+that you want. Logic components behave purely on a boolean basis - meaning that signals may either have a value of
+off (0) or on (1).
+
+<br />
+
+## Truth Tables
+
+Logic will behave differently depending on their input signals, typically in a deterministic manner. Thus, most logic 
+components have what is called a truth table associated with them. A truth table is a table that shows the output
+state for every combination of inputs for the given logic component. The corresponding page for each logic component
+that can be described using a truth table will have one present on it.
+
+<br />
+
+## Using Logic
+
+Logic can be placed or picked up in a [Microchip](../microchips.md)'s interface using left-click. To configure a logic
+component (if there is anything to configure), you can use right-click on it. This will open a menu that you can
+change the settings for the component. Every component's settings are described in their corresponding page.
+
+For information on how to connect logic together using their ports, see the page on [wires](../redstone_bits.md).

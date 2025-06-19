@@ -3,7 +3,7 @@ navigation:
   title: "T Flip-Flop"
   icon: "t_flip_flop"
   parent: little_big_redstone:logic.md
-  position: 13
+  position: 22
 categories:
   - logic
 item_ids:

@@ -46,14 +46,30 @@ item_ids:
 
 <RecipeFor id="red_microchip" />
 
-Microchips are blocks that can have [logic](logic.md) placed inside of it to create complex systems.
+Microchips are blocks that can have [logic](logic/introduction.md) placed inside of it to create complex systems.
 [Wires](redstone_bits.md) can be placed between logic to allow signals to be carried from one logic component to
-another.
+another. Microchips can be dyed any of the standard 16 dye colors, and the GUI will reflect the color.
 
-<MicrochipScene color="red" includeToolbar={true}>
-    <Logic name="1" x="0" y="0" type="not_gate" />
-    <Logic name="2" x="32" y="0" type="sequencer" data="{config:{auto_reset:true}}" />
-    <Logic name="3" x="80" y="0" type="io" data="{config:{input:false}}" />
-    <Wire from="1" fromPort="0" to="2" toPort="0" />
-    <Wire from="2" fromPort="0" to="3" toPort="0" />
-</MicrochipScene>
+<Row>
+	<Column alignItems="start">
+		<MicrochipScene color="red">
+			<Logic name="1" x="0" y="0" type="not_gate" />
+			<Logic name="2" x="32" y="0" type="sequencer" data="{config:{auto_reset:true}}" />
+			<Wire from="1" fromPort="0" to="2" toPort="0" />
+		</MicrochipScene>
+	</Column>
+	<Column alignItems="start">
+		<MicrochipScene color="green">
+			<Logic name="1" x="0" y="0" type="not_gate" />
+			<Logic name="2" x="32" y="0" type="sequencer" data="{config:{auto_reset:true}}" />
+			<Wire from="1" fromPort="0" to="2" toPort="0" />
+		</MicrochipScene>
+	</Column>
+	<Column alignItems="start">
+		<MicrochipScene color="blue">
+			<Logic name="1" x="0" y="0" type="not_gate" />
+			<Logic name="2" x="32" y="0" type="sequencer" data="{config:{auto_reset:true}}" />
+			<Wire from="1" fromPort="0" to="2" toPort="0" />
+		</MicrochipScene>
+	</Column>
+</Row>

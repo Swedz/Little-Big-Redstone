@@ -3,7 +3,7 @@ navigation:
   title: "Pulse Throttler"
   icon: "pulse_throttler"
   parent: little_big_redstone:logic.md
-  position: 10
+  position: 19
 categories:
   - logic
 item_ids:

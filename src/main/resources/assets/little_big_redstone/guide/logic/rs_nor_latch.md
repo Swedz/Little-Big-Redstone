@@ -3,7 +3,7 @@ navigation:
   title: "RS NOR Latch"
   icon: "rs_nor_latch"
   parent: little_big_redstone:logic.md
-  position: 14
+  position: 23
 categories:
   - logic
 item_ids:
