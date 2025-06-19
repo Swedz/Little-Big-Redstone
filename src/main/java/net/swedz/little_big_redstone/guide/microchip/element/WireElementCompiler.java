@@ -38,4 +38,10 @@ public final class WireElementCompiler implements MicrochipSceneElementTagCompil
 		
 		microchip.addWire(from, to, fromPort, toPort, compiler, errorSink, el);
 	}
+	
+	@Override
+	public boolean isDelayed()
+	{
+		return true;
+	}
 }
