@@ -31,6 +31,8 @@ import net.swedz.little_big_redstone.guide.PausePlayGuideIconButton;
 import net.swedz.little_big_redstone.guide.microchip.element.MicrochipObjectGuideTooltip;
 import net.swedz.little_big_redstone.microchip.Microchip;
 import net.swedz.little_big_redstone.microchip.MicrochipSize;
+import net.swedz.little_big_redstone.microchip.awareness.AwarenessType;
+import net.swedz.little_big_redstone.microchip.awareness.MicrochipAwareness;
 import net.swedz.little_big_redstone.microchip.object.logic.LogicComponent;
 import net.swedz.little_big_redstone.microchip.object.logic.LogicContext;
 import net.swedz.little_big_redstone.microchip.object.logic.LogicType;
@@ -166,6 +168,7 @@ public final class MicrochipGuidebookScene extends LytBox implements ExportableR
 			return;
 		}
 		logic.put(name, entry.slot());
+		microchip.markDirty();
 	}
 	
 	public void addWire(String from, String to, int fromPort, int toPort,
@@ -198,9 +201,13 @@ public final class MicrochipGuidebookScene extends LytBox implements ExportableR
 		}
 		
 		microchip.wires().add(fromSlot, fromPort, toSlot, toPort);
+		microchip.markDirty();
 	}
 	
-	// TODO awarenesses, maybe use a game scene's level?
+	public <A extends MicrochipAwareness<A>> A getAwareness(AwarenessType<A> type)
+	{
+		return microchip.awarenesses().get(type);
+	}
 	
 	@Override
 	protected LytRect computeBoxLayout(LayoutContext context, int x, int y, int availableWidth)

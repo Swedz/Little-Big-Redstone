@@ -16,4 +16,9 @@ public interface MicrochipSceneElementTagCompiler extends Extension
 	Set<String> getTagNames();
 	
 	void compile(MicrochipGuidebookScene microchip, PageCompiler compiler, LytErrorSink errorSink, MdxJsxElementFields el);
+	
+	default boolean isDelayed()
+	{
+		return false;
+	}
 }

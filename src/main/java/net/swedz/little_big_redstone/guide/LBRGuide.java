@@ -11,6 +11,7 @@ import net.swedz.little_big_redstone.LBR;
 import net.swedz.little_big_redstone.guide.microchip.MicrochipSceneCompiler;
 import net.swedz.little_big_redstone.guide.microchip.element.LogicElementCompiler;
 import net.swedz.little_big_redstone.guide.microchip.element.MicrochipSceneElementTagCompiler;
+import net.swedz.little_big_redstone.guide.microchip.element.RedstoneSignalCompiler;
 import net.swedz.little_big_redstone.guide.microchip.element.WireElementCompiler;
 import net.swedz.little_big_redstone.guide.truthtable.TruthTableCompiler;
 import net.swedz.little_big_redstone.guide.truthtable.element.TruthTableElementTagCompiler;
@@ -27,6 +28,7 @@ public final class LBRGuide
 				.extension(TagCompiler.EXTENSION_POINT, new MicrochipSceneCompiler())
 				.extension(MicrochipSceneElementTagCompiler.EXTENSION_POINT, new LogicElementCompiler())
 				.extension(MicrochipSceneElementTagCompiler.EXTENSION_POINT, new WireElementCompiler())
+				.extension(MicrochipSceneElementTagCompiler.EXTENSION_POINT, new RedstoneSignalCompiler())
 				.extension(TagCompiler.EXTENSION_POINT, new TruthTableCompiler())
 				.extension(TruthTableElementTagCompiler.EXTENSION_POINT, new TruthTableStateCompiler())
 				.build();

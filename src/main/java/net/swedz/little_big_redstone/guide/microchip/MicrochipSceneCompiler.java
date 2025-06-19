@@ -1,6 +1,7 @@
 package net.swedz.little_big_redstone.guide.microchip;
 
 import com.google.common.collect.Maps;
+import com.google.common.collect.Sets;
 import guideme.compiler.IndexingContext;
 import guideme.compiler.IndexingSink;
 import guideme.compiler.PageCompiler;
@@ -38,6 +39,7 @@ public final class MicrochipSceneCompiler extends BlockTagCompiler
 		
 		var block = new MicrochipGuidebookScene(color, width, height, marginWidth, marginHeight, includeToolbar);
 		
+		Set<MdxJsxElementFields> delayedChildren = Sets.newHashSet();
 		for(var child : el.children())
 		{
 			if(child instanceof MdxJsxElementFields childEl)
@@ -48,6 +50,10 @@ public final class MicrochipSceneCompiler extends BlockTagCompiler
 				{
 					parent.appendError(compiler, "Unknown microchip scene element", child);
 				}
+				else if(childCompiler.isDelayed())
+				{
+					delayedChildren.add(childEl);
+				}
 				else
 				{
 					childCompiler.compile(block, compiler, parent, childEl);
@@ -56,6 +62,13 @@ public final class MicrochipSceneCompiler extends BlockTagCompiler
 		}
 		
 		block.adjustSize();
+		
+		for(var childEl : delayedChildren)
+		{
+			var childTagName = childEl.name();
+			var childCompiler = elementTagCompilers.get(childTagName);
+			childCompiler.compile(block, compiler, parent, childEl);
+		}
 		
 		parent.append(block);
 	}
