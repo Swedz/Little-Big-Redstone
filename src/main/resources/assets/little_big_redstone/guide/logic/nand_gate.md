@@ -41,16 +41,16 @@ NAND gates can be configured to have anywhere between 2 and 10 inputs.
 			<Wire from="a" fromPort="0" to="and" toPort="0" />
 			<Wire from="b" fromPort="0" to="and" toPort="1" />
 			<Wire from="and" fromPort="0" to="output" toPort="0" />
-		
+
 			<RedstoneSignal step="0" direction="east" strength="0" />
 			<RedstoneSignal step="0" direction="west" strength="0" />
-		
+
 			<RedstoneSignal step="1" direction="east" strength="0" />
 			<RedstoneSignal step="1" direction="west" strength="15" />
-		
+
 			<RedstoneSignal step="2" direction="east" strength="15" />
 			<RedstoneSignal step="2" direction="west" strength="0" />
-		
+
 			<RedstoneSignal step="3" direction="east" strength="15" />
 			<RedstoneSignal step="3" direction="west" strength="15" />
 		</MicrochipScene>
@@ -64,28 +64,28 @@ NAND gates can be configured to have anywhere between 2 and 10 inputs.
 			<Logic name="d" x="0" y="48" type="io" data="{config:{direction:'west'}}" />
 			<Logic name="and" x="32" y="16" type="nand_gate" data="{config:{input_count:4}}" />
 			<Logic name="output" x="64" y="24" type="io" data="{config:{direction:'up',input:false,signal_strength:15}}" />
-		
+
 			<Wire from="a" fromPort="0" to="and" toPort="0" />
 			<Wire from="b" fromPort="0" to="and" toPort="1" />
 			<Wire from="c" fromPort="0" to="and" toPort="2" />
 			<Wire from="d" fromPort="0" to="and" toPort="3" />
 			<Wire from="and" fromPort="0" to="output" toPort="0" />
-		
+
 			<RedstoneSignal step="0" direction="north" strength="0" />
 			<RedstoneSignal step="0" direction="south" strength="0" />
 			<RedstoneSignal step="0" direction="east" strength="0" />
 			<RedstoneSignal step="0" direction="west" strength="0" />
-		
+
 			<RedstoneSignal step="1" direction="north" strength="15" />
 			<RedstoneSignal step="1" direction="south" strength="0" />
 			<RedstoneSignal step="1" direction="east" strength="0" />
 			<RedstoneSignal step="1" direction="west" strength="15" />
-		
+
 			<RedstoneSignal step="2" direction="north" strength="0" />
 			<RedstoneSignal step="2" direction="south" strength="15" />
 			<RedstoneSignal step="2" direction="east" strength="15" />
 			<RedstoneSignal step="2" direction="west" strength="0" />
-		
+
 			<RedstoneSignal step="3" direction="north" strength="15" />
 			<RedstoneSignal step="3" direction="south" strength="15" />
 			<RedstoneSignal step="3" direction="east" strength="15" />
