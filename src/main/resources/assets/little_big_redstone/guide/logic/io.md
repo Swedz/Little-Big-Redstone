@@ -24,7 +24,8 @@ redstone signal.
 
 Each I/O port has a direction that it links to: <Color id="green">north</Color>, <Color id="blue">south</Color>,
 <Color id="red">east</Color>, <Color id="gold">west</Color>, <Color id="white">up</Color>, and
-<Color id="yellow">down</Color>.
+<Color id="yellow">down</Color>. The color of a direction can be seen on the side of a microchip by crouching and
+looking at it.
 
 **NOTE:** Each direction may only either act as an input or output, not both. If I/O ports are placed in a circuit such
 that one is an input and the other is an output on the same face - neither port will work and a warning indicator will
