@@ -21,6 +21,7 @@ import guideme.siteexport.ResourceExporter;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtOps;
 import net.minecraft.world.item.DyeColor;
@@ -31,8 +32,7 @@ import net.swedz.little_big_redstone.guide.PausePlayGuideIconButton;
 import net.swedz.little_big_redstone.guide.microchip.element.MicrochipObjectGuideTooltip;
 import net.swedz.little_big_redstone.microchip.Microchip;
 import net.swedz.little_big_redstone.microchip.MicrochipSize;
-import net.swedz.little_big_redstone.microchip.awareness.AwarenessType;
-import net.swedz.little_big_redstone.microchip.awareness.MicrochipAwareness;
+import net.swedz.little_big_redstone.microchip.awareness.AwarenessTypes;
 import net.swedz.little_big_redstone.microchip.object.logic.LogicComponent;
 import net.swedz.little_big_redstone.microchip.object.logic.LogicContext;
 import net.swedz.little_big_redstone.microchip.object.logic.LogicType;
@@ -58,6 +58,8 @@ public final class MicrochipGuidebookScene extends LytBox implements ExportableR
 	private MicrochipRenderBoardPanel panel;
 	
 	private final Map<String, Integer> logic = Maps.newHashMap();
+	
+	private final TimedRedstoneSignals redstoneSignals = new TimedRedstoneSignals();
 	
 	private final Viewport viewport = new Viewport();
 	private final LytVBox  toolbar  = new LytVBox();
@@ -89,6 +91,7 @@ public final class MicrochipGuidebookScene extends LytBox implements ExportableR
 			{
 				entry.component().resetForPickup();
 			}
+			redstoneSignals.reset();
 		})));
 		toolbar.append(pausePlayButton = new LytWidget(new PausePlayGuideIconButton(0, 0, () ->
 		{
@@ -204,9 +207,9 @@ public final class MicrochipGuidebookScene extends LytBox implements ExportableR
 		microchip.markDirty();
 	}
 	
-	public <A extends MicrochipAwareness<A>> A getAwareness(AwarenessType<A> type)
+	public void setRedstoneSignal(Integer step, Direction direction, int signal)
 	{
-		return microchip.awarenesses().get(type);
+		redstoneSignals.setSignal(step, direction, signal);
 	}
 	
 	@Override
@@ -233,9 +236,11 @@ public final class MicrochipGuidebookScene extends LytBox implements ExportableR
 			return;
 		}
 		
-		if(microchip.components().traversal().isEmpty())
+		var redstone = microchip.awarenesses().get(AwarenessTypes.REDSTONE);
+		if(redstone != null)
 		{
-			microchip.components().rebuildTraversal();
+			redstoneSignals.tick();
+			redstoneSignals.applySignals(redstone);
 		}
 		
 		var context = new LogicContext(Minecraft.getInstance().level, new BlockPos(0, 0, 0), microchip);

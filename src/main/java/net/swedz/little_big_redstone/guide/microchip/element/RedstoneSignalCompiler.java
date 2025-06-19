@@ -21,11 +21,15 @@ public final class RedstoneSignalCompiler implements MicrochipSceneElementTagCom
 	@Override
 	public void compile(MicrochipGuidebookScene microchip, PageCompiler compiler, LytErrorSink errorSink, MdxJsxElementFields el)
 	{
+		Integer step = MdxAttrs.getInt(compiler, errorSink, el, "step", -1);
+		if(step == -1)
+		{
+			step = null;
+		}
 		var direction = MdxAttrs.getEnum(compiler, errorSink, el, "direction", Direction.NORTH);
 		int strength = MdxAttrs.getInt(compiler, errorSink, el, "strength", 0);
 		
-		var redstone = microchip.getAwareness(AwarenessTypes.REDSTONE);
-		redstone.setInputPowered(direction, strength);
+		microchip.setRedstoneSignal(step, direction, strength);
 	}
 	
 	@Override
