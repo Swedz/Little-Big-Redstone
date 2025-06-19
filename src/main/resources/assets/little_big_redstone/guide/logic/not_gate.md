@@ -12,8 +12,6 @@ item_ids:
 
 # NOT Gate
 
-<ItemImage id="not_gate" scale="2" />
-
 <FloatingColumn width="100" align="right">
 	### Truth Table
 	<TruthTable>

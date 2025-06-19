@@ -12,6 +12,6 @@ item_ids:
 
 # T Flip-Flop
 
-<ItemImage id="t_flip_flop" scale="2" />
+<RecipeFor id="t_flip_flop" />
 
 Placeholder

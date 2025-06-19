@@ -12,6 +12,6 @@ item_ids:
 
 # Sequencer
 
-<ItemImage id="sequencer" scale="2" />
+<RecipeFor id="sequencer" />
 
 Placeholder

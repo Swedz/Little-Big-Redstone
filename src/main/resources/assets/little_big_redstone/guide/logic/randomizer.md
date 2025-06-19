@@ -12,6 +12,6 @@ item_ids:
 
 # Randomizer
 
-<ItemImage id="randomizer" scale="2" />
+<RecipeFor id="randomizer" />
 
 Placeholder

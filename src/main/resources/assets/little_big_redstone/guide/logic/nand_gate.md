@@ -12,8 +12,6 @@ item_ids:
 
 # NAND Gate
 
-<ItemImage id="nand_gate" scale="2" />
-
 <FloatingColumn width="100" align="right">
 	### Truth Table
 	<TruthTable inputs="2">

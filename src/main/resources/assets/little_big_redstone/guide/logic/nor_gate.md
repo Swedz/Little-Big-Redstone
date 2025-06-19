@@ -12,8 +12,6 @@ item_ids:
 
 # NOR Gate
 
-<ItemImage id="nor_gate" scale="2" />
-
 <FloatingColumn width="100" align="right">
 	### Truth Table
 	<TruthTable inputs="2" outputs="1">

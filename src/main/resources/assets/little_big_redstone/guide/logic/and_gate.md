@@ -12,8 +12,6 @@ item_ids:
 
 # AND Gate
 
-<ItemImage id="and_gate" scale="2" />
-
 <FloatingColumn width="100" align="right">
 	### Truth Table
 	<TruthTable inputs="2">

@@ -12,6 +12,6 @@ item_ids:
 
 # XOR Gate
 
-<ItemImage id="xor_gate" scale="2" />
+<RecipeFor id="xor_gate" />
 
 Placeholder

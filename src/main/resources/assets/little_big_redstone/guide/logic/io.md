@@ -12,8 +12,6 @@ item_ids:
 
 # I/O Port
 
-<ItemImage id="io" scale="2" />
-
 <RecipeFor id="io" />
 
 I/O ports are how you can input and output redstone signals to and from your circuits. When I/O ports are placed into

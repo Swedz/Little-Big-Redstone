@@ -12,6 +12,6 @@ item_ids:
 
 # RS NOR Latch
 
-<ItemImage id="rs_nor_latch" scale="2" />
+<RecipeFor id="rs_nor_latch" />
 
 Placeholder

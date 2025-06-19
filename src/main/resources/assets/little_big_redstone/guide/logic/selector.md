@@ -12,6 +12,6 @@ item_ids:
 
 # Selector
 
-<ItemImage id="selector" scale="2" />
+<RecipeFor id="selector" />
 
 Placeholder

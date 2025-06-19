@@ -12,6 +12,6 @@ item_ids:
 
 # Pulse Throttler
 
-<ItemImage id="pulse_throttler" scale="2" />
+<RecipeFor id="pulse_throttler" />
 
 Placeholder

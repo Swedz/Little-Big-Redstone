@@ -12,6 +12,6 @@ item_ids:
 
 # Reader
 
-<ItemImage id="reader" scale="2" />
+<RecipeFor id="reader" />
 
 Placeholder
