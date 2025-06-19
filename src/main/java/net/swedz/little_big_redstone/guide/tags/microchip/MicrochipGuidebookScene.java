@@ -92,6 +92,7 @@ public final class MicrochipGuidebookScene extends LytBox implements ExportableR
 				entry.component().resetForPickup();
 			}
 			redstoneSignals.reset();
+			this.tickLogic();
 		})));
 		toolbar.append(pausePlayButton = new LytWidget(new PausePlayGuideIconButton(0, 0, () ->
 		{
@@ -236,6 +237,11 @@ public final class MicrochipGuidebookScene extends LytBox implements ExportableR
 			return;
 		}
 		
+		this.tickLogic();
+	}
+	
+	private void tickLogic()
+	{
 		var redstone = microchip.awarenesses().get(AwarenessTypes.REDSTONE);
 		if(redstone != null)
 		{
