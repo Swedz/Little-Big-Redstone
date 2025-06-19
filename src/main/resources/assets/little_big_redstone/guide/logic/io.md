@@ -37,20 +37,12 @@ You may also configure the signal strength of an I/O port. When the port is in i
 must meet or exceed the signal in order for the port to provide an output of ON. When the port is in output mode, and
 the input port is provided with an ON signal, the redstone signal provided will be equal to the signal strength set.
 
-<Row>
-	<Column>
-		<MicrochipScene color="red">
-			<Logic name="input" x="0" y="0" type="io" />
-			<Logic name="output" x="48" y="0" type="io" data="{config:{input:false,direction:'south',signal_strength:15}}" />
-			<Wire from="input" fromPort="0" to="output" toPort="0" />
-		</MicrochipScene>
-	</Column>
-	<Column>
-		<MicrochipScene color="red">
-			<Logic name="input" x="0" y="0" type="io" />
-			<Logic name="output" x="48" y="0" type="io" data="{config:{input:false,direction:'south',signal_strength:15}}" />
-			<Wire from="input" fromPort="0" to="output" toPort="0" />
-			<RedstoneSignal direction="north" strength="15" />
-		</MicrochipScene>
-	</Column>
-</Row>
+<MicrochipScene color="red" includeToolbar={true}>
+	<Logic name="input" x="0" y="0" type="io" />
+	<Logic name="output" x="48" y="0" type="io" data="{config:{input:false,direction:'south',signal_strength:15}}" />
+
+	<Wire from="input" fromPort="0" to="output" toPort="0" />
+
+	<RedstoneSignal step="0" direction="north" strength="15" />
+	<RedstoneSignal step="1" direction="north" strength="0" />
+</MicrochipScene>
