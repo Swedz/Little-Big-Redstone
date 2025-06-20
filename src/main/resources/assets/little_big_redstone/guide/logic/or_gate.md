@@ -82,17 +82,37 @@ OR gates can be configured to have anywhere between 2 and 10 inputs.
 			<RedstoneSignal step="1" direction="north" strength="15" />
 			<RedstoneSignal step="1" direction="south" strength="0" />
 			<RedstoneSignal step="1" direction="east" strength="0" />
-			<RedstoneSignal step="1" direction="west" strength="15" />
+			<RedstoneSignal step="1" direction="west" strength="0" />
 
 			<RedstoneSignal step="2" direction="north" strength="0" />
 			<RedstoneSignal step="2" direction="south" strength="15" />
-			<RedstoneSignal step="2" direction="east" strength="15" />
+			<RedstoneSignal step="2" direction="east" strength="0" />
 			<RedstoneSignal step="2" direction="west" strength="0" />
 
-			<RedstoneSignal step="3" direction="north" strength="15" />
-			<RedstoneSignal step="3" direction="south" strength="15" />
+			<RedstoneSignal step="3" direction="north" strength="0" />
+			<RedstoneSignal step="3" direction="south" strength="0" />
 			<RedstoneSignal step="3" direction="east" strength="15" />
-			<RedstoneSignal step="3" direction="west" strength="15" />
+			<RedstoneSignal step="3" direction="west" strength="0" />
+
+			<RedstoneSignal step="4" direction="north" strength="0" />
+			<RedstoneSignal step="4" direction="south" strength="0" />
+			<RedstoneSignal step="4" direction="east" strength="0" />
+			<RedstoneSignal step="4" direction="west" strength="15" />
+
+			<RedstoneSignal step="5" direction="north" strength="0" />
+			<RedstoneSignal step="5" direction="south" strength="15" />
+			<RedstoneSignal step="5" direction="east" strength="0" />
+			<RedstoneSignal step="5" direction="west" strength="15" />
+
+			<RedstoneSignal step="6" direction="north" strength="15" />
+			<RedstoneSignal step="6" direction="south" strength="0" />
+			<RedstoneSignal step="6" direction="east" strength="15" />
+			<RedstoneSignal step="6" direction="west" strength="0" />
+
+			<RedstoneSignal step="7" direction="north" strength="15" />
+			<RedstoneSignal step="7" direction="south" strength="15" />
+			<RedstoneSignal step="7" direction="east" strength="15" />
+			<RedstoneSignal step="7" direction="west" strength="15" />
 		</MicrochipScene>
 	</Column>
 </Row>
