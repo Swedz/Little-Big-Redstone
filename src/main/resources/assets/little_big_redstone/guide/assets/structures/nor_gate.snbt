@@ -11,18 +11,18 @@
         {pos: [3, 0, 2], state: "minecraft:light_blue_concrete"},
         {pos: [4, 0, 0], state: "minecraft:cyan_concrete"},
         {pos: [4, 0, 2], state: "minecraft:light_blue_concrete"},
-        {pos: [0, 1, 1], state: "minecraft:redstone_wire{east:side,north:none,power:0,south:none,west:side}"},
-        {pos: [1, 1, 1], state: "minecraft:redstone_wall_torch{facing:west,lit:false}"},
+        {pos: [0, 1, 1], state: "minecraft:redstone_wire{east:side,north:none,power:15,south:none,west:side}"},
+        {pos: [1, 1, 1], state: "minecraft:redstone_wall_torch{facing:west,lit:true}"},
         {pos: [2, 1, 0], state: "minecraft:smooth_stone"},
         {pos: [2, 1, 1], state: "minecraft:smooth_stone"},
         {pos: [2, 1, 2], state: "minecraft:smooth_stone"},
-        {pos: [3, 1, 0], state: "minecraft:redstone_wire{east:side,north:none,power:0,south:none,west:side}"},
-        {pos: [3, 1, 2], state: "minecraft:redstone_wire{east:side,north:none,power:0,south:none,west:side}"},
+        {pos: [3, 1, 0], state: "minecraft:redstone_wire{east:side,north:none,power:0,south:none,west:up}"},
+        {pos: [3, 1, 2], state: "minecraft:redstone_wire{east:side,north:none,power:0,south:none,west:up}"},
         {pos: [4, 1, 0], state: "minecraft:redstone_wire{east:side,north:none,power:0,south:none,west:side}"},
         {pos: [4, 1, 2], state: "minecraft:redstone_wire{east:side,north:none,power:0,south:none,west:side}"},
-        {pos: [2, 2, 0], state: "minecraft:redstone_torch{lit:true}"},
-        {pos: [2, 2, 1], state: "minecraft:redstone_wire{east:none,north:side,power:15,south:side,west:none}"},
-        {pos: [2, 2, 2], state: "minecraft:redstone_torch{lit:true}"}
+        {pos: [2, 2, 0], state: "minecraft:redstone_wire{east:side,north:none,power:0,south:side,west:none}"},
+        {pos: [2, 2, 1], state: "minecraft:redstone_wire{east:none,north:side,power:0,south:side,west:none}"},
+        {pos: [2, 2, 2], state: "minecraft:redstone_wire{east:side,north:side,power:0,south:none,west:none}"}
     ],
     entities: [],
     palette: [
@@ -30,9 +30,12 @@
         "minecraft:smooth_stone",
         "minecraft:cyan_concrete",
         "minecraft:light_blue_concrete",
+        "minecraft:redstone_wire{east:side,north:none,power:15,south:none,west:side}",
+        "minecraft:redstone_wall_torch{facing:west,lit:true}",
+        "minecraft:redstone_wire{east:side,north:none,power:0,south:none,west:up}",
         "minecraft:redstone_wire{east:side,north:none,power:0,south:none,west:side}",
-        "minecraft:redstone_wall_torch{facing:west,lit:false}",
-        "minecraft:redstone_torch{lit:true}",
-        "minecraft:redstone_wire{east:none,north:side,power:15,south:side,west:none}"
+        "minecraft:redstone_wire{east:side,north:none,power:0,south:side,west:none}",
+        "minecraft:redstone_wire{east:none,north:side,power:0,south:side,west:none}",
+        "minecraft:redstone_wire{east:side,north:side,power:0,south:none,west:none}"
     ]
 }

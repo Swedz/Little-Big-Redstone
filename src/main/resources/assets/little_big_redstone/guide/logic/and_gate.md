@@ -29,22 +29,8 @@ item_ids:
 	</Column>
 
 	<Column>
-		<GameScene zoom="1.85" padding="3" interactive={true}>
+		<GameScene zoom="1.48" padding="3" interactive={true}>
 			<ImportStructure src="../assets/structures/and_gate.snbt" />
-			<Block id="minecraft:redstone_wire" x="0" y="0" z="1" p:east="side" p:west="side" />
-			<Block id="minecraft:redstone_wire" x="3" y="0" z="2" p:east="side" p:west="side" />
-			<Block id="minecraft:redstone_wire" x="4" y="0" z="2" p:east="side" p:west="side" />
-			<Block id="minecraft:redstone_wire" x="3" y="0" z="0" p:east="side" p:west="side" />
-			<Block id="minecraft:redstone_wire" x="4" y="0" z="0" p:east="side" p:west="side" />
-			<BoxAnnotation min="3 0 2" max="5 1 3" color="#4EC5E7">
-                Input A
-            </BoxAnnotation>
-            <BoxAnnotation min="3 0 0" max="5 1 1" color="#4EC5E7">
-                Input B
-            </BoxAnnotation>
-            <BoxAnnotation min="0 0 1" max="2 1 2" color="#F9932B">
-                Output
-            </BoxAnnotation>
 			<IsometricCamera yaw="150" pitch="30" />
 		</GameScene>
 	</Column>

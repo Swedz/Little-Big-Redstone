@@ -23,7 +23,18 @@ item_ids:
 	*For details about truth tables, see the page [here](introduction.md).*
 </FloatingColumn>
 
-<RecipeFor id="or_gate" />
+<Row>
+	<Column>
+		<RecipeFor id="or_gate" />
+	</Column>
+
+	<Column>
+		<GameScene zoom="1.48" padding="3" interactive={true}>
+			<ImportStructure src="../assets/structures/or_gate.snbt" />
+			<IsometricCamera yaw="150" pitch="30" />
+		</GameScene>
+	</Column>
+</Row>
 
 OR gates are logic components that require at least one input to be ON for the output to be ON. This is the inverse of
 a [NOR gate](nor_gate.md).

@@ -21,7 +21,18 @@ item_ids:
 	*For details about truth tables, see the page [here](introduction.md).*
 </FloatingColumn>
 
-<RecipeFor id="not_gate" />
+<Row>
+	<Column>
+		<RecipeFor id="not_gate" />
+	</Column>
+
+	<Column>
+		<GameScene zoom="1.48" padding="3" interactive={true}>
+			<ImportStructure src="../assets/structures/not_gate.snbt" />
+			<IsometricCamera yaw="150" pitch="30" />
+		</GameScene>
+	</Column>
+</Row>
 
 NOT Gates are the simplest gate available. These take a single input, invert the signal, and provide a single output.
 

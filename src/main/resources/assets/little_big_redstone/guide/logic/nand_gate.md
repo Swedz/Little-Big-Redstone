@@ -23,7 +23,18 @@ item_ids:
 	*For details about truth tables, see the page [here](introduction.md).*
 </FloatingColumn>
 
-<RecipeFor id="nand_gate" />
+<Row>
+	<Column>
+		<RecipeFor id="nand_gate" />
+	</Column>
+
+	<Column>
+		<GameScene zoom="1.48" padding="3" interactive={true}>
+			<ImportStructure src="../assets/structures/nand_gate.snbt" />
+			<IsometricCamera yaw="150" pitch="30" />
+		</GameScene>
+	</Column>
+</Row>
 
 NAND gates are logic components that require all inputs to be ON for the output to be OFF. This is the inverse of an
 [AND gate](and_gate.md).

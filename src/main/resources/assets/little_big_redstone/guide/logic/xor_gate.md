@@ -23,7 +23,18 @@ item_ids:
 	*For details about truth tables, see the page [here](introduction.md).*
 </FloatingColumn>
 
-<RecipeFor id="xor_gate" />
+<Row>
+	<Column>
+		<RecipeFor id="xor_gate" />
+	</Column>
+
+	<Column>
+		<GameScene zoom="1.48" padding="3" interactive={true}>
+			<ImportStructure src="../assets/structures/xor_gate.snbt" />
+			<IsometricCamera yaw="150" pitch="30" />
+		</GameScene>
+	</Column>
+</Row>
 
 XOR gates are logic components that only has an ON output when an odd number of inputs are ON. In the case of a
 simple two input XOR gate, this means that the output will only be ON when exactly one of the inputs are ON.

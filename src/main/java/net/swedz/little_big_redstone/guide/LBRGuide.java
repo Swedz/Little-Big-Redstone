@@ -7,6 +7,7 @@ import guideme.compiler.tags.BoxFlowDirection;
 import guideme.compiler.tags.MdxAttrs;
 import guideme.document.LytErrorSink;
 import guideme.libs.mdast.mdx.model.MdxJsxElementFields;
+import guideme.scene.ImplicitAnnotationStrategy;
 import net.minecraft.world.item.DyeColor;
 import net.swedz.little_big_redstone.LBR;
 import net.swedz.little_big_redstone.guide.tags.block.FloatingBoxTagCompiler;
@@ -15,6 +16,7 @@ import net.swedz.little_big_redstone.guide.tags.microchip.element.LogicElementCo
 import net.swedz.little_big_redstone.guide.tags.microchip.element.MicrochipSceneElementTagCompiler;
 import net.swedz.little_big_redstone.guide.tags.microchip.element.RedstoneSignalCompiler;
 import net.swedz.little_big_redstone.guide.tags.microchip.element.WireElementCompiler;
+import net.swedz.little_big_redstone.guide.tags.scene.InputOutputAnnotation;
 import net.swedz.little_big_redstone.guide.tags.truthtable.TruthTableCompiler;
 import net.swedz.little_big_redstone.guide.tags.truthtable.element.TruthTableElementTagCompiler;
 import net.swedz.little_big_redstone.guide.tags.truthtable.element.TruthTableStateCompiler;
@@ -35,6 +37,7 @@ public final class LBRGuide
 				.extension(TruthTableElementTagCompiler.EXTENSION_POINT, new TruthTableStateCompiler())
 				.extension(TagCompiler.EXTENSION_POINT, new FloatingBoxTagCompiler(BoxFlowDirection.ROW))
 				.extension(TagCompiler.EXTENSION_POINT, new FloatingBoxTagCompiler(BoxFlowDirection.COLUMN))
+				.extension(ImplicitAnnotationStrategy.EXTENSION_POINT, new InputOutputAnnotation())
 				.build();
 	}
 	
