@@ -1,0 +1,26 @@
+{
+    DataVersion: 3955,
+    size: [5, 2, 3],
+    data: [
+        {pos: [0, 0, 1], state: "minecraft:redstone_wire{east:side,north:none,power:0,south:none,west:side}"},
+        {pos: [1, 0, 1], state: "minecraft:redstone_wall_torch{facing:west,lit:false}"},
+        {pos: [2, 0, 0], state: "minecraft:smooth_stone"},
+        {pos: [2, 0, 1], state: "minecraft:smooth_stone"},
+        {pos: [2, 0, 2], state: "minecraft:smooth_stone"},
+        {pos: [3, 0, 0], state: "minecraft:redstone_wire{east:side,north:none,power:0,south:none,west:side}"},
+        {pos: [3, 0, 2], state: "minecraft:redstone_wire{east:side,north:none,power:0,south:none,west:side}"},
+        {pos: [4, 0, 0], state: "minecraft:redstone_wire{east:side,north:none,power:0,south:none,west:side}"},
+        {pos: [4, 0, 2], state: "minecraft:redstone_wire{east:side,north:none,power:0,south:none,west:side}"},
+        {pos: [2, 1, 0], state: "minecraft:redstone_torch{lit:true}"},
+        {pos: [2, 1, 1], state: "minecraft:redstone_wire{east:none,north:side,power:15,south:side,west:none}"},
+        {pos: [2, 1, 2], state: "minecraft:redstone_torch{lit:true}"}
+    ],
+    entities: [],
+    palette: [
+        "minecraft:smooth_stone",
+        "minecraft:redstone_wire{east:side,north:none,power:0,south:none,west:side}",
+        "minecraft:redstone_wall_torch{facing:west,lit:false}",
+        "minecraft:redstone_torch{lit:true}",
+        "minecraft:redstone_wire{east:none,north:side,power:15,south:side,west:none}"
+    ]
+}
