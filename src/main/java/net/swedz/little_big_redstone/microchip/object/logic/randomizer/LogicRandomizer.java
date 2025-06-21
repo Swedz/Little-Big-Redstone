@@ -8,6 +8,7 @@ import io.netty.buffer.ByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.item.DyeColor;
 import net.swedz.little_big_redstone.LBRText;
 import net.swedz.little_big_redstone.microchip.object.logic.LogicComponent;
@@ -67,9 +68,9 @@ public final class LogicRandomizer extends LogicComponent<LogicRandomizer, Logic
 	{
 		int originalOutputIndex = outputIndex;
 		
-		if(inputs[0] && context.level().random.nextFloat() <= config.chance)
+		if(inputs[0] && context.level() instanceof ServerLevel level && level.random.nextFloat() <= config.chance)
 		{
-			outputIndex = context.level().random.nextInt(config.outputs);
+			outputIndex = level.random.nextInt(config.outputs);
 		}
 		else
 		{
