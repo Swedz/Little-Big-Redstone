@@ -21,6 +21,10 @@ components have what is called a truth table associated with them. A truth table
 state for every combination of inputs for the given logic component. The corresponding page for each logic component
 that can be described using a truth table will have one present on it.
 
+Inputs are represented by sequentially ordered letters. For example, the first input would be A, the second B, and so
+on and so forth. Outputs are represented by Q. If multiple outputs are present, the Q is followed by subscript denoting
+the specific output. For example, Q₁, Q₂, and so on. However, in most cases there will only be one output to a gate.
+
 <br />
 
 ## Using Logic
