@@ -8,7 +8,7 @@ import net.swedz.little_big_redstone.guide.tags.microchip.MicrochipGuidebookScen
 
 import java.util.Set;
 
-public final class WireElementCompiler implements MicrochipSceneElementTagCompiler
+public final class WireElementTagCompiler implements MicrochipSceneElementTagCompiler
 {
 	@Override
 	public Set<String> getTagNames()

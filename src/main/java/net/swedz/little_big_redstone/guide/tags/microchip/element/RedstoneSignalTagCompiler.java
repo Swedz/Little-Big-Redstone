@@ -9,7 +9,7 @@ import net.swedz.little_big_redstone.guide.tags.microchip.MicrochipGuidebookScen
 
 import java.util.Set;
 
-public final class RedstoneSignalCompiler implements MicrochipSceneElementTagCompiler
+public final class RedstoneSignalTagCompiler implements MicrochipSceneElementTagCompiler
 {
 	@Override
 	public Set<String> getTagNames()

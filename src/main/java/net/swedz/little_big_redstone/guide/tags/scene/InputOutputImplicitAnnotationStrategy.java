@@ -12,7 +12,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.swedz.little_big_redstone.LBRText;
 
-public final class InputOutputAnnotation implements ImplicitAnnotationStrategy
+public final class InputOutputImplicitAnnotationStrategy implements ImplicitAnnotationStrategy
 {
 	@Override
 	public SceneAnnotation getAnnotation(GuidebookLevel level, BlockState state, BlockHitResult hitResult)

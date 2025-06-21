@@ -18,7 +18,7 @@ import net.swedz.little_big_redstone.guide.tags.truthtable.element.TruthTableEle
 import java.util.Map;
 import java.util.Set;
 
-public final class TruthTableCompiler extends BlockTagCompiler
+public final class TruthTableTagCompiler extends BlockTagCompiler
 {
 	private final Map<String, TruthTableElementTagCompiler> elementTagCompilers = Maps.newHashMap();
 	

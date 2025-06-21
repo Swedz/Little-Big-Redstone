@@ -13,7 +13,7 @@ import net.swedz.little_big_redstone.guide.LBRGuide;
 
 import java.util.Set;
 
-public final class TruthTableStateCompiler implements TruthTableElementTagCompiler
+public final class TruthTableStateTagCompiler implements TruthTableElementTagCompiler
 {
 	@Override
 	public Set<String> getTagNames()

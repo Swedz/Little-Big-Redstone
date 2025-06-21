@@ -17,7 +17,7 @@ import net.swedz.little_big_redstone.guide.tags.microchip.element.MicrochipScene
 import java.util.Map;
 import java.util.Set;
 
-public final class MicrochipSceneCompiler extends BlockTagCompiler
+public final class MicrochipSceneTagCompiler extends BlockTagCompiler
 {
 	private final Map<String, MicrochipSceneElementTagCompiler> elementTagCompilers = Maps.newHashMap();
 	
