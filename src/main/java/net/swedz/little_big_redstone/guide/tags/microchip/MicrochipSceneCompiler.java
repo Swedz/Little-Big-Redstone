@@ -30,10 +30,11 @@ public final class MicrochipSceneCompiler extends BlockTagCompiler
 	@Override
 	protected void compile(PageCompiler compiler, LytBlockContainer parent, MdxJsxElementFields el)
 	{
-		var width = MdxAttrs.getInt(compiler, parent, el, "width", -1);
-		var height = MdxAttrs.getInt(compiler, parent, el, "height", -1);
-		var marginWidth = MdxAttrs.getInt(compiler, parent, el, "marginWidth", width == -1 ? 10 : 0);
-		var marginHeight = MdxAttrs.getInt(compiler, parent, el, "marginHeight", height == -1 ? 10 : 0);
+		int padding = MdxAttrs.getInt(compiler, parent, el, "padding", 5);
+		int width = MdxAttrs.getInt(compiler, parent, el, "width", -1);
+		int height = MdxAttrs.getInt(compiler, parent, el, "height", -1);
+		int marginWidth = MdxAttrs.getInt(compiler, parent, el, "marginWidth", width == -1 ? 10 : 0);
+		int marginHeight = MdxAttrs.getInt(compiler, parent, el, "marginHeight", height == -1 ? 10 : 0);
 		var color = LBRGuide.getDyeColor(compiler, parent, el, "color", DyeColor.RED);
 		var includeToolbar = MdxAttrs.getBoolean(compiler, parent, el, "includeToolbar", false);
 		
@@ -69,6 +70,8 @@ public final class MicrochipSceneCompiler extends BlockTagCompiler
 			var childCompiler = elementTagCompilers.get(childTagName);
 			childCompiler.compile(block, compiler, parent, childEl);
 		}
+		
+		block.setPadding(padding);
 		
 		parent.append(block);
 	}
