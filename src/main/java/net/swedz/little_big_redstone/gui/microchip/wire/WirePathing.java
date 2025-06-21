@@ -48,7 +48,10 @@ public final class WirePathing
 		avoidBounds = Lists.newArrayList(avoidBounds);
 		for(var entry : microchip.components())
 		{
-			avoidBounds.add(this.mutateComponentBounds(entry.toBounds()));
+			if(entry.component().config().isVisible())
+			{
+				avoidBounds.add(this.mutateComponentBounds(entry.toBounds()));
+			}
 		}
 		return path(startX, startY, endX, endY, microchip, areaPaddingXY, avoidBounds);
 	}
