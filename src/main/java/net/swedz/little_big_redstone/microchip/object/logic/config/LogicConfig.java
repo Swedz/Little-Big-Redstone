@@ -1,10 +1,8 @@
 package net.swedz.little_big_redstone.microchip.object.logic.config;
 
 import net.minecraft.network.chat.Component;
-import net.swedz.little_big_redstone.LBR;
 import net.swedz.little_big_redstone.microchip.object.logic.LogicComponents;
 import net.swedz.little_big_redstone.microchip.object.logic.LogicPortHolder;
-import net.swedz.little_big_redstone.microchip.object.logic.selector.LogicSelectorConfig;
 
 import java.util.Arrays;
 import java.util.List;
@@ -85,10 +83,6 @@ public abstract class LogicConfig<C extends LogicConfig<C>> implements LogicPort
 	
 	public final void loadFrom(C other)
 	{
-		if(this instanceof LogicSelectorConfig)
-		{
-			LBR.LOGGER.info("selector");
-		}
 		valid = other.valid;
 		outputLocks = other.outputLocks;
 		hidden = other.hidden;
