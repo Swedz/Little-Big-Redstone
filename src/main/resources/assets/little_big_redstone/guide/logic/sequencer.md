@@ -21,7 +21,7 @@ item_ids:
 		<GameScene zoom="1.48" padding="3" interactive={true}>
 			<ImportStructure src="../assets/structures/sequencer.snbt" />
 			<BoxAnnotation min="2 1 0" max="3 1.5 1" color="#FFFFFF">
-				The sequencer is quite a bit more flexible than a repeater, but its similar in concept
+				The sequencer is quite a bit more flexible than a repeater, but its similar in concept.
 			</BoxAnnotation>
 			<IsometricCamera yaw="150" pitch="30" />
 		</GameScene>
