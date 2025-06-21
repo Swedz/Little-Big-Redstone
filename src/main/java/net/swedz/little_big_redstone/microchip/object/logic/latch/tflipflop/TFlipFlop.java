@@ -83,14 +83,14 @@ public final class TFlipFlop extends LogicComponent<TFlipFlop, TFlipFlopConfig>
 	}
 	
 	@Override
-	public boolean output(int index)
+	protected boolean outputInternal(int index)
 	{
 		return outputState;
 	}
 	
 	public boolean output()
 	{
-		return outputState;
+		return this.output(0);
 	}
 	
 	@Override

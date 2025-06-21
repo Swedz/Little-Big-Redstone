@@ -5,9 +5,7 @@ import net.swedz.tesseract.neoforge.api.range.IntRange;
 
 public final class SingleLogicGateConfig extends LogicConfig<SingleLogicGateConfig>
 {
-	public static final SingleLogicGateConfig INSTANCE = new SingleLogicGateConfig();
-	
-	private SingleLogicGateConfig()
+	public SingleLogicGateConfig()
 	{
 	}
 	

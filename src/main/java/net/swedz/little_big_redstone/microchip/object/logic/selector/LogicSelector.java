@@ -109,7 +109,7 @@ public final class LogicSelector extends LogicComponent<LogicSelector, LogicSele
 	}
 	
 	@Override
-	public boolean output(int index)
+	protected boolean outputInternal(int index)
 	{
 		return index == selected;
 	}

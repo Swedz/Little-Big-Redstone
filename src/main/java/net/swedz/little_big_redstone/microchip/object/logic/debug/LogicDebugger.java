@@ -55,7 +55,7 @@ public final class LogicDebugger extends LogicComponent<LogicDebugger, LogicDebu
 	}
 	
 	@Override
-	public boolean output(int index)
+	protected boolean outputInternal(int index)
 	{
 		return false;
 	}

@@ -36,7 +36,15 @@ public final class WireElementTagCompiler implements MicrochipSceneElementTagCom
 		int fromPort = MdxAttrs.getInt(compiler, errorSink, el, "fromPort", 0);
 		int toPort = MdxAttrs.getInt(compiler, errorSink, el, "toPort", 0);
 		
+		Boolean powerLock = el.getAttribute("powered") == null ? null : MdxAttrs.getBoolean(compiler, errorSink, el, "powered", false);
+		
 		microchip.addWire(from, to, fromPort, toPort, compiler, errorSink, el);
+		
+		if(powerLock != null)
+		{
+			var fromLogic = microchip.getLogic(from);
+			fromLogic.component().config().setOutputLock(fromPort, powerLock);
+		}
 	}
 	
 	@Override

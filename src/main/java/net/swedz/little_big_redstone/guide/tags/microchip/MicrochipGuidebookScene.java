@@ -35,6 +35,7 @@ import net.swedz.little_big_redstone.microchip.MicrochipSize;
 import net.swedz.little_big_redstone.microchip.awareness.AwarenessTypes;
 import net.swedz.little_big_redstone.microchip.object.logic.LogicComponent;
 import net.swedz.little_big_redstone.microchip.object.logic.LogicContext;
+import net.swedz.little_big_redstone.microchip.object.logic.LogicEntry;
 import net.swedz.little_big_redstone.microchip.object.logic.LogicType;
 import net.swedz.tesseract.neoforge.api.Bounds;
 import net.swedz.tesseract.neoforge.helper.guigraphics.TesseractGuiGraphics;
@@ -152,6 +153,12 @@ public final class MicrochipGuidebookScene extends LytBox implements ExportableR
 	public Integer getLogicSlot(String name)
 	{
 		return logic.get(name);
+	}
+	
+	public LogicEntry getLogic(String name)
+	{
+		var slot = this.getLogicSlot(name);
+		return slot == null ? null : microchip.components().get(slot);
 	}
 	
 	public void addLogic(String name, int x, int y, DyeColor color, LogicType<?> type, CompoundTag data,

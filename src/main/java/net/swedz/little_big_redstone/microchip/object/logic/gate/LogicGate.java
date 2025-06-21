@@ -86,14 +86,14 @@ public abstract class LogicGate<G extends LogicGate<G, C>, C extends LogicConfig
 	}
 	
 	@Override
-	public final boolean output(int index)
+	protected final boolean outputInternal(int index)
 	{
 		return outputState;
 	}
 	
 	public final boolean output()
 	{
-		return outputState;
+		return this.output(0);
 	}
 	
 	@Override
@@ -106,7 +106,7 @@ public abstract class LogicGate<G extends LogicGate<G, C>, C extends LogicConfig
 	@Override
 	protected void internalLoadFrom(G other)
 	{
-		outputState = other.output();
+		outputState = other.outputInternal(0);
 	}
 	
 	@Override

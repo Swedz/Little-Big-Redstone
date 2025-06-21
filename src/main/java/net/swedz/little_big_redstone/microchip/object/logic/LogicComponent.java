@@ -5,6 +5,7 @@ import io.netty.buffer.ByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.world.item.DyeColor;
+import net.swedz.little_big_redstone.LBR;
 import net.swedz.little_big_redstone.microchip.object.logic.config.LogicConfig;
 import net.swedz.tesseract.neoforge.api.Assert;
 import net.swedz.tesseract.neoforge.api.range.IntRange;
@@ -94,7 +95,17 @@ public abstract class LogicComponent<L extends LogicComponent<L, C>, C extends L
 		}
 	}
 	
-	public abstract boolean output(int index);
+	protected abstract boolean outputInternal(int index);
+	
+	public final boolean output(int index)
+	{
+		var lock = config.getOutputLock(index);
+		if(lock != null)
+		{
+			return lock;
+		}
+		return this.outputInternal(index);
+	}
 	
 	public LogicGridSize size()
 	{

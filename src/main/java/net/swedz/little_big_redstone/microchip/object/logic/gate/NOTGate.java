@@ -36,7 +36,7 @@ public final class NOTGate extends LogicGate<NOTGate, SingleLogicGateConfig>
 	@Override
 	protected SingleLogicGateConfig defaultConfig()
 	{
-		return SingleLogicGateConfig.INSTANCE;
+		return new SingleLogicGateConfig();
 	}
 	
 	@Override

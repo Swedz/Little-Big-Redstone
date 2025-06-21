@@ -84,7 +84,7 @@ public final class LogicRandomizer extends LogicComponent<LogicRandomizer, Logic
 	}
 	
 	@Override
-	public boolean output(int index)
+	protected boolean outputInternal(int index)
 	{
 		return index == outputIndex;
 	}

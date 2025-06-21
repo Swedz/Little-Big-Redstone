@@ -106,14 +106,14 @@ public final class LogicIO extends LogicComponent<LogicIO, LogicIOConfig> implem
 	}
 	
 	@Override
-	public boolean output(int index)
+	protected boolean outputInternal(int index)
 	{
 		return outputState;
 	}
 	
 	public boolean output()
 	{
-		return outputState;
+		return this.output(0);
 	}
 	
 	@Override
