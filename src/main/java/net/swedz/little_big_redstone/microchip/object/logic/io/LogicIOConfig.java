@@ -131,7 +131,7 @@ public final class LogicIOConfig extends LogicConfig<LogicIOConfig>
 	}
 	
 	@Override
-	public void loadFrom(LogicIOConfig other)
+	protected void internalLoadFrom(LogicIOConfig other)
 	{
 		input = other.input;
 		direction = other.direction;
@@ -142,12 +142,6 @@ public final class LogicIOConfig extends LogicConfig<LogicIOConfig>
 	public void resetForPickup()
 	{
 		valid = true;
-	}
-	
-	@Override
-	public LogicIOConfig copy()
-	{
-		return new LogicIOConfig(valid, input, direction, signalStrength);
 	}
 	
 	@Override

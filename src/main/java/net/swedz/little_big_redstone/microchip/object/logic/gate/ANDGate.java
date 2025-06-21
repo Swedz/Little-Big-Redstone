@@ -76,12 +76,6 @@ public final class ANDGate extends LogicGate<ANDGate, MultiLogicGateConfig>
 	}
 	
 	@Override
-	public ANDGate copy()
-	{
-		return new ANDGate(config.copy(), color, this.output());
-	}
-	
-	@Override
 	public int hashCode()
 	{
 		return Objects.hash(this.type(), config, color);

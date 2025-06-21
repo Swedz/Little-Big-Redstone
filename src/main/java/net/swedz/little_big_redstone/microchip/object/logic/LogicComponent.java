@@ -5,7 +5,6 @@ import io.netty.buffer.ByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.world.item.DyeColor;
-import net.swedz.little_big_redstone.LBR;
 import net.swedz.little_big_redstone.microchip.object.logic.config.LogicConfig;
 import net.swedz.tesseract.neoforge.api.Assert;
 import net.swedz.tesseract.neoforge.api.range.IntRange;
@@ -137,7 +136,12 @@ public abstract class LogicComponent<L extends LogicComponent<L, C>, C extends L
 		this.internalResetForPickup();
 	}
 	
-	public abstract L copy();
+	public final L copy()
+	{
+		var copy = (L) this.type().defaultFactory().create();
+		copy.loadFrom((L) this);
+		return copy;
+	}
 	
 	public abstract int hashCode();
 	

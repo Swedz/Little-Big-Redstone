@@ -136,12 +136,6 @@ public final class LogicIO extends LogicComponent<LogicIO, LogicIOConfig> implem
 	}
 	
 	@Override
-	public LogicIO copy()
-	{
-		return new LogicIO(config.copy(), color, outputState);
-	}
-	
-	@Override
 	public int hashCode()
 	{
 		return Objects.hash(this.type(), config, color);

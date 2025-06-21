@@ -65,28 +65,31 @@ public final class MicrochipRenderBoardPanel extends MicrochipRenderPanel
 	
 	private void renderLogic(TesseractGuiGraphics graphics, LogicEntry entry, boolean hasSelectedPort, boolean isCarryingWire)
 	{
-		var context = LogicRenderer.Context.create(color, entry.component(), true, hasSelectedPort, isCarryingWire);
-		LogicRenderers.render(context, graphics, entry.component(), entry.x(), entry.y());
-		
-		if(microchip.isDebug())
+		if(entry.component().config().isVisible())
 		{
-			graphics.resetColor();
-			graphics.drawString("#" + entry.slot(), entry.x(), entry.y() - 8);
+			var context = LogicRenderer.Context.create(color, entry.component(), true, hasSelectedPort, isCarryingWire);
+			LogicRenderers.render(context, graphics, entry.component(), entry.x(), entry.y());
 			
-			List<Integer> indexes = Lists.newArrayList();
-			int index = 0;
-			for(var other : microchip.components().traversal())
+			if(microchip.isDebug())
 			{
-				if(entry.slot() == other.slot())
+				graphics.resetColor();
+				graphics.drawString("#" + entry.slot(), entry.x(), entry.y() - 8);
+				
+				List<Integer> indexes = Lists.newArrayList();
+				int index = 0;
+				for(var other : microchip.components().traversal())
 				{
-					indexes.add(index);
+					if(entry.slot() == other.slot())
+					{
+						indexes.add(index);
+					}
+					index++;
 				}
-				index++;
-			}
-			for(int i = 0; i < indexes.size(); i++)
-			{
-				int ind = indexes.get(i);
-				graphics.drawString(Integer.toString(ind), entry.x(), entry.y() + (i * 8));
+				for(int i = 0; i < indexes.size(); i++)
+				{
+					int ind = indexes.get(i);
+					graphics.drawString(Integer.toString(ind), entry.x(), entry.y() + (i * 8));
+				}
 			}
 		}
 	}

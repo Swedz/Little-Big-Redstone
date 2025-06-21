@@ -186,12 +186,6 @@ public final class LogicReader extends LogicComponent<LogicReader, LogicReaderCo
 	}
 	
 	@Override
-	public LogicReader copy()
-	{
-		return new LogicReader(config.copy(), color, outputState);
-	}
-	
-	@Override
 	public int hashCode()
 	{
 		return Objects.hash(this.type(), config, color);

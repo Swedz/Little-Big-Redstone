@@ -169,12 +169,6 @@ public final class LogicSequencer extends LogicComponent<LogicSequencer, LogicSe
 	}
 	
 	@Override
-	public LogicSequencer copy()
-	{
-		return new LogicSequencer(config.copy(), color, processedTicks, outputState);
-	}
-	
-	@Override
 	public int hashCode()
 	{
 		return Objects.hashCode(this.type(), config, color, processedTicks);

@@ -1,8 +1,10 @@
 package net.swedz.little_big_redstone.microchip.object.logic.config;
 
 import net.minecraft.network.chat.Component;
+import net.swedz.little_big_redstone.LBR;
 import net.swedz.little_big_redstone.microchip.object.logic.LogicComponents;
 import net.swedz.little_big_redstone.microchip.object.logic.LogicPortHolder;
+import net.swedz.little_big_redstone.microchip.object.logic.selector.LogicSelectorConfig;
 
 import java.util.Arrays;
 import java.util.List;
@@ -18,6 +20,14 @@ public abstract class LogicConfig<C extends LogicConfig<C>> implements LogicPort
 	 * outside of the guide, something has gone terribly wrong.</b>
 	 */
 	protected Boolean[] outputLocks;
+	
+	/**
+	 * Used to hide logic in the guide so that only the wires to/from it render.
+	 * <br><br>
+	 * <b>WARNING: Should not be used at all outside the guide. Ever. If this is not false for a logic component
+	 * outside of the guide, something has gone terribly wrong.</b>
+	 */
+	protected boolean hidden = false;
 	
 	public final boolean isValid()
 	{
@@ -48,6 +58,16 @@ public abstract class LogicConfig<C extends LogicConfig<C>> implements LogicPort
 		return (outputLocks == null || outputLocks.length <= index) ? null : outputLocks[index];
 	}
 	
+	public final void hide()
+	{
+		hidden = true;
+	}
+	
+	public final boolean isVisible()
+	{
+		return !hidden;
+	}
+	
 	public void appendHoverText(List<Component> lines)
 	{
 	}
@@ -61,11 +81,21 @@ public abstract class LogicConfig<C extends LogicConfig<C>> implements LogicPort
 	{
 	}
 	
-	public abstract void loadFrom(C other);
+	protected abstract void internalLoadFrom(C other);
+	
+	public final void loadFrom(C other)
+	{
+		if(this instanceof LogicSelectorConfig)
+		{
+			LBR.LOGGER.info("selector");
+		}
+		valid = other.valid;
+		outputLocks = other.outputLocks;
+		hidden = other.hidden;
+		this.internalLoadFrom(other);
+	}
 	
 	public abstract void resetForPickup();
-	
-	public abstract C copy();
 	
 	public abstract int hashCode();
 	

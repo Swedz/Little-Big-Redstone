@@ -54,7 +54,7 @@ public final class TFlipFlop extends LogicComponent<TFlipFlop, TFlipFlopConfig>
 	@Override
 	protected TFlipFlopConfig defaultConfig()
 	{
-		return TFlipFlopConfig.INSTANCE;
+		return new TFlipFlopConfig();
 	}
 	
 	@Override
@@ -111,12 +111,6 @@ public final class TFlipFlop extends LogicComponent<TFlipFlop, TFlipFlopConfig>
 	{
 		lastInputState = false;
 		outputState = false;
-	}
-	
-	@Override
-	public TFlipFlop copy()
-	{
-		return new TFlipFlop(color, lastInputState, outputState);
 	}
 	
 	@Override

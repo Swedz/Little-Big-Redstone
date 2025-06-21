@@ -50,6 +50,8 @@ public final class LogicElementTagCompiler implements MicrochipSceneElementTagCo
 			data.put("config", new CompoundTag());
 		}
 		
-		microchip.addLogic(name, x, y, color, type, data, compiler, errorSink, el);
+		boolean hide = MdxAttrs.getBoolean(compiler, errorSink, el, "hide", false);
+		
+		microchip.addLogic(name, x, y, color, type, data, hide, compiler, errorSink, el);
 	}
 }

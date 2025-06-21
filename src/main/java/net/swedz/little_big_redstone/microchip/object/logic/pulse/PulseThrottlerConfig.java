@@ -86,7 +86,7 @@ public final class PulseThrottlerConfig extends LogicConfig<PulseThrottlerConfig
 	}
 	
 	@Override
-	public void loadFrom(PulseThrottlerConfig other)
+	protected void internalLoadFrom(PulseThrottlerConfig other)
 	{
 		outputDuration = other.outputDuration;
 	}
@@ -94,12 +94,6 @@ public final class PulseThrottlerConfig extends LogicConfig<PulseThrottlerConfig
 	@Override
 	public void resetForPickup()
 	{
-	}
-	
-	@Override
-	public PulseThrottlerConfig copy()
-	{
-		return new PulseThrottlerConfig(outputDuration);
 	}
 	
 	@Override

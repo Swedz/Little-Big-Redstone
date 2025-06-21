@@ -40,7 +40,7 @@ public final class LogicDebugger extends LogicComponent<LogicDebugger, LogicDebu
 	@Override
 	protected LogicDebuggerConfig defaultConfig()
 	{
-		return LogicDebuggerConfig.INSTANCE;
+		return new LogicDebuggerConfig();
 	}
 	
 	@Override
@@ -68,12 +68,6 @@ public final class LogicDebugger extends LogicComponent<LogicDebugger, LogicDebu
 	@Override
 	protected void internalResetForPickup()
 	{
-	}
-	
-	@Override
-	public LogicDebugger copy()
-	{
-		return new LogicDebugger(color);
 	}
 	
 	@Override

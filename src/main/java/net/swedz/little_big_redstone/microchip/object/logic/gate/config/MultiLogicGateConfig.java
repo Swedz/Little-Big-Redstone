@@ -84,7 +84,7 @@ public final class MultiLogicGateConfig extends LogicConfig<MultiLogicGateConfig
 	}
 	
 	@Override
-	public void loadFrom(MultiLogicGateConfig other)
+	protected void internalLoadFrom(MultiLogicGateConfig other)
 	{
 		inputs = this.inputsAllowed().clamp(other.inputs);
 	}
@@ -92,12 +92,6 @@ public final class MultiLogicGateConfig extends LogicConfig<MultiLogicGateConfig
 	@Override
 	public void resetForPickup()
 	{
-	}
-	
-	@Override
-	public MultiLogicGateConfig copy()
-	{
-		return new MultiLogicGateConfig(inputs);
 	}
 	
 	@Override

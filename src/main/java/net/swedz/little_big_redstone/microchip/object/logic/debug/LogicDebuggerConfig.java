@@ -5,14 +5,12 @@ import net.swedz.tesseract.neoforge.api.range.IntRange;
 
 public final class LogicDebuggerConfig extends LogicConfig<LogicDebuggerConfig>
 {
-	public static final LogicDebuggerConfig INSTANCE = new LogicDebuggerConfig();
-	
-	private LogicDebuggerConfig()
+	public LogicDebuggerConfig()
 	{
 	}
 	
 	@Override
-	public void loadFrom(LogicDebuggerConfig other)
+	protected void internalLoadFrom(LogicDebuggerConfig other)
 	{
 	}
 	
@@ -43,12 +41,6 @@ public final class LogicDebuggerConfig extends LogicConfig<LogicDebuggerConfig>
 	public int outputs()
 	{
 		return 0;
-	}
-	
-	@Override
-	public LogicDebuggerConfig copy()
-	{
-		return this;
 	}
 	
 	@Override

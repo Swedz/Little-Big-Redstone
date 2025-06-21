@@ -158,12 +158,6 @@ public final class PulseThrottler extends LogicComponent<PulseThrottler, PulseTh
 	}
 	
 	@Override
-	public PulseThrottler copy()
-	{
-		return new PulseThrottler(config.copy(), color, lastInputState, processedTicks, outputState);
-	}
-	
-	@Override
 	public int hashCode()
 	{
 		return Objects.hashCode(this.type(), config, color, processedTicks);

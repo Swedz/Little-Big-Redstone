@@ -115,12 +115,6 @@ public final class LogicRandomizer extends LogicComponent<LogicRandomizer, Logic
 	}
 	
 	@Override
-	public LogicRandomizer copy()
-	{
-		return new LogicRandomizer(config.copy(), color, outputIndex);
-	}
-	
-	@Override
 	protected LogicRandomizerConfig defaultConfig()
 	{
 		return new LogicRandomizerConfig();

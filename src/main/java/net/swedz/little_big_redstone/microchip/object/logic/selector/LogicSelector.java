@@ -140,12 +140,6 @@ public final class LogicSelector extends LogicComponent<LogicSelector, LogicSele
 	}
 	
 	@Override
-	public LogicSelector copy()
-	{
-		return new LogicSelector(config.copy(), color, selected);
-	}
-	
-	@Override
 	protected LogicSelectorConfig defaultConfig()
 	{
 		return new LogicSelectorConfig();

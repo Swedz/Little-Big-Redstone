@@ -123,10 +123,11 @@ public final class MicrochipGuidebookScene extends LytBox implements ExportableR
 		{
 			for(var entry : microchip.components())
 			{
+				boolean visible = entry.component().config().isVisible();
 				var bounds = entry.toBounds();
 				if(autoWidth)
 				{
-					int endX = bounds.maxX() + marginWidth + 1;
+					int endX = visible ? (bounds.maxX() + marginWidth + 1) : bounds.minX();
 					if(evaluatedWidth < endX)
 					{
 						evaluatedWidth = endX;
@@ -134,7 +135,7 @@ public final class MicrochipGuidebookScene extends LytBox implements ExportableR
 				}
 				if(autoHeight)
 				{
-					int endY = bounds.maxY() + marginHeight + 1;
+					int endY = visible ? (bounds.maxY() + marginHeight + 1) : bounds.minY();
 					if(evaluatedHeight < endY)
 					{
 						evaluatedHeight = endY;
@@ -161,7 +162,7 @@ public final class MicrochipGuidebookScene extends LytBox implements ExportableR
 		return slot == null ? null : microchip.components().get(slot);
 	}
 	
-	public void addLogic(String name, int x, int y, DyeColor color, LogicType<?> type, CompoundTag data,
+	public void addLogic(String name, int x, int y, DyeColor color, LogicType<?> type, CompoundTag data, boolean hide,
 						 PageCompiler compiler, LytErrorSink errorSink, MdxJsxElementFields el)
 	{
 		DataResult<? extends LogicComponent> result = type.codec().codec().parse(NbtOps.INSTANCE, data);
@@ -172,6 +173,10 @@ public final class MicrochipGuidebookScene extends LytBox implements ExportableR
 		}
 		LogicComponent<?, ?> component = result.getOrThrow();
 		component.setColor(Optional.ofNullable(color));
+		if(hide)
+		{
+			component.config().hide();
+		}
 		var entry = microchip.components().add(x + marginWidth, y + marginHeight, component);
 		if(entry == null)
 		{

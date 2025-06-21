@@ -80,7 +80,7 @@ public final class LogicSelectorConfig extends LogicConfig<LogicSelectorConfig>
 	}
 	
 	@Override
-	public void loadFrom(LogicSelectorConfig other)
+	protected void internalLoadFrom(LogicSelectorConfig other)
 	{
 		mode = other.mode;
 		outputs = other.outputs;
@@ -89,12 +89,6 @@ public final class LogicSelectorConfig extends LogicConfig<LogicSelectorConfig>
 	@Override
 	public void resetForPickup()
 	{
-	}
-	
-	@Override
-	public LogicSelectorConfig copy()
-	{
-		return new LogicSelectorConfig(mode, outputs);
 	}
 	
 	@Override

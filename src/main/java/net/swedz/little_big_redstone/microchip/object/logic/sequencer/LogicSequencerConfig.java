@@ -119,7 +119,7 @@ public final class LogicSequencerConfig extends LogicConfig<LogicSequencerConfig
 	}
 	
 	@Override
-	public void loadFrom(LogicSequencerConfig other)
+	protected void internalLoadFrom(LogicSequencerConfig other)
 	{
 		mode = other.mode;
 		outputDelay = other.outputDelay;
@@ -130,12 +130,6 @@ public final class LogicSequencerConfig extends LogicConfig<LogicSequencerConfig
 	@Override
 	public void resetForPickup()
 	{
-	}
-	
-	@Override
-	public LogicSequencerConfig copy()
-	{
-		return new LogicSequencerConfig(mode, outputDelay, autoReset, resetPort);
 	}
 	
 	@Override
