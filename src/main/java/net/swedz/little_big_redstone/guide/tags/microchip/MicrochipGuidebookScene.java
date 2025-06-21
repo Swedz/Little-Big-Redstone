@@ -326,7 +326,7 @@ public final class MicrochipGuidebookScene extends LytBox implements ExportableR
 			int y = (int) (mouseY - bounds.y() - PANEL_MARGIN);
 			
 			var hoveredObject = microchip.findAt(x, y);
-			if(hoveredObject != null)
+			if(hoveredObject != null && !(hoveredObject instanceof LogicEntry entry && !entry.component().config().isVisible()))
 			{
 				return Optional.of(new MicrochipObjectGuideTooltip(hoveredObject));
 			}
