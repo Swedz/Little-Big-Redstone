@@ -57,9 +57,9 @@ public final class MicrochipGuidebookScene extends LytBox implements ExportableR
 	private Microchip                 microchip;
 	private MicrochipRenderBoardPanel panel;
 	
-	private final Map<String, Integer> logic = Maps.newHashMap();
-	
-	private final TimedRedstoneSignals redstoneSignals = new TimedRedstoneSignals();
+	private final Map<Integer, LogicComponent> logicDefaults   = Maps.newHashMap();
+	private final Map<String, Integer>         logic           = Maps.newHashMap();
+	private final TimedRedstoneSignals         redstoneSignals = new TimedRedstoneSignals();
 	
 	private final Viewport viewport = new Viewport();
 	private final LytVBox  toolbar  = new LytVBox();
@@ -89,7 +89,7 @@ public final class MicrochipGuidebookScene extends LytBox implements ExportableR
 		{
 			for(var entry : microchip.components())
 			{
-				entry.component().resetForPickup();
+				entry.component().loadFrom(logicDefaults.get(entry.slot()));
 			}
 			redstoneSignals.reset();
 			this.tickLogic();
@@ -182,6 +182,7 @@ public final class MicrochipGuidebookScene extends LytBox implements ExportableR
 			errorSink.appendError(compiler, "Logic cannot fit", el);
 			return;
 		}
+		logicDefaults.put(entry.slot(), component);
 		logic.put(name, entry.slot());
 		microchip.markDirty();
 	}
