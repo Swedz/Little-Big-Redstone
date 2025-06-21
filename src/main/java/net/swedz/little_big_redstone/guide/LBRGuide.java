@@ -11,6 +11,7 @@ import guideme.scene.ImplicitAnnotationStrategy;
 import net.minecraft.world.item.DyeColor;
 import net.swedz.little_big_redstone.LBR;
 import net.swedz.little_big_redstone.guide.tags.block.FloatingBoxTagCompiler;
+import net.swedz.little_big_redstone.guide.tags.block.PaddedBoxTagCompiler;
 import net.swedz.little_big_redstone.guide.tags.microchip.MicrochipSceneCompiler;
 import net.swedz.little_big_redstone.guide.tags.microchip.element.LogicElementCompiler;
 import net.swedz.little_big_redstone.guide.tags.microchip.element.MicrochipSceneElementTagCompiler;
@@ -29,6 +30,7 @@ public final class LBRGuide
 	{
 		Guide.builder(LBR.id("guide"))
 				.folder("guide")
+				.extension(TagCompiler.EXTENSION_POINT, new PaddedBoxTagCompiler())
 				.extension(TagCompiler.EXTENSION_POINT, new MicrochipSceneCompiler())
 				.extension(MicrochipSceneElementTagCompiler.EXTENSION_POINT, new LogicElementCompiler())
 				.extension(MicrochipSceneElementTagCompiler.EXTENSION_POINT, new WireElementCompiler())
