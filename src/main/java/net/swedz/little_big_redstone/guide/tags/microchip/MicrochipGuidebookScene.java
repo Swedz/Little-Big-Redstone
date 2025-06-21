@@ -189,11 +189,11 @@ public final class MicrochipGuidebookScene extends LytBox implements ExportableR
 			}
 			if(startX == -1)
 			{
-				startX = 0;
+				startX = firstVisibleX;
 			}
 			if(startY == -1)
 			{
-				startY = 0;
+				startY = firstVisibleY;
 			}
 		}
 		else
