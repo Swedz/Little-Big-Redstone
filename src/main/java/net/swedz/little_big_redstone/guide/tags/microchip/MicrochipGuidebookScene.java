@@ -18,7 +18,6 @@ import guideme.libs.mdast.mdx.model.MdxJsxElementFields;
 import guideme.render.RenderContext;
 import guideme.siteexport.ExportableResourceProvider;
 import guideme.siteexport.ResourceExporter;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -261,7 +260,7 @@ public final class MicrochipGuidebookScene extends LytBox implements ExportableR
 			redstoneSignals.applySignals(redstone);
 		}
 		
-		var context = new LogicContext(Minecraft.getInstance().level, new BlockPos(0, 0, 0), microchip);
+		var context = new LogicContext(null, new BlockPos(0, 0, 0), microchip);
 		
 		microchip.tickLogic(context);
 		
