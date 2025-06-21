@@ -143,34 +143,52 @@ public final class MicrochipRenderWiresPanel extends MicrochipRenderPanel
 	
 	private void renderWire(TesseractGuiGraphics graphics, Either<Wire, List<Bounds>> eitherWireOrBounds, int startX, int startY, int endX, int endY, boolean hovered, boolean usePadding, boolean powered, int argb)
 	{
+		int maxX = microchip.size().bounds().maxX();
+		int maxY = microchip.size().bounds().maxY();
+		
 		int portPadding = usePadding ? wirePortPadding : 0;
+		boolean renderStart = startX >= 0 && startX < maxX && startY >= 0 && startY < maxY;
+		boolean renderEnd = endX - portPadding >= 0 && endX - portPadding < maxX && endY >= 0 && endY < maxY;
 		
-		var path = eitherWireOrBounds.map(
-				(wire) -> pathing.get(wire, startX + portPadding, startY, endX - portPadding - wireSize, endY),
-				(avoidBounds) -> pathing.build(startX + portPadding, startY, endX - portPadding - wireSize, endY, avoidBounds)
-		);
-		
-		if(hovered)
+		if(renderStart || renderEnd)
 		{
-			graphics = graphics.inner();
-			graphics.enableBatching();
-			graphics.setTextureShader(LBRClientShaders::pulsingTextureLightness);
-		}
-		
-		graphics.setColor(argb);
-		graphics.setTexture(LBR.id("textures/gui/container/microchip/wire_%s.png".formatted(powered ? "on" : "off")));
-		graphics.blit(startX, startY, startX, startY, portPadding, wireSize, 16, 16);
-		graphics.blit(endX - portPadding, endY, endX - portPadding, endY, portPadding, wireSize, 16, 16);
-		for(var position : path)
-		{
-			graphics.blit(position.x(), position.y(), position.x(), position.y(), wireSize, wireSize, 16, 16);
-		}
-		graphics.resetColor();
-		
-		if(hovered)
-		{
-			graphics.resetTextureShader();
-			graphics.end();
+			var path = eitherWireOrBounds.map(
+					(wire) -> pathing.get(wire, startX + portPadding, startY, endX - portPadding - wireSize, endY),
+					(avoidBounds) -> pathing.build(startX + portPadding, startY, endX - portPadding - wireSize, endY, avoidBounds)
+			);
+			
+			if(hovered)
+			{
+				graphics = graphics.inner();
+				graphics.enableBatching();
+				graphics.setTextureShader(LBRClientShaders::pulsingTextureLightness);
+			}
+			
+			graphics.setColor(argb);
+			graphics.setTexture(LBR.id("textures/gui/container/microchip/wire_%s.png".formatted(powered ? "on" : "off")));
+			if(renderStart)
+			{
+				graphics.blit(startX, startY, startX, startY, portPadding, wireSize, 16, 16);
+			}
+			if(renderEnd)
+			{
+				graphics.blit(endX - portPadding, endY, endX - portPadding, endY, portPadding, wireSize, 16, 16);
+			}
+			for(var position : path)
+			{
+				if(position.x() < 0 || position.y() < 0 || position.x() >= maxX || position.y() >= maxY)
+				{
+					continue;
+				}
+				graphics.blit(position.x(), position.y(), position.x(), position.y(), wireSize, wireSize, 16, 16);
+			}
+			graphics.resetColor();
+			
+			if(hovered)
+			{
+				graphics.resetTextureShader();
+				graphics.end();
+			}
 		}
 	}
 }
