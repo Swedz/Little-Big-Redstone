@@ -81,7 +81,7 @@ public final class MicrochipGuidebookScene extends LytBox implements ExportableR
 		this.marginHeight = marginHeight;
 		this.includeToolbar = includeToolbar;
 		
-		this.rebuildMicrochip(autoWidth ? 0 : width, autoHeight ? 0 : height);
+		this.rebuildMicrochip(0, 0, autoWidth ? 0 : width, autoHeight ? 0 : height);
 		
 		this.append(viewport);
 		
@@ -103,51 +103,107 @@ public final class MicrochipGuidebookScene extends LytBox implements ExportableR
 		}
 	}
 	
-	private void rebuildMicrochip(int width, int height)
+	private void rebuildMicrochip(int startX, int startY, int endX, int endY)
 	{
+		int width = Math.abs(endX - startX);
+		int height = Math.abs(endY - startY);
 		var previous = microchip;
 		microchip = new Microchip(MicrochipSize.create(new Bounds(0, 0, width, height), 1));
 		if(previous != null)
 		{
 			microchip.loadFrom(previous);
+			microchip.components().loadFrom(previous.components(), (before) -> new LogicEntry(before.slot(), before.x() - startX, before.y() - startY, before.component()));
 		}
 		panel = new MicrochipRenderBoardPanel(color, microchip);
 	}
 	
 	public void adjustSize()
 	{
-		int evaluatedWidth = 0;
-		int evaluatedHeight = 0;
+		int startX = -1;
+		int startY = -1;
+		int endX = 0;
+		int endY = 0;
 		if(autoWidth || autoHeight)
 		{
+			// Find the first visible logic component coordinate
+			int firstVisibleX = -1;
+			int firstVisibleY = -1;
+			for(var entry : microchip.components())
+			{
+				var bounds = entry.toBounds();
+				if(entry.component().config().isVisible())
+				{
+					int x = bounds.minX() - marginWidth;
+					if(firstVisibleX == -1 || firstVisibleX > x)
+					{
+						firstVisibleX = x;
+					}
+					int y = bounds.minY() - marginHeight;
+					if(firstVisibleY == -1 || firstVisibleY > y)
+					{
+						firstVisibleY = y;
+					}
+				}
+			}
+			// Figure out where the start and end coordinates should be
 			for(var entry : microchip.components())
 			{
 				boolean visible = entry.component().config().isVisible();
 				var bounds = entry.toBounds();
 				if(autoWidth)
 				{
-					int endX = visible ? (bounds.maxX() + marginWidth + 1) : bounds.minX();
-					if(evaluatedWidth < endX)
+					// Shift the start x to the end of the furthest right hidden logic before the first visible logic
+					if(!visible)
 					{
-						evaluatedWidth = endX;
+						int entryStartX = bounds.maxX() + 1;
+						if(startX < entryStartX && entryStartX < firstVisibleX)
+						{
+							startX = entryStartX;
+						}
+					}
+					// Shift the end x to the start of the furthest left hidden logic
+					int entryEndX = visible ? (bounds.maxX() + marginWidth + 1) : bounds.minX();
+					if(endX < entryEndX)
+					{
+						endX = entryEndX;
 					}
 				}
 				if(autoHeight)
 				{
-					int endY = visible ? (bounds.maxY() + marginHeight + 1) : bounds.minY();
-					if(evaluatedHeight < endY)
+					// Shift the start y to the end of the top most hidden logic before the first visible logic
+					if(!visible)
 					{
-						evaluatedHeight = endY;
+						int entryStartY = bounds.maxY() + 1;
+						if(startY < entryStartY && entryStartY < firstVisibleY)
+						{
+							startY = entryStartY;
+						}
+					}
+					// Shift the end y to the start of the bottom most hidden logic
+					int entryEndY = visible ? (bounds.maxY() + marginHeight + 1) : bounds.minY();
+					if(endY < entryEndY)
+					{
+						endY = entryEndY;
 					}
 				}
+			}
+			if(startX == -1)
+			{
+				startX = 0;
+			}
+			if(startY == -1)
+			{
+				startY = 0;
 			}
 		}
 		else
 		{
-			evaluatedWidth = width + (marginWidth * 2);
-			evaluatedHeight = height + (marginHeight * 2);
+			startX = 0;
+			startY = 0;
+			endX = width + (marginWidth * 2);
+			endY = height + (marginHeight * 2);
 		}
-		this.rebuildMicrochip(evaluatedWidth, evaluatedHeight);
+		this.rebuildMicrochip(startX, startY, endX, endY);
 	}
 	
 	public Integer getLogicSlot(String name)

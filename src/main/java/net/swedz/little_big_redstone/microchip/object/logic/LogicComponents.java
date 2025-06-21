@@ -13,6 +13,7 @@ import net.swedz.little_big_redstone.microchip.wire.Wire;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Function;
 
 public final class LogicComponents extends MicrochipObjectContainer<LogicEntry, LogicComponents>
 {
@@ -141,8 +142,13 @@ public final class LogicComponents extends MicrochipObjectContainer<LogicEntry, 
 	@Override
 	public void loadFrom(LogicComponents other)
 	{
+		this.loadFrom(other, (before) -> new LogicEntry(before.slot(), before.x(), before.y(), before.component()));
+	}
+	
+	public void loadFrom(LogicComponents other, Function<LogicEntry, LogicEntry> conversion)
+	{
 		Map<Integer, LogicEntry> copiedComponents = Maps.newHashMap();
-		other.objects.forEach((slot, entry) -> copiedComponents.put(slot, new LogicEntry(entry.slot(), entry.x(), entry.y(), entry.component().copy())));
+		other.objects.forEach((slot, entry) -> copiedComponents.put(slot, conversion.apply(entry)));
 		objects = copiedComponents;
 		debug = other.debug;
 	}
