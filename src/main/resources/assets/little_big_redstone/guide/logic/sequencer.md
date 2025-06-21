@@ -12,7 +12,21 @@ item_ids:
 
 # Sequencer
 
-<RecipeFor id="sequencer" />
+<Row>
+	<Column>
+		<RecipeFor id="sequencer" />
+	</Column>
+
+	<Column>
+		<GameScene zoom="1.48" padding="3" interactive={true}>
+			<ImportStructure src="../assets/structures/sequencer.snbt" />
+			<BoxAnnotation min="2 1 0" max="3 1.5 1" color="#FFFFFF">
+				The sequencer is quite a bit more flexible than a repeater, but its similar in concept
+			</BoxAnnotation>
+			<IsometricCamera yaw="150" pitch="30" />
+		</GameScene>
+	</Column>
+</Row>
 
 > **Note:** In Minecraft, there are 20 ticks per real-life second.
 
