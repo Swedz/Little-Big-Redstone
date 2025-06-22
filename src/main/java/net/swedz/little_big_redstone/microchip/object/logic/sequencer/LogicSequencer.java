@@ -130,14 +130,14 @@ public final class LogicSequencer extends LogicComponent<LogicSequencer, LogicSe
 	}
 	
 	@Override
-	public boolean output(int index)
+	protected boolean outputInternal(int index)
 	{
 		return outputState;
 	}
 	
 	public boolean output()
 	{
-		return outputState;
+		return this.output(0);
 	}
 	
 	@Override
@@ -166,12 +166,6 @@ public final class LogicSequencer extends LogicComponent<LogicSequencer, LogicSe
 	{
 		processedTicks = 0;
 		outputState = false;
-	}
-	
-	@Override
-	public LogicSequencer copy()
-	{
-		return new LogicSequencer(config.copy(), color, processedTicks, outputState);
 	}
 	
 	@Override

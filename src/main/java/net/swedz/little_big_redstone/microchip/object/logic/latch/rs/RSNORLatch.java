@@ -51,7 +51,7 @@ public final class RSNORLatch extends LogicComponent<RSNORLatch, RSNORLatchConfi
 	@Override
 	protected RSNORLatchConfig defaultConfig()
 	{
-		return RSNORLatchConfig.INSTANCE;
+		return new RSNORLatchConfig();
 	}
 	
 	@Override
@@ -83,14 +83,14 @@ public final class RSNORLatch extends LogicComponent<RSNORLatch, RSNORLatchConfi
 	}
 	
 	@Override
-	public boolean output(int index)
+	protected boolean outputInternal(int index)
 	{
 		return outputState;
 	}
 	
 	public boolean output()
 	{
-		return outputState;
+		return this.output(0);
 	}
 	
 	@Override
@@ -110,12 +110,6 @@ public final class RSNORLatch extends LogicComponent<RSNORLatch, RSNORLatchConfi
 	protected void internalResetForPickup()
 	{
 		outputState = false;
-	}
-	
-	@Override
-	public RSNORLatch copy()
-	{
-		return new RSNORLatch(color, outputState);
 	}
 	
 	@Override

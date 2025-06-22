@@ -5,9 +5,7 @@ import net.swedz.tesseract.neoforge.api.range.IntRange;
 
 public final class RSNORLatchConfig extends LogicConfig<RSNORLatchConfig>
 {
-	public static final RSNORLatchConfig INSTANCE = new RSNORLatchConfig();
-	
-	private RSNORLatchConfig()
+	public RSNORLatchConfig()
 	{
 	}
 	
@@ -36,19 +34,13 @@ public final class RSNORLatchConfig extends LogicConfig<RSNORLatchConfig>
 	}
 	
 	@Override
-	public void loadFrom(RSNORLatchConfig other)
+	protected void internalLoadFrom(RSNORLatchConfig other)
 	{
 	}
 	
 	@Override
 	public void resetForPickup()
 	{
-	}
-	
-	@Override
-	public RSNORLatchConfig copy()
-	{
-		return this;
 	}
 	
 	@Override

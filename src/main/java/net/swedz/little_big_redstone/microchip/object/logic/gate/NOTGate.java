@@ -36,7 +36,7 @@ public final class NOTGate extends LogicGate<NOTGate, SingleLogicGateConfig>
 	@Override
 	protected SingleLogicGateConfig defaultConfig()
 	{
-		return SingleLogicGateConfig.INSTANCE;
+		return new SingleLogicGateConfig();
 	}
 	
 	@Override
@@ -61,12 +61,6 @@ public final class NOTGate extends LogicGate<NOTGate, SingleLogicGateConfig>
 	public void appendShiftHoverText(List<Component> lines)
 	{
 		lines.add(line(LBRText.LOGIC_HELP_NOT_GATE));
-	}
-	
-	@Override
-	public NOTGate copy()
-	{
-		return new NOTGate(color, this.output());
 	}
 	
 	@Override

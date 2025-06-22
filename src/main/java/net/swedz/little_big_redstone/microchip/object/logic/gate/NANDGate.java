@@ -76,12 +76,6 @@ public final class NANDGate extends LogicGate<NANDGate, MultiLogicGateConfig>
 	}
 	
 	@Override
-	public NANDGate copy()
-	{
-		return new NANDGate(config.copy(), color, this.output());
-	}
-	
-	@Override
 	public int hashCode()
 	{
 		return Objects.hash(this.type(), config, color);

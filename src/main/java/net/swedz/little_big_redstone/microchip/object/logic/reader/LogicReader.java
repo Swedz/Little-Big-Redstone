@@ -7,6 +7,7 @@ import io.netty.buffer.ByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.Mth;
 import net.minecraft.world.item.DyeColor;
 import net.swedz.little_big_redstone.LBRText;
@@ -84,57 +85,60 @@ public final class LogicReader extends LogicComponent<LogicReader, LogicReaderCo
 		
 		float fill = 0;
 		
-		if(config.mode == LogicReaderMode.ITEM)
+		if(context.level() instanceof ServerLevel)
 		{
-			var awareness = context.awareness(AwarenessTypes.CAPABILITY_ITEM);
-			var handler = awareness.get(context.level(), context.pos(), config.direction);
-			if(handler != null)
+			if(config.mode == LogicReaderMode.ITEM)
 			{
-				int totalItems = 0;
-				int maxItems = 0;
-				for(int slot = 0; slot < handler.getSlots(); slot++)
+				var awareness = context.awareness(AwarenessTypes.CAPABILITY_ITEM);
+				var handler = awareness.get(context.level(), context.pos(), config.direction);
+				if(handler != null)
 				{
-					var stack = handler.getStackInSlot(slot);
-					if(stack.isEmpty())
+					int totalItems = 0;
+					int maxItems = 0;
+					for(int slot = 0; slot < handler.getSlots(); slot++)
 					{
-						maxItems += Mth.clamp(handler.getSlotLimit(slot), 0, 64);
+						var stack = handler.getStackInSlot(slot);
+						if(stack.isEmpty())
+						{
+							maxItems += Mth.clamp(handler.getSlotLimit(slot), 0, 64);
+						}
+						else
+						{
+							totalItems += stack.getCount();
+							maxItems += stack.getMaxStackSize();
+						}
 					}
-					else
-					{
-						totalItems += stack.getCount();
-						maxItems += stack.getMaxStackSize();
-					}
+					fill = (float) totalItems / maxItems;
 				}
-				fill = (float) totalItems / maxItems;
 			}
-		}
-		
-		else if(config.mode == LogicReaderMode.FLUID)
-		{
-			var awareness = context.awareness(AwarenessTypes.CAPABILITY_FLUID);
-			var handler = awareness.get(context.level(), context.pos(), config.direction);
-			if(handler != null)
+			
+			else if(config.mode == LogicReaderMode.FLUID)
 			{
-				int totalFluid = 0;
-				int maxFluid = 0;
-				for(int tank = 0; tank < handler.getTanks(); tank++)
+				var awareness = context.awareness(AwarenessTypes.CAPABILITY_FLUID);
+				var handler = awareness.get(context.level(), context.pos(), config.direction);
+				if(handler != null)
 				{
-					totalFluid += handler.getFluidInTank(tank).getAmount();
-					maxFluid += handler.getTankCapacity(tank);
+					int totalFluid = 0;
+					int maxFluid = 0;
+					for(int tank = 0; tank < handler.getTanks(); tank++)
+					{
+						totalFluid += handler.getFluidInTank(tank).getAmount();
+						maxFluid += handler.getTankCapacity(tank);
+					}
+					fill = (float) totalFluid / maxFluid;
 				}
-				fill = (float) totalFluid / maxFluid;
 			}
-		}
-		
-		else if(config.mode == LogicReaderMode.ENERGY)
-		{
-			var awareness = context.awareness(AwarenessTypes.CAPABILITY_ENERGY);
-			var handler = awareness.get(context.level(), context.pos(), config.direction);
-			if(handler != null)
+			
+			else if(config.mode == LogicReaderMode.ENERGY)
 			{
-				int totalEnergy = handler.getEnergyStored();
-				int maxEnergy = handler.getMaxEnergyStored();
-				fill = (float) totalEnergy / maxEnergy;
+				var awareness = context.awareness(AwarenessTypes.CAPABILITY_ENERGY);
+				var handler = awareness.get(context.level(), context.pos(), config.direction);
+				if(handler != null)
+				{
+					int totalEnergy = handler.getEnergyStored();
+					int maxEnergy = handler.getMaxEnergyStored();
+					fill = (float) totalEnergy / maxEnergy;
+				}
 			}
 		}
 		
@@ -152,14 +156,14 @@ public final class LogicReader extends LogicComponent<LogicReader, LogicReaderCo
 	}
 	
 	@Override
-	public boolean output(int index)
+	protected boolean outputInternal(int index)
 	{
 		return outputState;
 	}
 	
 	public boolean output()
 	{
-		return outputState;
+		return this.output(0);
 	}
 	
 	@Override
@@ -179,12 +183,6 @@ public final class LogicReader extends LogicComponent<LogicReader, LogicReaderCo
 	public void internalResetForPickup()
 	{
 		outputState = false;
-	}
-	
-	@Override
-	public LogicReader copy()
-	{
-		return new LogicReader(config.copy(), color, outputState);
 	}
 	
 	@Override

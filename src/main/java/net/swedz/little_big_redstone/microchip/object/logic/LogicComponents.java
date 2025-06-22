@@ -13,6 +13,7 @@ import net.swedz.little_big_redstone.microchip.wire.Wire;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Function;
 
 public final class LogicComponents extends MicrochipObjectContainer<LogicEntry, LogicComponents>
 {
@@ -83,20 +84,25 @@ public final class LogicComponents extends MicrochipObjectContainer<LogicEntry, 
 	{
 		if(microchip.canFit(component.size().toBounds(x, y)))
 		{
-			if(component.type() == LogicTypes.DEBUGGER)
-			{
-				if(debug)
-				{
-					return null;
-				}
-				debug = true;
-			}
-			int slot = this.pickAvailableSlot();
-			var entry = new LogicEntry(slot, x, y, component);
-			objects.put(slot, entry);
-			return entry;
+			return this.addUnsafe(x, y, component);
 		}
 		return null;
+	}
+	
+	public LogicEntry addUnsafe(int x, int y, LogicComponent component)
+	{
+		if(component.type() == LogicTypes.DEBUGGER)
+		{
+			if(debug)
+			{
+				return null;
+			}
+			debug = true;
+		}
+		int slot = this.pickAvailableSlot();
+		var entry = new LogicEntry(slot, x, y, component);
+		objects.put(slot, entry);
+		return entry;
 	}
 	
 	public List<Wire> remove(int slot)
@@ -141,8 +147,13 @@ public final class LogicComponents extends MicrochipObjectContainer<LogicEntry, 
 	@Override
 	public void loadFrom(LogicComponents other)
 	{
+		this.loadFrom(other, (before) -> new LogicEntry(before.slot(), before.x(), before.y(), before.component()));
+	}
+	
+	public void loadFrom(LogicComponents other, Function<LogicEntry, LogicEntry> conversion)
+	{
 		Map<Integer, LogicEntry> copiedComponents = Maps.newHashMap();
-		other.objects.forEach((slot, entry) -> copiedComponents.put(slot, new LogicEntry(entry.slot(), entry.x(), entry.y(), entry.component().copy())));
+		other.objects.forEach((slot, entry) -> copiedComponents.put(slot, conversion.apply(entry)));
 		objects = copiedComponents;
 		debug = other.debug;
 	}
