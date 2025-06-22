@@ -9,9 +9,7 @@ navigation:
 
 <FloatingColumn align="right">
 	### Index
-	<PaddedBox top="-5">
-		<CategoryIndexWithIcons category="logic" icons={true} />
-	</PaddedBox>
+	<LogicIndex />
 </FloatingColumn>
 
 Logic components, or what are also sometimes referred to as logic gates, are what drives your circuit. All logic 
