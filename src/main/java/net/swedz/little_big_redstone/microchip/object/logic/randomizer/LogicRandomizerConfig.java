@@ -23,7 +23,7 @@ public final class LogicRandomizerConfig extends LogicConfig<LogicRandomizerConf
 {
 	public static final MapCodec<LogicRandomizerConfig> CODEC = RecordCodecBuilder.mapCodec((instance) -> instance
 			.group(
-					Codec.intRange(1, 8).optionalFieldOf("outputs", 1).forGetter((config) -> config.outputs),
+					Codec.intRange(1, 10).optionalFieldOf("outputs", 1).forGetter((config) -> config.outputs),
 					Codec.FLOAT.optionalFieldOf("chance", 1f).forGetter((config) -> config.chance)
 			)
 			.apply(instance, LogicRandomizerConfig::new));
@@ -97,7 +97,7 @@ public final class LogicRandomizerConfig extends LogicConfig<LogicRandomizerConf
 	@Override
 	public IntRange outputsAllowed()
 	{
-		return new IntRange(1, 8);
+		return new IntRange(1, 10);
 	}
 	
 	@Override
