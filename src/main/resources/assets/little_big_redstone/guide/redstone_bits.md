@@ -2,6 +2,7 @@
 navigation:
   title: "Redstone Bits"
   icon: "redstone_bit"
+  position: 2
 item_ids:
   - little_big_redstone:redstone_bit
 ---

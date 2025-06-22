@@ -2,6 +2,7 @@
 navigation:
   title: "Microchips"
   icon: "red_microchip"
+  position: 1
 item_ids:
   - little_big_redstone:white_microchip
   - little_big_redstone:light_gray_microchip

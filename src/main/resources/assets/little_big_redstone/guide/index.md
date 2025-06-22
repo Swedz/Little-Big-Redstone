@@ -1,6 +1,7 @@
 ---
 navigation:
   title: "Little Big Redstone"
+  position: 0
 ---
 
 # Little Big Redstone

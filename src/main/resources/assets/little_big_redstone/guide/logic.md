@@ -1,7 +1,7 @@
 ---
 navigation:
   title: "Logic"
-  position: 1
+  position: 10
 ---
 
 # Logic
