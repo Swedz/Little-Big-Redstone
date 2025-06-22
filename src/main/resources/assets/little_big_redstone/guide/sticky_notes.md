@@ -31,7 +31,7 @@ item_ids:
 </FloatingColumn>
 
 <FloatingColumn>
-	<PaddedBox left="5" right="-3" bottom="5">
+	<PaddedBox left="5" right="-5" bottom="5">
 		<Row gap="1">
 			<ItemImage id="white_sticky_note" />
 			<ItemImage id="light_gray_sticky_note" />
@@ -57,7 +57,7 @@ item_ids:
 			<ItemImage id="pink_sticky_note" />
 		</Row>
 
-		<PaddedBox top="10">
+		<PaddedBox left="2" top="10">
 			<GameScene zoom="3.3" padding="0">
 				<Entity id="little_big_redstone:sticky_note" x="0.75" y="0.75" z="0.96875" rotationY="180" rotationX="0" data="{StickyNote:' ',TextColor:15,Color:0,Facing:0,AttachedFace:2,Quadrant:0}" />
 				<Entity id="little_big_redstone:sticky_note" x="0.25" y="0.75" z="0.96875" rotationY="180" rotationX="0" data="{StickyNote:'',Color:8,Facing:0,AttachedFace:2,Quadrant:1}" />
