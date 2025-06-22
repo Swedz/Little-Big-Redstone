@@ -7,6 +7,13 @@ navigation:
 
 # Introduction to Logic
 
+<FloatingColumn align="right">
+	### Index
+	<PaddedBox top="-5">
+		<CategoryIndexWithIcons category="logic" icons={true} />
+	</PaddedBox>
+</FloatingColumn>
+
 Logic components, or what are also sometimes referred to as logic gates, are what drives your circuit. All logic 
 components will either have input or output ports. These ports are how you pass and modify signals to get the results
 that you want. Logic components behave purely on a boolean basis - meaning that signals may either have a value of

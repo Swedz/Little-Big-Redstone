@@ -10,6 +10,7 @@ import guideme.libs.mdast.mdx.model.MdxJsxElementFields;
 import guideme.scene.ImplicitAnnotationStrategy;
 import net.minecraft.world.item.DyeColor;
 import net.swedz.little_big_redstone.LBR;
+import net.swedz.little_big_redstone.guide.tags.block.LogicIndexTagCompiler;
 import net.swedz.little_big_redstone.guide.tags.block.FloatingBoxTagCompiler;
 import net.swedz.little_big_redstone.guide.tags.block.MarginFloatingImageCompiler;
 import net.swedz.little_big_redstone.guide.tags.block.PaddedBoxTagCompiler;
@@ -35,6 +36,7 @@ public final class LBRGuide
 				.extension(TagCompiler.EXTENSION_POINT, new UnderlinedTextTagCompiler())
 				.extension(TagCompiler.EXTENSION_POINT, new PaddedBoxTagCompiler())
 				.extension(TagCompiler.EXTENSION_POINT, new MarginFloatingImageCompiler())
+				.extension(TagCompiler.EXTENSION_POINT, new LogicIndexTagCompiler())
 				.extension(TagCompiler.EXTENSION_POINT, new MicrochipSceneTagCompiler())
 				.extension(MicrochipSceneElementTagCompiler.EXTENSION_POINT, new LogicElementTagCompiler())
 				.extension(MicrochipSceneElementTagCompiler.EXTENSION_POINT, new WireElementTagCompiler())
