@@ -8,7 +8,7 @@ import io.netty.buffer.ByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
-import net.minecraft.server.level.ServerLevel;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.item.DyeColor;
 import net.swedz.little_big_redstone.LBRText;
 import net.swedz.little_big_redstone.microchip.object.logic.LogicComponent;
@@ -24,6 +24,8 @@ import static net.swedz.little_big_redstone.LBRTextLine.*;
 
 public final class LogicRandomizer extends LogicComponent<LogicRandomizer, LogicRandomizerConfig>
 {
+	private static final RandomSource RANDOM = RandomSource.create();
+	
 	public static final MapCodec<LogicRandomizer> CODEC = RecordCodecBuilder.mapCodec((instance) -> instance
 			.group(
 					LogicRandomizerConfig.CODEC.fieldOf("config").forGetter(LogicRandomizer::config),
@@ -68,9 +70,9 @@ public final class LogicRandomizer extends LogicComponent<LogicRandomizer, Logic
 	{
 		int originalOutputIndex = outputIndex;
 		
-		if(inputs[0] && context.level() instanceof ServerLevel level && level.random.nextFloat() <= config.chance)
+		if(inputs[0] && RANDOM.nextFloat() <= config.chance)
 		{
-			outputIndex = level.random.nextInt(config.outputs);
+			outputIndex = RANDOM.nextInt(config.outputs);
 		}
 		else
 		{
