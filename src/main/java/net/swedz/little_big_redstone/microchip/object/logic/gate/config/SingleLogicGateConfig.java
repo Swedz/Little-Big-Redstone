@@ -5,9 +5,7 @@ import net.swedz.tesseract.neoforge.api.range.IntRange;
 
 public final class SingleLogicGateConfig extends LogicConfig<SingleLogicGateConfig>
 {
-	public static final SingleLogicGateConfig INSTANCE = new SingleLogicGateConfig();
-	
-	private SingleLogicGateConfig()
+	public SingleLogicGateConfig()
 	{
 	}
 	
@@ -36,19 +34,13 @@ public final class SingleLogicGateConfig extends LogicConfig<SingleLogicGateConf
 	}
 	
 	@Override
-	public void loadFrom(SingleLogicGateConfig other)
+	protected void internalLoadFrom(SingleLogicGateConfig other)
 	{
 	}
 	
 	@Override
 	public void resetForPickup()
 	{
-	}
-	
-	@Override
-	public SingleLogicGateConfig copy()
-	{
-		return this;
 	}
 	
 	@Override

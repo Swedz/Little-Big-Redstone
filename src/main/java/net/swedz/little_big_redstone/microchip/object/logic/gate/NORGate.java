@@ -76,12 +76,6 @@ public final class NORGate extends LogicGate<NORGate, MultiLogicGateConfig>
 	}
 	
 	@Override
-	public NORGate copy()
-	{
-		return new NORGate(config.copy(), color, this.output());
-	}
-	
-	@Override
 	public int hashCode()
 	{
 		return Objects.hash(this.type(), config, color);

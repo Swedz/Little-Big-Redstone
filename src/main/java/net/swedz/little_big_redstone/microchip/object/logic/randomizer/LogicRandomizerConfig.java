@@ -71,7 +71,7 @@ public final class LogicRandomizerConfig extends LogicConfig<LogicRandomizerConf
 	}
 	
 	@Override
-	public void loadFrom(LogicRandomizerConfig other)
+	protected void internalLoadFrom(LogicRandomizerConfig other)
 	{
 		outputs = other.outputs;
 		chance = other.chance;
@@ -80,12 +80,6 @@ public final class LogicRandomizerConfig extends LogicConfig<LogicRandomizerConf
 	@Override
 	public void resetForPickup()
 	{
-	}
-	
-	@Override
-	public LogicRandomizerConfig copy()
-	{
-		return new LogicRandomizerConfig(outputs, chance);
 	}
 	
 	@Override

@@ -94,7 +94,17 @@ public abstract class LogicComponent<L extends LogicComponent<L, C>, C extends L
 		}
 	}
 	
-	public abstract boolean output(int index);
+	protected abstract boolean outputInternal(int index);
+	
+	public final boolean output(int index)
+	{
+		var lock = config.getOutputLock(index);
+		if(lock != null)
+		{
+			return lock;
+		}
+		return this.outputInternal(index);
+	}
 	
 	public LogicGridSize size()
 	{
@@ -126,7 +136,12 @@ public abstract class LogicComponent<L extends LogicComponent<L, C>, C extends L
 		this.internalResetForPickup();
 	}
 	
-	public abstract L copy();
+	public final L copy()
+	{
+		var copy = (L) this.type().defaultFactory().create();
+		copy.loadFrom((L) this);
+		return copy;
+	}
 	
 	public abstract int hashCode();
 	

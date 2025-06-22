@@ -125,14 +125,14 @@ public final class PulseThrottler extends LogicComponent<PulseThrottler, PulseTh
 	}
 	
 	@Override
-	public boolean output(int index)
+	protected boolean outputInternal(int index)
 	{
 		return outputState;
 	}
 	
 	public boolean output()
 	{
-		return outputState;
+		return this.output(0);
 	}
 	
 	@Override
@@ -155,12 +155,6 @@ public final class PulseThrottler extends LogicComponent<PulseThrottler, PulseTh
 		lastInputState = false;
 		processedTicks = 0;
 		outputState = false;
-	}
-	
-	@Override
-	public PulseThrottler copy()
-	{
-		return new PulseThrottler(config.copy(), color, lastInputState, processedTicks, outputState);
 	}
 	
 	@Override

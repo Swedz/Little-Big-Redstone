@@ -5,9 +5,7 @@ import net.swedz.tesseract.neoforge.api.range.IntRange;
 
 public final class TFlipFlopConfig extends LogicConfig<TFlipFlopConfig>
 {
-	public static final TFlipFlopConfig INSTANCE = new TFlipFlopConfig();
-	
-	private TFlipFlopConfig()
+	public TFlipFlopConfig()
 	{
 	}
 	
@@ -36,19 +34,13 @@ public final class TFlipFlopConfig extends LogicConfig<TFlipFlopConfig>
 	}
 	
 	@Override
-	public void loadFrom(TFlipFlopConfig other)
+	protected void internalLoadFrom(TFlipFlopConfig other)
 	{
 	}
 	
 	@Override
 	public void resetForPickup()
 	{
-	}
-	
-	@Override
-	public TFlipFlopConfig copy()
-	{
-		return this;
 	}
 	
 	@Override

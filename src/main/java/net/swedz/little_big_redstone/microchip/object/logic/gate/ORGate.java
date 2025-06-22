@@ -76,12 +76,6 @@ public final class ORGate extends LogicGate<ORGate, MultiLogicGateConfig>
 	}
 	
 	@Override
-	public ORGate copy()
-	{
-		return new ORGate(config.copy(), color, this.output());
-	}
-	
-	@Override
 	public int hashCode()
 	{
 		return Objects.hash(this.type(), config, color);

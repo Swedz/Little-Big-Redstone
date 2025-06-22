@@ -109,7 +109,7 @@ public final class LogicSelector extends LogicComponent<LogicSelector, LogicSele
 	}
 	
 	@Override
-	public boolean output(int index)
+	protected boolean outputInternal(int index)
 	{
 		return index == selected;
 	}
@@ -137,12 +137,6 @@ public final class LogicSelector extends LogicComponent<LogicSelector, LogicSele
 	protected void internalResetForPickup()
 	{
 		selected = 0;
-	}
-	
-	@Override
-	public LogicSelector copy()
-	{
-		return new LogicSelector(config.copy(), color, selected);
 	}
 	
 	@Override
