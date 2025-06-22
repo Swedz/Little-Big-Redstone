@@ -23,53 +23,39 @@ item_ids:
 
 # Microchips
 
-<Row>
-    <ItemImage id="white_microchip" scale="2" />
-    <ItemImage id="light_gray_microchip" scale="2" />
-    <ItemImage id="gray_microchip" scale="2" />
-    <ItemImage id="black_microchip" scale="2" />
-    <ItemImage id="brown_microchip" scale="2" />
-    <ItemImage id="red_microchip" scale="2" />
-    <ItemImage id="orange_microchip" scale="2" />
-    <ItemImage id="yellow_microchip" scale="2" />
-</Row>
-<Row>
-    <ItemImage id="lime_microchip" scale="2" />
-    <ItemImage id="green_microchip" scale="2" />
-    <ItemImage id="cyan_microchip" scale="2" />
-    <ItemImage id="light_blue_microchip" scale="2" />
-    <ItemImage id="blue_microchip" scale="2" />
-    <ItemImage id="purple_microchip" scale="2" />
-    <ItemImage id="magenta_microchip" scale="2" />
-    <ItemImage id="pink_microchip" scale="2" />
-</Row>
+<FloatingColumn align="right">
+	<PaddedBox left="5">
+		<RecipeFor id="red_microchip" />
+	</PaddedBox>
+</FloatingColumn>
 
-<RecipeFor id="red_microchip" />
+<FloatingColumn>
+	<PaddedBox left="5" right="-5" bottom="5">
+		<GameScene zoom="1.5" padding="0">
+			<ImportStructure src="assets/structures/microchips.snbt" />
+			<IsometricCamera yaw="135" pitch="30" />
+		</GameScene>
+	</PaddedBox>
+</FloatingColumn>
 
 Microchips are blocks that can have [logic](logic/introduction.md) placed inside of it to create complex systems.
 [Wires](redstone_bits.md) can be placed between logic to allow signals to be carried from one logic component to
-another. Microchips can be dyed any of the standard 16 dye colors, and the GUI will reflect the color.
+another.
 
-<Row>
-	<Column alignItems="start">
-		<MicrochipScene color="red">
-			<Logic name="1" x="0" y="0" type="not_gate" />
-			<Logic name="2" x="32" y="0" type="sequencer" data="{config:{auto_reset:true}}" />
-			<Wire from="1" fromPort="0" to="2" toPort="0" />
-		</MicrochipScene>
-	</Column>
-	<Column alignItems="start">
-		<MicrochipScene color="green">
-			<Logic name="1" x="0" y="0" type="not_gate" />
-			<Logic name="2" x="32" y="0" type="sequencer" data="{config:{auto_reset:true}}" />
-			<Wire from="1" fromPort="0" to="2" toPort="0" />
-		</MicrochipScene>
-	</Column>
-	<Column alignItems="start">
-		<MicrochipScene color="blue">
-			<Logic name="1" x="0" y="0" type="not_gate" />
-			<Logic name="2" x="32" y="0" type="sequencer" data="{config:{auto_reset:true}}" />
-			<Wire from="1" fromPort="0" to="2" toPort="0" />
-		</MicrochipScene>
-	</Column>
-</Row>
+### Directions
+
+When using logic components that take input from or output to the world, you will need to set the direction it uses.
+The microchip uses cardinal directions, meaning <Color color="#4CFF00">north</Color>,
+<Color color="#0094FF">south</Color>, <Color color="#FF0000">east</Color>, and <Color color="#FF6A00">west</Color> as
+well as <Color color="#FFFFFF">up</Color> and <Color color="#FFD800">down</Color>. The color of a direction can be seen
+on the side of a microchip by pressing **<KeyBind id="key.sneak" />** and looking at it.
+
+### Coloring
+
+Microchips can be dyed any of the standard 16 dye colors, and the menu will reflect the color. Logic components can be
+dyed separately from the microchip, but by default they will inherit the color of the microchip they are placed into.
+To dye logic components, you can either do so in your crafting grid as you would normally, or you can right click the
+logic in the menu with the dye to apply it.
+
+Similarly, you can use a water bucket or snowballs to clear the color from the logic component. Note that snowballs
+will be consumed, whereas water buckets will not.

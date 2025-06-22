@@ -6,28 +6,14 @@ navigation:
 
 # Little Big Redstone
 
-This is a test
+<MarginFloatingImage src="assets/logo.png" left="0" right="10" />
 
-<Row>
-	<Column alignItems="start">
-		<MicrochipScene color="red">
-			<Logic name="1" x="0" y="0" type="not_gate" />
-			<Logic name="2" x="48" y="0" type="sequencer" />
-			<Wire from="1" fromPort="0" to="2" toPort="0" />
-		</MicrochipScene>
-	</Column>
-	<Column alignItems="start">
-		<MicrochipScene color="green">
-			<Logic name="1" x="0" y="0" type="not_gate" />
-			<Logic name="2" x="48" y="0" type="sequencer" />
-			<Wire from="1" fromPort="0" to="2" toPort="0" />
-		</MicrochipScene>
-	</Column>
-	<Column alignItems="start">
-		<MicrochipScene color="blue">
-			<Logic name="1" x="0" y="0" type="not_gate" />
-			<Logic name="2" x="48" y="0" type="sequencer" />
-			<Wire from="1" fromPort="0" to="2" toPort="0" />
-		</MicrochipScene>
-	</Column>
-</Row>
+Little Big Redstone adds a [Microchip](microchips.md) block that can have [logic](logic/introduction.md) placed in it
+so more complex logic systems can be compacted into one block.
+
+This includes the standard logic gates such as [NOT](logic/not_gate.md), [AND](logic/and_gate.md),
+[OR](logic/or_gate.md), and so on and so forth. There are also some logic components that can be used for delaying,
+shortening, or lengthening a signal such as with the [Sequencer](logic/sequencer.md) and
+[Pulse Throttler](logic/pulse_throttler.md).
+
+All items come in all dye colors to allow for personalization, expression, and organization!
