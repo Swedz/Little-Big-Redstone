@@ -59,36 +59,20 @@ item_ids:
 	</PaddedBox>
 </FloatingColumn>
 
+Logic arrays can hold [logic](logic/introduction.md) and [redstone bits](redstone_bits.md) to save on inventory space
+and allow for easy access when building your circuits.
 
+### Inventory
 
-Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc dictum faucibus augue, vitae egestas tellus interdum ut.
-Maecenas non sagittis justo. Sed eu semper nunc, eu feugiat lectus. Integer porttitor lectus quis tincidunt dapibus.
-Nunc rhoncus eu erat vel efficitur. Ut bibendum sed orci ut accumsan. Suspendisse sagittis est sit amet fringilla
-tristique. Curabitur vestibulum libero vel efficitur faucibus. Aenean malesuada orci nec nisi facilisis, sed aliquet
-turpis facilisis. Maecenas pellentesque, sapien et pellentesque vulputate, augue justo pharetra velit, vel ultricies
-erat velit sit amet orci. Morbi mollis condimentum facilisis. Morbi pretium convallis libero, at iaculis odio eleifend
-ac.
+Logic arrays have 28 slots. The inventory can be opened by holding the logic array in hand and then pressing
+**<KeyBind id="key.use" />**. While in the menu for a [Microchip](microchips.md), you can view the contents of any of
+the logic arrays in your inventory. By default it will select the first logic array in your inventory to display. At
+any point while in the microchip menu, you can left-click one of your logic arrays to select it. That way, you can
+have multiple logic arrays and access all of them while working on your circuit.
 
-Donec condimentum, turpis vel porta sagittis, nisl lorem gravida nunc, suscipit mollis enim diam ultrices purus. Cras
-ut sem vestibulum, tempus nisl nec, commodo tellus. Donec malesuada condimentum massa, non mollis ipsum euismod ut. Sed
-venenatis orci vel congue scelerisque. Praesent condimentum lacus in egestas aliquet. Aenean nec leo justo. Suspendisse
-non purus sed sapien fringilla rutrum in ultricies tortor. Proin consequat ultricies commodo. Praesent a lectus et nunc
-laoreet posuere nec rhoncus mauris. Sed pretium orci elit. Suspendisse id hendrerit diam, nec porttitor lorem.
-Vestibulum mauris dolor, lobortis non magna sagittis, egestas dignissim sapien. Morbi iaculis magna in dolor commodo
-porttitor.
+Below are two examples of what you can expect from the logic array's menu. On the left is when you open the logic
+array on its own, and on the right is when you open the logic array when inside the microchip.
 
-Suspendisse risus arcu, aliquet in elit non, cursus pharetra sem. Ut ut semper enim, nec volutpat nulla. Donec
-dignissim ligula id sapien pulvinar, quis ornare velit mollis. Suspendisse id placerat metus. Cras eleifend orci vitae
-dui egestas, sit amet convallis libero convallis. Ut in ultricies neque. Sed accumsan blandit lorem et tincidunt.
-Vivamus sit amet ex at libero consequat euismod pharetra vel diam.
+<FloatingImage src="assets/logic_array_menu.png" />
 
-Cras sit amet turpis ac quam ullamcorper hendrerit. Curabitur vel nisl vel elit laoreet faucibus. Duis in nulla vitae
-libero faucibus ullamcorper quis vitae nulla. Aliquam eget cursus neque. Phasellus tristique odio lectus, in vehicula
-lacus euismod sit amet. Nulla mollis odio a diam ultrices iaculis. Sed blandit pretium mi quis rutrum. Duis semper
-auctor tortor, et elementum eros sodales tincidunt. Fusce ornare dolor eget leo venenatis ullamcorper. Donec porta a
-diam eu semper. In sit amet feugiat erat. Pellentesque pellentesque tortor ac ornare cursus.
-
-Donec nec dolor lectus. Pellentesque in nibh a turpis fringilla fermentum in quis magna. Etiam sit amet laoreet est.
-Donec molestie tortor est, et tincidunt elit viverra non. In hac habitasse platea dictumst. Proin condimentum ante
-velit, ornare volutpat ante rutrum non. In ac consequat metus. Phasellus in augue nisl. Integer leo ipsum, placerat
-sit amet feugiat quis, tristique ut odio. 
+<FloatingImage src="assets/logic_array_in_microchip_menu.png" />
