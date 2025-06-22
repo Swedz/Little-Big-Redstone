@@ -2,6 +2,7 @@
 navigation:
   title: "Sticky Notes"
   icon: "red_sticky_note"
+  position: 5
 item_ids:
   - little_big_redstone:white_sticky_note
   - little_big_redstone:light_gray_sticky_note
@@ -30,30 +31,30 @@ item_ids:
 </FloatingColumn>
 
 <FloatingColumn>
-	<PaddedBox left="5" right="-5" bottom="5">
-		<Row>
-			<PaddedBox right="-5"><ItemImage id="white_sticky_note" /></PaddedBox>
-			<PaddedBox right="-5"><ItemImage id="light_gray_sticky_note" /></PaddedBox>
-			<PaddedBox right="-5"><ItemImage id="gray_sticky_note" /></PaddedBox>
-			<PaddedBox right="-5"><ItemImage id="black_sticky_note" /></PaddedBox>
+	<PaddedBox left="5" right="-3" bottom="5">
+		<Row gap="1">
+			<ItemImage id="white_sticky_note" />
+			<ItemImage id="light_gray_sticky_note" />
+			<ItemImage id="gray_sticky_note" />
+			<ItemImage id="black_sticky_note" />
 		</Row>
-		<Row>
-			<PaddedBox right="-5"><ItemImage id="brown_sticky_note" /></PaddedBox>
-			<PaddedBox right="-5"><ItemImage id="red_sticky_note" /></PaddedBox>
-			<PaddedBox right="-5"><ItemImage id="orange_sticky_note" /></PaddedBox>
-			<PaddedBox right="-5"><ItemImage id="yellow_sticky_note" /></PaddedBox>
+		<Row gap="1">
+			<ItemImage id="brown_sticky_note" />
+			<ItemImage id="red_sticky_note" />
+			<ItemImage id="orange_sticky_note" />
+			<ItemImage id="yellow_sticky_note" />
 		</Row>
-		<Row>
-			<PaddedBox right="-5"><ItemImage id="lime_sticky_note" /></PaddedBox>
-			<PaddedBox right="-5"><ItemImage id="green_sticky_note" /></PaddedBox>
-			<PaddedBox right="-5"><ItemImage id="cyan_sticky_note" /></PaddedBox>
-			<PaddedBox right="-5"><ItemImage id="light_blue_sticky_note" /></PaddedBox>
+		<Row gap="1">
+			<ItemImage id="lime_sticky_note" />
+			<ItemImage id="green_sticky_note" />
+			<ItemImage id="cyan_sticky_note" />
+			<ItemImage id="light_blue_sticky_note" />
 		</Row>
-		<Row>
-			<PaddedBox right="-5"><ItemImage id="blue_sticky_note" /></PaddedBox>
-			<PaddedBox right="-5"><ItemImage id="purple_sticky_note" /></PaddedBox>
-			<PaddedBox right="-5"><ItemImage id="magenta_sticky_note" /></PaddedBox>
-			<PaddedBox right="-5"><ItemImage id="pink_sticky_note" /></PaddedBox>
+		<Row gap="1">
+			<ItemImage id="blue_sticky_note" />
+			<ItemImage id="purple_sticky_note" />
+			<ItemImage id="magenta_sticky_note" />
+			<ItemImage id="pink_sticky_note" />
 		</Row>
 
 		<PaddedBox top="10">
