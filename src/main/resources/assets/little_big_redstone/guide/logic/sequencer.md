@@ -73,7 +73,7 @@ internal counter of the sequencer will be reset to 0.
 
 <br />
 
-## Weak
+### Weak Mode
 
 After an ON signal is passed to the first input port of the sequencer, regardless of the duration of the signal, the
 sequencer will increment until it reaches the configured delay. Use this mode when you want to simply delay a signal
@@ -99,7 +99,7 @@ input remains on or not.
 
 <br />
 
-## Strong
+### Strong Mode
 
 So long as an ON signal is passed to the first input port of the sequencer, the sequencer will increment. However, if
 the signal ceases, the sequencer will decrement.
@@ -147,7 +147,7 @@ state and thus the output is always OFF.
 
 <br />
 
-## Counter
+### Counter Mode
 
 So long as an ON signal is passed to the first input port of the sequencer, the sequencer will increment. The only way
 the sequencer will go down in this mode is if it is reset either by the auto reset option or by the reset port.

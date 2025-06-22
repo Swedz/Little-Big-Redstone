@@ -14,7 +14,7 @@ off (0) or on (1).
 
 <br />
 
-## Truth Tables
+### Truth Tables
 
 Logic will behave differently depending on their input signals, typically in a deterministic manner. Thus, most logic 
 components have what is called a truth table associated with them. A truth table is a table that shows the output
@@ -27,7 +27,7 @@ the specific output. For example, Q₁, Q₂, and so on. However, in most cases 
 
 <br />
 
-## Using Logic
+### Using Logic
 
 Logic can be placed or picked up in a [Microchip](../microchips.md)'s interface using left-click. To configure a logic
 component (if there is anything to configure), you can use right-click on it. This will open a menu that you can
