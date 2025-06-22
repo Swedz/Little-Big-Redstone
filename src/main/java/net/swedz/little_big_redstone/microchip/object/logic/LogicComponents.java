@@ -84,20 +84,25 @@ public final class LogicComponents extends MicrochipObjectContainer<LogicEntry, 
 	{
 		if(microchip.canFit(component.size().toBounds(x, y)))
 		{
-			if(component.type() == LogicTypes.DEBUGGER)
-			{
-				if(debug)
-				{
-					return null;
-				}
-				debug = true;
-			}
-			int slot = this.pickAvailableSlot();
-			var entry = new LogicEntry(slot, x, y, component);
-			objects.put(slot, entry);
-			return entry;
+			return this.addUnsafe(x, y, component);
 		}
 		return null;
+	}
+	
+	public LogicEntry addUnsafe(int x, int y, LogicComponent component)
+	{
+		if(component.type() == LogicTypes.DEBUGGER)
+		{
+			if(debug)
+			{
+				return null;
+			}
+			debug = true;
+		}
+		int slot = this.pickAvailableSlot();
+		var entry = new LogicEntry(slot, x, y, component);
+		objects.put(slot, entry);
+		return entry;
 	}
 	
 	public List<Wire> remove(int slot)

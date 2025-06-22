@@ -232,12 +232,7 @@ public final class MicrochipGuidebookScene extends LytBox implements ExportableR
 		{
 			component.config().hide();
 		}
-		var entry = microchip.components().add(x + marginWidth, y + marginHeight, component);
-		if(entry == null)
-		{
-			errorSink.appendError(compiler, "Logic cannot fit", el);
-			return;
-		}
+		var entry = microchip.components().addUnsafe(x + marginWidth, y + marginHeight, component);
 		logicDefaults.put(entry.slot(), component);
 		logic.put(name, entry.slot());
 		microchip.markDirty();
