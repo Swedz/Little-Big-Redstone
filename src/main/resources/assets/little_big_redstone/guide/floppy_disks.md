@@ -33,28 +33,28 @@ item_ids:
 <FloatingColumn>
 	<PaddedBox left="5" right="10" bottom="0">
 		<Row gap="1">
+			<ItemImage id="red_floppy_disk" />
+			<ItemImage id="orange_floppy_disk" />
+			<ItemImage id="yellow_floppy_disk" />
+			<ItemImage id="lime_floppy_disk" />
+		</Row>
+		<Row gap="1">
+			<ItemImage id="green_floppy_disk" />
+			<ItemImage id="cyan_floppy_disk" />
+			<ItemImage id="light_blue_floppy_disk" />
+			<ItemImage id="blue_floppy_disk" />
+		</Row>
+		<Row gap="1">
+			<ItemImage id="purple_floppy_disk" />
+			<ItemImage id="magenta_floppy_disk" />
+			<ItemImage id="pink_floppy_disk" />
+			<ItemImage id="brown_floppy_disk" />
+		</Row>
+		<Row gap="1">
 			<ItemImage id="white_floppy_disk" />
 			<ItemImage id="light_gray_floppy_disk" />
 			<ItemImage id="gray_floppy_disk" />
 			<ItemImage id="black_floppy_disk" />
-		</Row>
-		<Row gap="1">
-			<ItemImage id="brown_floppy_disk" />
-			<ItemImage id="red_floppy_disk" />
-			<ItemImage id="orange_floppy_disk" />
-			<ItemImage id="yellow_floppy_disk" />
-		</Row>
-		<Row gap="1">
-			<ItemImage id="lime_floppy_disk" />
-			<ItemImage id="green_floppy_disk" />
-			<ItemImage id="cyan_floppy_disk" />
-			<ItemImage id="light_blue_floppy_disk" />
-		</Row>
-		<Row gap="1">
-			<ItemImage id="blue_floppy_disk" />
-			<ItemImage id="purple_floppy_disk" />
-			<ItemImage id="magenta_floppy_disk" />
-			<ItemImage id="pink_floppy_disk" />
 		</Row>
 	</PaddedBox>
 </FloatingColumn>

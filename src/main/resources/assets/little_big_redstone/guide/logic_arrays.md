@@ -33,28 +33,28 @@ item_ids:
 <FloatingColumn>
 	<PaddedBox left="5" right="10" bottom="0">
 		<Row gap="1">
+			<ItemImage id="red_logic_array" />
+			<ItemImage id="orange_logic_array" />
+			<ItemImage id="yellow_logic_array" />
+			<ItemImage id="lime_logic_array" />
+		</Row>
+		<Row gap="1">
+			<ItemImage id="green_logic_array" />
+			<ItemImage id="cyan_logic_array" />
+			<ItemImage id="light_blue_logic_array" />
+			<ItemImage id="blue_logic_array" />
+		</Row>
+		<Row gap="1">
+			<ItemImage id="purple_logic_array" />
+			<ItemImage id="magenta_logic_array" />
+			<ItemImage id="pink_logic_array" />
+			<ItemImage id="brown_logic_array" />
+		</Row>
+		<Row gap="1">
 			<ItemImage id="white_logic_array" />
 			<ItemImage id="light_gray_logic_array" />
 			<ItemImage id="gray_logic_array" />
 			<ItemImage id="black_logic_array" />
-		</Row>
-		<Row gap="1">
-			<ItemImage id="brown_logic_array" />
-			<ItemImage id="red_logic_array" />
-			<ItemImage id="orange_logic_array" />
-			<ItemImage id="yellow_logic_array" />
-		</Row>
-		<Row gap="1">
-			<ItemImage id="lime_logic_array" />
-			<ItemImage id="green_logic_array" />
-			<ItemImage id="cyan_logic_array" />
-			<ItemImage id="light_blue_logic_array" />
-		</Row>
-		<Row gap="1">
-			<ItemImage id="blue_logic_array" />
-			<ItemImage id="purple_logic_array" />
-			<ItemImage id="magenta_logic_array" />
-			<ItemImage id="pink_logic_array" />
 		</Row>
 	</PaddedBox>
 </FloatingColumn>
