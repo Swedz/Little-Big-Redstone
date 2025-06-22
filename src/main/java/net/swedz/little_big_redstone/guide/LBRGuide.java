@@ -18,6 +18,7 @@ import net.swedz.little_big_redstone.guide.tags.microchip.element.MicrochipScene
 import net.swedz.little_big_redstone.guide.tags.microchip.element.RedstoneSignalTagCompiler;
 import net.swedz.little_big_redstone.guide.tags.microchip.element.WireElementTagCompiler;
 import net.swedz.little_big_redstone.guide.tags.scene.InputOutputImplicitAnnotationStrategy;
+import net.swedz.little_big_redstone.guide.tags.text.UnderlinedTextTagCompiler;
 import net.swedz.little_big_redstone.guide.tags.truthtable.TruthTableTagCompiler;
 import net.swedz.little_big_redstone.guide.tags.truthtable.element.TruthTableElementTagCompiler;
 import net.swedz.little_big_redstone.guide.tags.truthtable.element.TruthTableStateTagCompiler;
@@ -30,6 +31,7 @@ public final class LBRGuide
 	{
 		Guide.builder(LBR.id("guide"))
 				.folder("guide")
+				.extension(TagCompiler.EXTENSION_POINT, new UnderlinedTextTagCompiler())
 				.extension(TagCompiler.EXTENSION_POINT, new PaddedBoxTagCompiler())
 				.extension(TagCompiler.EXTENSION_POINT, new MicrochipSceneTagCompiler())
 				.extension(MicrochipSceneElementTagCompiler.EXTENSION_POINT, new LogicElementTagCompiler())
