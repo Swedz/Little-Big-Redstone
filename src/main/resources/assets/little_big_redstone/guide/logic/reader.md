@@ -43,7 +43,7 @@ Below is an example of a reader being used to light up a redstone lamp when the 
 		</Column>
 	
 		<Column>
-			<MicrochipScene color="red" padding="0">
+			<MicrochipScene color="red" padding="0" marginWidth="16">
 				<Logic name="reader" x="0" y="0" type="reader" data="{config:{direction:'west'}}" />
 				<Logic name="output" x="32" y="0" type="io" data="{config:{direction:'east',input:false,signal_strength:15}}" />
 	
@@ -68,7 +68,7 @@ Below is an example of a reader being used to light up a redstone lamp when the 
 		</Column>
 	
 		<Column>
-			<MicrochipScene color="red" padding="0">
+			<MicrochipScene color="red" padding="0" marginWidth="16">
 				<Logic name="reader" x="0" y="0" type="reader" data="{config:{direction:'west'}}" />
 				<Logic name="output" x="32" y="0" type="io" data="{config:{direction:'east',input:false,signal_strength:15}}" />
 	

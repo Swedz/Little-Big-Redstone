@@ -47,10 +47,10 @@ OR gates can be configured to have anywhere between 2 and 10 inputs.
 <Row>
 	<Column>
 		<MicrochipScene color="red" includeToolbar={true}>
-			<Logic name="a" x="0" y="0" type="io" data="{config:{direction:'east'}}" />
-			<Logic name="b" x="0" y="32" type="io" data="{config:{direction:'west'}}" />
+			<Logic name="a" x="0" y="12" type="io" data="{config:{direction:'east'}}" hide={true} />
+			<Logic name="b" x="0" y="20" type="io" data="{config:{direction:'west'}}" hide={true} />
 			<Logic name="and" x="32" y="16" type="or_gate" />
-			<Logic name="output" x="64" y="16" type="io" data="{config:{input:false,signal_strength:15}}" />
+			<Logic name="output" x="64" y="16" type="io" data="{config:{input:false,signal_strength:15}}" hide={true} />
 
 			<Wire from="a" fromPort="0" to="and" toPort="0" />
 			<Wire from="b" fromPort="0" to="and" toPort="1" />
@@ -72,12 +72,12 @@ OR gates can be configured to have anywhere between 2 and 10 inputs.
 
 	<Column>
 		<MicrochipScene color="red" includeToolbar={true}>
-			<Logic name="a" x="0" y="0" type="io" data="{config:{direction:'north'}}" />
-			<Logic name="b" x="0" y="16" type="io" data="{config:{direction:'south'}}" />
-			<Logic name="c" x="0" y="32" type="io" data="{config:{direction:'east'}}" />
-			<Logic name="d" x="0" y="48" type="io" data="{config:{direction:'west'}}" />
+			<Logic name="a" x="0" y="12" type="io" data="{config:{direction:'north'}}" hide={true} />
+			<Logic name="b" x="0" y="20" type="io" data="{config:{direction:'south'}}" hide={true} />
+			<Logic name="c" x="0" y="28" type="io" data="{config:{direction:'east'}}" hide={true} />
+			<Logic name="d" x="0" y="36" type="io" data="{config:{direction:'west'}}" hide={true} />
 			<Logic name="and" x="32" y="16" type="or_gate" data="{config:{input_count:4}}" />
-			<Logic name="output" x="64" y="24" type="io" data="{config:{direction:'up',input:false,signal_strength:15}}" />
+			<Logic name="output" x="64" y="24" type="io" data="{config:{direction:'up',input:false,signal_strength:15}}" hide={true} />
 
 			<Wire from="a" fromPort="0" to="and" toPort="0" />
 			<Wire from="b" fromPort="0" to="and" toPort="1" />

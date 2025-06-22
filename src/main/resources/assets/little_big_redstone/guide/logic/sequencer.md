@@ -41,9 +41,9 @@ The sequencer can be configured to have its internal counter reset to 0 once it 
 will output an ON signal for exactly 1 tick.
 
 <MicrochipScene color="red" includeToolbar={true}>
-	<Logic name="input" x="0" y="0" type="io" />
+	<Logic name="input" x="0" y="0" type="io" hide={true} />
 	<Logic name="sequencer" x="32" y="0" type="sequencer" data="{config:{delay:30,auto_reset:true}}" />
-	<Logic name="output" x="80" y="0" type="io" data="{config:{input:false,direction:'south',signal_strength:15}}" />
+	<Logic name="output" x="80" y="0" type="io" data="{config:{input:false,direction:'south',signal_strength:15}}" hide={true} />
 
 	<Wire from="input" fromPort="0" to="sequencer" toPort="0" />
 	<Wire from="sequencer" fromPort="0" to="output" toPort="0" />
@@ -55,10 +55,10 @@ Additionally, the sequencer can be configured to have a second input port. Whene
 internal counter of the sequencer will be reset to 0.
 
 <MicrochipScene color="red" includeToolbar={true}>
-	<Logic name="input1" x="0" y="0" type="io" data="{config:{direction:'east'}}" />
-	<Logic name="input2" x="0" y="32" type="io" data="{config:{direction:'west'}}" />
+	<Logic name="input1" x="0" y="12" type="io" data="{config:{direction:'east'}}" hide={true} />
+	<Logic name="input2" x="0" y="20" type="io" data="{config:{direction:'west'}}" hide={true} />
 	<Logic name="sequencer" x="32" y="16" type="sequencer" data="{config:{delay:50,reset_port:true}}" />
-	<Logic name="output" x="80" y="16" type="io" data="{config:{input:false,direction:'south',signal_strength:15}}" />
+	<Logic name="output" x="80" y="16" type="io" data="{config:{input:false,direction:'south',signal_strength:15}}" hide={true} />
 
 	<Wire from="input1" fromPort="0" to="sequencer" toPort="0" />
 	<Wire from="input2" fromPort="0" to="sequencer" toPort="1" />
@@ -84,9 +84,9 @@ completes. The input signal is somewhat brief, but the sequencer continues to in
 input remains on or not.
 
 <MicrochipScene color="red" includeToolbar={true}>
-	<Logic name="input" x="0" y="0" type="io" />
+	<Logic name="input" x="0" y="0" type="io" hide={true} />
 	<Logic name="sequencer" x="32" y="0" type="sequencer" data="{config:{delay:100,auto_reset:true}}" />
-	<Logic name="output" x="80" y="0" type="io" data="{config:{input:false,direction:'south',signal_strength:15}}" />
+	<Logic name="output" x="80" y="0" type="io" data="{config:{input:false,direction:'south',signal_strength:15}}" hide={true} />
 
 	<Wire from="input" fromPort="0" to="sequencer" toPort="0" />
 	<Wire from="sequencer" fromPort="0" to="output" toPort="0" />
@@ -110,9 +110,9 @@ This one has an ON signal long enough that the sequencer reaches its ON state, a
 that it returns back to its original state.
 
 <MicrochipScene color="red" includeToolbar={true}>
-	<Logic name="input" x="0" y="0" type="io" />
+	<Logic name="input" x="0" y="0" type="io" hide={true} />
 	<Logic name="sequencer" x="32" y="0" type="sequencer" data="{config:{delay:100,mode:'strong'}}" />
-	<Logic name="output" x="80" y="0" type="io" data="{config:{input:false,direction:'south',signal_strength:15}}" />
+	<Logic name="output" x="80" y="0" type="io" data="{config:{input:false,direction:'south',signal_strength:15}}" hide={true} />
 
 	<Wire from="input" fromPort="0" to="sequencer" toPort="0" />
 	<Wire from="sequencer" fromPort="0" to="output" toPort="0" />
@@ -132,9 +132,9 @@ turns off, and it decrements all the way back to its original state. Because of 
 state and thus the output is always OFF.
 
 <MicrochipScene color="red" includeToolbar={true}>
-	<Logic name="input" x="0" y="0" type="io" />
+	<Logic name="input" x="0" y="0" type="io" hide={true} />
 	<Logic name="sequencer" x="32" y="0" type="sequencer" data="{config:{delay:100,mode:'strong'}}" />
-	<Logic name="output" x="80" y="0" type="io" data="{config:{input:false,direction:'south',signal_strength:15}}" />
+	<Logic name="output" x="80" y="0" type="io" data="{config:{input:false,direction:'south',signal_strength:15}}" hide={true} />
 
 	<Wire from="input" fromPort="0" to="sequencer" toPort="0" />
 	<Wire from="sequencer" fromPort="0" to="output" toPort="0" />
@@ -156,9 +156,9 @@ Below is an example of a sequencer that is set to delay 100 ticks (5 seconds) an
 completes. The input goes on and off frequently, but the sequencer does not decrement when the input is OFF.
 
 <MicrochipScene color="red" includeToolbar={true}>
-	<Logic name="input" x="0" y="0" type="io" />
+	<Logic name="input" x="0" y="0" type="io" hide={true} />
 	<Logic name="sequencer" x="32" y="0" type="sequencer" data="{config:{delay:100,mode:'counter',auto_reset:true}}" />
-	<Logic name="output" x="80" y="0" type="io" data="{config:{input:false,direction:'south',signal_strength:15}}" />
+	<Logic name="output" x="80" y="0" type="io" data="{config:{input:false,direction:'south',signal_strength:15}}" hide={true} />
 
 	<Wire from="input" fromPort="0" to="sequencer" toPort="0" />
 	<Wire from="sequencer" fromPort="0" to="output" toPort="0" />
@@ -172,10 +172,10 @@ is throttled by a [Pulse Throttler](pulse_throttler.md) to prevent the input sig
 This way, the sequencer will only emit an output signal for a single tick once 5 separate ON inputs have been received.
 
 <MicrochipScene color="red" includeToolbar={true}>
-	<Logic name="input" x="0" y="0" type="io" />
+	<Logic name="input" x="0" y="0" type="io" hide={true} />
 	<Logic name="pulse_throttler" x="32" y="0" type="pulse_throttler" />
 	<Logic name="sequencer" x="64" y="0" type="sequencer" data="{config:{delay:5,mode:'counter',auto_reset:true}}" />
-	<Logic name="output" x="112" y="0" type="io" data="{config:{input:false,direction:'south',signal_strength:15}}" />
+	<Logic name="output" x="112" y="0" type="io" data="{config:{input:false,direction:'south',signal_strength:15}}" hide={true} />
 
 	<Wire from="input" fromPort="0" to="pulse_throttler" toPort="0" />
 	<Wire from="pulse_throttler" fromPort="0" to="sequencer" toPort="0" />

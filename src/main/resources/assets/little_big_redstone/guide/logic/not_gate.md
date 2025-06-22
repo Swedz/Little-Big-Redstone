@@ -37,9 +37,9 @@ item_ids:
 NOT Gates are the simplest gate available. These take a single input, invert the signal, and provide a single output.
 
 <MicrochipScene color="red" includeToolbar={true}>
-	<Logic name="1" x="0" y="0" type="io" />
+	<Logic name="1" x="0" y="0" type="io" hide={true} />
 	<Logic name="2" x="32" y="0" type="not_gate" />
-	<Logic name="3" x="64" y="0" type="io" data="{config:{input:false,direction:'south',signal_strength:15}}" />
+	<Logic name="3" x="64" y="0" type="io" data="{config:{input:false,direction:'south',signal_strength:15}}" hide={true} />
 
 	<Wire from="1" fromPort="0" to="2" toPort="0" />
 	<Wire from="2" fromPort="0" to="3" toPort="0" />
