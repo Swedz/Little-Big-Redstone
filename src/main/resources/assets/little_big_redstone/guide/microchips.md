@@ -32,7 +32,7 @@ item_ids:
 
 <FloatingColumn>
 	<PaddedBox left="5" right="-5" bottom="5">
-		<GameScene zoom="1.5" padding="0">
+		<GameScene zoom="1.5" padding="0" background="transparent">
 			<ImportStructure src="assets/structures/microchips.snbt" />
 			<IsometricCamera yaw="135" pitch="30" />
 		</GameScene>
