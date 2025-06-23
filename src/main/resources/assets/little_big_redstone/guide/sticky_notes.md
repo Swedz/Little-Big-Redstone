@@ -31,7 +31,7 @@ item_ids:
 </FloatingColumn>
 
 <FloatingColumn>
-	<PaddedBox left="5" right="-5" bottom="5">
+	<PaddedBox left="5" right="10" bottom="5">
 		<Row gap="1">
 			<ItemImage id="red_sticky_note" />
 			<ItemImage id="orange_sticky_note" />
