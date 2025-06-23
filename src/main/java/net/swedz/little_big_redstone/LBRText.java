@@ -95,7 +95,7 @@ public enum LBRText implements TranslatableTextEnum
 	LOGIC_HELP_IO_PORT_1("Can either input or output a redstone signal in the world on a single face. Multiple I/O ports can be used to input and output from different faces."),
 	LOGIC_HELP_IO_PORT_2("A microchip cannot have both an input and output port on the same face."),
 	LOGIC_HELP_NAND_GATE("Output is OFF when all inputs are ON, otherwise output is ON."),
-	LOGIC_HELP_NOR_GATE("Output is ON when all inputs are OFF, otherwise output is ON."),
+	LOGIC_HELP_NOR_GATE("Output is ON when all inputs are OFF, otherwise output is OFF."),
 	LOGIC_HELP_NOT_GATE("Output is ON when the input is OFF, and output is OFF when the input is ON."),
 	LOGIC_HELP_OR_GATE("Output is ON when any input is ON, otherwise output is OFF."),
 	LOGIC_HELP_PULSE_THROTTLER("Throttles an input signal and yields an output with a configurable duration."),
