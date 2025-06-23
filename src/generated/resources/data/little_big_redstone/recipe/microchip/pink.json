@@ -9,7 +9,7 @@
       "tag": "c:storage_blocks/iron"
     },
     "N": {
-      "tag": "c:ingots/netherite"
+      "item": "minecraft:netherite_scrap"
     },
     "R": {
       "tag": "c:dusts/redstone"

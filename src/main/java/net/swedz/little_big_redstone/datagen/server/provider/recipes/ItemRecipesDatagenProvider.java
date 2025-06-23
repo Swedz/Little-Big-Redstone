@@ -29,7 +29,7 @@ public final class ItemRecipesDatagenProvider extends RecipeProvider
 				.define('I', Tags.Items.STORAGE_BLOCKS_IRON)
 				.define('R', Tags.Items.DUSTS_REDSTONE)
 				.define('F', LBRItems.floppyDisk(color))
-				.define('N', Tags.Items.INGOTS_NETHERITE)
+				.define('N', Items.NETHERITE_SCRAP)
 				.output(LBRBlocks.microchip(color).get(), 1)
 				.offerTo(output, LBR.id("microchip/%s".formatted(color.getName())));
 	}
