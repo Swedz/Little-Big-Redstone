@@ -36,3 +36,10 @@ type = "optional"
 versionRange = "${emi_version_range}"
 ordering = "AFTER"
 side = "CLIENT"
+
+[[dependencies.${ mod_id }]]
+modId = "guideme"
+type = "required"
+versionRange = "${guideme_version_range}"
+ordering = "AFTER"
+side = "BOTH"
