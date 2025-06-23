@@ -59,13 +59,13 @@ item_ids:
 	</PaddedBox>
 </FloatingColumn>
 
-Floppy disks allow you to store the circuit in a [microchip](microchips.md) and then program it onto another microchip
+Floppy disks allow you to store the circuit in a [Microchip](microchips.md) and then program it onto another microchip
 with ease.
 
 By pressing **<KeyBind id="key.sneak" />** + **<KeyBind id="key.use" />** on a microchip while holding a floppy disk,
 it will store the microchip's circuit into the floppy disk.
 
 Once a circuit has been stored in the floppy disk, you can press **<KeyBind id="key.use" />** on a microchip to install
-it, given that you have the logic components and redstone bits necessary. Items in [logic arrays](logic_arrays.md)
+it, given that you have the logic components and redstone bits necessary. Items in [Logic Arrays](logic_arrays.md)
 count as items in your inventory for the sake of installing circuits. The items required to install the circuit will
 display above the hotbar when looking at a microchip with a floppy disk in hand.
