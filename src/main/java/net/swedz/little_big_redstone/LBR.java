@@ -7,6 +7,7 @@ import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent;
 import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
+import net.swedz.little_big_redstone.guide.LBRGuide;
 import net.swedz.little_big_redstone.microchip.awareness.AwarenessTypes;
 import net.swedz.little_big_redstone.microchip.object.logic.LogicTypes;
 import net.swedz.little_big_redstone.network.LBRPackets;
@@ -41,6 +42,7 @@ public final class LBR
 		LBRCreativeTabs.init(bus);
 		LBRMenus.init(bus);
 		LBRRecipeTypes.init(bus);
+		LBRGuide.init();
 		
 		bus.addListener(RegisterPayloadHandlersEvent.class, LBRPackets::init);
 		
