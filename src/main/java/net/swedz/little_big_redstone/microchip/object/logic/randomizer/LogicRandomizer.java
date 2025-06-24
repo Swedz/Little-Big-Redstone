@@ -30,7 +30,7 @@ public final class LogicRandomizer extends LogicComponent<LogicRandomizer, Logic
 			.group(
 					LogicRandomizerConfig.CODEC.fieldOf("config").forGetter(LogicRandomizer::config),
 					DyeColor.CODEC.optionalFieldOf("color").forGetter(LogicRandomizer::color),
-					Codec.intRange(-1, 7).optionalFieldOf("outputIndex", -1).forGetter(LogicRandomizer::outputIndex)
+					Codec.intRange(-1, 9).optionalFieldOf("outputIndex", -1).forGetter(LogicRandomizer::outputIndex)
 			)
 			.apply(instance, LogicRandomizer::new));
 	
