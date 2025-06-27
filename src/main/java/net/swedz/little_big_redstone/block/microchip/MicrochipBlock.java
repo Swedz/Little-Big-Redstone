@@ -128,7 +128,10 @@ public final class MicrochipBlock extends Block implements TickableBlock, DyeCol
 		
 		var delta = neighborPos.subtract(pos);
 		Direction neighborDirection = Direction.fromDelta(delta.getX(), delta.getY(), delta.getZ());
-		blockEntity.microchip().awarenesses().neighborChanged(new AwarenessContext(blockEntity), neighborBlock, neighborPos, neighborDirection, movedByPiston);
+		if(neighborDirection != null)
+		{
+			blockEntity.microchip().awarenesses().neighborChanged(new AwarenessContext(blockEntity), neighborBlock, neighborPos, neighborDirection, movedByPiston);
+		}
 	}
 	
 	@Override
