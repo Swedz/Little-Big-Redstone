@@ -213,12 +213,12 @@ public final class LogicConfigScreen extends AbstractContainerScreen<LogicConfig
 	
 	private void save()
 	{
-		new WriteLogicConfigPacket(menu.blockPos(), logicEntry.slot(), logicEntry.component()).sendToServer();
+		new WriteLogicConfigPacket(menu.blockPos(), logicEntry.slot(), logicEntry.component(), menu.returnViewPosition()).sendToServer();
 	}
 	
 	private void cancel()
 	{
-		new RequestMicrochipMenuPacket(menu.blockPos()).sendToServer();
+		new RequestMicrochipMenuPacket(menu.blockPos(), menu.returnViewPosition()).sendToServer();
 	}
 	
 	@Override

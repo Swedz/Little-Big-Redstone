@@ -12,15 +12,19 @@ import net.swedz.little_big_redstone.LBR;
 import net.swedz.little_big_redstone.block.microchip.MicrochipBlockEntity;
 import net.swedz.little_big_redstone.gui.logicconfig.LogicConfigMenu;
 import net.swedz.little_big_redstone.gui.microchip.MicrochipMenu;
+import net.swedz.little_big_redstone.gui.microchip.MicrochipViewPosition;
 import net.swedz.little_big_redstone.microchip.object.logic.LogicEntry;
 import net.swedz.little_big_redstone.network.LBRCustomPacket;
 import net.swedz.tesseract.neoforge.packet.PacketContext;
 
-public record OpenLogicConfigPacket(int containerId, int slot) implements LBRCustomPacket
+public record OpenLogicConfigPacket(
+		int containerId, int slot, MicrochipViewPosition returnViewPosition
+) implements LBRCustomPacket
 {
 	public static final StreamCodec<ByteBuf, OpenLogicConfigPacket> STREAM_CODEC = StreamCodec.composite(
 			ByteBufCodecs.VAR_INT, OpenLogicConfigPacket::containerId,
 			ByteBufCodecs.VAR_INT, OpenLogicConfigPacket::slot,
+			MicrochipViewPosition.STREAM_CODEC, OpenLogicConfigPacket::returnViewPosition,
 			OpenLogicConfigPacket::new
 	);
 	
@@ -54,13 +58,14 @@ public record OpenLogicConfigPacket(int containerId, int slot) implements LBRCus
 								@Override
 								public AbstractContainerMenu createMenu(int containerId, Inventory playerInventory, Player player)
 								{
-									return new LogicConfigMenu(containerId, playerInventory, menu.blockPos(), () -> menu.stillValid(player) && microchip.components().values().contains(entry), entry);
+									return new LogicConfigMenu(containerId, playerInventory, menu.blockPos(), () -> menu.stillValid(player) && microchip.components().values().contains(entry), entry, returnViewPosition);
 								}
 							},
 							(buf) ->
 							{
 								buf.writeBlockPos(menu.blockPos());
 								LogicEntry.STREAM_CODEC.encode(buf, entry);
+								MicrochipViewPosition.STREAM_CODEC.encode(buf, returnViewPosition);
 							}
 					);
 				}

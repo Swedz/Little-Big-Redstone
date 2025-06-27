@@ -23,6 +23,7 @@ import net.swedz.little_big_redstone.LBR;
 import net.swedz.little_big_redstone.LBRBlocks;
 import net.swedz.little_big_redstone.client.model.microchip.MicrochipModelData;
 import net.swedz.little_big_redstone.gui.microchip.MicrochipMenu;
+import net.swedz.little_big_redstone.gui.microchip.MicrochipViewPosition;
 import net.swedz.little_big_redstone.microchip.Microchip;
 import net.swedz.little_big_redstone.microchip.MicrochipSize;
 import net.swedz.little_big_redstone.microchip.awareness.AwarenessContext;
@@ -106,10 +107,10 @@ public final class MicrochipBlockEntity extends BlockEntity implements MenuProvi
 	@Override
 	public AbstractContainerMenu createMenu(int containerId, Inventory inventory, Player player)
 	{
-		return new MicrochipMenu(containerId, inventory, worldPosition, this::isMenuValid, microchip, this.color());
+		return new MicrochipMenu(containerId, inventory, worldPosition, this::isMenuValid, microchip, this.color(), new MicrochipViewPosition());
 	}
 	
-	public boolean openMenu(Player player)
+	public boolean openMenu(Player player, MicrochipViewPosition viewPosition)
 	{
 		if(this.isMenuValid(player))
 		{
@@ -118,10 +119,16 @@ public final class MicrochipBlockEntity extends BlockEntity implements MenuProvi
 				buf.writeBlockPos(worldPosition);
 				Microchip.STREAM_CODEC.encode(buf, microchip);
 				DyeColor.STREAM_CODEC.encode(buf, this.color());
+				MicrochipViewPosition.STREAM_CODEC.encode(buf, viewPosition);
 			});
 			return true;
 		}
 		return false;
+	}
+	
+	public boolean openMenu(Player player)
+	{
+		return this.openMenu(player, new MicrochipViewPosition());
 	}
 	
 	@Override

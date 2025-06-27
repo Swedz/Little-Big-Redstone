@@ -35,13 +35,16 @@ public final class MicrochipMenu extends PlayerInventoryContainerMenu
 	private final Microchip                 microchip;
 	private final DyeColor                  color;
 	
+	private final MicrochipViewPosition viewPosition;
+	
 	private final MicrochipLogicArrayItemHandler logicArrayItemHandler;
 	
 	private int        carriedComponentSlot = -1;
 	private List<Wire> carriedWires;
 	
 	public MicrochipMenu(int containerId, Inventory playerInventory,
-						 BlockPos blockPos, Function<Player, Boolean> validChecker, Microchip microchip, DyeColor color)
+						 BlockPos blockPos, Function<Player, Boolean> validChecker, Microchip microchip, DyeColor color,
+						 MicrochipViewPosition viewPosition)
 	{
 		super(LBRMenus.MICROCHIP.get(), containerId);
 		
@@ -49,6 +52,8 @@ public final class MicrochipMenu extends PlayerInventoryContainerMenu
 		this.validChecker = validChecker;
 		this.microchip = microchip;
 		this.color = color;
+		
+		this.viewPosition = viewPosition;
 		
 		logicArrayItemHandler = new MicrochipLogicArrayItemHandler(this, playerInventory.player);
 		this.setupInventory(playerInventory);
@@ -63,6 +68,7 @@ public final class MicrochipMenu extends PlayerInventoryContainerMenu
 		this.validChecker = null;
 		this.microchip = Microchip.STREAM_CODEC.decode(buf);
 		this.color = DyeColor.STREAM_CODEC.decode(buf);
+		this.viewPosition = MicrochipViewPosition.STREAM_CODEC.decode(buf);
 		
 		logicArrayItemHandler = new MicrochipLogicArrayItemHandler(this, playerInventory.player);
 		this.setupInventory(playerInventory);
@@ -89,6 +95,11 @@ public final class MicrochipMenu extends PlayerInventoryContainerMenu
 	public DyeColor color()
 	{
 		return color;
+	}
+	
+	public MicrochipViewPosition viewPosition()
+	{
+		return viewPosition;
 	}
 	
 	public MicrochipLogicArrayItemHandler getLogicArrayItemHandler()

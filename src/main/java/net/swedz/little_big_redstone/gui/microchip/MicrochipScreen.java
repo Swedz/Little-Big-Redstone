@@ -64,7 +64,7 @@ public final class MicrochipScreen extends AbstractContainerScreen<MicrochipMenu
 	{
 		super.init();
 		
-		this.addRenderableWidget(microchipWidget = new MicrochipWidget(leftPos + 8, topPos + 8, this, microchipWidget));
+		this.addRenderableWidget(microchipWidget = new MicrochipWidget(leftPos + 8, topPos + 8, this, menu.viewPosition()));
 	}
 	
 	@Override
@@ -115,8 +115,8 @@ public final class MicrochipScreen extends AbstractContainerScreen<MicrochipMenu
 		{
 			var microchip = menu.microchip();
 			var size = microchip.size();
-			int boardMouseX = size.boardCoord(localX, microchipWidget.zoom(), microchipWidget.offsetX());
-			int boardMouseY = size.boardCoord(localY, microchipWidget.zoom(), microchipWidget.offsetY());
+			int boardMouseX = size.boardCoord(localX, microchipWidget.viewPosition().zoom(), microchipWidget.viewPosition().x());
+			int boardMouseY = size.boardCoord(localY, microchipWidget.viewPosition().zoom(), microchipWidget.viewPosition().y());
 			
 			var graphics = new TesseractGuiGraphics(vanilla);
 			
@@ -124,8 +124,8 @@ public final class MicrochipScreen extends AbstractContainerScreen<MicrochipMenu
 			graphics.pose().pushPose();
 			graphics.pose().translate(8, 8, 0);
 			graphics.pose().scale(size.scale(), size.scale(), 0);
-			graphics.pose().scale(microchipWidget.zoom(), microchipWidget.zoom(), 0);
-			graphics.pose().translate(-microchipWidget.offsetX(), -microchipWidget.offsetY(), 0);
+			graphics.pose().scale(microchipWidget.viewPosition().zoom(), microchipWidget.viewPosition().zoom(), 0);
+			graphics.pose().translate(-microchipWidget.viewPosition().x(), -microchipWidget.viewPosition().y(), 0);
 			
 			if(stack.getItem() instanceof StickyNoteItem)
 			{
