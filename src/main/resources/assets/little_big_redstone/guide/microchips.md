@@ -43,6 +43,9 @@ Microchips are blocks that can have [logic](logic/introduction.md) placed inside
 [Wires](redstone_bits.md) can be placed between logic to allow signals to be carried from one logic component to
 another.
 
+While in the microchip menu, you can zoom in and out using the scroll wheel. Holding left-click and dragging will move
+the view area of the circuit.
+
 ### Directions
 
 When using logic components that take input from or output to the world, you will need to set the direction it uses.
