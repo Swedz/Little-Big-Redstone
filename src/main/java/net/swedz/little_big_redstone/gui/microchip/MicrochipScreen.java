@@ -1,5 +1,6 @@
 package net.swedz.little_big_redstone.gui.microchip;
 
+import com.mojang.blaze3d.platform.InputConstants;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
@@ -13,6 +14,7 @@ import net.swedz.little_big_redstone.LBRClientShaders;
 import net.swedz.little_big_redstone.LBRComponents;
 import net.swedz.little_big_redstone.LBRItemDisplayContext;
 import net.swedz.little_big_redstone.LBRItems;
+import net.swedz.little_big_redstone.block.microchip.MicrochipBlockEntity;
 import net.swedz.little_big_redstone.gui.logicarray.slot.LogicArrayPlayerSlot;
 import net.swedz.little_big_redstone.gui.microchip.logic.LogicRenderer;
 import net.swedz.little_big_redstone.gui.microchip.logic.LogicRenderers;
@@ -62,7 +64,14 @@ public final class MicrochipScreen extends AbstractContainerScreen<MicrochipMenu
 	{
 		super.init();
 		
-		this.addRenderableWidget(microchipWidget = new MicrochipWidget(leftPos + 8, topPos + 8, this));
+		this.addRenderableWidget(microchipWidget = new MicrochipWidget(leftPos + 8, topPos + 8, this, microchipWidget));
+	}
+	
+	@Override
+	public boolean mouseDragged(double mouseX, double mouseY, int button, double dragX, double dragY)
+	{
+		boolean drag = this.getFocused() != null && this.isDragging() && button == InputConstants.MOUSE_BUTTON_LEFT && this.getFocused().mouseDragged(mouseX, mouseY, button, dragX, dragY);
+		return drag || super.mouseDragged(mouseX, mouseY, button, dragX, dragY);
 	}
 	
 	@Override
@@ -106,14 +115,17 @@ public final class MicrochipScreen extends AbstractContainerScreen<MicrochipMenu
 		{
 			var microchip = menu.microchip();
 			var size = microchip.size();
-			int boardMouseX = size.boardCoord(localX);
-			int boardMouseY = size.boardCoord(localY);
+			int boardMouseX = size.boardCoord(localX, microchipWidget.zoom(), microchipWidget.offsetX());
+			int boardMouseY = size.boardCoord(localY, microchipWidget.zoom(), microchipWidget.offsetY());
 			
 			var graphics = new TesseractGuiGraphics(vanilla);
 			
+			vanilla.enableScissor(microchipWidget.x(), microchipWidget.y(), microchipWidget.x() + MicrochipBlockEntity.CIRCUIT_BOUNDS.width(), microchipWidget.y() + MicrochipBlockEntity.CIRCUIT_BOUNDS.height());
 			graphics.pose().pushPose();
 			graphics.pose().translate(8, 8, 0);
-			graphics.pose().scale(size.scale(), size.scale(), size.scale());
+			graphics.pose().scale(size.scale(), size.scale(), 0);
+			graphics.pose().scale(microchipWidget.zoom(), microchipWidget.zoom(), 0);
+			graphics.pose().translate(-microchipWidget.offsetX(), -microchipWidget.offsetY(), 0);
 			
 			if(stack.getItem() instanceof StickyNoteItem)
 			{
@@ -125,6 +137,7 @@ public final class MicrochipScreen extends AbstractContainerScreen<MicrochipMenu
 				graphics.renderItem(stack, LBRItemDisplayContext.MICROCHIP_GUI, itemX, itemY);
 				
 				graphics.pose().popPose();
+				vanilla.disableScissor();
 				return;
 			}
 			else if(stack.has(LBRComponents.LOGIC))
@@ -139,6 +152,7 @@ public final class MicrochipScreen extends AbstractContainerScreen<MicrochipMenu
 				this.renderCarriedLogic(graphics, logicX, logicY, context, component);
 				
 				graphics.pose().popPose();
+				vanilla.disableScissor();
 				return;
 			}
 			else if(stack.is(LBRItems.REDSTONE_BIT.asItem()))
@@ -154,10 +168,12 @@ public final class MicrochipScreen extends AbstractContainerScreen<MicrochipMenu
 				graphics.renderItemDecorations(stack, boardMouseX - 8, boardMouseY - 8);
 				
 				graphics.pose().popPose();
+				vanilla.disableScissor();
 				return;
 			}
 			
 			graphics.pose().popPose();
+			vanilla.disableScissor();
 		}
 		
 		super.renderFloatingItem(vanilla, stack, localX, localY, text);

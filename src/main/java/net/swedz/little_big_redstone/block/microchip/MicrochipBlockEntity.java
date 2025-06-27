@@ -30,6 +30,7 @@ import net.swedz.little_big_redstone.microchip.awareness.AwarenessTypes;
 import net.swedz.little_big_redstone.microchip.object.logic.LogicContext;
 import net.swedz.little_big_redstone.network.packet.UpdateComponentsMicrochipPacket;
 import net.swedz.little_big_redstone.network.packet.UpdateMicrochipPacket;
+import net.swedz.tesseract.neoforge.api.Bounds;
 import net.swedz.tesseract.neoforge.api.Tickable;
 import net.swedz.tesseract.neoforge.packet.CustomPacket;
 
@@ -37,6 +38,8 @@ import java.util.function.Function;
 
 public final class MicrochipBlockEntity extends BlockEntity implements MenuProvider, Tickable
 {
+	public static final Bounds CIRCUIT_BOUNDS = new Bounds(0, 0, 240, 128);
+	
 	private final Microchip microchip;
 	
 	private boolean            modelDataChanged = true;
@@ -46,7 +49,7 @@ public final class MicrochipBlockEntity extends BlockEntity implements MenuProvi
 	{
 		super(LBRBlocks.MICROCHIP_ENTITY.get(), pos, blockState);
 		
-		microchip = new Microchip(MicrochipSize.create(0.5f));
+		microchip = new Microchip(MicrochipSize.create(CIRCUIT_BOUNDS, 0.5f));
 	}
 	
 	public Microchip microchip()
