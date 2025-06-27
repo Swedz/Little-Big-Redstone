@@ -363,7 +363,7 @@ public final class MicrochipGuidebookScene extends LytBox implements ExportableR
 			
 			context.renderPanel(bounds);
 			
-			graphics.pose().translate(bounds.x() + PANEL_MARGIN, bounds.y() + PANEL_MARGIN, 0);
+			graphics.pose().translate(bounds.x() + PANEL_MARGIN, bounds.y() + PANEL_MARGIN, 10);
 			
 			panel.render(graphics);
 			
