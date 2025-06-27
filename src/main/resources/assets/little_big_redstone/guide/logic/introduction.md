@@ -34,8 +34,11 @@ the specific output. For example, Q₁, Q₂, and so on. However, in most cases 
 
 ### Using Logic
 
-Logic can be placed or picked up in a [Microchip](../microchips.md)'s interface using left-click. To configure a logic
-component (if there is anything to configure), you can use right-click on it. This will open a menu that you can
-change the settings for the component. Every component's settings are described in their corresponding page.
+Logic can be placed or picked up in a [Microchip](../microchips.md)'s interface using left-click. While holding logic in your
+cursor, you can hold the ctrl key to snap its placement to a grid.
+
+To configure a logic component (if there is anything to configure), you can use right-click on it. This will open a
+menu that you can change the settings for the component. Every component's settings are described in their
+corresponding page.
 
 For information on how to connect logic together using their ports, see the page on [wires](../redstone_bits.md).
