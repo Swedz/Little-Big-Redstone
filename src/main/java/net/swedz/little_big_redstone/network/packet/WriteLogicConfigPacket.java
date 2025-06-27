@@ -10,16 +10,18 @@ import net.neoforged.neoforge.items.ItemHandlerHelper;
 import net.swedz.little_big_redstone.LBR;
 import net.swedz.little_big_redstone.LBRItems;
 import net.swedz.little_big_redstone.block.microchip.MicrochipBlockEntity;
+import net.swedz.little_big_redstone.gui.microchip.MicrochipViewPosition;
 import net.swedz.little_big_redstone.microchip.object.logic.LogicComponent;
 import net.swedz.little_big_redstone.network.LBRCustomPacket;
 import net.swedz.tesseract.neoforge.packet.PacketContext;
 
-public record WriteLogicConfigPacket(BlockPos pos, int slot, LogicComponent component) implements LBRCustomPacket
+public record WriteLogicConfigPacket(BlockPos pos, int slot, LogicComponent component, MicrochipViewPosition returnViewPosition) implements LBRCustomPacket
 {
 	public static final StreamCodec<ByteBuf, WriteLogicConfigPacket> STREAM_CODEC = StreamCodec.composite(
 			BlockPos.STREAM_CODEC, WriteLogicConfigPacket::pos,
 			ByteBufCodecs.VAR_INT, WriteLogicConfigPacket::slot,
 			LogicComponent.STREAM_CODEC, WriteLogicConfigPacket::component,
+			MicrochipViewPosition.STREAM_CODEC, WriteLogicConfigPacket::returnViewPosition,
 			WriteLogicConfigPacket::new
 	);
 	
@@ -46,7 +48,7 @@ public record WriteLogicConfigPacket(BlockPos pos, int slot, LogicComponent comp
 				}
 				microchip.markDirty();
 				
-				blockEntity.openMenu(player);
+				blockEntity.openMenu(player, returnViewPosition);
 			}
 			else
 			{

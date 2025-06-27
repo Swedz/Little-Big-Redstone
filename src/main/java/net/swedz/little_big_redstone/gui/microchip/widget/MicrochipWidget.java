@@ -24,6 +24,7 @@ import net.swedz.little_big_redstone.block.microchip.MicrochipBlockEntity;
 import net.swedz.little_big_redstone.client.model.logic.LogicBakingModelData;
 import net.swedz.little_big_redstone.gui.microchip.MicrochipMenu;
 import net.swedz.little_big_redstone.gui.microchip.MicrochipScreen;
+import net.swedz.little_big_redstone.gui.microchip.MicrochipViewPosition;
 import net.swedz.little_big_redstone.gui.microchip.logic.DyeComponentResult;
 import net.swedz.little_big_redstone.gui.microchip.logic.LogicRenderer;
 import net.swedz.little_big_redstone.gui.microchip.logic.LogicRenderers;
@@ -56,22 +57,14 @@ public final class MicrochipWidget implements GuiEventListener, Renderable, Narr
 	
 	private MicrochipWidgetContext context = new MicrochipWidgetContext(this, 0, 0);
 	
-	private double offsetX, offsetY;
-	private float zoom = 1;
+	private final MicrochipViewPosition viewPosition;
 	
 	private LogicSelectedPort selectedPort;
 	
 	private boolean allowDragging = true;
 	
-	public MicrochipWidget(int x, int y, MicrochipScreen screen, MicrochipWidget previous)
+	public MicrochipWidget(int x, int y, MicrochipScreen screen, MicrochipViewPosition viewPosition)
 	{
-		if(previous != null)
-		{
-			offsetX = previous.offsetX;
-			offsetY = previous.offsetY;
-			zoom = previous.zoom;
-		}
-		
 		this.screen = screen;
 		this.microchip = screen.getMenu().microchip();
 		
@@ -82,6 +75,9 @@ public final class MicrochipWidget implements GuiEventListener, Renderable, Narr
 		this.y = y + microchip.size().scale(bounds.minY());
 		this.width = bounds.width();
 		this.height = bounds.height();
+		
+		this.viewPosition = viewPosition;
+		this.viewPosition.init(microchip.size(), this.x, this.y);
 	}
 	
 	public int x()
@@ -129,49 +125,9 @@ public final class MicrochipWidget implements GuiEventListener, Renderable, Narr
 		return context;
 	}
 	
-	public double offsetX()
+	public MicrochipViewPosition viewPosition()
 	{
-		return offsetX;
-	}
-	
-	public double offsetY()
-	{
-		return offsetY;
-	}
-	
-	public float zoom()
-	{
-		return zoom;
-	}
-	
-	public void zoom(float amount, double mouseX, double mouseY)
-	{
-		float newZoom = zoom + amount;
-		if(newZoom < 1)
-		{
-			newZoom = 1;
-		}
-		else if(newZoom > 2.5)
-		{
-			newZoom = 2.5f;
-		}
-		if(newZoom == zoom)
-		{
-			return;
-		}
-		
-		double localMouseX = this.toLocalX(mouseX);
-		double localMouseY = this.toLocalY(mouseY);
-		double boardMouseX = microchip.size().boardCoord(localMouseX, zoom, offsetX);
-		double boardMouseY = microchip.size().boardCoord(localMouseY, zoom, offsetY);
-		
-		zoom = Math.round(newZoom * 100) / 100f;
-		
-		double ox = microchip.size().boardCoord(-localMouseX, zoom, boardMouseX);
-		double oy = microchip.size().boardCoord(-localMouseY, zoom, boardMouseY);
-		
-		offsetX = this.clampOffset(ox, MicrochipBlockEntity.CIRCUIT_BOUNDS.width());
-		offsetY = this.clampOffset(oy, MicrochipBlockEntity.CIRCUIT_BOUNDS.height());
+		return viewPosition;
 	}
 	
 	public boolean hasSelectedPort()
@@ -458,7 +414,7 @@ public final class MicrochipWidget implements GuiEventListener, Renderable, Narr
 		   carried.isEmpty() &&
 		   logic.component().config().hasMenu())
 		{
-			new OpenLogicConfigPacket(menu.containerId, logic.slot()).sendToServer();
+			new OpenLogicConfigPacket(menu.containerId, logic.slot(), viewPosition).sendToServer();
 			return true;
 		}
 		
@@ -484,28 +440,10 @@ public final class MicrochipWidget implements GuiEventListener, Renderable, Narr
 	{
 		if(allowDragging)
 		{
-			double ox = offsetX - (dragX / microchip.size().scale() / zoom);
-			double oy = offsetY - (dragY / microchip.size().scale() / zoom);
-			offsetX = this.clampOffset(ox, MicrochipBlockEntity.CIRCUIT_BOUNDS.width());
-			offsetY = this.clampOffset(oy, MicrochipBlockEntity.CIRCUIT_BOUNDS.height());
+			viewPosition.pan(dragX, dragY);
 			return true;
 		}
 		return false;
-	}
-	
-	private double clampOffset(double offset, double bounds)
-	{
-		double circuitBounds = bounds / microchip.size().scale();
-		if(offset < 0)
-		{
-			offset = 0;
-		}
-		double max = circuitBounds - (circuitBounds / zoom);
-		if(offset > max)
-		{
-			offset = max;
-		}
-		return offset;
 	}
 	
 	@Override
@@ -516,8 +454,8 @@ public final class MicrochipWidget implements GuiEventListener, Renderable, Narr
 		if(this.isMouseOver(mouseX, mouseY))
 		{
 			var size = microchip.size();
-			int boardMouseX = size.boardCoord(this.toLocalX(mouseX), zoom, offsetX);
-			int boardMouseY = size.boardCoord(this.toLocalY(mouseY), zoom, offsetY);
+			int boardMouseX = size.boardCoord(this.toLocalX(mouseX), viewPosition.zoom(), viewPosition.x());
+			int boardMouseY = size.boardCoord(this.toLocalY(mouseY), viewPosition.zoom(), viewPosition.y());
 			return allowDragging = !this.mouseClickedOnBoard(mouseX, mouseY, boardMouseX, boardMouseY, button);
 		}
 		else
@@ -536,7 +474,7 @@ public final class MicrochipWidget implements GuiEventListener, Renderable, Narr
 	{
 		if(context.isOnBoard())
 		{
-			this.zoom(scrollY > 0 ? 0.25f : -0.25f, mouseX, mouseY);
+			viewPosition.zoom(scrollY > 0 ? 0.25f : -0.25f, mouseX, mouseY);
 			return true;
 		}
 		return false;
@@ -546,8 +484,8 @@ public final class MicrochipWidget implements GuiEventListener, Renderable, Narr
 	public void render(GuiGraphics vanilla, int mouseX, int mouseY, float partialTick)
 	{
 		var size = microchip.size();
-		int boardMouseX = size.boardCoord(this.toLocalX(mouseX), zoom, offsetX);
-		int boardMouseY = size.boardCoord(this.toLocalY(mouseY), zoom, offsetY);
+		int boardMouseX = size.boardCoord(this.toLocalX(mouseX), viewPosition.zoom(), viewPosition.x());
+		int boardMouseY = size.boardCoord(this.toLocalY(mouseY), viewPosition.zoom(), viewPosition.y());
 		
 		context = MicrochipWidgetContext.test(this, panel, mouseX, mouseY, boardMouseX, boardMouseY, context);
 		
@@ -557,8 +495,8 @@ public final class MicrochipWidget implements GuiEventListener, Renderable, Narr
 		graphics.pose().pushPose();
 		graphics.pose().translate(x, y, 0);
 		graphics.pose().scale(microchip.size().scale(), microchip.size().scale(), 0);
-		graphics.pose().scale(zoom, zoom, 0);
-		graphics.pose().translate(-offsetX, -offsetY, 0);
+		graphics.pose().scale(viewPosition.zoom(), viewPosition.zoom(), 0);
+		graphics.pose().translate(-viewPosition.x(), -viewPosition.y(), 0);
 		panel.render(graphics);
 		graphics.pose().popPose();
 		vanilla.disableScissor();
@@ -669,17 +607,7 @@ public final class MicrochipWidget implements GuiEventListener, Renderable, Narr
 		return x - this.x;
 	}
 	
-	public double toLocalX(double x)
-	{
-		return x - this.x;
-	}
-	
 	public int toLocalY(int y)
-	{
-		return y - this.y;
-	}
-	
-	public double toLocalY(double y)
 	{
 		return y - this.y;
 	}

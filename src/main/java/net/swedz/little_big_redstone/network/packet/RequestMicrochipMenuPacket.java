@@ -6,13 +6,15 @@ import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.server.level.ServerPlayer;
 import net.swedz.little_big_redstone.LBR;
 import net.swedz.little_big_redstone.block.microchip.MicrochipBlockEntity;
+import net.swedz.little_big_redstone.gui.microchip.MicrochipViewPosition;
 import net.swedz.little_big_redstone.network.LBRCustomPacket;
 import net.swedz.tesseract.neoforge.packet.PacketContext;
 
-public record RequestMicrochipMenuPacket(BlockPos pos) implements LBRCustomPacket
+public record RequestMicrochipMenuPacket(BlockPos pos, MicrochipViewPosition viewPosition) implements LBRCustomPacket
 {
 	public static final StreamCodec<ByteBuf, RequestMicrochipMenuPacket> STREAM_CODEC = StreamCodec.composite(
 			BlockPos.STREAM_CODEC, RequestMicrochipMenuPacket::pos,
+			MicrochipViewPosition.STREAM_CODEC, RequestMicrochipMenuPacket::viewPosition,
 			RequestMicrochipMenuPacket::new
 	);
 	
@@ -26,7 +28,7 @@ public record RequestMicrochipMenuPacket(BlockPos pos) implements LBRCustomPacke
 		
 		if(player.level().getBlockEntity(pos) instanceof MicrochipBlockEntity blockEntity)
 		{
-			if(!blockEntity.openMenu(player))
+			if(!blockEntity.openMenu(player, viewPosition))
 			{
 				LBR.LOGGER.warn("Received WriteLogicConfigPacket from {} when too far or not in the same dimension or the block entity is removed, discarding", playerName);
 			}
