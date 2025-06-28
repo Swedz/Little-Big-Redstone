@@ -140,11 +140,7 @@ public final class MicrochipBlock extends Block implements TickableBlock, DyeCol
 		if(!state.is(newState.getBlock()) &&
 		   level.getBlockEntity(pos) instanceof MicrochipBlockEntity blockEntity)
 		{
-			for(var entry : blockEntity.microchip().stickyNotes())
-			{
-				Containers.dropItemStack(level, pos.getX(), pos.getY(), pos.getZ(), entry.toStack());
-			}
-			for(var entry : blockEntity.microchip().components())
+			for(var entry : blockEntity.microchip().objects())
 			{
 				Containers.dropItemStack(level, pos.getX(), pos.getY(), pos.getZ(), entry.toStack());
 			}

@@ -1,5 +1,6 @@
 package net.swedz.little_big_redstone.microchip;
 
+import com.google.common.collect.Iterables;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import io.netty.buffer.ByteBuf;
@@ -109,6 +110,11 @@ public final class Microchip
 	private List<MicrochipObjectContainer<?, ?>> objectContainers()
 	{
 		return List.of(stickyNotes, components);
+	}
+	
+	public Iterable<MicrochipObject> objects()
+	{
+		return Iterables.concat(this.objectContainers());
 	}
 	
 	private MicrochipObjectContainer<?, ?> getContainer(MicrochipObjectContainerType containerType)
