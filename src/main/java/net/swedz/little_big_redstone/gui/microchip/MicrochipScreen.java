@@ -122,15 +122,13 @@ public final class MicrochipScreen extends AbstractContainerScreen<MicrochipMenu
 			
 			vanilla.enableScissor(microchipWidget.x(), microchipWidget.y(), microchipWidget.x() + MicrochipBlockEntity.CIRCUIT_BOUNDS.width(), microchipWidget.y() + MicrochipBlockEntity.CIRCUIT_BOUNDS.height());
 			graphics.pose().pushPose();
-			graphics.pose().translate(8, 8, 0);
-			graphics.pose().scale(size.scale(), size.scale(), 0);
-			graphics.pose().scale(microchipWidget.viewPosition().zoom(), microchipWidget.viewPosition().zoom(), 0);
+			graphics.pose().translate(8, 8, 232);
+			graphics.pose().scale(size.scale(), size.scale(), 1);
+			graphics.pose().scale(microchipWidget.viewPosition().zoom(), microchipWidget.viewPosition().zoom(), 1);
 			graphics.pose().translate(-microchipWidget.viewPosition().x(), -microchipWidget.viewPosition().y(), 0);
 			
 			if(stack.getItem() instanceof StickyNoteItem)
 			{
-				graphics.pose().translate(0, 0, 232);
-				
 				int itemX = Screen.hasControlDown() ? getGridSnappedCoord(boardMouseX) : (boardMouseX - 8);
 				int itemY = Screen.hasControlDown() ? getGridSnappedCoord(boardMouseY) : (boardMouseY - 8);
 				
@@ -157,8 +155,6 @@ public final class MicrochipScreen extends AbstractContainerScreen<MicrochipMenu
 			}
 			else if(stack.is(LBRItems.REDSTONE_BIT.asItem()))
 			{
-				graphics.pose().translate(0, 0, 232);
-				
 				graphics.setTexture(LBR.id("textures/item/redstone_bit.png"));
 				if(!microchipWidget.context().hasPort())
 				{

@@ -494,8 +494,8 @@ public final class MicrochipWidget implements GuiEventListener, Renderable, Narr
 		vanilla.enableScissor(x, y, x + MicrochipBlockEntity.CIRCUIT_BOUNDS.width(), y + MicrochipBlockEntity.CIRCUIT_BOUNDS.height());
 		graphics.pose().pushPose();
 		graphics.pose().translate(x, y, 0);
-		graphics.pose().scale(microchip.size().scale(), microchip.size().scale(), 0);
-		graphics.pose().scale(viewPosition.zoom(), viewPosition.zoom(), 0);
+		graphics.pose().scale(microchip.size().scale(), microchip.size().scale(), 1);
+		graphics.pose().scale(viewPosition.zoom(), viewPosition.zoom(), 1);
 		graphics.pose().translate(-viewPosition.x(), -viewPosition.y(), 0);
 		panel.render(graphics);
 		graphics.pose().popPose();
