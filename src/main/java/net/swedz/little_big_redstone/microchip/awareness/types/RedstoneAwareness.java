@@ -163,6 +163,7 @@ public final class RedstoneAwareness extends MicrochipAwareness<RedstoneAwarenes
 		var pos = context.pos();
 		var state = context.state();
 		
+		boolean[] directionsChanged = new boolean[6];
 		boolean powerChanged = false;
 		for(int index = 0; index < outputPowerEvaluated.length; index++)
 		{
@@ -170,7 +171,7 @@ public final class RedstoneAwareness extends MicrochipAwareness<RedstoneAwarenes
 			if(outputPower[index] != signal)
 			{
 				powerChanged = true;
-				break;
+				directionsChanged[index] = true;
 			}
 		}
 		outputPower = outputPowerEvaluated;
@@ -185,6 +186,14 @@ public final class RedstoneAwareness extends MicrochipAwareness<RedstoneAwarenes
 		{
 			level.setBlock(pos, newState, Block.UPDATE_ALL);
 			level.updateNeighborsAt(pos, state.getBlock());
+			for(int index = 0; index < directionsChanged.length; index++)
+			{
+				if(directionsChanged[index])
+				{
+					var direction = Direction.values()[index];
+					level.updateNeighborsAt(pos.relative(direction), state.getBlock());
+				}
+			}
 		}
 	}
 }
