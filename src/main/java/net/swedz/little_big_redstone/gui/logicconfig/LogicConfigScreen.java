@@ -10,6 +10,7 @@ import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.Mth;
 import net.minecraft.world.entity.player.Inventory;
 import net.neoforged.neoforge.client.gui.widget.ExtendedSlider;
 import net.swedz.little_big_redstone.LBR;
@@ -84,13 +85,30 @@ public final class LogicConfigScreen extends AbstractContainerScreen<LogicConfig
 	@Override
 	public LogicConfigButtonReference addSlider(Component prefix, Component suffix, Component tooltip, int x, int y, int width, int height, double minValue, double maxValue, double currentValue, double stepSize, int precision, BiFunction<Double, String, Component> valueStringifier, Consumer<Double> onChange)
 	{
+		boolean isInteger = Mth.equal(stepSize, Math.floor(stepSize));
 		var widget = new ExtendedSlider(configX + x, configY + y, width, height, prefix, suffix, minValue, maxValue, currentValue, stepSize, precision, true)
 		{
+			private String typed = "";
+			
 			@Override
 			protected void updateMessage()
 			{
 				this.setMessage(Component.literal("").append(prefix).append(valueStringifier.apply(this.getValue(), this.getValueString())).append(suffix));
 				onChange.accept(minValue + (value * (maxValue - minValue)));
+			}
+			
+			@Override
+			public void onClick(double mouseX, double mouseY)
+			{
+				super.onClick(mouseX, mouseY);
+				typed = this.getValueString();
+			}
+			
+			@Override
+			protected void onDrag(double mouseX, double mouseY, double dragX, double dragY)
+			{
+				super.onDrag(mouseX, mouseY, dragX, dragY);
+				typed = this.getValueString();
 			}
 			
 			@Override
@@ -115,6 +133,27 @@ public final class LogicConfigScreen extends AbstractContainerScreen<LogicConfig
 						step *= 10;
 					}
 					this.setValue(this.getValue() + step * stepSize);
+					typed = this.getValueString();
+					return false;
+				}
+				
+				if(isInteger)
+				{
+					if(keyCode >= GLFW.GLFW_KEY_0 && keyCode <= GLFW.GLFW_KEY_9)
+					{
+						int number = keyCode - GLFW.GLFW_KEY_0;
+						typed += number;
+						this.setValue(Integer.parseInt(typed));
+						typed = this.getValueString();
+						return false;
+					}
+					else if(keyCode == GLFW.GLFW_KEY_BACKSPACE && !typed.isEmpty())
+					{
+						typed = typed.substring(0, typed.length() - 1);
+						this.setValue(typed.isEmpty() ? 0 : Integer.parseInt(typed));
+						typed = this.getValueString();
+						return false;
+					}
 				}
 				
 				return false;
@@ -140,6 +179,7 @@ public final class LogicConfigScreen extends AbstractContainerScreen<LogicConfig
 					step *= 10;
 				}
 				this.setValue(this.getValue() + step * stepSize);
+				typed = "";
 				
 				return true;
 			}
@@ -148,7 +188,6 @@ public final class LogicConfigScreen extends AbstractContainerScreen<LogicConfig
 		this.addRenderableWidget(widget);
 		return new LogicConfigButtonReference<Double>()
 		{
-			
 			@Override
 			public void setText(Component text)
 			{
