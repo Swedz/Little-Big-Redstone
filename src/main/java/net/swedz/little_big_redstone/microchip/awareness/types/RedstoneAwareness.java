@@ -163,8 +163,8 @@ public final class RedstoneAwareness extends MicrochipAwareness<RedstoneAwarenes
 		var pos = context.pos();
 		var state = context.state();
 		
-		boolean[] directionsChanged = new boolean[6];
 		boolean powerChanged = false;
+		boolean[] directionsChanged = new boolean[6];
 		for(int index = 0; index < outputPowerEvaluated.length; index++)
 		{
 			int signal = outputPowerEvaluated[index];
