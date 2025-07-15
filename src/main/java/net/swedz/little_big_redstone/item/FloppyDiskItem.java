@@ -24,8 +24,10 @@ import net.swedz.little_big_redstone.LBRItems;
 import net.swedz.little_big_redstone.LBRText;
 import net.swedz.little_big_redstone.block.microchip.MicrochipBlockEntity;
 import net.swedz.little_big_redstone.microchip.Microchip;
+import net.swedz.little_big_redstone.microchip.object.logic.LogicEntry;
 import net.swedz.little_big_redstone.microchip.object.logic.LogicType;
 import net.swedz.little_big_redstone.network.packet.FloppyDiskGuiOverlayUpdatePacket;
+import net.swedz.tesseract.neoforge.api.tuple.Pair;
 import net.swedz.tesseract.neoforge.event.PlayerInventoryChangeEvent;
 import net.swedz.tesseract.neoforge.helper.TransferHelper;
 
@@ -54,7 +56,27 @@ public final class FloppyDiskItem extends Item implements DyeColoredItem
 		return color;
 	}
 	
-	public static ConsumeResult consumeItems(Player player, Microchip.Immutable microchip, boolean simulate)
+	/**
+	 * Gets a structured map of components for each color needed to replicate a microchip.
+	 * <br><br>
+	 * Each logic type for a color is mapped to a count of how many components of that type and color are needed.
+	 *
+	 * @param microchip the microchip
+	 * @return the components of the microchip compiled into a map
+	 */
+	private static Map<Pair<LogicType<?>, Optional<DyeColor>>, Integer> getComponentsNeeded(Microchip.Immutable microchip)
+	{
+		Map<Pair<LogicType<?>, Optional<DyeColor>>, Integer> componentsNeeded = Maps.newHashMap();
+		for(var entry : microchip.components())
+		{
+			var component = entry.component();
+			Pair<LogicType<?>, Optional<DyeColor>> key = new Pair<>(component.type(), (Optional<DyeColor>) component.color());
+			componentsNeeded.compute(key, (__, value) -> value == null ? 1 : (value + 1));
+		}
+		return componentsNeeded;
+	}
+	
+	public static ConsumeResult consumeItems(Player player, Microchip.Immutable microchip, Microchip.Immutable targetMicrochip, boolean simulate)
 	{
 		if(player.hasInfiniteMaterials())
 		{
@@ -64,39 +86,46 @@ public final class FloppyDiskItem extends Item implements DyeColoredItem
 		List<ItemStack> presentItems = Lists.newArrayList();
 		List<ItemStack> missingItems = Lists.newArrayList();
 		
-		int extracted = TransferHelper.extractAny(player.getInventory(), (item) -> item.is(LBRItems.REDSTONE_BIT.get()), microchip.wireCount(), true, simulate);
-		if(extracted != microchip.wireCount())
+		int totalWiresNeeded = microchip.wireCount();
+		int wiresReused = Math.min(totalWiresNeeded, targetMicrochip.wireCount());
+		int wiresAvailable = wiresReused;
+		wiresAvailable += TransferHelper.extractAny(player.getInventory(), (item) -> item.is(LBRItems.REDSTONE_BIT.get()), totalWiresNeeded - wiresAvailable, true, simulate);
+		if(wiresAvailable != microchip.wireCount())
 		{
-			missingItems.add(new ItemStack(LBRItems.REDSTONE_BIT.get(), microchip.wireCount() - extracted));
+			missingItems.add(new ItemStack(LBRItems.REDSTONE_BIT.get(), totalWiresNeeded - wiresAvailable));
 		}
-		if(extracted > 0)
+		if(wiresAvailable > 0)
 		{
-			presentItems.add(new ItemStack(LBRItems.REDSTONE_BIT.get(), extracted));
+			presentItems.add(new ItemStack(LBRItems.REDSTONE_BIT.get(), wiresAvailable));
 		}
 		
-		Map<LogicType<?>, Map<Optional<DyeColor>, Integer>> componentsNeeded = Maps.newHashMap();
-		for(var entry : microchip.components())
+		var componentsNeeded = getComponentsNeeded(microchip);
+		List<Integer> logicReused = Lists.newArrayList();
+		for(var entry : componentsNeeded.entrySet())
 		{
-			var component = entry.component();
-			componentsNeeded.compute(component.type(), (__, value) ->
+			LogicType type = entry.getKey().a();
+			var dye = entry.getKey().b();
+			int totalLogicNeeded = entry.getValue();
+			
+			// Check if there is logic already available in the microchip
+			int logicAvailable = 0;
+			for(LogicEntry reuseEntry : targetMicrochip.components())
 			{
-				if(value == null)
+				var component = reuseEntry.component();
+				if(component.type().equals(type) &&
+				   component.color().equals(dye))
 				{
-					value = Maps.newHashMap();
+					logicReused.add(reuseEntry.slot());
+					if(++logicAvailable == totalLogicNeeded)
+					{
+						break;
+					}
 				}
-				value.compute((Optional<DyeColor>) component.color(), (___, count) ->
-						count == null ? 1 : count + 1);
-				return value;
-			});
-		}
-		for(var typeEntry : componentsNeeded.entrySet())
-		{
-			LogicType type = typeEntry.getKey();
-			for(var dyeEntry : typeEntry.getValue().entrySet())
+			}
+			
+			// If more logic is needed, check the player inventory
+			if(logicAvailable < totalLogicNeeded)
 			{
-				var dye = dyeEntry.getKey();
-				int count = dyeEntry.getValue();
-				
 				Predicate<ItemStack> predicate = (item) ->
 				{
 					if(item.has(LBRComponents.LOGIC))
@@ -107,33 +136,39 @@ public final class FloppyDiskItem extends Item implements DyeColoredItem
 					}
 					return false;
 				};
-				extracted = TransferHelper.extractAny(player.getInventory(), predicate, count, true, simulate);
-				
-				if(extracted != count)
-				{
-					var component = type.defaultFactory().create();
-					component.setColor(dye);
-					var stack = type.toStack(component);
-					stack.setCount(count - extracted);
-					missingItems.add(stack);
-				}
-				if(extracted > 0)
-				{
-					var component = type.defaultFactory().create();
-					component.setColor(dye);
-					var stack = type.toStack(component);
-					stack.setCount(extracted);
-					presentItems.add(stack);
-				}
+				logicAvailable += TransferHelper.extractAny(player.getInventory(), predicate, totalLogicNeeded - logicAvailable, true, simulate);
+			}
+			
+			// Not enough logic available
+			if(logicAvailable != totalLogicNeeded)
+			{
+				var component = type.defaultFactory().create();
+				component.setColor(dye);
+				var stack = type.toStack(component);
+				stack.setCount(totalLogicNeeded - logicAvailable);
+				missingItems.add(stack);
+			}
+			// There is some logic available
+			if(logicAvailable > 0)
+			{
+				var component = type.defaultFactory().create();
+				component.setColor(dye);
+				var stack = type.toStack(component);
+				stack.setCount(logicAvailable);
+				presentItems.add(stack);
 			}
 		}
 		
-		return new ConsumeResult(presentItems, missingItems);
+		return new ConsumeResult(presentItems, missingItems, wiresReused, logicReused);
 	}
 	
-	public record ConsumeResult(List<ItemStack> present, List<ItemStack> missing) implements Iterable<ItemStack>
+	public record ConsumeResult(
+			List<ItemStack> present, List<ItemStack> missing,
+			int wiresReused, List<Integer> logicReused
+	) implements Iterable<ItemStack>
 	{
-		public ConsumeResult(List<ItemStack> present, List<ItemStack> missing)
+		public ConsumeResult(List<ItemStack> present, List<ItemStack> missing,
+							 int wiresReused, List<Integer> logicReused)
 		{
 			present = Lists.newArrayList(present);
 			missing = Lists.newArrayList(missing);
@@ -141,11 +176,13 @@ public final class FloppyDiskItem extends Item implements DyeColoredItem
 			missing.sort(Comparator.comparingInt(ItemStack::getCount).reversed());
 			this.present = Collections.unmodifiableList(present);
 			this.missing = Collections.unmodifiableList(missing);
+			this.wiresReused = wiresReused;
+			this.logicReused = logicReused;
 		}
 		
 		public ConsumeResult()
 		{
-			this(List.of(), List.of());
+			this(List.of(), List.of(), 0, List.of());
 		}
 		
 		public boolean isSuccess()
@@ -165,14 +202,20 @@ public final class FloppyDiskItem extends Item implements DyeColoredItem
 		}
 	}
 	
-	private static void dropAll(Player player, Microchip microchip)
+	private static void dropAll(Player player, Microchip microchip, ConsumeResult result)
 	{
 		for(var entry : microchip.components())
 		{
-			ItemHandlerHelper.giveItemToPlayer(player, entry.toStack());
+			if(!result.logicReused().contains(entry.slot()))
+			{
+				ItemHandlerHelper.giveItemToPlayer(player, entry.toStack());
+			}
 		}
-		var redstoneBits = new ItemStack(LBRItems.REDSTONE_BIT, microchip.wires().values().size());
-		ItemHandlerHelper.giveItemToPlayer(player, redstoneBits);
+		int wiresToDrop = microchip.wires().values().size() - result.wiresReused();
+		if(wiresToDrop > 0)
+		{
+			ItemHandlerHelper.giveItemToPlayer(player, new ItemStack(LBRItems.REDSTONE_BIT, wiresToDrop));
+		}
 	}
 	
 	@SubscribeEvent(priority = EventPriority.LOWEST)
@@ -189,11 +232,12 @@ public final class FloppyDiskItem extends Item implements DyeColoredItem
 					var blockEntity = event.getLevel().getBlockEntity(event.getPos());
 					if(blockEntity instanceof MicrochipBlockEntity microchipBlockEntity)
 					{
-						var missingItems = consumeItems(player, microchip, true);
-						if(missingItems.isSuccess())
+						var targetMicrochip = microchipBlockEntity.microchip().immutable();
+						var result = consumeItems(player, microchip, targetMicrochip, true);
+						if(result.isSuccess())
 						{
-							consumeItems(player, microchip, false);
-							dropAll(player, microchipBlockEntity.microchip());
+							consumeItems(player, microchip, targetMicrochip, false);
+							dropAll(player, microchipBlockEntity.microchip(), result);
 							microchipBlockEntity.microchip().loadFrom(microchip);
 							player.displayClientMessage(LBRText.FLOPPY_DISK_APPLY_SUCCESS.text(), true);
 						}
@@ -228,16 +272,17 @@ public final class FloppyDiskItem extends Item implements DyeColoredItem
 					}
 					else
 					{
-						if(itemStack.has(LBRComponents.FLOPPY_DISK))
+						if(itemStack.has(LBRComponents.FLOPPY_DISK) && !player.getCooldowns().isOnCooldown(this))
 						{
 							var microchip = itemStack.get(LBRComponents.FLOPPY_DISK);
 							if(microchip != null)
 							{
-								var missingItems = consumeItems(player, microchip, true);
-								if(missingItems.isSuccess())
+								var targetMicrochip = microchipBlockEntity.microchip().immutable();
+								var result = consumeItems(player, microchip, targetMicrochip, true);
+								if(result.isSuccess())
 								{
-									consumeItems(player, microchip, false);
-									dropAll(player, microchipBlockEntity.microchip());
+									consumeItems(player, microchip, targetMicrochip, false);
+									dropAll(player, microchipBlockEntity.microchip(), result);
 									microchipBlockEntity.microchip().loadFrom(microchip);
 									player.displayClientMessage(LBRText.FLOPPY_DISK_APPLY_SUCCESS.text(), true);
 								}
@@ -245,6 +290,7 @@ public final class FloppyDiskItem extends Item implements DyeColoredItem
 								{
 									player.displayClientMessage(LBRText.FLOPPY_DISK_APPLY_FAILURE.text(), true);
 								}
+								player.getCooldowns().addCooldown(this, 20);
 								new FloppyDiskGuiOverlayUpdatePacket(true).sendToClient((ServerPlayer) player);
 							}
 						}

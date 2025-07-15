@@ -1,0 +1,5 @@
+{
+    "net/minecraft/world/entity/player/Player": [
+        "net/swedz/little_big_redstone/block/microchip/MicrochipWatcher"
+    ]
+}

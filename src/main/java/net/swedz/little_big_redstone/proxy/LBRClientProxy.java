@@ -73,4 +73,19 @@ public class LBRClientProxy extends LBRProxy
 	{
 		FloppyDiskConsumeItemsGuiOverlay.update(force);
 	}
+	
+	private Microchip.Immutable watchedMicrochip;
+	
+	@Override
+	public void updateWatchedMicrochip(Microchip microchip)
+	{
+		watchedMicrochip = microchip == null ? null : microchip.immutable();
+		FloppyDiskConsumeItemsGuiOverlay.update(true);
+	}
+	
+	@Override
+	public Microchip.Immutable getWatchedMicrochip()
+	{
+		return watchedMicrochip;
+	}
 }

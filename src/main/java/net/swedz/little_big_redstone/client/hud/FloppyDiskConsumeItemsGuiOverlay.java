@@ -19,7 +19,11 @@ import net.swedz.little_big_redstone.LBRComponents;
 import net.swedz.little_big_redstone.LBRText;
 import net.swedz.little_big_redstone.block.microchip.MicrochipBlockEntity;
 import net.swedz.little_big_redstone.item.FloppyDiskItem;
+import net.swedz.little_big_redstone.microchip.Microchip;
+import net.swedz.little_big_redstone.network.packet.RequestMicrochipWatcherPacket;
+import net.swedz.little_big_redstone.proxy.LBRProxy;
 import net.swedz.tesseract.neoforge.helper.guigraphics.TesseractGuiGraphics;
+import net.swedz.tesseract.neoforge.proxy.Proxies;
 import org.apache.commons.lang3.mutable.MutableInt;
 
 import java.util.List;
@@ -133,26 +137,36 @@ public final class FloppyDiskConsumeItemsGuiOverlay
 		}
 	}
 	
-	private static boolean update(Level level, Player player, BlockPos targetBlock)
+	private static boolean update(Level level, Player player, BlockPos targetBlock, Microchip.Immutable watchedMicrochip)
 	{
-		if(targetBlock != null && level.getBlockEntity(targetBlock) instanceof MicrochipBlockEntity)
+		if(isMicrochip(level, targetBlock) && watchedMicrochip != null)
 		{
-			for(var hand : InteractionHand.values())
+			var stack = getHeldFloppyDisk(player);
+			if(!stack.isEmpty())
 			{
-				var stack = player.getItemInHand(hand);
-				if(stack.has(LBRComponents.FLOPPY_DISK))
+				var microchip = stack.get(LBRComponents.FLOPPY_DISK);
+				if(microchip != null)
 				{
-					var microchip = stack.get(LBRComponents.FLOPPY_DISK);
-					if(microchip != null)
-					{
-						var items = FloppyDiskItem.consumeItems(player, microchip, true);
-						displayItems(items);
-						return true;
-					}
+					var items = FloppyDiskItem.consumeItems(player, microchip, watchedMicrochip, true);
+					displayItems(items);
+					return true;
 				}
 			}
 		}
 		return false;
+	}
+	
+	private static boolean isMicrochip(Level level, BlockPos pos)
+	{
+		return pos != null && level.getBlockEntity(pos) instanceof MicrochipBlockEntity;
+	}
+	
+	private static ItemStack getHeldFloppyDisk(Player player)
+	{
+		var mainHand = player.getItemInHand(InteractionHand.MAIN_HAND);
+		var offHand = player.getItemInHand(InteractionHand.OFF_HAND);
+		return mainHand.has(LBRComponents.FLOPPY_DISK) ? mainHand :
+				offHand.has(LBRComponents.FLOPPY_DISK) ? offHand : ItemStack.EMPTY;
 	}
 	
 	@SubscribeEvent
@@ -163,16 +177,38 @@ public final class FloppyDiskConsumeItemsGuiOverlay
 		{
 			return;
 		}
+		var proxy = Proxies.get(LBRProxy.class);
 		var player = Minecraft.getInstance().player;
 		int selectedSlot = player.getInventory().selected;
 		var targetBlock = Minecraft.getInstance().hitResult instanceof BlockHitResult hitResult ? hitResult.getBlockPos() : null;
+		var watchedMicrochip = proxy.getWatchedMicrochip();
 		
-		if(SHOULD_FORCE_UPDATE ||
-		   selectedSlot != LAST_SELECTED_SLOT ||
+		if(selectedSlot != LAST_SELECTED_SLOT ||
 		   !Objects.equals(targetBlock, LAST_TARGET_BLOCK_POS))
 		{
+			proxy.updateWatchedMicrochip(null);
+			if(isMicrochip(level, targetBlock))
+			{
+				var floppyDisk = getHeldFloppyDisk(player);
+				if(!floppyDisk.isEmpty())
+				{
+					new RequestMicrochipWatcherPacket(targetBlock, true).sendToServer();
+				}
+				else if(watchedMicrochip != null)
+				{
+					new RequestMicrochipWatcherPacket(targetBlock, false).sendToServer();
+				}
+			}
+			else if(watchedMicrochip != null)
+			{
+				new RequestMicrochipWatcherPacket(targetBlock, false).sendToServer();
+			}
+		}
+		else if(SHOULD_FORCE_UPDATE ||
+				watchedMicrochip == null)
+		{
 			SHOULD_FORCE_UPDATE = false;
-			if(!update(level, player, targetBlock))
+			if(!update(level, player, targetBlock, watchedMicrochip))
 			{
 				SHOULD_FADE = true;
 			}

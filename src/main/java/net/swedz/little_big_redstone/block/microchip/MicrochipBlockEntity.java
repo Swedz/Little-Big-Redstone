@@ -29,13 +29,15 @@ import net.swedz.little_big_redstone.microchip.MicrochipSize;
 import net.swedz.little_big_redstone.microchip.awareness.AwarenessContext;
 import net.swedz.little_big_redstone.microchip.awareness.AwarenessTypes;
 import net.swedz.little_big_redstone.microchip.object.logic.LogicContext;
-import net.swedz.little_big_redstone.network.packet.UpdateComponentsMicrochipPacket;
-import net.swedz.little_big_redstone.network.packet.UpdateMicrochipPacket;
+import net.swedz.little_big_redstone.network.packet.UpdateComponentsMicrochipMenuPacket;
+import net.swedz.little_big_redstone.network.packet.UpdateMicrochipMenuPacket;
+import net.swedz.little_big_redstone.network.packet.UpdateMicrochipWatcherPacket;
 import net.swedz.tesseract.neoforge.api.Bounds;
 import net.swedz.tesseract.neoforge.api.Tickable;
 import net.swedz.tesseract.neoforge.packet.CustomPacket;
 
 import java.util.function.Function;
+import java.util.function.Supplier;
 
 public final class MicrochipBlockEntity extends BlockEntity implements MenuProvider, Tickable
 {
@@ -162,24 +164,37 @@ public final class MicrochipBlockEntity extends BlockEntity implements MenuProvi
 					modelData = newModelData;
 					this.sync();
 				}
-				this.publishUpdatePacket((container) -> new UpdateMicrochipPacket(container, microchip));
+				this.publishUpdatePacket(
+						(container) -> new UpdateMicrochipMenuPacket(container, microchip),
+						() -> new UpdateMicrochipWatcherPacket(microchip)
+				);
 			}
 			else if(contextDirty)
 			{
-				this.publishUpdatePacket((container) -> new UpdateComponentsMicrochipPacket(container, context.getDirtyEntries()));
+				this.publishUpdatePacket((container) -> new UpdateComponentsMicrochipMenuPacket(container, context.getDirtyEntries()));
 			}
 		}
 	}
 	
-	private void publishUpdatePacket(Function<Integer, CustomPacket> packetCreator)
+	private void publishUpdatePacket(Function<Integer, CustomPacket> containerPacketCreator, Supplier<CustomPacket> watcherPacketCreator)
 	{
 		for(var player : level.players())
 		{
 			if(player.containerMenu instanceof MicrochipMenu menu && worldPosition.equals(menu.blockPos()))
 			{
-				packetCreator.apply(menu.containerId).sendToClient((ServerPlayer) player);
+				containerPacketCreator.apply(menu.containerId).sendToClient((ServerPlayer) player);
+			}
+			
+			if(worldPosition.equals(player.getWatchedMicrochip()) && watcherPacketCreator != null)
+			{
+				watcherPacketCreator.get().sendToClient((ServerPlayer) player);
 			}
 		}
+	}
+	
+	private void publishUpdatePacket(Function<Integer, CustomPacket> containerPacketCreator)
+	{
+		this.publishUpdatePacket(containerPacketCreator, null);
 	}
 	
 	@Override

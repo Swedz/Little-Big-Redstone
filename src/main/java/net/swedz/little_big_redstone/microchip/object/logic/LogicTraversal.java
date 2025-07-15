@@ -73,6 +73,10 @@ public final class LogicTraversal
 			if(wiresUsed.add(wire))
 			{
 				var targetEntry = microchip.components().get(wire.input().slot());
+				if(targetEntry == null)
+				{
+					continue;
+				}
 				int existingTargetIndex = order.indexOf(targetEntry);
 				if(existingTargetIndex >= 0)
 				{

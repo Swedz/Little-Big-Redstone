@@ -11,12 +11,12 @@ import net.swedz.tesseract.neoforge.proxy.Proxies;
 
 import java.util.List;
 
-public record UpdateComponentsMicrochipPacket(int containerId, List<LogicEntry> entries) implements LBRCustomPacket
+public record UpdateComponentsMicrochipMenuPacket(int containerId, List<LogicEntry> entries) implements LBRCustomPacket
 {
-	public static final StreamCodec<ByteBuf, UpdateComponentsMicrochipPacket> STREAM_CODEC = StreamCodec.composite(
-			ByteBufCodecs.VAR_INT, UpdateComponentsMicrochipPacket::containerId,
-			LogicEntry.STREAM_CODEC.apply(ByteBufCodecs.list()), UpdateComponentsMicrochipPacket::entries,
-			UpdateComponentsMicrochipPacket::new
+	public static final StreamCodec<ByteBuf, UpdateComponentsMicrochipMenuPacket> STREAM_CODEC = StreamCodec.composite(
+			ByteBufCodecs.VAR_INT, UpdateComponentsMicrochipMenuPacket::containerId,
+			LogicEntry.STREAM_CODEC.apply(ByteBufCodecs.list()), UpdateComponentsMicrochipMenuPacket::entries,
+			UpdateComponentsMicrochipMenuPacket::new
 	);
 	
 	@Override
