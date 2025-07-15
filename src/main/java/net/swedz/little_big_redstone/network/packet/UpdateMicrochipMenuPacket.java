@@ -9,12 +9,12 @@ import net.swedz.little_big_redstone.proxy.LBRProxy;
 import net.swedz.tesseract.neoforge.packet.PacketContext;
 import net.swedz.tesseract.neoforge.proxy.Proxies;
 
-public record UpdateMicrochipPacket(int containerId, Microchip microchip) implements LBRCustomPacket
+public record UpdateMicrochipMenuPacket(int containerId, Microchip microchip) implements LBRCustomPacket
 {
-	public static final StreamCodec<ByteBuf, UpdateMicrochipPacket> STREAM_CODEC = StreamCodec.composite(
-			ByteBufCodecs.VAR_INT, UpdateMicrochipPacket::containerId,
-			Microchip.STREAM_CODEC, UpdateMicrochipPacket::microchip,
-			UpdateMicrochipPacket::new
+	public static final StreamCodec<ByteBuf, UpdateMicrochipMenuPacket> STREAM_CODEC = StreamCodec.composite(
+			ByteBufCodecs.VAR_INT, UpdateMicrochipMenuPacket::containerId,
+			Microchip.STREAM_CODEC, UpdateMicrochipMenuPacket::microchip,
+			UpdateMicrochipMenuPacket::new
 	);
 	
 	@Override

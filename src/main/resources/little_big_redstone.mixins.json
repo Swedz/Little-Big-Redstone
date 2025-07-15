@@ -1,0 +1,13 @@
+{
+    "required": true,
+    "minVersion": "0.8",
+    "package": "net.swedz.little_big_redstone.mixin",
+    "compatibilityLevel": "JAVA_21",
+    "mixins": [
+        "MicrochipWatcherPlayerMixin"
+    ],
+    "client": [],
+    "injectors": {
+        "defaultRequire": 1
+    }
+}

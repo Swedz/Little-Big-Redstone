@@ -10,11 +10,26 @@ import net.swedz.little_big_redstone.microchip.wire.Wire;
 import net.swedz.tesseract.neoforge.api.Assert;
 
 public record WireEndpoints(
+		boolean valid,
 		int startX, int startY,
 		int endX, int endY,
 		boolean usePadding, boolean powered, int argb
 )
 {
+	public WireEndpoints(
+			int startX, int startY,
+			int endX, int endY,
+			boolean usePadding, boolean powered, int argb
+	)
+	{
+		this(true, startX, startY, endX, endY, usePadding, powered, argb);
+	}
+	
+	public WireEndpoints()
+	{
+		this(false, 0, 0, 0, 0, false, false, 0);
+	}
+	
 	private static int getColor(LogicComponent<?, ?> output, DyeColor fallback)
 	{
 		return LogicBakingModelData.get(output).getColorSet(output.color().orElse(fallback)).foreground();
@@ -25,6 +40,10 @@ public record WireEndpoints(
 									boolean usePadding,
 									DyeColor fallbackColor)
 	{
+		if(output == null || input == null)
+		{
+			return new WireEndpoints();
+		}
 		return new WireEndpoints(
 				output.size().wireOutStartX(outputX),
 				output.size().wireOutStartY(outputY, outputIndex, output.outputs()),
@@ -54,6 +73,10 @@ public record WireEndpoints(
 									boolean usePadding,
 									DyeColor fallbackColor)
 	{
+		if(output == null || input == null)
+		{
+			return new WireEndpoints();
+		}
 		return of(
 				output.x(), output.y(), output.component(), outputIndex,
 				input.x(), input.y(), input.component(), inputIndex,

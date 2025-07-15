@@ -13,6 +13,9 @@ logoFile = "assets/${mod_id}/logo.png"
 displayURL = "${mod_github}"
 enumExtensions = "${mod_id}.enumextensions.json"
 
+[[mixins]]
+config = "${mod_id}.mixins.json"
+
 [[accessTransformers]]
 file = "${mod_id}.accesstransformer.cfg"
 

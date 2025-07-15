@@ -26,4 +26,13 @@ public class LBRProxy implements Proxy
 	public void floppyDiskGuiOverlayUpdate(boolean force)
 	{
 	}
+	
+	public void updateWatchedMicrochip(Microchip microchip)
+	{
+	}
+	
+	public Microchip.Immutable getWatchedMicrochip()
+	{
+		throw new UnsupportedOperationException("getWatchedMicrochip() can only be called on the client");
+	}
 }
