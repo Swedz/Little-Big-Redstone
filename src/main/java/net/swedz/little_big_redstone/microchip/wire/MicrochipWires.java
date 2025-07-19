@@ -222,8 +222,16 @@ public final class MicrochipWires implements Iterable<Wire>
 	public void loadFrom(MicrochipWires other)
 	{
 		wires = Lists.newArrayList(other.wires);
-		wiresByOutputSlot = Maps.newHashMap(other.wiresByOutputSlot);
-		wiresByInputSlot = Maps.newHashMap(other.wiresByInputSlot);
+		wiresByOutputSlot = Maps.newHashMap();
+		for(var entry : other.wiresByOutputSlot.entrySet())
+		{
+			wiresByOutputSlot.put(entry.getKey(), Sets.newHashSet(entry.getValue()));
+		}
+		wiresByInputSlot = Maps.newHashMap();
+		for(var entry : other.wiresByInputSlot.entrySet())
+		{
+			wiresByInputSlot.put(entry.getKey(), Sets.newHashSet(entry.getValue()));
+		}
 	}
 	
 	public void clear()
