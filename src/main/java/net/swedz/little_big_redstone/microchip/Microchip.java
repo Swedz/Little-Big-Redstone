@@ -1,6 +1,7 @@
 package net.swedz.little_big_redstone.microchip;
 
 import com.google.common.collect.Iterables;
+import com.google.common.collect.Lists;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import io.netty.buffer.ByteBuf;
@@ -63,6 +64,7 @@ public final class Microchip
 		this.awarenesses = new MicrochipAwarenesses();
 		this.awarenesses.rebuild(this);
 		this.awarenesses.load(this);
+		removeDanglingWires(this.wires, this.components);
 	}
 	
 	public Microchip(MicrochipSize size)
@@ -253,6 +255,29 @@ public final class Microchip
 	}
 	
 	/**
+	 * Removes all wires with no valid connections. This is used to clear out invalid wires when loading Microchips.
+	 * Helps prevent tampered program files creating broken states when loaded into a {@link FloppyDiskItem}.
+	 *
+	 * @param wires the wires of the microchip
+	 * @param components the components of the microchip
+	 * @return true if any dangling wires were removed, false otherwise
+	 */
+	private static boolean removeDanglingWires(MicrochipWires wires, LogicComponents components)
+	{
+		boolean removed = false;
+		for(var wire : Lists.newArrayList(wires))
+		{
+			if(!components.has(wire.output().slot()) ||
+			   !components.has(wire.input().slot()))
+			{
+				wires.remove(wire);
+				removed = true;
+			}
+		}
+		return removed;
+	}
+	
+	/**
 	 * <p>An immutable copy of a {@link Microchip}. Used for storing a program in a
 	 * {@link FloppyDiskItem}.</p>
 	 */
@@ -285,6 +310,7 @@ public final class Microchip
 			this.stickyNotes = stickyNotes != null ? stickyNotes : new MicrochipStickyNotes(null);
 			this.components = components != null ? components : new LogicComponents(null);
 			this.wires = wires != null ? wires : new MicrochipWires(null);
+			removeDanglingWires(this.wires, this.components);
 		}
 		
 		/**
