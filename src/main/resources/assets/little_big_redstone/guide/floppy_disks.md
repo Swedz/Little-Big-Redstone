@@ -70,7 +70,7 @@ it, given that you have the logic components and redstone bits necessary. Items 
 count as items in your inventory for the sake of installing programs. The items required to install the program will
 display above the hotbar when looking at a microchip with a floppy disk in hand.
 
-Circuits can be saved and loaded to and from your local computer too! Open the menu for this by pressing
+Programs can be saved and loaded to and from your local computer too! Open the menu for this by pressing
 **<KeyBind id="key.use" />** while holding a floppy disk (and not looking at a microchip). The "Save" button will save
 the currently stored program to a file with the name you provide in the "Program Name" text box. Similarly, the "Load"
 button will load the program from the file with the name provided. If there is not an existing file with this name, the
