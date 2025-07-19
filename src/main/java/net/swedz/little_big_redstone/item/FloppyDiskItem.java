@@ -215,6 +215,10 @@ public final class FloppyDiskItem extends Item implements DyeColoredItem
 	
 	private static void dropAll(Player player, Microchip microchip, ConsumeResult result)
 	{
+		if(player.hasInfiniteMaterials())
+		{
+			return;
+		}
 		for(var entry : microchip.components())
 		{
 			if(!result.logicReused().contains(entry.slot()))
