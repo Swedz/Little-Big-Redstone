@@ -59,21 +59,20 @@ item_ids:
 	</PaddedBox>
 </FloatingColumn>
 
-Floppy disks allow you to store the circuit in a [Microchip](microchips.md) and then program it onto another microchip
+Floppy disks allow you to store the program in a [Microchip](microchips.md) and then install it onto another microchip
 with ease.
 
 By pressing **<KeyBind id="key.sneak" />** + **<KeyBind id="key.use" />** on a microchip while holding a floppy disk,
-it will store the microchip's circuit into the floppy disk.
+it will store the microchip's program into the floppy disk.
 
-Once a circuit has been stored in the floppy disk, you can press **<KeyBind id="key.use" />** on a microchip to install
+Once a program has been stored in the floppy disk, you can press **<KeyBind id="key.use" />** on a microchip to install
 it, given that you have the logic components and redstone bits necessary. Items in [Logic Arrays](logic_arrays.md)
-count as items in your inventory for the sake of installing circuits. The items required to install the circuit will
+count as items in your inventory for the sake of installing programs. The items required to install the program will
 display above the hotbar when looking at a microchip with a floppy disk in hand.
 
 Circuits can be saved and loaded to and from your local computer too! Open the menu for this by pressing
 **<KeyBind id="key.use" />** while holding a floppy disk (and not looking at a microchip). The "Save" button will save
-the currently stored circuit to a file with the name you provide in the "Program Name" text box. The "Load" button will
-load the circuit from the file with the name provided in the "Circuit Name" text box. If there is not an existing file
-for this name, the "Load" button will not be clickable. Saved circuits are stored in the
-**/little_big_redstone/microchips** directory in your game directory. These files are accessible across worlds and
-servers.
+the currently stored program to a file with the name you provide in the "Program Name" text box. Similarly, the "Load"
+button will load the program from the file with the name provided. If there is not an existing file with this name, the
+"Load" button will not be clickable. Saved programs are stored in the **/little_big_redstone/microchips** directory in
+your game directory. These files are accessible across worlds and servers.
