@@ -21,6 +21,7 @@ import net.swedz.little_big_redstone.LBRText;
 import net.swedz.little_big_redstone.microchip.Microchip;
 import net.swedz.little_big_redstone.network.packet.FloppyDiskLoadPacket;
 import net.swedz.tesseract.neoforge.api.Assert;
+import net.swedz.tesseract.neoforge.gui.widget.AutoFillEditBox;
 import net.swedz.tesseract.neoforge.helper.guigraphics.TesseractGuiGraphics;
 
 import java.io.IOException;
