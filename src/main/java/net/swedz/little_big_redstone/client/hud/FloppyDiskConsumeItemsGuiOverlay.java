@@ -4,7 +4,6 @@ import net.minecraft.client.DeltaTracker;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.core.BlockPos;
-import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
@@ -141,7 +140,7 @@ public final class FloppyDiskConsumeItemsGuiOverlay
 	{
 		if(isMicrochip(level, targetBlock) && watchedMicrochip != null)
 		{
-			var stack = getHeldFloppyDisk(player);
+			var stack = FloppyDiskItem.getHeldStack(player);
 			if(!stack.isEmpty())
 			{
 				var microchip = stack.get(LBRComponents.FLOPPY_DISK);
@@ -159,14 +158,6 @@ public final class FloppyDiskConsumeItemsGuiOverlay
 	private static boolean isMicrochip(Level level, BlockPos pos)
 	{
 		return pos != null && level.getBlockEntity(pos) instanceof MicrochipBlockEntity;
-	}
-	
-	private static ItemStack getHeldFloppyDisk(Player player)
-	{
-		var mainHand = player.getItemInHand(InteractionHand.MAIN_HAND);
-		var offHand = player.getItemInHand(InteractionHand.OFF_HAND);
-		return mainHand.has(LBRComponents.FLOPPY_DISK) ? mainHand :
-				offHand.has(LBRComponents.FLOPPY_DISK) ? offHand : ItemStack.EMPTY;
 	}
 	
 	@SubscribeEvent
@@ -189,7 +180,7 @@ public final class FloppyDiskConsumeItemsGuiOverlay
 			proxy.updateWatchedMicrochip(null);
 			if(isMicrochip(level, targetBlock))
 			{
-				var floppyDisk = getHeldFloppyDisk(player);
+				var floppyDisk = FloppyDiskItem.getHeldStack(player);
 				if(!floppyDisk.isEmpty())
 				{
 					new RequestMicrochipWatcherPacket(targetBlock, true).sendToServer();

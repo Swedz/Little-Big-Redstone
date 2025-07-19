@@ -1,9 +1,11 @@
 package net.swedz.little_big_redstone.proxy;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.world.InteractionHand;
 import net.minecraft.world.item.DyeColor;
 import net.swedz.little_big_redstone.LBR;
 import net.swedz.little_big_redstone.client.hud.FloppyDiskConsumeItemsGuiOverlay;
+import net.swedz.little_big_redstone.gui.floppydisk.FloppyDiskScreen;
 import net.swedz.little_big_redstone.gui.microchip.MicrochipScreen;
 import net.swedz.little_big_redstone.gui.stickynote.edit.StickyNoteEditScreen;
 import net.swedz.little_big_redstone.gui.stickynote.view.StickyNoteViewScreen;
@@ -87,5 +89,11 @@ public class LBRClientProxy extends LBRProxy
 	public Microchip.Immutable getWatchedMicrochip()
 	{
 		return watchedMicrochip;
+	}
+	
+	@Override
+	public void openFloppyDisk(InteractionHand hand)
+	{
+		Minecraft.getInstance().setScreen(new FloppyDiskScreen(hand));
 	}
 }

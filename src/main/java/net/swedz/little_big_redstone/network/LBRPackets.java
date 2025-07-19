@@ -7,6 +7,7 @@ import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
 import net.swedz.little_big_redstone.LBR;
 import net.swedz.little_big_redstone.network.packet.DyeMicrochipObjectPacket;
 import net.swedz.little_big_redstone.network.packet.FloppyDiskGuiOverlayUpdatePacket;
+import net.swedz.little_big_redstone.network.packet.FloppyDiskLoadPacket;
 import net.swedz.little_big_redstone.network.packet.OpenLogicConfigPacket;
 import net.swedz.little_big_redstone.network.packet.PlaceTakeMicrochipObjectPacket;
 import net.swedz.little_big_redstone.network.packet.PlaceTakeMicrochipWirePacket;
@@ -37,6 +38,7 @@ public final class LBRPackets
 	{
 		create("dye_microchip_object", DyeMicrochipObjectPacket.class, DyeMicrochipObjectPacket.STREAM_CODEC);
 		create("floppy_disk_gui_overlay_update", FloppyDiskGuiOverlayUpdatePacket.class, FloppyDiskGuiOverlayUpdatePacket.STREAM_CODEC);
+		create("floppy_disk_load", FloppyDiskLoadPacket.class, FloppyDiskLoadPacket.STREAM_CODEC);
 		create("open_logic_config", OpenLogicConfigPacket.class, OpenLogicConfigPacket.STREAM_CODEC);
 		create("place_take_microchip_object", PlaceTakeMicrochipObjectPacket.class, PlaceTakeMicrochipObjectPacket.STREAM_CODEC);
 		create("place_take_microchip_wire", PlaceTakeMicrochipWirePacket.class, PlaceTakeMicrochipWirePacket.STREAM_CODEC);

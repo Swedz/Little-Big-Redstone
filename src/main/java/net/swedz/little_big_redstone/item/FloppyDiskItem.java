@@ -21,15 +21,18 @@ import net.neoforged.neoforge.items.ItemHandlerHelper;
 import net.swedz.little_big_redstone.LBR;
 import net.swedz.little_big_redstone.LBRComponents;
 import net.swedz.little_big_redstone.LBRItems;
+import net.swedz.little_big_redstone.LBRTags;
 import net.swedz.little_big_redstone.LBRText;
 import net.swedz.little_big_redstone.block.microchip.MicrochipBlockEntity;
 import net.swedz.little_big_redstone.microchip.Microchip;
 import net.swedz.little_big_redstone.microchip.object.logic.LogicEntry;
 import net.swedz.little_big_redstone.microchip.object.logic.LogicType;
 import net.swedz.little_big_redstone.network.packet.FloppyDiskGuiOverlayUpdatePacket;
+import net.swedz.little_big_redstone.proxy.LBRProxy;
 import net.swedz.tesseract.neoforge.api.tuple.Pair;
 import net.swedz.tesseract.neoforge.event.PlayerInventoryChangeEvent;
 import net.swedz.tesseract.neoforge.helper.TransferHelper;
+import net.swedz.tesseract.neoforge.proxy.Proxies;
 
 import java.util.Collections;
 import java.util.Comparator;
@@ -54,6 +57,14 @@ public final class FloppyDiskItem extends Item implements DyeColoredItem
 	public DyeColor color()
 	{
 		return color;
+	}
+	
+	public static ItemStack getHeldStack(Player player)
+	{
+		var mainHand = player.getItemInHand(InteractionHand.MAIN_HAND);
+		var offHand = player.getItemInHand(InteractionHand.OFF_HAND);
+		return mainHand.is(LBRTags.Items.FLOPPY_DISKS) ? mainHand :
+				offHand.is(LBRTags.Items.FLOPPY_DISKS) ? offHand : ItemStack.EMPTY;
 	}
 	
 	/**
@@ -305,13 +316,17 @@ public final class FloppyDiskItem extends Item implements DyeColoredItem
 	@Override
 	public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand usedHand)
 	{
+		var stack = player.getItemInHand(usedHand);
 		if(player.isShiftKeyDown())
 		{
-			player.getItemInHand(usedHand).remove(LBRComponents.FLOPPY_DISK);
+			stack.remove(LBRComponents.FLOPPY_DISK);
 			player.displayClientMessage(LBRText.FLOPPY_DISK_CLEAR.text(), true);
-			return InteractionResultHolder.sidedSuccess(player.getItemInHand(usedHand), level.isClientSide());
 		}
-		return super.use(level, player, usedHand);
+		else if(level.isClientSide())
+		{
+			Proxies.get(LBRProxy.class).openFloppyDisk(usedHand);
+		}
+		return InteractionResultHolder.sidedSuccess(stack, level.isClientSide());
 	}
 	
 	@Override

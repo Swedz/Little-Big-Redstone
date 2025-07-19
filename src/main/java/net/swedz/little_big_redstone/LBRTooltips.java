@@ -128,7 +128,8 @@ public final class LBRTooltips
 					line(LBRText.FLOPPY_DISK_HELP_1),
 					Component.empty(),
 					line(LBRText.FLOPPY_DISK_HELP_2).arg("sneak", KEYBIND_PARSER).arg("use", KEYBIND_PARSER),
-					line(LBRText.FLOPPY_DISK_HELP_3).arg("use", KEYBIND_PARSER)
+					line(LBRText.FLOPPY_DISK_HELP_3).arg("use", KEYBIND_PARSER),
+					line(LBRText.FLOPPY_DISK_HELP_4).arg("use", KEYBIND_PARSER)
 			)
 	);
 	
