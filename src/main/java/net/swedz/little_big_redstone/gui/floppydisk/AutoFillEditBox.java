@@ -144,7 +144,7 @@ public class AutoFillEditBox extends EditBox
 	{
 		super.renderWidget(graphics, mouseX, mouseY, partialTick);
 		
-		if(this.isVisible() && !matchingFillOptions.isEmpty())
+		if(this.isVisible() && this.isFocused() && !matchingFillOptions.isEmpty())
 		{
 			int endIndex = Math.min(matchingFillOptions.size(), viewOptionIndex + optionsToDisplay);
 			
