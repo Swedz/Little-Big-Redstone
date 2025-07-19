@@ -72,7 +72,7 @@ display above the hotbar when looking at a microchip with a floppy disk in hand.
 
 Circuits can be saved and loaded to and from your local computer too! Open the menu for this by pressing
 **<KeyBind id="key.use" />** while holding a floppy disk (and not looking at a microchip). The "Save" button will save
-the currently stored circuit to a file with the name you provide in the "Circuit Name" text box. The "Load" button will
+the currently stored circuit to a file with the name you provide in the "Program Name" text box. The "Load" button will
 load the circuit from the file with the name provided in the "Circuit Name" text box. If there is not an existing file
 for this name, the "Load" button will not be clickable. Saved circuits are stored in the
 **/little_big_redstone/microchips** directory in your game directory. These files are accessible across worlds and
