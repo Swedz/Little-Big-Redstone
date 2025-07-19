@@ -108,7 +108,12 @@ public final class FloppyDiskScreen extends Screen
 	
 	private static List<String> getExistingFiles()
 	{
-		try (var files = Files.list(path()))
+		var path = path();
+		if(!Files.exists(path))
+		{
+			return List.of();
+		}
+		try (var files = Files.list(path))
 		{
 			return files
 					.filter(Files::isRegularFile)
