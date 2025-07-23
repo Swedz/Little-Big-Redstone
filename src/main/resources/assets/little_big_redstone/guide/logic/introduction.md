@@ -42,3 +42,10 @@ menu that you can change the settings for the component. Every component's setti
 corresponding page.
 
 For information on how to connect logic together using their ports, see the page on [wires](../redstone_bits.md).
+
+Logic components can be dyed separately from the microchip, but by default they will inherit the color of the microchip
+they are placed into. To dye logic components, you can either do so in your crafting grid as you would normally, or you
+can right click the logic in the menu with the dye to apply it.
+
+Similarly, you can use a water bucket or snowballs to clear the color from the logic component. Note that snowballs
+will be consumed, whereas water buckets will not.
