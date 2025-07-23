@@ -13,6 +13,11 @@ import net.swedz.little_big_redstone.LBR;
 import net.swedz.little_big_redstone.entity.stickynote.StickyNoteEntity;
 import net.swedz.little_big_redstone.network.packet.PickStickyNotePacket;
 
+/**
+ * Because the entity/block picking process in vanilla is entirely client sided, and the client is not aware of the
+ * text content of a sticky note (to avoid excess network load), the client has to request the server to give the
+ * sticky note item to it.
+ */
 @EventBusSubscriber(modid = LBR.ID, bus = EventBusSubscriber.Bus.GAME, value = Dist.CLIENT)
 public final class StickyNoteEntityPicker
 {
