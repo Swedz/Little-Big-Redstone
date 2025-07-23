@@ -125,6 +125,21 @@ public final class StickyNoteEntity extends HangingEntity
 		this.playSound(SoundEvents.WOOL_PLACE, 1, 1);
 	}
 	
+	public ItemStack asItem(boolean includeData)
+	{
+		var stack = LBRItems.stickyNote(color).get().getDefaultInstance();
+		if(includeData)
+		{
+			stack.set(LBRComponents.STICKY_NOTE, note);
+			stack.set(LBRComponents.STICKY_NOTE_TEXT_COLOR, textColor);
+			if(itemName != null)
+			{
+				stack.set(DataComponents.CUSTOM_NAME, itemName);
+			}
+		}
+		return stack;
+	}
+	
 	@Override
 	public void dropItem(Entity breaker)
 	{
@@ -135,21 +150,8 @@ public final class StickyNoteEntity extends HangingEntity
 			{
 				return;
 			}
-			var stack = LBRItems.stickyNote(color).get().getDefaultInstance();
-			stack.set(LBRComponents.STICKY_NOTE, note);
-			stack.set(LBRComponents.STICKY_NOTE_TEXT_COLOR, textColor);
-			if(itemName != null)
-			{
-				stack.set(DataComponents.CUSTOM_NAME, itemName);
-			}
-			this.spawnAtLocation(stack);
+			this.spawnAtLocation(this.asItem(true));
 		}
-	}
-	
-	@Override
-	public ItemStack getPickResult()
-	{
-		return LBRItems.stickyNote(color).get().getDefaultInstance();
 	}
 	
 	@Override
