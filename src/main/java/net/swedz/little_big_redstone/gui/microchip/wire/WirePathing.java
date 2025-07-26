@@ -151,8 +151,11 @@ public final class WirePathing
 					neighbor.h = neighbor.distanceTo(end);
 					neighbor.parent = current;
 					
-					open.enqueue(neighbor);
-					neighbor.open = true;
+					if(notOpen)
+					{
+						open.enqueue(neighbor);
+						neighbor.open = true;
+					}
 				}
 			}
 		}
@@ -264,7 +267,10 @@ public final class WirePathing
 		
 		public int distanceTo(Node other)
 		{
-			return (int) (Math.pow(x - other.x, 2) + Math.pow(y - other.y, 2));
+			// This encourages straight lines and diagonals over any other kind of path
+			int dx = Math.abs(x - other.x);
+			int dy = Math.abs(y - other.y);
+			return 10 * (dx + dy) + (14 - 2 * 10) * Math.min(dx, dy);
 		}
 		
 		public Position immutable()
