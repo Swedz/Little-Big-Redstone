@@ -2,6 +2,7 @@ package net.swedz.little_big_redstone.proxy;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.world.InteractionHand;
+import net.minecraft.world.item.ItemStack;
 import net.swedz.little_big_redstone.LBR;
 import net.swedz.little_big_redstone.client.hud.FloppyDiskConsumeItemsGuiOverlay;
 import net.swedz.little_big_redstone.gui.floppydisk.FloppyDiskScreen;
@@ -95,5 +96,16 @@ public class LBRClientProxy extends LBRProxy
 	public void openFloppyDisk(InteractionHand hand)
 	{
 		Minecraft.getInstance().setScreen(new FloppyDiskScreen(hand));
+	}
+	
+	@Override
+	public void setPickedItem(ItemStack stack)
+	{
+		var minecraft = Minecraft.getInstance();
+		var player = minecraft.player;
+		var inventory = player.getInventory();
+		
+		inventory.setPickedItem(stack);
+		minecraft.gameMode.handleCreativeModeItemAdd(player.getItemInHand(InteractionHand.MAIN_HAND), 36 + inventory.selected);
 	}
 }

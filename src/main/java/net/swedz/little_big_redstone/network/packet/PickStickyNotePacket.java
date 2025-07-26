@@ -3,7 +3,6 @@ package net.swedz.little_big_redstone.network.packet;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
-import net.minecraft.network.protocol.game.ClientboundSetCarriedItemPacket;
 import net.minecraft.server.level.ServerPlayer;
 import net.swedz.little_big_redstone.LBR;
 import net.swedz.little_big_redstone.entity.stickynote.StickyNoteEntity;
@@ -32,17 +31,7 @@ public record PickStickyNotePacket(int entityId, boolean includeData) implements
 			if(level.getEntity(entityId) instanceof StickyNoteEntity entity)
 			{
 				var stack = entity.asItem(includeData);
-				
-				var inventory = player.getInventory();
-				int originalSelectedSlot = inventory.selected;
-				
-				inventory.setPickedItem(stack);
-				
-				if(inventory.selected != originalSelectedSlot)
-				{
-					// We need to update the client about the change of selected slot
-					player.connection.send(new ClientboundSetCarriedItemPacket(inventory.selected));
-				}
+				new PickStickyNoteResponsePacket(stack).sendToClient(player);
 			}
 			else
 			{
