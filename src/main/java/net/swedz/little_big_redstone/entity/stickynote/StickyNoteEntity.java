@@ -353,7 +353,7 @@ public final class StickyNoteEntity extends HangingEntity
 			}
 			
 			var action = player.isShiftKeyDown() ? StickyNotePacket.Action.OPEN_EDIT : StickyNotePacket.Action.OPEN_VIEW;
-			new StickyNotePacket(this.getId(), action, note.text()).sendToClient((ServerPlayer) player);
+			new StickyNotePacket(StickyNotePacket.ReferenceType.ENTITY, this.getId(), action, note.text()).sendToClient((ServerPlayer) player);
 			return InteractionResult.CONSUME;
 		}
 		else

@@ -5,11 +5,13 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.world.item.DyeColor;
 import net.swedz.little_big_redstone.LBR;
+import net.swedz.little_big_redstone.gui.stickynote.reference.StickyNoteReference;
 import net.swedz.tesseract.neoforge.helper.guigraphics.TesseractGuiGraphics;
 
 public abstract class StickyNoteScreen extends Screen
 {
-	protected final int      entityId;
+	protected final StickyNoteReference reference;
+	
 	protected final DyeColor color, textColor;
 	protected final String initialText;
 	
@@ -19,14 +21,15 @@ public abstract class StickyNoteScreen extends Screen
 	protected int contentLeftPos, contentTopPos;
 	protected int maxContentWidth, maxContentHeight;
 	
-	protected StickyNoteScreen(int entityId, DyeColor color, DyeColor textColor, String text)
+	protected StickyNoteScreen(StickyNoteReference reference)
 	{
 		super(GameNarrator.NO_TITLE);
 		
-		this.entityId = entityId;
-		this.color = color;
-		this.textColor = textColor;
-		this.initialText = text;
+		this.reference = reference;
+		
+		this.color = reference.color();
+		this.textColor = reference.textColor();
+		this.initialText = reference.text();
 		
 		uiWidth = 180;
 		uiHeight = 214;
@@ -35,11 +38,6 @@ public abstract class StickyNoteScreen extends Screen
 		contentTopPos = 27;
 		maxContentWidth = 170;
 		maxContentHeight = 126;
-	}
-	
-	public boolean hasEntity()
-	{
-		return entityId != -1;
 	}
 	
 	@Override

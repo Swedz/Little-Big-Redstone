@@ -3,19 +3,26 @@ package net.swedz.little_big_redstone.network.packet;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
-import net.swedz.little_big_redstone.LBR;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.entity.player.Player;
 import net.swedz.little_big_redstone.entity.stickynote.StickyNoteEntity;
-import net.swedz.little_big_redstone.item.stickynote.StickyNote;
+import net.swedz.little_big_redstone.gui.stickynote.reference.EntityStickyNoteReference;
+import net.swedz.little_big_redstone.gui.stickynote.reference.HeldItemStickyNoteReference;
+import net.swedz.little_big_redstone.gui.stickynote.reference.StickyNoteReference;
+import net.swedz.little_big_redstone.item.stickynote.StickyNoteItem;
 import net.swedz.little_big_redstone.network.LBRCustomPacket;
 import net.swedz.little_big_redstone.proxy.LBRProxy;
 import net.swedz.tesseract.neoforge.helper.CodecHelper;
 import net.swedz.tesseract.neoforge.packet.PacketContext;
 import net.swedz.tesseract.neoforge.proxy.Proxies;
 
-public record StickyNotePacket(int entityId, Action action, String text) implements LBRCustomPacket
+public record StickyNotePacket(
+		ReferenceType referenceType, int data, Action action, String text
+) implements LBRCustomPacket
 {
 	public static final StreamCodec<ByteBuf, StickyNotePacket> STREAM_CODEC = StreamCodec.composite(
-			ByteBufCodecs.VAR_INT, StickyNotePacket::entityId,
+			CodecHelper.forEnumStream(ReferenceType.class), StickyNotePacket::referenceType,
+			ByteBufCodecs.VAR_INT, StickyNotePacket::data,
 			CodecHelper.forEnumStream(Action.class), StickyNotePacket::action,
 			ByteBufCodecs.STRING_UTF8, StickyNotePacket::text,
 			StickyNotePacket::new
@@ -34,30 +41,54 @@ public record StickyNotePacket(int entityId, Action action, String text) impleme
 		}
 		
 		var player = context.getPlayer();
-		var playerName = player.getGameProfile().getName();
-		
-		var entity = player.level().getEntity(entityId);
-		if(entity instanceof StickyNoteEntity stickyNote)
+		var reference = referenceType.create(player, data);
+		if(reference != null)
 		{
+			reference = reference.withText(text);
 			if(action.isClientbound())
 			{
-				Proxies.get(LBRProxy.class).openStickyNote(entityId, stickyNote.getColor(), stickyNote.getTextColor(), text, action == Action.OPEN_EDIT);
+				Proxies.get(LBRProxy.class).openStickyNote(reference, action == Action.OPEN_EDIT);
 			}
 			else if(action == Action.DONE_EDIT)
 			{
-				if(entity.distanceTo(player) <= 16)
-				{
-					stickyNote.setNote(new StickyNote(text));
-				}
-				else
-				{
-					LBR.LOGGER.warn("Received StickyNotePacket from {} targeting a far away sticky note, discarding", playerName);
-				}
+				reference.saveServer(player.level(), player);
 			}
 		}
-		else
+	}
+	
+	public enum ReferenceType
+	{
+		ENTITY((player, data) -> player.level().getEntity(data) instanceof StickyNoteEntity entity ? new EntityStickyNoteReference(entity) : null),
+		
+		HELD_ITEM((player, data) ->
 		{
-			LBR.LOGGER.warn("Received StickyNotePacket from {} with an entity id ({}) targeting a non-sticky note entity, discarding", playerName, entityId);
+			var hand = data == 0 ? InteractionHand.MAIN_HAND : InteractionHand.OFF_HAND;
+			var stack = player.getItemInHand(hand);
+			return stack.getItem() instanceof StickyNoteItem ? new HeldItemStickyNoteReference(hand, stack) : null;
+		});
+		
+		private final Factory factory;
+		
+		ReferenceType(Factory factory)
+		{
+			this.factory = factory;
+		}
+		
+		/**
+		 * Creates a sticky note reference for the given type.
+		 *
+		 * @param player the player
+		 * @param data   the data value
+		 * @return the sticky note reference, null if no reference could be made
+		 */
+		public StickyNoteReference create(Player player, int data)
+		{
+			return factory.create(player, data);
+		}
+		
+		private interface Factory
+		{
+			StickyNoteReference create(Player player, int data);
 		}
 	}
 	
