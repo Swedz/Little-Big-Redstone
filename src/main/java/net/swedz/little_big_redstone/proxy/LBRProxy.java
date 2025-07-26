@@ -1,6 +1,7 @@
 package net.swedz.little_big_redstone.proxy;
 
 import net.minecraft.world.InteractionHand;
+import net.minecraft.world.item.ItemStack;
 import net.swedz.little_big_redstone.gui.stickynote.reference.StickyNoteReference;
 import net.swedz.little_big_redstone.microchip.Microchip;
 import net.swedz.little_big_redstone.microchip.object.logic.LogicEntry;
@@ -38,6 +39,10 @@ public class LBRProxy implements Proxy
 	}
 	
 	public void openFloppyDisk(InteractionHand hand)
+	{
+	}
+	
+	public void setPickedItem(ItemStack stack)
 	{
 	}
 }

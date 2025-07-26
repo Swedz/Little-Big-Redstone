@@ -10,6 +10,7 @@ import net.swedz.little_big_redstone.network.packet.FloppyDiskGuiOverlayUpdatePa
 import net.swedz.little_big_redstone.network.packet.FloppyDiskLoadPacket;
 import net.swedz.little_big_redstone.network.packet.OpenLogicConfigPacket;
 import net.swedz.little_big_redstone.network.packet.PickStickyNotePacket;
+import net.swedz.little_big_redstone.network.packet.PickStickyNoteResponsePacket;
 import net.swedz.little_big_redstone.network.packet.PlaceTakeMicrochipObjectPacket;
 import net.swedz.little_big_redstone.network.packet.PlaceTakeMicrochipWirePacket;
 import net.swedz.little_big_redstone.network.packet.RequestMicrochipMenuPacket;
@@ -42,6 +43,7 @@ public final class LBRPackets
 		create("floppy_disk_load", FloppyDiskLoadPacket.class, FloppyDiskLoadPacket.STREAM_CODEC);
 		create("open_logic_config", OpenLogicConfigPacket.class, OpenLogicConfigPacket.STREAM_CODEC);
 		create("pick_sticky_note", PickStickyNotePacket.class, PickStickyNotePacket.STREAM_CODEC);
+		create("pick_sticky_note_response", PickStickyNoteResponsePacket.class, PickStickyNoteResponsePacket.STREAM_CODEC);
 		create("place_take_microchip_object", PlaceTakeMicrochipObjectPacket.class, PlaceTakeMicrochipObjectPacket.STREAM_CODEC);
 		create("place_take_microchip_wire", PlaceTakeMicrochipWirePacket.class, PlaceTakeMicrochipWirePacket.STREAM_CODEC);
 		create("request_microchip_menu", RequestMicrochipMenuPacket.class, RequestMicrochipMenuPacket.STREAM_CODEC);
