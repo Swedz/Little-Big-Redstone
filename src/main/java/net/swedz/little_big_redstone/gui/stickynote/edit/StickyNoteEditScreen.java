@@ -1,12 +1,12 @@
 package net.swedz.little_big_redstone.gui.stickynote.edit;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.network.chat.CommonComponents;
-import net.minecraft.world.item.DyeColor;
 import net.swedz.little_big_redstone.LBRColors;
 import net.swedz.little_big_redstone.gui.stickynote.StickyNoteScreen;
+import net.swedz.little_big_redstone.gui.stickynote.reference.StickyNoteReference;
 import net.swedz.little_big_redstone.gui.stickynote.view.StickyNoteViewScreen;
-import net.swedz.little_big_redstone.network.packet.StickyNotePacket;
 
 import java.util.function.Supplier;
 
@@ -14,9 +14,9 @@ public final class StickyNoteEditScreen extends StickyNoteScreen
 {
 	private final boolean shouldReturnToView;
 	
-	public StickyNoteEditScreen(int entityId, DyeColor color, DyeColor textColor, String text, boolean shouldReturnToView)
+	public StickyNoteEditScreen(StickyNoteReference reference, boolean shouldReturnToView)
 	{
-		super(entityId, color, textColor, text);
+		super(reference);
 		
 		this.shouldReturnToView = shouldReturnToView;
 	}
@@ -43,7 +43,7 @@ public final class StickyNoteEditScreen extends StickyNoteScreen
 	
 	private void close()
 	{
-		minecraft.setScreen(shouldReturnToView ? new StickyNoteViewScreen(entityId, color, textColor, editWidget.note().text()) : null);
+		minecraft.setScreen(shouldReturnToView ? new StickyNoteViewScreen(reference.withText(editWidget.note().text())) : null);
 	}
 	
 	private void done()
@@ -52,7 +52,7 @@ public final class StickyNoteEditScreen extends StickyNoteScreen
 		
 		if(editWidget.note().isTextModified())
 		{
-			new StickyNotePacket(entityId, StickyNotePacket.Action.DONE_EDIT, editWidget.note().text()).sendToServer();
+			reference.withText(editWidget.note().text()).saveClient();
 		}
 	}
 	
@@ -61,8 +61,7 @@ public final class StickyNoteEditScreen extends StickyNoteScreen
 	{
 		editWidget.tick();
 		
-		var entity = minecraft.level.getEntity(entityId);
-		if(entity == null || entity.distanceTo(minecraft.player) > 16)
+		if(!reference.isStillValid(Minecraft.getInstance().level, Minecraft.getInstance().player))
 		{
 			minecraft.setScreen(null);
 		}

@@ -2,12 +2,12 @@ package net.swedz.little_big_redstone.proxy;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.item.DyeColor;
 import net.swedz.little_big_redstone.LBR;
 import net.swedz.little_big_redstone.client.hud.FloppyDiskConsumeItemsGuiOverlay;
 import net.swedz.little_big_redstone.gui.floppydisk.FloppyDiskScreen;
 import net.swedz.little_big_redstone.gui.microchip.MicrochipScreen;
 import net.swedz.little_big_redstone.gui.stickynote.edit.StickyNoteEditScreen;
+import net.swedz.little_big_redstone.gui.stickynote.reference.StickyNoteReference;
 import net.swedz.little_big_redstone.gui.stickynote.view.StickyNoteViewScreen;
 import net.swedz.little_big_redstone.microchip.Microchip;
 import net.swedz.little_big_redstone.microchip.object.logic.LogicEntry;
@@ -57,16 +57,16 @@ public class LBRClientProxy extends LBRProxy
 	}
 	
 	@Override
-	public void openStickyNote(int entityId, DyeColor color, DyeColor textColor, String text, boolean edit)
+	public void openStickyNote(StickyNoteReference reference, boolean edit)
 	{
 		var minecraft = Minecraft.getInstance();
 		if(edit)
 		{
-			minecraft.setScreen(new StickyNoteEditScreen(entityId, color, textColor, text, false));
+			minecraft.setScreen(new StickyNoteEditScreen(reference, false));
 		}
 		else
 		{
-			minecraft.setScreen(new StickyNoteViewScreen(entityId, color, textColor, text));
+			minecraft.setScreen(new StickyNoteViewScreen(reference));
 		}
 	}
 	

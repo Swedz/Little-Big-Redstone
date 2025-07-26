@@ -1,7 +1,7 @@
 package net.swedz.little_big_redstone.proxy;
 
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.item.DyeColor;
+import net.swedz.little_big_redstone.gui.stickynote.reference.StickyNoteReference;
 import net.swedz.little_big_redstone.microchip.Microchip;
 import net.swedz.little_big_redstone.microchip.object.logic.LogicEntry;
 import net.swedz.tesseract.neoforge.proxy.Proxy;
@@ -20,7 +20,7 @@ public class LBRProxy implements Proxy
 	{
 	}
 	
-	public void openStickyNote(int entityId, DyeColor color, DyeColor textColor, String text, boolean edit)
+	public void openStickyNote(StickyNoteReference reference, boolean edit)
 	{
 	}
 	

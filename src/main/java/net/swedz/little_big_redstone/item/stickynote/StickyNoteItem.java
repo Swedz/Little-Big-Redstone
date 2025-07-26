@@ -18,6 +18,7 @@ import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.phys.Vec3;
 import net.swedz.little_big_redstone.LBRComponents;
 import net.swedz.little_big_redstone.entity.stickynote.StickyNoteEntity;
+import net.swedz.little_big_redstone.gui.stickynote.reference.HeldItemStickyNoteReference;
 import net.swedz.little_big_redstone.item.DyeColoredItem;
 import net.swedz.little_big_redstone.proxy.LBRProxy;
 import net.swedz.tesseract.neoforge.helper.DirectionHelper;
@@ -62,9 +63,7 @@ public final class StickyNoteItem extends Item implements DyeColoredItem
 		var stack = player.getItemInHand(hand);
 		if(level.isClientSide())
 		{
-			var note = stack.getOrDefault(LBRComponents.STICKY_NOTE, StickyNote.EMPTY);
-			var textColor = stack.get(LBRComponents.STICKY_NOTE_TEXT_COLOR);
-			Proxies.get(LBRProxy.class).openStickyNote(-1, color, textColor, note.text(), false);
+			Proxies.get(LBRProxy.class).openStickyNote(new HeldItemStickyNoteReference(hand, stack), false);
 		}
 		return InteractionResultHolder.sidedSuccess(stack, level.isClientSide());
 	}
