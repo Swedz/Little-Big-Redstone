@@ -6,8 +6,10 @@ import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.player.Player;
 import net.swedz.little_big_redstone.entity.stickynote.StickyNoteEntity;
+import net.swedz.little_big_redstone.gui.microchip.MicrochipMenu;
 import net.swedz.little_big_redstone.gui.stickynote.reference.EntityStickyNoteReference;
 import net.swedz.little_big_redstone.gui.stickynote.reference.HeldItemStickyNoteReference;
+import net.swedz.little_big_redstone.gui.stickynote.reference.MicrochipStickyNoteReference;
 import net.swedz.little_big_redstone.gui.stickynote.reference.StickyNoteReference;
 import net.swedz.little_big_redstone.item.stickynote.StickyNoteItem;
 import net.swedz.little_big_redstone.network.LBRCustomPacket;
@@ -65,6 +67,19 @@ public record StickyNotePacket(
 			var hand = data == 0 ? InteractionHand.MAIN_HAND : InteractionHand.OFF_HAND;
 			var stack = player.getItemInHand(hand);
 			return stack.getItem() instanceof StickyNoteItem ? new HeldItemStickyNoteReference(hand, stack) : null;
+		}),
+		
+		MICROCHIP((player, data) ->
+		{
+			if(player.containerMenu instanceof MicrochipMenu menu)
+			{
+				var entry = menu.microchip().stickyNotes().get(data);
+				if(entry != null)
+				{
+					return new MicrochipStickyNoteReference(entry);
+				}
+			}
+			return null;
 		});
 		
 		private final Factory factory;

@@ -89,7 +89,8 @@ Sticky Notes are items that can be placed into the world similarly to how item f
 you can place 4 sticky notes with any combination of colors and rotations.
 
 Additionally, sticky notes can be placed inside of [Microchips](microchips.md) in the same way that you place
-[logic](logic/introduction.md). In this way, sticky notes can be used to further organize your logic.
+[logic](logic/introduction.md). In this way, sticky notes can be used to further organize your logic. Sticky notes
+that are placed inside of Microchips can be edited by pressing right-click on it.
 
 ### Reading / Editing
 

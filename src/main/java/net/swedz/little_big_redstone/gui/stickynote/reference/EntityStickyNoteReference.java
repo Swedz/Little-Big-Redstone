@@ -53,7 +53,7 @@ public final class EntityStickyNoteReference implements StickyNoteReference
 	}
 	
 	@Override
-	public void saveClient()
+	public void saveClient(Level level, Player player)
 	{
 		new StickyNotePacket(StickyNotePacket.ReferenceType.ENTITY, entityId, StickyNotePacket.Action.DONE_EDIT, text).sendToServer();
 	}
