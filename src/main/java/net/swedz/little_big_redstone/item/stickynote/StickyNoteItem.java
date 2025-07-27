@@ -63,7 +63,7 @@ public final class StickyNoteItem extends Item implements DyeColoredItem
 		var stack = player.getItemInHand(hand);
 		if(level.isClientSide())
 		{
-			Proxies.get(LBRProxy.class).openStickyNote(new HeldItemStickyNoteReference(hand, stack), false);
+			Proxies.get(LBRProxy.class).openStickyNote(new HeldItemStickyNoteReference(hand, stack), player.isCrouching());
 		}
 		return InteractionResultHolder.sidedSuccess(stack, level.isClientSide());
 	}
