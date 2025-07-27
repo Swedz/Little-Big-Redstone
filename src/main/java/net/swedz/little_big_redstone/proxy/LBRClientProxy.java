@@ -6,6 +6,7 @@ import net.minecraft.world.item.ItemStack;
 import net.swedz.little_big_redstone.LBR;
 import net.swedz.little_big_redstone.client.hud.FloppyDiskConsumeItemsGuiOverlay;
 import net.swedz.little_big_redstone.gui.floppydisk.FloppyDiskScreen;
+import net.swedz.little_big_redstone.gui.microchip.MicrochipMenu;
 import net.swedz.little_big_redstone.gui.microchip.MicrochipScreen;
 import net.swedz.little_big_redstone.gui.stickynote.edit.StickyNoteEditScreen;
 import net.swedz.little_big_redstone.gui.stickynote.reference.StickyNoteReference;
@@ -23,11 +24,14 @@ public class LBRClientProxy extends LBRProxy
 	@Override
 	public void handleUpdateMicrochip(int containerId, Microchip microchip)
 	{
-		if(Minecraft.getInstance().screen instanceof MicrochipScreen screen &&
-		   screen.getMenu().containerId == containerId)
+		if(Minecraft.getInstance().player.containerMenu instanceof MicrochipMenu menu &&
+		   menu.containerId == containerId)
 		{
-			screen.getMenu().microchip().loadFrom(microchip);
-			screen.handleUpdate();
+			menu.microchip().loadFrom(microchip);
+			if(Minecraft.getInstance().screen instanceof MicrochipScreen screen)
+			{
+				screen.handleUpdate();
+			}
 		}
 		else
 		{
@@ -38,12 +42,12 @@ public class LBRClientProxy extends LBRProxy
 	@Override
 	public void handleUpdateComponentsMicrochip(int containerId, List<LogicEntry> entries)
 	{
-		if(Minecraft.getInstance().screen instanceof MicrochipScreen screen &&
-		   screen.getMenu().containerId == containerId)
+		if(Minecraft.getInstance().player.containerMenu instanceof MicrochipMenu menu &&
+		   menu.containerId == containerId)
 		{
 			for(var entry : entries)
 			{
-				var existingEntry = screen.getMenu().microchip().components().get(entry.slot());
+				var existingEntry = menu.microchip().components().get(entry.slot());
 				if(existingEntry == null)
 				{
 					continue;

@@ -23,7 +23,7 @@ public interface StickyNoteReference
 	/**
 	 * Sends the packet from the client to the server telling it about the changes made to the sticky note.
 	 */
-	void saveClient();
+	void saveClient(Level level, Player player);
 	
 	/**
 	 * Updates the sticky note contents on the server side. This should only be called if the data has been validated.

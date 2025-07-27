@@ -64,7 +64,7 @@ public final class HeldItemStickyNoteReference implements StickyNoteReference
 	}
 	
 	@Override
-	public void saveClient()
+	public void saveClient(Level level, Player player)
 	{
 		new StickyNotePacket(StickyNotePacket.ReferenceType.HELD_ITEM, hand.ordinal(), StickyNotePacket.Action.DONE_EDIT, text).sendToServer();
 	}

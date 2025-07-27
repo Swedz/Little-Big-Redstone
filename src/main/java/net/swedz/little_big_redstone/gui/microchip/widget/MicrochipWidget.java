@@ -29,6 +29,7 @@ import net.swedz.little_big_redstone.gui.microchip.logic.DyeComponentResult;
 import net.swedz.little_big_redstone.gui.microchip.logic.LogicRenderer;
 import net.swedz.little_big_redstone.gui.microchip.logic.LogicRenderers;
 import net.swedz.little_big_redstone.gui.microchip.panel.MicrochipRenderBoardPanel;
+import net.swedz.little_big_redstone.gui.stickynote.reference.MicrochipStickyNoteReference;
 import net.swedz.little_big_redstone.item.stickynote.StickyNoteItem;
 import net.swedz.little_big_redstone.microchip.Microchip;
 import net.swedz.little_big_redstone.microchip.object.logic.LogicSelectedPort;
@@ -37,9 +38,11 @@ import net.swedz.little_big_redstone.network.packet.DyeMicrochipObjectPacket;
 import net.swedz.little_big_redstone.network.packet.OpenLogicConfigPacket;
 import net.swedz.little_big_redstone.network.packet.PlaceTakeMicrochipObjectPacket;
 import net.swedz.little_big_redstone.network.packet.PlaceTakeMicrochipWirePacket;
+import net.swedz.little_big_redstone.proxy.LBRProxy;
 import net.swedz.tesseract.neoforge.api.Bounds;
 import net.swedz.tesseract.neoforge.helper.TransferHelper;
 import net.swedz.tesseract.neoforge.helper.guigraphics.TesseractGuiGraphics;
+import net.swedz.tesseract.neoforge.proxy.Proxies;
 
 import java.util.List;
 import java.util.function.Consumer;
@@ -421,6 +424,24 @@ public final class MicrochipWidget implements GuiEventListener, Renderable, Narr
 		return false;
 	}
 	
+	private boolean openNote(int x, int y, int button)
+	{
+		var menu = this.menu();
+		var carried = menu.getCarried();
+		var player = screen.getMinecraft().player;
+		var note = context.note();
+		
+		if(button == InputConstants.MOUSE_BUTTON_RIGHT &&
+		   context.shouldInteractNote() &&
+		   carried.isEmpty())
+		{
+			Proxies.get(LBRProxy.class).openStickyNote(new MicrochipStickyNoteReference(note), true);
+			return true;
+		}
+		
+		return false;
+	}
+	
 	private boolean mouseClickedOnBoard(int mouseX, int mouseY, int boardMouseX, int boardMouseY, int button)
 	{
 		context = MicrochipWidgetContext.test(this, panel, mouseX, mouseY, boardMouseX, boardMouseY, context);
@@ -432,7 +453,8 @@ public final class MicrochipWidget implements GuiEventListener, Renderable, Narr
 			   this.placeNote(boardMouseX, boardMouseY, button) ||
 			   this.placeWire(boardMouseX, boardMouseY, button) ||
 			   this.placeLogic(boardMouseX, boardMouseY, button) ||
-			   this.openLogicConfig(boardMouseX, boardMouseY, button);
+			   this.openLogicConfig(boardMouseX, boardMouseY, button) ||
+			   this.openNote(boardMouseX, boardMouseY, button);
 	}
 	
 	@Override
