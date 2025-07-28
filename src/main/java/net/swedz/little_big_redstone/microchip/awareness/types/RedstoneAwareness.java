@@ -246,29 +246,29 @@ public final class RedstoneAwareness extends MicrochipAwareness<RedstoneAwarenes
 				for(var direction : Direction.values())
 				{
 					var relative = pos.relative(direction, channel);
-					int index = direction.ordinal();
+					// TODO cache the BlockStates using LocalizedListeners
 					var state = level.getBlockState(relative);
-					if(!state.is(LBRBlocks.CHANNEL.get()) ||
-					   state.getValue(ChannelBlock.CHANNEL) != channel ||
-					   state.getValue(ChannelBlock.ORIGIN_DIRECTION) != direction.getOpposite())
+					if(!ChannelBlock.is(state, direction.getOpposite(), channel))
 					{
 						continue;
 					}
+					
 					var newState = state;
 					int power = 0;
 					boolean input = true;
-					if(inputSides[channel][index])
+					if(this.isInput(direction, channel))
 					{
-						power = inputPower[channel][index];
+						power = this.getInputPower(direction, channel);
 					}
-					else if(outputSides[channel][index])
+					else if(this.isOutput(direction, channel))
 					{
-						power = outputPower[channel][index];
+						power = this.getOutputPower(direction, channel);
 						input = false;
 					}
 					newState = newState
 							.setValue(ChannelBlock.INPUT, input)
 							.setValue(ChannelBlock.POWER, power);
+					
 					if(powerChanged[channel] || newState != state)
 					{
 						level.setBlock(relative, newState, Block.UPDATE_ALL);

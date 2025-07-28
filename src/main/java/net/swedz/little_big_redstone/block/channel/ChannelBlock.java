@@ -17,6 +17,7 @@ import net.minecraft.world.level.block.state.properties.IntegerProperty;
 import net.swedz.little_big_redstone.LBRBlocks;
 import net.swedz.little_big_redstone.block.microchip.MicrochipBlockEntity;
 import net.swedz.little_big_redstone.microchip.awareness.AwarenessTypes;
+import net.swedz.little_big_redstone.microchip.awareness.types.RedstoneAwareness;
 import net.swedz.tesseract.neoforge.api.Assert;
 
 public final class ChannelBlock extends Block
@@ -26,14 +27,19 @@ public final class ChannelBlock extends Block
 	public static final IntegerProperty   CHANNEL          = IntegerProperty.create("channel", 1, 15);
 	public static final IntegerProperty   POWER            = IntegerProperty.create("power", 0, 15);
 	
-	public static boolean isAligned(BlockState state, Direction originDirection)
+	public static boolean is(BlockState state, Direction originDirection)
 	{
-		Assert.that(state.is(LBRBlocks.CHANNEL.get()), "Cannot get origin direction for non-channel block");
-		
-		return state.getValue(ORIGIN_DIRECTION) == originDirection;
+		return state.is(LBRBlocks.CHANNEL.get()) &&
+			   state.getValue(ORIGIN_DIRECTION) == originDirection;
 	}
 	
-	public static MicrochipBlockEntity getMicrochip(Level level, BlockPos pos, BlockState state)
+	public static boolean is(BlockState state, Direction originDirection, int channel)
+	{
+		return is(state, originDirection) &&
+			   state.getValue(CHANNEL) == channel;
+	}
+	
+	private static MicrochipBlockEntity getOrigin(Level level, BlockPos pos, BlockState state)
 	{
 		Assert.that(state.is(LBRBlocks.CHANNEL.get()), "Cannot get origin direction for non-channel block");
 		
@@ -45,6 +51,12 @@ public final class ChannelBlock extends Block
 			return microchip;
 		}
 		return null;
+	}
+	
+	private static RedstoneAwareness getOriginRedstone(Level level, BlockPos pos, BlockState state)
+	{
+		var microchip = getOrigin(level, pos, state);
+		return microchip != null ? microchip.microchip().awarenesses().get(AwarenessTypes.REDSTONE) : null;
 	}
 	
 	public ChannelBlock(Properties properties)
@@ -71,8 +83,7 @@ public final class ChannelBlock extends Block
 	{
 		var adjacentPos = channelPos.relative(originDirection);
 		var adjacentBlock = level.getBlockState(adjacentPos);
-		if(adjacentBlock.is(LBRBlocks.CHANNEL.get()) &&
-		   isAligned(adjacentBlock, originDirection))
+		if(is(adjacentBlock, originDirection))
 		{
 			int previousChannelIndex = adjacentBlock.getValue(CHANNEL);
 			return Math.min(previousChannelIndex + 1, 15);
@@ -122,7 +133,9 @@ public final class ChannelBlock extends Block
 		
 		var delta = neighborPos.subtract(pos);
 		Direction neighborDirection = Direction.fromDelta(delta.getX(), delta.getY(), delta.getZ());
-		if(isAligned(state, neighborDirection))
+		
+		// The block that updated is the block in the direction the channel is pointing
+		if(is(state, neighborDirection))
 		{
 			int channel = calculateChannelIndex(level, pos, neighborDirection);
 			state = state.setValue(CHANNEL, channel);
@@ -131,36 +144,25 @@ public final class ChannelBlock extends Block
 			
 			boolean input = true;
 			int power = 0;
-			var microchip = getMicrochip(level, pos, state);
-			if(microchip != null)
+			var redstone = getOriginRedstone(level, pos, state);
+			if(redstone != null)
 			{
-				var redstone = microchip.microchip().awarenesses().get(AwarenessTypes.REDSTONE);
-				if(redstone != null)
-				{
-					input = !redstone.isOutput(channelDirection, channel);
-					power = redstone.getOutputPower(channelDirection, channel);
-				}
+				input = !redstone.isOutput(channelDirection, channel);
+				power = redstone.getOutputPower(channelDirection, channel);
 			}
 			state = state
 					.setValue(INPUT, input)
 					.setValue(POWER, power);
 		}
-		else
+		// The block that updated is not on either end of the channel
+		else if(!is(state, neighborDirection.getOpposite()))
 		{
-			boolean needsToUpdate = true;
-			
-			var microchip = getMicrochip(level, pos, state);
-			if(microchip != null)
+			var redstone = getOriginRedstone(level, pos, state);
+			if(redstone != null)
 			{
-				var redstone = microchip.microchip().awarenesses().get(AwarenessTypes.REDSTONE);
-				if(redstone != null)
-				{
-					state = redstone.updateSignal(level, pos, state, neighborPos, neighborDirection, state.getValue(CHANNEL), state.getValue(ORIGIN_DIRECTION).getOpposite());
-					needsToUpdate = false;
-				}
+				state = redstone.updateSignal(level, pos, state, neighborPos, neighborDirection, state.getValue(CHANNEL), state.getValue(ORIGIN_DIRECTION).getOpposite());
 			}
-			
-			if(needsToUpdate)
+			else
 			{
 				int signal = level.getSignal(neighborPos, neighborDirection);
 				state = state.setValue(ChannelBlock.POWER, signal);
