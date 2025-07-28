@@ -71,7 +71,9 @@ public final class LogicIOConfig extends LogicConfig<LogicIOConfig>
 		for(var entry : components)
 		{
 			if(entry.component().config() != this && entry.component().config() instanceof LogicIOConfig entryConfig &&
-			   input != entryConfig.input && direction == entryConfig.direction)
+			   input != entryConfig.input &&
+			   channel == entryConfig.channel &&
+			   direction == entryConfig.direction)
 			{
 				return false;
 			}
