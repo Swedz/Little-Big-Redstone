@@ -28,7 +28,7 @@ public final class TimedRedstoneSignals
 		for(var direction : Direction.values())
 		{
 			int signal = signals[direction.ordinal()];
-			redstone.setInputPowered(direction, signal);
+			redstone.setInputPowered(direction, 0, signal);
 		}
 	}
 	

@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:block/cube_column_horizontal",
+  "textures": {
+    "end": "little_big_redstone:block/channel_end",
+    "side": "little_big_redstone:block/channel_side"
+  }
+}

@@ -80,7 +80,7 @@ public final class LogicIO extends LogicComponent<LogicIO, LogicIOConfig> implem
 		boolean originalOutputState = outputState;
 		if(config.input)
 		{
-			int signal = context.awareness(AwarenessTypes.REDSTONE).getInputPower(config.direction);
+			int signal = context.awareness(AwarenessTypes.REDSTONE).getInputPower(config.direction, config.channel);
 			outputState = signal >= config.signalStrength;
 		}
 		else
@@ -88,7 +88,7 @@ public final class LogicIO extends LogicComponent<LogicIO, LogicIOConfig> implem
 			outputState = inputs[0];
 			var redstone = context.awareness(AwarenessTypes.REDSTONE);
 			int signal = outputState ? config.signalStrength : 0;
-			if(redstone.setOutputPowered(config.direction, signal))
+			if(redstone.setOutputPowered(config.direction, config.channel, signal))
 			{
 				powerChanged = true;
 			}

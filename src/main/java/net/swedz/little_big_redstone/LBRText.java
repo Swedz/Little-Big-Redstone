@@ -47,6 +47,7 @@ public enum LBRText implements TranslatableTextEnum
 	LOGIC_CONFIG_BUTTON_LABEL_DIRECTION("Direction"),
 	LOGIC_CONFIG_BUTTON_LABEL_DURATION("Duration: "),
 	LOGIC_CONFIG_BUTTON_LABEL_INPUTS("Inputs: "),
+	LOGIC_CONFIG_BUTTON_LABEL_IO_CHANNEL("Channel: "),
 	LOGIC_CONFIG_BUTTON_LABEL_IO_SIGNAL_STRENGTH("Signal Strength: "),
 	LOGIC_CONFIG_BUTTON_LABEL_MODE("Mode"),
 	LOGIC_CONFIG_BUTTON_LABEL_OUTPUTS("Outputs: "),
@@ -59,6 +60,8 @@ public enum LBRText implements TranslatableTextEnum
 	LOGIC_CONFIG_BUTTON_LABEL_TICKS_AND_SECONDS_SINGULAR("%s tick (%ss)"),
 	LOGIC_CONFIG_BUTTON_TOOLTIP_DURATION("The time for the output to be on."),
 	LOGIC_CONFIG_BUTTON_TOOLTIP_INPUTS("The number of inputs that this component can accept."),
+	LOGIC_CONFIG_BUTTON_TOOLTIP_IO_CHANNEL("What channel this port should link to." +
+										   "\nWhen the channel is set to 0, the microchip block itself is used."),
 	LOGIC_CONFIG_BUTTON_TOOLTIP_IO_DIRECTION("The direction this port should interact with redstone power on."),
 	LOGIC_CONFIG_BUTTON_TOOLTIP_IO_MODE("Whether this port should input or output redstone power."),
 	LOGIC_CONFIG_BUTTON_TOOLTIP_IO_SIGNAL_STRENGTH("When in input mode, the minimum redstone signal strength required for the output to be on." +
@@ -87,6 +90,7 @@ public enum LBRText implements TranslatableTextEnum
 	LOGIC_CONFIG_TOOLTIP_DIRECTION("  Direction: %s"),
 	LOGIC_CONFIG_TOOLTIP_DURATION("  Duration: %d"),
 	LOGIC_CONFIG_TOOLTIP_INPUTS("  Inputs: %s"),
+	LOGIC_CONFIG_TOOLTIP_IO_CHANNEL("  Channel: %d"),
 	LOGIC_CONFIG_TOOLTIP_IO_SIGNAL_STRENGTH("  Signal Strength: %d"),
 	LOGIC_CONFIG_TOOLTIP_MODE("  Mode: %s"),
 	LOGIC_CONFIG_TOOLTIP_OUTPUTS("  Outputs: %s"),

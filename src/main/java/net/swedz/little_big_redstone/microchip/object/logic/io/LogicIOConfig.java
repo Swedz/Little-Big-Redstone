@@ -29,36 +29,40 @@ public final class LogicIOConfig extends LogicConfig<LogicIOConfig>
 	public static final MapCodec<LogicIOConfig> CODEC = RecordCodecBuilder.mapCodec((instance) -> instance
 			.group(
 					Codec.BOOL.optionalFieldOf("input", true).forGetter((config) -> config.input),
+					Codec.intRange(0, 15).optionalFieldOf("channel", 0).forGetter((config) -> config.channel),
 					Direction.CODEC.optionalFieldOf("direction", Direction.NORTH).forGetter((config) -> config.direction),
 					Codec.intRange(1, 15).optionalFieldOf("signal_strength", 1).forGetter((config) -> config.signalStrength)
 			)
-			.apply(instance, (input, direction, signalStrength) -> new LogicIOConfig(true, input, direction, signalStrength)));
+			.apply(instance, (input, channel, direction, signalStrength) -> new LogicIOConfig(true, input, channel, direction, signalStrength)));
 	
 	public static final StreamCodec<ByteBuf, LogicIOConfig> STREAM_CODEC = StreamCodec.composite(
 			ByteBufCodecs.BOOL, (config) -> config.valid,
 			ByteBufCodecs.BOOL, (config) -> config.input,
+			ByteBufCodecs.INT, (config) -> config.channel,
 			Direction.STREAM_CODEC, (config) -> config.direction,
 			ByteBufCodecs.INT, (config) -> config.signalStrength,
 			LogicIOConfig::new
 	);
 	
 	public boolean input;
+	public int     channel;
 	
 	public Direction direction;
 	
 	public int signalStrength;
 	
-	private LogicIOConfig(boolean valid, boolean input, Direction direction, int signalStrength)
+	private LogicIOConfig(boolean valid, boolean input, int channel, Direction direction, int signalStrength)
 	{
 		this.valid = valid;
 		this.input = input;
+		this.channel = channel;
 		this.direction = direction;
 		this.signalStrength = Mth.clamp(signalStrength, 1, 15);
 	}
 	
 	public LogicIOConfig()
 	{
-		this(true, true, Direction.NORTH, 1);
+		this(true, true, 0, Direction.NORTH, 1);
 	}
 	
 	@Override
@@ -103,6 +107,7 @@ public final class LogicIOConfig extends LogicConfig<LogicIOConfig>
 	public void appendHoverText(List<Component> lines)
 	{
 		lines.add(line(LBRText.LOGIC_CONFIG_TOOLTIP_MODE).arg(input, LBRTooltips.INPUT_OUTPUT_PARSER));
+		lines.add(line(LBRText.LOGIC_CONFIG_TOOLTIP_IO_CHANNEL).arg(channel));
 		lines.add(line(LBRText.LOGIC_CONFIG_TOOLTIP_DIRECTION).arg(direction, LBRTooltips.DIRECTION_PARSER));
 		lines.add(line(LBRText.LOGIC_CONFIG_TOOLTIP_IO_SIGNAL_STRENGTH).arg(signalStrength));
 	}
@@ -125,15 +130,18 @@ public final class LogicIOConfig extends LogicConfig<LogicIOConfig>
 			signalStrengthSlider.get().setValue((double) signalStrength);
 		});
 		
-		builder.addCycleButton(LBRText.LOGIC_CONFIG_BUTTON_LABEL_DIRECTION.text(), LBRText.LOGIC_CONFIG_BUTTON_TOOLTIP_IO_DIRECTION.text(), 0, 23, 160, 18, false, direction, Arrays.asList(Direction.values()), LBRTooltips.DIRECTION_PARSER::parse, (value) -> direction = value);
+		builder.addSlider(LBRText.LOGIC_CONFIG_BUTTON_LABEL_IO_CHANNEL.text(), Component.empty(), LBRText.LOGIC_CONFIG_BUTTON_TOOLTIP_IO_CHANNEL.text(), 0, 23, 160, 18, 0, 15, channel, 1, 0, (value) -> channel = value.intValue());
 		
-		signalStrengthSlider.set(builder.addSlider(LBRText.LOGIC_CONFIG_BUTTON_LABEL_IO_SIGNAL_STRENGTH.text(), Component.empty(), LBRText.LOGIC_CONFIG_BUTTON_TOOLTIP_IO_SIGNAL_STRENGTH.text(), 0, 23 * 2, 160, 18, 1, 15, signalStrength, 1, 0, (value) -> signalStrength = value.intValue()));
+		builder.addCycleButton(LBRText.LOGIC_CONFIG_BUTTON_LABEL_DIRECTION.text(), LBRText.LOGIC_CONFIG_BUTTON_TOOLTIP_IO_DIRECTION.text(), 0, 23 * 2, 160, 18, false, direction, Arrays.asList(Direction.values()), LBRTooltips.DIRECTION_PARSER::parse, (value) -> direction = value);
+		
+		signalStrengthSlider.set(builder.addSlider(LBRText.LOGIC_CONFIG_BUTTON_LABEL_IO_SIGNAL_STRENGTH.text(), Component.empty(), LBRText.LOGIC_CONFIG_BUTTON_TOOLTIP_IO_SIGNAL_STRENGTH.text(), 0, 23 * 3, 160, 18, 1, 15, signalStrength, 1, 0, (value) -> signalStrength = value.intValue()));
 	}
 	
 	@Override
 	protected void internalLoadFrom(LogicIOConfig other)
 	{
 		input = other.input;
+		channel = other.channel;
 		direction = other.direction;
 		signalStrength = other.signalStrength;
 	}
@@ -147,13 +155,13 @@ public final class LogicIOConfig extends LogicConfig<LogicIOConfig>
 	@Override
 	public int hashCode()
 	{
-		return Objects.hash(input, direction, signalStrength);
+		return Objects.hash(input, channel, direction, signalStrength);
 	}
 	
 	@Override
 	public boolean equals(Object o)
 	{
 		return this == o ||
-			   (o instanceof LogicIOConfig other && input == other.input && direction == other.direction && signalStrength == other.signalStrength);
+			   (o instanceof LogicIOConfig other && input == other.input && channel == other.channel && direction == other.direction && signalStrength == other.signalStrength);
 	}
 }
