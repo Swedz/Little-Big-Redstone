@@ -45,10 +45,8 @@ public final class LogicIOConfig extends LogicConfig<LogicIOConfig>
 	);
 	
 	public boolean input;
-	public int     channel;
-	
+	public int channel;
 	public Direction direction;
-	
 	public int signalStrength;
 	
 	private LogicIOConfig(boolean valid, boolean input, int channel, Direction direction, int signalStrength)
