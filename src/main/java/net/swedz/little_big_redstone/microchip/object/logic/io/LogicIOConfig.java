@@ -112,7 +112,7 @@ public final class LogicIOConfig extends LogicConfig<LogicIOConfig>
 		lines.add(line(LBRText.LOGIC_CONFIG_TOOLTIP_MODE).arg(input, LBRTooltips.INPUT_OUTPUT_PARSER));
 		lines.add(line(LBRText.LOGIC_CONFIG_TOOLTIP_DIRECTION).arg(direction, LBRTooltips.DIRECTION_PARSER));
 		lines.add(line(LBRText.LOGIC_CONFIG_TOOLTIP_IO_SIGNAL_STRENGTH).arg(signalStrength));
-		lines.add(line(LBRText.LOGIC_CONFIG_TOOLTIP_IO_COMPARISON_MODE).arg(Component.literal(signalComparison.display()).withStyle(ChatFormatting.WHITE)));
+		lines.add(line(LBRText.LOGIC_CONFIG_TOOLTIP_IO_SIGNAL_COMPARISON_MODE).arg(Component.literal(signalComparison.display()).withStyle(ChatFormatting.WHITE)));
 	}
 	
 	@Override

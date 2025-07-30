@@ -6,17 +6,17 @@ import net.swedz.little_big_redstone.gui.logicconfig.button.IconCycleButtonIcon;
 public enum LogicIOComparisonMode implements IconCycleButtonIcon
 {
 	LESS_THAN_OR_EQUAL_TO(
-			"\u2264", LBRText.LOGIC_CONFIG_BUTTON_TOOLTIP_IO_COMPARISON_MODE_LESS_THAN_OR_EQUAL_TO,
+			"\u2264", LBRText.LOGIC_CONFIG_BUTTON_TOOLTIP_IO_SIGNAL_COMPARISON_MODE_LESS_THAN_OR_EQUAL_TO,
 			36, 0,
 			(input, setting) -> input <= setting
 	),
 	EQUAL_TO(
-			"=", LBRText.LOGIC_CONFIG_BUTTON_TOOLTIP_IO_COMPARISON_MODE_EQUAL_TO,
+			"=", LBRText.LOGIC_CONFIG_BUTTON_TOOLTIP_IO_SIGNAL_COMPARISON_MODE_EQUAL_TO,
 			36 + 18, 0,
 			(input, setting) -> input == setting
 	),
 	GREATER_THAN_OR_EQUAL_TO(
-			"\u2265", LBRText.LOGIC_CONFIG_BUTTON_TOOLTIP_IO_COMPARISON_MODE_GREATER_THAN_OR_EQUAL_TO,
+			"\u2265", LBRText.LOGIC_CONFIG_BUTTON_TOOLTIP_IO_SIGNAL_COMPARISON_MODE_GREATER_THAN_OR_EQUAL_TO,
 			36 + (18 * 2), 0,
 			(input, setting) -> input >= setting
 	);
