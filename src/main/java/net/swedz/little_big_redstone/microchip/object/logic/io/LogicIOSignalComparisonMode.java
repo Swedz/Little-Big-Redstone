@@ -3,7 +3,7 @@ package net.swedz.little_big_redstone.microchip.object.logic.io;
 import net.swedz.little_big_redstone.LBRText;
 import net.swedz.little_big_redstone.gui.logicconfig.button.IconCycleButtonIcon;
 
-public enum LogicIOComparisonMode implements IconCycleButtonIcon
+public enum LogicIOSignalComparisonMode implements IconCycleButtonIcon
 {
 	LESS_THAN_OR_EQUAL_TO(
 			"\u2264", LBRText.LOGIC_CONFIG_BUTTON_TOOLTIP_IO_SIGNAL_COMPARISON_MODE_LESS_THAN_OR_EQUAL_TO,
@@ -21,25 +21,25 @@ public enum LogicIOComparisonMode implements IconCycleButtonIcon
 			(input, setting) -> input >= setting
 	);
 	
-	private final String display;
+	private final String  symbol;
 	private final LBRText tooltipButton;
 	
 	private final int u, v;
 	
 	private final Test test;
 	
-	LogicIOComparisonMode(String display, LBRText tooltipButton, int u, int v, Test test)
+	LogicIOSignalComparisonMode(String symbol, LBRText tooltipButton, int u, int v, Test test)
 	{
-		this.display = display;
+		this.symbol = symbol;
 		this.tooltipButton = tooltipButton;
 		this.u = u;
 		this.v = v;
 		this.test = test;
 	}
 	
-	public String display()
+	public String symbol()
 	{
-		return display;
+		return symbol;
 	}
 	
 	public LBRText tooltipButton()

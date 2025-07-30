@@ -34,7 +34,7 @@ public final class LogicIOConfig extends LogicConfig<LogicIOConfig>
 					Codec.BOOL.optionalFieldOf("input", true).forGetter((config) -> config.input),
 					Direction.CODEC.optionalFieldOf("direction", Direction.NORTH).forGetter((config) -> config.direction),
 					Codec.intRange(1, 15).optionalFieldOf("signal_strength", 1).forGetter((config) -> config.signalStrength),
-					CodecHelper.forLowercaseEnum(LogicIOComparisonMode.class).optionalFieldOf("signal_comparison", LogicIOComparisonMode.GREATER_THAN_OR_EQUAL_TO).forGetter((config) -> config.signalComparison)
+					CodecHelper.forLowercaseEnum(LogicIOSignalComparisonMode.class).optionalFieldOf("signal_comparison", LogicIOSignalComparisonMode.GREATER_THAN_OR_EQUAL_TO).forGetter((config) -> config.signalComparison)
 			)
 			.apply(instance, (input, direction, signalStrength, precise) -> new LogicIOConfig(true, input, direction, signalStrength, precise)));
 	
@@ -43,7 +43,7 @@ public final class LogicIOConfig extends LogicConfig<LogicIOConfig>
 			ByteBufCodecs.BOOL, (config) -> config.input,
 			Direction.STREAM_CODEC, (config) -> config.direction,
 			ByteBufCodecs.INT, (config) -> config.signalStrength,
-			CodecHelper.forEnumStream(LogicIOComparisonMode.class), (config) -> config.signalComparison,
+			CodecHelper.forEnumStream(LogicIOSignalComparisonMode.class), (config) -> config.signalComparison,
 			LogicIOConfig::new
 	);
 	
@@ -52,9 +52,9 @@ public final class LogicIOConfig extends LogicConfig<LogicIOConfig>
 	public Direction direction;
 	
 	public int signalStrength;
-	public LogicIOComparisonMode signalComparison;
+	public LogicIOSignalComparisonMode signalComparison;
 	
-	private LogicIOConfig(boolean valid, boolean input, Direction direction, int signalStrength, LogicIOComparisonMode signalComparison)
+	private LogicIOConfig(boolean valid, boolean input, Direction direction, int signalStrength, LogicIOSignalComparisonMode signalComparison)
 	{
 		this.valid = valid;
 		this.input = input;
@@ -65,7 +65,7 @@ public final class LogicIOConfig extends LogicConfig<LogicIOConfig>
 	
 	public LogicIOConfig()
 	{
-		this(true, true, Direction.NORTH, 1, LogicIOComparisonMode.GREATER_THAN_OR_EQUAL_TO);
+		this(true, true, Direction.NORTH, 1, LogicIOSignalComparisonMode.GREATER_THAN_OR_EQUAL_TO);
 	}
 	
 	@Override
@@ -112,7 +112,7 @@ public final class LogicIOConfig extends LogicConfig<LogicIOConfig>
 		lines.add(line(LBRText.LOGIC_CONFIG_TOOLTIP_MODE).arg(input, LBRTooltips.INPUT_OUTPUT_PARSER));
 		lines.add(line(LBRText.LOGIC_CONFIG_TOOLTIP_DIRECTION).arg(direction, LBRTooltips.DIRECTION_PARSER));
 		lines.add(line(LBRText.LOGIC_CONFIG_TOOLTIP_IO_SIGNAL_STRENGTH).arg(signalStrength));
-		lines.add(line(LBRText.LOGIC_CONFIG_TOOLTIP_IO_SIGNAL_COMPARISON_MODE).arg(Component.literal(signalComparison.display()).withStyle(ChatFormatting.WHITE)));
+		lines.add(line(LBRText.LOGIC_CONFIG_TOOLTIP_IO_SIGNAL_COMPARISON_MODE).arg(Component.literal(signalComparison.symbol()).withStyle(ChatFormatting.WHITE)));
 	}
 	
 	@Override
@@ -146,7 +146,7 @@ public final class LogicIOConfig extends LogicConfig<LogicIOConfig>
 			}
 		}));
 		
-		comparisonButton.set(builder.addCycleButton(signalComparison.tooltipButton().text(signalStrength), 0, 23 * 2, LBR.id("textures/gui/slot_atlas.png"), signalComparison, Arrays.asList(LogicIOComparisonMode.values()), (value) ->
+		comparisonButton.set(builder.addCycleButton(signalComparison.tooltipButton().text(signalStrength), 0, 23 * 2, LBR.id("textures/gui/slot_atlas.png"), signalComparison, Arrays.asList(LogicIOSignalComparisonMode.values()), (value) ->
 		{
 			signalComparison = value;
 			comparisonButton.get().setTooltip(signalComparison.tooltipButton().text(signalStrength));
