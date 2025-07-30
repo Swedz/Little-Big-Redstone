@@ -1,6 +1,8 @@
 package net.swedz.little_big_redstone.microchip.object.logic.config;
 
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
+import net.swedz.little_big_redstone.gui.logicconfig.button.IconCycleButtonIcon;
 
 import java.util.List;
 import java.util.function.BiFunction;
@@ -19,4 +21,6 @@ public interface LogicConfigMenuBuilder
 	}
 	
 	LogicConfigButtonReference<Boolean> addCheckbox(Component text, Component tooltip, int x, int y, boolean initialValue, Consumer<Boolean> onChange);
+	
+	<T extends Enum<T> & IconCycleButtonIcon> LogicConfigButtonReference<Boolean> addCycleButton(Component tooltip, int x, int y, ResourceLocation atlas, T initialValue, List<T> values, Consumer<T> onChange);
 }
