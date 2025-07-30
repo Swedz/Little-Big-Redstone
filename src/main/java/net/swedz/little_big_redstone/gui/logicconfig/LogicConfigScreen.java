@@ -15,6 +15,8 @@ import net.minecraft.world.entity.player.Inventory;
 import net.neoforged.neoforge.client.gui.widget.ExtendedSlider;
 import net.swedz.little_big_redstone.LBR;
 import net.swedz.little_big_redstone.LBRText;
+import net.swedz.little_big_redstone.gui.logicconfig.button.IconCycleButton;
+import net.swedz.little_big_redstone.gui.logicconfig.button.IconCycleButtonIcon;
 import net.swedz.little_big_redstone.microchip.object.logic.LogicEntry;
 import net.swedz.little_big_redstone.microchip.object.logic.config.LogicConfigButtonReference;
 import net.swedz.little_big_redstone.microchip.object.logic.config.LogicConfigMenuBuilder;
@@ -75,9 +77,21 @@ public final class LogicConfigScreen extends AbstractContainerScreen<LogicConfig
 			}
 			
 			@Override
+			public T getValue()
+			{
+				return button.getValue();
+			}
+			
+			@Override
 			public void setValue(T value)
 			{
 				button.setValue(value);
+			}
+			
+			@Override
+			public void setActive(boolean active)
+			{
+				button.active = active;
 			}
 		};
 	}
@@ -201,9 +215,21 @@ public final class LogicConfigScreen extends AbstractContainerScreen<LogicConfig
 			}
 			
 			@Override
+			public Double getValue()
+			{
+				return widget.getValue();
+			}
+			
+			@Override
 			public void setValue(Double value)
 			{
 				widget.setValue(value);
+			}
+			
+			@Override
+			public void setActive(boolean active)
+			{
+				widget.active = active;
 			}
 		};
 	}
@@ -236,6 +262,12 @@ public final class LogicConfigScreen extends AbstractContainerScreen<LogicConfig
 			}
 			
 			@Override
+			public Boolean getValue()
+			{
+				return button.selected();
+			}
+			
+			@Override
 			public void setValue(Boolean value)
 			{
 				if(value && !button.selected())
@@ -246,6 +278,51 @@ public final class LogicConfigScreen extends AbstractContainerScreen<LogicConfig
 				{
 					button.onPress();
 				}
+			}
+			
+			@Override
+			public void setActive(boolean active)
+			{
+				button.active = active;
+			}
+		};
+	}
+	
+	@Override
+	public <T extends Enum<T> & IconCycleButtonIcon> LogicConfigButtonReference addCycleButton(Component tooltip, int x, int y, ResourceLocation atlas, T initialValue, List<T> values, Consumer<T> onChange)
+	{
+		var button = new IconCycleButton<>(configX + x, configY + y, atlas, values, initialValue, (__, value) -> onChange.accept(value));
+		button.setTooltip(Tooltip.create(tooltip));
+		this.addRenderableWidget(button);
+		return new LogicConfigButtonReference<T>()
+		{
+			@Override
+			public void setText(Component text)
+			{
+			}
+			
+			@Override
+			public void setTooltip(Component tooltip)
+			{
+				button.setTooltip(Tooltip.create(tooltip));
+			}
+			
+			@Override
+			public T getValue()
+			{
+				return button.value();
+			}
+			
+			@Override
+			public void setValue(T value)
+			{
+				button.setValue(value);
+			}
+			
+			@Override
+			public void setActive(boolean active)
+			{
+				button.active = active;
 			}
 		};
 	}

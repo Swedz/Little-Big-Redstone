@@ -76,7 +76,7 @@ public abstract class LogicRenderer<L extends LogicComponent>
 		}
 		else
 		{
-			graphics.nineSlice(x, y, size.widthPixels(), size.heightPixels(), 16, 16, 3);
+			graphics.nineSlice(x, y, size.widthPixels(), size.heightPixels(), 16, 16, 7);
 		}
 		graphics.resetColor();
 	}
