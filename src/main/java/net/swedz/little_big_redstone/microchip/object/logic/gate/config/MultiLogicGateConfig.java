@@ -78,9 +78,9 @@ public final class MultiLogicGateConfig extends LogicConfig<MultiLogicGateConfig
 	}
 	
 	@Override
-	public void buildMenu(LogicConfigMenuBuilder builder)
+	public void buildMenu(LogicConfigMenuBuilder builder, int width, int height)
 	{
-		builder.addSlider(LBRText.LOGIC_CONFIG_BUTTON_LABEL_INPUTS.text(), Component.empty(), LBRText.LOGIC_CONFIG_BUTTON_TOOLTIP_INPUTS.text(), 0, 0, 160, 18, this.inputsAllowed().min(), this.inputsAllowed().max(), inputs, 1, 0, (value) -> inputs = value.intValue());
+		builder.addSlider(LBRText.LOGIC_CONFIG_BUTTON_LABEL_INPUTS.text(), Component.empty(), LBRText.LOGIC_CONFIG_BUTTON_TOOLTIP_INPUTS.text(), 0, 0, width, 18, this.inputsAllowed().min(), this.inputsAllowed().max(), inputs, 1, 0, (value) -> inputs = value.intValue());
 	}
 	
 	@Override

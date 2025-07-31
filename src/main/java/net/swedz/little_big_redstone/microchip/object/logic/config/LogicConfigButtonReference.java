@@ -12,5 +12,7 @@ public interface LogicConfigButtonReference<T>
 	
 	void setValue(T value);
 	
+	boolean isActive();
+	
 	void setActive(boolean active);
 }

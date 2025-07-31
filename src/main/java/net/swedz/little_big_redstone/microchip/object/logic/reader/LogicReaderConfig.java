@@ -97,13 +97,13 @@ public final class LogicReaderConfig extends LogicConfig<LogicReaderConfig>
 	}
 	
 	@Override
-	public void buildMenu(LogicConfigMenuBuilder builder)
+	public void buildMenu(LogicConfigMenuBuilder builder, int width, int height)
 	{
-		builder.addCycleButton(LBRText.LOGIC_CONFIG_BUTTON_LABEL_MODE.text(), LBRText.LOGIC_CONFIG_BUTTON_TOOLTIP_READER_MODE.text(), 0, 0, 160, 18, false, mode, Arrays.asList(LogicReaderMode.values()), (value) -> LBRTooltips.READER_MODE_PARSER.parse(value).plainCopy(), (value) -> mode = value);
+		builder.addCycleButton(LBRText.LOGIC_CONFIG_BUTTON_LABEL_MODE.text(), LBRText.LOGIC_CONFIG_BUTTON_TOOLTIP_READER_MODE.text(), 0, 0, width, 18, false, mode, Arrays.asList(LogicReaderMode.values()), (value) -> LBRTooltips.READER_MODE_PARSER.parse(value).plainCopy(), (value) -> mode = value);
 		
-		builder.addCycleButton(LBRText.LOGIC_CONFIG_BUTTON_LABEL_DIRECTION.text(), LBRText.LOGIC_CONFIG_BUTTON_TOOLTIP_READER_DIRECTION.text(), 0, 23, 160, 18, false, direction, Arrays.asList(Direction.values()), LBRTooltips.DIRECTION_PARSER::parse, (value) -> direction = value);
+		builder.addCycleButton(LBRText.LOGIC_CONFIG_BUTTON_LABEL_DIRECTION.text(), LBRText.LOGIC_CONFIG_BUTTON_TOOLTIP_READER_DIRECTION.text(), 0, 22, width, 18, false, direction, Arrays.asList(Direction.values()), LBRTooltips.DIRECTION_PARSER::parse, (value) -> direction = value);
 		
-		builder.addSlider(LBRText.LOGIC_CONFIG_BUTTON_LABEL_READER_FILL_THRESHOLD.text(), Component.literal("%"), LBRText.LOGIC_CONFIG_BUTTON_TOOLTIP_READER_FILL_THRESHOLD.text(), 0, 23 * 2, 160, 18, 0, 100, fillThreshold * 100, 1, 0, (value) -> fillThreshold = (float) (value / 100f));
+		builder.addSlider(LBRText.LOGIC_CONFIG_BUTTON_LABEL_READER_FILL_THRESHOLD.text(), Component.literal("%"), LBRText.LOGIC_CONFIG_BUTTON_TOOLTIP_READER_FILL_THRESHOLD.text(), 0, 22 * 2, width, 18, 0, 100, fillThreshold * 100, 1, 0, (value) -> fillThreshold = (float) (value / 100f));
 	}
 	
 	@Override

@@ -80,7 +80,7 @@ public final class IconCycleButton<T extends Enum<T> & IconCycleButtonIcon> exte
 		{
 			v += height * 2;
 		}
-		else if(this.isFocused())
+		else if(this.isHoveredOrFocused())
 		{
 			v += height;
 		}
