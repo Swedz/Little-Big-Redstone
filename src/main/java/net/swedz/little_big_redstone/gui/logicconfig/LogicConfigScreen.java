@@ -36,15 +36,18 @@ public final class LogicConfigScreen extends AbstractContainerScreen<LogicConfig
 	
 	private final LogicEntry logicEntry;
 	
-	private int configX, configY;
+	private int configX, configY, configWidth, configHeight;
 	
 	public LogicConfigScreen(LogicConfigMenu menu, Inventory playerInventory, Component title)
 	{
 		super(menu, playerInventory, title);
 		
 		imageWidth = 176;
-		imageHeight = 232;
+		imageHeight = 196;
 		inventoryLabelY = imageHeight - 94;
+		
+		configWidth = 160 - 4;
+		configHeight = 180 - 4;
 		
 		logicEntry = menu.logicEntry();
 	}
@@ -86,6 +89,12 @@ public final class LogicConfigScreen extends AbstractContainerScreen<LogicConfig
 			public void setValue(T value)
 			{
 				button.setValue(value);
+			}
+			
+			@Override
+			public boolean isActive()
+			{
+				return button.active;
 			}
 			
 			@Override
@@ -227,6 +236,12 @@ public final class LogicConfigScreen extends AbstractContainerScreen<LogicConfig
 			}
 			
 			@Override
+			public boolean isActive()
+			{
+				return widget.active;
+			}
+			
+			@Override
 			public void setActive(boolean active)
 			{
 				widget.active = active;
@@ -281,6 +296,12 @@ public final class LogicConfigScreen extends AbstractContainerScreen<LogicConfig
 			}
 			
 			@Override
+			public boolean isActive()
+			{
+				return button.active;
+			}
+			
+			@Override
 			public void setActive(boolean active)
 			{
 				button.active = active;
@@ -320,6 +341,12 @@ public final class LogicConfigScreen extends AbstractContainerScreen<LogicConfig
 			}
 			
 			@Override
+			public boolean isActive()
+			{
+				return button.active;
+			}
+			
+			@Override
 			public void setActive(boolean active)
 			{
 				button.active = active;
@@ -341,18 +368,25 @@ public final class LogicConfigScreen extends AbstractContainerScreen<LogicConfig
 	protected void init()
 	{
 		super.init();
-		configX = leftPos + 8;
-		configY = topPos + 17;
+		configX = leftPos + 8 + 2;
+		configY = topPos + 8 + 2;
 		
-		logicEntry.component().config().buildMenu(this);
+		logicEntry.component().config().buildMenu(this, configWidth, configHeight);
+		
+		int buttonWidth = (configWidth / 2) - 4;
 		
 		this.addRenderableWidget(Button.builder(LBRText.LOGIC_CONFIG_BUTTON_LABEL_SAVE.text(), (__) -> this.save())
-				.bounds(leftPos + 8, topPos + imageHeight - 94 - 20, 75, 16)
+				.bounds(configX, configY + configHeight - 16, buttonWidth, 16)
 				.build());
 		
 		this.addRenderableWidget(Button.builder(LBRText.LOGIC_CONFIG_BUTTON_LABEL_CANCEL.text(), (__) -> this.cancel())
-				.bounds(leftPos + imageWidth - 75 - 8, topPos + imageHeight - 94 - 20, 75, 16)
+				.bounds(configX + configWidth - buttonWidth, configY + configHeight - 16, buttonWidth, 16)
 				.build());
+	}
+	
+	@Override
+	protected void renderLabels(GuiGraphics graphics, int mouseX, int mouseY)
+	{
 	}
 	
 	@Override

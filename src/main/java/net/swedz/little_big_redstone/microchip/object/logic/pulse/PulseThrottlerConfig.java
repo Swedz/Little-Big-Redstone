@@ -80,9 +80,9 @@ public final class PulseThrottlerConfig extends LogicConfig<PulseThrottlerConfig
 	}
 	
 	@Override
-	public void buildMenu(LogicConfigMenuBuilder builder)
+	public void buildMenu(LogicConfigMenuBuilder builder, int width, int height)
 	{
-		builder.addSlider(LBRText.LOGIC_CONFIG_BUTTON_LABEL_DURATION.text(), Component.empty(), LBRText.LOGIC_CONFIG_BUTTON_TOOLTIP_DURATION.text(), 0, 0, 160, 18, 1, 60 * 20, outputDuration, 1, 0, LBRTooltips.TICKS_AND_SECONDS_SLIDER_PARSER::parse, (value) -> outputDuration = value.intValue());
+		builder.addSlider(LBRText.LOGIC_CONFIG_BUTTON_LABEL_DURATION.text(), Component.empty(), LBRText.LOGIC_CONFIG_BUTTON_TOOLTIP_DURATION.text(), 0, 0, width, 18, 1, 60 * 20, outputDuration, 1, 0, LBRTooltips.TICKS_AND_SECONDS_SLIDER_PARSER::parse, (value) -> outputDuration = value.intValue());
 	}
 	
 	@Override

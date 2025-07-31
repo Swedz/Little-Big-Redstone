@@ -101,21 +101,21 @@ public final class LogicSequencerConfig extends LogicConfig<LogicSequencerConfig
 	}
 	
 	@Override
-	public void buildMenu(LogicConfigMenuBuilder builder)
+	public void buildMenu(LogicConfigMenuBuilder builder, int width, int height)
 	{
 		var modeButton = new AtomicReference<LogicConfigButtonReference<LogicSequencerMode>>();
 		
-		modeButton.set(builder.addCycleButton(LBRText.LOGIC_CONFIG_BUTTON_LABEL_MODE.text(), mode.tooltip().text(), 0, 0, 160, 18, false, mode, Arrays.asList(LogicSequencerMode.values()), (value) -> LBRTooltips.SEQUENCER_MODE_PARSER.parse(value).plainCopy(), (value) ->
+		modeButton.set(builder.addCycleButton(LBRText.LOGIC_CONFIG_BUTTON_LABEL_MODE.text(), mode.tooltip().text(), 0, 0, width, 18, false, mode, Arrays.asList(LogicSequencerMode.values()), (value) -> LBRTooltips.SEQUENCER_MODE_PARSER.parse(value).plainCopy(), (value) ->
 		{
 			mode = value;
 			modeButton.get().setTooltip(mode.tooltip().text());
 		}));
 		
-		builder.addSlider(LBRText.LOGIC_CONFIG_BUTTON_LABEL_SEQUENCER_DELAY.text(), Component.empty(), LBRText.LOGIC_CONFIG_BUTTON_TOOLTIP_SEQUENCER_DELAY.text(), 0, 23, 160, 18, 1, 60 * 20, outputDelay, 1, 0, LBRTooltips.TICKS_AND_SECONDS_SLIDER_PARSER::parse, (value) -> outputDelay = value.intValue());
+		builder.addSlider(LBRText.LOGIC_CONFIG_BUTTON_LABEL_SEQUENCER_DELAY.text(), Component.empty(), LBRText.LOGIC_CONFIG_BUTTON_TOOLTIP_SEQUENCER_DELAY.text(), 0, 22, width, 18, 1, 60 * 20, outputDelay, 1, 0, LBRTooltips.TICKS_AND_SECONDS_SLIDER_PARSER::parse, (value) -> outputDelay = value.intValue());
 		
-		builder.addCheckbox(LBRText.LOGIC_CONFIG_BUTTON_LABEL_SEQUENCER_AUTO_RESET.text().withColor(0x3E3E3E), LBRText.LOGIC_CONFIG_BUTTON_TOOLTIP_SEQUENCER_AUTO_RESET.text(), 0, 23 * 2, autoReset, (value) -> autoReset = value);
+		builder.addCheckbox(LBRText.LOGIC_CONFIG_BUTTON_LABEL_SEQUENCER_AUTO_RESET.text().withColor(0x3E3E3E), LBRText.LOGIC_CONFIG_BUTTON_TOOLTIP_SEQUENCER_AUTO_RESET.text(), 0, 22 * 2, autoReset, (value) -> autoReset = value);
 		
-		builder.addCheckbox(LBRText.LOGIC_CONFIG_BUTTON_LABEL_SEQUENCER_RESET_PORT.text().withColor(0x3E3E3E), LBRText.LOGIC_CONFIG_BUTTON_TOOLTIP_SEQUENCER_RESET_PORT.text(), 0, 23 * 3, resetPort, (value) -> resetPort = value);
+		builder.addCheckbox(LBRText.LOGIC_CONFIG_BUTTON_LABEL_SEQUENCER_RESET_PORT.text().withColor(0x3E3E3E), LBRText.LOGIC_CONFIG_BUTTON_TOOLTIP_SEQUENCER_RESET_PORT.text(), 0, 22 * 3, resetPort, (value) -> resetPort = value);
 	}
 	
 	@Override

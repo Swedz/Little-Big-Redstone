@@ -140,6 +140,7 @@
   "text.little_big_redstone.logic_config_button_tooltip_io_signal_comparison_mode_equal_to": "The input signal must be equal to %s.",
   "text.little_big_redstone.logic_config_button_tooltip_io_signal_comparison_mode_greater_than_or_equal_to": "The input signal must be greater than or equal to %s.",
   "text.little_big_redstone.logic_config_button_tooltip_io_signal_comparison_mode_less_than_or_equal_to": "The input signal must be less than or equal to %s.",
+  "text.little_big_redstone.logic_config_button_tooltip_io_signal_comparison_output": "The output signal will be equal to %s.",
   "text.little_big_redstone.logic_config_button_tooltip_io_signal_strength": "When in input mode, the redstone signal strength required for the output to be on.\n\nWhen in output mode, the redstone signal strength that will be outputted.",
   "text.little_big_redstone.logic_config_button_tooltip_outputs": "The number of outputs that this component can yield.",
   "text.little_big_redstone.logic_config_button_tooltip_randomizer_chance": "The percentage chance of one of the outputs to be ON for a given tick while the input is ON.",

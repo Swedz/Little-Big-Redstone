@@ -64,6 +64,7 @@ public enum LBRText implements TranslatableTextEnum
 	LOGIC_CONFIG_BUTTON_TOOLTIP_IO_SIGNAL_COMPARISON_MODE_EQUAL_TO("The input signal must be equal to %s."),
 	LOGIC_CONFIG_BUTTON_TOOLTIP_IO_SIGNAL_COMPARISON_MODE_GREATER_THAN_OR_EQUAL_TO("The input signal must be greater than or equal to %s."),
 	LOGIC_CONFIG_BUTTON_TOOLTIP_IO_SIGNAL_COMPARISON_MODE_LESS_THAN_OR_EQUAL_TO("The input signal must be less than or equal to %s."),
+	LOGIC_CONFIG_BUTTON_TOOLTIP_IO_SIGNAL_COMPARISON_OUTPUT("The output signal will be equal to %s."),
 	LOGIC_CONFIG_BUTTON_TOOLTIP_IO_SIGNAL_STRENGTH("When in input mode, the redstone signal strength required for the output to be on.\n\nWhen in output mode, the redstone signal strength that will be outputted."),
 	LOGIC_CONFIG_BUTTON_TOOLTIP_OUTPUTS("The number of outputs that this component can yield."),
 	LOGIC_CONFIG_BUTTON_TOOLTIP_RANDOMIZER_CHANCE("The percentage chance of one of the outputs to be ON for a given tick while the input is ON."),

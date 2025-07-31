@@ -75,7 +75,7 @@ public abstract class LogicConfig<C extends LogicConfig<C>> implements LogicPort
 		return false;
 	}
 	
-	public void buildMenu(LogicConfigMenuBuilder builder)
+	public void buildMenu(LogicConfigMenuBuilder builder, int width, int height)
 	{
 	}
 	
