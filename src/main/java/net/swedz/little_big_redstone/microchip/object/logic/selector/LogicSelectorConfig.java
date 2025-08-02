@@ -73,7 +73,10 @@ public final class LogicSelectorConfig extends LogicConfig<LogicSelectorConfig>
 		modeButton.set(builder.addCycleButton(LBRText.LOGIC_CONFIG_BUTTON_LABEL_MODE.text(), mode.tooltip().text(), 0, 0, width, 18, false, mode, Arrays.asList(LogicSelectorMode.values()), (value) -> LBRTooltips.SELECTOR_MODE_PARSER.parse(value).plainCopy(), (value) ->
 		{
 			mode = value;
-			modeButton.get().setTooltip(mode.tooltip().text());
+			if(modeButton.get() != null)
+			{
+				modeButton.get().setTooltip(mode.tooltip().text());
+			}
 		}));
 		
 		builder.addSlider(LBRText.LOGIC_CONFIG_BUTTON_LABEL_OUTPUTS.text(), Component.empty(), LBRText.LOGIC_CONFIG_BUTTON_TOOLTIP_OUTPUTS.text(), 0, 22, width, 18, this.outputsAllowed().min(), this.outputsAllowed().max(), outputs, 1, 0, (value) -> outputs = value.intValue());

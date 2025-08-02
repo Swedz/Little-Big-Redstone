@@ -125,7 +125,7 @@ public final class LogicIOConfig extends LogicConfig<LogicIOConfig>
 	public void buildMenu(LogicConfigMenuBuilder builder, int width, int height)
 	{
 		var signalStrengthSlider = new AtomicReference<LogicConfigButtonReference<Double>>();
-		var comparisonButton = new AtomicReference<LogicConfigButtonReference<Boolean>>();
+		var comparisonButton = new AtomicReference<LogicConfigButtonReference<LogicIOSignalComparisonMode>>();
 		
 		Runnable updateComparisonButtonTooltip = () ->
 		{
@@ -142,8 +142,14 @@ public final class LogicIOConfig extends LogicConfig<LogicIOConfig>
 		{
 			input = value;
 			signalStrength = input ? 1 : 15;
-			signalStrengthSlider.get().setValue((double) signalStrength);
-			comparisonButton.get().setActive(input);
+			if(signalStrengthSlider.get() != null)
+			{
+				signalStrengthSlider.get().setValue((double) signalStrength);
+			}
+			if(comparisonButton.get() != null)
+			{
+				comparisonButton.get().setActive(input);
+			}
 			updateComparisonButtonTooltip.run();
 		});
 		

@@ -1,9 +1,9 @@
 package net.swedz.little_big_redstone.microchip.object.logic.io;
 
 import net.swedz.little_big_redstone.LBRText;
-import net.swedz.little_big_redstone.gui.logicconfig.button.IconCycleButtonIcon;
+import net.swedz.little_big_redstone.gui.logicconfig.button.iconcycle.IconCycleLogicConfigButtonIcon;
 
-public enum LogicIOSignalComparisonMode implements IconCycleButtonIcon
+public enum LogicIOSignalComparisonMode implements IconCycleLogicConfigButtonIcon
 {
 	LESS_THAN_OR_EQUAL_TO(
 			"\u2264", LBRText.LOGIC_CONFIG_BUTTON_TOOLTIP_IO_SIGNAL_COMPARISON_MODE_LESS_THAN_OR_EQUAL_TO,

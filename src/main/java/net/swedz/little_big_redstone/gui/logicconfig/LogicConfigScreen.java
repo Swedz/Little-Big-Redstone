@@ -2,39 +2,39 @@ package net.swedz.little_big_redstone.gui.logicconfig;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.client.gui.components.Button;
-import net.minecraft.client.gui.components.Checkbox;
-import net.minecraft.client.gui.components.CycleButton;
 import net.minecraft.client.gui.components.Tooltip;
-import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.util.Mth;
 import net.minecraft.world.entity.player.Inventory;
-import net.neoforged.neoforge.client.gui.widget.ExtendedSlider;
+import net.minecraft.world.item.ItemStack;
 import net.swedz.little_big_redstone.LBR;
+import net.swedz.little_big_redstone.LBRComponents;
 import net.swedz.little_big_redstone.LBRText;
-import net.swedz.little_big_redstone.gui.logicconfig.button.IconCycleButton;
-import net.swedz.little_big_redstone.gui.logicconfig.button.IconCycleButtonIcon;
+import net.swedz.little_big_redstone.client.model.logic.LogicBakingModelData;
+import net.swedz.little_big_redstone.gui.logicconfig.button.iconcycle.CheckboxState;
+import net.swedz.little_big_redstone.gui.logicconfig.button.LogicConfigButton;
+import net.swedz.little_big_redstone.gui.logicconfig.button.cycle.CycleLogicConfigButton;
+import net.swedz.little_big_redstone.gui.logicconfig.button.iconcycle.IconCycleLogicConfigButton;
+import net.swedz.little_big_redstone.gui.logicconfig.button.iconcycle.IconCycleLogicConfigButtonIcon;
+import net.swedz.little_big_redstone.gui.logicconfig.button.slider.SliderLogicConfigButton;
 import net.swedz.little_big_redstone.microchip.object.logic.LogicEntry;
 import net.swedz.little_big_redstone.microchip.object.logic.config.LogicConfigButtonReference;
 import net.swedz.little_big_redstone.microchip.object.logic.config.LogicConfigMenuBuilder;
 import net.swedz.little_big_redstone.network.packet.RequestMicrochipMenuPacket;
 import net.swedz.little_big_redstone.network.packet.WriteLogicConfigPacket;
-import org.lwjgl.glfw.GLFW;
+import net.swedz.tesseract.neoforge.helper.guigraphics.TesseractGuiGraphics;
 
+import java.util.Arrays;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicReference;
-import java.util.function.BiFunction;
+import java.util.Optional;
 import java.util.function.Consumer;
-import java.util.function.Function;
 
 public final class LogicConfigScreen extends AbstractContainerScreen<LogicConfigMenu> implements LogicConfigMenuBuilder
 {
-	private static final ResourceLocation INVENTORY_BACKGROUND = LBR.id("textures/gui/container/logic_config/inventory_background.png");
-	
+	private final int        color;
 	private final LogicEntry logicEntry;
+	private final ItemStack  logicStack;
 	
 	private int configX, configY, configWidth, configHeight;
 	
@@ -49,23 +49,24 @@ public final class LogicConfigScreen extends AbstractContainerScreen<LogicConfig
 		configWidth = 160 - 4;
 		configHeight = 180 - 4;
 		
+		var component = menu.logicEntry().component();
+		var colorSet = LogicBakingModelData.get(component).getColorSet(component, menu.color());
+		color = colorSet.foreground();
 		logicEntry = menu.logicEntry();
+		
+		logicStack = logicEntry.toStack();
+		var stackComponent = logicStack.get(LBRComponents.LOGIC).copy();
+		stackComponent.setColor(Optional.of(stackComponent.color().orElse(menu.color())));
+		logicStack.set(LBRComponents.LOGIC, stackComponent);
 	}
 	
 	@Override
-	public <T> LogicConfigButtonReference addCycleButton(Component name, Component tooltip, int x, int y, int width, int height, boolean displayOnlyValue, T initialValue, List<T> values, Function<T, Component> valueStringifier, Consumer<T> onChange)
+	public <T> LogicConfigButtonReference<T> addCycleButton(Component name, Component tooltip, int x, int y, int width, int height, boolean displayOnlyValue, T initialValue, List<T> values, CycleLogicConfigButton.ValueStringifier<T> valueStringifier, Consumer<T> onChange)
 	{
-		var builder = CycleButton.builder(valueStringifier)
-				.withTooltip((__) -> Tooltip.create(tooltip))
-				.withValues(values)
-				.withInitialValue(initialValue);
-		if(displayOnlyValue)
-		{
-			builder.displayOnlyValue();
-		}
-		var button = builder.create(configX + x, configY + y, width, height, name, (__, value) -> onChange.accept(value));
+		var button = new CycleLogicConfigButton<>(configX + x, configY + y, width, height, color, name, displayOnlyValue, initialValue, values, valueStringifier, (__, value) -> onChange.accept(value));
+		button.setTooltip(Tooltip.create(tooltip));
 		this.addRenderableWidget(button);
-		return new LogicConfigButtonReference<T>()
+		return new LogicConfigButtonReference<>()
 		{
 			@Override
 			public void setText(Component text)
@@ -82,7 +83,7 @@ public final class LogicConfigScreen extends AbstractContainerScreen<LogicConfig
 			@Override
 			public T getValue()
 			{
-				return button.getValue();
+				return button.value();
 			}
 			
 			@Override
@@ -106,168 +107,17 @@ public final class LogicConfigScreen extends AbstractContainerScreen<LogicConfig
 	}
 	
 	@Override
-	public LogicConfigButtonReference addSlider(Component prefix, Component suffix, Component tooltip, int x, int y, int width, int height, double minValue, double maxValue, double currentValue, double stepSize, int precision, BiFunction<Double, String, Component> valueStringifier, Consumer<Double> onChange)
+	public LogicConfigButtonReference<Double> addSlider(Component prefix, Component suffix, Component tooltip, int x, int y, int width, int height, double minValue, double maxValue, double currentValue, double stepSize, int precision, SliderLogicConfigButton.ValueStringifier valueStringifier, Consumer<Double> onChange)
 	{
-		boolean isInteger = Mth.equal(stepSize, Math.floor(stepSize));
-		var widget = new ExtendedSlider(configX + x, configY + y, width, height, prefix, suffix, minValue, maxValue, currentValue, stepSize, precision, true)
-		{
-			private String typed = "";
-			
-			@Override
-			protected void updateMessage()
-			{
-				this.setMessage(Component.literal("").append(prefix).append(valueStringifier.apply(this.getValue(), this.getValueString())).append(suffix));
-				onChange.accept(minValue + (value * (maxValue - minValue)));
-			}
-			
-			@Override
-			public void onClick(double mouseX, double mouseY)
-			{
-				super.onClick(mouseX, mouseY);
-				typed = this.getValueString();
-			}
-			
-			@Override
-			protected void onDrag(double mouseX, double mouseY, double dragX, double dragY)
-			{
-				super.onDrag(mouseX, mouseY, dragX, dragY);
-				typed = this.getValueString();
-			}
-			
-			@Override
-			public boolean keyPressed(int keyCode, int scanCode, int modifiers)
-			{
-				// We cannot support stepSizes of <= 0 because ExtendedSlider#setSliderValue is private
-				if(stepSize <= 0D)
-				{
-					return false;
-				}
-				
-				boolean left = keyCode == GLFW.GLFW_KEY_LEFT;
-				if(left || keyCode == GLFW.GLFW_KEY_RIGHT)
-				{
-					if(minValue > maxValue)
-					{
-						left = !left;
-					}
-					float step = left ? -1 : 1;
-					if(Screen.hasShiftDown())
-					{
-						step *= 10;
-					}
-					this.setValue(this.getValue() + step * stepSize);
-					typed = this.getValueString();
-					return false;
-				}
-				
-				if(isInteger)
-				{
-					if(keyCode >= GLFW.GLFW_KEY_0 && keyCode <= GLFW.GLFW_KEY_9)
-					{
-						int number = keyCode - GLFW.GLFW_KEY_0;
-						typed += number;
-						this.setValue(Integer.parseInt(typed));
-						typed = this.getValueString();
-						return false;
-					}
-					else if(keyCode == GLFW.GLFW_KEY_BACKSPACE && !typed.isEmpty())
-					{
-						typed = typed.substring(0, typed.length() - 1);
-						this.setValue(typed.isEmpty() ? 0 : Integer.parseInt(typed));
-						typed = this.getValueString();
-						return false;
-					}
-				}
-				
-				return false;
-			}
-			
-			@Override
-			public boolean mouseScrolled(double mouseX, double mouseY, double scrollX, double scrollY)
-			{
-				// We cannot support stepSizes of <= 0 because ExtendedSlider#setSliderValue is private
-				if(stepSize <= 0)
-				{
-					return false;
-				}
-				
-				boolean left = scrollY < 0;
-				if(minValue > maxValue)
-				{
-					left = !left;
-				}
-				float step = left ? -1 : 1;
-				if(Screen.hasShiftDown())
-				{
-					step *= 10;
-				}
-				this.setValue(this.getValue() + step * stepSize);
-				typed = "";
-				
-				return true;
-			}
-		};
-		widget.setTooltip(Tooltip.create(tooltip));
-		this.addRenderableWidget(widget);
-		return new LogicConfigButtonReference<Double>()
-		{
-			@Override
-			public void setText(Component text)
-			{
-				widget.setMessage(text);
-			}
-			
-			@Override
-			public void setTooltip(Component tooltip)
-			{
-				widget.setTooltip(Tooltip.create(tooltip));
-			}
-			
-			@Override
-			public Double getValue()
-			{
-				return widget.getValue();
-			}
-			
-			@Override
-			public void setValue(Double value)
-			{
-				widget.setValue(value);
-			}
-			
-			@Override
-			public boolean isActive()
-			{
-				return widget.active;
-			}
-			
-			@Override
-			public void setActive(boolean active)
-			{
-				widget.active = active;
-			}
-		};
-	}
-	
-	@Override
-	public LogicConfigButtonReference addCheckbox(Component text, Component tooltip, int x, int y, boolean initialValue, Consumer<Boolean> onChange)
-	{
-		AtomicReference<Component> textReference = new AtomicReference<>(text);
-		var button = Checkbox.builder(Component.empty(), Minecraft.getInstance().font)
-				.tooltip(Tooltip.create(tooltip))
-				.pos(configX + x, configY + y)
-				.selected(initialValue)
-				.onValueChange((__, value) -> onChange.accept(value))
-				.build();
+		var button = new SliderLogicConfigButton(configX + x, configY + y, width, height, color, prefix, suffix, minValue, maxValue, currentValue, stepSize, precision, true, valueStringifier, (__, value) -> onChange.accept(value));
+		button.setTooltip(Tooltip.create(tooltip));
 		this.addRenderableWidget(button);
-		this.addRenderableOnly((graphics, mouseX, mouseY, partialTicks) ->
-				graphics.drawString(Minecraft.getInstance().font, textReference.get(), configX + x + 21, configY + y + 8 - 3, 0xFFFFFF, false));
-		return new LogicConfigButtonReference<Boolean>()
+		return new LogicConfigButtonReference<>()
 		{
 			@Override
 			public void setText(Component text)
 			{
-				textReference.set(text);
+				button.setMessage(text);
 			}
 			
 			@Override
@@ -277,22 +127,15 @@ public final class LogicConfigScreen extends AbstractContainerScreen<LogicConfig
 			}
 			
 			@Override
-			public Boolean getValue()
+			public Double getValue()
 			{
-				return button.selected();
+				return button.getValue();
 			}
 			
 			@Override
-			public void setValue(Boolean value)
+			public void setValue(Double value)
 			{
-				if(value && !button.selected())
-				{
-					button.onPress();
-				}
-				else if(!value && button.selected())
-				{
-					button.onPress();
-				}
+				button.setValue(value);
 			}
 			
 			@Override
@@ -310,12 +153,71 @@ public final class LogicConfigScreen extends AbstractContainerScreen<LogicConfig
 	}
 	
 	@Override
-	public <T extends Enum<T> & IconCycleButtonIcon> LogicConfigButtonReference addCycleButton(Component tooltip, int x, int y, ResourceLocation atlas, T initialValue, List<T> values, Consumer<T> onChange)
+	public LogicConfigButtonReference<CheckboxState> addCheckbox(Component text, Component tooltip, int x, int y, boolean initialValue, Consumer<Boolean> onChange)
 	{
-		var button = new IconCycleButton<>(configX + x, configY + y, atlas, values, initialValue, (__, value) -> onChange.accept(value));
+		var button = new IconCycleLogicConfigButton<>(configX + x, configY + y, color, LBR.id("textures/gui/slot_atlas.png"), initialValue ? CheckboxState.YES : CheckboxState.NO, Arrays.asList(CheckboxState.values()), (__, value) -> onChange.accept(value == CheckboxState.YES))
+		{
+			@Override
+			protected void renderWidget(GuiGraphics internal, int mouseX, int mouseY, float partialTick)
+			{
+				super.renderWidget(internal, mouseX, mouseY, partialTick);
+				
+				var graphics = new TesseractGuiGraphics(internal);
+				graphics.setColor(color);
+				graphics.setStringDropShadow(false);
+				graphics.drawString(text, this.getX() + width + 6, this.getY() + (18 / 2f) - (Minecraft.getInstance().font.lineHeight / 2f));
+				graphics.resetColor();
+			}
+		};
 		button.setTooltip(Tooltip.create(tooltip));
 		this.addRenderableWidget(button);
-		return new LogicConfigButtonReference<T>()
+		return new LogicConfigButtonReference<>()
+		{
+			@Override
+			public void setText(Component text)
+			{
+			}
+			
+			@Override
+			public void setTooltip(Component tooltip)
+			{
+				button.setTooltip(Tooltip.create(tooltip));
+			}
+			
+			@Override
+			public CheckboxState getValue()
+			{
+				return button.value();
+			}
+			
+			@Override
+			public void setValue(CheckboxState value)
+			{
+				button.setValue(value);
+			}
+			
+			@Override
+			public boolean isActive()
+			{
+				return button.active;
+			}
+			
+			@Override
+			public void setActive(boolean active)
+			{
+				button.active = active;
+			}
+		};
+		//return this.addCycleButton(tooltip, x, y, LBR.id("textures/gui/slot_atlas.png"), initialValue ? CheckboxState.YES : CheckboxState.NO, Arrays.asList(CheckboxState.values()), (value) -> onChange.accept(value == CheckboxState.YES));
+	}
+	
+	@Override
+	public <T extends IconCycleLogicConfigButtonIcon> LogicConfigButtonReference<T> addCycleButton(Component tooltip, int x, int y, ResourceLocation atlas, T initialValue, List<T> values, Consumer<T> onChange)
+	{
+		var button = new IconCycleLogicConfigButton<>(configX + x, configY + y, color, atlas, initialValue, values, (__, value) -> onChange.accept(value));
+		button.setTooltip(Tooltip.create(tooltip));
+		this.addRenderableWidget(button);
+		return new LogicConfigButtonReference<>()
 		{
 			@Override
 			public void setText(Component text)
@@ -375,13 +277,9 @@ public final class LogicConfigScreen extends AbstractContainerScreen<LogicConfig
 		
 		int buttonWidth = (configWidth / 2) - 4;
 		
-		this.addRenderableWidget(Button.builder(LBRText.LOGIC_CONFIG_BUTTON_LABEL_SAVE.text(), (__) -> this.save())
-				.bounds(configX, configY + configHeight - 16, buttonWidth, 16)
-				.build());
+		this.addRenderableWidget(new LogicConfigButton(configX, configY + configHeight - 16, buttonWidth, 16, color, LBRText.LOGIC_CONFIG_BUTTON_LABEL_SAVE.text(), (__) -> this.save()));
 		
-		this.addRenderableWidget(Button.builder(LBRText.LOGIC_CONFIG_BUTTON_LABEL_CANCEL.text(), (__) -> this.cancel())
-				.bounds(configX + configWidth - buttonWidth, configY + configHeight - 16, buttonWidth, 16)
-				.build());
+		this.addRenderableWidget(new LogicConfigButton(configX + configWidth - buttonWidth, configY + configHeight - 16, buttonWidth, 16, color, LBRText.LOGIC_CONFIG_BUTTON_LABEL_CANCEL.text(), (__) -> this.cancel()));
 	}
 	
 	@Override
@@ -392,7 +290,15 @@ public final class LogicConfigScreen extends AbstractContainerScreen<LogicConfig
 	@Override
 	protected void renderBg(GuiGraphics graphics, float partialTicks, int mouseX, int mouseY)
 	{
-		graphics.blit(INVENTORY_BACKGROUND, leftPos, topPos, 0, 0, imageWidth, imageHeight);
+		graphics.blit(LBR.id("textures/gui/container/logic_config/background.png"), leftPos, topPos, 0, 0, imageWidth, imageHeight);
+		
+		graphics.blit(LBR.id("textures/gui/container/logic_config/item_background.png"), leftPos - 61, topPos, 0, 0, imageWidth, imageHeight);
+		
+		graphics.pose().pushPose();
+		graphics.pose().translate(leftPos - 45, topPos + 18, 0);
+		graphics.pose().scale(2, 2, 1);
+		graphics.renderItem(logicStack, 0, 0);
+		graphics.pose().popPose();
 	}
 	
 	@Override
