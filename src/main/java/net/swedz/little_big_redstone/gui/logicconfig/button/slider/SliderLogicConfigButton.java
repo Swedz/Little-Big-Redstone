@@ -124,7 +124,6 @@ public class SliderLogicConfigButton extends ExtendedSlider implements LogicConf
 			{
 				typed = typed.substring(0, typed.length() - 1);
 				this.setValue(typed.isEmpty() ? 0 : Integer.parseInt(typed));
-				typed = this.getValueString();
 				return false;
 			}
 		}
