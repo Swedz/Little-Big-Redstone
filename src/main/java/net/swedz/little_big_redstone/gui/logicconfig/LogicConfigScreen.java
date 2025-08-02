@@ -208,7 +208,6 @@ public final class LogicConfigScreen extends AbstractContainerScreen<LogicConfig
 				button.active = active;
 			}
 		};
-		//return this.addCycleButton(tooltip, x, y, LBR.id("textures/gui/slot_atlas.png"), initialValue ? CheckboxState.YES : CheckboxState.NO, Arrays.asList(CheckboxState.values()), (value) -> onChange.accept(value == CheckboxState.YES));
 	}
 	
 	@Override
