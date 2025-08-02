@@ -8,6 +8,7 @@ import net.minecraft.world.MenuProvider;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.item.DyeColor;
 import net.swedz.little_big_redstone.LBR;
 import net.swedz.little_big_redstone.block.microchip.MicrochipBlockEntity;
 import net.swedz.little_big_redstone.gui.logicconfig.LogicConfigMenu;
@@ -58,12 +59,19 @@ public record OpenLogicConfigPacket(
 								@Override
 								public AbstractContainerMenu createMenu(int containerId, Inventory playerInventory, Player player)
 								{
-									return new LogicConfigMenu(containerId, playerInventory, menu.blockPos(), () -> menu.stillValid(player) && microchip.components().values().contains(entry), entry, returnViewPosition);
+									return new LogicConfigMenu(
+											containerId, playerInventory,
+											menu.blockPos(),
+											() -> menu.stillValid(player) && microchip.components().values().contains(entry),
+											entry.color().orElse(menu.color()), entry,
+											returnViewPosition
+									);
 								}
 							},
 							(buf) ->
 							{
 								buf.writeBlockPos(menu.blockPos());
+								DyeColor.STREAM_CODEC.encode(buf, entry.color().orElse(menu.color()));
 								LogicEntry.STREAM_CODEC.encode(buf, entry);
 								MicrochipViewPosition.STREAM_CODEC.encode(buf, returnViewPosition);
 							}

@@ -8,5 +8,11 @@ public interface LogicConfigButtonReference<T>
 	
 	void setTooltip(Component tooltip);
 	
+	T getValue();
+	
 	void setValue(T value);
+	
+	boolean isActive();
+	
+	void setActive(boolean active);
 }

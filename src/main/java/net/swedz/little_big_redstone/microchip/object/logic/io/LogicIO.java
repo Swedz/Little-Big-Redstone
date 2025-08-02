@@ -81,7 +81,7 @@ public final class LogicIO extends LogicComponent<LogicIO, LogicIOConfig> implem
 		if(config.input)
 		{
 			int signal = context.awareness(AwarenessTypes.REDSTONE).getInputPower(config.direction, config.channel);
-			outputState = signal >= config.signalStrength;
+			outputState = config.signalComparison.test(signal, config.signalStrength);
 		}
 		else
 		{
