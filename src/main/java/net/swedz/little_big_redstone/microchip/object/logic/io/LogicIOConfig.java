@@ -4,7 +4,6 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import io.netty.buffer.ByteBuf;
-import net.minecraft.ChatFormatting;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.codec.ByteBufCodecs;
@@ -111,8 +110,14 @@ public final class LogicIOConfig extends LogicConfig<LogicIOConfig>
 	{
 		lines.add(line(LBRText.LOGIC_CONFIG_TOOLTIP_MODE).arg(input, LBRTooltips.INPUT_OUTPUT_PARSER));
 		lines.add(line(LBRText.LOGIC_CONFIG_TOOLTIP_DIRECTION).arg(direction, LBRTooltips.DIRECTION_PARSER));
-		lines.add(line(LBRText.LOGIC_CONFIG_TOOLTIP_IO_SIGNAL_STRENGTH).arg(signalStrength));
-		lines.add(line(LBRText.LOGIC_CONFIG_TOOLTIP_IO_SIGNAL_COMPARISON_MODE).arg(Component.literal(signalComparison.symbol()).withStyle(ChatFormatting.WHITE)));
+		if(input)
+		{
+			lines.add(line(LBRText.LOGIC_CONFIG_TOOLTIP_IO_SIGNAL).arg(signalComparison, signalStrength, LBRTooltips.SIGNAL_PARSER));
+		}
+		else
+		{
+			lines.add(line(LBRText.LOGIC_CONFIG_TOOLTIP_IO_SIGNAL).arg(signalStrength));
+		}
 	}
 	
 	@Override
@@ -145,6 +150,7 @@ public final class LogicIOConfig extends LogicConfig<LogicIOConfig>
 			if(signalStrengthSlider.get() != null)
 			{
 				signalStrengthSlider.get().setValue((double) signalStrength);
+				signalStrengthSlider.get().setTooltip((input ? LBRText.LOGIC_CONFIG_BUTTON_TOOLTIP_IO_SIGNAL_STRENGTH_INPUT : LBRText.LOGIC_CONFIG_BUTTON_TOOLTIP_IO_SIGNAL_STRENGTH_OUTPUT).text());
 			}
 			if(comparisonButton.get() != null)
 			{
@@ -155,7 +161,7 @@ public final class LogicIOConfig extends LogicConfig<LogicIOConfig>
 		
 		builder.addCycleButton(LBRText.LOGIC_CONFIG_BUTTON_LABEL_DIRECTION.text(), LBRText.LOGIC_CONFIG_BUTTON_TOOLTIP_IO_DIRECTION.text(), 0, 22, width, 18, false, direction, Arrays.asList(Direction.values()), LBRTooltips.DIRECTION_PARSER::parse, (value) -> direction = value);
 		
-		signalStrengthSlider.set(builder.addSlider(LBRText.LOGIC_CONFIG_BUTTON_LABEL_IO_SIGNAL_STRENGTH.text(), Component.empty(), LBRText.LOGIC_CONFIG_BUTTON_TOOLTIP_IO_SIGNAL_STRENGTH.text(), 18 + 4, 22 * 2, width - 18 - 4, 18, 1, 15, signalStrength, 1, 0, (value) ->
+		signalStrengthSlider.set(builder.addSlider(LBRText.LOGIC_CONFIG_BUTTON_LABEL_IO_SIGNAL_STRENGTH.text(), Component.empty(), (input ? LBRText.LOGIC_CONFIG_BUTTON_TOOLTIP_IO_SIGNAL_STRENGTH_INPUT : LBRText.LOGIC_CONFIG_BUTTON_TOOLTIP_IO_SIGNAL_STRENGTH_OUTPUT).text(), 18 + 4, 22 * 2, width - 18 - 4, 18, 1, 15, signalStrength, 1, 0, (value) ->
 		{
 			signalStrength = value.intValue();
 			updateComparisonButtonTooltip.run();
