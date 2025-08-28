@@ -4,7 +4,7 @@ import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.Style;
 import net.minecraft.network.chat.TextColor;
-import net.swedz.little_big_redstone.microchip.object.logic.io.LogicIOSignalComparisonMode;
+import net.swedz.little_big_redstone.microchip.object.logic.config.LogicComparisonMode;
 import net.swedz.little_big_redstone.microchip.object.logic.reader.LogicReaderMode;
 import net.swedz.little_big_redstone.microchip.object.logic.selector.LogicSelectorMode;
 import net.swedz.little_big_redstone.microchip.object.logic.sequencer.LogicSequencerMode;
@@ -63,7 +63,8 @@ public final class LBRTooltips
 	
 	public static final Parser<LogicSelectorMode> SELECTOR_MODE_PARSER = (value) -> value.label().text().withStyle(HIGHLIGHT_STYLE);
 	
-	public static final BiParser<LogicIOSignalComparisonMode, Integer> SIGNAL_PARSER = (mode, value) -> Component.literal("%s %s".formatted(mode.symbol(), value)).withStyle(HIGHLIGHT_STYLE);
+	public static final BiParser<LogicComparisonMode, Integer> COMPARISON_PARSER            = (mode, value) -> Component.literal("%s %s".formatted(mode.symbol(), value)).withStyle(HIGHLIGHT_STYLE);
+	public static final BiParser<LogicComparisonMode, Float>   COMPARISON_PERCENTAGE_PARSER = (mode, value) -> Component.literal("%s %.0f%%".formatted(mode.symbol(), value * 100)).withStyle(HIGHLIGHT_STYLE);
 	
 	private static LBRText ticksAndSecondsText(Number value)
 	{

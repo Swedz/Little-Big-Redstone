@@ -142,7 +142,7 @@ public final class LogicReader extends LogicComponent<LogicReader, LogicReaderCo
 			}
 		}
 		
-		outputState = fill >= config.fillThreshold;
+		outputState = config.comparison.test(fill, config.fillThreshold);
 		if(outputState != originalOutputState)
 		{
 			context.markDirty(this);

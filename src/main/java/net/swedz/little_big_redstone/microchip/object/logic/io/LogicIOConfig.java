@@ -13,6 +13,7 @@ import net.swedz.little_big_redstone.LBR;
 import net.swedz.little_big_redstone.LBRText;
 import net.swedz.little_big_redstone.LBRTooltips;
 import net.swedz.little_big_redstone.microchip.object.logic.LogicComponents;
+import net.swedz.little_big_redstone.microchip.object.logic.config.LogicComparisonMode;
 import net.swedz.little_big_redstone.microchip.object.logic.config.LogicConfig;
 import net.swedz.little_big_redstone.microchip.object.logic.config.LogicConfigButtonReference;
 import net.swedz.little_big_redstone.microchip.object.logic.config.LogicConfigMenuBuilder;
@@ -33,7 +34,7 @@ public final class LogicIOConfig extends LogicConfig<LogicIOConfig>
 					Codec.BOOL.optionalFieldOf("input", true).forGetter((config) -> config.input),
 					Direction.CODEC.optionalFieldOf("direction", Direction.NORTH).forGetter((config) -> config.direction),
 					Codec.intRange(1, 15).optionalFieldOf("signal_strength", 1).forGetter((config) -> config.signalStrength),
-					CodecHelper.forLowercaseEnum(LogicIOSignalComparisonMode.class).optionalFieldOf("signal_comparison", LogicIOSignalComparisonMode.GREATER_THAN_OR_EQUAL_TO).forGetter((config) -> config.signalComparison)
+					CodecHelper.forLowercaseEnum(LogicComparisonMode.class).optionalFieldOf("signal_comparison", LogicComparisonMode.GREATER_THAN_OR_EQUAL_TO).forGetter((config) -> config.signalComparison)
 			)
 			.apply(instance, (input, direction, signalStrength, precise) -> new LogicIOConfig(true, input, direction, signalStrength, precise)));
 	
@@ -42,7 +43,7 @@ public final class LogicIOConfig extends LogicConfig<LogicIOConfig>
 			ByteBufCodecs.BOOL, (config) -> config.input,
 			Direction.STREAM_CODEC, (config) -> config.direction,
 			ByteBufCodecs.INT, (config) -> config.signalStrength,
-			CodecHelper.forEnumStream(LogicIOSignalComparisonMode.class), (config) -> config.signalComparison,
+			CodecHelper.forEnumStream(LogicComparisonMode.class), (config) -> config.signalComparison,
 			LogicIOConfig::new
 	);
 	
@@ -51,9 +52,9 @@ public final class LogicIOConfig extends LogicConfig<LogicIOConfig>
 	public Direction direction;
 	
 	public int signalStrength;
-	public LogicIOSignalComparisonMode signalComparison;
+	public LogicComparisonMode signalComparison;
 	
-	private LogicIOConfig(boolean valid, boolean input, Direction direction, int signalStrength, LogicIOSignalComparisonMode signalComparison)
+	private LogicIOConfig(boolean valid, boolean input, Direction direction, int signalStrength, LogicComparisonMode signalComparison)
 	{
 		this.valid = valid;
 		this.input = input;
@@ -64,7 +65,7 @@ public final class LogicIOConfig extends LogicConfig<LogicIOConfig>
 	
 	public LogicIOConfig()
 	{
-		this(true, true, Direction.NORTH, 1, LogicIOSignalComparisonMode.GREATER_THAN_OR_EQUAL_TO);
+		this(true, true, Direction.NORTH, 1, LogicComparisonMode.GREATER_THAN_OR_EQUAL_TO);
 	}
 	
 	@Override
@@ -112,7 +113,7 @@ public final class LogicIOConfig extends LogicConfig<LogicIOConfig>
 		lines.add(line(LBRText.LOGIC_CONFIG_TOOLTIP_DIRECTION).arg(direction, LBRTooltips.DIRECTION_PARSER));
 		if(input)
 		{
-			lines.add(line(LBRText.LOGIC_CONFIG_TOOLTIP_IO_SIGNAL).arg(signalComparison, signalStrength, LBRTooltips.SIGNAL_PARSER));
+			lines.add(line(LBRText.LOGIC_CONFIG_TOOLTIP_IO_SIGNAL).arg(signalComparison, signalStrength, LBRTooltips.COMPARISON_PARSER));
 		}
 		else
 		{
@@ -126,11 +127,23 @@ public final class LogicIOConfig extends LogicConfig<LogicIOConfig>
 		return true;
 	}
 	
+	private LBRText signalComparisonTooltip()
+	{
+		return switch (signalComparison)
+		{
+			case LESS_THAN_OR_EQUAL_TO ->
+					LBRText.LOGIC_CONFIG_BUTTON_TOOLTIP_IO_SIGNAL_COMPARISON_MODE_LESS_THAN_OR_EQUAL_TO;
+			case EQUAL_TO -> LBRText.LOGIC_CONFIG_BUTTON_TOOLTIP_IO_SIGNAL_COMPARISON_MODE_EQUAL_TO;
+			case GREATER_THAN_OR_EQUAL_TO ->
+					LBRText.LOGIC_CONFIG_BUTTON_TOOLTIP_IO_SIGNAL_COMPARISON_MODE_GREATER_THAN_OR_EQUAL_TO;
+		};
+	}
+	
 	@Override
 	public void buildMenu(LogicConfigMenuBuilder builder, int width, int height)
 	{
 		var signalStrengthSlider = new AtomicReference<LogicConfigButtonReference<Double>>();
-		var comparisonButton = new AtomicReference<LogicConfigButtonReference<LogicIOSignalComparisonMode>>();
+		var comparisonButton = new AtomicReference<LogicConfigButtonReference<LogicComparisonMode>>();
 		
 		Runnable updateComparisonButtonTooltip = () ->
 		{
@@ -138,7 +151,7 @@ public final class LogicIOConfig extends LogicConfig<LogicIOConfig>
 			if(button != null)
 			{
 				button.setTooltip(button.isActive() ?
-						signalComparison.tooltipButton().text(signalStrength) :
+						this.signalComparisonTooltip().text(signalStrength) :
 						LBRText.LOGIC_CONFIG_BUTTON_TOOLTIP_IO_SIGNAL_COMPARISON_OUTPUT.text(signalStrength));
 			}
 		};
@@ -167,7 +180,7 @@ public final class LogicIOConfig extends LogicConfig<LogicIOConfig>
 			updateComparisonButtonTooltip.run();
 		}));
 		
-		comparisonButton.set(builder.addCycleButton(signalComparison.tooltipButton().text(signalStrength), 0, 22 * 2, LBR.id("textures/gui/slot_atlas.png"), signalComparison, Arrays.asList(LogicIOSignalComparisonMode.values()), (value) ->
+		comparisonButton.set(builder.addCycleButton(this.signalComparisonTooltip().text(signalStrength), 0, 22 * 2, LBR.id("textures/gui/slot_atlas.png"), signalComparison, Arrays.asList(LogicComparisonMode.values()), (value) ->
 		{
 			signalComparison = value;
 			updateComparisonButtonTooltip.run();
