@@ -25,6 +25,7 @@ import net.swedz.little_big_redstone.client.model.logic.LogicUnbakedModel;
 import net.swedz.little_big_redstone.client.model.microchip.MicrochipUnbakedModel;
 import net.swedz.little_big_redstone.client.model.stickynote.entity.StickyNoteEntityUnbakedModel;
 import net.swedz.little_big_redstone.client.model.stickynote.item.StickyNoteItemUnbakedModel;
+import net.swedz.little_big_redstone.gui.floppydisk.FloppyDiskScreen;
 import net.swedz.little_big_redstone.gui.logicarray.LogicArrayScreen;
 import net.swedz.little_big_redstone.gui.logicconfig.LogicConfigScreen;
 import net.swedz.little_big_redstone.gui.microchip.MicrochipScreen;
@@ -43,6 +44,7 @@ public final class LBRClient
 {
 	public LBRClient(IEventBus bus, ModContainer container)
 	{
+		FloppyDiskScreen.createPath();
 		LBRTooltips.init();
 		LogicRenderers.init();
 	}

@@ -99,6 +99,19 @@ public final class FloppyDiskScreen extends Screen
 				.resolve("microchips");
 	}
 	
+	public static void createPath()
+	{
+		try
+		{
+			Files.createDirectories(path());
+		}
+		catch (IOException ex)
+		{
+			LBR.LOGGER.error("Failed to create microchips data file path");
+			throw new RuntimeException(ex);
+		}
+	}
+	
 	private static Path path(String name) throws IOException
 	{
 		Assert.notNull(name);
