@@ -31,9 +31,9 @@ import net.swedz.little_big_redstone.gui.logicconfig.LogicConfigScreen;
 import net.swedz.little_big_redstone.gui.microchip.MicrochipScreen;
 import net.swedz.little_big_redstone.gui.microchip.logic.LogicRenderers;
 import net.swedz.little_big_redstone.item.LogicItem;
-import net.swedz.little_big_redstone.item.logicarray.tooltip.LogicArrayClientTooltip;
-import net.swedz.little_big_redstone.item.logicarray.tooltip.LogicArrayTooltipData;
 import net.swedz.little_big_redstone.item.stickynote.StickyNoteItem;
+import net.swedz.little_big_redstone.item.tooltip.ItemContainerContentsClientTooltip;
+import net.swedz.little_big_redstone.item.tooltip.ItemContainerContentsTooltipData;
 import net.swedz.tesseract.neoforge.registry.holder.ItemHolder;
 
 import java.util.function.Supplier;
@@ -86,7 +86,7 @@ public final class LBRClient
 	@SubscribeEvent
 	private static void registerClientTooltipComponents(RegisterClientTooltipComponentFactoriesEvent event)
 	{
-		event.register(LogicArrayTooltipData.class, (data) -> new LogicArrayClientTooltip(data.storage()));
+		event.register(ItemContainerContentsTooltipData.class, (data) -> new ItemContainerContentsClientTooltip(data.storage(), data.maxColumns(), data.maxRows(), data.showExtraSlot()));
 	}
 	
 	@SubscribeEvent

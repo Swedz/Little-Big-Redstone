@@ -3,14 +3,17 @@ package net.swedz.little_big_redstone.item;
 import com.google.common.collect.Iterators;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.tooltip.TooltipComponent;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.component.ItemContainerContents;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
 import net.neoforged.bus.api.EventPriority;
@@ -26,6 +29,7 @@ import net.swedz.little_big_redstone.LBRTags;
 import net.swedz.little_big_redstone.LBRText;
 import net.swedz.little_big_redstone.block.microchip.MicrochipBlockEntity;
 import net.swedz.little_big_redstone.item.stickynote.StickyNoteItem;
+import net.swedz.little_big_redstone.item.tooltip.ItemContainerContentsTooltipData;
 import net.swedz.little_big_redstone.microchip.Microchip;
 import net.swedz.little_big_redstone.microchip.object.MicrochipObject;
 import net.swedz.little_big_redstone.microchip.object.logic.LogicType;
@@ -397,5 +401,37 @@ public final class FloppyDiskItem extends Item implements DyeColoredItem
 		{
 			new FloppyDiskGuiOverlayUpdatePacket(false).sendToClient(player);
 		}
+	}
+	
+	private static ItemContainerContents convertMicrochipToContents(Microchip.Immutable microchip)
+	{
+		List<ItemStack> stacks = Lists.newArrayList();
+		
+		stacks.add(new ItemStack(LBRItems.REDSTONE_BIT.get(), microchip.wireCount()));
+		
+		for(var entry : getComponentsNeeded(microchip).entrySet())
+		{
+			var type = entry.getKey().a();
+			var color = entry.getKey().b();
+			int count = entry.getValue();
+			if(count > 0)
+			{
+				var component = type.defaultFactory().create();
+				component.setColor(color);
+				var stack = ((LogicType) type).toStack(component);
+				stack.setCount(count);
+				stacks.add(stack);
+			}
+		}
+		
+		return ItemContainerContents.fromItems(stacks);
+	}
+	
+	@Override
+	public Optional<TooltipComponent> getTooltipImage(ItemStack stack)
+	{
+		return !stack.has(DataComponents.HIDE_TOOLTIP) && !stack.has(DataComponents.HIDE_ADDITIONAL_TOOLTIP) ?
+				Optional.ofNullable(stack.get(LBRComponents.FLOPPY_DISK)).map((microchip) -> new ItemContainerContentsTooltipData(convertMicrochipToContents(microchip), 9, false)) :
+				Optional.empty();
 	}
 }
