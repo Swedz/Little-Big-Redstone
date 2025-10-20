@@ -22,7 +22,7 @@ import net.neoforged.neoforge.capabilities.Capabilities;
 import net.swedz.little_big_redstone.LBRComponents;
 import net.swedz.little_big_redstone.gui.logicarray.LogicArrayMenu;
 import net.swedz.little_big_redstone.item.DyeColoredItem;
-import net.swedz.little_big_redstone.item.logicarray.tooltip.LogicArrayTooltipData;
+import net.swedz.little_big_redstone.item.tooltip.ItemContainerContentsTooltipData;
 import net.swedz.tesseract.neoforge.helper.TransferHelper;
 
 import java.util.Optional;
@@ -143,7 +143,7 @@ public final class LogicArrayItem extends Item implements DyeColoredItem
 	public Optional<TooltipComponent> getTooltipImage(ItemStack stack)
 	{
 		return !stack.has(DataComponents.HIDE_TOOLTIP) && !stack.has(DataComponents.HIDE_ADDITIONAL_TOOLTIP) ?
-				Optional.ofNullable(stack.get(LBRComponents.LOGIC_ARRAY_STORAGE)).map(LogicArrayTooltipData::new) :
+				Optional.ofNullable(stack.get(LBRComponents.LOGIC_ARRAY_STORAGE)).map((contents) -> new ItemContainerContentsTooltipData(contents, COLUMNS, ROWS, true)) :
 				Optional.empty();
 	}
 }

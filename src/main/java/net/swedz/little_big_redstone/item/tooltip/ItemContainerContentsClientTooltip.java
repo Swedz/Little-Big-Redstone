@@ -1,20 +1,28 @@
-package net.swedz.little_big_redstone.item.logicarray.tooltip;
+package net.swedz.little_big_redstone.item.tooltip;
 
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.tooltip.ClientTooltipComponent;
 import net.minecraft.world.item.component.ItemContainerContents;
 import net.swedz.little_big_redstone.LBR;
-import net.swedz.little_big_redstone.item.logicarray.LogicArrayItem;
+import net.swedz.tesseract.neoforge.api.Assert;
 import net.swedz.tesseract.neoforge.helper.guigraphics.TesseractGuiGraphics;
 
-public final class LogicArrayClientTooltip implements ClientTooltipComponent
+public final class ItemContainerContentsClientTooltip implements ClientTooltipComponent
 {
 	private final ItemContainerContents storage;
 	
-	public LogicArrayClientTooltip(ItemContainerContents storage)
+	private final int maxColumns, maxRows;
+	
+	private final boolean showExtraSlot;
+	
+	public ItemContainerContentsClientTooltip(ItemContainerContents storage, int maxColumns, int maxRows, boolean showExtraSlot)
 	{
+		Assert.that(maxColumns > 0, "Must have at least one column.");
 		this.storage = storage;
+		this.maxColumns = maxColumns;
+		this.maxRows = maxRows;
+		this.showExtraSlot = showExtraSlot;
 	}
 	
 	@Override
@@ -41,12 +49,13 @@ public final class LogicArrayClientTooltip implements ClientTooltipComponent
 	
 	private int gridSizeX()
 	{
-		return Math.min(LogicArrayItem.COLUMNS, storage.getSlots() + 1);
+		return Math.min(maxColumns, storage.getSlots() + (showExtraSlot ? 1 : 0));
 	}
 	
 	private int gridSizeY()
 	{
-		return Math.min(LogicArrayItem.ROWS, storage.getSlots() == 0 ? 0 : (int) Math.ceil(((double) storage.getSlots() + 1) / (double) this.gridSizeX()));
+		int sizeY = storage.getSlots() == 0 ? 0 : (int) Math.ceil(((double) storage.getSlots() + (showExtraSlot ? 1 : 0)) / (double) this.gridSizeX());
+		return maxRows > 0 ? Math.min(maxRows, sizeY) : sizeY;
 	}
 	
 	@Override
