@@ -39,6 +39,11 @@ public abstract class LogicComponent<L extends LogicComponent<L, C>, C extends L
 		return config;
 	}
 	
+	public void resetConfig()
+	{
+		config.loadFrom(this.defaultConfig());
+	}
+	
 	protected abstract C defaultConfig();
 	
 	public final Optional<DyeColor> color()
