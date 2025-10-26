@@ -31,6 +31,10 @@ public final class ClearConfigRecipe extends CustomRecipe
 				}
 				hasLogic = true;
 			}
+			else if(!stack.isEmpty())
+			{
+				return false;
+			}
 		}
 		return hasLogic;
 	}
