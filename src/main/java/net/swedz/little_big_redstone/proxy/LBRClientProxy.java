@@ -5,6 +5,8 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.item.ItemStack;
 import net.swedz.little_big_redstone.LBR;
 import net.swedz.little_big_redstone.client.hud.FloppyDiskConsumeItemsGuiOverlay;
+import net.swedz.little_big_redstone.client.hud.StickyNoteViewContentsGuiOverlay;
+import net.swedz.little_big_redstone.entity.stickynote.StickyNoteView;
 import net.swedz.little_big_redstone.gui.floppydisk.FloppyDiskScreen;
 import net.swedz.little_big_redstone.gui.microchip.MicrochipMenu;
 import net.swedz.little_big_redstone.gui.microchip.MicrochipScreen;
@@ -94,6 +96,21 @@ public class LBRClientProxy extends LBRProxy
 	public Microchip.Immutable getWatchedMicrochip()
 	{
 		return watchedMicrochip;
+	}
+	
+	private StickyNoteView watchedStickyNote;
+	
+	@Override
+	public void updateWatchedStickyNote(StickyNoteView stickyNote)
+	{
+		watchedStickyNote = stickyNote;
+		StickyNoteViewContentsGuiOverlay.update(watchedStickyNote);
+	}
+	
+	@Override
+	public StickyNoteView getWatchedStickyNote()
+	{
+		return watchedStickyNote;
 	}
 	
 	@Override

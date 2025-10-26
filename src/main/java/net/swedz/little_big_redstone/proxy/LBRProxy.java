@@ -2,6 +2,7 @@ package net.swedz.little_big_redstone.proxy;
 
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.item.ItemStack;
+import net.swedz.little_big_redstone.entity.stickynote.StickyNoteView;
 import net.swedz.little_big_redstone.gui.stickynote.reference.StickyNoteReference;
 import net.swedz.little_big_redstone.microchip.Microchip;
 import net.swedz.little_big_redstone.microchip.object.logic.LogicEntry;
@@ -36,6 +37,15 @@ public class LBRProxy implements Proxy
 	public Microchip.Immutable getWatchedMicrochip()
 	{
 		throw new UnsupportedOperationException("getWatchedMicrochip() can only be called on the client");
+	}
+	
+	public void updateWatchedStickyNote(StickyNoteView stickyNote)
+	{
+	}
+	
+	public StickyNoteView getWatchedStickyNote()
+	{
+		throw new UnsupportedOperationException("getWatchedStickyNote() can only be called on the client");
 	}
 	
 	public void openFloppyDisk(InteractionHand hand)

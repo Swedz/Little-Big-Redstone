@@ -19,6 +19,7 @@ import net.neoforged.neoforge.client.extensions.common.RegisterClientExtensionsE
 import net.neoforged.neoforge.client.gui.VanillaGuiLayers;
 import net.swedz.little_big_redstone.client.entity.StickyNoteEntityRenderer;
 import net.swedz.little_big_redstone.client.hud.FloppyDiskConsumeItemsGuiOverlay;
+import net.swedz.little_big_redstone.client.hud.StickyNoteViewContentsGuiOverlay;
 import net.swedz.little_big_redstone.client.item.LogicItemRenderer;
 import net.swedz.little_big_redstone.client.item.StickyNoteItemRenderer;
 import net.swedz.little_big_redstone.client.model.logic.LogicUnbakedModel;
@@ -75,6 +76,7 @@ public final class LBRClient
 	private static void register(RegisterGuiLayersEvent event)
 	{
 		event.registerAbove(VanillaGuiLayers.OVERLAY_MESSAGE, LBR.id("floppy_disk_consume_items"), FloppyDiskConsumeItemsGuiOverlay::render);
+		event.registerAbove(VanillaGuiLayers.OVERLAY_MESSAGE, LBR.id("sticky_note_view_contents"), StickyNoteViewContentsGuiOverlay::render);
 	}
 	
 	@SubscribeEvent
