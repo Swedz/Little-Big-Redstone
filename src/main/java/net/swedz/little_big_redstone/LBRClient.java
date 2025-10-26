@@ -33,6 +33,8 @@ import net.swedz.little_big_redstone.gui.microchip.MicrochipScreen;
 import net.swedz.little_big_redstone.gui.microchip.logic.LogicRenderers;
 import net.swedz.little_big_redstone.item.LogicItem;
 import net.swedz.little_big_redstone.item.stickynote.StickyNoteItem;
+import net.swedz.little_big_redstone.item.stickynote.tooltip.StickyNoteClientTooltip;
+import net.swedz.little_big_redstone.item.stickynote.tooltip.StickyNoteTooltipData;
 import net.swedz.little_big_redstone.item.tooltip.ItemContainerContentsClientTooltip;
 import net.swedz.little_big_redstone.item.tooltip.ItemContainerContentsTooltipData;
 import net.swedz.tesseract.neoforge.registry.holder.ItemHolder;
@@ -89,6 +91,7 @@ public final class LBRClient
 	private static void registerClientTooltipComponents(RegisterClientTooltipComponentFactoriesEvent event)
 	{
 		event.register(ItemContainerContentsTooltipData.class, (data) -> new ItemContainerContentsClientTooltip(data.storage(), data.maxColumns(), data.maxRows(), data.showExtraSlot()));
+		event.register(StickyNoteTooltipData.class, (data) -> new StickyNoteClientTooltip(data.note()));
 	}
 	
 	@SubscribeEvent

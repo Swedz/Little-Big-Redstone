@@ -4,8 +4,9 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.network.chat.CommonComponents;
 import net.minecraft.network.chat.Component;
-import net.swedz.little_big_redstone.LBRColors;
 import net.swedz.little_big_redstone.LBRText;
+import net.swedz.little_big_redstone.client.StickyNoteViewRenderer;
+import net.swedz.little_big_redstone.entity.stickynote.StickyNoteView;
 import net.swedz.little_big_redstone.gui.stickynote.StickyNoteScreen;
 import net.swedz.little_big_redstone.gui.stickynote.edit.StickyNoteEditScreen;
 import net.swedz.little_big_redstone.gui.stickynote.reference.StickyNoteReference;
@@ -55,19 +56,8 @@ public final class StickyNoteViewScreen extends StickyNoteScreen
 		
 		graphics.pose().pushPose();
 		graphics.pose().translate(leftPos, topPos, 0);
-		graphics.pose().translate(contentLeftPos, contentTopPos, 0);
 		
-		graphics.setColor(LBRColors.stickyNoteText(textColor));
-		graphics.setStringDropShadow(false);
-		int index = 0;
-		for(var line : font.split(text, maxContentWidth))
-		{
-			int y = index * font.lineHeight;
-			graphics.drawString(line, 0, y);
-			index++;
-		}
-		graphics.setStringDropShadow(true);
-		graphics.resetColor();
+		StickyNoteViewRenderer.renderText(graphics, new StickyNoteView(color, textColor, text));
 		
 		graphics.pose().popPose();
 	}

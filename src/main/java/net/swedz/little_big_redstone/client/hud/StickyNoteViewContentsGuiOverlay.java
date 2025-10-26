@@ -10,7 +10,7 @@ import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.client.event.ClientTickEvent;
 import net.swedz.little_big_redstone.LBR;
-import net.swedz.little_big_redstone.LBRColors;
+import net.swedz.little_big_redstone.client.StickyNoteViewRenderer;
 import net.swedz.little_big_redstone.entity.stickynote.StickyNoteEntity;
 import net.swedz.little_big_redstone.entity.stickynote.StickyNoteView;
 import net.swedz.little_big_redstone.network.packet.RequestStickyNoteWatcherPacket;
@@ -41,43 +41,6 @@ public final class StickyNoteViewContentsGuiOverlay
 		}
 	}
 	
-	private static void renderBackground(TesseractGuiGraphics graphics, float alpha)
-	{
-		graphics.pose().pushPose();
-		
-		graphics.setColor(1, 1, 1, alpha);
-		
-		graphics.setTexture(LBR.id("textures/gui/sticky_note/background_%s.png".formatted(STICKY_NOTE.color().getName())));
-		graphics.nineSlice(0, 0, 180, 180, 64, 64, 21);
-		
-		graphics.setTexture(LBR.id("textures/gui/sticky_note/pin_%s.png".formatted(STICKY_NOTE.color().getName())));
-		graphics.blit((180 / 2) - 9, 4, 0, 0, 32, 32, 32, 32);
-		
-		graphics.pose().popPose();
-	}
-	
-	private static void renderText(TesseractGuiGraphics graphics, float alpha)
-	{
-		var font = Minecraft.getInstance().font;
-		
-		graphics.pose().pushPose();
-		graphics.pose().translate(5, 27, 0);
-		
-		graphics.setColor(LBRColors.stickyNoteText(STICKY_NOTE.textColor(), alpha));
-		graphics.setStringDropShadow(false);
-		int index = 0;
-		for(var line : font.split(STICKY_NOTE.text(), 170))
-		{
-			int y = index * font.lineHeight;
-			graphics.drawString(line, 0, y);
-			index++;
-		}
-		graphics.setStringDropShadow(true);
-		graphics.resetColor();
-		
-		graphics.pose().popPose();
-	}
-	
 	public static void render(GuiGraphics internal, DeltaTracker delta)
 	{
 		// If a screen is open, stop viewing the sticky note
@@ -98,15 +61,14 @@ public final class StickyNoteViewContentsGuiOverlay
 			int alpha = Math.min((int) ((DISPLAY_TIME - delta.getGameTimeDeltaPartialTick(false)) * (255f / 20f)), 255);
 			if(alpha > 8)
 			{
-				var gui = Minecraft.getInstance().gui;
 				var graphics = new TesseractGuiGraphics(internal);
 				
 				graphics.pose().pushPose();
 				graphics.pose().translate(10, 10, 0);
 				graphics.pose().scale(0.5f, 0.5f, 0.5f);
 				
-				renderBackground(graphics, alpha / 255f);
-				renderText(graphics, alpha / 255f);
+				StickyNoteViewRenderer.renderBackground(graphics, STICKY_NOTE, alpha / 255f);
+				StickyNoteViewRenderer.renderText(graphics, STICKY_NOTE, alpha / 255f);
 				
 				graphics.pose().popPose();
 			}
