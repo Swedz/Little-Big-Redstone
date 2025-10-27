@@ -13,6 +13,7 @@ import net.swedz.little_big_redstone.network.packet.PickStickyNotePacket;
 import net.swedz.little_big_redstone.network.packet.PickStickyNoteResponsePacket;
 import net.swedz.little_big_redstone.network.packet.PlaceTakeMicrochipObjectPacket;
 import net.swedz.little_big_redstone.network.packet.PlaceTakeMicrochipWirePacket;
+import net.swedz.little_big_redstone.network.packet.QuickGrabMicrochipWireItemPacket;
 import net.swedz.little_big_redstone.network.packet.RequestMicrochipMenuPacket;
 import net.swedz.little_big_redstone.network.packet.RequestMicrochipWatcherPacket;
 import net.swedz.little_big_redstone.network.packet.RequestStickyNoteWatcherPacket;
@@ -48,6 +49,7 @@ public final class LBRPackets
 		create("pick_sticky_note_response", PickStickyNoteResponsePacket.class, PickStickyNoteResponsePacket.STREAM_CODEC);
 		create("place_take_microchip_object", PlaceTakeMicrochipObjectPacket.class, PlaceTakeMicrochipObjectPacket.STREAM_CODEC);
 		create("place_take_microchip_wire", PlaceTakeMicrochipWirePacket.class, PlaceTakeMicrochipWirePacket.STREAM_CODEC);
+		create("quick_grab_microchip_wire_item", QuickGrabMicrochipWireItemPacket.class, QuickGrabMicrochipWireItemPacket.STREAM_CODEC);
 		create("request_microchip_menu", RequestMicrochipMenuPacket.class, RequestMicrochipMenuPacket.STREAM_CODEC);
 		create("request_microchip_watcher", RequestMicrochipWatcherPacket.class, RequestMicrochipWatcherPacket.STREAM_CODEC);
 		create("request_sticky_note_watcher", RequestStickyNoteWatcherPacket.class, RequestStickyNoteWatcherPacket.STREAM_CODEC);
