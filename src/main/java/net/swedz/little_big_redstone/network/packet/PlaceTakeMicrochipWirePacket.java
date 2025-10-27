@@ -4,7 +4,6 @@ import io.netty.buffer.ByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.item.ItemStack;
 import net.swedz.little_big_redstone.LBR;
 import net.swedz.little_big_redstone.LBRItems;
 import net.swedz.little_big_redstone.gui.microchip.MicrochipMenu;
@@ -53,8 +52,8 @@ public record PlaceTakeMicrochipWirePacket(
 			var microchip = menu.microchip();
 			var components = microchip.components();
 			var wires = microchip.wires();
-			ItemStack heldItem = menu.getCarried();
-			if(heldItem.is(LBRItems.REDSTONE_BIT.asItem()))
+			var carried = menu.getCarried();
+			if(carried.is(LBRItems.REDSTONE_BIT.asItem()))
 			{
 				var outputLogic = components.get(outputSlot);
 				var inputLogic = components.get(inputSlot);
@@ -66,14 +65,14 @@ public record PlaceTakeMicrochipWirePacket(
 						if(wires.add(outputSlot, outputPort, inputSlot, inputPort))
 						{
 							microchip.markDirty();
-							heldItem.consume(1, player);
+							carried.consume(1, player);
 						}
 						else
 						{
 							LBR.LOGGER.warn("Received PlaceTakeMicrochipWirePacket from {} with already existing wire: {}#{} -> {}#{}, discarding", playerName, outputSlot, outputPort, inputSlot, inputPort);
 						}
 					}
-					else if(heldItem.getCount() < heldItem.getMaxStackSize())
+					else if(carried.getCount() < carried.getMaxStackSize())
 					{
 						var wire = wires.get(outputSlot, outputPort, inputSlot, inputPort);
 						if(wire != null)
@@ -82,7 +81,7 @@ public record PlaceTakeMicrochipWirePacket(
 							microchip.markDirty();
 							if(!player.hasInfiniteMaterials())
 							{
-								heldItem.grow(1);
+								carried.grow(1);
 							}
 						}
 						else
@@ -92,7 +91,7 @@ public record PlaceTakeMicrochipWirePacket(
 					}
 					else
 					{
-						LBR.LOGGER.warn("Received PlaceTakeMicrochipWirePacket from {} with too many items: {} >= {}, discarding", playerName, heldItem.getCount(), heldItem.getMaxStackSize());
+						LBR.LOGGER.warn("Received PlaceTakeMicrochipWirePacket from {} with too many items: {} >= {}, discarding", playerName, carried.getCount(), carried.getMaxStackSize());
 					}
 				}
 				else
@@ -106,7 +105,7 @@ public record PlaceTakeMicrochipWirePacket(
 				{
 					LBR.LOGGER.warn("Received PlaceTakeMicrochipWirePacket from {} without holding a microchip wire item, discarding", playerName);
 				}
-				else if(heldItem.isEmpty())
+				else if(carried.isEmpty())
 				{
 					var wire = wires.get(outputSlot, outputPort, inputSlot, inputPort);
 					if(wire != null)

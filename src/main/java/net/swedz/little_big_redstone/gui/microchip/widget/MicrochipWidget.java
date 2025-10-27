@@ -38,6 +38,7 @@ import net.swedz.little_big_redstone.network.packet.DyeMicrochipObjectPacket;
 import net.swedz.little_big_redstone.network.packet.OpenLogicConfigPacket;
 import net.swedz.little_big_redstone.network.packet.PlaceTakeMicrochipObjectPacket;
 import net.swedz.little_big_redstone.network.packet.PlaceTakeMicrochipWirePacket;
+import net.swedz.little_big_redstone.network.packet.QuickGrabMicrochipWireItemPacket;
 import net.swedz.little_big_redstone.proxy.LBRProxy;
 import net.swedz.tesseract.neoforge.api.Bounds;
 import net.swedz.tesseract.neoforge.helper.TransferHelper;
@@ -253,12 +254,27 @@ public final class MicrochipWidget implements GuiEventListener, Renderable, Narr
 			
 			if(context.shouldInteractPort())
 			{
-				if(context.isPortOutput() && !carried.isEmpty())
+				if(context.isPortOutput())
 				{
-					selectedPort = context.port();
-					return true;
+					if(carried.isEmpty())
+					{
+						var extracted = TransferHelper.extractMatching(menu.getLogicArrayItemHandler(), (stack) -> stack.is(LBRItems.REDSTONE_BIT.asItem()), 1);
+						if(!extracted.isEmpty())
+						{
+							menu.setCarried(extracted);
+							selectedPort = context.port();
+							new QuickGrabMicrochipWireItemPacket(menu.containerId).sendToServer();
+							return true;
+						}
+					}
+					else
+					{
+						selectedPort = context.port();
+						return true;
+					}
 				}
-				else if(context.isPortInput() && (carried.isEmpty() || carried.getCount() < carried.getMaxStackSize()))
+				if(context.isPortInput() &&
+				   (carried.isEmpty() || carried.getCount() < carried.getMaxStackSize()))
 				{
 					var wire = microchip.wires().getByInputSlot(context.port());
 					return this.pickupWire(wire);
