@@ -10,6 +10,7 @@ import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.client.event.ClientTickEvent;
 import net.swedz.little_big_redstone.LBR;
+import net.swedz.little_big_redstone.LBRClient;
 import net.swedz.little_big_redstone.client.StickyNoteViewRenderer;
 import net.swedz.little_big_redstone.entity.stickynote.StickyNoteEntity;
 import net.swedz.little_big_redstone.entity.stickynote.StickyNoteView;
@@ -63,9 +64,11 @@ public final class StickyNoteViewContentsGuiOverlay
 			{
 				var graphics = new TesseractGuiGraphics(internal);
 				
+				float scale = (float) LBRClient.config().stickyNoteInWorldViewScale();
+				
 				graphics.pose().pushPose();
 				graphics.pose().translate(10, 10, 0);
-				graphics.pose().scale(0.5f, 0.5f, 0.5f);
+				graphics.pose().scale(scale, scale, 1);
 				
 				StickyNoteViewRenderer.renderBackground(graphics, STICKY_NOTE, alpha / 255f);
 				StickyNoteViewRenderer.renderText(graphics, STICKY_NOTE, alpha / 255f);

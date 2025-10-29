@@ -8,6 +8,7 @@ import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.ModContainer;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.fml.common.Mod;
+import net.neoforged.fml.config.ModConfig;
 import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
 import net.neoforged.neoforge.client.event.EntityRenderersEvent;
 import net.neoforged.neoforge.client.event.ModelEvent;
@@ -37,6 +38,8 @@ import net.swedz.little_big_redstone.item.stickynote.tooltip.StickyNoteClientToo
 import net.swedz.little_big_redstone.item.stickynote.tooltip.StickyNoteTooltipData;
 import net.swedz.little_big_redstone.item.tooltip.ItemContainerContentsClientTooltip;
 import net.swedz.little_big_redstone.item.tooltip.ItemContainerContentsTooltipData;
+import net.swedz.tesseract.neoforge.api.Assert;
+import net.swedz.tesseract.neoforge.config.ConfigManager;
 import net.swedz.tesseract.neoforge.registry.holder.ItemHolder;
 
 import java.util.function.Supplier;
@@ -47,9 +50,29 @@ public final class LBRClient
 {
 	public LBRClient(IEventBus bus, ModContainer container)
 	{
+		setupConfig(bus, container);
+		
 		FloppyDiskScreen.createPath();
 		LBRTooltips.init();
 		LogicRenderers.init();
+	}
+	
+	private static LBRClientConfig CONFIG;
+	
+	public static LBRClientConfig config()
+	{
+		Assert.notNull(CONFIG, "Config not yet loaded");
+		return CONFIG;
+	}
+	
+	private static void setupConfig(IEventBus bus, ModContainer container)
+	{
+		CONFIG = new ConfigManager()
+				.includeDefaultValueComments()
+				.build(LBRClientConfig.class)
+				.register(container, ModConfig.Type.CLIENT)
+				.listenToLoad(bus)
+				.config();
 	}
 	
 	private static void registerCustomItemRenderer(RegisterClientExtensionsEvent event, Supplier<BlockEntityWithoutLevelRenderer> renderer, Class<?> itemType)
