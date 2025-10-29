@@ -49,7 +49,6 @@ public final class ClearConfigRecipe extends CustomRecipe
 				var copy = stack.copyWithCount(1);
 				var logic = stack.get(LBRComponents.LOGIC).copy();
 				logic.resetConfig();
-				logic.resetColor();
 				copy.set(LBRComponents.LOGIC, logic);
 				return copy;
 			}
