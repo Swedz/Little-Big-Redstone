@@ -100,8 +100,8 @@ public final class LBRClient
 	@SubscribeEvent
 	private static void register(RegisterGuiLayersEvent event)
 	{
-		event.registerAbove(VanillaGuiLayers.OVERLAY_MESSAGE, LBR.id("floppy_disk_consume_items"), FloppyDiskConsumeItemsGuiOverlay::render);
-		event.registerAbove(VanillaGuiLayers.OVERLAY_MESSAGE, LBR.id("sticky_note_view_contents"), StickyNoteViewContentsGuiOverlay::render);
+		event.registerAbove(VanillaGuiLayers.HOTBAR, LBR.id("floppy_disk_consume_items"), FloppyDiskConsumeItemsGuiOverlay::render);
+		event.registerBelow(VanillaGuiLayers.DEBUG_OVERLAY, LBR.id("sticky_note_view_contents"), StickyNoteViewContentsGuiOverlay::render);
 	}
 	
 	@SubscribeEvent
