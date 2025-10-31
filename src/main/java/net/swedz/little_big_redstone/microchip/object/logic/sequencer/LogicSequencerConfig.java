@@ -7,7 +7,7 @@ import io.netty.buffer.ByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
-import net.swedz.little_big_redstone.LBRText;
+import net.swedz.little_big_redstone.LBR;
 import net.swedz.little_big_redstone.LBRTooltips;
 import net.swedz.little_big_redstone.microchip.object.logic.config.LogicConfig;
 import net.swedz.little_big_redstone.microchip.object.logic.config.LogicConfigButtonReference;
@@ -19,8 +19,6 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.atomic.AtomicReference;
-
-import static net.swedz.little_big_redstone.LBRTextLine.*;
 
 public final class LogicSequencerConfig extends LogicConfig<LogicSequencerConfig>
 {
@@ -88,10 +86,10 @@ public final class LogicSequencerConfig extends LogicConfig<LogicSequencerConfig
 	@Override
 	public void appendHoverText(List<Component> lines)
 	{
-		lines.add(line(LBRText.LOGIC_CONFIG_TOOLTIP_MODE).arg(mode, LBRTooltips.SEQUENCER_MODE_PARSER));
-		lines.add(line(LBRText.LOGIC_CONFIG_TOOLTIP_SEQUENCER_DELAY).arg(outputDelay, LBRTooltips.TICKS_AND_SECONDS_PARSER));
-		lines.add(line(LBRText.LOGIC_CONFIG_TOOLTIP_SEQUENCER_AUTO_RESET).arg(autoReset, LBRTooltips.BOOLEAN_YES_NO_PARSER));
-		lines.add(line(LBRText.LOGIC_CONFIG_TOOLTIP_SEQUENCER_RESET_PORT).arg(resetPort, LBRTooltips.BOOLEAN_YES_NO_PARSER));
+		lines.add(LBR.text().logicConfigTooltipMode(mode));
+		lines.add(LBR.text().logicConfigTooltipSequencerDelay(outputDelay));
+		lines.add(LBR.text().logicConfigTooltipSequencerAutoReset(autoReset));
+		lines.add(LBR.text().logicConfigTooltipSequencerResetPort(resetPort));
 	}
 	
 	@Override
@@ -105,20 +103,20 @@ public final class LogicSequencerConfig extends LogicConfig<LogicSequencerConfig
 	{
 		var modeButton = new AtomicReference<LogicConfigButtonReference<LogicSequencerMode>>();
 		
-		modeButton.set(builder.addCycleButton(LBRText.LOGIC_CONFIG_BUTTON_LABEL_MODE.text(), mode.tooltip().text(), 0, 0, width, 18, false, mode, Arrays.asList(LogicSequencerMode.values()), (value) -> LBRTooltips.SEQUENCER_MODE_PARSER.parse(value).plainCopy(), (value) ->
+		modeButton.set(builder.addCycleButton(LBR.text().logicConfigButtonLabelMode(), mode.tooltip(), 0, 0, width, 18, false, mode, Arrays.asList(LogicSequencerMode.values()), LogicSequencerMode::label, (value) ->
 		{
 			mode = value;
 			if(modeButton.get() != null)
 			{
-				modeButton.get().setTooltip(mode.tooltip().text());
+				modeButton.get().setTooltip(mode.tooltip());
 			}
 		}));
 		
-		builder.addSlider(LBRText.LOGIC_CONFIG_BUTTON_LABEL_SEQUENCER_DELAY.text(), Component.empty(), LBRText.LOGIC_CONFIG_BUTTON_TOOLTIP_SEQUENCER_DELAY.text(), 0, 22, width, 18, 1, 60 * 20, outputDelay, 1, 0, LBRTooltips.TICKS_AND_SECONDS_SLIDER_PARSER::parse, (value) -> outputDelay = value.intValue());
+		builder.addSlider(LBR.text().logicConfigButtonLabelSequencerDelay(), Component.empty(), LBR.text().logicConfigButtonTooltipSequencerDelay(), 0, 22, width, 18, 1, 60 * 20, outputDelay, 1, 0, LBRTooltips.TICKS_AND_SECONDS_SLIDER_PARSER::parse, (value) -> outputDelay = value.intValue());
 		
-		builder.addCheckbox(LBRText.LOGIC_CONFIG_BUTTON_LABEL_SEQUENCER_AUTO_RESET.text(), LBRText.LOGIC_CONFIG_BUTTON_TOOLTIP_SEQUENCER_AUTO_RESET.text(), 0, 22 * 2, autoReset, (value) -> autoReset = value);
+		builder.addCheckbox(LBR.text().logicConfigButtonLabelSequencerAutoReset(), LBR.text().logicConfigButtonTooltipSequencerAutoReset(), 0, 22 * 2, autoReset, (value) -> autoReset = value);
 		
-		builder.addCheckbox(LBRText.LOGIC_CONFIG_BUTTON_LABEL_SEQUENCER_RESET_PORT.text(), LBRText.LOGIC_CONFIG_BUTTON_TOOLTIP_SEQUENCER_RESET_PORT.text(), 0, 22 * 3, resetPort, (value) -> resetPort = value);
+		builder.addCheckbox(LBR.text().logicConfigButtonLabelSequencerResetPort(), LBR.text().logicConfigButtonTooltipSequencerResetPort(), 0, 22 * 3, resetPort, (value) -> resetPort = value);
 	}
 	
 	@Override

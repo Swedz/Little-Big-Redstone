@@ -10,9 +10,9 @@ import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.util.Mth;
 import net.swedz.little_big_redstone.LBR;
-import net.swedz.little_big_redstone.LBRText;
 import net.swedz.little_big_redstone.LBRTooltips;
 import net.swedz.little_big_redstone.microchip.object.logic.LogicComponents;
+import net.swedz.little_big_redstone.microchip.object.logic.LogicMode;
 import net.swedz.little_big_redstone.microchip.object.logic.config.LogicComparisonMode;
 import net.swedz.little_big_redstone.microchip.object.logic.config.LogicConfig;
 import net.swedz.little_big_redstone.microchip.object.logic.config.LogicConfigButtonReference;
@@ -24,8 +24,6 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.atomic.AtomicReference;
-
-import static net.swedz.little_big_redstone.LBRTextLine.*;
 
 public final class LogicIOConfig extends LogicConfig<LogicIOConfig>
 {
@@ -109,15 +107,15 @@ public final class LogicIOConfig extends LogicConfig<LogicIOConfig>
 	@Override
 	public void appendHoverText(List<Component> lines)
 	{
-		lines.add(line(LBRText.LOGIC_CONFIG_TOOLTIP_MODE).arg(input, LBRTooltips.INPUT_OUTPUT_PARSER));
-		lines.add(line(LBRText.LOGIC_CONFIG_TOOLTIP_DIRECTION).arg(direction, LBRTooltips.DIRECTION_PARSER));
+		lines.add(LBR.text().logicConfigTooltipMode(input ? LogicMode.input() : LogicMode.output()));
+		lines.add(LBR.text().logicConfigTooltipDirection(direction));
 		if(input)
 		{
-			lines.add(line(LBRText.LOGIC_CONFIG_TOOLTIP_IO_SIGNAL).arg(signalComparison, signalStrength, LBRTooltips.COMPARISON_PARSER));
+			lines.add(LBR.text().logicConfigTooltipIoSignalComparison(signalComparison, signalStrength));
 		}
 		else
 		{
-			lines.add(line(LBRText.LOGIC_CONFIG_TOOLTIP_IO_SIGNAL).arg(signalStrength));
+			lines.add(LBR.text().logicConfigTooltipIoSignal(signalStrength));
 		}
 	}
 	
@@ -127,15 +125,15 @@ public final class LogicIOConfig extends LogicConfig<LogicIOConfig>
 		return true;
 	}
 	
-	private LBRText signalComparisonTooltip()
+	private Component signalComparisonTooltip(int signal)
 	{
 		return switch (signalComparison)
 		{
 			case LESS_THAN_OR_EQUAL_TO ->
-					LBRText.LOGIC_CONFIG_BUTTON_TOOLTIP_IO_SIGNAL_COMPARISON_MODE_LESS_THAN_OR_EQUAL_TO;
-			case EQUAL_TO -> LBRText.LOGIC_CONFIG_BUTTON_TOOLTIP_IO_SIGNAL_COMPARISON_MODE_EQUAL_TO;
+					LBR.text().logicConfigButtonTooltipIoSignalComparisonModeLessThanOrEqualTo(signal);
+			case EQUAL_TO -> LBR.text().logicConfigButtonTooltipIoSignalComparisonModeEqualTo(signal);
 			case GREATER_THAN_OR_EQUAL_TO ->
-					LBRText.LOGIC_CONFIG_BUTTON_TOOLTIP_IO_SIGNAL_COMPARISON_MODE_GREATER_THAN_OR_EQUAL_TO;
+					LBR.text().logicConfigButtonTooltipIoSignalComparisonModeGreaterThanOrEqualTo(signal);
 		};
 	}
 	
@@ -151,19 +149,19 @@ public final class LogicIOConfig extends LogicConfig<LogicIOConfig>
 			if(button != null)
 			{
 				button.setTooltip(button.isActive() ?
-						this.signalComparisonTooltip().text(signalStrength) :
-						LBRText.LOGIC_CONFIG_BUTTON_TOOLTIP_IO_SIGNAL_COMPARISON_OUTPUT.text(signalStrength));
+						this.signalComparisonTooltip(signalStrength) :
+						LBR.text().logicConfigButtonTooltipIoSignalComparisonOutput(signalStrength));
 			}
 		};
 		
-		builder.addCycleButton(LBRText.LOGIC_CONFIG_BUTTON_LABEL_MODE.text(), LBRText.LOGIC_CONFIG_BUTTON_TOOLTIP_IO_MODE.text(), 0, 0, width, 18, false, input, List.of(true, false), (value) -> LBRTooltips.INPUT_OUTPUT_PARSER.parse(value).plainCopy(), (value) ->
+		builder.addCycleButton(LBR.text().logicConfigButtonLabelMode(), LBR.text().logicConfigButtonTooltipIoMode(), 0, 0, width, 18, false, input, List.of(true, false), (value) -> LBRTooltips.INPUT_OUTPUT_PARSER.parse(value).plainCopy(), (value) ->
 		{
 			input = value;
 			signalStrength = input ? 1 : 15;
 			if(signalStrengthSlider.get() != null)
 			{
 				signalStrengthSlider.get().setValue((double) signalStrength);
-				signalStrengthSlider.get().setTooltip((input ? LBRText.LOGIC_CONFIG_BUTTON_TOOLTIP_IO_SIGNAL_STRENGTH_INPUT : LBRText.LOGIC_CONFIG_BUTTON_TOOLTIP_IO_SIGNAL_STRENGTH_OUTPUT).text());
+				signalStrengthSlider.get().setTooltip(input ? LBR.text().logicConfigButtonTooltipIoSignalStrengthInput() : LBR.text().logicConfigButtonTooltipIoSignalStrengthOutput());
 			}
 			if(comparisonButton.get() != null)
 			{
@@ -172,15 +170,15 @@ public final class LogicIOConfig extends LogicConfig<LogicIOConfig>
 			updateComparisonButtonTooltip.run();
 		});
 		
-		builder.addCycleButton(LBRText.LOGIC_CONFIG_BUTTON_LABEL_DIRECTION.text(), LBRText.LOGIC_CONFIG_BUTTON_TOOLTIP_IO_DIRECTION.text(), 0, 22, width, 18, false, direction, Arrays.asList(Direction.values()), LBRTooltips.DIRECTION_PARSER::parse, (value) -> direction = value);
+		builder.addCycleButton(LBR.text().logicConfigButtonLabelDirection(), LBR.text().logicConfigButtonTooltipIoDirection(), 0, 22, width, 18, false, direction, Arrays.asList(Direction.values()), LBRTooltips.DIRECTION_PARSER::parse, (value) -> direction = value);
 		
-		signalStrengthSlider.set(builder.addSlider(LBRText.LOGIC_CONFIG_BUTTON_LABEL_IO_SIGNAL_STRENGTH.text(), Component.empty(), (input ? LBRText.LOGIC_CONFIG_BUTTON_TOOLTIP_IO_SIGNAL_STRENGTH_INPUT : LBRText.LOGIC_CONFIG_BUTTON_TOOLTIP_IO_SIGNAL_STRENGTH_OUTPUT).text(), 18 + 4, 22 * 2, width - 18 - 4, 18, 1, 15, signalStrength, 1, 0, (value) ->
+		signalStrengthSlider.set(builder.addSlider(LBR.text().logicConfigButtonLabelIoSignalStrength(), Component.empty(), input ? LBR.text().logicConfigButtonTooltipIoSignalStrengthInput() : LBR.text().logicConfigButtonTooltipIoSignalStrengthOutput(), 18 + 4, 22 * 2, width - 18 - 4, 18, 1, 15, signalStrength, 1, 0, (value) ->
 		{
 			signalStrength = value.intValue();
 			updateComparisonButtonTooltip.run();
 		}));
 		
-		comparisonButton.set(builder.addCycleButton(this.signalComparisonTooltip().text(signalStrength), 0, 22 * 2, LBR.id("textures/gui/slot_atlas.png"), signalComparison, Arrays.asList(LogicComparisonMode.values()), (value) ->
+		comparisonButton.set(builder.addCycleButton(this.signalComparisonTooltip(signalStrength), 0, 22 * 2, LBR.id("textures/gui/slot_atlas.png"), signalComparison, Arrays.asList(LogicComparisonMode.values()), (value) ->
 		{
 			signalComparison = value;
 			updateComparisonButtonTooltip.run();

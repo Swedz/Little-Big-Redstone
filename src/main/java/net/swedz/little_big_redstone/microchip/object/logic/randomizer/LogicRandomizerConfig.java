@@ -7,17 +7,13 @@ import io.netty.buffer.ByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
-import net.swedz.little_big_redstone.LBRText;
+import net.swedz.little_big_redstone.LBR;
 import net.swedz.little_big_redstone.microchip.object.logic.config.LogicConfig;
 import net.swedz.little_big_redstone.microchip.object.logic.config.LogicConfigMenuBuilder;
 import net.swedz.tesseract.neoforge.api.range.IntRange;
-import net.swedz.tesseract.neoforge.tooltip.Parser;
 
 import java.util.List;
 import java.util.Objects;
-
-import static net.swedz.little_big_redstone.LBRTextLine.*;
-import static net.swedz.little_big_redstone.LBRTooltips.*;
 
 public final class LogicRandomizerConfig extends LogicConfig<LogicRandomizerConfig>
 {
@@ -52,8 +48,8 @@ public final class LogicRandomizerConfig extends LogicConfig<LogicRandomizerConf
 	@Override
 	public void appendHoverText(List<Component> lines)
 	{
-		lines.add(line(LBRText.LOGIC_CONFIG_TOOLTIP_OUTPUTS).arg(outputs));
-		lines.add(line(LBRText.LOGIC_CONFIG_TOOLTIP_CHANCE).arg(chance, 0, Parser.FLOAT_PERCENTAGE.withStyle(HIGHLIGHT_STYLE)));
+		lines.add(LBR.text().logicConfigTooltipOutputs(outputs));
+		lines.add(LBR.text().logicConfigTooltipChance(chance));
 	}
 	
 	@Override
@@ -65,9 +61,9 @@ public final class LogicRandomizerConfig extends LogicConfig<LogicRandomizerConf
 	@Override
 	public void buildMenu(LogicConfigMenuBuilder builder, int width, int height)
 	{
-		builder.addSlider(LBRText.LOGIC_CONFIG_BUTTON_LABEL_OUTPUTS.text(), Component.empty(), LBRText.LOGIC_CONFIG_BUTTON_TOOLTIP_OUTPUTS.text(), 0, 0, width, 18, this.outputsAllowed().min(), this.outputsAllowed().max(), outputs, 1, 0, (value) -> outputs = value.intValue());
+		builder.addSlider(LBR.text().logicConfigButtonLabelOutputs(), Component.empty(), LBR.text().logicConfigButtonTooltipOutputs(), 0, 0, width, 18, this.outputsAllowed().min(), this.outputsAllowed().max(), outputs, 1, 0, (value) -> outputs = value.intValue());
 		
-		builder.addSlider(LBRText.LOGIC_CONFIG_BUTTON_LABEL_CHANCE.text(), Component.literal("%"), LBRText.LOGIC_CONFIG_BUTTON_TOOLTIP_RANDOMIZER_CHANCE.text(), 0, 22, width, 18, 1, 100, chance * 100, 1, 0, (value) -> chance = (float) (value / 100f));
+		builder.addSlider(LBR.text().logicConfigButtonLabelChance(), Component.literal("%"), LBR.text().logicConfigButtonTooltipRandomizerChance(), 0, 22, width, 18, 1, 100, chance * 100, 1, 0, (value) -> chance = (float) (value / 100f));
 	}
 	
 	@Override

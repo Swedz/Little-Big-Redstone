@@ -6,7 +6,6 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.Tooltip;
 import net.swedz.little_big_redstone.LBR;
-import net.swedz.little_big_redstone.LBRText;
 import net.swedz.tesseract.neoforge.helper.guigraphics.TesseractGuiGraphics;
 
 import java.util.function.Consumer;
@@ -26,7 +25,7 @@ public final class PausePlayGuideIconButton extends Button
 	
 	public PausePlayGuideIconButton(int x, int y, Consumer<PausePlayGuideIconButton> callback)
 	{
-		super(x, y, WIDTH, HEIGHT, LBRText.GUIDE_BUTTON_PAUSE.text(), (b) ->
+		super(x, y, WIDTH, HEIGHT, LBR.text().guideButtonPause(), (b) ->
 		{
 			var button = (PausePlayGuideIconButton) b;
 			button.toggle();
@@ -38,7 +37,7 @@ public final class PausePlayGuideIconButton extends Button
 	private void toggle()
 	{
 		playing = !playing;
-		this.setMessage(playing ? LBRText.GUIDE_BUTTON_PAUSE.text() : LBRText.GUIDE_BUTTON_RESUME.text());
+		this.setMessage(playing ? LBR.text().guideButtonPause() : LBR.text().guideButtonResume());
 		this.setTooltip(Tooltip.create(this.getMessage()));
 	}
 	

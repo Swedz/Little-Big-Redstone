@@ -9,7 +9,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.world.item.DyeColor;
-import net.swedz.little_big_redstone.LBRText;
+import net.swedz.little_big_redstone.LBR;
 import net.swedz.little_big_redstone.microchip.object.logic.LogicComponent;
 import net.swedz.little_big_redstone.microchip.object.logic.LogicContext;
 import net.swedz.little_big_redstone.microchip.object.logic.LogicGridSize;
@@ -18,8 +18,6 @@ import net.swedz.little_big_redstone.microchip.object.logic.LogicTypes;
 
 import java.util.List;
 import java.util.Optional;
-
-import static net.swedz.little_big_redstone.LBRTextLine.*;
 
 public final class LogicSequencer extends LogicComponent<LogicSequencer, LogicSequencerConfig>
 {
@@ -149,9 +147,9 @@ public final class LogicSequencer extends LogicComponent<LogicSequencer, LogicSe
 	@Override
 	public void appendShiftHoverText(List<Component> lines)
 	{
-		lines.add(line(LBRText.LOGIC_HELP_SEQUENCER_1));
-		lines.add(line(LBRText.LOGIC_HELP_SEQUENCER_2));
-		lines.add(line(LBRText.LOGIC_HELP_SEQUENCER_3));
+		lines.add(LBR.text().logicHelpSequencer1());
+		lines.add(LBR.text().logicHelpSequencer2());
+		lines.add(LBR.text().logicHelpSequencer3());
 	}
 	
 	@Override

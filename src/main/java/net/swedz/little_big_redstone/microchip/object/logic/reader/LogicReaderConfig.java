@@ -6,10 +6,10 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.swedz.little_big_redstone.LBR;
-import net.swedz.little_big_redstone.LBRText;
 import net.swedz.little_big_redstone.LBRTooltips;
 import net.swedz.little_big_redstone.microchip.object.logic.config.LogicComparisonMode;
 import net.swedz.little_big_redstone.microchip.object.logic.config.LogicConfig;
@@ -17,14 +17,11 @@ import net.swedz.little_big_redstone.microchip.object.logic.config.LogicConfigBu
 import net.swedz.little_big_redstone.microchip.object.logic.config.LogicConfigMenuBuilder;
 import net.swedz.tesseract.neoforge.api.range.IntRange;
 import net.swedz.tesseract.neoforge.helper.CodecHelper;
-import net.swedz.tesseract.neoforge.tooltip.Parser;
 
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.atomic.AtomicReference;
-
-import static net.swedz.little_big_redstone.LBRTextLine.*;
 
 public final class LogicReaderConfig extends LogicConfig<LogicReaderConfig>
 {
@@ -92,9 +89,9 @@ public final class LogicReaderConfig extends LogicConfig<LogicReaderConfig>
 	@Override
 	public void appendHoverText(List<Component> lines)
 	{
-		lines.add(line(LBRText.LOGIC_CONFIG_TOOLTIP_MODE).arg(mode, LBRTooltips.READER_MODE_PARSER));
-		lines.add(line(LBRText.LOGIC_CONFIG_TOOLTIP_DIRECTION).arg(direction, LBRTooltips.DIRECTION_PARSER));
-		lines.add(line(LBRText.LOGIC_CONFIG_TOOLTIP_READER_FILL).arg(comparison, fillThreshold, LBRTooltips.COMPARISON_PERCENTAGE_PARSER));
+		lines.add(LBR.text().logicConfigTooltipMode(mode));
+		lines.add(LBR.text().logicConfigTooltipDirection(direction));
+		lines.add(LBR.text().logicConfigTooltipReaderFill(comparison, fillThreshold));
 	}
 	
 	@Override
@@ -103,15 +100,15 @@ public final class LogicReaderConfig extends LogicConfig<LogicReaderConfig>
 		return true;
 	}
 	
-	private LBRText comparisonTooltip()
+	private MutableComponent comparisonTooltip(float threshold)
 	{
 		return switch (comparison)
 		{
 			case LESS_THAN_OR_EQUAL_TO ->
-					LBRText.LOGIC_CONFIG_BUTTON_TOOLTIP_READER_THRESHOLD_COMPARISON_MODE_LESS_THAN_OR_EQUAL_TO;
-			case EQUAL_TO -> LBRText.LOGIC_CONFIG_BUTTON_TOOLTIP_READER_THRESHOLD_COMPARISON_MODE_EQUAL_TO;
+					LBR.text().logicConfigButtonTooltipReaderThresholdComparisonModeLessThanOrEqualTo(threshold);
+			case EQUAL_TO -> LBR.text().logicConfigButtonTooltipReaderThresholdComparisonModeEqualTo(threshold);
 			case GREATER_THAN_OR_EQUAL_TO ->
-					LBRText.LOGIC_CONFIG_BUTTON_TOOLTIP_READER_THRESHOLD_COMPARISON_MODE_GREATER_THAN_OR_EQUAL_TO;
+					LBR.text().logicConfigButtonTooltipReaderThresholdComparisonModeGreaterThanOrEqualTo(threshold);
 		};
 	}
 	
@@ -125,21 +122,21 @@ public final class LogicReaderConfig extends LogicConfig<LogicReaderConfig>
 			var button = comparisonButton.get();
 			if(button != null)
 			{
-				button.setTooltip(this.comparisonTooltip().arg(fillThreshold, 0, Parser.FLOAT_PERCENTAGE));
+				button.setTooltip(this.comparisonTooltip(fillThreshold));
 			}
 		};
 		
-		builder.addCycleButton(LBRText.LOGIC_CONFIG_BUTTON_LABEL_MODE.text(), LBRText.LOGIC_CONFIG_BUTTON_TOOLTIP_READER_MODE.text(), 0, 0, width, 18, false, mode, Arrays.asList(LogicReaderMode.values()), (value) -> LBRTooltips.READER_MODE_PARSER.parse(value).plainCopy(), (value) -> mode = value);
+		builder.addCycleButton(LBR.text().logicConfigButtonLabelMode(), LBR.text().logicConfigButtonTooltipReaderMode(), 0, 0, width, 18, false, mode, Arrays.asList(LogicReaderMode.values()), LogicReaderMode::label, (value) -> mode = value);
 		
-		builder.addCycleButton(LBRText.LOGIC_CONFIG_BUTTON_LABEL_DIRECTION.text(), LBRText.LOGIC_CONFIG_BUTTON_TOOLTIP_READER_DIRECTION.text(), 0, 22, width, 18, false, direction, Arrays.asList(Direction.values()), LBRTooltips.DIRECTION_PARSER::parse, (value) -> direction = value);
+		builder.addCycleButton(LBR.text().logicConfigButtonLabelDirection(), LBR.text().logicConfigButtonTooltipReaderDirection(), 0, 22, width, 18, false, direction, Arrays.asList(Direction.values()), LBRTooltips.DIRECTION_PARSER::parse, (value) -> direction = value);
 		
-		builder.addSlider(LBRText.LOGIC_CONFIG_BUTTON_LABEL_READER_FILL_THRESHOLD.text(), Component.literal("%"), LBRText.LOGIC_CONFIG_BUTTON_TOOLTIP_READER_FILL_THRESHOLD.text(), 18 + 4, 22 * 2, width - 18 - 4, 18, 0, 100, fillThreshold * 100, 1, 0, (value) ->
+		builder.addSlider(LBR.text().logicConfigButtonLabelReaderFillThreshold(), Component.literal("%"), LBR.text().logicConfigButtonTooltipReaderFillThreshold(), 18 + 4, 22 * 2, width - 18 - 4, 18, 0, 100, fillThreshold * 100, 1, 0, (value) ->
 		{
 			fillThreshold = (float) (value / 100f);
 			updateComparisonButtonTooltip.run();
 		});
 		
-		comparisonButton.set(builder.addCycleButton(this.comparisonTooltip().arg(fillThreshold, 0, Parser.FLOAT_PERCENTAGE), 0, 22 * 2, LBR.id("textures/gui/slot_atlas.png"), comparison, Arrays.asList(LogicComparisonMode.values()), (value) ->
+		comparisonButton.set(builder.addCycleButton(this.comparisonTooltip(fillThreshold), 0, 22 * 2, LBR.id("textures/gui/slot_atlas.png"), comparison, Arrays.asList(LogicComparisonMode.values()), (value) ->
 		{
 			comparison = value;
 			updateComparisonButtonTooltip.run();

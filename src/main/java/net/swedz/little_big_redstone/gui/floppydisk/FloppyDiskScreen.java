@@ -1,6 +1,5 @@
 package net.swedz.little_big_redstone.gui.floppydisk;
 
-import net.minecraft.ChatFormatting;
 import net.minecraft.FileUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
@@ -17,7 +16,6 @@ import net.neoforged.fml.loading.FMLPaths;
 import net.swedz.little_big_redstone.LBR;
 import net.swedz.little_big_redstone.LBRComponents;
 import net.swedz.little_big_redstone.LBRTags;
-import net.swedz.little_big_redstone.LBRText;
 import net.swedz.little_big_redstone.microchip.Microchip;
 import net.swedz.little_big_redstone.network.packet.FloppyDiskLoadPacket;
 import net.swedz.tesseract.neoforge.api.Assert;
@@ -46,7 +44,7 @@ public final class FloppyDiskScreen extends Screen
 	
 	public FloppyDiskScreen(InteractionHand hand)
 	{
-		super(LBRText.FLOPPY_DISK.text());
+		super(LBR.text().floppyDisk());
 		
 		this.hand = hand;
 		
@@ -66,12 +64,12 @@ public final class FloppyDiskScreen extends Screen
 		boolean hasData = stack.has(LBRComponents.FLOPPY_DISK);
 		boolean hasInput = input != null && !input.getValue().isEmpty();
 		
-		save = this.addRenderableWidget(Button.builder(LBRText.FLOPPY_DISK_BUTTON_SAVE.text(), (b) -> this.save()).bounds(leftPos, topPos + uiHeight - 40 - 3, uiWidth / 2 - 3, 20).build());
+		save = this.addRenderableWidget(Button.builder(LBR.text().floppyDiskButtonSave(), (b) -> this.save()).bounds(leftPos, topPos + uiHeight - 40 - 3, uiWidth / 2 - 3, 20).build());
 		save.active = hasData && hasInput;
 		
-		load = this.addRenderableWidget(Button.builder(LBRText.FLOPPY_DISK_BUTTON_LOAD.text(), (b) -> this.load()).bounds(leftPos + uiWidth / 2 + 3, topPos + uiHeight - 40 - 3, uiWidth / 2 - 3, 20).build());
+		load = this.addRenderableWidget(Button.builder(LBR.text().floppyDiskButtonLoad(), (b) -> this.load()).bounds(leftPos + uiWidth / 2 + 3, topPos + uiHeight - 40 - 3, uiWidth / 2 - 3, 20).build());
 		load.active = hasInput;
-		this.addRenderableWidget(Button.builder(LBRText.FLOPPY_DISK_BUTTON_CLOSE.text(), (b) -> this.close()).bounds(leftPos, topPos + uiHeight - 20, uiWidth, 20).build());
+		this.addRenderableWidget(Button.builder(LBR.text().floppyDiskButtonClose(), (b) -> this.close()).bounds(leftPos, topPos + uiHeight - 20, uiWidth, 20).build());
 		
 		input = new AutoFillEditBox(minecraft.font, leftPos, topPos + uiHeight / 2 - 20, uiWidth, 20, Component.empty(), () -> existingFiles, 3);
 		input.setMaxLength(32);
@@ -225,14 +223,10 @@ public final class FloppyDiskScreen extends Screen
 			return;
 		}
 		
-		if(saveToFile(name, microchip))
-		{
-			player.sendSystemMessage(LBRText.FLOPPY_DISK_FILE_SAVED.text(name).withStyle(ChatFormatting.GREEN));
-		}
-		else
-		{
-			player.sendSystemMessage(LBRText.FLOPPY_DISK_FILE_FAILED_TO_SAVE.text().withStyle(ChatFormatting.RED));
-		}
+		boolean saved = saveToFile(name, microchip);
+		player.sendSystemMessage(saved ?
+				LBR.text().floppyDiskFileSaved(name) :
+				LBR.text().floppyDiskFileFailedToSave());
 	}
 	
 	private void load()
@@ -257,12 +251,12 @@ public final class FloppyDiskScreen extends Screen
 			}
 			else
 			{
-				player.sendSystemMessage(LBRText.FLOPPY_DISK_FILE_FAILED_TO_LOAD.text().withStyle(ChatFormatting.RED));
+				player.sendSystemMessage(LBR.text().floppyDiskFileFailedToLoad());
 			}
 		}
 		else
 		{
-			player.sendSystemMessage(LBRText.FLOPPY_DISK_FILE_DOESNT_EXIST.text(name).withStyle(ChatFormatting.RED));
+			player.sendSystemMessage(LBR.text().floppyDiskFileDoesntExist(name));
 		}
 	}
 	
@@ -295,7 +289,7 @@ public final class FloppyDiskScreen extends Screen
 		
 		graphics.drawString(title, leftPos + uiWidth / 2 - minecraft.font.width(title) / 2, topPos);
 		
-		graphics.drawString(LBRText.FLOPPY_DISK_INPUT_PROGRAM_NAME.text(), input.getX(), input.getY() - minecraft.font.lineHeight);
+		graphics.drawString(LBR.text().floppyDiskInputProgramName(), input.getX(), input.getY() - minecraft.font.lineHeight);
 	}
 	
 	@Override
