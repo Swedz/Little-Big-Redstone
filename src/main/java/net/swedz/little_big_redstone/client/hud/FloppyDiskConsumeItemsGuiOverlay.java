@@ -14,6 +14,7 @@ import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.client.event.ClientPlayerChangeGameTypeEvent;
 import net.neoforged.neoforge.client.event.ClientTickEvent;
 import net.swedz.little_big_redstone.LBR;
+import net.swedz.little_big_redstone.LBRClient;
 import net.swedz.little_big_redstone.LBRComponents;
 import net.swedz.little_big_redstone.block.microchip.MicrochipBlockEntity;
 import net.swedz.little_big_redstone.item.FloppyDiskItem;
@@ -38,7 +39,7 @@ public final class FloppyDiskConsumeItemsGuiOverlay
 	{
 		SHOULD_FADE = false;
 		ITEMS = items;
-		DISPLAY_TIME = 40;
+		DISPLAY_TIME = LBRClient.config().floppyDiskViewLingerTime();
 	}
 	
 	private static void renderItem(TesseractGuiGraphics graphics, ItemStack stack, boolean isPresent, int x, float alpha)
