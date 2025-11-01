@@ -26,7 +26,6 @@ import net.swedz.little_big_redstone.LBR;
 import net.swedz.little_big_redstone.LBRComponents;
 import net.swedz.little_big_redstone.LBRItems;
 import net.swedz.little_big_redstone.LBRTags;
-import net.swedz.little_big_redstone.LBRText;
 import net.swedz.little_big_redstone.block.microchip.MicrochipBlockEntity;
 import net.swedz.little_big_redstone.item.stickynote.StickyNoteItem;
 import net.swedz.little_big_redstone.item.tooltip.ItemContainerContentsTooltipData;
@@ -309,11 +308,11 @@ public final class FloppyDiskItem extends Item implements DyeColoredItem
 							consumeItems(player, microchip, targetMicrochip, false);
 							dropAll(player, microchipBlockEntity.microchip(), result);
 							microchipBlockEntity.microchip().loadFrom(microchip);
-							player.displayClientMessage(LBRText.FLOPPY_DISK_APPLY_SUCCESS.text(), true);
+							player.displayClientMessage(LBR.text().floppyDiskApplySuccess(), true);
 						}
 						else
 						{
-							player.displayClientMessage(LBRText.FLOPPY_DISK_APPLY_FAILURE.text(), true);
+							player.displayClientMessage(LBR.text().floppyDiskApplyFailure(), true);
 						}
 						new FloppyDiskGuiOverlayUpdatePacket(true).sendToClient(player);
 					}
@@ -338,7 +337,7 @@ public final class FloppyDiskItem extends Item implements DyeColoredItem
 					if(player.isShiftKeyDown())
 					{
 						itemStack.set(LBRComponents.FLOPPY_DISK, microchipBlockEntity.microchip().immutable());
-						player.displayClientMessage(LBRText.FLOPPY_DISK_SAVE.text(), true);
+						player.displayClientMessage(LBR.text().floppyDiskSave(), true);
 					}
 					else
 					{
@@ -354,11 +353,11 @@ public final class FloppyDiskItem extends Item implements DyeColoredItem
 									consumeItems(player, microchip, targetMicrochip, false);
 									dropAll(player, microchipBlockEntity.microchip(), result);
 									microchipBlockEntity.microchip().loadFrom(microchip);
-									player.displayClientMessage(LBRText.FLOPPY_DISK_APPLY_SUCCESS.text(), true);
+									player.displayClientMessage(LBR.text().floppyDiskApplySuccess(), true);
 								}
 								else
 								{
-									player.displayClientMessage(LBRText.FLOPPY_DISK_APPLY_FAILURE.text(), true);
+									player.displayClientMessage(LBR.text().floppyDiskApplyFailure(), true);
 								}
 								player.getCooldowns().addCooldown(this, 20);
 								new FloppyDiskGuiOverlayUpdatePacket(true).sendToClient((ServerPlayer) player);
@@ -379,7 +378,7 @@ public final class FloppyDiskItem extends Item implements DyeColoredItem
 		if(player.isShiftKeyDown())
 		{
 			stack.remove(LBRComponents.FLOPPY_DISK);
-			player.displayClientMessage(LBRText.FLOPPY_DISK_CLEAR.text(), true);
+			player.displayClientMessage(LBR.text().floppyDiskClear(), true);
 		}
 		else if(level.isClientSide())
 		{

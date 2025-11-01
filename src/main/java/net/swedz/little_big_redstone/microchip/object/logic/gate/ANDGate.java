@@ -5,7 +5,7 @@ import io.netty.buffer.ByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.world.item.DyeColor;
-import net.swedz.little_big_redstone.LBRText;
+import net.swedz.little_big_redstone.LBR;
 import net.swedz.little_big_redstone.microchip.object.logic.LogicContext;
 import net.swedz.little_big_redstone.microchip.object.logic.LogicType;
 import net.swedz.little_big_redstone.microchip.object.logic.LogicTypes;
@@ -14,8 +14,6 @@ import net.swedz.little_big_redstone.microchip.object.logic.gate.config.MultiLog
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
-
-import static net.swedz.little_big_redstone.LBRTextLine.*;
 
 public final class ANDGate extends LogicGate<ANDGate, MultiLogicGateConfig>
 {
@@ -66,13 +64,13 @@ public final class ANDGate extends LogicGate<ANDGate, MultiLogicGateConfig>
 	@Override
 	public void appendNoShiftHoverText(List<Component> lines)
 	{
-		lines.add(line(LBRText.LOGIC_GATE_ALGEBRA).arg(LBRText.LOGIC_GATE_ALGEBRA_AND.text()));
+		lines.add(LBR.text().logicGateAlgebra(LBR.text().logicGateAlgebraAND()));
 	}
 	
 	@Override
 	public void appendShiftHoverText(List<Component> lines)
 	{
-		lines.add(line(LBRText.LOGIC_HELP_AND_GATE));
+		lines.add(LBR.text().logicHelpANDGate());
 	}
 	
 	@Override

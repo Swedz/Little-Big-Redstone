@@ -18,8 +18,6 @@ import net.swedz.little_big_redstone.LBR;
 import net.swedz.little_big_redstone.LBRColors;
 import net.swedz.little_big_redstone.LBRComponents;
 import net.swedz.little_big_redstone.LBRItems;
-import net.swedz.little_big_redstone.LBRText;
-import net.swedz.little_big_redstone.LBRTooltips;
 import net.swedz.little_big_redstone.block.microchip.MicrochipBlockEntity;
 import net.swedz.little_big_redstone.client.model.logic.LogicBakingModelData;
 import net.swedz.little_big_redstone.gui.microchip.MicrochipMenu;
@@ -582,7 +580,7 @@ public final class MicrochipWidget implements GuiEventListener, Renderable, Narr
 				if(component.config().hasMenu())
 				{
 					lines.add(Component.empty());
-					lines.add(LBRText.LOGIC_CONFIG_TOOLTIP_CLICK_TO_OPEN.text().withStyle(LBRTooltips.DEFAULT_STYLE));
+					lines.add(LBR.text().logicConfigTooltipClickToOpen());
 				}
 				
 				var colorSet = LogicBakingModelData.get(component).getColorSet(component, this.color());

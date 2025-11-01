@@ -4,7 +4,7 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.network.chat.CommonComponents;
 import net.minecraft.network.chat.Component;
-import net.swedz.little_big_redstone.LBRText;
+import net.swedz.little_big_redstone.LBR;
 import net.swedz.little_big_redstone.client.StickyNoteViewRenderer;
 import net.swedz.little_big_redstone.entity.stickynote.StickyNoteView;
 import net.swedz.little_big_redstone.gui.stickynote.StickyNoteScreen;
@@ -34,7 +34,7 @@ public final class StickyNoteViewScreen extends StickyNoteScreen
 		
 		doneButton = this.addRenderableWidget(Button.builder(CommonComponents.GUI_DONE, (b) -> this.close()).bounds(leftPos, topPos + uiHeight - 20, 87, 20).build());
 		
-		editButton = this.addRenderableWidget(Button.builder(LBRText.STICKY_NOTE_EDIT.text(), (b) -> this.edit()).bounds(leftPos + 87 + 6, topPos + uiHeight - 20, 87, 20).build());
+		editButton = this.addRenderableWidget(Button.builder(LBR.text().stickyNoteEdit(), (b) -> this.edit()).bounds(leftPos + 87 + 6, topPos + uiHeight - 20, 87, 20).build());
 	}
 	
 	private void close()

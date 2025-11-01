@@ -10,11 +10,10 @@ import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.item.ItemStack;
 import net.swedz.little_big_redstone.LBR;
 import net.swedz.little_big_redstone.LBRComponents;
-import net.swedz.little_big_redstone.LBRText;
 import net.swedz.little_big_redstone.client.model.logic.LogicBakingModelData;
-import net.swedz.little_big_redstone.gui.logicconfig.button.iconcycle.CheckboxState;
 import net.swedz.little_big_redstone.gui.logicconfig.button.LogicConfigButton;
 import net.swedz.little_big_redstone.gui.logicconfig.button.cycle.CycleLogicConfigButton;
+import net.swedz.little_big_redstone.gui.logicconfig.button.iconcycle.CheckboxState;
 import net.swedz.little_big_redstone.gui.logicconfig.button.iconcycle.IconCycleLogicConfigButton;
 import net.swedz.little_big_redstone.gui.logicconfig.button.iconcycle.IconCycleLogicConfigButtonIcon;
 import net.swedz.little_big_redstone.gui.logicconfig.button.slider.SliderLogicConfigButton;
@@ -276,9 +275,9 @@ public final class LogicConfigScreen extends AbstractContainerScreen<LogicConfig
 		
 		int buttonWidth = (configWidth / 2) - 4;
 		
-		this.addRenderableWidget(new LogicConfigButton(configX, configY + configHeight - 16, buttonWidth, 16, color, LBRText.LOGIC_CONFIG_BUTTON_LABEL_SAVE.text(), (__) -> this.save()));
+		this.addRenderableWidget(new LogicConfigButton(configX, configY + configHeight - 16, buttonWidth, 16, color, LBR.text().logicConfigButtonLabelSave(), (__) -> this.save()));
 		
-		this.addRenderableWidget(new LogicConfigButton(configX + configWidth - buttonWidth, configY + configHeight - 16, buttonWidth, 16, color, LBRText.LOGIC_CONFIG_BUTTON_LABEL_CANCEL.text(), (__) -> this.cancel()));
+		this.addRenderableWidget(new LogicConfigButton(configX + configWidth - buttonWidth, configY + configHeight - 16, buttonWidth, 16, color, LBR.text().logicConfigButtonLabelCancel(), (__) -> this.cancel()));
 	}
 	
 	@Override

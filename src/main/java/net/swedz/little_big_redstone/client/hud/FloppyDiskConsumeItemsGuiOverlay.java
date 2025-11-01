@@ -15,7 +15,6 @@ import net.neoforged.neoforge.client.event.ClientPlayerChangeGameTypeEvent;
 import net.neoforged.neoforge.client.event.ClientTickEvent;
 import net.swedz.little_big_redstone.LBR;
 import net.swedz.little_big_redstone.LBRComponents;
-import net.swedz.little_big_redstone.LBRText;
 import net.swedz.little_big_redstone.block.microchip.MicrochipBlockEntity;
 import net.swedz.little_big_redstone.item.FloppyDiskItem;
 import net.swedz.little_big_redstone.microchip.Microchip;
@@ -67,7 +66,7 @@ public final class FloppyDiskConsumeItemsGuiOverlay
 			{
 				graphics.setTexture(LBR.id("textures/gui/slot_atlas.png"));
 				graphics.blit(x.getValue() - 1, -1, 0, 18 * 2, 18, 18);
-				var text = LBRText.FLOPPY_DISK_MORE_ITEMS.text(ITEMS.size() - index.getValue());
+				var text = LBR.text().floppyDiskMoreItems(ITEMS.size() - index.getValue());
 				graphics.setStringDropShadow(false);
 				graphics.drawString(text, x.getValue() + 19 - 2 - graphics.getFont().width(text), 9);
 				graphics.setStringDropShadow(true);

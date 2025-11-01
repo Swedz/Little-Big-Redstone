@@ -1,20 +1,24 @@
 package net.swedz.little_big_redstone.microchip.object.logic.config;
 
+import net.minecraft.network.chat.MutableComponent;
+import net.swedz.little_big_redstone.LBR;
 import net.swedz.little_big_redstone.gui.logicconfig.button.iconcycle.IconCycleLogicConfigButtonIcon;
+
+import java.util.function.Supplier;
 
 public enum LogicComparisonMode implements IconCycleLogicConfigButtonIcon
 {
-	LESS_THAN_OR_EQUAL_TO("\u2264", 36, 0, (input, setting) -> input <= setting),
-	EQUAL_TO("=", 36 + 18, 0, (input, setting) -> input == setting),
-	GREATER_THAN_OR_EQUAL_TO("\u2265", 36 + (18 * 2), 0, (input, setting) -> input >= setting);
+	LESS_THAN_OR_EQUAL_TO(() -> LBR.text().logicComparisonModeLessThanOrEqualTo(), 36, 0, (input, setting) -> input <= setting),
+	EQUAL_TO(() -> LBR.text().logicComparisonModeEqualTo(), 36 + 18, 0, (input, setting) -> input == setting),
+	GREATER_THAN_OR_EQUAL_TO(() -> LBR.text().logicComparisonModeGreaterThanOrEqualTo(), 36 + (18 * 2), 0, (input, setting) -> input >= setting);
 	
-	private final String symbol;
+	private final Supplier<MutableComponent> symbol;
 	
 	private final int u, v;
 	
 	private final Test test;
 	
-	LogicComparisonMode(String symbol, int u, int v, Test test)
+	LogicComparisonMode(Supplier<MutableComponent> symbol, int u, int v, Test test)
 	{
 		this.symbol = symbol;
 		this.u = u;
@@ -22,9 +26,9 @@ public enum LogicComparisonMode implements IconCycleLogicConfigButtonIcon
 		this.test = test;
 	}
 	
-	public String symbol()
+	public MutableComponent symbol()
 	{
-		return symbol;
+		return symbol.get();
 	}
 	
 	@Override

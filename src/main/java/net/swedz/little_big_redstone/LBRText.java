@@ -1,154 +1,481 @@
 package net.swedz.little_big_redstone;
 
-import net.swedz.tesseract.neoforge.tooltip.TranslatableTextEnum;
+import net.minecraft.core.Direction;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
+import net.swedz.little_big_redstone.microchip.object.logic.LogicMode;
+import net.swedz.little_big_redstone.microchip.object.logic.config.LogicComparisonMode;
+import net.swedz.tesseract.neoforge.lang.annotation.LangKey;
+import net.swedz.tesseract.neoforge.lang.annotation.Parsed;
+import net.swedz.tesseract.neoforge.lang.annotation.WithStyle;
 
-public enum LBRText implements TranslatableTextEnum
+public interface LBRText
 {
-	CAPABILITY_ENERGY("Energy"),
-	CAPABILITY_FLUID("Fluid"),
-	CAPABILITY_ITEM("Item"),
-	DIRECTION_DOWN("Down"),
-	DIRECTION_EAST("East"),
-	DIRECTION_NORTH("North"),
-	DIRECTION_SOUTH("South"),
-	DIRECTION_UP("Up"),
-	DIRECTION_WEST("West"),
-	FLOPPY_DISK("Floppy Disk"),
-	FLOPPY_DISK_APPLY_FAILURE("Failed to install microchip program."),
-	FLOPPY_DISK_APPLY_SUCCESS("Installed microchip program to the microchip from the floppy disk."),
-	FLOPPY_DISK_BUTTON_CLOSE("Close"),
-	FLOPPY_DISK_BUTTON_LOAD("Load"),
-	FLOPPY_DISK_BUTTON_SAVE("Save"),
-	FLOPPY_DISK_CLEAR("Cleared floppy disk microchip program."),
-	FLOPPY_DISK_FILE_DOESNT_EXIST("No microchip program file exists for the name %s."),
-	FLOPPY_DISK_FILE_FAILED_TO_LOAD("There was an error while trying to load the microchip program from a file. See logs for more information."),
-	FLOPPY_DISK_FILE_FAILED_TO_SAVE("There was an error while trying to save the floppy disk's contents to a file. See logs for more information."),
-	FLOPPY_DISK_FILE_LOADED("Loaded the microchip program %s!"),
-	FLOPPY_DISK_FILE_SAVED("Saved the floppy disk's contents as %s!"),
-	FLOPPY_DISK_HELP_1("Can save, copy & paste Microchip programs."),
-	FLOPPY_DISK_HELP_2("Press %s + %s on a Microchip to save it to the disk."),
-	FLOPPY_DISK_HELP_3("Use %s on a Microchip to install the program. This does require that you have all the components and wires needed available in your inventory."),
-	FLOPPY_DISK_HELP_4("Use %s to open the menu to save or load a program to or from a local file."),
-	FLOPPY_DISK_INPUT_PROGRAM_NAME("Program Name"),
-	FLOPPY_DISK_MORE_ITEMS("+%s"),
-	FLOPPY_DISK_SAVE("Saved microchip program to the floppy disk."),
-	GUIDE_BUTTON_PAUSE("Pause"),
-	GUIDE_BUTTON_RESUME("Resume"),
-	GUIDE_TOOLTIP_INPUT_A("Input A"),
-	GUIDE_TOOLTIP_INPUT_B("Input B"),
-	GUIDE_TOOLTIP_OUTPUT("Output"),
-	INPUT("Input"),
-	LOGIC_ARRAY_HELP_1("Stores all of your redstone bits and logic components!"),
-	LOGIC_ARRAY_HELP_2("Can be opened while in the Microchip menu."),
-	LOGIC_ARRAY_HELP_3("Use %s while holding to open."),
-	LOGIC_ARRAY_HELP_4("Can insert and extract items while in your inventory using %s."),
-	LOGIC_CONFIG_BUTTON_LABEL_CANCEL("Cancel"),
-	LOGIC_CONFIG_BUTTON_LABEL_CHANCE("Chance: "),
-	LOGIC_CONFIG_BUTTON_LABEL_DIRECTION("Direction"),
-	LOGIC_CONFIG_BUTTON_LABEL_DURATION("Duration: "),
-	LOGIC_CONFIG_BUTTON_LABEL_INPUTS("Inputs: "),
-	LOGIC_CONFIG_BUTTON_LABEL_IO_SIGNAL_STRENGTH("Signal Strength: "),
-	LOGIC_CONFIG_BUTTON_LABEL_MODE("Mode"),
-	LOGIC_CONFIG_BUTTON_LABEL_OUTPUTS("Outputs: "),
-	LOGIC_CONFIG_BUTTON_LABEL_READER_FILL_THRESHOLD("Fill Threshold: "),
-	LOGIC_CONFIG_BUTTON_LABEL_SAVE("Save"),
-	LOGIC_CONFIG_BUTTON_LABEL_SEQUENCER_AUTO_RESET("Auto Reset"),
-	LOGIC_CONFIG_BUTTON_LABEL_SEQUENCER_DELAY("Delay: "),
-	LOGIC_CONFIG_BUTTON_LABEL_SEQUENCER_RESET_PORT("Reset Port"),
-	LOGIC_CONFIG_BUTTON_LABEL_TICKS_AND_SECONDS("%s ticks (%ss)"),
-	LOGIC_CONFIG_BUTTON_LABEL_TICKS_AND_SECONDS_SINGULAR("%s tick (%ss)"),
-	LOGIC_CONFIG_BUTTON_TOOLTIP_DURATION("The time for the output to be on."),
-	LOGIC_CONFIG_BUTTON_TOOLTIP_INPUTS("The number of inputs that this component can accept."),
-	LOGIC_CONFIG_BUTTON_TOOLTIP_IO_DIRECTION("The direction this port should interact with redstone power on."),
-	LOGIC_CONFIG_BUTTON_TOOLTIP_IO_MODE("Whether this port should input or output redstone power."),
-	LOGIC_CONFIG_BUTTON_TOOLTIP_IO_SIGNAL_COMPARISON_MODE_EQUAL_TO("The input signal must be equal to %s."),
-	LOGIC_CONFIG_BUTTON_TOOLTIP_IO_SIGNAL_COMPARISON_MODE_GREATER_THAN_OR_EQUAL_TO("The input signal must be greater than or equal to %s."),
-	LOGIC_CONFIG_BUTTON_TOOLTIP_IO_SIGNAL_COMPARISON_MODE_LESS_THAN_OR_EQUAL_TO("The input signal must be less than or equal to %s."),
-	LOGIC_CONFIG_BUTTON_TOOLTIP_IO_SIGNAL_COMPARISON_OUTPUT("The output signal will be equal to %s."),
-	LOGIC_CONFIG_BUTTON_TOOLTIP_IO_SIGNAL_STRENGTH_INPUT("The redstone signal strength required for the output to be on."),
-	LOGIC_CONFIG_BUTTON_TOOLTIP_IO_SIGNAL_STRENGTH_OUTPUT("The redstone signal strength that will be outputted."),
-	LOGIC_CONFIG_BUTTON_TOOLTIP_OUTPUTS("The number of outputs that this component can yield."),
-	LOGIC_CONFIG_BUTTON_TOOLTIP_RANDOMIZER_CHANCE("The percentage chance of one of the outputs to be ON for a given tick while the input is ON."),
-	LOGIC_CONFIG_BUTTON_TOOLTIP_READER_DIRECTION("The direction this reader should read block capacity from."),
-	LOGIC_CONFIG_BUTTON_TOOLTIP_READER_FILL_THRESHOLD("The percentage filled the container capacity must be for the output to be on."),
-	LOGIC_CONFIG_BUTTON_TOOLTIP_READER_MODE("The type of information to read from the adjacent block."),
-	LOGIC_CONFIG_BUTTON_TOOLTIP_READER_THRESHOLD_COMPARISON_MODE_EQUAL_TO("The fill percentage must be equal to %s."),
-	LOGIC_CONFIG_BUTTON_TOOLTIP_READER_THRESHOLD_COMPARISON_MODE_GREATER_THAN_OR_EQUAL_TO("The fill percentage must be greater than or equal to %s."),
-	LOGIC_CONFIG_BUTTON_TOOLTIP_READER_THRESHOLD_COMPARISON_MODE_LESS_THAN_OR_EQUAL_TO("The fill percentage must be less than or equal to %s."),
-	LOGIC_CONFIG_BUTTON_TOOLTIP_SELECTOR_MODE_COUNTER("When the first input is ON, the selected output will move up. When the second input is ON, the selected output will move down."),
-	LOGIC_CONFIG_BUTTON_TOOLTIP_SELECTOR_MODE_SETTER("The lowest output with a corresponding ON input will have an ON output."),
-	LOGIC_CONFIG_BUTTON_TOOLTIP_SEQUENCER_AUTO_RESET("Whether the sequencer should automatically reset its progress immediately after yielding an output of ON."),
-	LOGIC_CONFIG_BUTTON_TOOLTIP_SEQUENCER_DELAY("The time before the output is on."),
-	LOGIC_CONFIG_BUTTON_TOOLTIP_SEQUENCER_MODE_COUNTER("While input is ON, the sequencer will increment until it has met X ticks and then emit an output of ON."),
-	LOGIC_CONFIG_BUTTON_TOOLTIP_SEQUENCER_MODE_STRONG("While input is ON, the sequencer will increment until it has met X ticks and then emit an output of ON. While input is OFF, the sequencer will decrement."),
-	LOGIC_CONFIG_BUTTON_TOOLTIP_SEQUENCER_MODE_WEAK("After an ON input signal, the sequencer will wait X ticks and then emit an output of ON."),
-	LOGIC_CONFIG_BUTTON_TOOLTIP_SEQUENCER_RESET_PORT("Whether a second wire port should be added that will forcefully reset the sequencer's progress."),
-	LOGIC_CONFIG_SELECTOR_MODE_COUNTER("Counter"),
-	LOGIC_CONFIG_SELECTOR_MODE_SETTER("Setter"),
-	LOGIC_CONFIG_SEQUENCER_MODE_COUNTER("Counter"),
-	LOGIC_CONFIG_SEQUENCER_MODE_STRONG("Strong"),
-	LOGIC_CONFIG_SEQUENCER_MODE_WEAK("Weak"),
-	LOGIC_CONFIG_TOOLTIP("Configuration:"),
-	LOGIC_CONFIG_TOOLTIP_CHANCE("  Chance: %s"),
-	LOGIC_CONFIG_TOOLTIP_CLICK_TO_OPEN("Use Right Button to edit the config."),
-	LOGIC_CONFIG_TOOLTIP_DIRECTION("  Direction: %s"),
-	LOGIC_CONFIG_TOOLTIP_DURATION("  Duration: %d"),
-	LOGIC_CONFIG_TOOLTIP_INPUTS("  Inputs: %s"),
-	LOGIC_CONFIG_TOOLTIP_IO_SIGNAL("  Signal: %s"),
-	LOGIC_CONFIG_TOOLTIP_MODE("  Mode: %s"),
-	LOGIC_CONFIG_TOOLTIP_OUTPUTS("  Outputs: %s"),
-	LOGIC_CONFIG_TOOLTIP_READER_FILL("  Fill: %s"),
-	LOGIC_CONFIG_TOOLTIP_SEQUENCER_AUTO_RESET("  Auto Reset: %s"),
-	LOGIC_CONFIG_TOOLTIP_SEQUENCER_DELAY("  Delay: %d"),
-	LOGIC_CONFIG_TOOLTIP_SEQUENCER_RESET_PORT("  Reset Port: %s"),
-	LOGIC_GATE_ALGEBRA("Q = %s"),
-	LOGIC_GATE_ALGEBRA_AND("A \u2227 B"),
-	LOGIC_GATE_ALGEBRA_NAND("A \u2191 B"),
-	LOGIC_GATE_ALGEBRA_NOR("A \u2193 B"),
-	LOGIC_GATE_ALGEBRA_NOT("\u00ACA"),
-	LOGIC_GATE_ALGEBRA_OR("A \u2228 B"),
-	LOGIC_GATE_ALGEBRA_XOR("A \u22BB B"),
-	LOGIC_HELP_AND_GATE("Output is ON when all inputs are ON, otherwise output is OFF."),
-	LOGIC_HELP_IO_PORT_1("Can either input or output a redstone signal in the world on a single face. Multiple I/O ports can be used to input and output from different faces."),
-	LOGIC_HELP_IO_PORT_2("A microchip cannot have both an input and output port on the same face."),
-	LOGIC_HELP_NAND_GATE("Output is OFF when all inputs are ON, otherwise output is ON."),
-	LOGIC_HELP_NOR_GATE("Output is ON when all inputs are OFF, otherwise output is OFF."),
-	LOGIC_HELP_NOT_GATE("Output is ON when the input is OFF, and output is OFF when the input is ON."),
-	LOGIC_HELP_OR_GATE("Output is ON when any input is ON, otherwise output is OFF."),
-	LOGIC_HELP_PULSE_THROTTLER("Throttles an input signal and yields an output with a configurable duration."),
-	LOGIC_HELP_RANDOMIZER("When the input is ON, a random output will be ON a configurable percentage of the time."),
-	LOGIC_HELP_READER_1("Checks the filled percentage of an adjacent block and yields an ON signal if the block's filled percentage is greater than or equal to the set fill threshold."),
-	LOGIC_HELP_READER_2("Can be used on item, fluid, or energy storages."),
-	LOGIC_HELP_RS_NOR_LATCH_1("When the reset (R) input is ON, the output is always OFF."),
-	LOGIC_HELP_RS_NOR_LATCH_2("When the set (S) input is ON and the reset (R) input is OFF, the output is set to ON and will remain ON until the reset (R) input is ON."),
-	LOGIC_HELP_SELECTOR("Emits a single ON output and will switch to adjacent ports in a strategy depending on the mode selected."),
-	LOGIC_HELP_SEQUENCER_1("Delays the output signal by the set delay."),
-	LOGIC_HELP_SEQUENCER_2("The mode determines the behavior of the sequencer and can be set to Weak, Strong, or Counter."),
-	LOGIC_HELP_SEQUENCER_3("By default the sequencer will not reset after yielding an output state. If auto reset is enabled, the progress will be reset immediately after yielding an output of ON. Additionally, if reset port is enabled, a second input port will be available. When the second input port is given an ON input, the progress of the sequencer will be reset. As long as an ON input is present on this input, the sequencer cannot progress."),
-	LOGIC_HELP_T_FLIP_FLOP("When the input goes from OFF to ON, the output signal swaps states."),
-	LOGIC_HELP_XOR_GATE("Output is ON when the amount of ON inputs is odd, otherwise output is OFF."),
-	NO("No"),
-	OUTPUT("Output"),
-	STICKY_NOTE("Sticky Note"),
-	STICKY_NOTE_EDIT("Edit"),
-	YES("Yes");
+	@LangKey(text = "Energy")
+	MutableComponent capabilityEnergy();
 	
-	private final String englishText;
+	@LangKey(text = "Fluid")
+	MutableComponent capabilityFluid();
 	
-	LBRText(String englishText)
-	{
-		this.englishText = englishText;
-	}
+	@LangKey(text = "Item")
+	MutableComponent capabilityItem();
 	
-	@Override
-	public String englishText()
-	{
-		return englishText;
-	}
+	@LangKey(text = "Down")
+	@WithStyle("direction.down")
+	MutableComponent directionDown();
 	
-	@Override
-	public String getTranslationKey()
-	{
-		return "text.%s.%s".formatted(LBR.ID, this.name().toLowerCase());
-	}
+	@LangKey(text = "East")
+	@WithStyle("direction.east")
+	MutableComponent directionEast();
+	
+	@LangKey(text = "North")
+	@WithStyle("direction.north")
+	MutableComponent directionNorth();
+	
+	@LangKey(text = "South")
+	@WithStyle("direction.south")
+	MutableComponent directionSouth();
+	
+	@LangKey(text = "Up")
+	@WithStyle("direction.up")
+	MutableComponent directionUp();
+	
+	@LangKey(text = "West")
+	@WithStyle("direction.west")
+	MutableComponent directionWest();
+	
+	@LangKey(text = "Floppy Disk")
+	MutableComponent floppyDisk();
+	
+	@LangKey(text = "Failed to install microchip program.")
+	MutableComponent floppyDiskApplyFailure();
+	
+	@LangKey(text = "Installed microchip program to the microchip from the floppy disk.")
+	MutableComponent floppyDiskApplySuccess();
+	
+	@LangKey(text = "Close")
+	MutableComponent floppyDiskButtonClose();
+	
+	@LangKey(text = "Load")
+	MutableComponent floppyDiskButtonLoad();
+	
+	@LangKey(text = "Save")
+	MutableComponent floppyDiskButtonSave();
+	
+	@LangKey(text = "Cleared floppy disk microchip program.")
+	MutableComponent floppyDiskClear();
+	
+	@LangKey(text = "No microchip program file exists for the name %s.")
+	@WithStyle("red")
+	MutableComponent floppyDiskFileDoesntExist(String name);
+	
+	@LangKey(text = "There was an error while trying to load the microchip program from a file. See logs for more information.")
+	@WithStyle("red")
+	MutableComponent floppyDiskFileFailedToLoad();
+	
+	@LangKey(text = "There was an error while trying to save the floppy disk's contents to a file. See logs for more information.")
+	@WithStyle("red")
+	MutableComponent floppyDiskFileFailedToSave();
+	
+	@LangKey(text = "Loaded the microchip program %s!")
+	@WithStyle("green")
+	MutableComponent floppyDiskFileLoaded(String name);
+	
+	@LangKey(text = "Saved the floppy disk's contents as %s!")
+	@WithStyle("green")
+	MutableComponent floppyDiskFileSaved(String name);
+	
+	@LangKey(text = "Can save, copy & paste Microchip programs.")
+	@WithStyle("tooltip")
+	MutableComponent floppyDiskHelp1();
+	
+	@LangKey(text = "Press %s + %s on a Microchip to save it to the disk.")
+	@WithStyle("tooltip")
+	MutableComponent floppyDiskHelp2(
+			@Parsed("keybind") @WithStyle("highlighted") String keybind1,
+			@Parsed("keybind") @WithStyle("highlighted") String keybind2
+	);
+	
+	@LangKey(text = "Use %s on a Microchip to install the program. This does require that you have all the components and wires needed available in your inventory.")
+	@WithStyle("tooltip")
+	MutableComponent floppyDiskHelp3(@Parsed("keybind") @WithStyle("highlighted") String keybind);
+	
+	@LangKey(text = "Use %s to open the menu to save or load a program to or from a local file.")
+	@WithStyle("tooltip")
+	MutableComponent floppyDiskHelp4(@Parsed("keybind") @WithStyle("highlighted") String keybind);
+	
+	@LangKey(text = "Program Name")
+	MutableComponent floppyDiskInputProgramName();
+	
+	@LangKey(text = "+%s")
+	MutableComponent floppyDiskMoreItems(int count);
+	
+	@LangKey(text = "Saved microchip program to the floppy disk.")
+	MutableComponent floppyDiskSave();
+	
+	@LangKey(text = "Pause")
+	MutableComponent guideButtonPause();
+	
+	@LangKey(text = "Resume")
+	MutableComponent guideButtonResume();
+	
+	@LangKey(text = "Input A")
+	MutableComponent guideTooltipInputA();
+	
+	@LangKey(text = "Input B")
+	MutableComponent guideTooltipInputB();
+	
+	@LangKey(text = "Output")
+	MutableComponent guideTooltipOutput();
+	
+	@LangKey(text = "Input")
+	@WithStyle("input")
+	MutableComponent input();
+	
+	@LangKey(text = "Stores all of your redstone bits and logic components!")
+	@WithStyle("tooltip")
+	MutableComponent logicArrayHelp1();
+	
+	@LangKey(text = "Can be opened while in the Microchip menu.")
+	@WithStyle("tooltip")
+	MutableComponent logicArrayHelp2();
+	
+	@LangKey(text = "Use %s while holding to open.")
+	@WithStyle("tooltip")
+	MutableComponent logicArrayHelp3(@Parsed("keybind") @WithStyle("highlighted") String keybind);
+	
+	@LangKey(text = "Can insert and extract items while in your inventory using %s.")
+	@WithStyle("tooltip")
+	MutableComponent logicArrayHelp4(@Parsed("keybind") @WithStyle("highlighted") String keybind);
+	
+	@LangKey(text = "\u2264")
+	MutableComponent logicComparisonModeLessThanOrEqualTo();
+	
+	@LangKey(text = "=")
+	MutableComponent logicComparisonModeEqualTo();
+	
+	@LangKey(text = "\u2265")
+	MutableComponent logicComparisonModeGreaterThanOrEqualTo();
+	
+	@LangKey(text = "Cancel")
+	MutableComponent logicConfigButtonLabelCancel();
+	
+	@LangKey(text = "Chance: ")
+	MutableComponent logicConfigButtonLabelChance();
+	
+	@LangKey(text = "Direction")
+	MutableComponent logicConfigButtonLabelDirection();
+	
+	@LangKey(text = "Duration: ")
+	MutableComponent logicConfigButtonLabelDuration();
+	
+	@LangKey(text = "Inputs: ")
+	MutableComponent logicConfigButtonLabelInputs();
+	
+	@LangKey(text = "Signal Strength: ")
+	MutableComponent logicConfigButtonLabelIoSignalStrength();
+	
+	@LangKey(text = "Mode")
+	MutableComponent logicConfigButtonLabelMode();
+	
+	@LangKey(text = "Outputs: ")
+	MutableComponent logicConfigButtonLabelOutputs();
+	
+	@LangKey(text = "Fill Threshold: ")
+	MutableComponent logicConfigButtonLabelReaderFillThreshold();
+	
+	@LangKey(text = "Save")
+	MutableComponent logicConfigButtonLabelSave();
+	
+	@LangKey(text = "Auto Reset")
+	MutableComponent logicConfigButtonLabelSequencerAutoReset();
+	
+	@LangKey(text = "Delay: ")
+	MutableComponent logicConfigButtonLabelSequencerDelay();
+	
+	@LangKey(text = "Reset Port")
+	MutableComponent logicConfigButtonLabelSequencerResetPort();
+	
+	@LangKey(text = "%s ticks (%ss)")
+	MutableComponent logicConfigButtonLabelTicksAndSeconds(long ticks, float seconds);
+	
+	@LangKey(text = "%s tick (%ss)")
+	MutableComponent logicConfigButtonLabelTicksAndSecondsSingular(long ticks, float seconds);
+	
+	@LangKey(text = "The time for the output to be on.")
+	MutableComponent logicConfigButtonTooltipDuration();
+	
+	@LangKey(text = "The number of inputs that this component can accept.")
+	MutableComponent logicConfigButtonTooltipInputs();
+	
+	@LangKey(text = "The direction this port should interact with redstone power on.")
+	MutableComponent logicConfigButtonTooltipIoDirection();
+	
+	@LangKey(text = "Whether this port should input or output redstone power.")
+	MutableComponent logicConfigButtonTooltipIoMode();
+	
+	@LangKey(text = "The input signal must be equal to %s.")
+	MutableComponent logicConfigButtonTooltipIoSignalComparisonModeEqualTo(int signal);
+	
+	@LangKey(text = "The input signal must be greater than or equal to %s.")
+	MutableComponent logicConfigButtonTooltipIoSignalComparisonModeGreaterThanOrEqualTo(int signal);
+	
+	@LangKey(text = "The input signal must be less than or equal to %s.")
+	MutableComponent logicConfigButtonTooltipIoSignalComparisonModeLessThanOrEqualTo(int signal);
+	
+	@LangKey(text = "The output signal will be equal to %s.")
+	MutableComponent logicConfigButtonTooltipIoSignalComparisonOutput(int signal);
+	
+	@LangKey(text = "The redstone signal strength required for the output to be on.")
+	MutableComponent logicConfigButtonTooltipIoSignalStrengthInput();
+	
+	@LangKey(text = "The redstone signal strength that will be outputted.")
+	MutableComponent logicConfigButtonTooltipIoSignalStrengthOutput();
+	
+	@LangKey(text = "The number of outputs that this component can yield.")
+	MutableComponent logicConfigButtonTooltipOutputs();
+	
+	@LangKey(text = "The percentage chance of one of the outputs to be ON for a given tick while the input is ON.")
+	MutableComponent logicConfigButtonTooltipRandomizerChance();
+	
+	@LangKey(text = "The direction this reader should read block capacity from.")
+	MutableComponent logicConfigButtonTooltipReaderDirection();
+	
+	@LangKey(text = "The percentage filled the container capacity must be for the output to be on.")
+	MutableComponent logicConfigButtonTooltipReaderFillThreshold();
+	
+	@LangKey(text = "The type of information to read from the adjacent block.")
+	MutableComponent logicConfigButtonTooltipReaderMode();
+	
+	@LangKey(text = "The fill percentage must be equal to %s.")
+	MutableComponent logicConfigButtonTooltipReaderThresholdComparisonModeEqualTo(@Parsed("percentage") float threshold);
+	
+	@LangKey(text = "The fill percentage must be greater than or equal to %s.")
+	MutableComponent logicConfigButtonTooltipReaderThresholdComparisonModeGreaterThanOrEqualTo(@Parsed("percentage") float threshold);
+	
+	@LangKey(text = "The fill percentage must be less than or equal to %s.")
+	MutableComponent logicConfigButtonTooltipReaderThresholdComparisonModeLessThanOrEqualTo(@Parsed("percentage") float threshold);
+	
+	@LangKey(text = "When the first input is ON, the selected output will move up. When the second input is ON, the selected output will move down.")
+	MutableComponent logicConfigButtonTooltipSelectorModeCounter();
+	
+	@LangKey(text = "The lowest output with a corresponding ON input will have an ON output.")
+	MutableComponent logicConfigButtonTooltipSelectorModeSetter();
+	
+	@LangKey(text = "Whether the sequencer should automatically reset its progress immediately after yielding an output of ON.")
+	MutableComponent logicConfigButtonTooltipSequencerAutoReset();
+	
+	@LangKey(text = "The time before the output is on.")
+	MutableComponent logicConfigButtonTooltipSequencerDelay();
+	
+	@LangKey(text = "While input is ON, the sequencer will increment until it has met X ticks and then emit an output of ON.")
+	MutableComponent logicConfigButtonTooltipSequencerModeCounter();
+	
+	@LangKey(text = "While input is ON, the sequencer will increment until it has met X ticks and then emit an output of ON. While input is OFF, the sequencer will decrement.")
+	MutableComponent logicConfigButtonTooltipSequencerModeStrong();
+	
+	@LangKey(text = "After an ON input signal, the sequencer will wait X ticks and then emit an output of ON.")
+	MutableComponent logicConfigButtonTooltipSequencerModeWeak();
+	
+	@LangKey(text = "Whether a second wire port should be added that will forcefully reset the sequencer's progress.")
+	MutableComponent logicConfigButtonTooltipSequencerResetPort();
+	
+	@LangKey(text = "Counter")
+	MutableComponent logicConfigSelectorModeCounter();
+	
+	@LangKey(text = "Setter")
+	MutableComponent logicConfigSelectorModeSetter();
+	
+	@LangKey(text = "Counter")
+	MutableComponent logicConfigSequencerModeCounter();
+	
+	@LangKey(text = "Strong")
+	MutableComponent logicConfigSequencerModeStrong();
+	
+	@LangKey(text = "Weak")
+	MutableComponent logicConfigSequencerModeWeak();
+	
+	@LangKey(text = "Configuration:")
+	@WithStyle("tooltip")
+	MutableComponent logicConfigTooltip();
+	
+	@LangKey(text = "  Chance: %s")
+	@WithStyle("tooltip")
+	MutableComponent logicConfigTooltipChance(@Parsed("percentage") @WithStyle("highlighted") float chance);
+	
+	@LangKey(text = "Use Right Button to edit the config.")
+	@WithStyle("tooltip")
+	MutableComponent logicConfigTooltipClickToOpen();
+	
+	@LangKey(text = "  Direction: %s")
+	@WithStyle("tooltip")
+	MutableComponent logicConfigTooltipDirection(Direction direction);
+	
+	@LangKey(text = "  Duration: %s")
+	@WithStyle("tooltip")
+	MutableComponent logicConfigTooltipDuration(@Parsed("ticks_and_seconds") @WithStyle("highlighted") long ticks);
+	
+	@LangKey(text = "  Inputs: %s")
+	@WithStyle("tooltip")
+	MutableComponent logicConfigTooltipInputs(@WithStyle("highlighted") int inputs);
+	
+	@LangKey(text = "  Signal: %s")
+	@WithStyle("tooltip")
+	MutableComponent logicConfigTooltipIoSignal(@WithStyle("highlighted") int signal);
+	
+	@LangKey(text = "  Signal: %s %s")
+	@WithStyle("tooltip")
+	MutableComponent logicConfigTooltipIoSignalComparison(
+			@WithStyle("highlighted") LogicComparisonMode comparison,
+			@WithStyle("highlighted") int signal
+	);
+	
+	@LangKey(text = "  Mode: %s")
+	@WithStyle("tooltip")
+	MutableComponent logicConfigTooltipMode(@WithStyle("highlighted") LogicMode mode);
+	
+	@LangKey(text = "  Outputs: %s")
+	@WithStyle("tooltip")
+	MutableComponent logicConfigTooltipOutputs(@WithStyle("highlighted") int outputs);
+	
+	@LangKey(text = "  Fill: %s %s")
+	@WithStyle("tooltip")
+	MutableComponent logicConfigTooltipReaderFill(
+			@WithStyle("highlighted") LogicComparisonMode comparison,
+			@WithStyle("highlighted") float threshold
+	);
+	
+	@LangKey(text = "  Auto Reset: %s")
+	@WithStyle("tooltip")
+	MutableComponent logicConfigTooltipSequencerAutoReset(@Parsed("yes_no") boolean autoReset);
+	
+	@LangKey(text = "  Delay: %s")
+	@WithStyle("tooltip")
+	MutableComponent logicConfigTooltipSequencerDelay(@Parsed("ticks_and_seconds") @WithStyle("highlighted") long ticks);
+	
+	@LangKey(text = "  Reset Port: %s")
+	@WithStyle("tooltip")
+	MutableComponent logicConfigTooltipSequencerResetPort(@Parsed("yes_no") boolean resetPort);
+	
+	@LangKey(text = "Q = %s")
+	@WithStyle("tooltip")
+	MutableComponent logicGateAlgebra(Component algebra);
+	
+	@LangKey(text = "A \u2227 B")
+	MutableComponent logicGateAlgebraAND();
+	
+	@LangKey(text = "A \u2191 B")
+	MutableComponent logicGateAlgebraNAND();
+	
+	@LangKey(text = "A \u2193 B")
+	MutableComponent logicGateAlgebraNOR();
+	
+	@LangKey(text = "\u00ACA")
+	MutableComponent logicGateAlgebraNOT();
+	
+	@LangKey(text = "A \u2228 B")
+	MutableComponent logicGateAlgebraOR();
+	
+	@LangKey(text = "A \u22BB B")
+	MutableComponent logicGateAlgebraXOR();
+	
+	@LangKey(text = "Output is ON when all inputs are ON, otherwise output is OFF.")
+	@WithStyle("tooltip")
+	MutableComponent logicHelpANDGate();
+	
+	@LangKey(text = "Can either input or output a redstone signal in the world on a single face. Multiple I/O ports can be used to input and output from different faces.")
+	@WithStyle("tooltip")
+	MutableComponent logicHelpIOPort1();
+	
+	@LangKey(text = "A microchip cannot have both an input and output port on the same face.")
+	@WithStyle("tooltip")
+	MutableComponent logicHelpIOPort2();
+	
+	@LangKey(text = "Output is OFF when all inputs are ON, otherwise output is ON.")
+	@WithStyle("tooltip")
+	MutableComponent logicHelpNANDGate();
+	
+	@LangKey(text = "Output is ON when all inputs are OFF, otherwise output is OFF.")
+	@WithStyle("tooltip")
+	MutableComponent logicHelpNORGate();
+	
+	@LangKey(text = "Output is ON when the input is OFF, and output is OFF when the input is ON.")
+	@WithStyle("tooltip")
+	MutableComponent logicHelpNOTGate();
+	
+	@LangKey(text = "Output is ON when any input is ON, otherwise output is OFF.")
+	@WithStyle("tooltip")
+	MutableComponent logicHelpORGate();
+	
+	@LangKey(text = "Throttles an input signal and yields an output with a configurable duration.")
+	@WithStyle("tooltip")
+	MutableComponent logicHelpPulseThrottler();
+	
+	@LangKey(text = "When the input is ON, a random output will be ON a configurable percentage of the time.")
+	@WithStyle("tooltip")
+	MutableComponent logicHelpRandomizer();
+	
+	@LangKey(text = "Checks the filled percentage of an adjacent block and yields an ON signal if the block's filled percentage is greater than or equal to the set fill threshold.")
+	@WithStyle("tooltip")
+	MutableComponent logicHelpReader1();
+	
+	@LangKey(text = "Can be used on item, fluid, or energy storages.")
+	@WithStyle("tooltip")
+	MutableComponent logicHelpReader2();
+	
+	@LangKey(
+			key = "logic_help_rs_nor_latch_1",
+			text = "When the reset (R) input is ON, the output is always OFF."
+	)
+	@WithStyle("tooltip")
+	MutableComponent logicHelpRSNORLatch1();
+	
+	@LangKey(
+			key = "logic_help_rs_nor_latch_2",
+			text = "When the set (S) input is ON and the reset (R) input is OFF, the output is set to ON and will remain ON until the reset (R) input is ON."
+	)
+	@WithStyle("tooltip")
+	MutableComponent logicHelpRSNORLatch2();
+	
+	@LangKey(text = "Emits a single ON output and will switch to adjacent ports in a strategy depending on the mode selected.")
+	@WithStyle("tooltip")
+	MutableComponent logicHelpSelector();
+	
+	@LangKey(text = "Delays the output signal by the set delay.")
+	@WithStyle("tooltip")
+	MutableComponent logicHelpSequencer1();
+	
+	@LangKey(text = "The mode determines the behavior of the sequencer and can be set to Weak, Strong, or Counter.")
+	@WithStyle("tooltip")
+	MutableComponent logicHelpSequencer2();
+	
+	@LangKey(text = "By default the sequencer will not reset after yielding an output state. If auto reset is enabled, the progress will be reset immediately after yielding an output of ON. Additionally, if reset port is enabled, a second input port will be available. When the second input port is given an ON input, the progress of the sequencer will be reset. As long as an ON input is present on this input, the sequencer cannot progress.")
+	@WithStyle("tooltip")
+	MutableComponent logicHelpSequencer3();
+	
+	@LangKey(text = "When the input goes from OFF to ON, the output signal swaps states.")
+	@WithStyle("tooltip")
+	MutableComponent logicHelpTFlipFlop();
+	
+	@LangKey(text = "Output is ON when the amount of ON inputs is odd, otherwise output is OFF.")
+	@WithStyle("tooltip")
+	MutableComponent logicHelpXORGate();
+	
+	@LangKey(text = "No")
+	@WithStyle("no")
+	MutableComponent no();
+	
+	@LangKey(text = "Output")
+	@WithStyle("output")
+	MutableComponent output();
+	
+	@LangKey(text = "Sticky Note")
+	MutableComponent stickyNote();
+	
+	@LangKey(text = "Edit")
+	MutableComponent stickyNoteEdit();
+	
+	@LangKey(text = "Yes")
+	@WithStyle("yes")
+	MutableComponent yes();
 }

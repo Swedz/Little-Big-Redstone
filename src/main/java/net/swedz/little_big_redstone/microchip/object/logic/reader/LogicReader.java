@@ -10,7 +10,7 @@ import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.Mth;
 import net.minecraft.world.item.DyeColor;
-import net.swedz.little_big_redstone.LBRText;
+import net.swedz.little_big_redstone.LBR;
 import net.swedz.little_big_redstone.microchip.awareness.AwarenessType;
 import net.swedz.little_big_redstone.microchip.awareness.AwarenessTypes;
 import net.swedz.little_big_redstone.microchip.awareness.MicrochipAware;
@@ -22,8 +22,6 @@ import net.swedz.little_big_redstone.microchip.object.logic.LogicTypes;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
-
-import static net.swedz.little_big_redstone.LBRTextLine.*;
 
 public final class LogicReader extends LogicComponent<LogicReader, LogicReaderConfig> implements MicrochipAware
 {
@@ -169,8 +167,8 @@ public final class LogicReader extends LogicComponent<LogicReader, LogicReaderCo
 	@Override
 	public void appendShiftHoverText(List<Component> lines)
 	{
-		lines.add(line(LBRText.LOGIC_HELP_READER_1));
-		lines.add(line(LBRText.LOGIC_HELP_READER_2));
+		lines.add(LBR.text().logicHelpReader1());
+		lines.add(LBR.text().logicHelpReader2());
 	}
 	
 	@Override
