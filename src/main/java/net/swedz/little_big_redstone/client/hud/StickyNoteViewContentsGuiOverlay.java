@@ -38,7 +38,7 @@ public final class StickyNoteViewContentsGuiOverlay
 		{
 			SHOULD_FADE = false;
 			STICKY_NOTE = stickyNote;
-			DISPLAY_TIME = 40;
+			DISPLAY_TIME = LBRClient.config().stickyNoteInWorldViewLingerTime();
 		}
 	}
 	
