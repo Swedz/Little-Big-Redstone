@@ -1,14 +1,24 @@
 package net.swedz.little_big_redstone.datagen.client.provider;
 
+import com.google.common.collect.Sets;
 import net.neoforged.neoforge.common.data.LanguageProvider;
 import net.neoforged.neoforge.data.event.GatherDataEvent;
 import net.swedz.little_big_redstone.LBR;
 import net.swedz.little_big_redstone.LBRItems;
-import net.swedz.little_big_redstone.LBRText;
+import net.swedz.tesseract.neoforge.lang.LangInstance;
 import net.swedz.tesseract.neoforge.registry.holder.ItemHolder;
+
+import java.util.Set;
 
 public final class LanguageDatagenProvider extends LanguageProvider
 {
+	private static final Set<LangInstance<?>> INSTANCES = Sets.newHashSet();
+	
+	public static void include(LangInstance<?> instance)
+	{
+		INSTANCES.add(instance);
+	}
+	
 	public LanguageDatagenProvider(GatherDataEvent event)
 	{
 		super(event.getGenerator().getPackOutput(), LBR.ID, "en_us");
@@ -17,9 +27,9 @@ public final class LanguageDatagenProvider extends LanguageProvider
 	@Override
 	protected void addTranslations()
 	{
-		for(LBRText text : LBRText.values())
+		for(var instance : INSTANCES)
 		{
-			this.add(text.getTranslationKey(), text.englishText());
+			instance.datagen(this);
 		}
 		
 		for(ItemHolder item : LBRItems.values())

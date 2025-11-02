@@ -7,8 +7,7 @@ import io.netty.buffer.ByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
-import net.swedz.little_big_redstone.LBRText;
-import net.swedz.little_big_redstone.LBRTooltips;
+import net.swedz.little_big_redstone.LBR;
 import net.swedz.little_big_redstone.microchip.object.logic.config.LogicConfig;
 import net.swedz.little_big_redstone.microchip.object.logic.config.LogicConfigButtonReference;
 import net.swedz.little_big_redstone.microchip.object.logic.config.LogicConfigMenuBuilder;
@@ -19,8 +18,6 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.atomic.AtomicReference;
-
-import static net.swedz.little_big_redstone.LBRTextLine.*;
 
 public final class LogicSelectorConfig extends LogicConfig<LogicSelectorConfig>
 {
@@ -55,8 +52,8 @@ public final class LogicSelectorConfig extends LogicConfig<LogicSelectorConfig>
 	@Override
 	public void appendHoverText(List<Component> lines)
 	{
-		lines.add(line(LBRText.LOGIC_CONFIG_TOOLTIP_MODE).arg(mode, LBRTooltips.SELECTOR_MODE_PARSER));
-		lines.add(line(LBRText.LOGIC_CONFIG_TOOLTIP_OUTPUTS).arg(outputs));
+		lines.add(LBR.text().logicConfigTooltipMode(mode));
+		lines.add(LBR.text().logicConfigTooltipOutputs(outputs));
 	}
 	
 	@Override
@@ -70,16 +67,16 @@ public final class LogicSelectorConfig extends LogicConfig<LogicSelectorConfig>
 	{
 		var modeButton = new AtomicReference<LogicConfigButtonReference<LogicSelectorMode>>();
 		
-		modeButton.set(builder.addCycleButton(LBRText.LOGIC_CONFIG_BUTTON_LABEL_MODE.text(), mode.tooltip().text(), 0, 0, width, 18, false, mode, Arrays.asList(LogicSelectorMode.values()), (value) -> LBRTooltips.SELECTOR_MODE_PARSER.parse(value).plainCopy(), (value) ->
+		modeButton.set(builder.addCycleButton(LBR.text().logicConfigButtonLabelMode(), mode.tooltip(), 0, 0, width, 18, false, mode, Arrays.asList(LogicSelectorMode.values()), LogicSelectorMode::label, (value) ->
 		{
 			mode = value;
 			if(modeButton.get() != null)
 			{
-				modeButton.get().setTooltip(mode.tooltip().text());
+				modeButton.get().setTooltip(mode.tooltip());
 			}
 		}));
 		
-		builder.addSlider(LBRText.LOGIC_CONFIG_BUTTON_LABEL_OUTPUTS.text(), Component.empty(), LBRText.LOGIC_CONFIG_BUTTON_TOOLTIP_OUTPUTS.text(), 0, 22, width, 18, this.outputsAllowed().min(), this.outputsAllowed().max(), outputs, 1, 0, (value) -> outputs = value.intValue());
+		builder.addSlider(LBR.text().logicConfigButtonLabelOutputs(), Component.empty(), LBR.text().logicConfigButtonTooltipOutputs(), 0, 22, width, 18, this.outputsAllowed().min(), this.outputsAllowed().max(), outputs, 1, 0, (value) -> outputs = value.intValue());
 	}
 	
 	@Override

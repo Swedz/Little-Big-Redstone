@@ -5,6 +5,8 @@ import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.SimpleCraftingRecipeSerializer;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.registries.DeferredRegister;
+import net.swedz.little_big_redstone.recipe.ClearConfigRecipe;
+import net.swedz.little_big_redstone.recipe.CopyStickyNoteRecipe;
 import net.swedz.little_big_redstone.recipe.DataRetainingDyeRecipe;
 
 import java.util.function.Supplier;
@@ -16,6 +18,16 @@ public final class LBRRecipeTypes
 	public static final Supplier<RecipeSerializer<DataRetainingDyeRecipe>> DATA_RETAINING_DYE_RECIPE_SERIALIZER = RECIPE_SERIALIZERS.register(
 			"crafting_data_retaining_dye",
 			() -> new SimpleCraftingRecipeSerializer<>(DataRetainingDyeRecipe::new)
+	);
+	
+	public static final Supplier<RecipeSerializer<CopyStickyNoteRecipe>> COPY_STICKY_NOTE_RECIPE_SERIALIZER = RECIPE_SERIALIZERS.register(
+			"copy_sticky_note",
+			() -> new SimpleCraftingRecipeSerializer<>(CopyStickyNoteRecipe::new)
+	);
+	
+	public static final Supplier<RecipeSerializer<ClearConfigRecipe>> CLEAR_CONFIG_RECIPE_SERIALIZER = RECIPE_SERIALIZERS.register(
+			"clear_config",
+			() -> new SimpleCraftingRecipeSerializer<>(ClearConfigRecipe::new)
 	);
 	
 	public static void init(IEventBus bus)

@@ -12,12 +12,9 @@ import net.minecraft.world.item.ItemStack;
 import net.swedz.little_big_redstone.LBR;
 import net.swedz.little_big_redstone.LBRComponents;
 import net.swedz.little_big_redstone.LBRItems;
-import net.swedz.little_big_redstone.LBRText;
 
 import java.util.List;
 import java.util.Optional;
-
-import static net.swedz.little_big_redstone.LBRTextLine.*;
 
 public record LogicType<L extends LogicComponent>(
 		String id, String englishName, char symbol,
@@ -67,7 +64,7 @@ public record LogicType<L extends LogicComponent>(
 				}
 				if(configHeader)
 				{
-					lines.add(line(LBRText.LOGIC_CONFIG_TOOLTIP));
+					lines.add(LBR.text().logicConfigTooltip());
 				}
 				lines.addAll(configLines);
 			}

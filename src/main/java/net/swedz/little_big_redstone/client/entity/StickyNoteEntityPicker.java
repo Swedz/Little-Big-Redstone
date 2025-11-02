@@ -18,7 +18,7 @@ import net.swedz.little_big_redstone.network.packet.PickStickyNotePacket;
  * text content of a sticky note (to avoid excess network and memory load), the client has to request the server to
  * give the sticky note item to it.
  */
-@EventBusSubscriber(modid = LBR.ID, bus = EventBusSubscriber.Bus.GAME, value = Dist.CLIENT)
+@EventBusSubscriber(modid = LBR.ID, value = Dist.CLIENT)
 public final class StickyNoteEntityPicker
 {
 	@SubscribeEvent(priority = EventPriority.HIGHEST)

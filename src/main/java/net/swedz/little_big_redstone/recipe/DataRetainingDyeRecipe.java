@@ -41,7 +41,7 @@ public final class DataRetainingDyeRecipe extends CustomRecipe
 					(stack) -> stack.getItem() instanceof LogicItem ? stack.get(LBRComponents.LOGIC).color() : Optional.empty(),
 					(original, color) ->
 					{
-						var output = original.copy();
+						var output = original.copyWithCount(1);
 						var logic = original.get(LBRComponents.LOGIC).copy();
 						logic.setColor(color);
 						output.set(LBRComponents.LOGIC, logic);
@@ -107,7 +107,7 @@ public final class DataRetainingDyeRecipe extends CustomRecipe
 			@Override
 			default ItemStack create(ItemStack original, Optional<DyeColor> color)
 			{
-				return color.map((c) -> original.transmuteCopy(this.create(c))).orElse(ItemStack.EMPTY);
+				return color.map((c) -> original.transmuteCopy(this.create(c), 1)).orElse(ItemStack.EMPTY);
 			}
 		}
 	}

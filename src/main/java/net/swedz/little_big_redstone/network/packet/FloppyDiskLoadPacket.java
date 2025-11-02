@@ -1,14 +1,12 @@
 package net.swedz.little_big_redstone.network.packet;
 
 import io.netty.buffer.ByteBuf;
-import net.minecraft.ChatFormatting;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.world.InteractionHand;
 import net.swedz.little_big_redstone.LBR;
 import net.swedz.little_big_redstone.LBRComponents;
 import net.swedz.little_big_redstone.LBRTags;
-import net.swedz.little_big_redstone.LBRText;
 import net.swedz.little_big_redstone.microchip.Microchip;
 import net.swedz.little_big_redstone.network.LBRCustomPacket;
 import net.swedz.tesseract.neoforge.helper.CodecHelper;
@@ -37,7 +35,7 @@ public record FloppyDiskLoadPacket(
 		if(!stack.isEmpty() && stack.is(LBRTags.Items.FLOPPY_DISKS))
 		{
 			stack.set(LBRComponents.FLOPPY_DISK, microchip);
-			player.sendSystemMessage(LBRText.FLOPPY_DISK_FILE_LOADED.text(name).withStyle(ChatFormatting.GREEN));
+			player.sendSystemMessage(LBR.text().floppyDiskFileLoaded(name));
 		}
 		else
 		{

@@ -11,7 +11,7 @@ import java.io.IOException;
 
 import static com.mojang.blaze3d.vertex.DefaultVertexFormat.*;
 
-@EventBusSubscriber(value = Dist.CLIENT, modid = LBR.ID, bus = EventBusSubscriber.Bus.MOD)
+@EventBusSubscriber(modid = LBR.ID, value = Dist.CLIENT)
 public final class LBRClientShaders
 {
 	private static ShaderInstance LOGIC_ITEM_SCANLINE_INSTANCE;

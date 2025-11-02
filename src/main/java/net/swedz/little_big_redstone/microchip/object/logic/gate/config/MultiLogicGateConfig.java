@@ -6,15 +6,13 @@ import io.netty.buffer.ByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
-import net.swedz.little_big_redstone.LBRText;
+import net.swedz.little_big_redstone.LBR;
 import net.swedz.little_big_redstone.microchip.object.logic.config.LogicConfig;
 import net.swedz.little_big_redstone.microchip.object.logic.config.LogicConfigMenuBuilder;
 import net.swedz.tesseract.neoforge.api.range.IntRange;
 
 import java.util.List;
 import java.util.Objects;
-
-import static net.swedz.little_big_redstone.LBRTextLine.*;
 
 public final class MultiLogicGateConfig extends LogicConfig<MultiLogicGateConfig>
 {
@@ -68,7 +66,7 @@ public final class MultiLogicGateConfig extends LogicConfig<MultiLogicGateConfig
 	@Override
 	public void appendHoverText(List<Component> lines)
 	{
-		lines.add(line(LBRText.LOGIC_CONFIG_TOOLTIP_INPUTS).arg(inputs));
+		lines.add(LBR.text().logicConfigTooltipInputs(inputs));
 	}
 	
 	@Override
@@ -80,7 +78,7 @@ public final class MultiLogicGateConfig extends LogicConfig<MultiLogicGateConfig
 	@Override
 	public void buildMenu(LogicConfigMenuBuilder builder, int width, int height)
 	{
-		builder.addSlider(LBRText.LOGIC_CONFIG_BUTTON_LABEL_INPUTS.text(), Component.empty(), LBRText.LOGIC_CONFIG_BUTTON_TOOLTIP_INPUTS.text(), 0, 0, width, 18, this.inputsAllowed().min(), this.inputsAllowed().max(), inputs, 1, 0, (value) -> inputs = value.intValue());
+		builder.addSlider(LBR.text().logicConfigButtonLabelInputs(), Component.empty(), LBR.text().logicConfigButtonTooltipInputs(), 0, 0, width, 18, this.inputsAllowed().min(), this.inputsAllowed().max(), inputs, 1, 0, (value) -> inputs = value.intValue());
 	}
 	
 	@Override

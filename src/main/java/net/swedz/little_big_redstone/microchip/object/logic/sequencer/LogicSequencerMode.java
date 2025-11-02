@@ -1,29 +1,33 @@
 package net.swedz.little_big_redstone.microchip.object.logic.sequencer;
 
-import net.swedz.little_big_redstone.LBRText;
+import net.minecraft.network.chat.MutableComponent;
+import net.swedz.little_big_redstone.LBR;
+import net.swedz.little_big_redstone.microchip.object.logic.LogicMode;
 
-public enum LogicSequencerMode
+import java.util.function.Supplier;
+
+public enum LogicSequencerMode implements LogicMode
 {
-	WEAK(LBRText.LOGIC_CONFIG_SEQUENCER_MODE_WEAK, LBRText.LOGIC_CONFIG_BUTTON_TOOLTIP_SEQUENCER_MODE_WEAK),
-	STRONG(LBRText.LOGIC_CONFIG_SEQUENCER_MODE_STRONG, LBRText.LOGIC_CONFIG_BUTTON_TOOLTIP_SEQUENCER_MODE_STRONG),
-	COUNTER(LBRText.LOGIC_CONFIG_SEQUENCER_MODE_COUNTER, LBRText.LOGIC_CONFIG_BUTTON_TOOLTIP_SEQUENCER_MODE_COUNTER);
+	WEAK(() -> LBR.text().logicConfigSequencerModeWeak(), () -> LBR.text().logicConfigButtonTooltipSequencerModeWeak()),
+	STRONG(() -> LBR.text().logicConfigSequencerModeStrong(), () -> LBR.text().logicConfigButtonTooltipSequencerModeStrong()),
+	COUNTER(() -> LBR.text().logicConfigSequencerModeCounter(), () -> LBR.text().logicConfigButtonTooltipSequencerModeCounter());
 	
-	private final LBRText label;
-	private final LBRText tooltip;
+	private final Supplier<MutableComponent> label;
+	private final Supplier<MutableComponent> tooltip;
 	
-	LogicSequencerMode(LBRText label, LBRText tooltip)
+	LogicSequencerMode(Supplier<MutableComponent> label, Supplier<MutableComponent> tooltip)
 	{
 		this.label = label;
 		this.tooltip = tooltip;
 	}
 	
-	public LBRText label()
+	public MutableComponent label()
 	{
-		return label;
+		return label.get();
 	}
 	
-	public LBRText tooltip()
+	public MutableComponent tooltip()
 	{
-		return tooltip;
+		return tooltip.get();
 	}
 }

@@ -10,7 +10,7 @@ import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.item.DyeColor;
-import net.swedz.little_big_redstone.LBRText;
+import net.swedz.little_big_redstone.LBR;
 import net.swedz.little_big_redstone.microchip.object.logic.LogicComponent;
 import net.swedz.little_big_redstone.microchip.object.logic.LogicContext;
 import net.swedz.little_big_redstone.microchip.object.logic.LogicGridSize;
@@ -19,8 +19,6 @@ import net.swedz.little_big_redstone.microchip.object.logic.LogicTypes;
 
 import java.util.List;
 import java.util.Optional;
-
-import static net.swedz.little_big_redstone.LBRTextLine.*;
 
 public final class LogicRandomizer extends LogicComponent<LogicRandomizer, LogicRandomizerConfig>
 {
@@ -101,7 +99,7 @@ public final class LogicRandomizer extends LogicComponent<LogicRandomizer, Logic
 	@Override
 	public void appendShiftHoverText(List<Component> lines)
 	{
-		lines.add(line(LBRText.LOGIC_HELP_RANDOMIZER));
+		lines.add(LBR.text().logicHelpRandomizer());
 	}
 	
 	@Override

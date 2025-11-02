@@ -8,6 +8,7 @@ import net.minecraft.world.InteractionResult;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.tooltip.TooltipComponent;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -18,11 +19,15 @@ import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.phys.Vec3;
 import net.swedz.little_big_redstone.LBRComponents;
 import net.swedz.little_big_redstone.entity.stickynote.StickyNoteEntity;
+import net.swedz.little_big_redstone.entity.stickynote.StickyNoteView;
 import net.swedz.little_big_redstone.gui.stickynote.reference.HeldItemStickyNoteReference;
 import net.swedz.little_big_redstone.item.DyeColoredItem;
+import net.swedz.little_big_redstone.item.stickynote.tooltip.StickyNoteTooltipData;
 import net.swedz.little_big_redstone.proxy.LBRProxy;
 import net.swedz.tesseract.neoforge.helper.DirectionHelper;
 import net.swedz.tesseract.neoforge.proxy.Proxies;
+
+import java.util.Optional;
 
 public final class StickyNoteItem extends Item implements DyeColoredItem
 {
@@ -148,5 +153,15 @@ public final class StickyNoteItem extends Item implements DyeColoredItem
 		}
 		
 		return InteractionResult.CONSUME;
+	}
+	
+	@Override
+	public Optional<TooltipComponent> getTooltipImage(ItemStack stack)
+	{
+		var textColor = stack.get(LBRComponents.STICKY_NOTE_TEXT_COLOR);
+		var note = stack.get(LBRComponents.STICKY_NOTE);
+		return note.isEmpty() ?
+				Optional.empty() :
+				Optional.of(new StickyNoteTooltipData(new StickyNoteView(color, textColor, note.parsed())));
 	}
 }

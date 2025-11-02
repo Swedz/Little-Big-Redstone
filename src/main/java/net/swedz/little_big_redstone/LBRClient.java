@@ -8,6 +8,7 @@ import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.ModContainer;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.fml.common.Mod;
+import net.neoforged.fml.config.ModConfig;
 import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
 import net.neoforged.neoforge.client.event.EntityRenderersEvent;
 import net.neoforged.neoforge.client.event.ModelEvent;
@@ -19,32 +20,59 @@ import net.neoforged.neoforge.client.extensions.common.RegisterClientExtensionsE
 import net.neoforged.neoforge.client.gui.VanillaGuiLayers;
 import net.swedz.little_big_redstone.client.entity.StickyNoteEntityRenderer;
 import net.swedz.little_big_redstone.client.hud.FloppyDiskConsumeItemsGuiOverlay;
+import net.swedz.little_big_redstone.client.hud.StickyNoteViewContentsGuiOverlay;
 import net.swedz.little_big_redstone.client.item.LogicItemRenderer;
 import net.swedz.little_big_redstone.client.item.StickyNoteItemRenderer;
 import net.swedz.little_big_redstone.client.model.logic.LogicUnbakedModel;
 import net.swedz.little_big_redstone.client.model.microchip.MicrochipUnbakedModel;
 import net.swedz.little_big_redstone.client.model.stickynote.entity.StickyNoteEntityUnbakedModel;
 import net.swedz.little_big_redstone.client.model.stickynote.item.StickyNoteItemUnbakedModel;
+import net.swedz.little_big_redstone.gui.floppydisk.FloppyDiskScreen;
 import net.swedz.little_big_redstone.gui.logicarray.LogicArrayScreen;
 import net.swedz.little_big_redstone.gui.logicconfig.LogicConfigScreen;
 import net.swedz.little_big_redstone.gui.microchip.MicrochipScreen;
 import net.swedz.little_big_redstone.gui.microchip.logic.LogicRenderers;
 import net.swedz.little_big_redstone.item.LogicItem;
-import net.swedz.little_big_redstone.item.logicarray.tooltip.LogicArrayClientTooltip;
-import net.swedz.little_big_redstone.item.logicarray.tooltip.LogicArrayTooltipData;
 import net.swedz.little_big_redstone.item.stickynote.StickyNoteItem;
+import net.swedz.little_big_redstone.item.stickynote.tooltip.StickyNoteClientTooltip;
+import net.swedz.little_big_redstone.item.stickynote.tooltip.StickyNoteTooltipData;
+import net.swedz.little_big_redstone.item.tooltip.ItemContainerContentsClientTooltip;
+import net.swedz.little_big_redstone.item.tooltip.ItemContainerContentsTooltipData;
+import net.swedz.tesseract.neoforge.api.Assert;
+import net.swedz.tesseract.neoforge.config.ConfigManager;
 import net.swedz.tesseract.neoforge.registry.holder.ItemHolder;
 
 import java.util.function.Supplier;
 
 @Mod(value = LBR.ID, dist = Dist.CLIENT)
-@EventBusSubscriber(value = Dist.CLIENT, modid = LBR.ID, bus = EventBusSubscriber.Bus.MOD)
+@EventBusSubscriber(modid = LBR.ID, value = Dist.CLIENT)
 public final class LBRClient
 {
 	public LBRClient(IEventBus bus, ModContainer container)
 	{
+		setupConfig(bus, container);
+		
+		FloppyDiskScreen.createPath();
 		LBRTooltips.init();
 		LogicRenderers.init();
+	}
+	
+	private static LBRClientConfig CONFIG;
+	
+	public static LBRClientConfig config()
+	{
+		Assert.notNull(CONFIG, "Config not yet loaded");
+		return CONFIG;
+	}
+	
+	private static void setupConfig(IEventBus bus, ModContainer container)
+	{
+		CONFIG = new ConfigManager()
+				.includeDefaultValueComments()
+				.build(LBRClientConfig.class)
+				.register(container, ModConfig.Type.CLIENT)
+				.listenToLoad(bus)
+				.config();
 	}
 	
 	private static void registerCustomItemRenderer(RegisterClientExtensionsEvent event, Supplier<BlockEntityWithoutLevelRenderer> renderer, Class<?> itemType)
@@ -72,7 +100,8 @@ public final class LBRClient
 	@SubscribeEvent
 	private static void register(RegisterGuiLayersEvent event)
 	{
-		event.registerAbove(VanillaGuiLayers.OVERLAY_MESSAGE, LBR.id("floppy_disk_consume_items"), FloppyDiskConsumeItemsGuiOverlay::render);
+		event.registerAbove(VanillaGuiLayers.HOTBAR, LBR.id("floppy_disk_consume_items"), FloppyDiskConsumeItemsGuiOverlay::render);
+		event.registerBelow(VanillaGuiLayers.DEBUG_OVERLAY, LBR.id("sticky_note_view_contents"), StickyNoteViewContentsGuiOverlay::render);
 	}
 	
 	@SubscribeEvent
@@ -84,7 +113,8 @@ public final class LBRClient
 	@SubscribeEvent
 	private static void registerClientTooltipComponents(RegisterClientTooltipComponentFactoriesEvent event)
 	{
-		event.register(LogicArrayTooltipData.class, (data) -> new LogicArrayClientTooltip(data.storage()));
+		event.register(ItemContainerContentsTooltipData.class, (data) -> new ItemContainerContentsClientTooltip(data.storage(), data.maxColumns(), data.maxRows(), data.showExtraSlot()));
+		event.register(StickyNoteTooltipData.class, (data) -> new StickyNoteClientTooltip(data.note()));
 	}
 	
 	@SubscribeEvent

@@ -3,8 +3,10 @@ package net.swedz.little_big_redstone.gui.stickynote;
 import net.minecraft.client.GameNarrator;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.DyeColor;
-import net.swedz.little_big_redstone.LBR;
+import net.swedz.little_big_redstone.client.StickyNoteViewRenderer;
+import net.swedz.little_big_redstone.entity.stickynote.StickyNoteView;
 import net.swedz.little_big_redstone.gui.stickynote.reference.StickyNoteReference;
 import net.swedz.tesseract.neoforge.helper.guigraphics.TesseractGuiGraphics;
 
@@ -18,8 +20,8 @@ public abstract class StickyNoteScreen extends Screen
 	protected int uiWidth, uiHeight;
 	protected int leftPos, topPos;
 	
-	protected int contentLeftPos, contentTopPos;
-	protected int maxContentWidth, maxContentHeight;
+	protected final int contentLeftPos, contentTopPos;
+	protected final int maxContentWidth, maxContentHeight;
 	
 	protected StickyNoteScreen(StickyNoteReference reference)
 	{
@@ -57,11 +59,7 @@ public abstract class StickyNoteScreen extends Screen
 		graphics.pose().pushPose();
 		graphics.pose().translate(leftPos, topPos, 0);
 		
-		graphics.setTexture(LBR.id("textures/gui/sticky_note/background_%s.png".formatted(color.getName())));
-		graphics.nineSlice(0, 0, 180, 180, 64, 64, 21);
-		
-		graphics.setTexture(LBR.id("textures/gui/sticky_note/pin_%s.png".formatted(color.getName())));
-		graphics.blit((180 / 2) - 9, 4, 0, 0, 32, 32, 32, 32);
+		StickyNoteViewRenderer.renderBackground(graphics, new StickyNoteView(color, textColor, Component.empty()));
 		
 		graphics.pose().popPose();
 	}

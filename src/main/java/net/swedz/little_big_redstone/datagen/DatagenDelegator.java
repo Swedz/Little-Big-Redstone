@@ -7,7 +7,7 @@ import net.swedz.little_big_redstone.LBR;
 import net.swedz.little_big_redstone.datagen.client.DatagenDelegatorClient;
 import net.swedz.little_big_redstone.datagen.server.DatagenDelegatorServer;
 
-@EventBusSubscriber(modid = LBR.ID, bus = EventBusSubscriber.Bus.MOD)
+@EventBusSubscriber(modid = LBR.ID)
 public final class DatagenDelegator
 {
 	@SubscribeEvent

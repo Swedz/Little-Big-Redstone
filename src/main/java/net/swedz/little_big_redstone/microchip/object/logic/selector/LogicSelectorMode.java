@@ -1,28 +1,33 @@
 package net.swedz.little_big_redstone.microchip.object.logic.selector;
 
-import net.swedz.little_big_redstone.LBRText;
+import net.minecraft.network.chat.MutableComponent;
+import net.swedz.little_big_redstone.LBR;
+import net.swedz.little_big_redstone.microchip.object.logic.LogicMode;
 
-public enum LogicSelectorMode
+import java.util.function.Supplier;
+
+public enum LogicSelectorMode implements LogicMode
 {
-	COUNTER(LBRText.LOGIC_CONFIG_SELECTOR_MODE_COUNTER, LBRText.LOGIC_CONFIG_BUTTON_TOOLTIP_SELECTOR_MODE_COUNTER),
-	SETTER(LBRText.LOGIC_CONFIG_SELECTOR_MODE_SETTER, LBRText.LOGIC_CONFIG_BUTTON_TOOLTIP_SELECTOR_MODE_SETTER);
+	COUNTER(() -> LBR.text().logicConfigSelectorModeCounter(), () -> LBR.text().logicConfigButtonTooltipSelectorModeCounter()),
+	SETTER(() -> LBR.text().logicConfigSelectorModeSetter(), () -> LBR.text().logicConfigButtonTooltipSelectorModeSetter());
 	
-	private final LBRText label;
-	private final LBRText tooltip;
+	private final Supplier<MutableComponent> label;
+	private final Supplier<MutableComponent> tooltip;
 	
-	LogicSelectorMode(LBRText label, LBRText tooltip)
+	LogicSelectorMode(Supplier<MutableComponent> label, Supplier<MutableComponent> tooltip)
 	{
 		this.label = label;
 		this.tooltip = tooltip;
 	}
 	
-	public LBRText label()
+	@Override
+	public MutableComponent label()
 	{
-		return label;
+		return label.get();
 	}
 	
-	public LBRText tooltip()
+	public MutableComponent tooltip()
 	{
-		return tooltip;
+		return tooltip.get();
 	}
 }
