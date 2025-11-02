@@ -16,7 +16,7 @@ import net.swedz.tesseract.neoforge.helper.CubeOverlayRenderHelper;
 import java.util.Locale;
 import java.util.function.Function;
 
-@EventBusSubscriber(modid = LBR.ID, bus = EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
+@EventBusSubscriber(modid = LBR.ID, value = Dist.CLIENT)
 public final class LBRClientRenderTypes
 {
 	private static final Function<Direction, RenderType> MICROCHIP_OVERLAY = Util.memoize((direction) ->

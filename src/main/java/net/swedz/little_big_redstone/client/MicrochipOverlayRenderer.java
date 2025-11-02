@@ -11,7 +11,7 @@ import net.swedz.little_big_redstone.LBRClientRenderTypes;
 import net.swedz.little_big_redstone.block.microchip.MicrochipBlock;
 import net.swedz.tesseract.neoforge.helper.CubeOverlayRenderHelper;
 
-@EventBusSubscriber(modid = LBR.ID, bus = EventBusSubscriber.Bus.GAME, value = Dist.CLIENT)
+@EventBusSubscriber(modid = LBR.ID, value = Dist.CLIENT)
 public final class MicrochipOverlayRenderer
 {
 	@SubscribeEvent
