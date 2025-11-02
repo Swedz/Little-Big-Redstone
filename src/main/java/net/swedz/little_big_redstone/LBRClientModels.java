@@ -12,7 +12,7 @@ import net.swedz.tesseract.neoforge.api.Assert;
 import java.util.Collections;
 import java.util.Map;
 
-@EventBusSubscriber(modid = LBR.ID, value = Dist.CLIENT, bus = EventBusSubscriber.Bus.MOD)
+@EventBusSubscriber(modid = LBR.ID, value = Dist.CLIENT)
 public final class LBRClientModels
 {
 	private static final Map<DyeColor, ModelResourceLocation> STICKY_NOTES;

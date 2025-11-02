@@ -45,7 +45,7 @@ import net.swedz.tesseract.neoforge.registry.holder.ItemHolder;
 import java.util.function.Supplier;
 
 @Mod(value = LBR.ID, dist = Dist.CLIENT)
-@EventBusSubscriber(value = Dist.CLIENT, modid = LBR.ID, bus = EventBusSubscriber.Bus.MOD)
+@EventBusSubscriber(modid = LBR.ID, value = Dist.CLIENT)
 public final class LBRClient
 {
 	public LBRClient(IEventBus bus, ModContainer container)
