@@ -172,6 +172,9 @@ public interface LBRText
 	@LangKey(text = "Inputs: ")
 	MutableComponent logicConfigButtonLabelInputs();
 	
+	@LangKey(text = "Channel: ")
+	MutableComponent logicConfigButtonLabelIOChannel();
+	
 	@LangKey(text = "Signal Strength: ")
 	MutableComponent logicConfigButtonLabelIoSignalStrength();
 	
@@ -207,6 +210,10 @@ public interface LBRText
 	
 	@LangKey(text = "The number of inputs that this component can accept.")
 	MutableComponent logicConfigButtonTooltipInputs();
+	
+	@LangKey(text = "What channel this port should link to." +
+					"\nWhen the channel is set to 0, the microchip block itself is used.")
+	MutableComponent logicConfigButtonTooltipIOChannel();
 	
 	@LangKey(text = "The direction this port should interact with redstone power on.")
 	MutableComponent logicConfigButtonTooltipIoDirection();
@@ -318,6 +325,10 @@ public interface LBRText
 	@LangKey(text = "  Inputs: %s")
 	@WithStyle("tooltip")
 	MutableComponent logicConfigTooltipInputs(@WithStyle("highlighted") int inputs);
+	
+	@LangKey(text = "  Channel: %s")
+	@WithStyle("tooltip")
+	MutableComponent logicConfigTooltipIOChannel(@WithStyle("highlighted") int channel);
 	
 	@LangKey(text = "  Signal: %s")
 	@WithStyle("tooltip")

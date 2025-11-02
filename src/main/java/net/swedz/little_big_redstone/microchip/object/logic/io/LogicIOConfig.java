@@ -47,10 +47,10 @@ public final class LogicIOConfig extends LogicConfig<LogicIOConfig>
 			LogicIOConfig::new
 	);
 	
-	public boolean input;
-	public int channel;
-	public Direction direction;
-	public int signalStrength;
+	public boolean             input;
+	public int                 channel;
+	public Direction           direction;
+	public int                 signalStrength;
 	public LogicComparisonMode signalComparison;
 	
 	private LogicIOConfig(boolean valid, boolean input, int channel, Direction direction, int signalStrength, LogicComparisonMode signalComparison)
@@ -112,7 +112,7 @@ public final class LogicIOConfig extends LogicConfig<LogicIOConfig>
 	public void appendHoverText(List<Component> lines)
 	{
 		lines.add(LBR.text().logicConfigTooltipMode(input ? LogicMode.input() : LogicMode.output()));
-		// TODO channel
+		lines.add(LBR.text().logicConfigTooltipIOChannel(channel));
 		lines.add(LBR.text().logicConfigTooltipDirection(direction));
 		if(input)
 		{
@@ -175,17 +175,17 @@ public final class LogicIOConfig extends LogicConfig<LogicIOConfig>
 			updateComparisonButtonTooltip.run();
 		});
 		
-		builder.addSlider(LBRText.LOGIC_CONFIG_BUTTON_LABEL_IO_CHANNEL.text(), Component.empty(), LBRText.LOGIC_CONFIG_BUTTON_TOOLTIP_IO_CHANNEL.text(), 0, 22, width, 18, 0, 15, channel, 1, 0, (value) -> channel = value.intValue());
+		builder.addSlider(LBR.text().logicConfigButtonLabelIOChannel(), Component.empty(), LBR.text().logicConfigButtonTooltipIOChannel(), 0, 22, width, 18, 0, 15, channel, 1, 0, (value) -> channel = value.intValue());
 		
-		builder.addCycleButton(LBR.text().logicConfigButtonLabelDirection(), LBR.text().logicConfigButtonTooltipIoDirection(), 0, 22, width, 18, false, direction, Arrays.asList(Direction.values()), LBRTooltips.DIRECTION_PARSER::parse, (value) -> direction = value);
+		builder.addCycleButton(LBR.text().logicConfigButtonLabelDirection(), LBR.text().logicConfigButtonTooltipIoDirection(), 0, 22 * 2, width, 18, false, direction, Arrays.asList(Direction.values()), LBRTooltips.DIRECTION_PARSER::parse, (value) -> direction = value);
 		
-		signalStrengthSlider.set(builder.addSlider(LBR.text().logicConfigButtonLabelIoSignalStrength(), Component.empty(), input ? LBR.text().logicConfigButtonTooltipIoSignalStrengthInput() : LBR.text().logicConfigButtonTooltipIoSignalStrengthOutput(), 18 + 4, 22 * 2, width - 18 - 4, 18, 1, 15, signalStrength, 1, 0, (value) ->
+		signalStrengthSlider.set(builder.addSlider(LBR.text().logicConfigButtonLabelIoSignalStrength(), Component.empty(), input ? LBR.text().logicConfigButtonTooltipIoSignalStrengthInput() : LBR.text().logicConfigButtonTooltipIoSignalStrengthOutput(), 18 + 4, 22 * 3, width - 18 - 4, 18, 1, 15, signalStrength, 1, 0, (value) ->
 		{
 			signalStrength = value.intValue();
 			updateComparisonButtonTooltip.run();
 		}));
 		
-		comparisonButton.set(builder.addCycleButton(this.signalComparisonTooltip(signalStrength), 0, 22 * 2, LBR.id("textures/gui/slot_atlas.png"), signalComparison, Arrays.asList(LogicComparisonMode.values()), (value) ->
+		comparisonButton.set(builder.addCycleButton(this.signalComparisonTooltip(signalStrength), 0, 22 * 3, LBR.id("textures/gui/slot_atlas.png"), signalComparison, Arrays.asList(LogicComparisonMode.values()), (value) ->
 		{
 			signalComparison = value;
 			updateComparisonButtonTooltip.run();
