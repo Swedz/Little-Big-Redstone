@@ -108,7 +108,7 @@ public final class MicrochipBlock extends Block implements TickableBlock, DyeCol
 		}
 		
 		var redstone = blockEntity.microchip().awarenesses().get(AwarenessTypes.REDSTONE);
-		return redstone != null ? redstone.outputRedstoneSignal(state, direction) : 0;
+		return redstone != null ? redstone.outputRedstoneSignal(state, direction, 0) : 0;
 	}
 	
 	@Override

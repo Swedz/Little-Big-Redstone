@@ -87,7 +87,7 @@ public final class MicrochipBlockEntity extends BlockEntity implements MenuProvi
 		var redstone = microchip.awarenesses().get(AwarenessTypes.REDSTONE);
 		if(redstone != null)
 		{
-			data.sides(redstone.getSides());
+			data.sides(redstone.getSides(0));
 		}
 		return data;
 	}

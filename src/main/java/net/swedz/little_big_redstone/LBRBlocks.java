@@ -2,7 +2,9 @@ package net.swedz.little_big_redstone;
 
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
+import net.minecraft.core.Direction;
 import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.DyeColor;
@@ -12,8 +14,10 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.material.MapColor;
 import net.neoforged.bus.api.IEventBus;
+import net.neoforged.neoforge.client.model.generators.BlockStateProvider;
 import net.neoforged.neoforge.client.model.generators.ModelFile;
 import net.neoforged.neoforge.registries.DeferredRegister;
+import net.swedz.little_big_redstone.block.channel.ChannelBlock;
 import net.swedz.little_big_redstone.block.microchip.MicrochipBlock;
 import net.swedz.little_big_redstone.block.microchip.MicrochipBlockEntity;
 import net.swedz.tesseract.neoforge.api.Assert;
@@ -27,6 +31,7 @@ import java.util.Collections;
 import java.util.Map;
 import java.util.Set;
 import java.util.function.BiFunction;
+import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
@@ -63,6 +68,48 @@ public final class LBRBlocks
 		LBRColors.forEachIndexed((color, colorName, index) ->
 				microchips.put(color, createMicrochip(color, colorName, index).register()));
 		MICROCHIPS = Collections.unmodifiableMap(microchips);
+	}
+	
+	public static final BlockHolder<ChannelBlock> CHANNEL = create("channel", "Channel", ChannelBlock::new, BlockItem::new, LBRSortOrder.CHANNEL)
+			.withProperties((p) -> p
+					.mapColor(MapColor.STONE)
+					.destroyTime(4f)
+					.requiresCorrectToolForDrops())
+			.tag(BlockTags.MINEABLE_WITH_PICKAXE)
+			.withLootTable(CommonLootTableBuilders::self)
+			.withModel(LBRBlocks::channelModel)
+			.register();
+	
+	private static Consumer<BlockStateProvider> channelModel(BlockHolder block)
+	{
+		return (builder) ->
+		{
+			var id = block.identifier().id();
+			var side = ResourceLocation.fromNamespaceAndPath(block.identifier().modId(), "block/%s_side".formatted(id));
+			var end = ResourceLocation.fromNamespaceAndPath(block.identifier().modId(), "block/%s_end".formatted(id));
+			var vertical = builder.models().cubeColumn("%s_vertical".formatted(id), side, end);
+			var horizontal = builder.models().cubeColumnHorizontal("%s_horizontal".formatted(id), side, end);
+			
+			var blockStatesBuilder = builder.getVariantBuilder(block.get());
+			for(var originDirection : Direction.values())
+			{
+				var axis = originDirection.getAxis();
+				for(int power = 0; power <= 15; power++)
+				{
+					boolean powered = power > 0;
+					blockStatesBuilder.partialState()
+							.with(ChannelBlock.ORIGIN_DIRECTION, originDirection)
+							.with(ChannelBlock.POWER, power)
+							.modelForState()
+							.modelFile(axis.isVertical() ? vertical : horizontal)
+							.rotationX(axis.isHorizontal() ? 90 : 0)
+							.rotationY(axis == Direction.Axis.X ? 90 : 0)
+							.addModel();
+				}
+			}
+			
+			builder.simpleBlockItem(block.get(), new ModelFile.UncheckedModelFile(LBR.id("block/%s_vertical".formatted(id))));
+		};
 	}
 	
 	public static BlockHolder<MicrochipBlock> microchip(DyeColor color)

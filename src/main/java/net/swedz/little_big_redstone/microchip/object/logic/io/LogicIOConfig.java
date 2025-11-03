@@ -30,32 +30,34 @@ public final class LogicIOConfig extends LogicConfig<LogicIOConfig>
 	public static final MapCodec<LogicIOConfig> CODEC = RecordCodecBuilder.mapCodec((instance) -> instance
 			.group(
 					Codec.BOOL.optionalFieldOf("input", true).forGetter((config) -> config.input),
+					Codec.intRange(0, 15).optionalFieldOf("channel", 0).forGetter((config) -> config.channel),
 					Direction.CODEC.optionalFieldOf("direction", Direction.NORTH).forGetter((config) -> config.direction),
 					Codec.intRange(1, 15).optionalFieldOf("signal_strength", 1).forGetter((config) -> config.signalStrength),
 					CodecHelper.forLowercaseEnum(LogicComparisonMode.class).optionalFieldOf("signal_comparison", LogicComparisonMode.GREATER_THAN_OR_EQUAL_TO).forGetter((config) -> config.signalComparison)
 			)
-			.apply(instance, (input, direction, signalStrength, precise) -> new LogicIOConfig(true, input, direction, signalStrength, precise)));
+			.apply(instance, (input, channel, direction, signalStrength, precise) -> new LogicIOConfig(true, input, channel, direction, signalStrength, precise)));
 	
 	public static final StreamCodec<ByteBuf, LogicIOConfig> STREAM_CODEC = StreamCodec.composite(
 			ByteBufCodecs.BOOL, (config) -> config.valid,
 			ByteBufCodecs.BOOL, (config) -> config.input,
+			ByteBufCodecs.INT, (config) -> config.channel,
 			Direction.STREAM_CODEC, (config) -> config.direction,
 			ByteBufCodecs.INT, (config) -> config.signalStrength,
 			CodecHelper.forEnumStream(LogicComparisonMode.class), (config) -> config.signalComparison,
 			LogicIOConfig::new
 	);
 	
-	public boolean input;
-	
-	public Direction direction;
-	
-	public int signalStrength;
+	public boolean             input;
+	public int                 channel;
+	public Direction           direction;
+	public int                 signalStrength;
 	public LogicComparisonMode signalComparison;
 	
-	private LogicIOConfig(boolean valid, boolean input, Direction direction, int signalStrength, LogicComparisonMode signalComparison)
+	private LogicIOConfig(boolean valid, boolean input, int channel, Direction direction, int signalStrength, LogicComparisonMode signalComparison)
 	{
 		this.valid = valid;
 		this.input = input;
+		this.channel = channel;
 		this.direction = direction;
 		this.signalStrength = Mth.clamp(signalStrength, 1, 15);
 		this.signalComparison = signalComparison;
@@ -63,7 +65,7 @@ public final class LogicIOConfig extends LogicConfig<LogicIOConfig>
 	
 	public LogicIOConfig()
 	{
-		this(true, true, Direction.NORTH, 1, LogicComparisonMode.GREATER_THAN_OR_EQUAL_TO);
+		this(true, true, 0, Direction.NORTH, 1, LogicComparisonMode.GREATER_THAN_OR_EQUAL_TO);
 	}
 	
 	@Override
@@ -72,7 +74,9 @@ public final class LogicIOConfig extends LogicConfig<LogicIOConfig>
 		for(var entry : components)
 		{
 			if(entry.component().config() != this && entry.component().config() instanceof LogicIOConfig entryConfig &&
-			   input != entryConfig.input && direction == entryConfig.direction)
+			   input != entryConfig.input &&
+			   channel == entryConfig.channel &&
+			   direction == entryConfig.direction)
 			{
 				return false;
 			}
@@ -108,6 +112,7 @@ public final class LogicIOConfig extends LogicConfig<LogicIOConfig>
 	public void appendHoverText(List<Component> lines)
 	{
 		lines.add(LBR.text().logicConfigTooltipMode(input ? LogicMode.input() : LogicMode.output()));
+		lines.add(LBR.text().logicConfigTooltipIOChannel(channel));
 		lines.add(LBR.text().logicConfigTooltipDirection(direction));
 		if(input)
 		{
@@ -170,15 +175,17 @@ public final class LogicIOConfig extends LogicConfig<LogicIOConfig>
 			updateComparisonButtonTooltip.run();
 		});
 		
-		builder.addCycleButton(LBR.text().logicConfigButtonLabelDirection(), LBR.text().logicConfigButtonTooltipIoDirection(), 0, 22, width, 18, false, direction, Arrays.asList(Direction.values()), LBRTooltips.DIRECTION_PARSER::parse, (value) -> direction = value);
+		builder.addSlider(LBR.text().logicConfigButtonLabelIOChannel(), Component.empty(), LBR.text().logicConfigButtonTooltipIOChannel(), 0, 22, width, 18, 0, 15, channel, 1, 0, (value) -> channel = value.intValue());
 		
-		signalStrengthSlider.set(builder.addSlider(LBR.text().logicConfigButtonLabelIoSignalStrength(), Component.empty(), input ? LBR.text().logicConfigButtonTooltipIoSignalStrengthInput() : LBR.text().logicConfigButtonTooltipIoSignalStrengthOutput(), 18 + 4, 22 * 2, width - 18 - 4, 18, 1, 15, signalStrength, 1, 0, (value) ->
+		builder.addCycleButton(LBR.text().logicConfigButtonLabelDirection(), LBR.text().logicConfigButtonTooltipIoDirection(), 0, 22 * 2, width, 18, false, direction, Arrays.asList(Direction.values()), LBRTooltips.DIRECTION_PARSER::parse, (value) -> direction = value);
+		
+		signalStrengthSlider.set(builder.addSlider(LBR.text().logicConfigButtonLabelIoSignalStrength(), Component.empty(), input ? LBR.text().logicConfigButtonTooltipIoSignalStrengthInput() : LBR.text().logicConfigButtonTooltipIoSignalStrengthOutput(), 18 + 4, 22 * 3, width - 18 - 4, 18, 1, 15, signalStrength, 1, 0, (value) ->
 		{
 			signalStrength = value.intValue();
 			updateComparisonButtonTooltip.run();
 		}));
 		
-		comparisonButton.set(builder.addCycleButton(this.signalComparisonTooltip(signalStrength), 0, 22 * 2, LBR.id("textures/gui/slot_atlas.png"), signalComparison, Arrays.asList(LogicComparisonMode.values()), (value) ->
+		comparisonButton.set(builder.addCycleButton(this.signalComparisonTooltip(signalStrength), 0, 22 * 3, LBR.id("textures/gui/slot_atlas.png"), signalComparison, Arrays.asList(LogicComparisonMode.values()), (value) ->
 		{
 			signalComparison = value;
 			updateComparisonButtonTooltip.run();
@@ -191,6 +198,7 @@ public final class LogicIOConfig extends LogicConfig<LogicIOConfig>
 	protected void internalLoadFrom(LogicIOConfig other)
 	{
 		input = other.input;
+		channel = other.channel;
 		direction = other.direction;
 		signalStrength = other.signalStrength;
 		signalComparison = other.signalComparison;
@@ -205,13 +213,13 @@ public final class LogicIOConfig extends LogicConfig<LogicIOConfig>
 	@Override
 	public int hashCode()
 	{
-		return Objects.hash(input, direction, signalStrength, signalComparison);
+		return Objects.hash(input, channel, direction, signalStrength, signalComparison);
 	}
 	
 	@Override
 	public boolean equals(Object o)
 	{
 		return this == o ||
-			   (o instanceof LogicIOConfig other && input == other.input && direction == other.direction && signalStrength == other.signalStrength && signalComparison == other.signalComparison);
+			   (o instanceof LogicIOConfig other && input == other.input && channel == other.channel && direction == other.direction && signalStrength == other.signalStrength && signalComparison == other.signalComparison);
 	}
 }

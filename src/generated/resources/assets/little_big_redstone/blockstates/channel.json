@@ -1,0 +1,388 @@
+{
+  "variants": {
+    "origin_direction=down,power=0": {
+      "model": "little_big_redstone:block/channel_vertical"
+    },
+    "origin_direction=down,power=1": {
+      "model": "little_big_redstone:block/channel_vertical"
+    },
+    "origin_direction=down,power=10": {
+      "model": "little_big_redstone:block/channel_vertical"
+    },
+    "origin_direction=down,power=11": {
+      "model": "little_big_redstone:block/channel_vertical"
+    },
+    "origin_direction=down,power=12": {
+      "model": "little_big_redstone:block/channel_vertical"
+    },
+    "origin_direction=down,power=13": {
+      "model": "little_big_redstone:block/channel_vertical"
+    },
+    "origin_direction=down,power=14": {
+      "model": "little_big_redstone:block/channel_vertical"
+    },
+    "origin_direction=down,power=15": {
+      "model": "little_big_redstone:block/channel_vertical"
+    },
+    "origin_direction=down,power=2": {
+      "model": "little_big_redstone:block/channel_vertical"
+    },
+    "origin_direction=down,power=3": {
+      "model": "little_big_redstone:block/channel_vertical"
+    },
+    "origin_direction=down,power=4": {
+      "model": "little_big_redstone:block/channel_vertical"
+    },
+    "origin_direction=down,power=5": {
+      "model": "little_big_redstone:block/channel_vertical"
+    },
+    "origin_direction=down,power=6": {
+      "model": "little_big_redstone:block/channel_vertical"
+    },
+    "origin_direction=down,power=7": {
+      "model": "little_big_redstone:block/channel_vertical"
+    },
+    "origin_direction=down,power=8": {
+      "model": "little_big_redstone:block/channel_vertical"
+    },
+    "origin_direction=down,power=9": {
+      "model": "little_big_redstone:block/channel_vertical"
+    },
+    "origin_direction=east,power=0": {
+      "model": "little_big_redstone:block/channel_horizontal",
+      "x": 90,
+      "y": 90
+    },
+    "origin_direction=east,power=1": {
+      "model": "little_big_redstone:block/channel_horizontal",
+      "x": 90,
+      "y": 90
+    },
+    "origin_direction=east,power=10": {
+      "model": "little_big_redstone:block/channel_horizontal",
+      "x": 90,
+      "y": 90
+    },
+    "origin_direction=east,power=11": {
+      "model": "little_big_redstone:block/channel_horizontal",
+      "x": 90,
+      "y": 90
+    },
+    "origin_direction=east,power=12": {
+      "model": "little_big_redstone:block/channel_horizontal",
+      "x": 90,
+      "y": 90
+    },
+    "origin_direction=east,power=13": {
+      "model": "little_big_redstone:block/channel_horizontal",
+      "x": 90,
+      "y": 90
+    },
+    "origin_direction=east,power=14": {
+      "model": "little_big_redstone:block/channel_horizontal",
+      "x": 90,
+      "y": 90
+    },
+    "origin_direction=east,power=15": {
+      "model": "little_big_redstone:block/channel_horizontal",
+      "x": 90,
+      "y": 90
+    },
+    "origin_direction=east,power=2": {
+      "model": "little_big_redstone:block/channel_horizontal",
+      "x": 90,
+      "y": 90
+    },
+    "origin_direction=east,power=3": {
+      "model": "little_big_redstone:block/channel_horizontal",
+      "x": 90,
+      "y": 90
+    },
+    "origin_direction=east,power=4": {
+      "model": "little_big_redstone:block/channel_horizontal",
+      "x": 90,
+      "y": 90
+    },
+    "origin_direction=east,power=5": {
+      "model": "little_big_redstone:block/channel_horizontal",
+      "x": 90,
+      "y": 90
+    },
+    "origin_direction=east,power=6": {
+      "model": "little_big_redstone:block/channel_horizontal",
+      "x": 90,
+      "y": 90
+    },
+    "origin_direction=east,power=7": {
+      "model": "little_big_redstone:block/channel_horizontal",
+      "x": 90,
+      "y": 90
+    },
+    "origin_direction=east,power=8": {
+      "model": "little_big_redstone:block/channel_horizontal",
+      "x": 90,
+      "y": 90
+    },
+    "origin_direction=east,power=9": {
+      "model": "little_big_redstone:block/channel_horizontal",
+      "x": 90,
+      "y": 90
+    },
+    "origin_direction=north,power=0": {
+      "model": "little_big_redstone:block/channel_horizontal",
+      "x": 90
+    },
+    "origin_direction=north,power=1": {
+      "model": "little_big_redstone:block/channel_horizontal",
+      "x": 90
+    },
+    "origin_direction=north,power=10": {
+      "model": "little_big_redstone:block/channel_horizontal",
+      "x": 90
+    },
+    "origin_direction=north,power=11": {
+      "model": "little_big_redstone:block/channel_horizontal",
+      "x": 90
+    },
+    "origin_direction=north,power=12": {
+      "model": "little_big_redstone:block/channel_horizontal",
+      "x": 90
+    },
+    "origin_direction=north,power=13": {
+      "model": "little_big_redstone:block/channel_horizontal",
+      "x": 90
+    },
+    "origin_direction=north,power=14": {
+      "model": "little_big_redstone:block/channel_horizontal",
+      "x": 90
+    },
+    "origin_direction=north,power=15": {
+      "model": "little_big_redstone:block/channel_horizontal",
+      "x": 90
+    },
+    "origin_direction=north,power=2": {
+      "model": "little_big_redstone:block/channel_horizontal",
+      "x": 90
+    },
+    "origin_direction=north,power=3": {
+      "model": "little_big_redstone:block/channel_horizontal",
+      "x": 90
+    },
+    "origin_direction=north,power=4": {
+      "model": "little_big_redstone:block/channel_horizontal",
+      "x": 90
+    },
+    "origin_direction=north,power=5": {
+      "model": "little_big_redstone:block/channel_horizontal",
+      "x": 90
+    },
+    "origin_direction=north,power=6": {
+      "model": "little_big_redstone:block/channel_horizontal",
+      "x": 90
+    },
+    "origin_direction=north,power=7": {
+      "model": "little_big_redstone:block/channel_horizontal",
+      "x": 90
+    },
+    "origin_direction=north,power=8": {
+      "model": "little_big_redstone:block/channel_horizontal",
+      "x": 90
+    },
+    "origin_direction=north,power=9": {
+      "model": "little_big_redstone:block/channel_horizontal",
+      "x": 90
+    },
+    "origin_direction=south,power=0": {
+      "model": "little_big_redstone:block/channel_horizontal",
+      "x": 90
+    },
+    "origin_direction=south,power=1": {
+      "model": "little_big_redstone:block/channel_horizontal",
+      "x": 90
+    },
+    "origin_direction=south,power=10": {
+      "model": "little_big_redstone:block/channel_horizontal",
+      "x": 90
+    },
+    "origin_direction=south,power=11": {
+      "model": "little_big_redstone:block/channel_horizontal",
+      "x": 90
+    },
+    "origin_direction=south,power=12": {
+      "model": "little_big_redstone:block/channel_horizontal",
+      "x": 90
+    },
+    "origin_direction=south,power=13": {
+      "model": "little_big_redstone:block/channel_horizontal",
+      "x": 90
+    },
+    "origin_direction=south,power=14": {
+      "model": "little_big_redstone:block/channel_horizontal",
+      "x": 90
+    },
+    "origin_direction=south,power=15": {
+      "model": "little_big_redstone:block/channel_horizontal",
+      "x": 90
+    },
+    "origin_direction=south,power=2": {
+      "model": "little_big_redstone:block/channel_horizontal",
+      "x": 90
+    },
+    "origin_direction=south,power=3": {
+      "model": "little_big_redstone:block/channel_horizontal",
+      "x": 90
+    },
+    "origin_direction=south,power=4": {
+      "model": "little_big_redstone:block/channel_horizontal",
+      "x": 90
+    },
+    "origin_direction=south,power=5": {
+      "model": "little_big_redstone:block/channel_horizontal",
+      "x": 90
+    },
+    "origin_direction=south,power=6": {
+      "model": "little_big_redstone:block/channel_horizontal",
+      "x": 90
+    },
+    "origin_direction=south,power=7": {
+      "model": "little_big_redstone:block/channel_horizontal",
+      "x": 90
+    },
+    "origin_direction=south,power=8": {
+      "model": "little_big_redstone:block/channel_horizontal",
+      "x": 90
+    },
+    "origin_direction=south,power=9": {
+      "model": "little_big_redstone:block/channel_horizontal",
+      "x": 90
+    },
+    "origin_direction=up,power=0": {
+      "model": "little_big_redstone:block/channel_vertical"
+    },
+    "origin_direction=up,power=1": {
+      "model": "little_big_redstone:block/channel_vertical"
+    },
+    "origin_direction=up,power=10": {
+      "model": "little_big_redstone:block/channel_vertical"
+    },
+    "origin_direction=up,power=11": {
+      "model": "little_big_redstone:block/channel_vertical"
+    },
+    "origin_direction=up,power=12": {
+      "model": "little_big_redstone:block/channel_vertical"
+    },
+    "origin_direction=up,power=13": {
+      "model": "little_big_redstone:block/channel_vertical"
+    },
+    "origin_direction=up,power=14": {
+      "model": "little_big_redstone:block/channel_vertical"
+    },
+    "origin_direction=up,power=15": {
+      "model": "little_big_redstone:block/channel_vertical"
+    },
+    "origin_direction=up,power=2": {
+      "model": "little_big_redstone:block/channel_vertical"
+    },
+    "origin_direction=up,power=3": {
+      "model": "little_big_redstone:block/channel_vertical"
+    },
+    "origin_direction=up,power=4": {
+      "model": "little_big_redstone:block/channel_vertical"
+    },
+    "origin_direction=up,power=5": {
+      "model": "little_big_redstone:block/channel_vertical"
+    },
+    "origin_direction=up,power=6": {
+      "model": "little_big_redstone:block/channel_vertical"
+    },
+    "origin_direction=up,power=7": {
+      "model": "little_big_redstone:block/channel_vertical"
+    },
+    "origin_direction=up,power=8": {
+      "model": "little_big_redstone:block/channel_vertical"
+    },
+    "origin_direction=up,power=9": {
+      "model": "little_big_redstone:block/channel_vertical"
+    },
+    "origin_direction=west,power=0": {
+      "model": "little_big_redstone:block/channel_horizontal",
+      "x": 90,
+      "y": 90
+    },
+    "origin_direction=west,power=1": {
+      "model": "little_big_redstone:block/channel_horizontal",
+      "x": 90,
+      "y": 90
+    },
+    "origin_direction=west,power=10": {
+      "model": "little_big_redstone:block/channel_horizontal",
+      "x": 90,
+      "y": 90
+    },
+    "origin_direction=west,power=11": {
+      "model": "little_big_redstone:block/channel_horizontal",
+      "x": 90,
+      "y": 90
+    },
+    "origin_direction=west,power=12": {
+      "model": "little_big_redstone:block/channel_horizontal",
+      "x": 90,
+      "y": 90
+    },
+    "origin_direction=west,power=13": {
+      "model": "little_big_redstone:block/channel_horizontal",
+      "x": 90,
+      "y": 90
+    },
+    "origin_direction=west,power=14": {
+      "model": "little_big_redstone:block/channel_horizontal",
+      "x": 90,
+      "y": 90
+    },
+    "origin_direction=west,power=15": {
+      "model": "little_big_redstone:block/channel_horizontal",
+      "x": 90,
+      "y": 90
+    },
+    "origin_direction=west,power=2": {
+      "model": "little_big_redstone:block/channel_horizontal",
+      "x": 90,
+      "y": 90
+    },
+    "origin_direction=west,power=3": {
+      "model": "little_big_redstone:block/channel_horizontal",
+      "x": 90,
+      "y": 90
+    },
+    "origin_direction=west,power=4": {
+      "model": "little_big_redstone:block/channel_horizontal",
+      "x": 90,
+      "y": 90
+    },
+    "origin_direction=west,power=5": {
+      "model": "little_big_redstone:block/channel_horizontal",
+      "x": 90,
+      "y": 90
+    },
+    "origin_direction=west,power=6": {
+      "model": "little_big_redstone:block/channel_horizontal",
+      "x": 90,
+      "y": 90
+    },
+    "origin_direction=west,power=7": {
+      "model": "little_big_redstone:block/channel_horizontal",
+      "x": 90,
+      "y": 90
+    },
+    "origin_direction=west,power=8": {
+      "model": "little_big_redstone:block/channel_horizontal",
+      "x": 90,
+      "y": 90
+    },
+    "origin_direction=west,power=9": {
+      "model": "little_big_redstone:block/channel_horizontal",
+      "x": 90,
+      "y": 90
+    }
+  }
+}
