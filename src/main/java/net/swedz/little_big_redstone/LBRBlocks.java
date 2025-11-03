@@ -70,7 +70,15 @@ public final class LBRBlocks
 		MICROCHIPS = Collections.unmodifiableMap(microchips);
 	}
 	
-	public static final BlockHolder<ChannelBlock> CHANNEL = create("channel", "Channel", ChannelBlock::new, BlockItem::new, LBRSortOrder.CHANNEL).withProperties((p) -> p.mapColor(MapColor.STONE).destroyTime(4f).requiresCorrectToolForDrops()).tag(BlockTags.MINEABLE_WITH_PICKAXE).withLootTable(CommonLootTableBuilders::self).withModel(LBRBlocks::channelModel).register();
+	public static final BlockHolder<ChannelBlock> CHANNEL = create("channel", "Channel", ChannelBlock::new, BlockItem::new, LBRSortOrder.CHANNEL)
+			.withProperties((p) -> p
+					.mapColor(MapColor.STONE)
+					.destroyTime(4f)
+					.requiresCorrectToolForDrops())
+			.tag(BlockTags.MINEABLE_WITH_PICKAXE)
+			.withLootTable(CommonLootTableBuilders::self)
+			.withModel(LBRBlocks::channelModel)
+			.register();
 	
 	private static Consumer<BlockStateProvider> channelModel(BlockHolder block)
 	{
@@ -83,8 +91,9 @@ public final class LBRBlocks
 			var horizontal = builder.models().cubeColumnHorizontal("%s_horizontal".formatted(id), side, end);
 			
 			var blockStatesBuilder = builder.getVariantBuilder(block.get());
-			for(Direction originDirection : Direction.values())
+			for(var originDirection : Direction.values())
 			{
+				var axis = originDirection.getAxis();
 				for(int power = 0; power <= 15; power++)
 				{
 					boolean powered = power > 0;
@@ -92,14 +101,14 @@ public final class LBRBlocks
 							.with(ChannelBlock.ORIGIN_DIRECTION, originDirection)
 							.with(ChannelBlock.POWER, power)
 							.modelForState()
-							.modelFile(originDirection.getAxis().isVertical() ? vertical : horizontal)
-							.rotationX(originDirection.getAxis().isHorizontal() ? 90 : 0)
-							.rotationY(originDirection.getAxis() == Direction.Axis.X ? 90 : 0)
+							.modelFile(axis.isVertical() ? vertical : horizontal)
+							.rotationX(axis.isHorizontal() ? 90 : 0)
+							.rotationY(axis == Direction.Axis.X ? 90 : 0)
 							.addModel();
 				}
 			}
 			
-			builder.simpleBlockItem(block.get(), vertical);
+			builder.simpleBlockItem(block.get(), new ModelFile.UncheckedModelFile(LBR.id("block/%s_vertical".formatted(id))));
 		};
 	}
 	
