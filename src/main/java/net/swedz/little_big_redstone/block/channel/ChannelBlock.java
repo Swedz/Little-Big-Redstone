@@ -112,7 +112,7 @@ public final class ChannelBlock extends Block
 	@Override
 	protected boolean isSignalSource(BlockState state)
 	{
-		return !state.getValue(INPUT);
+		return true;
 	}
 	
 	@Override
