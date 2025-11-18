@@ -2,8 +2,12 @@ package net.swedz.little_big_redstone.microchip.awareness.types;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.redstone.NeighborUpdater;
+import net.neoforged.neoforge.event.EventHooks;
 import net.swedz.little_big_redstone.block.microchip.MicrochipBlock;
 import net.swedz.little_big_redstone.microchip.Microchip;
 import net.swedz.little_big_redstone.microchip.awareness.AwarenessContext;
@@ -11,6 +15,8 @@ import net.swedz.little_big_redstone.microchip.awareness.AwarenessType;
 import net.swedz.little_big_redstone.microchip.awareness.AwarenessTypes;
 import net.swedz.little_big_redstone.microchip.awareness.MicrochipAwareness;
 import net.swedz.little_big_redstone.microchip.object.logic.io.LogicIO;
+
+import java.util.EnumSet;
 
 public final class RedstoneAwareness extends MicrochipAwareness<RedstoneAwareness>
 {
@@ -163,14 +169,15 @@ public final class RedstoneAwareness extends MicrochipAwareness<RedstoneAwarenes
 		var pos = context.pos();
 		var state = context.state();
 		
+		boolean[] powerChanges = new boolean[6];
 		boolean powerChanged = false;
 		for(int index = 0; index < outputPowerEvaluated.length; index++)
 		{
 			int signal = outputPowerEvaluated[index];
 			if(outputPower[index] != signal)
 			{
+				powerChanges[index] = true;
 				powerChanged = true;
-				break;
 			}
 		}
 		outputPower = outputPowerEvaluated;
@@ -183,8 +190,38 @@ public final class RedstoneAwareness extends MicrochipAwareness<RedstoneAwarenes
 		}
 		if(powerChanged || newState != state)
 		{
-			level.setBlock(pos, newState, Block.UPDATE_ALL);
-			level.updateNeighborsAt(pos, state.getBlock());
+			if(level.setBlock(pos, newState, Block.UPDATE_CLIENTS))
+			{
+				this.sendUpdates(level, pos, state, newState, powerChanges);
+			}
+		}
+	}
+	
+	/**
+	 * <p>Sends neighbor notifications to adjacent blocks. These updates are only sent in the directions of the sides
+	 * where an output state has changed. This reduces the number of neighbor notifications that are executed and helps
+	 * with situations where microchips are updating frequently.</p>
+	 *
+	 * @param level    the {@link Level}
+	 * @param pos      the {@link BlockPos} of the block updated
+	 * @param oldState the previous {@link BlockState} of the block updated
+	 * @param newState the new {@link BlockState} of the block updated
+	 * @param changes  an array of booleans stating which directions (as per the index of {@link Direction#ordinal()})
+	 *                 have had changes
+	 * @see ServerLevel#updateNeighborsAt(BlockPos, Block)
+	 */
+	private void sendUpdates(Level level, BlockPos pos, BlockState oldState, BlockState newState, boolean[] changes)
+	{
+		var updateDirections = EnumSet.allOf(Direction.class);
+		updateDirections.removeIf((direction) -> !changes[direction.ordinal()]);
+		EventHooks.onNeighborNotify(level, pos, newState, updateDirections, false);
+		
+		for(var direction : NeighborUpdater.UPDATE_ORDER)
+		{
+			if(changes[direction.ordinal()])
+			{
+				level.neighborChanged(pos.relative(direction), oldState.getBlock(), pos);
+			}
 		}
 	}
 }
