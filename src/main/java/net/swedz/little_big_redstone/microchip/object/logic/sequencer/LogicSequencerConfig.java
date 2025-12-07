@@ -8,17 +8,13 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.swedz.little_big_redstone.LBR;
-import net.swedz.little_big_redstone.LBRTooltips;
 import net.swedz.little_big_redstone.microchip.object.logic.config.LogicConfig;
-import net.swedz.little_big_redstone.microchip.object.logic.config.LogicConfigButtonReference;
-import net.swedz.little_big_redstone.microchip.object.logic.config.LogicConfigMenuBuilder;
+import net.swedz.little_big_redstone.microchip.object.logic.config.menu.LogicConfigMenuProvider;
 import net.swedz.tesseract.neoforge.api.range.IntRange;
 import net.swedz.tesseract.neoforge.helper.CodecHelper;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
-import java.util.concurrent.atomic.AtomicReference;
 
 public final class LogicSequencerConfig extends LogicConfig<LogicSequencerConfig>
 {
@@ -99,24 +95,9 @@ public final class LogicSequencerConfig extends LogicConfig<LogicSequencerConfig
 	}
 	
 	@Override
-	public void buildMenu(LogicConfigMenuBuilder builder, int width, int height)
+	public LogicConfigMenuProvider<LogicSequencerConfig> getMenuProvider()
 	{
-		var modeButton = new AtomicReference<LogicConfigButtonReference<LogicSequencerMode>>();
-		
-		modeButton.set(builder.addCycleButton(LBR.text().logicConfigButtonLabelMode(), mode.tooltip(), 0, 0, width, 18, false, mode, Arrays.asList(LogicSequencerMode.values()), LogicSequencerMode::label, (value) ->
-		{
-			mode = value;
-			if(modeButton.get() != null)
-			{
-				modeButton.get().setTooltip(mode.tooltip());
-			}
-		}));
-		
-		builder.addSlider(LBR.text().logicConfigButtonLabelSequencerDelay(), Component.empty(), LBR.text().logicConfigButtonTooltipSequencerDelay(), 0, 22, width, 18, 1, 60 * 20, outputDelay, 1, 0, LBRTooltips.TICKS_AND_SECONDS_SLIDER_PARSER::parse, (value) -> outputDelay = value.intValue());
-		
-		builder.addCheckbox(LBR.text().logicConfigButtonLabelSequencerAutoReset(), LBR.text().logicConfigButtonTooltipSequencerAutoReset(), 0, 22 * 2, autoReset, (value) -> autoReset = value);
-		
-		builder.addCheckbox(LBR.text().logicConfigButtonLabelSequencerResetPort(), LBR.text().logicConfigButtonTooltipSequencerResetPort(), 0, 22 * 3, resetPort, (value) -> resetPort = value);
+		return new LogicSequencerConfigMenuProvider(this);
 	}
 	
 	@Override

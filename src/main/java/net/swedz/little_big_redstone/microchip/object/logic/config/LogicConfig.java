@@ -3,6 +3,8 @@ package net.swedz.little_big_redstone.microchip.object.logic.config;
 import net.minecraft.network.chat.Component;
 import net.swedz.little_big_redstone.microchip.object.logic.LogicComponents;
 import net.swedz.little_big_redstone.microchip.object.logic.LogicPortHolder;
+import net.swedz.little_big_redstone.microchip.object.logic.config.menu.LogicConfigMenuBuilder;
+import net.swedz.little_big_redstone.microchip.object.logic.config.menu.LogicConfigMenuProvider;
 
 import java.util.Arrays;
 import java.util.List;
@@ -75,8 +77,15 @@ public abstract class LogicConfig<C extends LogicConfig<C>> implements LogicPort
 		return false;
 	}
 	
-	public void buildMenu(LogicConfigMenuBuilder builder, int width, int height)
+	public LogicConfigMenuProvider<C> getMenuProvider()
 	{
+		return new LogicConfigMenuProvider<>((C) this)
+		{
+			@Override
+			public void create(LogicConfigMenuBuilder builder, int width, int height)
+			{
+			}
+		};
 	}
 	
 	protected abstract void internalLoadFrom(C other);

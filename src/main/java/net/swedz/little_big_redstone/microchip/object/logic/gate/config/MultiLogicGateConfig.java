@@ -8,7 +8,7 @@ import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.swedz.little_big_redstone.LBR;
 import net.swedz.little_big_redstone.microchip.object.logic.config.LogicConfig;
-import net.swedz.little_big_redstone.microchip.object.logic.config.LogicConfigMenuBuilder;
+import net.swedz.little_big_redstone.microchip.object.logic.config.menu.LogicConfigMenuProvider;
 import net.swedz.tesseract.neoforge.api.range.IntRange;
 
 import java.util.List;
@@ -76,9 +76,9 @@ public final class MultiLogicGateConfig extends LogicConfig<MultiLogicGateConfig
 	}
 	
 	@Override
-	public void buildMenu(LogicConfigMenuBuilder builder, int width, int height)
+	public LogicConfigMenuProvider<MultiLogicGateConfig> getMenuProvider()
 	{
-		builder.addSlider(LBR.text().logicConfigButtonLabelInputs(), Component.empty(), LBR.text().logicConfigButtonTooltipInputs(), 0, 0, width, 18, this.inputsAllowed().min(), this.inputsAllowed().max(), inputs, 1, 0, (value) -> inputs = value.intValue());
+		return new MultiLogicGateConfigMenuProvider(this);
 	}
 	
 	@Override

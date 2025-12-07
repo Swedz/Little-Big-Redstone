@@ -6,22 +6,17 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.swedz.little_big_redstone.LBR;
-import net.swedz.little_big_redstone.LBRTooltips;
 import net.swedz.little_big_redstone.microchip.object.logic.config.LogicComparisonMode;
 import net.swedz.little_big_redstone.microchip.object.logic.config.LogicConfig;
-import net.swedz.little_big_redstone.microchip.object.logic.config.LogicConfigButtonReference;
-import net.swedz.little_big_redstone.microchip.object.logic.config.LogicConfigMenuBuilder;
+import net.swedz.little_big_redstone.microchip.object.logic.config.menu.LogicConfigMenuProvider;
 import net.swedz.tesseract.neoforge.api.range.IntRange;
 import net.swedz.tesseract.neoforge.helper.CodecHelper;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
-import java.util.concurrent.atomic.AtomicReference;
 
 public final class LogicReaderConfig extends LogicConfig<LogicReaderConfig>
 {
@@ -106,86 +101,10 @@ public final class LogicReaderConfig extends LogicConfig<LogicReaderConfig>
 		return true;
 	}
 	
-	private MutableComponent comparisonTooltip()
-	{
-		return mode.readsSignal() ?
-				this.signalComparisonTooltip(signalThreshold) :
-				this.fillComparisonTooltip(fillThreshold);
-	}
-	
-	private MutableComponent fillComparisonTooltip(float threshold)
-	{
-		return switch (comparison)
-		{
-			case LESS_THAN_OR_EQUAL_TO -> LBR.text().logicConfigButtonTooltipReaderThresholdComparisonModeLessThanOrEqualTo(threshold);
-			case EQUAL_TO -> LBR.text().logicConfigButtonTooltipReaderThresholdComparisonModeEqualTo(threshold);
-			case GREATER_THAN_OR_EQUAL_TO -> LBR.text().logicConfigButtonTooltipReaderThresholdComparisonModeGreaterThanOrEqualTo(threshold);
-		};
-	}
-	
-	private MutableComponent signalComparisonTooltip(int signal)
-	{
-		return switch (comparison)
-		{
-			case LESS_THAN_OR_EQUAL_TO -> LBR.text().logicConfigButtonTooltipReaderSignalComparisonModeLessThanOrEqualTo(signal);
-			case EQUAL_TO -> LBR.text().logicConfigButtonTooltipReaderSignalComparisonModeEqualTo(signal);
-			case GREATER_THAN_OR_EQUAL_TO -> LBR.text().logicConfigButtonTooltipReaderSignalComparisonModeGreaterThanOrEqualTo(signal);
-		};
-	}
-	
 	@Override
-	public void buildMenu(LogicConfigMenuBuilder builder, int width, int height)
+	public LogicConfigMenuProvider getMenuProvider()
 	{
-		var thresholdFillSlider = new AtomicReference<LogicConfigButtonReference<Double>>();
-		var thresholdSignalSlider = new AtomicReference<LogicConfigButtonReference<Double>>();
-		var comparisonButton = new AtomicReference<LogicConfigButtonReference<LogicComparisonMode>>();
-		
-		Runnable updateComparisonButtonTooltip = () ->
-		{
-			var button = comparisonButton.get();
-			if(button != null)
-			{
-				button.setTooltip(this.comparisonTooltip());
-			}
-		};
-		
-		Runnable updateThresholdSlider = () ->
-		{
-			boolean readsSignal = mode.readsSignal();
-			thresholdFillSlider.get().setVisible(!readsSignal);
-			thresholdSignalSlider.get().setVisible(readsSignal);
-		};
-		
-		builder.addCycleButton(LBR.text().logicConfigButtonLabelMode(), LBR.text().logicConfigButtonTooltipReaderMode(), 0, 0, width, 18, false, mode, Arrays.asList(LogicReaderMode.values()), LogicReaderMode::label, (value) ->
-		{
-			boolean changed = value.readsSignal() != mode.readsSignal();
-			mode = value;
-			if(changed)
-			{
-				updateThresholdSlider.run();
-			}
-		});
-		
-		builder.addCycleButton(LBR.text().logicConfigButtonLabelDirection(), LBR.text().logicConfigButtonTooltipReaderDirection(), 0, 22, width, 18, false, direction, Arrays.asList(Direction.values()), LBRTooltips.DIRECTION_PARSER::parse, (value) -> direction = value);
-		
-		thresholdFillSlider.set(builder.addSlider(LBR.text().logicConfigButtonLabelReaderFillThreshold(), Component.literal("%"), LBR.text().logicConfigButtonTooltipReaderFillThreshold(), 18 + 4, 22 * 2, width - 18 - 4, 18, 0, 100, fillThreshold * 100, 1, 0, (value) ->
-		{
-			fillThreshold = (float) (value / 100f);
-			updateComparisonButtonTooltip.run();
-		}).setVisible(false));
-		thresholdSignalSlider.set(builder.addSlider(LBR.text().logicConfigButtonLabelReaderSignalThreshold(), Component.empty(), LBR.text().logicConfigButtonTooltipReaderSignalThreshold(), 18 + 4, 22 * 2, width - 18 - 4, 18, 1, 15, signalThreshold, 1, 0, (value) ->
-		{
-			signalThreshold = value.intValue();
-			updateComparisonButtonTooltip.run();
-		}).setVisible(false));
-		updateThresholdSlider.run();
-		
-		comparisonButton.set(builder.addCycleButton(this.comparisonTooltip(), 0, 22 * 2, LBR.id("textures/gui/slot_atlas.png"), comparison, Arrays.asList(LogicComparisonMode.values()), (value) ->
-		{
-			comparison = value;
-			updateComparisonButtonTooltip.run();
-		}));
-		updateComparisonButtonTooltip.run();
+		return new LogicReaderConfigMenuProvider(this);
 	}
 	
 	@Override
