@@ -9,7 +9,7 @@ import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.swedz.little_big_redstone.LBR;
 import net.swedz.little_big_redstone.microchip.object.logic.config.LogicConfig;
-import net.swedz.little_big_redstone.microchip.object.logic.config.LogicConfigMenuBuilder;
+import net.swedz.little_big_redstone.microchip.object.logic.config.menu.LogicConfigMenuProvider;
 import net.swedz.tesseract.neoforge.api.range.IntRange;
 
 import java.util.List;
@@ -59,11 +59,9 @@ public final class LogicRandomizerConfig extends LogicConfig<LogicRandomizerConf
 	}
 	
 	@Override
-	public void buildMenu(LogicConfigMenuBuilder builder, int width, int height)
+	public LogicConfigMenuProvider getMenuProvider()
 	{
-		builder.addSlider(LBR.text().logicConfigButtonLabelOutputs(), Component.empty(), LBR.text().logicConfigButtonTooltipOutputs(), 0, 0, width, 18, this.outputsAllowed().min(), this.outputsAllowed().max(), outputs, 1, 0, (value) -> outputs = value.intValue());
-		
-		builder.addSlider(LBR.text().logicConfigButtonLabelChance(), Component.literal("%"), LBR.text().logicConfigButtonTooltipRandomizerChance(), 0, 22, width, 18, 1, 100, chance * 100, 1, 0, (value) -> chance = (float) (value / 100f));
+		return new LogicRandomizerConfigMenuProvider(this);
 	}
 	
 	@Override

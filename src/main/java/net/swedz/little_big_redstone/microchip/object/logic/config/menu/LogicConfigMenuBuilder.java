@@ -1,4 +1,4 @@
-package net.swedz.little_big_redstone.microchip.object.logic.config;
+package net.swedz.little_big_redstone.microchip.object.logic.config.menu;
 
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;

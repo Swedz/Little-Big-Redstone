@@ -9,15 +9,12 @@ import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.swedz.little_big_redstone.LBR;
 import net.swedz.little_big_redstone.microchip.object.logic.config.LogicConfig;
-import net.swedz.little_big_redstone.microchip.object.logic.config.LogicConfigButtonReference;
-import net.swedz.little_big_redstone.microchip.object.logic.config.LogicConfigMenuBuilder;
+import net.swedz.little_big_redstone.microchip.object.logic.config.menu.LogicConfigMenuProvider;
 import net.swedz.tesseract.neoforge.api.range.IntRange;
 import net.swedz.tesseract.neoforge.helper.CodecHelper;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
-import java.util.concurrent.atomic.AtomicReference;
 
 public final class LogicSelectorConfig extends LogicConfig<LogicSelectorConfig>
 {
@@ -63,20 +60,9 @@ public final class LogicSelectorConfig extends LogicConfig<LogicSelectorConfig>
 	}
 	
 	@Override
-	public void buildMenu(LogicConfigMenuBuilder builder, int width, int height)
+	public LogicConfigMenuProvider<LogicSelectorConfig> getMenuProvider()
 	{
-		var modeButton = new AtomicReference<LogicConfigButtonReference<LogicSelectorMode>>();
-		
-		modeButton.set(builder.addCycleButton(LBR.text().logicConfigButtonLabelMode(), mode.tooltip(), 0, 0, width, 18, false, mode, Arrays.asList(LogicSelectorMode.values()), LogicSelectorMode::label, (value) ->
-		{
-			mode = value;
-			if(modeButton.get() != null)
-			{
-				modeButton.get().setTooltip(mode.tooltip());
-			}
-		}));
-		
-		builder.addSlider(LBR.text().logicConfigButtonLabelOutputs(), Component.empty(), LBR.text().logicConfigButtonTooltipOutputs(), 0, 22, width, 18, this.outputsAllowed().min(), this.outputsAllowed().max(), outputs, 1, 0, (value) -> outputs = value.intValue());
+		return new LogicSelectorConfigMenuProvider(this);
 	}
 	
 	@Override

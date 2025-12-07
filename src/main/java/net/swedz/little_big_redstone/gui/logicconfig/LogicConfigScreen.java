@@ -18,8 +18,8 @@ import net.swedz.little_big_redstone.gui.logicconfig.button.iconcycle.IconCycleL
 import net.swedz.little_big_redstone.gui.logicconfig.button.iconcycle.IconCycleLogicConfigButtonIcon;
 import net.swedz.little_big_redstone.gui.logicconfig.button.slider.SliderLogicConfigButton;
 import net.swedz.little_big_redstone.microchip.object.logic.LogicEntry;
-import net.swedz.little_big_redstone.microchip.object.logic.config.LogicConfigButtonReference;
-import net.swedz.little_big_redstone.microchip.object.logic.config.LogicConfigMenuBuilder;
+import net.swedz.little_big_redstone.microchip.object.logic.config.menu.LogicConfigButtonReference;
+import net.swedz.little_big_redstone.microchip.object.logic.config.menu.LogicConfigMenuBuilder;
 import net.swedz.little_big_redstone.network.packet.RequestMicrochipMenuPacket;
 import net.swedz.little_big_redstone.network.packet.WriteLogicConfigPacket;
 import net.swedz.tesseract.neoforge.helper.guigraphics.TesseractGuiGraphics;
@@ -339,7 +339,7 @@ public final class LogicConfigScreen extends AbstractContainerScreen<LogicConfig
 		configX = leftPos + 8 + 2;
 		configY = topPos + 8 + 2;
 		
-		logicEntry.component().config().buildMenu(this, configWidth, configHeight);
+		logicEntry.component().config().getMenuProvider().create(this, configWidth, configHeight);
 		
 		int buttonWidth = (configWidth / 2) - 4;
 		

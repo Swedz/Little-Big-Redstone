@@ -8,9 +8,8 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.swedz.little_big_redstone.LBR;
-import net.swedz.little_big_redstone.LBRTooltips;
 import net.swedz.little_big_redstone.microchip.object.logic.config.LogicConfig;
-import net.swedz.little_big_redstone.microchip.object.logic.config.LogicConfigMenuBuilder;
+import net.swedz.little_big_redstone.microchip.object.logic.config.menu.LogicConfigMenuProvider;
 import net.swedz.tesseract.neoforge.api.range.IntRange;
 
 import java.util.List;
@@ -78,9 +77,9 @@ public final class PulseThrottlerConfig extends LogicConfig<PulseThrottlerConfig
 	}
 	
 	@Override
-	public void buildMenu(LogicConfigMenuBuilder builder, int width, int height)
+	public LogicConfigMenuProvider getMenuProvider()
 	{
-		builder.addSlider(LBR.text().logicConfigButtonLabelDuration(), Component.empty(), LBR.text().logicConfigButtonTooltipDuration(), 0, 0, width, 18, 1, 60 * 20, outputDuration, 1, 0, LBRTooltips.TICKS_AND_SECONDS_SLIDER_PARSER::parse, (value) -> outputDuration = value.intValue());
+		return new PulseThrottlerConfigMenuProvider(this);
 	}
 	
 	@Override
