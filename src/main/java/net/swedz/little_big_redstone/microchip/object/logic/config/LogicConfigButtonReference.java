@@ -4,15 +4,19 @@ import net.minecraft.network.chat.Component;
 
 public interface LogicConfigButtonReference<T>
 {
-	void setText(Component text);
+	LogicConfigButtonReference<T> setText(Component text);
 	
-	void setTooltip(Component tooltip);
+	LogicConfigButtonReference<T> setTooltip(Component tooltip);
 	
 	T getValue();
 	
-	void setValue(T value);
+	LogicConfigButtonReference<T> setValue(T value);
 	
 	boolean isActive();
 	
-	void setActive(boolean active);
+	LogicConfigButtonReference<T> setActive(boolean active);
+	
+	boolean isVisible();
+	
+	LogicConfigButtonReference<T> setVisible(boolean visible);
 }

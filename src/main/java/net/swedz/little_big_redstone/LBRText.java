@@ -11,6 +11,9 @@ import net.swedz.tesseract.neoforge.lang.annotation.WithStyle;
 
 public interface LBRText
 {
+	@LangKey(text = "Comparator")
+	MutableComponent capabilityComparator();
+	
 	@LangKey(text = "Energy")
 	MutableComponent capabilityEnergy();
 	
@@ -184,6 +187,9 @@ public interface LBRText
 	@LangKey(text = "Fill Threshold: ")
 	MutableComponent logicConfigButtonLabelReaderFillThreshold();
 	
+	@LangKey(text = "Signal Threshold: ")
+	MutableComponent logicConfigButtonLabelReaderSignalThreshold();
+	
 	@LangKey(text = "Save")
 	MutableComponent logicConfigButtonLabelSave();
 	
@@ -213,6 +219,15 @@ public interface LBRText
 	
 	@LangKey(text = "Whether this port should input or output redstone power.")
 	MutableComponent logicConfigButtonTooltipIoMode();
+	
+	@LangKey(text = "The input signal must be equal to %s.")
+	MutableComponent logicConfigButtonTooltipReaderSignalComparisonModeEqualTo(int signal);
+	
+	@LangKey(text = "The input signal must be greater than or equal to %s.")
+	MutableComponent logicConfigButtonTooltipReaderSignalComparisonModeGreaterThanOrEqualTo(int signal);
+	
+	@LangKey(text = "The input signal must be less than or equal to %s.")
+	MutableComponent logicConfigButtonTooltipReaderSignalComparisonModeLessThanOrEqualTo(int signal);
 	
 	@LangKey(text = "The input signal must be equal to %s.")
 	MutableComponent logicConfigButtonTooltipIoSignalComparisonModeEqualTo(int signal);
@@ -246,6 +261,9 @@ public interface LBRText
 	
 	@LangKey(text = "The type of information to read from the adjacent block.")
 	MutableComponent logicConfigButtonTooltipReaderMode();
+	
+	@LangKey(text = "The input signal (as per a comparator) required for the output to be on.")
+	MutableComponent logicConfigButtonTooltipReaderSignalThreshold();
 	
 	@LangKey(text = "The fill percentage must be equal to %s.")
 	MutableComponent logicConfigButtonTooltipReaderThresholdComparisonModeEqualTo(@Parsed("percentage") float threshold);
@@ -340,9 +358,16 @@ public interface LBRText
 	
 	@LangKey(text = "  Fill: %s %s")
 	@WithStyle("tooltip")
-	MutableComponent logicConfigTooltipReaderFill(
+	MutableComponent logicConfigTooltipReaderFillComparison(
 			@WithStyle("highlighted") LogicComparisonMode comparison,
 			@WithStyle("highlighted") float threshold
+	);
+	
+	@LangKey(text = "  Signal: %s %s")
+	@WithStyle("tooltip")
+	MutableComponent logicConfigTooltipReaderSignalComparison(
+			@WithStyle("highlighted") LogicComparisonMode comparison,
+			@WithStyle("highlighted") int signal
 	);
 	
 	@LangKey(text = "  Auto Reset: %s")

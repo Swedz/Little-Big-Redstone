@@ -1,5 +1,6 @@
 package net.swedz.little_big_redstone.microchip.awareness;
 
+import net.swedz.little_big_redstone.microchip.awareness.types.AnalogSignalAwareness;
 import net.swedz.little_big_redstone.microchip.awareness.types.RedstoneAwareness;
 import net.swedz.little_big_redstone.microchip.awareness.types.capability.EnergyCapabilityAwareness;
 import net.swedz.little_big_redstone.microchip.awareness.types.capability.FluidCapabilityAwareness;
@@ -12,6 +13,8 @@ public final class AwarenessTypes
 	public static final AwarenessType<EnergyCapabilityAwareness> CAPABILITY_ENERGY = register("capability_energy", EnergyCapabilityAwareness::new);
 	
 	public static final AwarenessType<RedstoneAwareness> REDSTONE = register("redstone", RedstoneAwareness::new);
+	
+	public static final AwarenessType<AnalogSignalAwareness> ANALOG_SIGNAL = register("analog_signal", AnalogSignalAwareness::new);
 	
 	private static <A extends MicrochipAwareness> AwarenessType<A> register(String id, AwarenessFactory<A> factory)
 	{
