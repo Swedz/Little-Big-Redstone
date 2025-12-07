@@ -142,17 +142,13 @@ public final class RedstoneAwareness extends MicrochipAwareness<RedstoneAwarenes
 		if(!initialized)
 		{
 			int[] inputPower = new int[6];
-			for(var entry : context.microchip().components())
+			for(int directionIndex = 0; directionIndex < inputSides.length; directionIndex++)
 			{
-				if(entry.component() instanceof LogicIO io)
+				if(inputSides[directionIndex])
 				{
-					var direction = io.config().direction;
-					int directionIndex = direction.ordinal();
-					if(inputSides[directionIndex])
-					{
-						int signal = level.getSignal(pos.relative(direction), direction);
-						inputPower[directionIndex] = signal;
-					}
+					var direction = Direction.values()[directionIndex];
+					int signal = level.getSignal(pos.relative(direction), direction);
+					inputPower[directionIndex] = signal;
 				}
 			}
 			this.inputPower = inputPower;
