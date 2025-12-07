@@ -129,11 +129,9 @@ public final class LogicIOConfig extends LogicConfig<LogicIOConfig>
 	{
 		return switch (signalComparison)
 		{
-			case LESS_THAN_OR_EQUAL_TO ->
-					LBR.text().logicConfigButtonTooltipIoSignalComparisonModeLessThanOrEqualTo(signal);
+			case LESS_THAN_OR_EQUAL_TO -> LBR.text().logicConfigButtonTooltipIoSignalComparisonModeLessThanOrEqualTo(signal);
 			case EQUAL_TO -> LBR.text().logicConfigButtonTooltipIoSignalComparisonModeEqualTo(signal);
-			case GREATER_THAN_OR_EQUAL_TO ->
-					LBR.text().logicConfigButtonTooltipIoSignalComparisonModeGreaterThanOrEqualTo(signal);
+			case GREATER_THAN_OR_EQUAL_TO -> LBR.text().logicConfigButtonTooltipIoSignalComparisonModeGreaterThanOrEqualTo(signal);
 		};
 	}
 	

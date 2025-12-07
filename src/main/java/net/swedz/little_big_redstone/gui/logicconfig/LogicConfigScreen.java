@@ -68,15 +68,17 @@ public final class LogicConfigScreen extends AbstractContainerScreen<LogicConfig
 		return new LogicConfigButtonReference<>()
 		{
 			@Override
-			public void setText(Component text)
+			public LogicConfigButtonReference<T> setText(Component text)
 			{
 				button.setMessage(text);
+				return this;
 			}
 			
 			@Override
-			public void setTooltip(Component tooltip)
+			public LogicConfigButtonReference<T> setTooltip(Component tooltip)
 			{
 				button.setTooltip(Tooltip.create(tooltip));
+				return this;
 			}
 			
 			@Override
@@ -86,9 +88,10 @@ public final class LogicConfigScreen extends AbstractContainerScreen<LogicConfig
 			}
 			
 			@Override
-			public void setValue(T value)
+			public LogicConfigButtonReference<T> setValue(T value)
 			{
 				button.setValue(value);
+				return this;
 			}
 			
 			@Override
@@ -98,9 +101,23 @@ public final class LogicConfigScreen extends AbstractContainerScreen<LogicConfig
 			}
 			
 			@Override
-			public void setActive(boolean active)
+			public LogicConfigButtonReference<T> setActive(boolean active)
 			{
 				button.active = active;
+				return this;
+			}
+			
+			@Override
+			public boolean isVisible()
+			{
+				return button.visible;
+			}
+			
+			@Override
+			public LogicConfigButtonReference<T> setVisible(boolean visible)
+			{
+				button.visible = visible;
+				return this;
 			}
 		};
 	}
@@ -114,15 +131,17 @@ public final class LogicConfigScreen extends AbstractContainerScreen<LogicConfig
 		return new LogicConfigButtonReference<>()
 		{
 			@Override
-			public void setText(Component text)
+			public LogicConfigButtonReference<Double> setText(Component text)
 			{
 				button.setMessage(text);
+				return this;
 			}
 			
 			@Override
-			public void setTooltip(Component tooltip)
+			public LogicConfigButtonReference<Double> setTooltip(Component tooltip)
 			{
 				button.setTooltip(Tooltip.create(tooltip));
+				return this;
 			}
 			
 			@Override
@@ -132,9 +151,10 @@ public final class LogicConfigScreen extends AbstractContainerScreen<LogicConfig
 			}
 			
 			@Override
-			public void setValue(Double value)
+			public LogicConfigButtonReference<Double> setValue(Double value)
 			{
 				button.setValue(value);
+				return this;
 			}
 			
 			@Override
@@ -144,9 +164,23 @@ public final class LogicConfigScreen extends AbstractContainerScreen<LogicConfig
 			}
 			
 			@Override
-			public void setActive(boolean active)
+			public LogicConfigButtonReference<Double> setActive(boolean active)
 			{
 				button.active = active;
+				return this;
+			}
+			
+			@Override
+			public boolean isVisible()
+			{
+				return button.visible;
+			}
+			
+			@Override
+			public LogicConfigButtonReference<Double> setVisible(boolean visible)
+			{
+				button.visible = visible;
+				return this;
 			}
 		};
 	}
@@ -173,14 +207,16 @@ public final class LogicConfigScreen extends AbstractContainerScreen<LogicConfig
 		return new LogicConfigButtonReference<>()
 		{
 			@Override
-			public void setText(Component text)
+			public LogicConfigButtonReference<CheckboxState> setText(Component text)
 			{
+				return this;
 			}
 			
 			@Override
-			public void setTooltip(Component tooltip)
+			public LogicConfigButtonReference<CheckboxState> setTooltip(Component tooltip)
 			{
 				button.setTooltip(Tooltip.create(tooltip));
+				return this;
 			}
 			
 			@Override
@@ -190,9 +226,10 @@ public final class LogicConfigScreen extends AbstractContainerScreen<LogicConfig
 			}
 			
 			@Override
-			public void setValue(CheckboxState value)
+			public LogicConfigButtonReference<CheckboxState> setValue(CheckboxState value)
 			{
 				button.setValue(value);
+				return this;
 			}
 			
 			@Override
@@ -202,9 +239,23 @@ public final class LogicConfigScreen extends AbstractContainerScreen<LogicConfig
 			}
 			
 			@Override
-			public void setActive(boolean active)
+			public LogicConfigButtonReference<CheckboxState> setActive(boolean active)
 			{
 				button.active = active;
+				return this;
+			}
+			
+			@Override
+			public boolean isVisible()
+			{
+				return button.visible;
+			}
+			
+			@Override
+			public LogicConfigButtonReference<CheckboxState> setVisible(boolean visible)
+			{
+				button.visible = visible;
+				return this;
 			}
 		};
 	}
@@ -218,14 +269,16 @@ public final class LogicConfigScreen extends AbstractContainerScreen<LogicConfig
 		return new LogicConfigButtonReference<>()
 		{
 			@Override
-			public void setText(Component text)
+			public LogicConfigButtonReference<T> setText(Component text)
 			{
+				return this;
 			}
 			
 			@Override
-			public void setTooltip(Component tooltip)
+			public LogicConfigButtonReference<T> setTooltip(Component tooltip)
 			{
 				button.setTooltip(Tooltip.create(tooltip));
+				return this;
 			}
 			
 			@Override
@@ -235,9 +288,10 @@ public final class LogicConfigScreen extends AbstractContainerScreen<LogicConfig
 			}
 			
 			@Override
-			public void setValue(T value)
+			public LogicConfigButtonReference<T> setValue(T value)
 			{
 				button.setValue(value);
+				return this;
 			}
 			
 			@Override
@@ -247,9 +301,23 @@ public final class LogicConfigScreen extends AbstractContainerScreen<LogicConfig
 			}
 			
 			@Override
-			public void setActive(boolean active)
+			public LogicConfigButtonReference<T> setActive(boolean active)
 			{
 				button.active = active;
+				return this;
+			}
+			
+			@Override
+			public boolean isVisible()
+			{
+				return button.visible;
+			}
+			
+			@Override
+			public LogicConfigButtonReference<T> setVisible(boolean visible)
+			{
+				button.visible = visible;
+				return this;
 			}
 		};
 	}

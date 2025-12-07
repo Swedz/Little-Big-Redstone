@@ -67,6 +67,7 @@ public final class LogicReader extends LogicComponent<LogicReader, LogicReaderCo
 			case ITEM -> AwarenessTypes.CAPABILITY_ITEM;
 			case FLUID -> AwarenessTypes.CAPABILITY_FLUID;
 			case ENERGY -> AwarenessTypes.CAPABILITY_ENERGY;
+			case COMPARATOR -> AwarenessTypes.ANALOG_SIGNAL;
 		}};
 	}
 	
@@ -82,6 +83,7 @@ public final class LogicReader extends LogicComponent<LogicReader, LogicReaderCo
 		boolean originalOutputState = outputState;
 		
 		float fill = 0;
+		int signal = 0;
 		
 		if(context.level() instanceof ServerLevel)
 		{
@@ -138,9 +140,17 @@ public final class LogicReader extends LogicComponent<LogicReader, LogicReaderCo
 					fill = (float) totalEnergy / maxEnergy;
 				}
 			}
+			
+			else if(config.mode == LogicReaderMode.COMPARATOR)
+			{
+				var awareness = context.awareness(AwarenessTypes.ANALOG_SIGNAL);
+				signal = awareness.getSignal(config.direction);
+			}
 		}
 		
-		outputState = config.comparison.test(fill, config.fillThreshold);
+		outputState = config.mode.readsSignal() ?
+				config.comparison.test(signal, config.signalThreshold) :
+				config.comparison.test(fill, config.fillThreshold);
 		if(outputState != originalOutputState)
 		{
 			context.markDirty(this);

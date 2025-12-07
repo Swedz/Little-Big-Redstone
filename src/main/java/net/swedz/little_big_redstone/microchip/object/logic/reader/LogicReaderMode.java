@@ -8,15 +8,23 @@ import java.util.function.Supplier;
 
 public enum LogicReaderMode implements LogicMode
 {
-	ITEM(() -> LBR.text().capabilityItem()),
-	FLUID(() -> LBR.text().capabilityFluid()),
-	ENERGY(() -> LBR.text().capabilityEnergy());
+	ITEM(false, () -> LBR.text().capabilityItem()),
+	FLUID(false, () -> LBR.text().capabilityFluid()),
+	ENERGY(false, () -> LBR.text().capabilityEnergy()),
+	COMPARATOR(true, () -> LBR.text().capabilityComparator());
 	
+	private final boolean                    readsSignal;
 	private final Supplier<MutableComponent> label;
 	
-	LogicReaderMode(Supplier<MutableComponent> label)
+	LogicReaderMode(boolean readsSignal, Supplier<MutableComponent> label)
 	{
+		this.readsSignal = readsSignal;
 		this.label = label;
+	}
+	
+	public boolean readsSignal()
+	{
+		return readsSignal;
 	}
 	
 	@Override
