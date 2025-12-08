@@ -13,14 +13,14 @@ item_ids:
 # Porta AND
 
 <FloatingColumn width="100" align="right">
-	### Tabela Verdade
+	### Tabela-verdade
 	<TruthTable inputs="2">
 		<TruthState input="0,0" output="0" />
 		<TruthState input="0,1" output="0" />
 		<TruthState input="1,0" output="0" />
 		<TruthState input="1,1" output="1" />
 	</TruthTable>
-	*Para detalhes sobre tabelas verdade, veja a página [aqui](introduction.md).*
+	*Para detalhes sobre tabelas-verdade, veja a página [aqui](introduction.md).*
 </FloatingColumn>
 
 <Row>
