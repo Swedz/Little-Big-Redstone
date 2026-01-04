@@ -13,7 +13,7 @@ public final class LogicComponentFontDatagenProvider extends FontDatagenProvider
 	}
 	
 	@Override
-	protected void addCharacters()
+	protected void addProviders()
 	{
 		for(var type : LogicTypes.values())
 		{
