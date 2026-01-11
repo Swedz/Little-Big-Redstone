@@ -31,4 +31,10 @@ public record WirePort(int slot, int index) implements PortReference
 	{
 		return slot + "#" + index;
 	}
+	
+	@Override
+	public int hashCode()
+	{
+		return (slot << 16) ^ index;
+	}
 }

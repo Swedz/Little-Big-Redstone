@@ -251,6 +251,6 @@ public final class MicrochipWires implements Iterable<Wire>
 	public boolean equals(Object o)
 	{
 		return this == o ||
-			   (o instanceof MicrochipWires other && this.hashCode() == other.hashCode());
+			   (o instanceof MicrochipWires other && wires.equals(other.wires));
 	}
 }

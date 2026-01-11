@@ -30,4 +30,10 @@ public record Wire(WirePort output, WirePort input)
 	{
 		return output.toString() + " -> " + input.toString();
 	}
+	
+	@Override
+	public int hashCode()
+	{
+		return Integer.rotateLeft(output.hashCode(), 13) ^ input.hashCode();
+	}
 }
