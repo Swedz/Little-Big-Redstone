@@ -88,7 +88,7 @@ public final class LogicTypes
 			LogicFactory defaultFactory
 	)
 	{
-		var type = new LogicType<>(id, englishName, Character.forDigit(SYMBOL.getAndIncrement(), 16), codec, streamCodec, defaultFactory);
+		var type = new LogicType<>(id, englishName, (char) (SYMBOL.getAndIncrement() + (int) '0'), codec, streamCodec, defaultFactory);
 		LOGICS.add(type);
 		LOGICS_MAP.put(id, type);
 		return type;
