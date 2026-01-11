@@ -94,7 +94,7 @@
       "type": "bitmap",
       "ascent": 7,
       "chars": [
-        "a"
+        ":"
       ],
       "file": "little_big_redstone:font/logic/pulse_throttler.png",
       "height": 7
@@ -103,7 +103,7 @@
       "type": "bitmap",
       "ascent": 7,
       "chars": [
-        "b"
+        ";"
       ],
       "file": "little_big_redstone:font/logic/selector.png",
       "height": 7
@@ -112,7 +112,7 @@
       "type": "bitmap",
       "ascent": 7,
       "chars": [
-        "c"
+        "<"
       ],
       "file": "little_big_redstone:font/logic/randomizer.png",
       "height": 7
@@ -121,7 +121,7 @@
       "type": "bitmap",
       "ascent": 7,
       "chars": [
-        "d"
+        "="
       ],
       "file": "little_big_redstone:font/logic/t_flip_flop.png",
       "height": 7
@@ -130,7 +130,7 @@
       "type": "bitmap",
       "ascent": 7,
       "chars": [
-        "e"
+        ">"
       ],
       "file": "little_big_redstone:font/logic/rs_nor_latch.png",
       "height": 7
