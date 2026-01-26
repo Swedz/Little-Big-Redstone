@@ -2,14 +2,14 @@
   "type": "minecraft:crafting_shaped",
   "category": "misc",
   "key": {
+    "C": {
+      "item": "little_big_redstone:redstone_circuit_board"
+    },
     "F": {
       "item": "little_big_redstone:gray_floppy_disk"
     },
     "I": {
       "tag": "c:storage_blocks/iron"
-    },
-    "N": {
-      "item": "minecraft:netherite_scrap"
     },
     "R": {
       "tag": "c:dusts/redstone"
@@ -17,8 +17,8 @@
   },
   "pattern": [
     "III",
-    "RFR",
-    "INI"
+    "RCR",
+    "IFI"
   ],
   "result": {
     "count": 1,
