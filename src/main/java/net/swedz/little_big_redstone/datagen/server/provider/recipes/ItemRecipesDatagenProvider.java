@@ -24,12 +24,12 @@ public final class ItemRecipesDatagenProvider extends RecipeProvider
 	{
 		new ShapedRecipeBuilder()
 				.pattern("III")
-				.pattern("RFR")
-				.pattern("INI")
+				.pattern("RCR")
+				.pattern("IFI")
 				.define('I', Tags.Items.STORAGE_BLOCKS_IRON)
 				.define('R', Tags.Items.DUSTS_REDSTONE)
+				.define('C', LBRItems.REDSTONE_CIRCUIT_BOARD)
 				.define('F', LBRItems.floppyDisk(color))
-				.define('N', Items.NETHERITE_SCRAP)
 				.output(LBRBlocks.microchip(color).get(), 1)
 				.offerTo(output, LBR.id("microchip/%s".formatted(color.getName())));
 	}
@@ -91,6 +91,17 @@ public final class ItemRecipesDatagenProvider extends RecipeProvider
 				.define('R', Tags.Items.DUSTS_REDSTONE)
 				.output(LBRItems.REDSTONE_BIT, 8)
 				.offerTo(output, LBR.id("redstone_bit"));
+		
+		new ShapedRecipeBuilder()
+				.pattern("DdD")
+				.pattern("RQR")
+				.pattern("DdD")
+				.define('D', Items.POLISHED_DEEPSLATE)
+				.define('Q', Tags.Items.GEMS_QUARTZ)
+				.define('R', Tags.Items.DUSTS_REDSTONE)
+				.define('d', Tags.Items.GEMS_DIAMOND)
+				.output(LBRItems.REDSTONE_CIRCUIT_BOARD, 1)
+				.offerTo(output, LBR.id("redstone_circuit_board"));
 	}
 	
 	@Override

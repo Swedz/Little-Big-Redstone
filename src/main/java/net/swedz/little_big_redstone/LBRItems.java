@@ -50,6 +50,8 @@ public final class LBRItems
 	
 	public static final ItemHolder<Item> REDSTONE_BIT = create("redstone_bit", "Redstone Bit", Item::new, LBRSortOrder.RESOURCES).withModelBuilder(CommonModelBuilders::generated).register();
 	
+	public static final ItemHolder<Item> REDSTONE_CIRCUIT_BOARD = create("redstone_circuit_board", "Redstone Circuit Board", Item::new, LBRSortOrder.RESOURCES).withModelBuilder(CommonModelBuilders::generated).register();
+	
 	private static final Map<DyeColor, ItemHolder<LogicArrayItem>> LOGIC_ARRAYS;
 	private static final Map<DyeColor, ItemHolder<FloppyDiskItem>> FLOPPY_DISKS;
 	private static final Map<DyeColor, ItemHolder<StickyNoteItem>> STICKY_NOTES;
