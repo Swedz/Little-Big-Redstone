@@ -68,6 +68,7 @@
   "item.little_big_redstone.red_logic_array": "Красная логическая матрица",
   "item.little_big_redstone.red_sticky_note": "Красный стикер",
   "item.little_big_redstone.redstone_bit": "Бит редстоуна",
+  "item.little_big_redstone.redstone_circuit_board": "Редстоуновая печатная плата",
   "item.little_big_redstone.rs_nor_latch": "RS-триггер на ИЛИ-НЕ",
   "item.little_big_redstone.selector": "Селектор",
   "item.little_big_redstone.sequencer": "Секвенсор",
