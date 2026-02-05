@@ -3,7 +3,7 @@ navigation:
   title: "Porta XOR"
   icon: "xor_gate"
   parent: little_big_redstone:logic.md
-  position: 16
+  position: 18
 categories:
   - logic
 item_ids:
