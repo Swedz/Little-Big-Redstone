@@ -150,11 +150,11 @@ public final class Microchip
 		return this.canFit(component.size().toBounds(x, y));
 	}
 	
-	public MicrochipObject findAt(int x, int y)
+	public MicrochipObject findAt(int x, int y, int padding)
 	{
 		for(var container : this.objectContainers())
 		{
-			var found = container.findAt(x, y);
+			var found = container.findAt(x, y, padding);
 			if(found != null)
 			{
 				return found;
@@ -163,9 +163,19 @@ public final class Microchip
 		return null;
 	}
 	
+	public MicrochipObject findAt(int x, int y)
+	{
+		return this.findAt(x, y, 0);
+	}
+	
+	public MicrochipObject findAt(int x, int y, int padding, MicrochipObjectContainerType containerType)
+	{
+		return this.getContainer(containerType).findAt(x, y, padding);
+	}
+	
 	public MicrochipObject findAt(int x, int y, MicrochipObjectContainerType containerType)
 	{
-		return this.getContainer(containerType).findAt(x, y);
+		return this.findAt(x, y, 0, containerType);
 	}
 	
 	public void loadFrom(Microchip other)
@@ -258,7 +268,7 @@ public final class Microchip
 	 * Removes all wires with no valid connections. This is used to clear out invalid wires when loading Microchips.
 	 * Helps prevent tampered program files creating broken states when loaded into a {@link FloppyDiskItem}.
 	 *
-	 * @param wires the wires of the microchip
+	 * @param wires      the wires of the microchip
 	 * @param components the components of the microchip
 	 * @return true if any dangling wires were removed, false otherwise
 	 */

@@ -13,7 +13,12 @@ import net.swedz.tesseract.neoforge.api.Bounds;
 
 import java.util.Optional;
 
-public record LogicEntry(int slot, int x, int y, LogicComponent component) implements MicrochipObject
+public record LogicEntry(
+		int slot,
+		int x,
+		int y,
+		LogicComponent component
+) implements MicrochipObject
 {
 	public static final Codec<LogicEntry> CODEC = RecordCodecBuilder.create((instance) -> instance
 			.group(

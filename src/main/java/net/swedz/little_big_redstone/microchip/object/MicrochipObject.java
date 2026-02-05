@@ -55,9 +55,19 @@ public interface MicrochipObject
 	 */
 	Bounds toBounds();
 	
+	default boolean contains(int x, int y, int padding)
+	{
+		var bounds = this.toBounds();
+		if(padding > 0)
+		{
+			bounds = bounds.grow(padding, padding);
+		}
+		return bounds.contains(x, y);
+	}
+	
 	default boolean contains(int x, int y)
 	{
-		return this.toBounds().contains(x, y);
+		return this.contains(x, y, 0);
 	}
 	
 	default boolean overlaps(Bounds other)

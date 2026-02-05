@@ -106,8 +106,7 @@ public final class MicrochipRenderWiresPanel extends MicrochipRenderPanel
 			}
 			
 			if(context.widget().hasSelectedPort() &&
-			   context.isOnBoard() &&
-			   microchip.findAt(context.boardMouseX(), context.boardMouseY()) == null)
+			   context.isOnBoard())
 			{
 				var endpoints = WireEndpoints.heldWire(context);
 				this.renderWire(graphics, endpoints, true);

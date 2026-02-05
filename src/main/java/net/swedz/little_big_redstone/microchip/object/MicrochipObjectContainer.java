@@ -95,20 +95,36 @@ public abstract class MicrochipObjectContainer<T extends MicrochipObject, S exte
 	 * <p>This method <i>should</i> only be invoked by {@link Microchip#findAt(int, int)} to ensure that all object
 	 * containers are respected. You may ignore this guideline for some purposes.</p>
 	 *
+	 * @param x       the x coordinate
+	 * @param y       the y coordinate
+	 * @param padding the amount of pixels to pad around objects to count as still overlapping with the x and y
+	 * @return the object at the position, null if none exists
+	 */
+	public final T findAt(int x, int y, int padding)
+	{
+		for(T value : objects.values())
+		{
+			if(value.contains(x, y, padding))
+			{
+				return value;
+			}
+		}
+		return null;
+	}
+	
+	/**
+	 * <p>Finds the object that contains the position.</p>
+	 *
+	 * <p>This method <i>should</i> only be invoked by {@link Microchip#findAt(int, int)} to ensure that all object
+	 * containers are respected. You may ignore this guideline for some purposes.</p>
+	 *
 	 * @param x the x coordinate
 	 * @param y the y coordinate
 	 * @return the object at the position, null if none exists
 	 */
 	public final T findAt(int x, int y)
 	{
-		for(T value : objects.values())
-		{
-			if(value.contains(x, y))
-			{
-				return value;
-			}
-		}
-		return null;
+		return this.findAt(x, y, 0);
 	}
 	
 	protected final int pickAvailableSlot()

@@ -228,7 +228,7 @@ public final class MicrochipWidget implements GuiEventListener, Renderable, Narr
 			{
 				carried.grow(1);
 			}
-			selectedPort = new LogicSelectedPort(microchip.components().get(wire.output().slot()), wire.output().index());
+			selectedPort = new LogicSelectedPort(microchip.components().get(wire.output().slot()), wire.output().index(), false);
 			new PlaceTakeMicrochipWirePacket(menu.containerId, wire, false).sendToServer();
 			return true;
 		}

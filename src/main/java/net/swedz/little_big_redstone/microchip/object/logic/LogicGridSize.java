@@ -44,6 +44,16 @@ public record LogicGridSize(int width, int height)
 		return y - this.centerY();
 	}
 	
+	public int portX(int x, boolean input, int index, int totalPorts)
+	{
+		return input ? x : (x + this.widthPixels());
+	}
+	
+	public int portY(int y, boolean input, int index, int totalPorts)
+	{
+		return this.portTopLeftCornerY(y, input, index, totalPorts) + 8;
+	}
+	
 	public int portTopLeftCornerX(int x, boolean input, int index, int totalPorts)
 	{
 		int halfX = this.centerX();
@@ -56,18 +66,6 @@ public record LogicGridSize(int width, int height)
 		int portPadding = this.heightPixels() / totalPorts;
 		int remainingPortPadding = this.heightPixels() - (portPadding * totalPorts);
 		return y - 8 + (portPadding * index) + (portPadding / 2) + (int) Math.ceil(remainingPortPadding / 2f);
-	}
-	
-	public Bounds portBounds(int x, int y, boolean input, int index, int totalPorts)
-	{
-		int portX = this.portTopLeftCornerX(x, input, index, totalPorts);
-		int portY = this.portTopLeftCornerY(y, input, index, totalPorts);
-		if(input)
-		{
-			portX += 10;
-		}
-		portY += 5;
-		return new Bounds(portX, portY, 6, 6);
 	}
 	
 	public int wireOutStartX(int x)

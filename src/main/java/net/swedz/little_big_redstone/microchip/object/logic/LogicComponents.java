@@ -63,21 +63,26 @@ public final class LogicComponents extends MicrochipObjectContainer<LogicEntry, 
 		return debug;
 	}
 	
-	public LogicSelectedPort findPortAt(int x, int y, boolean input)
+	public LogicSelectedPort findNearestPortAt(LogicEntry entry, int x, int y, boolean input)
 	{
-		for(LogicEntry entry : this.values())
+		var size = entry.size();
+		LogicSelectedPort nearest = null;
+		int nearestDistance = 0;
+		int totalPorts = input ? entry.component().inputs() : entry.component().outputs();
+		for(int index = 0; index < totalPorts; index++)
 		{
-			var size = entry.size();
-			int totalPorts = input ? entry.component().inputs() : entry.component().outputs();
-			for(int index = 0; index < totalPorts; index++)
+			int portX = size.portX(entry.x(), input, index, totalPorts);
+			int portY = size.portY(entry.y(), input, index, totalPorts);
+			int distance = Math.abs(portX - x) + Math.abs(portY - y);
+			var port = new LogicSelectedPort(entry, index, input);
+			if(nearest == null ||
+			   nearestDistance > distance)
 			{
-				if(size.portBounds(entry.x(), entry.y(), input, index, totalPorts).contains(x, y))
-				{
-					return new LogicSelectedPort(entry, index);
-				}
+				nearest = port;
+				nearestDistance = distance;
 			}
 		}
-		return null;
+		return nearest;
 	}
 	
 	public LogicEntry add(int x, int y, LogicComponent component)
