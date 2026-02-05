@@ -3,7 +3,7 @@ navigation:
   title: "Рандомизатор"
   icon: "randomizer"
   parent: little_big_redstone:logic.md
-  position: 21
+  position: 22
 categories:
   - logic
 item_ids:
