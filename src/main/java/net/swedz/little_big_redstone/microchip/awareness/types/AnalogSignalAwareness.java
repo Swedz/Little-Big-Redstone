@@ -75,7 +75,7 @@ public final class AnalogSignalAwareness extends MicrochipAwareness<AnalogSignal
 	public void preTick(AwarenessContext context)
 	{
 		var level = context.level();
-		var pos = context.pos();
+		var pos = context.blockPos();
 		
 		if(!initialized)
 		{
@@ -97,10 +97,5 @@ public final class AnalogSignalAwareness extends MicrochipAwareness<AnalogSignal
 			this.signals = signals;
 			initialized = true;
 		}
-	}
-	
-	@Override
-	public void postTick(AwarenessContext context, boolean microchipDirty, boolean contextDirty)
-	{
 	}
 }

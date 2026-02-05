@@ -6,11 +6,9 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.Block;
 import net.neoforged.neoforge.capabilities.BlockCapability;
 import net.neoforged.neoforge.capabilities.BlockCapabilityCache;
 import net.swedz.little_big_redstone.LBR;
-import net.swedz.little_big_redstone.microchip.awareness.AwarenessContext;
 import net.swedz.little_big_redstone.microchip.awareness.MicrochipAwareness;
 
 import java.util.concurrent.ExecutionException;
@@ -48,20 +46,5 @@ public abstract class CapabilityAwareness<A extends CapabilityAwareness<A, T>, T
 			LBR.LOGGER.error("Failed to fetch cached capability at {}", pos.toShortString(), ex);
 			return null;
 		}
-	}
-	
-	@Override
-	public void neighborChanged(AwarenessContext context, Block neighborBlock, BlockPos neighborPos, Direction neighborDirection, boolean movedByPiston)
-	{
-	}
-	
-	@Override
-	public void preTick(AwarenessContext context)
-	{
-	}
-	
-	@Override
-	public void postTick(AwarenessContext context, boolean microchipDirty, boolean contextDirty)
-	{
 	}
 }

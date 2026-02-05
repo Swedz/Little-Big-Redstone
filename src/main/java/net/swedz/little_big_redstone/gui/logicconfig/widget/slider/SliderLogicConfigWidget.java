@@ -1,15 +1,15 @@
-package net.swedz.little_big_redstone.gui.logicconfig.button.slider;
+package net.swedz.little_big_redstone.gui.logicconfig.widget.slider;
 
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.util.Mth;
 import net.neoforged.neoforge.client.gui.widget.ExtendedSlider;
-import net.swedz.little_big_redstone.gui.logicconfig.button.LogicConfigButtonHelper;
+import net.swedz.little_big_redstone.gui.logicconfig.widget.LogicConfigButtonHelper;
 import net.swedz.tesseract.neoforge.helper.guigraphics.TesseractGuiGraphics;
 import org.lwjgl.glfw.GLFW;
 
-public class SliderLogicConfigButton extends ExtendedSlider implements LogicConfigButtonHelper
+public class SliderLogicConfigWidget extends ExtendedSlider implements LogicConfigButtonHelper
 {
 	private final int color;
 	
@@ -20,7 +20,7 @@ public class SliderLogicConfigButton extends ExtendedSlider implements LogicConf
 	
 	private String typed = "";
 	
-	public SliderLogicConfigButton(int x, int y, int width, int height, int color, Component prefix, Component suffix,
+	public SliderLogicConfigWidget(int x, int y, int width, int height, int color, Component prefix, Component suffix,
 								   double minValue, double maxValue, double initialValue, double stepSize, int precision, boolean drawString,
 								   ValueStringifier valueStringifier, OnValueChange onChange)
 	{
@@ -36,7 +36,7 @@ public class SliderLogicConfigButton extends ExtendedSlider implements LogicConf
 		this.updateMessage();
 	}
 	
-	public SliderLogicConfigButton(int x, int y, int width, int height, int color, Component prefix, Component suffix,
+	public SliderLogicConfigWidget(int x, int y, int width, int height, int color, Component prefix, Component suffix,
 								   double minValue, double maxValue, double initialValue, boolean drawString,
 								   ValueStringifier valueStringifier, OnValueChange onChange)
 	{
@@ -176,7 +176,7 @@ public class SliderLogicConfigButton extends ExtendedSlider implements LogicConf
 	
 	public interface OnValueChange
 	{
-		void onValueChange(SliderLogicConfigButton button, double value);
+		void onValueChange(SliderLogicConfigWidget button, double value);
 	}
 	
 	public interface ValueStringifier

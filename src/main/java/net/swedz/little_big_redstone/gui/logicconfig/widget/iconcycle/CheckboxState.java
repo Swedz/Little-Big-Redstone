@@ -1,4 +1,4 @@
-package net.swedz.little_big_redstone.gui.logicconfig.button.iconcycle;
+package net.swedz.little_big_redstone.gui.logicconfig.widget.iconcycle;
 
 public enum CheckboxState implements IconCycleLogicConfigButtonIcon
 {

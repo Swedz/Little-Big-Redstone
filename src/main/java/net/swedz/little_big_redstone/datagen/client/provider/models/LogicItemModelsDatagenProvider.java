@@ -32,6 +32,8 @@ public final class LogicItemModelsDatagenProvider extends ItemModelProvider
 		this.logicComponent(LogicTypes.IO, BackgroundType.CIRCLE, false, (b) -> b
 				.boardTexture("input", LBR.id("logic/io_input"))
 				.boardTexture("output", LBR.id("logic/io_output")));
+		this.logicComponent(LogicTypes.READER, BackgroundType.CIRCLE, true);
+		this.logicComponent(LogicTypes.TAG, BackgroundType.CIRCLE, true);
 		
 		this.logicComponent(LogicTypes.NOT, BackgroundType.SQUARE, true);
 		this.logicComponent(LogicTypes.AND, BackgroundType.SQUARE, true);
@@ -39,8 +41,6 @@ public final class LogicItemModelsDatagenProvider extends ItemModelProvider
 		this.logicComponent(LogicTypes.OR, BackgroundType.SQUARE, true);
 		this.logicComponent(LogicTypes.NOR, BackgroundType.SQUARE, true);
 		this.logicComponent(LogicTypes.XOR, BackgroundType.SQUARE, true);
-		
-		this.logicComponent(LogicTypes.READER, BackgroundType.CIRCLE, true);
 		
 		this.logicComponent(LogicTypes.SEQUENCER, BackgroundType.SQUARE, false, (b) -> b
 				.boardTexture("progress", LBR.id("logic/sequencer")));

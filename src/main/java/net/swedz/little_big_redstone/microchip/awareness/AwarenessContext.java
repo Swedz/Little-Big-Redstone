@@ -7,7 +7,7 @@ import net.swedz.little_big_redstone.block.microchip.MicrochipBlockEntity;
 import net.swedz.little_big_redstone.microchip.Microchip;
 
 public record AwarenessContext(
-		Level level, BlockPos pos,
+		Level level, BlockPos blockPos,
 		MicrochipBlockEntity blockEntity,
 		Microchip microchip
 )
@@ -19,6 +19,6 @@ public record AwarenessContext(
 	
 	public BlockState state()
 	{
-		return level.getBlockState(pos);
+		return level.getBlockState(blockPos);
 	}
 }

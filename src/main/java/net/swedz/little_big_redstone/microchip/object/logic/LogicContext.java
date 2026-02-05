@@ -10,36 +10,48 @@ import net.swedz.little_big_redstone.microchip.awareness.MicrochipAwareness;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.UUID;
 
-public final class LogicContext
+public final class LogicContext implements LogicContextAccess
 {
 	private final Level    level;
-	private final BlockPos pos;
+	private final BlockPos blockPos;
 	
 	private final Microchip microchip;
 	
+	private final UUID placedBy;
+	
 	private final List<LogicEntry> dirtyEntries = Lists.newArrayList();
 	
-	public LogicContext(Level level, BlockPos pos, Microchip microchip)
+	public LogicContext(Level level, BlockPos blockPos, Microchip microchip, UUID placedBy)
 	{
 		this.level = level;
-		this.pos = pos;
+		this.blockPos = blockPos;
 		this.microchip = microchip;
+		this.placedBy = placedBy;
 	}
 	
 	public LogicContext(MicrochipBlockEntity blockEntity)
 	{
-		this(blockEntity.getLevel(), blockEntity.getBlockPos(), blockEntity.microchip());
+		this(blockEntity.getLevel(), blockEntity.getBlockPos(), blockEntity.microchip(), blockEntity.getPlacedBy());
 	}
 	
+	@Override
 	public Level level()
 	{
 		return level;
 	}
 	
-	public BlockPos pos()
+	@Override
+	public BlockPos blockPos()
 	{
-		return pos;
+		return blockPos;
+	}
+	
+	@Override
+	public UUID placedBy()
+	{
+		return placedBy;
 	}
 	
 	public <A extends MicrochipAwareness<A>> A awareness(AwarenessType<A> type)

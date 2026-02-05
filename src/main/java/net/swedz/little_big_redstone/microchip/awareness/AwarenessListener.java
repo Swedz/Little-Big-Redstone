@@ -14,4 +14,6 @@ public interface AwarenessListener
 	void preTick(AwarenessContext context);
 	
 	void postTick(AwarenessContext context, boolean microchipDirty, boolean contextDirty);
+	
+	void removed(AwarenessContext context);
 }

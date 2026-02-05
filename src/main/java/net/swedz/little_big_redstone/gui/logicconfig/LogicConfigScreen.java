@@ -1,5 +1,7 @@
 package net.swedz.little_big_redstone.gui.logicconfig;
 
+import com.google.common.collect.Lists;
+import com.mojang.blaze3d.platform.InputConstants;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Tooltip;
@@ -11,12 +13,14 @@ import net.minecraft.world.item.ItemStack;
 import net.swedz.little_big_redstone.LBR;
 import net.swedz.little_big_redstone.LBRComponents;
 import net.swedz.little_big_redstone.client.model.logic.LogicBakingModelData;
-import net.swedz.little_big_redstone.gui.logicconfig.button.LogicConfigButton;
-import net.swedz.little_big_redstone.gui.logicconfig.button.cycle.CycleLogicConfigButton;
-import net.swedz.little_big_redstone.gui.logicconfig.button.iconcycle.CheckboxState;
-import net.swedz.little_big_redstone.gui.logicconfig.button.iconcycle.IconCycleLogicConfigButton;
-import net.swedz.little_big_redstone.gui.logicconfig.button.iconcycle.IconCycleLogicConfigButtonIcon;
-import net.swedz.little_big_redstone.gui.logicconfig.button.slider.SliderLogicConfigButton;
+import net.swedz.little_big_redstone.gui.logicconfig.widget.LogicConfigButton;
+import net.swedz.little_big_redstone.gui.logicconfig.widget.TickableLogicConfigWidget;
+import net.swedz.little_big_redstone.gui.logicconfig.widget.cycle.CycleLogicConfigButton;
+import net.swedz.little_big_redstone.gui.logicconfig.widget.iconcycle.CheckboxState;
+import net.swedz.little_big_redstone.gui.logicconfig.widget.iconcycle.IconCycleLogicConfigButton;
+import net.swedz.little_big_redstone.gui.logicconfig.widget.iconcycle.IconCycleLogicConfigButtonIcon;
+import net.swedz.little_big_redstone.gui.logicconfig.widget.slider.SliderLogicConfigWidget;
+import net.swedz.little_big_redstone.gui.logicconfig.widget.textbox.TextBoxLogicConfigWidget;
 import net.swedz.little_big_redstone.microchip.object.logic.LogicEntry;
 import net.swedz.little_big_redstone.microchip.object.logic.config.menu.LogicConfigButtonReference;
 import net.swedz.little_big_redstone.microchip.object.logic.config.menu.LogicConfigMenuBuilder;
@@ -28,6 +32,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Consumer;
+import java.util.function.Predicate;
 
 public final class LogicConfigScreen extends AbstractContainerScreen<LogicConfigMenu> implements LogicConfigMenuBuilder
 {
@@ -36,6 +41,8 @@ public final class LogicConfigScreen extends AbstractContainerScreen<LogicConfig
 	private final ItemStack  logicStack;
 	
 	private int configX, configY, configWidth, configHeight;
+	
+	private final List<TickableLogicConfigWidget> tickableWidgets = Lists.newArrayList();
 	
 	public LogicConfigScreen(LogicConfigMenu menu, Inventory playerInventory, Component title)
 	{
@@ -123,9 +130,9 @@ public final class LogicConfigScreen extends AbstractContainerScreen<LogicConfig
 	}
 	
 	@Override
-	public LogicConfigButtonReference<Double> addSlider(Component prefix, Component suffix, Component tooltip, int x, int y, int width, int height, double minValue, double maxValue, double currentValue, double stepSize, int precision, SliderLogicConfigButton.ValueStringifier valueStringifier, Consumer<Double> onChange)
+	public LogicConfigButtonReference<Double> addSlider(Component prefix, Component suffix, Component tooltip, int x, int y, int width, int height, double minValue, double maxValue, double currentValue, double stepSize, int precision, SliderLogicConfigWidget.ValueStringifier valueStringifier, Consumer<Double> onChange)
 	{
-		var button = new SliderLogicConfigButton(configX + x, configY + y, width, height, color, prefix, suffix, minValue, maxValue, currentValue, stepSize, precision, true, valueStringifier, (__, value) -> onChange.accept(value));
+		var button = new SliderLogicConfigWidget(configX + x, configY + y, width, height, color, prefix, suffix, minValue, maxValue, currentValue, stepSize, precision, true, valueStringifier, (__, value) -> onChange.accept(value));
 		button.setTooltip(Tooltip.create(tooltip));
 		this.addRenderableWidget(button);
 		return new LogicConfigButtonReference<>()
@@ -322,6 +329,74 @@ public final class LogicConfigScreen extends AbstractContainerScreen<LogicConfig
 		};
 	}
 	
+	@Override
+	public LogicConfigButtonReference<String> addTextBox(Component name, Component tooltip, int x, int y, int width, int height, String initialValue, int maxLength, Predicate<String> filter, Consumer<String> onChange)
+	{
+		var editBox = new TextBoxLogicConfigWidget(minecraft.font, configX + x, configY + y, width, height, color, name);
+		editBox.setTooltip(Tooltip.create(tooltip));
+		editBox.setValue(initialValue);
+		editBox.setMaxLength(maxLength);
+		editBox.setFilter((value) -> value != null && filter.test(value));
+		editBox.setResponder(onChange);
+		this.addRenderableWidget(editBox);
+		tickableWidgets.add(editBox);
+		return new LogicConfigButtonReference<>()
+		{
+			@Override
+			public LogicConfigButtonReference<String> setText(Component text)
+			{
+				editBox.setMessage(text);
+				return this;
+			}
+			
+			@Override
+			public LogicConfigButtonReference<String> setTooltip(Component tooltip)
+			{
+				editBox.setTooltip(Tooltip.create(tooltip));
+				return this;
+			}
+			
+			@Override
+			public String getValue()
+			{
+				return editBox.getValue();
+			}
+			
+			@Override
+			public LogicConfigButtonReference<String> setValue(String value)
+			{
+				editBox.setValue(value);
+				return this;
+			}
+			
+			@Override
+			public boolean isActive()
+			{
+				return editBox.isActive();
+			}
+			
+			@Override
+			public LogicConfigButtonReference<String> setActive(boolean active)
+			{
+				editBox.active = active;
+				return this;
+			}
+			
+			@Override
+			public boolean isVisible()
+			{
+				return editBox.visible;
+			}
+			
+			@Override
+			public LogicConfigButtonReference<String> setVisible(boolean visible)
+			{
+				editBox.visible = visible;
+				return this;
+			}
+		};
+	}
+	
 	private void save()
 	{
 		new WriteLogicConfigPacket(menu.blockPos(), logicEntry.slot(), logicEntry.component(), menu.returnViewPosition()).sendToServer();
@@ -349,6 +424,12 @@ public final class LogicConfigScreen extends AbstractContainerScreen<LogicConfig
 	}
 	
 	@Override
+	protected void containerTick()
+	{
+		tickableWidgets.forEach(TickableLogicConfigWidget::tick);
+	}
+	
+	@Override
 	protected void renderLabels(GuiGraphics graphics, int mouseX, int mouseY)
 	{
 	}
@@ -365,6 +446,18 @@ public final class LogicConfigScreen extends AbstractContainerScreen<LogicConfig
 		graphics.pose().scale(2, 2, 1);
 		graphics.renderItem(logicStack, 0, 0);
 		graphics.pose().popPose();
+	}
+	
+	@Override
+	public boolean keyPressed(int keyCode, int scanCode, int modifiers)
+	{
+		var mouseKey = InputConstants.getKey(keyCode, scanCode);
+		if(minecraft.options.keyInventory.isActiveAndMatches(mouseKey) &&
+		   this.getFocused() != null)
+		{
+			return true;
+		}
+		return super.keyPressed(keyCode, scanCode, modifiers);
 	}
 	
 	@Override

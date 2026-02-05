@@ -312,7 +312,7 @@ public final class MicrochipGuidebookScene extends LytBox implements ExportableR
 			redstoneSignals.applySignals(redstone);
 		}
 		
-		var context = new LogicContext(null, new BlockPos(0, 0, 0), microchip);
+		var context = new LogicContext(null, new BlockPos(0, 0, 0), microchip, null);
 		
 		microchip.tickLogic(context);
 		
