@@ -47,7 +47,8 @@ public final class LogicTypes
 	
 	public static final LogicType<LogicDebugger> DEBUGGER = register("debugger", "Debugger", LogicDebugger.CODEC, LogicDebugger.STREAM_CODEC, LogicDebugger::new);
 	
-	public static final LogicType<LogicIO> IO = register("io", "I/O Port", LogicIO.CODEC, LogicIO.STREAM_CODEC, LogicIO::new);
+	public static final LogicType<LogicIO>     IO     = register("io", "I/O Port", LogicIO.CODEC, LogicIO.STREAM_CODEC, LogicIO::new);
+	public static final LogicType<LogicReader> READER = register("reader", "Reader", LogicReader.CODEC, LogicReader.STREAM_CODEC, LogicReader::new);
 	
 	public static final LogicType<NOTGate>  NOT  = registerGate("not", "NOT", NOTGate.CODEC, NOTGate.STREAM_CODEC, NOTGate::new);
 	public static final LogicType<ANDGate>  AND  = registerGate("and", "AND", ANDGate.CODEC, ANDGate.STREAM_CODEC, ANDGate::new);
@@ -55,8 +56,6 @@ public final class LogicTypes
 	public static final LogicType<ORGate>   OR   = registerGate("or", "OR", ORGate.CODEC, ORGate.STREAM_CODEC, ORGate::new);
 	public static final LogicType<NORGate>  NOR  = registerGate("nor", "NOR", NORGate.CODEC, NORGate.STREAM_CODEC, NORGate::new);
 	public static final LogicType<XORGate>  XOR  = registerGate("xor", "XOR", XORGate.CODEC, XORGate.STREAM_CODEC, XORGate::new);
-	
-	public static final LogicType<LogicReader> READER = register("reader", "Reader", LogicReader.CODEC, LogicReader.STREAM_CODEC, LogicReader::new);
 	
 	public static final LogicType<LogicSequencer>  SEQUENCER       = register("sequencer", "Sequencer", LogicSequencer.CODEC, LogicSequencer.STREAM_CODEC, LogicSequencer::new);
 	public static final LogicType<PulseThrottler>  PULSE_THROTTLER = register("pulse_throttler", "Pulse Throttler", PulseThrottler.CODEC, PulseThrottler.STREAM_CODEC, PulseThrottler::new);
