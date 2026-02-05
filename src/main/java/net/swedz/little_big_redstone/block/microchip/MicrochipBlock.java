@@ -4,6 +4,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.Containers;
 import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.ItemStack;
@@ -59,6 +60,18 @@ public final class MicrochipBlock extends Block implements TickableBlock, DyeCol
 				.setValue(SOUTH, false)
 				.setValue(EAST, false)
 				.setValue(WEST, false));
+	}
+	
+	@Override
+	public void setPlacedBy(Level level, BlockPos pos, BlockState state, LivingEntity placer, ItemStack stack)
+	{
+		super.setPlacedBy(level, pos, state, placer, stack);
+		
+		if(placer instanceof Player player &&
+		   level.getBlockEntity(pos) instanceof MicrochipBlockEntity blockEntity)
+		{
+			blockEntity.setPlacedBy(player.getUUID());
+		}
 	}
 	
 	@Override

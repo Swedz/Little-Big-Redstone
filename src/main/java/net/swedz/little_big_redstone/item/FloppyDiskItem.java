@@ -324,7 +324,7 @@ public final class FloppyDiskItem extends Item implements DyeColoredItem
 	@Override
 	public InteractionResult onItemUseFirst(ItemStack stack, UseOnContext context)
 	{
-		Player player = context.getPlayer();
+		var player = context.getPlayer();
 		if(player != null)
 		{
 			var usedHand = context.getHand();
@@ -350,6 +350,10 @@ public final class FloppyDiskItem extends Item implements DyeColoredItem
 								var result = consumeItems(player, microchip, targetMicrochip, true);
 								if(result.isSuccess())
 								{
+									if(microchipBlockEntity.getPlacedBy() == null)
+									{
+										microchipBlockEntity.setPlacedBy(player.getUUID());
+									}
 									consumeItems(player, microchip, targetMicrochip, false);
 									dropAll(player, microchipBlockEntity.microchip(), result);
 									microchipBlockEntity.microchip().loadFrom(microchip);

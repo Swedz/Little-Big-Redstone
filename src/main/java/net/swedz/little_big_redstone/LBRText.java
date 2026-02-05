@@ -131,6 +131,14 @@ public interface LBRText
 	@LangKey(text = "Output")
 	MutableComponent guideTooltipOutput();
 	
+	@LangKey(text = "Sensor")
+	@WithStyle("input")
+	MutableComponent sensor();
+	
+	@LangKey(text = "Emitter")
+	@WithStyle("output")
+	MutableComponent emitter();
+	
 	@LangKey(text = "Input")
 	@WithStyle("input")
 	MutableComponent input();
@@ -207,6 +215,15 @@ public interface LBRText
 	
 	@LangKey(text = "%s tick (%ss)")
 	MutableComponent logicConfigButtonLabelTicksAndSecondsSingular(long ticks, float seconds);
+	
+	@LangKey(text = "Label: ")
+	MutableComponent logicConfigButtonLabelTagLabel();
+	
+	@LangKey(text = "Threshold: ")
+	MutableComponent logicConfigButtonLabelTagThreshold();
+	
+	@LangKey(text = "Global")
+	MutableComponent logicConfigButtonLabelTagGlobal();
 	
 	@LangKey(text = "The time for the output to be on.")
 	MutableComponent logicConfigButtonTooltipDuration();
@@ -298,6 +315,18 @@ public interface LBRText
 	@LangKey(text = "Whether a second wire port should be added that will forcefully reset the sequencer's progress.")
 	MutableComponent logicConfigButtonTooltipSequencerResetPort();
 	
+	@LangKey(text = "Whether this tag should sense or emit a signal.")
+	MutableComponent logicConfigButtonTooltipTagMode();
+	
+	@LangKey(text = "The label for this tag to emit or sense.")
+	MutableComponent logicConfigButtonTooltipTagLabel();
+	
+	@LangKey(text = "The amount of tag emitters that must be sensed by this sensor to yield an output of ON.")
+	MutableComponent logicConfigButtonTooltipTagThreshold();
+	
+	@LangKey(text = "Whether this tag sensor should detect emitters in microchips placed by anybody, or just yourself.")
+	MutableComponent logicConfigButtonTooltipTagGlobal();
+	
 	@LangKey(text = "Counter")
 	MutableComponent logicConfigSelectorModeCounter();
 	
@@ -381,6 +410,18 @@ public interface LBRText
 	@LangKey(text = "  Reset Port: %s")
 	@WithStyle("tooltip")
 	MutableComponent logicConfigTooltipSequencerResetPort(@Parsed("yes_no") boolean resetPort);
+	
+	@LangKey(text = "  Label: %s")
+	@WithStyle("tooltip")
+	MutableComponent logicConfigTooltipLabel(@WithStyle("highlighted") String label);
+	
+	@LangKey(text = "  Threshold: %s")
+	@WithStyle("tooltip")
+	MutableComponent logicConfigTooltipThreshold(@WithStyle("highlighted") int threshold);
+	
+	@LangKey(text = "  Global: %s")
+	@WithStyle("tooltip")
+	MutableComponent logicConfigTooltipGlobal(@Parsed("yes_no") boolean global);
 	
 	@LangKey(text = "Q = %s")
 	@WithStyle("tooltip")
@@ -485,6 +526,20 @@ public interface LBRText
 	@LangKey(text = "Output is ON when the amount of ON inputs is odd, otherwise output is OFF.")
 	@WithStyle("tooltip")
 	MutableComponent logicHelpXORGate();
+	
+	@LangKey(text = "The mode determines whether the tag is a sensor or emitter.")
+	@WithStyle("tooltip")
+	MutableComponent logicHelpTag1();
+	
+	@LangKey(text = """
+			Sensors will yield an output of ON only when at least as many emitters as specified by the threshold that \
+			have the same label are also ON.""")
+	@WithStyle("tooltip")
+	MutableComponent logicHelpTag2();
+	
+	@LangKey(text = "Tag emitters emit across an entire world, ignoring dimensions.")
+	@WithStyle("tooltip")
+	MutableComponent logicHelpTag3();
 	
 	@LangKey(text = "No")
 	@WithStyle("no")

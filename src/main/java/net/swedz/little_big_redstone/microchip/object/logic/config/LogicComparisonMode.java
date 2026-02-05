@@ -2,7 +2,7 @@ package net.swedz.little_big_redstone.microchip.object.logic.config;
 
 import net.minecraft.network.chat.MutableComponent;
 import net.swedz.little_big_redstone.LBR;
-import net.swedz.little_big_redstone.gui.logicconfig.button.iconcycle.IconCycleLogicConfigButtonIcon;
+import net.swedz.little_big_redstone.gui.logicconfig.widget.iconcycle.IconCycleLogicConfigButtonIcon;
 
 import java.util.function.Supplier;
 

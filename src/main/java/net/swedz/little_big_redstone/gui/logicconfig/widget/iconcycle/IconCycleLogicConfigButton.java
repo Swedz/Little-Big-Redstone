@@ -1,11 +1,11 @@
-package net.swedz.little_big_redstone.gui.logicconfig.button.iconcycle;
+package net.swedz.little_big_redstone.gui.logicconfig.widget.iconcycle;
 
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.AbstractButton;
 import net.minecraft.client.gui.narration.NarrationElementOutput;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
-import net.swedz.little_big_redstone.gui.logicconfig.button.LogicConfigButtonHelper;
+import net.swedz.little_big_redstone.gui.logicconfig.widget.LogicConfigButtonHelper;
 import net.swedz.tesseract.neoforge.helper.guigraphics.TesseractGuiGraphics;
 
 import java.util.Collections;

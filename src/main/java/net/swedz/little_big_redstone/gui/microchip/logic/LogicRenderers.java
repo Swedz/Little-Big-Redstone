@@ -24,6 +24,8 @@ public final class LogicRenderers
 		register(LogicTypes.DEBUGGER, SimpleLogicRenderer::new);
 		
 		register(LogicTypes.IO, IORenderer::new);
+		register(LogicTypes.READER, SimpleLogicRenderer::new);
+		register(LogicTypes.TAG, SimpleLogicRenderer::new);
 		
 		register(LogicTypes.NOT, SimpleLogicRenderer::new);
 		register(LogicTypes.AND, SimpleLogicRenderer::new);
@@ -31,8 +33,6 @@ public final class LogicRenderers
 		register(LogicTypes.OR, SimpleLogicRenderer::new);
 		register(LogicTypes.NOR, SimpleLogicRenderer::new);
 		register(LogicTypes.XOR, SimpleLogicRenderer::new);
-		
-		register(LogicTypes.READER, SimpleLogicRenderer::new);
 		
 		register(LogicTypes.SEQUENCER, SequencerRenderer::new);
 		register(LogicTypes.PULSE_THROTTLER, SimpleLogicRenderer::new);

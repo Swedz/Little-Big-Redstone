@@ -11,6 +11,7 @@ import java.util.List;
 public final class LBRTooltips
 {
 	public static final Parser<Boolean> INPUT_OUTPUT_PARSER = (input) -> input ? LBR.text().input() : LBR.text().output();
+	public static final Parser<Boolean> SENSOR_EMITTER_PARSER = (input) -> input ? LBR.text().sensor() : LBR.text().emitter();
 	
 	public static final Parser<Direction> DIRECTION_PARSER = (direction) -> (switch (direction)
 	{

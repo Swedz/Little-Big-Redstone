@@ -14,6 +14,8 @@ public final class MicrochipAwarenesses implements AwarenessListener
 {
 	private final Map<AwarenessType<?>, MicrochipAwareness<?>> awarenesses = Maps.newHashMap();
 	
+	private final Set<MicrochipAwareness<?>> removed = Sets.newHashSet();
+	
 	public <A extends MicrochipAwareness<A>> A get(AwarenessType<A> type)
 	{
 		return (A) awarenesses.get(type);
@@ -38,7 +40,8 @@ public final class MicrochipAwarenesses implements AwarenessListener
 		}
 		for(var type : irrelevantTypes)
 		{
-			awarenesses.remove(type);
+			var awareness = awarenesses.remove(type);
+			removed.add(awareness);
 		}
 	}
 	
@@ -75,6 +78,24 @@ public final class MicrochipAwarenesses implements AwarenessListener
 		for(var awareness : awarenesses.values())
 		{
 			awareness.postTick(context, microchipDirty, contextDirty);
+		}
+	}
+	
+	@Override
+	public void removed(AwarenessContext context)
+	{
+		for(var awareness : removed)
+		{
+			awareness.removed(context);
+		}
+		removed.clear();
+	}
+	
+	public void removedAll(AwarenessContext context)
+	{
+		for(var awareness : awarenesses.values())
+		{
+			awareness.removed(context);
 		}
 	}
 }

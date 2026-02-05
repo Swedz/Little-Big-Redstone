@@ -24,6 +24,7 @@ import net.swedz.little_big_redstone.microchip.object.logic.randomizer.LogicRand
 import net.swedz.little_big_redstone.microchip.object.logic.reader.LogicReader;
 import net.swedz.little_big_redstone.microchip.object.logic.selector.LogicSelector;
 import net.swedz.little_big_redstone.microchip.object.logic.sequencer.LogicSequencer;
+import net.swedz.little_big_redstone.microchip.object.logic.tag.LogicTag;
 import org.apache.commons.lang3.mutable.MutableInt;
 
 import java.util.Collections;
@@ -49,6 +50,7 @@ public final class LogicTypes
 	
 	public static final LogicType<LogicIO>     IO     = register("io", "I/O Port", LogicIO.CODEC, LogicIO.STREAM_CODEC, LogicIO::new);
 	public static final LogicType<LogicReader> READER = register("reader", "Reader", LogicReader.CODEC, LogicReader.STREAM_CODEC, LogicReader::new);
+	public static final LogicType<LogicTag>    TAG    = register("tag", "Tag", LogicTag.CODEC, LogicTag.STREAM_CODEC, LogicTag::new);
 	
 	public static final LogicType<NOTGate>  NOT  = registerGate("not", "NOT", NOTGate.CODEC, NOTGate.STREAM_CODEC, NOTGate::new);
 	public static final LogicType<ANDGate>  AND  = registerGate("and", "AND", ANDGate.CODEC, ANDGate.STREAM_CODEC, ANDGate::new);

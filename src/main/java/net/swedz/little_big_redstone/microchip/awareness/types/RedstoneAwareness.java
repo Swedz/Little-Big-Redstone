@@ -121,7 +121,7 @@ public final class RedstoneAwareness extends MicrochipAwareness<RedstoneAwarenes
 	public void neighborChanged(AwarenessContext context, Block neighborBlock, BlockPos neighborPos, Direction neighborDirection, boolean movedByPiston)
 	{
 		var level = context.level();
-		var pos = context.pos();
+		var pos = context.blockPos();
 		
 		int neighborDirectionIndex = neighborDirection.ordinal();
 		if(inputSides[neighborDirectionIndex] && !outputSides[neighborDirectionIndex])
@@ -137,7 +137,7 @@ public final class RedstoneAwareness extends MicrochipAwareness<RedstoneAwarenes
 	public void preTick(AwarenessContext context)
 	{
 		var level = context.level();
-		var pos = context.pos();
+		var pos = context.blockPos();
 		
 		if(!initialized)
 		{
@@ -162,7 +162,7 @@ public final class RedstoneAwareness extends MicrochipAwareness<RedstoneAwarenes
 	public void postTick(AwarenessContext context, boolean microchipDirty, boolean contextDirty)
 	{
 		var level = context.level();
-		var pos = context.pos();
+		var pos = context.blockPos();
 		var state = context.state();
 		
 		boolean[] powerChanges = new boolean[6];

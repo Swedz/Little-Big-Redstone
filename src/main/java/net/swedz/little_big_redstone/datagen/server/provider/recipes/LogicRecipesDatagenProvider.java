@@ -32,7 +32,9 @@ public final class LogicRecipesDatagenProvider extends RecipeProvider
 			'T', Either.left(Items.REDSTONE_TORCH),
 			'E', Either.left(Items.REPEATER),
 			'Q', Either.right(Tags.Items.GEMS_QUARTZ),
-			'G', Either.right(Tags.Items.INGOTS_GOLD)
+			'G', Either.right(Tags.Items.INGOTS_GOLD),
+			'p', Either.left(Items.STICKY_PISTON),
+			'P', Either.right(Tags.Items.ENDER_PEARLS)
 	);
 	
 	private static void logicComponent(RecipeOutput output, LogicType<?> type, Consumer<ShapedRecipeBuilder> action)
@@ -66,6 +68,16 @@ public final class LogicRecipesDatagenProvider extends RecipeProvider
 				.pattern(" r ")
 				.pattern("  R"));
 		
+		logicComponent(output, LogicTypes.READER, (b) -> b
+				.pattern("R  ")
+				.pattern("QrR")
+				.pattern("R  "));
+		
+		logicComponent(output, LogicTypes.TAG, (b) -> b
+				.pattern("PQG")
+				.pattern("PrR")
+				.pattern("PQG"));
+		
 		logicComponent(output, LogicTypes.NOT, (b) -> b
 				.pattern("RrT"));
 		
@@ -96,11 +108,6 @@ public final class LogicRecipesDatagenProvider extends RecipeProvider
 				.define('1', LBRItems.valueOf("and_gate"))
 				.define('2', LBRItems.valueOf("nor_gate")));
 		
-		logicComponent(output, LogicTypes.READER, (b) -> b
-				.pattern("R  ")
-				.pattern("QrR")
-				.pattern("R  "));
-		
 		logicComponent(output, LogicTypes.SEQUENCER, (b) -> b
 				.pattern("GGG")
 				.pattern("ErR")
@@ -108,8 +115,7 @@ public final class LogicRecipesDatagenProvider extends RecipeProvider
 		
 		logicComponent(output, LogicTypes.PULSE_THROTTLER, (b) -> b
 				.pattern("RrR")
-				.pattern(" P ")
-				.define('P', Items.STICKY_PISTON));
+				.pattern(" p "));
 		
 		logicComponent(output, LogicTypes.SELECTOR, (b) -> b
 				.pattern("EGR")

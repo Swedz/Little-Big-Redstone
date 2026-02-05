@@ -36,6 +36,7 @@ import net.swedz.tesseract.neoforge.api.Bounds;
 import net.swedz.tesseract.neoforge.api.Tickable;
 import net.swedz.tesseract.neoforge.packet.CustomPacket;
 
+import java.util.UUID;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
@@ -44,6 +45,8 @@ public final class MicrochipBlockEntity extends BlockEntity implements MenuProvi
 	public static final Bounds CIRCUIT_BOUNDS = new Bounds(0, 0, 240, 128);
 	
 	private final Microchip microchip;
+	
+	private UUID placedBy;
 	
 	private boolean            modelDataChanged = true;
 	private MicrochipModelData modelData;
@@ -69,6 +72,17 @@ public final class MicrochipBlockEntity extends BlockEntity implements MenuProvi
 	public Component getDisplayName()
 	{
 		return Component.translatable(this.getBlockState().getBlock().getDescriptionId());
+	}
+	
+	public void setPlacedBy(UUID uuid)
+	{
+		placedBy = uuid;
+		this.setChanged();
+	}
+	
+	public UUID getPlacedBy()
+	{
+		return placedBy;
 	}
 	
 	public void sync()
@@ -116,6 +130,10 @@ public final class MicrochipBlockEntity extends BlockEntity implements MenuProvi
 	{
 		if(this.isMenuValid(player))
 		{
+			if(placedBy == null)
+			{
+				this.setPlacedBy(player.getUUID());
+			}
 			player.openMenu(this, (buf) ->
 			{
 				buf.writeBlockPos(worldPosition);
@@ -141,18 +159,21 @@ public final class MicrochipBlockEntity extends BlockEntity implements MenuProvi
 			return;
 		}
 		
-		microchip.awarenesses().preTick(new AwarenessContext(this));
+		var awarenesses = microchip.awarenesses();
+		var awarenessContext = new AwarenessContext(this);
+		awarenesses.removed(awarenessContext);
+		awarenesses.preTick(awarenessContext);
 		
-		LogicContext context = new LogicContext(this);
-		microchip.tickLogic(context);
+		var logicContext = new LogicContext(this);
+		microchip.tickLogic(logicContext);
 		
-		boolean microchipDirty = microchip.isDirty();
-		boolean contextDirty = context.isDirty();
+		var microchipDirty = microchip.isDirty();
+		var contextDirty = logicContext.isDirty();
 		if(microchipDirty || contextDirty)
 		{
 			microchip.markClean();
 			
-			microchip.awarenesses().postTick(new AwarenessContext(this), microchipDirty, contextDirty);
+			awarenesses.postTick(awarenessContext, microchipDirty, contextDirty);
 			
 			this.setChanged();
 			
@@ -171,9 +192,17 @@ public final class MicrochipBlockEntity extends BlockEntity implements MenuProvi
 			}
 			else if(contextDirty)
 			{
-				this.publishUpdatePacket((container) -> new UpdateComponentsMicrochipMenuPacket(container, context.getDirtyEntries()));
+				this.publishUpdatePacket((container) -> new UpdateComponentsMicrochipMenuPacket(container, logicContext.getDirtyEntries()));
 			}
 		}
+	}
+	
+	@Override
+	public void setRemoved()
+	{
+		super.setRemoved();
+		
+		microchip.awarenesses().removedAll(new AwarenessContext(this));
 	}
 	
 	private void publishUpdatePacket(Function<Integer, CustomPacket> containerPacketCreator, Supplier<CustomPacket> watcherPacketCreator)
@@ -232,6 +261,8 @@ public final class MicrochipBlockEntity extends BlockEntity implements MenuProvi
 			microchip.clear();
 		}
 		
+		placedBy = tag.hasUUID("placed_by") ? tag.getUUID("placed_by") : null;
+		
 		if(level != null && level.isClientSide())
 		{
 			if(tag.contains("microchip_model_data", Tag.TAG_COMPOUND))
@@ -255,5 +286,14 @@ public final class MicrochipBlockEntity extends BlockEntity implements MenuProvi
 		super.saveAdditional(tag, registries);
 		
 		tag.put("microchip", Microchip.CODEC.encodeStart(NbtOps.INSTANCE, microchip).getOrThrow());
+		
+		if(placedBy != null)
+		{
+			tag.putUUID("placed_by", placedBy);
+		}
+		else
+		{
+			tag.remove("placed_by");
+		}
 	}
 }

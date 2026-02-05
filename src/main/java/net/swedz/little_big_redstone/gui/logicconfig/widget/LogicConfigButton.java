@@ -1,4 +1,4 @@
-package net.swedz.little_big_redstone.gui.logicconfig.button;
+package net.swedz.little_big_redstone.gui.logicconfig.widget;
 
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.AbstractButton;

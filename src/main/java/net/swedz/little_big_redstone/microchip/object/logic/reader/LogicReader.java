@@ -90,7 +90,7 @@ public final class LogicReader extends LogicComponent<LogicReader, LogicReaderCo
 			if(config.mode == LogicReaderMode.ITEM)
 			{
 				var awareness = context.awareness(AwarenessTypes.CAPABILITY_ITEM);
-				var handler = awareness.get(context.level(), context.pos(), config.direction);
+				var handler = awareness.get(context.level(), context.blockPos(), config.direction);
 				if(handler != null)
 				{
 					int totalItems = 0;
@@ -115,7 +115,7 @@ public final class LogicReader extends LogicComponent<LogicReader, LogicReaderCo
 			else if(config.mode == LogicReaderMode.FLUID)
 			{
 				var awareness = context.awareness(AwarenessTypes.CAPABILITY_FLUID);
-				var handler = awareness.get(context.level(), context.pos(), config.direction);
+				var handler = awareness.get(context.level(), context.blockPos(), config.direction);
 				if(handler != null)
 				{
 					int totalFluid = 0;
@@ -132,7 +132,7 @@ public final class LogicReader extends LogicComponent<LogicReader, LogicReaderCo
 			else if(config.mode == LogicReaderMode.ENERGY)
 			{
 				var awareness = context.awareness(AwarenessTypes.CAPABILITY_ENERGY);
-				var handler = awareness.get(context.level(), context.pos(), config.direction);
+				var handler = awareness.get(context.level(), context.blockPos(), config.direction);
 				if(handler != null)
 				{
 					int totalEnergy = handler.getEnergyStored();
