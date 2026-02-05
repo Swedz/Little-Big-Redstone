@@ -16,9 +16,14 @@ import java.util.List;
 
 public final class MicrochipWidgetContext
 {
+	public static boolean isWire(ItemStack stack)
+	{
+		return stack.is(LBRItems.REDSTONE_BIT.asItem());
+	}
+	
 	public static boolean canInteractWire(ItemStack stack)
 	{
-		return stack.isEmpty() || stack.is(LBRItems.REDSTONE_BIT.asItem());
+		return stack.isEmpty() || isWire(stack);
 	}
 	
 	public static boolean canInteractDyeableObject(ItemStack stack)
@@ -38,62 +43,37 @@ public final class MicrochipWidgetContext
 		
 		List<Wire> topLayerWires = Lists.newArrayList();
 		
-		MicrochipObject object = microchip.findAt(boardMouseX, boardMouseY);
+		int padding = isWire(carriedStack) ? 2 : 0;
+		MicrochipObject object = microchip.findAt(boardMouseX, boardMouseY, padding);
 		
 		StickyNoteEntry note = canInteractDyeableObject(carriedStack) && object instanceof StickyNoteEntry o ? o : null;
 		
 		// Find the hovered logic component, if any
-		LogicEntry logic = canInteractDyeableObject(carriedStack) && object instanceof LogicEntry o ? o : null;
+		LogicEntry logic = (canInteractDyeableObject(carriedStack) || isWire(carriedStack)) && object instanceof LogicEntry o ? o : null;
 		LogicSelectedPort port = null;
-		boolean portInput = true;
 		Wire wire = null;
 		
-		if(canInteractWire(carriedStack) && object == null)
+		// Find the nearest port for the hovered logic component
+		if(isWire(carriedStack) && logic != null)
 		{
-			// Try to find the hovered port, if any
-			port = microchip.components().findPortAt(boardMouseX, boardMouseY, true);
-			if(port == null)
+			port = microchip.components().findNearestPortAt(logic, boardMouseX, boardMouseY, widget.hasSelectedPort());
+		}
+		
+		// Try to find the hovered wire, if any
+		if(canInteractWire(carriedStack) && object == null && !widget.hasSelectedPort())
+		{
+			wire = previous.wire();
+			if(wire == null || !panel.wires().isHovering(wire, boardMouseX, boardMouseY))
 			{
-				port = microchip.components().findPortAt(boardMouseX, boardMouseY, false);
-				if(port != null)
-				{
-					portInput = false;
-					// Only allow selecting the wire in the output port if no item is held in the cursor
-					if(carriedStack.isEmpty())
-					{
-						var wires = microchip.wires().getByOutputSlot(port);
-						if(!wires.isEmpty())
-						{
-							wire = wires.getLast();
-						}
-					}
-				}
-			}
-			else
-			{
-				wire = microchip.wires().getByInputSlot(port);
-			}
-			if(port != null)
-			{
-				logic = microchip.components().get(port.slot());
-			}
-			
-			// If no port was found and no port is selected, try to find the hovered wire, if any
-			if(logic == null && !widget.hasSelectedPort())
-			{
-				wire = previous.wire();
-				if(wire == null || !panel.wires().isHovering(wire, boardMouseX, boardMouseY))
-				{
-					wire = panel.wires().findHoveredWire(boardMouseX, boardMouseY);
-					if(wire != null)
-					{
-						logic = microchip.components().get(wire.output().slot());
-					}
-				}
-				else if(wire != null && panel.wires().isHovering(wire, boardMouseX, boardMouseY))
+				wire = panel.wires().findHoveredWire(boardMouseX, boardMouseY);
+				if(wire != null)
 				{
 					logic = microchip.components().get(wire.output().slot());
 				}
+			}
+			else if(wire != null && panel.wires().isHovering(wire, boardMouseX, boardMouseY))
+			{
+				logic = microchip.components().get(wire.output().slot());
 			}
 		}
 		
@@ -113,7 +93,7 @@ public final class MicrochipWidgetContext
 			}
 		}
 		
-		return new MicrochipWidgetContext(widget, boardMouseX, boardMouseY, carriedStack, object, note, logic, port, portInput, wire, topLayerWires);
+		return new MicrochipWidgetContext(widget, boardMouseX, boardMouseY, carriedStack, object, note, logic, port, port == null || port.input(), wire, topLayerWires);
 	}
 	
 	private final boolean onBoard;
