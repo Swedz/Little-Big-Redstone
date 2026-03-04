@@ -1,7 +1,8 @@
 package net.swedz.little_big_redstone.item;
 
-import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.Style;
+import net.minecraft.network.chat.TextColor;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -29,7 +30,8 @@ public final class LogicItem extends Item
 	
 	private static void appendColorTooltip(List<Component> lines, DyeColor color)
 	{
-		lines.add(Component.translatable("item.color", Component.translatable("color.minecraft." + color.getName())).withStyle(ChatFormatting.GRAY));
+		lines.add(Component.translatable("item.color", Component.translatable("color.minecraft." + color.getName()))
+				.withStyle(Style.EMPTY.withColor(TextColor.fromRgb(0xA9A9A9))));
 	}
 	
 	@Override
