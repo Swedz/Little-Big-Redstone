@@ -8,7 +8,9 @@ import net.minecraft.world.inventory.ClickType;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.ItemStack;
+import net.neoforged.neoforge.items.IItemHandler;
 import net.neoforged.neoforge.items.ItemHandlerHelper;
+import net.neoforged.neoforge.items.wrapper.CombinedInvWrapper;
 import net.neoforged.neoforge.items.wrapper.PlayerMainInvWrapper;
 import net.swedz.little_big_redstone.LBR;
 import net.swedz.little_big_redstone.LBRItems;
@@ -105,6 +107,14 @@ public final class MicrochipMenu extends PlayerInventoryContainerMenu
 	public MicrochipLogicArrayItemHandler getLogicArrayItemHandler()
 	{
 		return logicArrayItemHandler;
+	}
+	
+	public IItemHandler getDestinationInventoryItemHandler(Player player)
+	{
+		var playerInventory = new PlayerMainInvWrapper(player.getInventory());
+		return logicArrayItemHandler.isCreativeMode() ?
+				playerInventory :
+				new CombinedInvWrapper(logicArrayItemHandler, playerInventory);
 	}
 	
 	public int getCarriedComponentSlot()

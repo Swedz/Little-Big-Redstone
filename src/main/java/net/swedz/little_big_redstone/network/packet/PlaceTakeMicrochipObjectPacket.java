@@ -6,7 +6,6 @@ import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.neoforge.items.ItemHandlerHelper;
-import net.neoforged.neoforge.items.wrapper.PlayerMainInvWrapper;
 import net.swedz.little_big_redstone.LBR;
 import net.swedz.little_big_redstone.LBRComponents;
 import net.swedz.little_big_redstone.LBRItems;
@@ -114,7 +113,7 @@ public record PlaceTakeMicrochipObjectPacket(
 					{
 						microchip.stickyNotes().remove(note);
 						var stack = note.toStack();
-						if(!shift || TransferHelper.insert(new PlayerMainInvWrapper(player.getInventory()), stack) <= 0)
+						if(!shift || TransferHelper.insert(menu.getDestinationInventoryItemHandler(player), stack) <= 0)
 						{
 							menu.setCarried(stack);
 						}
@@ -124,7 +123,7 @@ public record PlaceTakeMicrochipObjectPacket(
 					{
 						var wiresPopped = components.remove(logic);
 						var stack = logic.toStack();
-						if(!shift || TransferHelper.insert(new PlayerMainInvWrapper(player.getInventory()), stack) <= 0)
+						if(!shift || TransferHelper.insert(menu.getDestinationInventoryItemHandler(player), stack) <= 0)
 						{
 							menu.setCarried(stack);
 							menu.setCarriedWires(logic.slot(), wiresPopped);

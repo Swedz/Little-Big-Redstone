@@ -13,7 +13,6 @@ import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.Style;
 import net.minecraft.world.item.DyeColor;
-import net.neoforged.neoforge.items.wrapper.PlayerMainInvWrapper;
 import net.swedz.little_big_redstone.LBR;
 import net.swedz.little_big_redstone.LBRColors;
 import net.swedz.little_big_redstone.LBRComponents;
@@ -201,7 +200,7 @@ public final class MicrochipWidget implements GuiEventListener, Renderable, Narr
 			microchip.stickyNotes().remove(note);
 			microchip.markDirty();
 			var stack = note.toStack();
-			if(!shift || TransferHelper.insert(new PlayerMainInvWrapper(Minecraft.getInstance().player.getInventory()), stack) <= 0)
+			if(!shift || TransferHelper.insert(menu.getDestinationInventoryItemHandler(Minecraft.getInstance().player), stack) <= 0)
 			{
 				menu.setCarried(stack);
 			}
@@ -304,7 +303,7 @@ public final class MicrochipWidget implements GuiEventListener, Renderable, Narr
 			microchip.markDirty();
 			panel.wires().rebuildPaths();
 			var stack = logic.toStack();
-			if(!shift || TransferHelper.insert(new PlayerMainInvWrapper(Minecraft.getInstance().player.getInventory()), stack) <= 0)
+			if(!shift || TransferHelper.insert(menu.getDestinationInventoryItemHandler(Minecraft.getInstance().player), stack) <= 0)
 			{
 				menu.setCarried(stack);
 				menu.setCarriedWires(logic.slot(), wiresPopped);
