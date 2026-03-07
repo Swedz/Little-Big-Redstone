@@ -17,7 +17,9 @@ import net.swedz.little_big_redstone.LBR;
 import net.swedz.little_big_redstone.LBRClient;
 import net.swedz.little_big_redstone.LBRComponents;
 import net.swedz.little_big_redstone.block.microchip.MicrochipBlockEntity;
-import net.swedz.little_big_redstone.item.FloppyDiskItem;
+import net.swedz.little_big_redstone.item.floppydisk.FloppyDiskInstallResult;
+import net.swedz.little_big_redstone.item.floppydisk.FloppyDiskInstaller;
+import net.swedz.little_big_redstone.item.floppydisk.FloppyDiskItem;
 import net.swedz.little_big_redstone.microchip.Microchip;
 import net.swedz.little_big_redstone.network.packet.RequestMicrochipWatcherPacket;
 import net.swedz.little_big_redstone.proxy.LBRProxy;
@@ -31,11 +33,11 @@ import java.util.Objects;
 @EventBusSubscriber(modid = LBR.ID, value = Dist.CLIENT)
 public final class FloppyDiskConsumeItemsGuiOverlay
 {
-	private static boolean                      SHOULD_FADE;
-	private static FloppyDiskItem.ConsumeResult ITEMS;
-	private static int                          DISPLAY_TIME;
+	private static boolean                 SHOULD_FADE;
+	private static FloppyDiskInstallResult ITEMS;
+	private static int                     DISPLAY_TIME;
 	
-	private static void displayItems(FloppyDiskItem.ConsumeResult items)
+	private static void displayItems(FloppyDiskInstallResult items)
 	{
 		SHOULD_FADE = false;
 		ITEMS = items;
@@ -146,7 +148,7 @@ public final class FloppyDiskConsumeItemsGuiOverlay
 				var microchip = stack.get(LBRComponents.FLOPPY_DISK);
 				if(microchip != null)
 				{
-					var items = FloppyDiskItem.consumeItems(player, microchip, watchedMicrochip, true);
+					var items = FloppyDiskInstaller.consumeItems(player, microchip, watchedMicrochip, true);
 					displayItems(items);
 					return true;
 				}
