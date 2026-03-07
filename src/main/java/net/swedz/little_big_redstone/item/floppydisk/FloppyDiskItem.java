@@ -195,7 +195,9 @@ public final class FloppyDiskItem extends Item implements DyeColoredItem
 	
 	private static ItemContainerContents convertMicrochipToContents(Microchip.Immutable microchip)
 	{
-		return ItemContainerContents.fromItems(FloppyDiskInstaller.asItemStacks(microchip));
+		return ItemContainerContents.fromItems(FloppyDiskInstaller.asItemStacks(microchip).stream()
+				.sorted(FloppyDiskInstaller.comparator())
+				.toList());
 	}
 	
 	@Override

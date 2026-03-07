@@ -7,7 +7,6 @@ import net.neoforged.neoforge.items.IItemHandler;
 import net.neoforged.neoforge.items.wrapper.EmptyItemHandler;
 
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
 
@@ -25,8 +24,8 @@ public record FloppyDiskInstallResult(
 	{
 		present = Lists.newArrayList(present);
 		missing = Lists.newArrayList(missing);
-		present.sort(Comparator.comparingInt(ItemStack::getCount).reversed());
-		missing.sort(Comparator.comparingInt(ItemStack::getCount).reversed());
+		present.sort(FloppyDiskInstaller.comparator());
+		missing.sort(FloppyDiskInstaller.comparator());
 		this.present = Collections.unmodifiableList(present);
 		this.missing = Collections.unmodifiableList(missing);
 		this.remainingDrops = remainingDrops;

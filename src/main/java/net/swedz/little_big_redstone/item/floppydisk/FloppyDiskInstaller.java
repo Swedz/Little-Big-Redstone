@@ -18,6 +18,7 @@ import net.swedz.little_big_redstone.microchip.Microchip;
 import net.swedz.tesseract.neoforge.api.tuple.Pair;
 import net.swedz.tesseract.neoforge.helper.TransferHelper;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -29,6 +30,14 @@ import java.util.stream.Stream;
 
 public final class FloppyDiskInstaller
 {
+	public static Comparator<ItemStack> comparator()
+	{
+		return Comparator
+				.comparingInt(ItemStack::getCount)
+				.thenComparing((stack) -> stack.getItemHolder().getKey())
+				.reversed();
+	}
+	
 	public record ItemWithCount(
 			Item item,
 			DataComponentMap data,
