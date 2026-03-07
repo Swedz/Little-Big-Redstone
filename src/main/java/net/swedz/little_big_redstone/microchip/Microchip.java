@@ -6,7 +6,7 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.network.codec.StreamCodec;
-import net.swedz.little_big_redstone.item.FloppyDiskItem;
+import net.swedz.little_big_redstone.item.floppydisk.FloppyDiskItem;
 import net.swedz.little_big_redstone.microchip.awareness.MicrochipAwarenesses;
 import net.swedz.little_big_redstone.microchip.object.MicrochipObject;
 import net.swedz.little_big_redstone.microchip.object.MicrochipObjectContainer;
@@ -361,6 +361,16 @@ public final class Microchip
 		public Iterable<LogicEntry> components()
 		{
 			return components;
+		}
+		
+		private List<MicrochipObjectContainer<?, ?>> objectContainers()
+		{
+			return List.of(stickyNotes, components);
+		}
+		
+		public Iterable<MicrochipObject> objects()
+		{
+			return Iterables.concat(this.objectContainers());
 		}
 		
 		public int wireCount()
