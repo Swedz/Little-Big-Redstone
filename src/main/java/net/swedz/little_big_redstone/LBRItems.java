@@ -7,7 +7,7 @@ import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.capabilities.Capabilities;
 import net.neoforged.neoforge.client.model.generators.ModelFile;
 import net.neoforged.neoforge.registries.DeferredRegister;
-import net.swedz.little_big_redstone.item.FloppyDiskItem;
+import net.swedz.little_big_redstone.item.floppydisk.FloppyDiskItem;
 import net.swedz.little_big_redstone.item.LogicItem;
 import net.swedz.little_big_redstone.item.logicarray.LogicArrayItem;
 import net.swedz.little_big_redstone.item.logicarray.LogicArrayItemHandler;
