@@ -186,10 +186,8 @@ public final class RedstoneAwareness extends MicrochipAwareness<RedstoneAwarenes
 		}
 		if(powerChanged || newState != state)
 		{
-			if(level.setBlock(pos, newState, Block.UPDATE_CLIENTS))
-			{
-				this.sendUpdates(level, pos, state, newState, powerChanges);
-			}
+			level.setBlock(pos, newState, Block.UPDATE_CLIENTS);
+			this.sendUpdates(level, pos, state, newState, powerChanges);
 		}
 	}
 	
