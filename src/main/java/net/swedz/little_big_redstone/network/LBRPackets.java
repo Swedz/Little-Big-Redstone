@@ -8,6 +8,7 @@ import net.swedz.little_big_redstone.LBR;
 import net.swedz.little_big_redstone.network.packet.DyeMicrochipObjectPacket;
 import net.swedz.little_big_redstone.network.packet.FloppyDiskGuiOverlayUpdatePacket;
 import net.swedz.little_big_redstone.network.packet.FloppyDiskLoadPacket;
+import net.swedz.little_big_redstone.network.packet.FloppyDiskSavePacket;
 import net.swedz.little_big_redstone.network.packet.OpenLogicConfigPacket;
 import net.swedz.little_big_redstone.network.packet.PickStickyNotePacket;
 import net.swedz.little_big_redstone.network.packet.PickStickyNoteResponsePacket;
@@ -44,6 +45,7 @@ public final class LBRPackets
 		create("dye_microchip_object", DyeMicrochipObjectPacket.class, DyeMicrochipObjectPacket.STREAM_CODEC);
 		create("floppy_disk_gui_overlay_update", FloppyDiskGuiOverlayUpdatePacket.class, FloppyDiskGuiOverlayUpdatePacket.STREAM_CODEC);
 		create("floppy_disk_load", FloppyDiskLoadPacket.class, FloppyDiskLoadPacket.STREAM_CODEC);
+		create("floppy_disk_save", FloppyDiskSavePacket.class, FloppyDiskSavePacket.STREAM_CODEC);
 		create("open_logic_config", OpenLogicConfigPacket.class, OpenLogicConfigPacket.STREAM_CODEC);
 		create("pick_sticky_note", PickStickyNotePacket.class, PickStickyNotePacket.STREAM_CODEC);
 		create("pick_sticky_note_response", PickStickyNoteResponsePacket.class, PickStickyNoteResponsePacket.STREAM_CODEC);
