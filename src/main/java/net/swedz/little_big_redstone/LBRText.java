@@ -88,6 +88,12 @@ public interface LBRText
 	@WithStyle("green")
 	MutableComponent floppyDiskFileSaved(String name);
 	
+	@LangKey(text = "Program: %s")
+	@WithStyle("tooltip")
+	MutableComponent floppyDiskProgramName(
+			@WithStyle("white") String name
+	);
+	
 	@LangKey(text = "Can save, copy & paste Microchip programs.")
 	@WithStyle("tooltip")
 	MutableComponent floppyDiskHelp1();

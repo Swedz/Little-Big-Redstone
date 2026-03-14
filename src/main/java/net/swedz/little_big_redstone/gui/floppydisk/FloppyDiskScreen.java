@@ -16,8 +16,10 @@ import net.neoforged.fml.loading.FMLPaths;
 import net.swedz.little_big_redstone.LBR;
 import net.swedz.little_big_redstone.LBRComponents;
 import net.swedz.little_big_redstone.LBRTags;
+import net.swedz.little_big_redstone.item.floppydisk.FloppyDiskProgramName;
 import net.swedz.little_big_redstone.microchip.Microchip;
 import net.swedz.little_big_redstone.network.packet.FloppyDiskLoadPacket;
+import net.swedz.little_big_redstone.network.packet.FloppyDiskSavePacket;
 import net.swedz.tesseract.neoforge.api.Assert;
 import net.swedz.tesseract.neoforge.gui.widget.AutoFillEditBox;
 import net.swedz.tesseract.neoforge.helper.guigraphics.TesseractGuiGraphics;
@@ -72,8 +74,8 @@ public final class FloppyDiskScreen extends Screen
 		this.addRenderableWidget(Button.builder(LBR.text().floppyDiskButtonClose(), (b) -> this.close()).bounds(leftPos, topPos + uiHeight - 20, uiWidth, 20).build());
 		
 		input = new AutoFillEditBox(minecraft.font, leftPos, topPos + uiHeight / 2 - 20, uiWidth, 20, Component.empty(), () -> existingFiles, 3);
-		input.setMaxLength(32);
-		input.setFilter((s) -> s.matches("[a-zA-Z0-9_]*"));
+		input.setMaxLength(FloppyDiskProgramName.MAX_LENGTH);
+		input.setFilter((s) -> s.matches(FloppyDiskProgramName.PATTERN));
 		input.setResponder((s) ->
 		{
 			load.active = existingFiles.contains(s);
@@ -103,7 +105,7 @@ public final class FloppyDiskScreen extends Screen
 		{
 			Files.createDirectories(path());
 		}
-		catch (IOException ex)
+		catch(IOException ex)
 		{
 			LBR.LOGGER.error("Failed to create microchips data file path");
 			throw new RuntimeException(ex);
@@ -125,7 +127,7 @@ public final class FloppyDiskScreen extends Screen
 		{
 			return List.of();
 		}
-		try (var files = Files.list(path))
+		try(var files = Files.list(path))
 		{
 			return files
 					.filter(Files::isRegularFile)
@@ -137,7 +139,7 @@ public final class FloppyDiskScreen extends Screen
 					})
 					.toList();
 		}
-		catch (IOException ex)
+		catch(IOException ex)
 		{
 			LBR.LOGGER.warn("Failed to read files", ex);
 			return List.of();
@@ -150,13 +152,13 @@ public final class FloppyDiskScreen extends Screen
 		{
 			var path = path(name);
 			var tag = Microchip.Immutable.CODEC.encodeStart(NbtOps.INSTANCE, microchip).getOrThrow();
-			try (OutputStream outputStream = Files.newOutputStream(path))
+			try(OutputStream outputStream = Files.newOutputStream(path))
 			{
 				outputStream.write(new SnbtPrinterTagVisitor().visit(tag).getBytes(StandardCharsets.UTF_8));
 			}
 			return true;
 		}
-		catch (Exception ex)
+		catch(Exception ex)
 		{
 			LBR.LOGGER.error("Failed to save microchip {} to file", name, ex);
 			return false;
@@ -169,7 +171,7 @@ public final class FloppyDiskScreen extends Screen
 		{
 			return Files.exists(path(name));
 		}
-		catch (IOException ex)
+		catch(IOException ex)
 		{
 			LBR.LOGGER.error("Failed to build microchip directory", ex);
 			return false;
@@ -183,7 +185,7 @@ public final class FloppyDiskScreen extends Screen
 			var path = path(name);
 			if(Files.exists(path))
 			{
-				try (var inputStream = new FastBufferedInputStream(Files.newInputStream(path)))
+				try(var inputStream = new FastBufferedInputStream(Files.newInputStream(path)))
 				{
 					var tag = TagParser.parseTag(new String(inputStream.readAllBytes(), StandardCharsets.UTF_8));
 					var microchip = Microchip.Immutable.CODEC.parse(NbtOps.INSTANCE, tag).getOrThrow();
@@ -191,7 +193,7 @@ public final class FloppyDiskScreen extends Screen
 				}
 			}
 		}
-		catch (Exception ex)
+		catch(Exception ex)
 		{
 			LBR.LOGGER.error("Failed to read microchip {} from file", name, ex);
 		}
@@ -217,11 +219,13 @@ public final class FloppyDiskScreen extends Screen
 		
 		var microchip = stack.get(LBRComponents.FLOPPY_DISK);
 		
-		String name = input.getValue();
-		if(name.isEmpty())
+		var name = input.getValue();
+		if(name.isEmpty() || !FloppyDiskProgramName.isValid(name))
 		{
 			return;
 		}
+		
+		new FloppyDiskSavePacket(hand, new FloppyDiskProgramName(name)).sendToServer();
 		
 		boolean saved = saveToFile(name, microchip);
 		player.sendSystemMessage(saved ?
@@ -241,13 +245,13 @@ public final class FloppyDiskScreen extends Screen
 			return;
 		}
 		
-		String name = input.getValue();
-		if(fileExists(name))
+		var name = input.getValue();
+		if(fileExists(name) && FloppyDiskProgramName.isValid(name))
 		{
 			var microchip = loadFromFile(name);
 			if(microchip.isPresent())
 			{
-				new FloppyDiskLoadPacket(hand, name, microchip.get()).sendToServer();
+				new FloppyDiskLoadPacket(hand, new FloppyDiskProgramName(name), microchip.get()).sendToServer();
 			}
 			else
 			{

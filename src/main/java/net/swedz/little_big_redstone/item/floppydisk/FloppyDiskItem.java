@@ -1,6 +1,7 @@
 package net.swedz.little_big_redstone.item.floppydisk;
 
 import net.minecraft.core.component.DataComponents;
+import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -10,6 +11,7 @@ import net.minecraft.world.inventory.tooltip.TooltipComponent;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.component.ItemContainerContents;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
@@ -31,6 +33,7 @@ import net.swedz.little_big_redstone.proxy.LBRProxy;
 import net.swedz.tesseract.neoforge.event.PlayerInventoryChangeEvent;
 import net.swedz.tesseract.neoforge.proxy.Proxies;
 
+import java.util.List;
 import java.util.Optional;
 
 @EventBusSubscriber(modid = LBR.ID)
@@ -40,7 +43,9 @@ public final class FloppyDiskItem extends Item implements DyeColoredItem
 	
 	public FloppyDiskItem(Properties properties, DyeColor color)
 	{
-		super(properties.stacksTo(1).component(LBRComponents.FLOPPY_DISK, null));
+		super(properties
+				.stacksTo(1)
+				.component(LBRComponents.FLOPPY_DISK, null));
 		this.color = color;
 	}
 	
@@ -114,8 +119,6 @@ public final class FloppyDiskItem extends Item implements DyeColoredItem
 		var player = context.getPlayer();
 		if(player != null)
 		{
-			var usedHand = context.getHand();
-			var itemStack = player.getItemInHand(usedHand);
 			var hitBlockEntity = context.getLevel().getBlockEntity(context.getClickedPos());
 			if(hitBlockEntity instanceof MicrochipBlockEntity microchipBlockEntity)
 			{
@@ -123,14 +126,15 @@ public final class FloppyDiskItem extends Item implements DyeColoredItem
 				{
 					if(player.isShiftKeyDown())
 					{
-						itemStack.set(LBRComponents.FLOPPY_DISK, microchipBlockEntity.microchip().immutable());
+						stack.set(LBRComponents.FLOPPY_DISK, microchipBlockEntity.microchip().immutable());
+						stack.remove(LBRComponents.FLOPPY_DISK_PROGRAM_NAME);
 						player.displayClientMessage(LBR.text().floppyDiskSave(), true);
 					}
 					else
 					{
-						if(itemStack.has(LBRComponents.FLOPPY_DISK) && !player.getCooldowns().isOnCooldown(this))
+						if(stack.has(LBRComponents.FLOPPY_DISK) && !player.getCooldowns().isOnCooldown(this))
 						{
-							var microchip = itemStack.get(LBRComponents.FLOPPY_DISK);
+							var microchip = stack.get(LBRComponents.FLOPPY_DISK);
 							if(microchip != null)
 							{
 								var targetMicrochip = microchipBlockEntity.microchip().immutable();
@@ -169,6 +173,7 @@ public final class FloppyDiskItem extends Item implements DyeColoredItem
 		if(player.isShiftKeyDown())
 		{
 			stack.remove(LBRComponents.FLOPPY_DISK);
+			stack.remove(LBRComponents.FLOPPY_DISK_PROGRAM_NAME);
 			player.displayClientMessage(LBR.text().floppyDiskClear(), true);
 		}
 		else if(level.isClientSide())
@@ -190,6 +195,16 @@ public final class FloppyDiskItem extends Item implements DyeColoredItem
 		if(event.getEntity() instanceof ServerPlayer player)
 		{
 			new FloppyDiskGuiOverlayUpdatePacket(false).sendToClient(player);
+		}
+	}
+	
+	@Override
+	public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> lines, TooltipFlag flag)
+	{
+		if(stack.has(LBRComponents.FLOPPY_DISK_PROGRAM_NAME))
+		{
+			var name = stack.get(LBRComponents.FLOPPY_DISK_PROGRAM_NAME);
+			lines.add(LBR.text().floppyDiskProgramName(name.name()));
 		}
 	}
 	
