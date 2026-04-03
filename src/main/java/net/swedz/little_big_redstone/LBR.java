@@ -57,11 +57,14 @@ public final class LBR
 		
 		bus.addListener(RegisterPayloadHandlersEvent.class, LBRPackets::init);
 		
-		bus.addListener(FMLCommonSetupEvent.class, (event) ->
-		{
-			LBRItems.values().forEach(ItemHolder::triggerRegistrationListener);
-			LBRBlocks.values().forEach(BlockHolder::triggerRegistrationListener);
-		});
+		bus.addListener(
+				FMLCommonSetupEvent.class,
+				(event) -> event.enqueueWork(() ->
+				{
+					LBRItems.values().forEach(ItemHolder::triggerRegistrationListener);
+					LBRBlocks.values().forEach(BlockHolder::triggerRegistrationListener);
+				})
+		);
 		
 		bus.addListener(RegisterCapabilitiesEvent.class, (event) -> CapabilitiesListeners.triggerAll(ID, event));
 	}
