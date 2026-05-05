@@ -124,7 +124,7 @@ final class LogicIOConfigMenuProvider extends LogicConfigMenuProvider<LogicIOCon
 				1, 0,
 				(value) ->
 				{
-					config.signalStrength = value.intValue();
+					config.signalStrength = (int) Math.round(value);
 					this.updateComparisonButton();
 				}
 		);

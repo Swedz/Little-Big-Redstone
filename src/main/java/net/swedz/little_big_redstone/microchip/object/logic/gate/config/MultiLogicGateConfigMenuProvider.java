@@ -24,7 +24,7 @@ final class MultiLogicGateConfigMenuProvider extends LogicConfigMenuProvider<Mul
 				config.inputsAllowed().min(), config.inputsAllowed().max(),
 				config.inputs,
 				1, 0,
-				(value) -> config.inputs = value.intValue()
+				(value) -> config.inputs = (int) Math.round(value)
 		);
 	}
 }

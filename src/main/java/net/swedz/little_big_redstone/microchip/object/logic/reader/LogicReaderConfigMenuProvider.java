@@ -151,7 +151,7 @@ final class LogicReaderConfigMenuProvider extends LogicConfigMenuProvider<LogicR
 				1, 0,
 				(value) ->
 				{
-					config.signalThreshold = value.intValue();
+					config.signalThreshold = (int) Math.round(value);
 					this.updateComparisonButton();
 				}
 		).setVisible(false);

@@ -50,7 +50,7 @@ final class LogicSelectorConfigMenuProvider extends LogicConfigMenuProvider<Logi
 				config.outputsAllowed().min(), config.outputsAllowed().max(),
 				config.outputs,
 				1, 0,
-				(value) -> config.outputs = value.intValue()
+				(value) -> config.outputs = (int) Math.round(value)
 		);
 	}
 	
