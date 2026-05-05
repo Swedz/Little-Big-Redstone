@@ -52,7 +52,7 @@ final class LogicSequencerConfigMenuProvider extends LogicConfigMenuProvider<Log
 				config.outputDelay,
 				1, 0,
 				LBRTooltips.TICKS_AND_SECONDS_SLIDER_PARSER::parse,
-				(value) -> config.outputDelay = value.intValue()
+				(value) -> config.outputDelay = Math.round(value)
 		);
 	}
 	

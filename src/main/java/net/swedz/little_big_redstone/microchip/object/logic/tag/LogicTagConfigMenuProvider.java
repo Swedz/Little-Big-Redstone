@@ -79,7 +79,7 @@ final class LogicTagConfigMenuProvider extends LogicConfigMenuProvider<LogicTagC
 				config.threshold,
 				1,
 				0,
-				(value) -> config.threshold = value.intValue()
+				(value) -> config.threshold = (int) Math.round(value)
 		).setVisible(config.input);
 	}
 	

@@ -25,7 +25,7 @@ final class PulseThrottlerConfigMenuProvider extends LogicConfigMenuProvider<Pul
 				config.outputDuration,
 				1, 0,
 				LBRTooltips.TICKS_AND_SECONDS_SLIDER_PARSER::parse,
-				(value) -> config.outputDuration = value.intValue()
+				(value) -> config.outputDuration = Math.round(value)
 		);
 	}
 	
