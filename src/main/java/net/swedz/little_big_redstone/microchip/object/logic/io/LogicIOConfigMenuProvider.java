@@ -39,6 +39,10 @@ final class LogicIOConfigMenuProvider extends LogicConfigMenuProvider<LogicIOCon
 				(value) ->
 				{
 					config.input = value;
+					if(inputSignalStrengthSlider != null && outputSignalStrengthSlider != null)
+					{
+						config.signalStrength = (int) Math.round((config.input ? inputSignalStrengthSlider : outputSignalStrengthSlider).getValue());
+					}
 					this.updateSignalStrengthButton();
 					this.updateComparisonButton();
 				}
@@ -64,12 +68,23 @@ final class LogicIOConfigMenuProvider extends LogicConfigMenuProvider<LogicIOCon
 	
 	private Component signalComparisonTooltip()
 	{
-		return switch(config.signalComparison)
+		if(config.input)
 		{
-			case LESS_THAN_OR_EQUAL_TO -> LBR.text().logicConfigButtonTooltipIoSignalComparisonModeLessThanOrEqualTo(config.signalStrength);
-			case EQUAL_TO -> LBR.text().logicConfigButtonTooltipIoSignalComparisonModeEqualTo(config.signalStrength);
-			case GREATER_THAN_OR_EQUAL_TO -> LBR.text().logicConfigButtonTooltipIoSignalComparisonModeGreaterThanOrEqualTo(config.signalStrength);
-		};
+			return switch(config.signalComparison)
+			{
+				case LESS_THAN_OR_EQUAL_TO -> LBR.text().logicConfigButtonTooltipIoSignalComparisonModeLessThanOrEqualTo(config.signalStrength);
+				case EQUAL_TO -> LBR.text().logicConfigButtonTooltipIoSignalComparisonModeEqualTo(config.signalStrength);
+				case GREATER_THAN_OR_EQUAL_TO -> LBR.text().logicConfigButtonTooltipIoSignalComparisonModeGreaterThanOrEqualTo(config.signalStrength);
+			};
+		}
+		else if(config.signalStrength == 0)
+		{
+			return LBR.text().logicConfigButtonTooltipIoSignalComparisonOutputPass();
+		}
+		else
+		{
+			return LBR.text().logicConfigButtonTooltipIoSignalComparisonOutput(config.signalStrength);
+		}
 	}
 	
 	private void createComparison(LogicConfigMenuBuilder builder, int width, int height)
@@ -95,13 +110,8 @@ final class LogicIOConfigMenuProvider extends LogicConfigMenuProvider<LogicIOCon
 	{
 		if(comparisonButton != null)
 		{
-			comparisonButton.setTooltip(comparisonButton.isActive() ?
-					this.signalComparisonTooltip() :
-					(config.signalStrength == 0 ?
-							LBR.text().logicConfigButtonTooltipIoSignalComparisonOutputPass() :
-							LBR.text().logicConfigButtonTooltipIoSignalComparisonOutput(config.signalStrength)));
-			
 			comparisonButton.setActive(config.input);
+			comparisonButton.setTooltip(this.signalComparisonTooltip());
 		}
 	}
 	
@@ -137,8 +147,13 @@ final class LogicIOConfigMenuProvider extends LogicConfigMenuProvider<LogicIOCon
 				(value, string) -> this.stringifySignalStrength(input, value, string),
 				(value) ->
 				{
-					config.signalStrength = (int) Math.round(value);
-					this.updateComparisonButton();
+					// Since onChange is invoked when the button is created, we have to use this check to prevent the
+					//  input slider from forcing the signalStrength value to always be >= 1
+					if(config.input == input)
+					{
+						config.signalStrength = (int) Math.round(value);
+						this.updateComparisonButton();
+					}
 				}
 		);
 	}
