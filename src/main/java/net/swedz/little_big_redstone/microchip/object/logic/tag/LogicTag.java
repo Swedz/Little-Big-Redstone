@@ -29,26 +29,26 @@ public final class LogicTag extends LogicComponent<LogicTag, LogicTagConfig> imp
 			.group(
 					LogicTagConfig.CODEC.fieldOf("config").forGetter(LogicTag::config),
 					DyeColor.CODEC.optionalFieldOf("color").forGetter(LogicTag::color),
-					Codec.BOOL.optionalFieldOf("output", false).forGetter(LogicTag::output)
+					Codec.INT.optionalFieldOf("output", 0).forGetter(LogicTag::output)
 			)
 			.apply(instance, LogicTag::new));
 	
 	public static final StreamCodec<ByteBuf, LogicTag> STREAM_CODEC = StreamCodec.composite(
 			LogicTagConfig.STREAM_CODEC, LogicTag::config,
 			ByteBufCodecs.optional(DyeColor.STREAM_CODEC), LogicTag::color,
-			ByteBufCodecs.BOOL, LogicTag::output,
+			ByteBufCodecs.VAR_INT, LogicTag::output,
 			LogicTag::new
 	);
 	
-	private boolean outputState;
+	private int outputState;
 	
-	private LogicTag(LogicTagConfig config, Optional<DyeColor> color, boolean outputState)
+	private LogicTag(LogicTagConfig config, Optional<DyeColor> color, int outputState)
 	{
 		super(config, color);
 		this.outputState = outputState;
 	}
 	
-	private LogicTag(Optional<DyeColor> color, boolean outputState)
+	private LogicTag(Optional<DyeColor> color, int outputState)
 	{
 		super(color);
 		this.outputState = outputState;
@@ -56,7 +56,7 @@ public final class LogicTag extends LogicComponent<LogicTag, LogicTagConfig> imp
 	
 	public LogicTag()
 	{
-		this(Optional.empty(), false);
+		this(Optional.empty(), 0);
 	}
 	
 	@Override
@@ -80,7 +80,7 @@ public final class LogicTag extends LogicComponent<LogicTag, LogicTagConfig> imp
 	}
 	
 	@Override
-	protected void processTickInternal(LogicContext context, boolean[] inputs)
+	protected void processTickInternal(LogicContext context, int[] inputs)
 	{
 		if(config.input)
 		{
@@ -94,20 +94,20 @@ public final class LogicTag extends LogicComponent<LogicTag, LogicTagConfig> imp
 			outputState = inputs[0];
 			
 			var awareness = context.awareness(AwarenessTypes.LOGIC_TAG);
-			if(outputState)
+			if(outputState > 0)
 			{
-				awareness.emit(config.label);
+				awareness.emit(config.label, outputState);
 			}
 		}
 	}
 	
 	@Override
-	protected boolean outputInternal(int index)
+	protected int outputInternal(int index)
 	{
 		return outputState;
 	}
 	
-	public boolean output()
+	public int output()
 	{
 		return this.output(0);
 	}
@@ -129,7 +129,7 @@ public final class LogicTag extends LogicComponent<LogicTag, LogicTagConfig> imp
 	@Override
 	protected void internalResetForPickup()
 	{
-		outputState = false;
+		outputState = 0;
 	}
 	
 	@Override

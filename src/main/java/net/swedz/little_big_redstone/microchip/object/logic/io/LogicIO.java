@@ -27,26 +27,26 @@ public final class LogicIO extends LogicComponent<LogicIO, LogicIOConfig> implem
 			.group(
 					LogicIOConfig.CODEC.fieldOf("config").forGetter(LogicIO::config),
 					DyeColor.CODEC.optionalFieldOf("color").forGetter(LogicIO::color),
-					Codec.BOOL.optionalFieldOf("output", false).forGetter(LogicIO::output)
+					Codec.INT.optionalFieldOf("output", 0).forGetter(LogicIO::output)
 			)
 			.apply(instance, LogicIO::new));
 	
 	public static final StreamCodec<ByteBuf, LogicIO> STREAM_CODEC = StreamCodec.composite(
 			LogicIOConfig.STREAM_CODEC, LogicIO::config,
 			ByteBufCodecs.optional(DyeColor.STREAM_CODEC), LogicIO::color,
-			ByteBufCodecs.BOOL, LogicIO::output,
+			ByteBufCodecs.VAR_INT, LogicIO::output,
 			LogicIO::new
 	);
 	
-	private boolean outputState;
+	private int outputState;
 	
-	private LogicIO(LogicIOConfig config, Optional<DyeColor> color, boolean outputState)
+	private LogicIO(LogicIOConfig config, Optional<DyeColor> color, int outputState)
 	{
 		super(config, color);
 		this.outputState = outputState;
 	}
 	
-	private LogicIO(Optional<DyeColor> color, boolean outputState)
+	private LogicIO(Optional<DyeColor> color, int outputState)
 	{
 		super(color);
 		this.outputState = outputState;
@@ -54,7 +54,7 @@ public final class LogicIO extends LogicComponent<LogicIO, LogicIOConfig> implem
 	
 	public LogicIO()
 	{
-		this(Optional.empty(), false);
+		this(Optional.empty(), 0);
 	}
 	
 	@Override
@@ -72,20 +72,20 @@ public final class LogicIO extends LogicComponent<LogicIO, LogicIOConfig> implem
 	}
 	
 	@Override
-	protected void processTickInternal(LogicContext context, boolean[] inputs)
+	protected void processTickInternal(LogicContext context, int[] inputs)
 	{
 		boolean powerChanged = false;
-		boolean originalOutputState = outputState;
+		int originalOutputState = outputState;
 		if(config.input)
 		{
 			int signal = context.awareness(AwarenessTypes.REDSTONE).getInputPower(config.direction);
-			outputState = config.signalComparison.test(signal, config.signalStrength);
+			outputState = config.signalComparison.test(signal, config.signalStrength) ? signal : 0;
 		}
 		else
 		{
 			outputState = inputs[0];
 			var redstone = context.awareness(AwarenessTypes.REDSTONE);
-			int signal = outputState ? config.signalStrength : 0;
+			int signal = outputState > 0 ? (config.signalStrength == 0 ? outputState : config.signalStrength) : 0;
 			if(redstone.setOutputPowered(config.direction, signal))
 			{
 				powerChanged = true;
@@ -104,12 +104,12 @@ public final class LogicIO extends LogicComponent<LogicIO, LogicIOConfig> implem
 	}
 	
 	@Override
-	protected boolean outputInternal(int index)
+	protected int outputInternal(int index)
 	{
 		return outputState;
 	}
 	
-	public boolean output()
+	public int output()
 	{
 		return this.output(0);
 	}
@@ -130,7 +130,7 @@ public final class LogicIO extends LogicComponent<LogicIO, LogicIOConfig> implem
 	@Override
 	public void internalResetForPickup()
 	{
-		outputState = false;
+		outputState = 0;
 	}
 	
 	@Override

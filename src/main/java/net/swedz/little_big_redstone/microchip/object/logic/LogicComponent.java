@@ -87,9 +87,9 @@ public abstract class LogicComponent<L extends LogicComponent<L, C>, C extends L
 		return config.outputs();
 	}
 	
-	protected abstract void processTickInternal(LogicContext context, boolean[] inputs);
+	protected abstract void processTickInternal(LogicContext context, int[] inputs);
 	
-	public final void processTick(LogicContext context, boolean[] inputs)
+	public final void processTick(LogicContext context, int[] inputs)
 	{
 		int expectedInputs = this.inputs();
 		Assert.that(expectedInputs == inputs.length, "Mismatching logic component input sizes: expected %d but got %d".formatted(expectedInputs, inputs.length));
@@ -99,9 +99,9 @@ public abstract class LogicComponent<L extends LogicComponent<L, C>, C extends L
 		}
 	}
 	
-	protected abstract boolean outputInternal(int index);
+	protected abstract int outputInternal(int index);
 	
-	public final boolean output(int index)
+	public final int output(int index)
 	{
 		var lock = config.getOutputLock(index);
 		if(lock != null)

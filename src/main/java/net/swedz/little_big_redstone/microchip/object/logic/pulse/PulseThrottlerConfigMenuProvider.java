@@ -13,19 +13,57 @@ final class PulseThrottlerConfigMenuProvider extends LogicConfigMenuProvider<Pul
 		super(config);
 	}
 	
+	private Component stringifyDuration(double value, String string)
+	{
+		return value == 0 ?
+				LBR.text().indefinite() :
+				LBRTooltips.TICKS_AND_SECONDS_SLIDER_PARSER.parse(value, string);
+	}
+	
 	private void createDuration(LogicConfigMenuBuilder builder, int width, int height)
 	{
 		builder.addSlider(
 				LBR.text().logicConfigButtonLabelDuration(),
 				Component.empty(),
 				LBR.text().logicConfigButtonTooltipDuration(),
-				0, 0,
-				width, 18,
-				1, 60 * 20,
+				0,
+				0,
+				width,
+				18,
+				0,
+				60 * 20,
 				config.outputDuration,
-				1, 0,
-				LBRTooltips.TICKS_AND_SECONDS_SLIDER_PARSER::parse,
+				1,
+				0,
+				this::stringifyDuration,
 				(value) -> config.outputDuration = Math.round(value)
+		);
+	}
+	
+	private Component stringifySignalStrength(double value, String string)
+	{
+		return value == 0 ?
+				LBR.text().pass() :
+				Component.literal(string);
+	}
+	
+	private void createSignalStrength(LogicConfigMenuBuilder builder, int width, int height)
+	{
+		builder.addSlider(
+				LBR.text().logicConfigButtonLabelIoSignalStrength(),
+				Component.empty(),
+				LBR.text().logicConfigButtonTooltipIoSignalStrengthOutput(),
+				0,
+				22,
+				width,
+				18,
+				0,
+				15,
+				config.signalStrength,
+				1,
+				0,
+				this::stringifySignalStrength,
+				(value) -> config.signalStrength = (int) Math.round(value)
 		);
 	}
 	
@@ -33,5 +71,6 @@ final class PulseThrottlerConfigMenuProvider extends LogicConfigMenuProvider<Pul
 	public void create(LogicConfigMenuBuilder builder, int width, int height)
 	{
 		this.createDuration(builder, width, height);
+		this.createSignalStrength(builder, width, height);
 	}
 }

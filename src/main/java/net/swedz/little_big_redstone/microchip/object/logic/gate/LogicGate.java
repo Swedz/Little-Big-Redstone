@@ -75,10 +75,15 @@ public abstract class LogicGate<G extends LogicGate<G, C>, C extends LogicConfig
 	protected abstract boolean processInputs(LogicContext context, boolean[] inputs);
 	
 	@Override
-	public final void processTickInternal(LogicContext context, boolean[] inputs)
+	public final void processTickInternal(LogicContext context, int[] inputs)
 	{
 		boolean originalOutputState = outputState;
-		outputState = this.processInputs(context, inputs);
+		boolean[] inputsBinary = new boolean[inputs.length];
+		for(int index = 0; index < inputs.length; index++)
+		{
+			inputsBinary[index] = inputs[index] > 0;
+		}
+		outputState = this.processInputs(context, inputsBinary);
 		if(outputState != originalOutputState)
 		{
 			context.markDirty(this);
@@ -86,14 +91,14 @@ public abstract class LogicGate<G extends LogicGate<G, C>, C extends LogicConfig
 	}
 	
 	@Override
-	protected final boolean outputInternal(int index)
+	protected final int outputInternal(int index)
 	{
-		return outputState;
+		return outputState ? 1 : 0;
 	}
 	
 	public final boolean output()
 	{
-		return this.output(0);
+		return this.output(0) > 0;
 	}
 	
 	@Override
@@ -106,7 +111,7 @@ public abstract class LogicGate<G extends LogicGate<G, C>, C extends LogicConfig
 	@Override
 	protected void internalLoadFrom(G other)
 	{
-		outputState = other.outputInternal(0);
+		outputState = other.outputInternal(0) > 0;
 	}
 	
 	@Override

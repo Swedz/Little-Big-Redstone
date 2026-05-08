@@ -23,19 +23,19 @@ public final class RSNORLatch extends LogicComponent<RSNORLatch, RSNORLatchConfi
 	public static final MapCodec<RSNORLatch> CODEC = RecordCodecBuilder.mapCodec((instance) -> instance
 			.group(
 					DyeColor.CODEC.optionalFieldOf("color").forGetter(RSNORLatch::color),
-					Codec.BOOL.optionalFieldOf("output", false).forGetter(RSNORLatch::output)
+					Codec.INT.optionalFieldOf("output", 0).forGetter(RSNORLatch::output)
 			)
 			.apply(instance, RSNORLatch::new));
 	
 	public static final StreamCodec<ByteBuf, RSNORLatch> STREAM_CODEC = StreamCodec.composite(
 			ByteBufCodecs.optional(DyeColor.STREAM_CODEC), RSNORLatch::color,
-			ByteBufCodecs.BOOL, RSNORLatch::output,
+			ByteBufCodecs.VAR_INT, RSNORLatch::output,
 			RSNORLatch::new
 	);
 	
-	private boolean outputState;
+	private int outputState;
 	
-	private RSNORLatch(Optional<DyeColor> color, boolean outputState)
+	private RSNORLatch(Optional<DyeColor> color, int outputState)
 	{
 		super(color);
 		this.outputState = outputState;
@@ -43,7 +43,7 @@ public final class RSNORLatch extends LogicComponent<RSNORLatch, RSNORLatchConfi
 	
 	public RSNORLatch()
 	{
-		this(Optional.empty(), false);
+		this(Optional.empty(), 0);
 	}
 	
 	@Override
@@ -59,19 +59,19 @@ public final class RSNORLatch extends LogicComponent<RSNORLatch, RSNORLatchConfi
 	}
 	
 	@Override
-	protected void processTickInternal(LogicContext context, boolean[] inputs)
+	protected void processTickInternal(LogicContext context, int[] inputs)
 	{
-		boolean originalOutputState = outputState;
-		boolean set = inputs[0];
-		boolean reset = inputs[1];
+		int originalOutputState = outputState;
+		int set = inputs[0];
+		int reset = inputs[1];
 		
-		if(reset)
+		if(reset > 0)
 		{
-			outputState = false;
+			outputState = 0;
 		}
-		else if(set)
+		else if(set > 0)
 		{
-			outputState = true;
+			outputState = set;
 		}
 		
 		if(originalOutputState != outputState)
@@ -81,12 +81,12 @@ public final class RSNORLatch extends LogicComponent<RSNORLatch, RSNORLatchConfi
 	}
 	
 	@Override
-	protected boolean outputInternal(int index)
+	protected int outputInternal(int index)
 	{
 		return outputState;
 	}
 	
-	public boolean output()
+	public int output()
 	{
 		return this.output(0);
 	}
@@ -107,7 +107,7 @@ public final class RSNORLatch extends LogicComponent<RSNORLatch, RSNORLatchConfi
 	@Override
 	protected void internalResetForPickup()
 	{
-		outputState = false;
+		outputState = 0;
 	}
 	
 	@Override

@@ -26,7 +26,8 @@ public final class PulseThrottler extends LogicComponent<PulseThrottler, PulseTh
 					DyeColor.CODEC.optionalFieldOf("color").forGetter(PulseThrottler::color),
 					Codec.BOOL.optionalFieldOf("last_input", false).forGetter(PulseThrottler::lastInput),
 					Codec.LONG.optionalFieldOf("processed_ticks", 0L).forGetter(PulseThrottler::processedTicks),
-					Codec.BOOL.optionalFieldOf("output", false).forGetter(PulseThrottler::output)
+					Codec.INT.optionalFieldOf("stored_signal", 0).forGetter(PulseThrottler::storedSignal),
+					Codec.INT.optionalFieldOf("output", 0).forGetter(PulseThrottler::output)
 			)
 			.apply(instance, PulseThrottler::new));
 	
@@ -35,34 +36,38 @@ public final class PulseThrottler extends LogicComponent<PulseThrottler, PulseTh
 			ByteBufCodecs.optional(DyeColor.STREAM_CODEC), PulseThrottler::color,
 			ByteBufCodecs.BOOL, PulseThrottler::lastInput,
 			ByteBufCodecs.VAR_LONG, PulseThrottler::processedTicks,
-			ByteBufCodecs.BOOL, PulseThrottler::output,
+			ByteBufCodecs.VAR_INT, PulseThrottler::storedSignal,
+			ByteBufCodecs.VAR_INT, PulseThrottler::output,
 			PulseThrottler::new
 	);
 	
 	private boolean lastInputState;
 	private long    processedTicks;
 	
-	private boolean outputState;
+	private int storedSignal;
+	private int outputState;
 	
-	private PulseThrottler(PulseThrottlerConfig config, Optional<DyeColor> color, boolean lastInputState, long processedTicks, boolean outputState)
+	private PulseThrottler(PulseThrottlerConfig config, Optional<DyeColor> color, boolean lastInputState, long processedTicks, int storedSignal, int outputState)
 	{
 		super(config, color);
 		this.lastInputState = lastInputState;
 		this.processedTicks = processedTicks;
+		this.storedSignal = storedSignal;
 		this.outputState = outputState;
 	}
 	
-	private PulseThrottler(Optional<DyeColor> color, boolean lastInputState, long processedTicks, boolean outputState)
+	private PulseThrottler(Optional<DyeColor> color, boolean lastInputState, long processedTicks, int storedSignal, int outputState)
 	{
 		super(color);
 		this.lastInputState = lastInputState;
 		this.processedTicks = processedTicks;
+		this.storedSignal = storedSignal;
 		this.outputState = outputState;
 	}
 	
 	public PulseThrottler()
 	{
-		this(Optional.empty(), false, 0, false);
+		this(Optional.empty(), false, 0, 0, 0);
 	}
 	
 	@Override
@@ -87,48 +92,68 @@ public final class PulseThrottler extends LogicComponent<PulseThrottler, PulseTh
 		return processedTicks;
 	}
 	
-	@Override
-	protected void processTickInternal(LogicContext context, boolean[] inputs)
+	public int storedSignal()
 	{
-		boolean input = inputs[0];
+		return storedSignal;
+	}
+	
+	@Override
+	protected void processTickInternal(LogicContext context, int[] inputs)
+	{
+		int originalOutputState = outputState;
+		
+		int input = inputs[0];
 		boolean output = false;
 		
 		boolean changed = false;
 		
-		if(processedTicks >= config.outputDuration)
+		if(config.outputDuration > 0)
 		{
-			processedTicks = 0;
-			output = false;
-			changed = true;
+			if(processedTicks >= config.outputDuration)
+			{
+				processedTicks = 0;
+				output = false;
+				changed = true;
+			}
+			else if(processedTicks > 0)
+			{
+				processedTicks++;
+				output = true;
+				changed = true;
+			}
+			else if(!lastInputState && input > 0)
+			{
+				storedSignal = input;
+				processedTicks++;
+				output = true;
+				changed = true;
+			}
 		}
-		else if(!lastInputState && input)
+		else
 		{
-			processedTicks++;
-			output = true;
-			changed = true;
-		}
-		else if(processedTicks > 0)
-		{
-			processedTicks++;
-			output = true;
-			changed = true;
+			output = input > 0;
+			storedSignal = input;
 		}
 		
-		outputState = output;
-		if(changed)
+		outputState = output ? (config.signalStrength == 0 ? storedSignal : config.signalStrength) : 0;
+		if(outputState == 0)
+		{
+			storedSignal = 0;
+		}
+		if(changed || originalOutputState != outputState)
 		{
 			context.markDirty(this);
 		}
-		lastInputState = input;
+		lastInputState = input > 0;
 	}
 	
 	@Override
-	protected boolean outputInternal(int index)
+	protected int outputInternal(int index)
 	{
 		return outputState;
 	}
 	
-	public boolean output()
+	public int output()
 	{
 		return this.output(0);
 	}
@@ -136,7 +161,8 @@ public final class PulseThrottler extends LogicComponent<PulseThrottler, PulseTh
 	@Override
 	public void appendShiftHoverText(List<Component> lines)
 	{
-		lines.add(LBR.text().logicHelpPulseThrottler());
+		lines.add(LBR.text().logicHelpPulseThrottler1());
+		lines.add(LBR.text().logicHelpPulseThrottler2());
 	}
 	
 	@Override
@@ -144,6 +170,7 @@ public final class PulseThrottler extends LogicComponent<PulseThrottler, PulseTh
 	{
 		lastInputState = other.lastInputState;
 		processedTicks = other.processedTicks;
+		storedSignal = other.storedSignal;
 		outputState = other.outputState;
 	}
 	
@@ -152,7 +179,8 @@ public final class PulseThrottler extends LogicComponent<PulseThrottler, PulseTh
 	{
 		lastInputState = false;
 		processedTicks = 0;
-		outputState = false;
+		storedSignal = 0;
+		outputState = 0;
 	}
 	
 	@Override

@@ -50,14 +50,14 @@ public final class LogicDebugger extends LogicComponent<LogicDebugger, LogicDebu
 	}
 	
 	@Override
-	protected void processTickInternal(LogicContext context, boolean[] inputs)
+	protected void processTickInternal(LogicContext context, int[] inputs)
 	{
 	}
 	
 	@Override
-	protected boolean outputInternal(int index)
+	protected int outputInternal(int index)
 	{
-		return false;
+		return 0;
 	}
 	
 	@Override
