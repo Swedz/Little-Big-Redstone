@@ -38,6 +38,7 @@ public final class LogicRenderers
 		register(LogicTypes.PULSE_THROTTLER, SimpleLogicRenderer::new);
 		register(LogicTypes.SELECTOR, SimpleLogicRenderer::new);
 		register(LogicTypes.RANDOMIZER, SimpleLogicRenderer::new);
+		register(LogicTypes.COMPARATOR, SimpleLogicRenderer::new);
 		
 		register(LogicTypes.T_FLIP_FLOP, OnOffLogicRenderer::new);
 		register(LogicTypes.RS_NOR_LATCH, OnOffLogicRenderer::new);

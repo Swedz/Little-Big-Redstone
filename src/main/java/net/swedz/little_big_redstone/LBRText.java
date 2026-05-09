@@ -243,6 +243,9 @@ public interface LBRText
 	@LangKey(text = "Whether this port should input or output redstone power.")
 	MutableComponent logicConfigButtonTooltipIoMode();
 	
+	@LangKey(text = "Whether any or all input(s) need to match the signal strength comparison for the output to be ON.")
+	MutableComponent logicConfigButtonTooltipComparatorMode();
+	
 	@LangKey(text = "The input signal must be equal to %s.")
 	MutableComponent logicConfigButtonTooltipReaderSignalComparisonModeEqualTo(int signal);
 	
@@ -272,6 +275,42 @@ public interface LBRText
 	
 	@LangKey(text = "The redstone signal strength that will be outputted.")
 	MutableComponent logicConfigButtonTooltipIoSignalStrengthOutput();
+	
+	@LangKey(text = "At least one input signal must be equal to %s.")
+	MutableComponent logicConfigButtonTooltipComparatorAnySignalComparisonModeEqualTo(int signal);
+	
+	@LangKey(text = "At least one input signal must be greater than or equal to %s.")
+	MutableComponent logicConfigButtonTooltipComparatorAnySignalComparisonModeGreaterThanOrEqualTo(int signal);
+	
+	@LangKey(text = "At least one input signal must be less than or equal to %s.")
+	MutableComponent logicConfigButtonTooltipComparatorAnySignalComparisonModeLessThanOrEqualTo(int signal);
+	
+	@LangKey(text = "At least one input signal must be equal to the first input's signal.")
+	MutableComponent logicConfigButtonTooltipComparatorAnyPassSignalComparisonModeEqualTo();
+	
+	@LangKey(text = "At least one input signal must be greater than or equal to the first input's signal.")
+	MutableComponent logicConfigButtonTooltipComparatorAnyPassSignalComparisonModeGreaterThanOrEqualTo();
+	
+	@LangKey(text = "At least one input signal must be less than or equal to the first input's signal.")
+	MutableComponent logicConfigButtonTooltipComparatorAnyPassSignalComparisonModeLessThanOrEqualTo();
+	
+	@LangKey(text = "All input signals must be equal to %s.")
+	MutableComponent logicConfigButtonTooltipComparatorAllSignalComparisonModeEqualTo(int signal);
+	
+	@LangKey(text = "All input signals must be greater than or equal to %s.")
+	MutableComponent logicConfigButtonTooltipComparatorAllSignalComparisonModeGreaterThanOrEqualTo(int signal);
+	
+	@LangKey(text = "All input signals must be less than or equal to %s.")
+	MutableComponent logicConfigButtonTooltipComparatorAllSignalComparisonModeLessThanOrEqualTo(int signal);
+	
+	@LangKey(text = "All input signals must be equal to the first input's signal.")
+	MutableComponent logicConfigButtonTooltipComparatorAllPassSignalComparisonModeEqualTo();
+	
+	@LangKey(text = "All input signals must be greater than or equal to the first input's signal.")
+	MutableComponent logicConfigButtonTooltipComparatorAllPassSignalComparisonModeGreaterThanOrEqualTo();
+	
+	@LangKey(text = "All input signals must be less than or equal to the first input's signal.")
+	MutableComponent logicConfigButtonTooltipComparatorAllPassSignalComparisonModeLessThanOrEqualTo();
 	
 	@LangKey(text = "The number of outputs that this component can yield.")
 	MutableComponent logicConfigButtonTooltipOutputs();
@@ -562,6 +601,14 @@ public interface LBRText
 	@WithStyle("tooltip")
 	MutableComponent logicHelpTag3();
 	
+	@LangKey(text = "The mode determines whether all inputs or at least one must match the comparison.")
+	@WithStyle("tooltip")
+	MutableComponent logicHelpComparator1();
+	
+	@LangKey(text = "When the output is ON, the signal strength will always equal the strength being compared against.")
+	@WithStyle("tooltip")
+	MutableComponent logicHelpComparator2();
+	
 	@LangKey(text = "No")
 	@WithStyle("no")
 	MutableComponent no();
@@ -585,4 +632,10 @@ public interface LBRText
 	
 	@LangKey(text = "Indefinite")
 	MutableComponent indefinite();
+	
+	@LangKey(text = "Any")
+	MutableComponent any();
+	
+	@LangKey(text = "All")
+	MutableComponent all();
 }
