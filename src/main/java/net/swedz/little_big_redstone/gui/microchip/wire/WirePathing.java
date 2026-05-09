@@ -3,6 +3,7 @@ package net.swedz.little_big_redstone.gui.microchip.wire;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import it.unimi.dsi.fastutil.objects.ObjectHeapPriorityQueue;
+import net.swedz.little_big_redstone.LBRClient;
 import net.swedz.little_big_redstone.microchip.Microchip;
 import net.swedz.little_big_redstone.microchip.wire.Wire;
 import net.swedz.tesseract.neoforge.api.Bounds;
@@ -12,10 +13,19 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.function.Function;
 
 public final class WirePathing
 {
+	private static final ExecutorService PATHFINDER_SERVICE = Executors.newFixedThreadPool(LBRClient.config().microchipWirePathfindingThreads());
+	
+	public static void shutdownExecutor()
+	{
+		PATHFINDER_SERVICE.shutdownNow();
+	}
+	
 	private final Microchip microchip;
 	
 	private final int                      areaPaddingXY;
@@ -40,7 +50,13 @@ public final class WirePathing
 	{
 		return wire == null ?
 				this.build(startX, startY, endX, endY) :
-				paths.computeIfAbsent(wire, (__) -> this.build(startX, startY, endX, endY));
+				paths.computeIfAbsent(wire, (__) ->
+				{
+					List<Position> path = Lists.newArrayList();
+					PATHFINDER_SERVICE.execute(() ->
+							path.addAll(this.build(startX, startY, endX, endY)));
+					return path;
+				});
 	}
 	
 	public List<Position> build(int startX, int startY, int endX, int endY, List<Bounds> avoidBounds)

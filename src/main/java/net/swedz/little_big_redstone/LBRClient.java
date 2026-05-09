@@ -18,6 +18,8 @@ import net.neoforged.neoforge.client.event.RegisterMenuScreensEvent;
 import net.neoforged.neoforge.client.extensions.common.IClientItemExtensions;
 import net.neoforged.neoforge.client.extensions.common.RegisterClientExtensionsEvent;
 import net.neoforged.neoforge.client.gui.VanillaGuiLayers;
+import net.neoforged.neoforge.common.NeoForge;
+import net.neoforged.neoforge.event.GameShuttingDownEvent;
 import net.swedz.little_big_redstone.client.entity.StickyNoteEntityRenderer;
 import net.swedz.little_big_redstone.client.hud.FloppyDiskConsumeItemsGuiOverlay;
 import net.swedz.little_big_redstone.client.hud.StickyNoteViewContentsGuiOverlay;
@@ -32,6 +34,7 @@ import net.swedz.little_big_redstone.gui.logicarray.LogicArrayScreen;
 import net.swedz.little_big_redstone.gui.logicconfig.LogicConfigScreen;
 import net.swedz.little_big_redstone.gui.microchip.MicrochipScreen;
 import net.swedz.little_big_redstone.gui.microchip.logic.LogicRenderers;
+import net.swedz.little_big_redstone.gui.microchip.wire.WirePathing;
 import net.swedz.little_big_redstone.item.LogicItem;
 import net.swedz.little_big_redstone.item.stickynote.StickyNoteItem;
 import net.swedz.little_big_redstone.item.stickynote.tooltip.StickyNoteClientTooltip;
@@ -55,6 +58,8 @@ public final class LBRClient
 		FloppyDiskScreen.createPath();
 		LBRTooltips.init();
 		LogicRenderers.init();
+		
+		NeoForge.EVENT_BUS.addListener(GameShuttingDownEvent.class, (event) -> WirePathing.shutdownExecutor());
 	}
 	
 	private static LBRClientConfig CONFIG;
