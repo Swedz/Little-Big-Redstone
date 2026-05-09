@@ -17,8 +17,11 @@ import java.util.List;
 import java.util.Optional;
 
 public record LogicType<L extends LogicComponent>(
-		String id, String englishName, char symbol,
-		MapCodec<L> codec, StreamCodec<ByteBuf, L> streamCodec,
+		String id,
+		String englishName,
+		char symbol,
+		MapCodec<L> codec,
+		StreamCodec<ByteBuf, L> streamCodec,
 		LogicFactory defaultFactory
 )
 {

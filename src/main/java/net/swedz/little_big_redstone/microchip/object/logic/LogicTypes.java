@@ -74,6 +74,11 @@ public final class LogicTypes
 		return Collections.unmodifiableList(LOGICS);
 	}
 	
+	public static boolean exists(String id)
+	{
+		return LOGICS_MAP.containsKey(id);
+	}
+	
 	private static DataResult<LogicType<?>> getMaybe(String id)
 	{
 		var type = LOGICS_MAP.get(id);
