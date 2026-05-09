@@ -1,5 +1,7 @@
 package net.swedz.little_big_redstone.gui.microchip;
 
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
@@ -8,6 +10,14 @@ import net.swedz.little_big_redstone.microchip.MicrochipSize;
 
 public final class MicrochipViewPosition
 {
+	public static final Codec<MicrochipViewPosition> CODEC = RecordCodecBuilder.create((instance) -> instance
+			.group(
+					Codec.DOUBLE.fieldOf("x").forGetter(MicrochipViewPosition::x),
+					Codec.DOUBLE.fieldOf("y").forGetter(MicrochipViewPosition::y),
+					Codec.FLOAT.fieldOf("zoom").forGetter(MicrochipViewPosition::zoom)
+			)
+			.apply(instance, MicrochipViewPosition::new));
+	
 	public static final StreamCodec<ByteBuf, MicrochipViewPosition> STREAM_CODEC = StreamCodec.composite(
 			ByteBufCodecs.DOUBLE, MicrochipViewPosition::x,
 			ByteBufCodecs.DOUBLE, MicrochipViewPosition::y,

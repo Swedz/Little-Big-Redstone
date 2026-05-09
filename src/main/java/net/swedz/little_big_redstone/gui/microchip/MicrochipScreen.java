@@ -22,6 +22,7 @@ import net.swedz.little_big_redstone.gui.microchip.widget.MicrochipWidget;
 import net.swedz.little_big_redstone.gui.microchip.wire.WireEndpoints;
 import net.swedz.little_big_redstone.item.stickynote.StickyNoteItem;
 import net.swedz.little_big_redstone.microchip.object.logic.LogicComponent;
+import net.swedz.little_big_redstone.network.packet.StoreMicrochipViewPositionPacket;
 import net.swedz.tesseract.neoforge.api.Bounds;
 import net.swedz.tesseract.neoforge.helper.guigraphics.TesseractGuiGraphics;
 
@@ -41,7 +42,11 @@ public final class MicrochipScreen extends AbstractContainerScreen<MicrochipMenu
 	
 	private float partialTicks;
 	
-	public MicrochipScreen(MicrochipMenu menu, Inventory playerInventory, Component title)
+	public MicrochipScreen(
+			MicrochipMenu menu,
+			Inventory playerInventory,
+			Component title
+	)
 	{
 		super(menu, playerInventory, title);
 		
@@ -65,6 +70,14 @@ public final class MicrochipScreen extends AbstractContainerScreen<MicrochipMenu
 		super.init();
 		
 		this.addRenderableWidget(microchipWidget = new MicrochipWidget(leftPos + 8, topPos + 8, this, menu.viewPosition()));
+	}
+	
+	@Override
+	public void removed()
+	{
+		new StoreMicrochipViewPositionPacket(menu.blockPos(), menu.viewPosition()).sendToServer();
+		
+		super.removed();
 	}
 	
 	@Override
