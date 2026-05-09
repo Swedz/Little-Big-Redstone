@@ -3,7 +3,7 @@ navigation:
   title: "RS-триггер на ИЛИ-НЕ"
   icon: "rs_nor_latch"
   parent: little_big_redstone:logic.md
-  position: 24
+  position: 25
 categories:
   - logic
 item_ids:
@@ -13,6 +13,9 @@ item_ids:
 # RS-триггер на ИЛИ-НЕ
 
 <FloatingColumn width="100" align="right">
+	### Аналоговый
+    RS-триггеры на ИЛИ-НЕ выдают выходной сигнал той же силы, что и входной сигнал, который перевёл их в состояние ВКЛ.    
+    
     ### Таблица истинности
     <TruthTable inputs="2" outputs="1">
        <TruthState input="0,0" output="0" />

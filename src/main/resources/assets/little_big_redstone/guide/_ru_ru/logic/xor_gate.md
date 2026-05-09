@@ -13,6 +13,9 @@ item_ids:
 # Вентиль ИСКЛЮЧАЮЩЕЕ ИЛИ
 
 <FloatingColumn width="100" align="right">
+    ### Булевый
+	Вентили всегда выдают только значение 0 (ВЫКЛ) или 1 (ВКЛ).
+
     ### Таблица истинности
     <TruthTable inputs="2" outputs="1">
        <TruthState input="0,0" output="0" />

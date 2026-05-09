@@ -12,6 +12,13 @@ item_ids:
 
 # Секвенсор
 
+<FloatingColumn width="100" align="right">
+	### Аналоговый
+    Секвенсоры выдают выходной сигнал той же силы, что и входной. 
+    В случае секвенсоров входной сигнал не всегда должен оставаться включённым, чтобы выход был включён. 
+    В таком случае для выхода используется сила входного сигнала, который привёл к включению выхода.
+</FloatingColumn>
+
 <Row>
 	<Column>
 		<RecipeFor id="sequencer" />
@@ -21,7 +28,7 @@ item_ids:
 		<GameScene zoom="1.48" padding="3" interactive={true}>
 			<ImportStructure src="../assets/structures/sequencer.snbt" />
 			<BoxAnnotation min="2 1 0" max="3 1.5 1" color="#FFFFFF">
-				The sequencer is quite a bit more flexible than a repeater, but its similar in concept.
+				Секвенсор гораздо гибче повторителя, но по сути похож на него.
 			</BoxAnnotation>
 			<IsometricCamera yaw="150" pitch="30" />
 		</GameScene>

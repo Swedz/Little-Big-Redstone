@@ -10,7 +10,13 @@ item_ids:
   - little_big_redstone:tag
 ---
 
-# Tag
+# Тег
+
+<FloatingColumn width="100" align="right">
+	### Аналоговый
+    Теги выдают выходной сигнал той же силы, что и входной. 
+    Если входов несколько, например при пороге больше 1, используется наибольшая сила сигнала.
+</FloatingColumn>
 
 <RecipeFor id="tag" />
 

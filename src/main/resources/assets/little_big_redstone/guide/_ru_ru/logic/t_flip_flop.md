@@ -3,7 +3,7 @@ navigation:
   title: "T-триггер"
   icon: "t_flip_flop"
   parent: little_big_redstone:logic.md
-  position: 23
+  position: 24
 categories:
   - logic
 item_ids:
@@ -11,6 +11,11 @@ item_ids:
 ---
 
 # T-триггер
+
+<FloatingColumn width="100" align="right">
+	### Аналоговый
+    T-триггеры выдают выходной сигнал той же силы, что и входной сигнал, который перевёл их в состояние ВКЛ.
+</FloatingColumn>
 
 <Row>
     <Column>
