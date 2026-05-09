@@ -1,6 +1,7 @@
 {
   "values": [
     "little_big_redstone:and_gate",
+    "little_big_redstone:comparator",
     "little_big_redstone:debugger",
     "little_big_redstone:io",
     "little_big_redstone:nand_gate",

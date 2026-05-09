@@ -128,6 +128,11 @@ public final class LogicRecipesDatagenProvider extends RecipeProvider
 				.pattern("GGR")
 				.define('1', Items.DROPPER));
 		
+		logicComponent(output, LogicTypes.COMPARATOR, (b) -> b
+				.pattern("RT ")
+				.pattern("QrT")
+				.pattern("RT "));
+		
 		logicComponent(output, LogicTypes.T_FLIP_FLOP, (b) -> b
 				.pattern("1  ")
 				.pattern("2rR")

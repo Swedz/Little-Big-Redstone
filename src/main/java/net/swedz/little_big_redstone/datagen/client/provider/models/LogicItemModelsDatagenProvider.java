@@ -47,6 +47,7 @@ public final class LogicItemModelsDatagenProvider extends ItemModelProvider
 		this.logicComponent(LogicTypes.PULSE_THROTTLER, BackgroundType.SQUARE, true);
 		this.logicComponent(LogicTypes.SELECTOR, BackgroundType.SQUARE, true);
 		this.logicComponent(LogicTypes.RANDOMIZER, BackgroundType.SQUARE, true);
+		this.logicComponent(LogicTypes.COMPARATOR, BackgroundType.SQUARE, true);
 		
 		this.logicComponent(LogicTypes.T_FLIP_FLOP, BackgroundType.SQUARE, false, (b) -> b
 				.boardTexture("on", LBR.id("logic/t_flip_flop_on"))
