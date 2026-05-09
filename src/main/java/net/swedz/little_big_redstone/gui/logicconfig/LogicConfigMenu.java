@@ -1,56 +1,66 @@
 package net.swedz.little_big_redstone.gui.logicconfig;
 
-import net.minecraft.core.BlockPos;
 import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.ItemStack;
 import net.swedz.little_big_redstone.LBRMenus;
-import net.swedz.little_big_redstone.gui.microchip.MicrochipViewPosition;
-import net.swedz.little_big_redstone.microchip.object.logic.LogicEntry;
+import net.swedz.little_big_redstone.gui.logicconfig.reference.LogicConfigReference;
+import net.swedz.little_big_redstone.microchip.object.logic.LogicComponent;
 
 import java.util.function.Supplier;
 
 public final class LogicConfigMenu extends AbstractContainerMenu
 {
-	private final BlockPos          blockPos;
+	private final boolean shouldClientClose;
+	
+	private final LogicConfigReference reference;
+	
 	private final Supplier<Boolean> validChecker;
 	
-	private final DyeColor   color;
-	private final LogicEntry logicEntry;
+	private final DyeColor       color;
+	private final LogicComponent logicComponent;
 	
-	private final MicrochipViewPosition returnViewPosition;
-	
-	public LogicConfigMenu(int containerId, Inventory playerInventory,
-						   BlockPos blockPos, Supplier<Boolean> validChecker,
-						   DyeColor color, LogicEntry logicEntry,
-						   MicrochipViewPosition returnViewPosition)
+	public LogicConfigMenu(
+			int containerId,
+			Inventory playerInventory,
+			boolean shouldClientClose,
+			LogicConfigReference reference,
+			Supplier<Boolean> validChecker,
+			DyeColor color,
+			LogicComponent logicComponent
+	)
 	{
 		super(LBRMenus.LOGIC_CONFIG.get(), containerId);
 		
-		this.blockPos = blockPos;
+		this.shouldClientClose = shouldClientClose;
+		this.reference = reference;
 		this.validChecker = validChecker;
 		this.color = color;
-		this.logicEntry = logicEntry;
-		this.returnViewPosition = returnViewPosition;
+		this.logicComponent = logicComponent;
 	}
 	
-	public LogicConfigMenu(int containerId, Inventory playerInventory, RegistryFriendlyByteBuf buf)
+	public LogicConfigMenu(
+			int containerId,
+			Inventory playerInventory,
+			RegistryFriendlyByteBuf buf
+	)
 	{
 		super(LBRMenus.LOGIC_CONFIG.get(), containerId);
 		
-		this.blockPos = buf.readBlockPos();
+		this.shouldClientClose = ByteBufCodecs.BOOL.decode(buf);
+		this.reference = null;
 		this.validChecker = null;
 		this.color = DyeColor.STREAM_CODEC.decode(buf);
-		this.logicEntry = LogicEntry.STREAM_CODEC.decode(buf);
-		this.returnViewPosition = MicrochipViewPosition.STREAM_CODEC.decode(buf);
+		this.logicComponent = LogicComponent.STREAM_CODEC.decode(buf);
 	}
 	
-	public BlockPos blockPos()
+	public boolean shouldClientClose()
 	{
-		return blockPos;
+		return shouldClientClose;
 	}
 	
 	public DyeColor color()
@@ -58,14 +68,19 @@ public final class LogicConfigMenu extends AbstractContainerMenu
 		return color;
 	}
 	
-	public LogicEntry logicEntry()
+	public LogicComponent logicComponent()
 	{
-		return logicEntry;
+		return logicComponent;
 	}
 	
-	public MicrochipViewPosition returnViewPosition()
+	public void save(Player player, LogicComponent component)
 	{
-		return returnViewPosition;
+		reference.save(player, component);
+	}
+	
+	public void cancel(Player player)
+	{
+		reference.cancel(player);
 	}
 	
 	@Override
@@ -78,6 +93,6 @@ public final class LogicConfigMenu extends AbstractContainerMenu
 	public boolean stillValid(Player player)
 	{
 		return (validChecker == null || validChecker.get()) &&
-			   player.blockPosition().closerThan(blockPos, 10);
+			   reference.isStillValid(player);
 	}
 }
