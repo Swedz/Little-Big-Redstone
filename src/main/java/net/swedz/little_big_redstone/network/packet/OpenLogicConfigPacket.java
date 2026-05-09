@@ -12,9 +12,10 @@ import net.minecraft.world.item.DyeColor;
 import net.swedz.little_big_redstone.LBR;
 import net.swedz.little_big_redstone.block.microchip.MicrochipBlockEntity;
 import net.swedz.little_big_redstone.gui.logicconfig.LogicConfigMenu;
+import net.swedz.little_big_redstone.gui.logicconfig.reference.MicrochipLogicConfigReference;
 import net.swedz.little_big_redstone.gui.microchip.MicrochipMenu;
 import net.swedz.little_big_redstone.gui.microchip.MicrochipViewPosition;
-import net.swedz.little_big_redstone.microchip.object.logic.LogicEntry;
+import net.swedz.little_big_redstone.microchip.object.logic.LogicComponent;
 import net.swedz.little_big_redstone.network.LBRCustomPacket;
 import net.swedz.tesseract.neoforge.packet.PacketContext;
 
@@ -47,33 +48,37 @@ public record OpenLogicConfigPacket(
 				var entry = microchip.components().get(slot);
 				if(entry != null && entry.component().config().hasMenu())
 				{
+					var component = entry.component().copy();
+					var color = entry.color().orElse(menu.color());
+					
 					player.openMenu(
 							new MenuProvider()
 							{
 								@Override
 								public Component getDisplayName()
 								{
-									return entry.component().type().displayName();
+									return component.type().displayName();
 								}
 								
 								@Override
 								public AbstractContainerMenu createMenu(int containerId, Inventory playerInventory, Player player)
 								{
 									return new LogicConfigMenu(
-											containerId, playerInventory,
-											menu.blockPos(),
+											containerId,
+											playerInventory,
+											false,
+											new MicrochipLogicConfigReference(pos, entry.slot(), returnViewPosition),
 											() -> menu.stillValid(player) && microchip.components().values().contains(entry),
-											entry.color().orElse(menu.color()), entry,
-											returnViewPosition
+											color,
+											component
 									);
 								}
 							},
 							(buf) ->
 							{
-								buf.writeBlockPos(menu.blockPos());
-								DyeColor.STREAM_CODEC.encode(buf, entry.color().orElse(menu.color()));
-								LogicEntry.STREAM_CODEC.encode(buf, entry);
-								MicrochipViewPosition.STREAM_CODEC.encode(buf, returnViewPosition);
+								ByteBufCodecs.BOOL.encode(buf, false);
+								DyeColor.STREAM_CODEC.encode(buf, color);
+								LogicComponent.STREAM_CODEC.encode(buf, component);
 							}
 					);
 				}

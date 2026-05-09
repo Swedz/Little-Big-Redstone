@@ -5,16 +5,14 @@ import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.server.level.ServerPlayer;
 import net.swedz.little_big_redstone.LBR;
 import net.swedz.little_big_redstone.gui.logicconfig.LogicConfigMenu;
-import net.swedz.little_big_redstone.microchip.object.logic.LogicComponent;
 import net.swedz.little_big_redstone.network.LBRCustomPacket;
 import net.swedz.tesseract.neoforge.packet.PacketContext;
 
-public record WriteLogicConfigPacket(LogicComponent component) implements LBRCustomPacket
+public record ReturnToMicrochipMenuPacket() implements LBRCustomPacket
 {
-	public static final StreamCodec<ByteBuf, WriteLogicConfigPacket> STREAM_CODEC = StreamCodec.composite(
-			LogicComponent.STREAM_CODEC, WriteLogicConfigPacket::component,
-			WriteLogicConfigPacket::new
-	);
+	public static final ReturnToMicrochipMenuPacket INSTANCE = new ReturnToMicrochipMenuPacket();
+	
+	public static final StreamCodec<ByteBuf, ReturnToMicrochipMenuPacket> STREAM_CODEC = StreamCodec.unit(INSTANCE);
 	
 	@Override
 	public void handle(PacketContext context)
@@ -26,11 +24,11 @@ public record WriteLogicConfigPacket(LogicComponent component) implements LBRCus
 		
 		if(player.containerMenu instanceof LogicConfigMenu menu)
 		{
-			menu.save(player, component);
+			menu.cancel(player);
 		}
 		else
 		{
-			LBR.LOGGER.warn("Received WriteLogicConfigPacket from {} when not in a logic config menu, discarding", playerName);
+			LBR.LOGGER.warn("Received ReturnToMicrochipMenuPacket from {} when not in a logic config menu, discarding", playerName);
 		}
 	}
 }
