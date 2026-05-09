@@ -92,25 +92,6 @@ public final class TruthTableTagCompiler extends BlockTagCompiler
 		outputColumn.append(outputTable);
 		
 		parent.append(table);
-		
-		/*var box = new LytSizedVBox(width);
-		var heading = new LytHeading();
-		heading.setDepth(3);
-		heading.append(LytFlowText.of("Truth Table"));
-		box.append(heading);
-		box.append(table);
-		var footer = new LytParagraph();
-		footer.setPaddingTop(5);
-		footer.append(LytFlowText.of("For details about truth tables, see the page [here](introduction.md)."));
-		box.append(footer);
-		var inlineBlock = LytFlowInlineBlock.of(box);
-		switch (align)
-		{
-			case "left" -> inlineBlock.setAlignment(InlineBlockAlignment.FLOAT_LEFT);
-			case "right" -> inlineBlock.setAlignment(InlineBlockAlignment.FLOAT_RIGHT);
-			default -> parent.append(compiler.createErrorFlowContent("Invalid align. Must be left or right.", el));
-		}
-		parent.append(inlineBlock);*/
 	}
 	
 	@Override
