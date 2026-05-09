@@ -10,7 +10,6 @@ import guideme.document.block.LytBox;
 import guideme.document.block.LytVBox;
 import guideme.document.interaction.GuideTooltip;
 import guideme.document.interaction.InteractiveElement;
-import guideme.document.interaction.ItemTooltip;
 import guideme.document.interaction.LytWidget;
 import guideme.internal.screen.GuideIconButton;
 import guideme.layout.LayoutContext;
@@ -25,10 +24,10 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtOps;
 import net.minecraft.world.item.DyeColor;
 import net.swedz.little_big_redstone.LBR;
-import net.swedz.little_big_redstone.LBRItems;
 import net.swedz.little_big_redstone.gui.microchip.panel.MicrochipRenderBoardPanel;
 import net.swedz.little_big_redstone.guide.PausePlayGuideIconButton;
 import net.swedz.little_big_redstone.guide.tags.microchip.element.MicrochipObjectGuideTooltip;
+import net.swedz.little_big_redstone.guide.tags.microchip.element.MicrochipWireGuideTooltip;
 import net.swedz.little_big_redstone.microchip.Microchip;
 import net.swedz.little_big_redstone.microchip.MicrochipSize;
 import net.swedz.little_big_redstone.microchip.awareness.AwarenessTypes;
@@ -85,7 +84,8 @@ public final class MicrochipGuidebookScene extends LytBox implements ExportableR
 		
 		this.append(viewport);
 		
-		toolbar.append(resetButton = new LytWidget(new GuideIconButton(0, 0, GuideIconButton.Role.RESET_VIEW, () ->
+		toolbar.append(resetButton = new LytWidget(new GuideIconButton(
+				0, 0, GuideIconButton.Role.RESET_VIEW, () ->
 		{
 			for(var entry : microchip.components())
 			{
@@ -93,10 +93,13 @@ public final class MicrochipGuidebookScene extends LytBox implements ExportableR
 			}
 			redstoneSignals.reset();
 			this.tickLogic();
-		})));
-		toolbar.append(pausePlayButton = new LytWidget(new PausePlayGuideIconButton(0, 0, () ->
+		}
+		)));
+		toolbar.append(pausePlayButton = new LytWidget(new PausePlayGuideIconButton(
+				0, 0, () ->
 		{
-		})));
+		}
+		)));
 		if(includeToolbar)
 		{
 			this.append(toolbar);
@@ -385,7 +388,9 @@ public final class MicrochipGuidebookScene extends LytBox implements ExportableR
 			var hoveredWire = panel.wires().findHoveredWire(x, y);
 			if(hoveredWire != null)
 			{
-				return Optional.of(new ItemTooltip(LBRItems.REDSTONE_BIT.asItem().getDefaultInstance()));
+				var sourceComponent = microchip.components().get(hoveredWire.output().slot());
+				int signal = sourceComponent.component().output(hoveredWire.output().index());
+				return Optional.of(new MicrochipWireGuideTooltip(signal));
 			}
 			
 			return Optional.empty();
