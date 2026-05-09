@@ -261,6 +261,9 @@ public interface LBRText
 	@LangKey(text = "The input signal must be less than or equal to %s.")
 	MutableComponent logicConfigButtonTooltipIoSignalComparisonModeLessThanOrEqualTo(int signal);
 	
+	@LangKey(text = "The output signal will be equal to the signal strength of the wire powering the port.")
+	MutableComponent logicConfigButtonTooltipIoSignalComparisonOutputPass();
+	
 	@LangKey(text = "The output signal will be equal to %s.")
 	MutableComponent logicConfigButtonTooltipIoSignalComparisonOutput(int signal);
 	
@@ -366,7 +369,11 @@ public interface LBRText
 	
 	@LangKey(text = "  Duration: %s")
 	@WithStyle("tooltip")
-	MutableComponent logicConfigTooltipDuration(@Parsed("ticks_and_seconds") @WithStyle("highlighted") long ticks);
+	MutableComponent logicConfigTooltipDuration(@WithStyle("highlighted") Component duration);
+	
+	@LangKey(datagen = false)
+	@WithStyle("tooltip")
+	MutableComponent logicConfigTooltipDuration(@Parsed("ticks_and_seconds") @WithStyle("highlighted") long duration);
 	
 	@LangKey(text = "  Inputs: %s")
 	@WithStyle("tooltip")
@@ -374,7 +381,11 @@ public interface LBRText
 	
 	@LangKey(text = "  Signal: %s")
 	@WithStyle("tooltip")
-	MutableComponent logicConfigTooltipIoSignal(@WithStyle("highlighted") int signal);
+	MutableComponent logicConfigTooltipSignal(@WithStyle("highlighted") Component signal);
+	
+	@LangKey(datagen = false)
+	@WithStyle("tooltip")
+	MutableComponent logicConfigTooltipSignal(@WithStyle("highlighted") int signal);
 	
 	@LangKey(text = "  Signal: %s %s")
 	@WithStyle("tooltip")
@@ -479,9 +490,13 @@ public interface LBRText
 	@WithStyle("tooltip")
 	MutableComponent logicHelpORGate();
 	
-	@LangKey(text = "Throttles an input signal and yields an output with a configurable duration.")
+	@LangKey(text = "Throttles an input signal and yields an output with a configurable duration. When set to indefinite, the output will be ON so long as the input is ON.")
 	@WithStyle("tooltip")
-	MutableComponent logicHelpPulseThrottler();
+	MutableComponent logicHelpPulseThrottler1();
+	
+	@LangKey(text = "The output signal can be set to pass through, or to a specific value.")
+	@WithStyle("tooltip")
+	MutableComponent logicHelpPulseThrottler2();
 	
 	@LangKey(text = "When the input is ON, a random output will be ON a configurable percentage of the time.")
 	@WithStyle("tooltip")
@@ -564,4 +579,10 @@ public interface LBRText
 	@LangKey(text = "Yes")
 	@WithStyle("yes")
 	MutableComponent yes();
+	
+	@LangKey(text = "Pass")
+	MutableComponent pass();
+	
+	@LangKey(text = "Indefinite")
+	MutableComponent indefinite();
 }

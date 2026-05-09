@@ -1,51 +1,49 @@
 package net.swedz.little_big_redstone.microchip.tag;
 
 import com.google.common.collect.Maps;
-import com.google.common.collect.Sets;
 import net.swedz.tesseract.neoforge.api.WorldPos;
 
 import java.util.Map;
-import java.util.Set;
 
 final class MicrochipTagSection
 {
-	private final Map<TagOwnerKey, Set<TagEmitTicket>> tickets = Maps.newConcurrentMap();
+	private final Map<TagOwnerKey, TagEmitTicketGroup> tickets = Maps.newConcurrentMap();
 	
 	public MicrochipTagSection()
 	{
 	}
 	
-	public boolean contains(TagOwnerKey owner, int threshold)
+	public int getSignal(TagOwnerKey owner, int threshold)
 	{
-		var activeTickets = tickets.get(owner);
-		return activeTickets != null && activeTickets.size() >= threshold;
+		var group = tickets.get(owner);
+		return group != null && group.size() >= threshold ? group.getSignal() : 0;
 	}
 	
-	private void add(TagOwnerKey owner, TagEmitTicket ticket)
+	private void add(TagOwnerKey owner, TagEmitTicket ticket, int signal)
 	{
-		tickets.computeIfAbsent(owner, (__) -> Sets.newConcurrentHashSet()).add(ticket);
+		tickets.computeIfAbsent(owner, (__) -> new TagEmitTicketGroup()).add(ticket, signal);
 	}
 	
 	private void remove(TagOwnerKey owner, TagEmitTicket ticket)
 	{
-		var activeTickets = tickets.get(owner);
-		if(activeTickets != null)
+		var group = tickets.get(owner);
+		if(group != null)
 		{
-			activeTickets.remove(ticket);
-			if(activeTickets.isEmpty())
+			group.remove(ticket);
+			if(group.isEmpty())
 			{
 				tickets.remove(owner);
 			}
 		}
 	}
 	
-	public void add(TagOwnerKey owner, WorldPos pos)
+	public void add(TagOwnerKey owner, WorldPos pos, int signal)
 	{
 		var ticket = new TagEmitTicket(pos);
-		this.add(owner, ticket);
+		this.add(owner, ticket, signal);
 		if(!owner.equals(TagOwnerKey.GLOBAL))
 		{
-			this.add(TagOwnerKey.GLOBAL, ticket);
+			this.add(TagOwnerKey.GLOBAL, ticket, signal);
 		}
 	}
 	

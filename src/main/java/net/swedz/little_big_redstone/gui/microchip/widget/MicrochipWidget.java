@@ -539,65 +539,93 @@ public final class MicrochipWidget implements GuiEventListener, Renderable, Narr
 		this.renderTooltip(graphics);
 	}
 	
+	private void renderTooltipStickyNote(TesseractGuiGraphics graphics, int x, int y)
+	{
+		var entry = context.note();
+		var note = entry.note();
+		if(!note.isEmpty())
+		{
+			int minWidth = graphics.guiWidth() - x - 6;
+			graphics.setColor(LBRColors.stickyNoteText(entry.textColor()));
+			graphics.setStringDropShadow(false);
+			graphics.setTooltipFirstLinePadded(false);
+			graphics.setTooltipBackgroundPadding(4, 21, 4, 4);
+			graphics.renderTooltipBounded(
+					List.of(note.parsed()),
+					x, y,
+					minWidth, minWidth / 2,
+					graphics.guiWidth(), graphics.guiHeight(),
+					LBR.id("textures/gui/sticky_note/background_%s.png".formatted(entry.noteColor().getName())),
+					64, 64, 21
+			);
+			graphics.resetTooltipBackgroundPadding();
+			graphics.setTooltipFirstLinePadded(true);
+			graphics.setStringDropShadow(true);
+			graphics.resetColor();
+		}
+	}
+	
+	private void renderTooltipLogic(TesseractGuiGraphics graphics, int x, int y)
+	{
+		var component = context.logic().component();
+		List<Component> lines = Lists.newArrayList();
+		lines.add(component.type().displayName().withStyle(Style.EMPTY.withUnderlined(true)));
+		component.type().tooltip(component, false, true, false).ifPresent((Consumer<List<Component>>) lines::addAll);
+		if(component.config().hasMenu())
+		{
+			lines.add(Component.empty());
+			lines.add(LBR.text().logicConfigTooltipClickToOpen());
+		}
+		
+		var colorSet = LogicBakingModelData.get(component).getColorSet(component, this.color());
+		int backgroundColor = colorSet.background();
+		int borderColor = colorSet.foreground();
+		graphics.renderTooltip(lines, x, y, backgroundColor, backgroundColor, borderColor, borderColor);
+		
+		if(microchip.isDebug())
+		{
+			graphics.pose().pushPose();
+			graphics.pose().translate(this.x + 211, this.y + 139, 0);
+			graphics.pose().scale(2, 2, 2);
+			graphics.enableBatching();
+			var context = LogicRenderer.Context.create(this.color(), component, this.menu().getCarriedWires() != null, this.hasSelectedPort(), false);
+			LogicRenderers.render(context, graphics, component, 0, 0);
+			graphics.drawBatches();
+			graphics.pose().popPose();
+		}
+	}
+	
+	private void renderTooltipWire(TesseractGuiGraphics graphics, int x, int y)
+	{
+		var component = context.logic().component();
+		
+		List<Component> lines = Lists.newArrayList();
+		lines.add(LBRItems.REDSTONE_BIT.asItem().getDefaultInstance().getHoverName().copy().withStyle(Style.EMPTY.withUnderlined(true)));
+		lines.add(LBR.text().logicConfigTooltipSignal(context.wireSignal()));
+		
+		var colorSet = LogicBakingModelData.get(component).getColorSet(component, this.color());
+		int backgroundColor = colorSet.background();
+		int borderColor = colorSet.foreground();
+		graphics.renderTooltip(lines, x, y, backgroundColor, backgroundColor, borderColor, borderColor);
+	}
+	
 	private void renderTooltip(TesseractGuiGraphics graphics)
 	{
 		if(context.shouldRenderTooltip())
 		{
 			int x = this.x + microchip.size().scale(microchip.size().bounds().width()) + 10 + 4;
 			int y = this.y + 4;
-			if(context.hasNote())
+			if(context.hasObject() && context.hasNote())
 			{
-				var entry = context.note();
-				var note = entry.note();
-				if(!note.isEmpty())
-				{
-					int minWidth = graphics.guiWidth() - x - 6;
-					graphics.setColor(LBRColors.stickyNoteText(entry.textColor()));
-					graphics.setStringDropShadow(false);
-					graphics.setTooltipFirstLinePadded(false);
-					graphics.setTooltipBackgroundPadding(4, 21, 4, 4);
-					graphics.renderTooltipBounded(
-							List.of(note.parsed()),
-							x, y,
-							minWidth, minWidth / 2,
-							graphics.guiWidth(), graphics.guiHeight(),
-							LBR.id("textures/gui/sticky_note/background_%s.png".formatted(entry.noteColor().getName())),
-							64, 64, 21
-					);
-					graphics.resetTooltipBackgroundPadding();
-					graphics.setTooltipFirstLinePadded(true);
-					graphics.setStringDropShadow(true);
-					graphics.resetColor();
-				}
+				this.renderTooltipStickyNote(graphics, x, y);
 			}
-			else if(context.hasLogic())
+			else if(context.hasObject() && context.hasLogic())
 			{
-				var component = context.logic().component();
-				List<Component> lines = Lists.newArrayList();
-				lines.add(component.type().displayName().withStyle(Style.EMPTY.withUnderlined(true)));
-				component.type().tooltip(component, false, true, false).ifPresent((Consumer<List<Component>>) lines::addAll);
-				if(component.config().hasMenu())
-				{
-					lines.add(Component.empty());
-					lines.add(LBR.text().logicConfigTooltipClickToOpen());
-				}
-				
-				var colorSet = LogicBakingModelData.get(component).getColorSet(component, this.color());
-				int backgroundColor = colorSet.background();
-				int borderColor = colorSet.foreground();
-				graphics.renderTooltip(lines, x, y, backgroundColor, backgroundColor, borderColor, borderColor);
-				
-				if(microchip.isDebug())
-				{
-					graphics.pose().pushPose();
-					graphics.pose().translate(this.x + 211, this.y + 139, 0);
-					graphics.pose().scale(2, 2, 2);
-					graphics.enableBatching();
-					var context = LogicRenderer.Context.create(this.color(), component, this.menu().getCarriedWires() != null, this.hasSelectedPort(), false);
-					LogicRenderers.render(context, graphics, component, 0, 0);
-					graphics.drawBatches();
-					graphics.pose().popPose();
-				}
+				this.renderTooltipLogic(graphics, x, y);
+			}
+			else if(!context.hasObject() && context.hasWire() && context.hasLogic())
+			{
+				this.renderTooltipWire(graphics, x, y);
 			}
 		}
 	}

@@ -50,7 +50,7 @@ public record WireEndpoints(
 				input.size().wireInEndX(inputX),
 				input.size().wireInEndY(inputY, inputIndex, input.inputs()),
 				usePadding,
-				output.output(outputIndex),
+				output.output(outputIndex) > 0,
 				getColor(output, fallbackColor)
 		);
 	}
@@ -127,7 +127,7 @@ public record WireEndpoints(
 				startX, startY,
 				context.boardMouseX() + 1, context.boardMouseY() - 1,
 				false,
-				outputLogic.component().output(selectedPort.index()),
+				outputLogic.component().output(selectedPort.index()) > 0,
 				getColor(outputLogic.component(), context.widget().color())
 		);
 	}

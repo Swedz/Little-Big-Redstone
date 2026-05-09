@@ -19,7 +19,7 @@ public abstract class LogicConfig<C extends LogicConfig<C>> implements LogicPort
 	 * <b>WARNING: Should not be used at all outside of the guide. Ever. If this is not null for a logic component
 	 * outside of the guide, something has gone terribly wrong.</b>
 	 */
-	protected Boolean[] outputLocks;
+	protected Integer[] outputLocks;
 	
 	/**
 	 * Used to hide logic in the guide so that only the wires to/from it render.
@@ -44,16 +44,16 @@ public abstract class LogicConfig<C extends LogicConfig<C>> implements LogicPort
 		return true;
 	}
 	
-	public final void setOutputLock(int index, Boolean lock)
+	public final void setOutputLock(int index, Integer lock)
 	{
 		if(outputLocks == null || outputLocks.length <= index)
 		{
-			outputLocks = outputLocks == null ? new Boolean[index + 1] : Arrays.copyOf(outputLocks, index + 1);
+			outputLocks = outputLocks == null ? new Integer[index + 1] : Arrays.copyOf(outputLocks, index + 1);
 		}
 		outputLocks[index] = lock;
 	}
 	
-	public final Boolean getOutputLock(int index)
+	public final Integer getOutputLock(int index)
 	{
 		return (outputLocks == null || outputLocks.length <= index) ? null : outputLocks[index];
 	}

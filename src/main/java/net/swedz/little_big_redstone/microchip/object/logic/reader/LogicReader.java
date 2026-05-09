@@ -78,7 +78,7 @@ public final class LogicReader extends LogicComponent<LogicReader, LogicReaderCo
 	}
 	
 	@Override
-	protected void processTickInternal(LogicContext context, boolean[] inputs)
+	protected void processTickInternal(LogicContext context, int[] inputs)
 	{
 		boolean originalOutputState = outputState;
 		
@@ -164,14 +164,14 @@ public final class LogicReader extends LogicComponent<LogicReader, LogicReaderCo
 	}
 	
 	@Override
-	protected boolean outputInternal(int index)
+	protected int outputInternal(int index)
 	{
-		return outputState;
+		return outputState ? 1 : 0;
 	}
 	
 	public boolean output()
 	{
-		return this.output(0);
+		return this.output(0) > 0;
 	}
 	
 	@Override

@@ -22,7 +22,7 @@ public final class OnOffLogicRenderer<L extends LogicComponent<?, ?>> extends Lo
 				(shader) -> shader.getUniform("LogicUV").set(16f, 16f)
 		);
 		graphics.setTextures(
-				context.getTexture(component.output(0) ? "on" : "off"),
+				context.getTexture(component.output(0) > 0 ? "on" : "off"),
 				LBR.id("textures/logic/scanline.png")
 		);
 		int centerX = x + size.centerX() - 8;

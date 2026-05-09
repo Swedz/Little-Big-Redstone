@@ -27,7 +27,7 @@ public final class LogicIOConfig extends LogicConfig<LogicIOConfig>
 			.group(
 					Codec.BOOL.optionalFieldOf("input", true).forGetter((config) -> config.input),
 					Direction.CODEC.optionalFieldOf("direction", Direction.NORTH).forGetter((config) -> config.direction),
-					Codec.intRange(1, 15).optionalFieldOf("signal_strength", 1).forGetter((config) -> config.signalStrength),
+					Codec.intRange(0, 15).optionalFieldOf("signal_strength", 0).forGetter((config) -> config.signalStrength),
 					CodecHelper.forLowercaseEnum(LogicComparisonMode.class).optionalFieldOf("signal_comparison", LogicComparisonMode.GREATER_THAN_OR_EQUAL_TO).forGetter((config) -> config.signalComparison)
 			)
 			.apply(instance, (input, direction, signalStrength, precise) -> new LogicIOConfig(true, input, direction, signalStrength, precise)));
@@ -53,7 +53,7 @@ public final class LogicIOConfig extends LogicConfig<LogicIOConfig>
 		this.valid = valid;
 		this.input = input;
 		this.direction = direction;
-		this.signalStrength = Mth.clamp(signalStrength, 1, 15);
+		this.signalStrength = Mth.clamp(signalStrength, input ? 1 : 0, 15);
 		this.signalComparison = signalComparison;
 	}
 	
@@ -111,7 +111,9 @@ public final class LogicIOConfig extends LogicConfig<LogicIOConfig>
 		}
 		else
 		{
-			lines.add(LBR.text().logicConfigTooltipIoSignal(signalStrength));
+			lines.add(signalStrength == 0 ?
+					LBR.text().logicConfigTooltipSignal(LBR.text().pass()) :
+					LBR.text().logicConfigTooltipSignal(signalStrength));
 		}
 	}
 	

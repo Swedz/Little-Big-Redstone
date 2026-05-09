@@ -1,5 +1,6 @@
 package net.swedz.little_big_redstone.microchip.awareness.types;
 
+import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import net.swedz.little_big_redstone.microchip.awareness.AwarenessContext;
 import net.swedz.little_big_redstone.microchip.awareness.AwarenessType;
@@ -9,16 +10,17 @@ import net.swedz.little_big_redstone.microchip.object.logic.tag.LogicTagLabel;
 import net.swedz.little_big_redstone.microchip.tag.MicrochipTagSystem;
 import net.swedz.little_big_redstone.microchip.tag.TagOwnerKey;
 
+import java.util.Map;
 import java.util.Set;
 
 public final class LogicTagAwareness extends MicrochipAwareness<LogicTagAwareness>
 {
-	private Set<LogicTagLabel> started = Sets.newHashSet();
-	private Set<LogicTagLabel> stopped = Sets.newHashSet();
+	private Map<LogicTagLabel, Integer> started = Maps.newHashMap();
+	private Set<LogicTagLabel>          stopped = Sets.newHashSet();
 	
-	public void emit(LogicTagLabel label)
+	public void emit(LogicTagLabel label, int signal)
 	{
-		if(started.add(label))
+		if(started.put(label, signal) == null)
 		{
 			stopped.remove(label);
 		}
@@ -33,8 +35,8 @@ public final class LogicTagAwareness extends MicrochipAwareness<LogicTagAwarenes
 	@Override
 	public void preTick(AwarenessContext context)
 	{
-		stopped = started;
-		started = Sets.newHashSet();
+		stopped = started.keySet();
+		started = Maps.newHashMap();
 	}
 	
 	@Override
@@ -54,9 +56,11 @@ public final class LogicTagAwareness extends MicrochipAwareness<LogicTagAwarenes
 			MicrochipTagSystem.stopEmit(level, blockPos, owner, label);
 		}
 		
-		for(var label : started)
+		for(var entry : started.entrySet())
 		{
-			MicrochipTagSystem.startEmit(level, blockPos, owner, label);
+			var label = entry.getKey();
+			var signal = entry.getValue();
+			MicrochipTagSystem.startEmit(level, blockPos, owner, label, signal);
 		}
 	}
 	
@@ -77,7 +81,7 @@ public final class LogicTagAwareness extends MicrochipAwareness<LogicTagAwarenes
 			MicrochipTagSystem.stopEmit(level, blockPos, owner, label);
 		}
 		
-		for(var label : started)
+		for(var label : started.keySet())
 		{
 			MicrochipTagSystem.stopEmit(level, blockPos, owner, label);
 		}

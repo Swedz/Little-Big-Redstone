@@ -24,20 +24,21 @@ public final class TFlipFlop extends LogicComponent<TFlipFlop, TFlipFlopConfig>
 			.group(
 					DyeColor.CODEC.optionalFieldOf("color").forGetter(TFlipFlop::color),
 					Codec.BOOL.optionalFieldOf("last_input", false).forGetter(TFlipFlop::lastInput),
-					Codec.BOOL.optionalFieldOf("output", false).forGetter(TFlipFlop::output)
+					Codec.INT.optionalFieldOf("output", 0).forGetter(TFlipFlop::output)
 			)
 			.apply(instance, TFlipFlop::new));
 	
 	public static final StreamCodec<ByteBuf, TFlipFlop> STREAM_CODEC = StreamCodec.composite(
 			ByteBufCodecs.optional(DyeColor.STREAM_CODEC), TFlipFlop::color,
 			ByteBufCodecs.BOOL, TFlipFlop::lastInput,
-			ByteBufCodecs.BOOL, TFlipFlop::output,
+			ByteBufCodecs.VAR_INT, TFlipFlop::output,
 			TFlipFlop::new
 	);
 	
-	private boolean lastInputState, outputState;
+	private boolean lastInputState;
+	private int     outputState;
 	
-	private TFlipFlop(Optional<DyeColor> color, boolean lastInputState, boolean outputState)
+	private TFlipFlop(Optional<DyeColor> color, boolean lastInputState, int outputState)
 	{
 		super(color);
 		this.lastInputState = lastInputState;
@@ -46,7 +47,7 @@ public final class TFlipFlop extends LogicComponent<TFlipFlop, TFlipFlopConfig>
 	
 	public TFlipFlop()
 	{
-		this(Optional.empty(), false, false);
+		this(Optional.empty(), false, 0);
 	}
 	
 	@Override
@@ -62,17 +63,17 @@ public final class TFlipFlop extends LogicComponent<TFlipFlop, TFlipFlopConfig>
 	}
 	
 	@Override
-	protected void processTickInternal(LogicContext context, boolean[] inputs)
+	protected void processTickInternal(LogicContext context, int[] inputs)
 	{
-		boolean input = inputs[0];
+		int input = inputs[0];
 		
-		if(!lastInputState && input)
+		if(!lastInputState && input > 0)
 		{
-			outputState = !outputState;
+			outputState = outputState > 0 ? 0 : input;
 			context.markDirty(this);
 		}
 		
-		lastInputState = input;
+		lastInputState = input > 0;
 	}
 	
 	public boolean lastInput()
@@ -81,12 +82,12 @@ public final class TFlipFlop extends LogicComponent<TFlipFlop, TFlipFlopConfig>
 	}
 	
 	@Override
-	protected boolean outputInternal(int index)
+	protected int outputInternal(int index)
 	{
 		return outputState;
 	}
 	
-	public boolean output()
+	public int output()
 	{
 		return this.output(0);
 	}
@@ -108,7 +109,7 @@ public final class TFlipFlop extends LogicComponent<TFlipFlop, TFlipFlopConfig>
 	public void internalResetForPickup()
 	{
 		lastInputState = false;
-		outputState = false;
+		outputState = 0;
 	}
 	
 	@Override

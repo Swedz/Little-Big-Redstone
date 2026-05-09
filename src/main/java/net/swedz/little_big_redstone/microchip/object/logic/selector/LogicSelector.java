@@ -25,7 +25,8 @@ public final class LogicSelector extends LogicComponent<LogicSelector, LogicSele
 			.group(
 					LogicSelectorConfig.CODEC.fieldOf("config").forGetter(LogicSelector::config),
 					DyeColor.CODEC.optionalFieldOf("color").forGetter(LogicSelector::color),
-					Codec.INT.optionalFieldOf("selected", 0).forGetter(LogicSelector::selected)
+					Codec.INT.optionalFieldOf("selected", 0).forGetter(LogicSelector::selected),
+					Codec.INT.optionalFieldOf("output", 0).forGetter(LogicSelector::output)
 			)
 			.apply(instance, LogicSelector::new));
 	
@@ -33,26 +34,29 @@ public final class LogicSelector extends LogicComponent<LogicSelector, LogicSele
 			LogicSelectorConfig.STREAM_CODEC, LogicSelector::config,
 			ByteBufCodecs.optional(DyeColor.STREAM_CODEC), LogicSelector::color,
 			ByteBufCodecs.VAR_INT, LogicSelector::selected,
+			ByteBufCodecs.VAR_INT, LogicSelector::output,
 			LogicSelector::new
 	);
 	
-	private int selected;
+	private int selected, outputState;
 	
-	private LogicSelector(LogicSelectorConfig config, Optional<DyeColor> color, int selected)
+	private LogicSelector(LogicSelectorConfig config, Optional<DyeColor> color, int selected, int outputState)
 	{
 		super(config, color);
 		this.selected = selected;
+		this.outputState = outputState;
 	}
 	
-	private LogicSelector(Optional<DyeColor> color, int selected)
+	private LogicSelector(Optional<DyeColor> color, int selected, int outputState)
 	{
 		super(color);
 		this.selected = selected;
+		this.outputState = outputState;
 	}
 	
 	public LogicSelector()
 	{
-		this(Optional.empty(), 0);
+		this(Optional.empty(), 0, 0);
 	}
 	
 	public int selected()
@@ -61,14 +65,14 @@ public final class LogicSelector extends LogicComponent<LogicSelector, LogicSele
 	}
 	
 	@Override
-	protected void processTickInternal(LogicContext context, boolean[] inputs)
+	protected void processTickInternal(LogicContext context, int[] inputs)
 	{
 		int originalSelected = selected;
 		
 		if(config.mode == LogicSelectorMode.COUNTER)
 		{
-			boolean decrement = inputs[0];
-			boolean increment = inputs[1];
+			boolean decrement = inputs[0] > 0;
+			boolean increment = inputs[1] > 0;
 			int newSelected = selected;
 			if(decrement)
 			{
@@ -87,14 +91,17 @@ public final class LogicSelector extends LogicComponent<LogicSelector, LogicSele
 				}
 			}
 			selected = newSelected;
+			outputState = Math.max(inputs[0], inputs[1]);
 		}
 		else if(config.mode == LogicSelectorMode.SETTER)
 		{
 			for(int index = inputs.length - 1; index >= 0; index--)
 			{
-				if(inputs[index])
+				int signal = inputs[index];
+				if(signal > 0)
 				{
 					selected = index;
+					outputState = signal;
 					break;
 				}
 			}
@@ -107,9 +114,14 @@ public final class LogicSelector extends LogicComponent<LogicSelector, LogicSele
 	}
 	
 	@Override
-	protected boolean outputInternal(int index)
+	protected int outputInternal(int index)
 	{
-		return index == selected;
+		return index == selected ? outputState : 0;
+	}
+	
+	public int output()
+	{
+		return outputState;
 	}
 	
 	@Override

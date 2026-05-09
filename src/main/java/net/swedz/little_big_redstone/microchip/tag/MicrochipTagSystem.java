@@ -12,16 +12,16 @@ public final class MicrochipTagSystem
 {
 	private static final Map<LogicTagLabel, MicrochipTagSection> TICKETS = Maps.newConcurrentMap();
 	
-	public static boolean sense(TagOwnerKey owner, LogicTagLabel label, int threshold)
+	public static int sense(TagOwnerKey owner, LogicTagLabel label, int threshold)
 	{
 		var section = TICKETS.get(label);
-		return section != null && section.contains(owner, threshold);
+		return section != null ? section.getSignal(owner, threshold) : 0;
 	}
 	
-	public static void startEmit(Level level, BlockPos blockPos, TagOwnerKey owner, LogicTagLabel label)
+	public static void startEmit(Level level, BlockPos blockPos, TagOwnerKey owner, LogicTagLabel label, int signal)
 	{
 		var section = TICKETS.computeIfAbsent(label, (__) -> new MicrochipTagSection());
-		section.add(owner, new WorldPos(level, blockPos));
+		section.add(owner, new WorldPos(level, blockPos), signal);
 	}
 	
 	public static void stopEmit(Level level, BlockPos blockPos, TagOwnerKey owner, LogicTagLabel label)

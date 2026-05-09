@@ -19,25 +19,30 @@ public final class PulseThrottlerConfig extends LogicConfig<PulseThrottlerConfig
 {
 	public static final MapCodec<PulseThrottlerConfig> CODEC = RecordCodecBuilder.mapCodec((instance) -> instance
 			.group(
-					Codec.LONG.optionalFieldOf("duration", 1L).forGetter((config) -> config.outputDuration)
+					Codec.LONG.optionalFieldOf("duration", 1L).forGetter((config) -> config.outputDuration),
+					Codec.intRange(0, 15).optionalFieldOf("signal_strength", 0).forGetter((config) -> config.signalStrength)
 			)
 			.apply(instance, PulseThrottlerConfig::new));
 	
 	public static final StreamCodec<ByteBuf, PulseThrottlerConfig> STREAM_CODEC = StreamCodec.composite(
 			ByteBufCodecs.VAR_LONG, (config) -> config.outputDuration,
+			ByteBufCodecs.VAR_INT, (config) -> config.signalStrength,
 			PulseThrottlerConfig::new
 	);
 	
 	public long outputDuration;
 	
-	private PulseThrottlerConfig(long outputDuration)
+	public int signalStrength;
+	
+	private PulseThrottlerConfig(long outputDuration, int signalStrength)
 	{
 		this.outputDuration = outputDuration;
+		this.signalStrength = signalStrength;
 	}
 	
 	public PulseThrottlerConfig()
 	{
-		this(1);
+		this(1, 0);
 	}
 	
 	@Override
@@ -67,7 +72,13 @@ public final class PulseThrottlerConfig extends LogicConfig<PulseThrottlerConfig
 	@Override
 	public void appendHoverText(List<Component> lines)
 	{
-		lines.add(LBR.text().logicConfigTooltipDuration(outputDuration));
+		lines.add(outputDuration == 0 ?
+				LBR.text().logicConfigTooltipDuration(LBR.text().indefinite()) :
+				LBR.text().logicConfigTooltipDuration(outputDuration));
+		
+		lines.add(signalStrength == 0 ?
+				LBR.text().logicConfigTooltipSignal(LBR.text().pass()) :
+				LBR.text().logicConfigTooltipSignal(signalStrength));
 	}
 	
 	@Override
@@ -86,6 +97,7 @@ public final class PulseThrottlerConfig extends LogicConfig<PulseThrottlerConfig
 	protected void internalLoadFrom(PulseThrottlerConfig other)
 	{
 		outputDuration = other.outputDuration;
+		signalStrength = other.signalStrength;
 	}
 	
 	@Override
@@ -96,13 +108,13 @@ public final class PulseThrottlerConfig extends LogicConfig<PulseThrottlerConfig
 	@Override
 	public int hashCode()
 	{
-		return Objects.hash(outputDuration);
+		return Objects.hash(outputDuration, signalStrength);
 	}
 	
 	@Override
 	public boolean equals(Object o)
 	{
 		return this == o ||
-			   (o instanceof PulseThrottlerConfig other && outputDuration == other.outputDuration);
+			   (o instanceof PulseThrottlerConfig other && outputDuration == other.outputDuration && signalStrength == other.signalStrength);
 	}
 }

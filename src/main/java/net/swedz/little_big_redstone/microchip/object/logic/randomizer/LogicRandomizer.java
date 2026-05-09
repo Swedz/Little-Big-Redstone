@@ -28,34 +28,38 @@ public final class LogicRandomizer extends LogicComponent<LogicRandomizer, Logic
 			.group(
 					LogicRandomizerConfig.CODEC.fieldOf("config").forGetter(LogicRandomizer::config),
 					DyeColor.CODEC.optionalFieldOf("color").forGetter(LogicRandomizer::color),
-					Codec.intRange(-1, 9).optionalFieldOf("outputIndex", -1).forGetter(LogicRandomizer::outputIndex)
+					Codec.intRange(-1, 9).optionalFieldOf("outputIndex", -1).forGetter(LogicRandomizer::outputIndex),
+					Codec.INT.optionalFieldOf("output", 0).forGetter(LogicRandomizer::output)
 			)
 			.apply(instance, LogicRandomizer::new));
 	
 	public static final StreamCodec<ByteBuf, LogicRandomizer> STREAM_CODEC = StreamCodec.composite(
 			LogicRandomizerConfig.STREAM_CODEC, LogicRandomizer::config,
 			ByteBufCodecs.optional(DyeColor.STREAM_CODEC), LogicRandomizer::color,
-			ByteBufCodecs.INT, LogicRandomizer::outputIndex,
+			ByteBufCodecs.VAR_INT, LogicRandomizer::outputIndex,
+			ByteBufCodecs.VAR_INT, LogicRandomizer::output,
 			LogicRandomizer::new
 	);
 	
-	private int outputIndex;
+	private int outputIndex, outputState;
 	
-	private LogicRandomizer(LogicRandomizerConfig config, Optional<DyeColor> color, int outputIndex)
+	private LogicRandomizer(LogicRandomizerConfig config, Optional<DyeColor> color, int outputIndex, int outputState)
 	{
 		super(config, color);
 		this.outputIndex = outputIndex;
+		this.outputState = outputState;
 	}
 	
-	private LogicRandomizer(Optional<DyeColor> color, int outputIndex)
+	private LogicRandomizer(Optional<DyeColor> color, int outputIndex, int outputState)
 	{
 		super(color);
 		this.outputIndex = outputIndex;
+		this.outputState = outputState;
 	}
 	
 	public LogicRandomizer()
 	{
-		this(Optional.empty(), -1);
+		this(Optional.empty(), -1, 0);
 	}
 	
 	public int outputIndex()
@@ -64,11 +68,11 @@ public final class LogicRandomizer extends LogicComponent<LogicRandomizer, Logic
 	}
 	
 	@Override
-	protected void processTickInternal(LogicContext context, boolean[] inputs)
+	protected void processTickInternal(LogicContext context, int[] inputs)
 	{
 		int originalOutputIndex = outputIndex;
 		
-		if(inputs[0] && RANDOM.nextFloat() <= config.chance)
+		if(inputs[0] > 0 && RANDOM.nextFloat() <= config.chance)
 		{
 			outputIndex = RANDOM.nextInt(config.outputs);
 		}
@@ -84,9 +88,14 @@ public final class LogicRandomizer extends LogicComponent<LogicRandomizer, Logic
 	}
 	
 	@Override
-	protected boolean outputInternal(int index)
+	protected int outputInternal(int index)
 	{
-		return index == outputIndex;
+		return index == outputIndex ? outputState : 0;
+	}
+	
+	public int output()
+	{
+		return outputState;
 	}
 	
 	@Override
@@ -106,12 +115,14 @@ public final class LogicRandomizer extends LogicComponent<LogicRandomizer, Logic
 	protected void internalLoadFrom(LogicRandomizer other)
 	{
 		outputIndex = other.outputIndex;
+		outputState = other.outputState;
 	}
 	
 	@Override
 	protected void internalResetForPickup()
 	{
 		outputIndex = -1;
+		outputState = 0;
 	}
 	
 	@Override
