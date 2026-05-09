@@ -44,9 +44,15 @@ public final class MicrochipMenu extends PlayerInventoryContainerMenu
 	private int        carriedComponentSlot = -1;
 	private List<Wire> carriedWires;
 	
-	public MicrochipMenu(int containerId, Inventory playerInventory,
-						 BlockPos blockPos, Function<Player, Boolean> validChecker, Microchip microchip, DyeColor color,
-						 MicrochipViewPosition viewPosition)
+	public MicrochipMenu(
+			int containerId,
+			Inventory playerInventory,
+			BlockPos blockPos,
+			Function<Player, Boolean> validChecker,
+			Microchip microchip,
+			DyeColor color,
+			MicrochipViewPosition viewPosition
+	)
 	{
 		super(LBRMenus.MICROCHIP.get(), containerId);
 		
@@ -62,7 +68,11 @@ public final class MicrochipMenu extends PlayerInventoryContainerMenu
 		logicArrayItemHandler.pickLogicArrayFromInventory();
 	}
 	
-	public MicrochipMenu(int containerId, Inventory playerInventory, RegistryFriendlyByteBuf buf)
+	public MicrochipMenu(
+			int containerId,
+			Inventory playerInventory,
+			RegistryFriendlyByteBuf buf
+	)
 	{
 		super(LBRMenus.MICROCHIP.get(), containerId);
 		

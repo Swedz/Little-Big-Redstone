@@ -48,6 +48,8 @@ public final class MicrochipBlockEntity extends BlockEntity implements MenuProvi
 	
 	private UUID placedBy;
 	
+	private MicrochipViewPosition viewPosition;
+	
 	private boolean            modelDataChanged = true;
 	private MicrochipModelData modelData;
 	
@@ -83,6 +85,21 @@ public final class MicrochipBlockEntity extends BlockEntity implements MenuProvi
 	public UUID getPlacedBy()
 	{
 		return placedBy;
+	}
+	
+	public void setViewPosition(MicrochipViewPosition viewPosition)
+	{
+		this.viewPosition = viewPosition;
+		this.setChanged();
+	}
+	
+	public MicrochipViewPosition getViewPosition()
+	{
+		if(viewPosition == null)
+		{
+			viewPosition = new MicrochipViewPosition();
+		}
+		return viewPosition;
 	}
 	
 	public void sync()
@@ -123,7 +140,7 @@ public final class MicrochipBlockEntity extends BlockEntity implements MenuProvi
 	@Override
 	public AbstractContainerMenu createMenu(int containerId, Inventory inventory, Player player)
 	{
-		return new MicrochipMenu(containerId, inventory, worldPosition, this::isMenuValid, microchip, this.color(), new MicrochipViewPosition());
+		return new MicrochipMenu(containerId, inventory, worldPosition, this::isMenuValid, microchip, this.color(), this.getViewPosition());
 	}
 	
 	public boolean openMenu(Player player, MicrochipViewPosition viewPosition)
@@ -148,7 +165,7 @@ public final class MicrochipBlockEntity extends BlockEntity implements MenuProvi
 	
 	public boolean openMenu(Player player)
 	{
-		return this.openMenu(player, new MicrochipViewPosition());
+		return this.openMenu(player, this.getViewPosition());
 	}
 	
 	@Override
@@ -263,6 +280,18 @@ public final class MicrochipBlockEntity extends BlockEntity implements MenuProvi
 		
 		placedBy = tag.hasUUID("placed_by") ? tag.getUUID("placed_by") : null;
 		
+		if(tag.contains("view_position", Tag.TAG_COMPOUND))
+		{
+			MicrochipViewPosition.CODEC.parse(NbtOps.INSTANCE, tag.getCompound("view_position"))
+					.ifSuccess((result) -> viewPosition = result)
+					.ifError((error) ->
+							LBR.LOGGER.error("Failed to load microchip data at {}: {}", worldPosition.toShortString(), error.message()));
+		}
+		else
+		{
+			viewPosition = null;
+		}
+		
 		if(level != null && level.isClientSide())
 		{
 			if(tag.contains("microchip_model_data", Tag.TAG_COMPOUND))
@@ -294,6 +323,11 @@ public final class MicrochipBlockEntity extends BlockEntity implements MenuProvi
 		else
 		{
 			tag.remove("placed_by");
+		}
+		
+		if(viewPosition != null)
+		{
+			tag.put("view_position", MicrochipViewPosition.CODEC.encodeStart(NbtOps.INSTANCE, viewPosition).getOrThrow());
 		}
 	}
 }
