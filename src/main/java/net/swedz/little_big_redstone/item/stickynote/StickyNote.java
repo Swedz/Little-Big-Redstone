@@ -7,6 +7,7 @@ import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.chat.Style;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
+import net.swedz.little_big_redstone.microchip.object.logic.LogicTypes;
 
 import java.util.Objects;
 import java.util.regex.Pattern;
@@ -18,7 +19,8 @@ public final class StickyNote
 			"|(?<!\\*)\\*\\*(?<bold>.+?)\\*\\*(?!\\*)" +
 			"|(?<!\\*)\\*(?<italic>.+?)\\*(?!\\*)" +
 			"|(?<!_)__(?<underline>.+?)__(?!_)" +
-			"|(?<!~)~~(?<strikethrough>.+?)~~(?!~)"
+			"|(?<!~)~~(?<strikethrough>.+?)~~(?!~)" +
+			"|(?<placeholder><(?<placeholderkey>[^>]+)>)"
 	);
 	
 	public static MutableComponent parse(String text)
@@ -61,6 +63,21 @@ public final class StickyNote
 			if(matchedText != null)
 			{
 				result = result.append(parse(matchedText).withStyle(style));
+			}
+			else if((matchedText = matcher.group("placeholder")) != null)
+			{
+				var placeholderKey = matcher.group("placeholderkey");
+				if(LogicTypes.exists(placeholderKey))
+				{
+					var logicType = LogicTypes.get(placeholderKey);
+					result = result.append(logicType.displaySymbol().withStyle(style));
+				}
+				else
+				{
+					result = result
+							.append(Component.literal(Character.toString(matchedText.charAt(0))).withStyle(style))
+							.append(parse(matchedText.substring(1))).withStyle(style);
+				}
 			}
 			
 			lastEndIndex = matcher.end();
