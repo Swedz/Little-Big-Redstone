@@ -77,6 +77,12 @@ public final class MicrochipWidgetContext
 			}
 		}
 		
+		int wireSignal = 0;
+		if(wire != null && logic != null)
+		{
+			wireSignal = logic.component().output(wire.output().index());
+		}
+		
 		// If something was found involving a logic component, set the component's output wires to be rendered last
 		if(logic != null)
 		{
@@ -93,7 +99,7 @@ public final class MicrochipWidgetContext
 			}
 		}
 		
-		return new MicrochipWidgetContext(widget, boardMouseX, boardMouseY, carriedStack, object, note, logic, port, port == null || port.input(), wire, topLayerWires);
+		return new MicrochipWidgetContext(widget, boardMouseX, boardMouseY, carriedStack, object, note, logic, port, port == null || port.input(), wire, wireSignal, topLayerWires);
 	}
 	
 	private final boolean onBoard;
@@ -109,6 +115,7 @@ public final class MicrochipWidgetContext
 	private final LogicSelectedPort port;
 	private final boolean           portInput;
 	private final Wire              wire;
+	private final int               wireSignal;
 	
 	private final List<Wire> topLayerWires;
 	
@@ -117,7 +124,7 @@ public final class MicrochipWidgetContext
 								   ItemStack carriedStack,
 								   MicrochipObject object, StickyNoteEntry note, LogicEntry logic,
 								   LogicSelectedPort port, boolean portInput,
-								   Wire wire, List<Wire> topLayerWires)
+								   Wire wire, int wireSignal, List<Wire> topLayerWires)
 	{
 		this.onBoard = true;
 		this.widget = widget;
@@ -130,6 +137,7 @@ public final class MicrochipWidgetContext
 		this.port = port;
 		this.portInput = portInput;
 		this.wire = wire;
+		this.wireSignal = wireSignal;
 		this.topLayerWires = Collections.unmodifiableList(topLayerWires);
 	}
 	
@@ -146,6 +154,7 @@ public final class MicrochipWidgetContext
 		this.port = null;
 		this.portInput = true;
 		this.wire = null;
+		this.wireSignal = 0;
 		this.topLayerWires = List.of();
 	}
 	
@@ -239,6 +248,11 @@ public final class MicrochipWidgetContext
 		return wire != null;
 	}
 	
+	public int wireSignal()
+	{
+		return wireSignal;
+	}
+	
 	public List<Wire> topLayerWires()
 	{
 		return topLayerWires;
@@ -246,7 +260,7 @@ public final class MicrochipWidgetContext
 	
 	public boolean shouldRenderTooltip()
 	{
-		return this.hasObject() && !this.hasPort() && !this.hasWire() && carriedStack.isEmpty();
+		return (this.hasObject() || this.hasWire()) && !this.hasPort() && carriedStack.isEmpty();
 	}
 	
 	public boolean shouldDyeObject()
