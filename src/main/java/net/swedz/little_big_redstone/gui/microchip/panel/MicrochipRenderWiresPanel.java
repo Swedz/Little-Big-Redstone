@@ -5,17 +5,17 @@ import net.minecraft.world.item.DyeColor;
 import net.swedz.little_big_redstone.LBR;
 import net.swedz.little_big_redstone.LBRClientShaders;
 import net.swedz.little_big_redstone.gui.microchip.widget.MicrochipWidgetContext;
-import net.swedz.little_big_redstone.gui.microchip.wire.WireEndpoints;
+import net.swedz.little_big_redstone.gui.microchip.wire.WireMetadata;
+import net.swedz.little_big_redstone.gui.microchip.wire.WirePath;
+import net.swedz.little_big_redstone.gui.microchip.wire.WirePathKey;
 import net.swedz.little_big_redstone.gui.microchip.wire.WirePathing;
 import net.swedz.little_big_redstone.microchip.Microchip;
 import net.swedz.little_big_redstone.microchip.wire.Wire;
 import net.swedz.tesseract.neoforge.api.Bounds;
-import net.swedz.tesseract.neoforge.api.tuple.Pair;
 import net.swedz.tesseract.neoforge.helper.guigraphics.TesseractGuiGraphics;
 
 import java.util.Collections;
 import java.util.List;
-import java.util.concurrent.CompletableFuture;
 import java.util.function.Supplier;
 
 public final class MicrochipRenderWiresPanel extends MicrochipRenderPanel
@@ -36,6 +36,7 @@ public final class MicrochipRenderWiresPanel extends MicrochipRenderPanel
 		int componentPadding = wirePortPadding + 1;
 		pathing = new WirePathing(
 				microchip,
+				// TODO include some area padding so wires can go out of bounds to save performance in some cases
 				0,
 				(b) -> new Bounds(
 						b.minX() - componentPadding, b.minY() - componentPadding,
@@ -94,7 +95,10 @@ public final class MicrochipRenderWiresPanel extends MicrochipRenderPanel
 			{
 				continue;
 			}
-			this.renderWire(graphics, wire, false);
+			var key = WirePathKey.placed(microchip, wire);
+			var path = pathing.get(key, true);
+			var metadata = WireMetadata.of(microchip, color, wire, false);
+			this.renderWire(graphics, key, path, metadata);
 		}
 		
 		if(context != null)
@@ -103,92 +107,29 @@ public final class MicrochipRenderWiresPanel extends MicrochipRenderPanel
 			graphics.enableBatching();
 			for(var wire : context.topLayerWires())
 			{
-				this.renderWire(graphics, wire, !context.widget().hasSelectedPort() && (context.wire() == null || context.wire() == wire));
+				var key = WirePathKey.placed(microchip, wire);
+				var path = pathing.get(key, true);
+				boolean hovered = !context.widget().hasSelectedPort() && (context.wire() == null || context.wire() == wire);
+				var metadata = WireMetadata.of(microchip, color, wire, hovered);
+				this.renderWire(graphics, key, path, metadata);
 			}
 			
 			if(context.widget().hasSelectedPort() &&
 			   context.isOnBoard())
 			{
-				var endpoints = WireEndpoints.heldWire(context);
-				// TODO these dont render immediately
-				this.renderWire(graphics, endpoints, true);
+				var key = WirePathKey.held(context);
+				var path = pathing.get(key, false);
+				path.block();
+				var metadata = WireMetadata.of(microchip, color, context.widget().getSelectedPort(), true);
+				this.renderWire(graphics, key, path, metadata);
 			}
 			graphics.end();
 		}
 	}
 	
-	private void renderWire(TesseractGuiGraphics graphics, Wire wire, boolean hovered)
+	public void renderWire(TesseractGuiGraphics graphics, WirePathKey key, WirePath path, WireMetadata metadata)
 	{
-		this.renderWire(graphics, wire, WireEndpoints.of(color, microchip, wire), hovered);
-	}
-	
-	public void renderWire(TesseractGuiGraphics graphics, WireEndpoints endpoints, boolean hovered)
-	{
-		this.renderWire(graphics, new Pair<>(null, List.of()), endpoints, hovered);
-	}
-	
-	public void renderWire(TesseractGuiGraphics graphics, Wire wire, WireEndpoints endpoints, boolean hovered)
-	{
-		this.renderWire(graphics, new Pair<>(wire, List.of()), endpoints, hovered);
-	}
-	
-	public void renderWire(TesseractGuiGraphics graphics, List<Bounds> avoidBounds, WireEndpoints endpoints, boolean hovered)
-	{
-		this.renderWire(graphics, new Pair<>(null, avoidBounds), endpoints, hovered);
-	}
-	
-	private void renderWire(TesseractGuiGraphics graphics, Pair<Wire, List<Bounds>> eitherWireOrBounds, WireEndpoints endpoints, boolean hovered)
-	{
-		if(endpoints.valid())
-		{
-			this.renderWire(graphics, eitherWireOrBounds, endpoints.startX(), endpoints.startY(), endpoints.endX(), endpoints.endY(), hovered, endpoints.usePadding(), endpoints.powered(), endpoints.argb());
-		}
-	}
-	
-	// TODO partial duplicate of fetchPathFuture
-	public List<WirePathing.Position> fetchPath(Pair<Wire, List<Bounds>> eitherWireOrBounds, int startX, int startY, int endX, int endY, boolean usePadding)
-	{
-		int maxX = microchip.size().bounds().maxX();
-		int maxY = microchip.size().bounds().maxY();
-		
-		int portPadding = usePadding ? wirePortPadding : 0;
-		
-		return pathing.get(
-				eitherWireOrBounds.a(),
-				startX + portPadding,
-				startY,
-				endX - portPadding - wireSize,
-				endY,
-				eitherWireOrBounds.b()
-		);
-	}
-	
-	public CompletableFuture<List<WirePathing.Position>> fetchPathFuture(Pair<Wire, List<Bounds>> eitherWireOrBounds, int startX, int startY, int endX, int endY, boolean usePadding)
-	{
-		int maxX = microchip.size().bounds().maxX();
-		int maxY = microchip.size().bounds().maxY();
-		
-		int portPadding = usePadding ? wirePortPadding : 0;
-		
-		return pathing.getFuture(
-				eitherWireOrBounds.a(),
-				startX + portPadding,
-				startY,
-				endX - portPadding - wireSize,
-				endY,
-				eitherWireOrBounds.b()
-		);
-	}
-	
-	private void renderWire(TesseractGuiGraphics graphics, Pair<Wire, List<Bounds>> eitherWireOrBounds, int startX, int startY, int endX, int endY, boolean hovered, boolean usePadding, boolean powered, int argb)
-	{
-		var path = this.fetchPath(eitherWireOrBounds, startX, startY, endX, endY, usePadding);
-		this.renderWire(graphics, path, startX, startY, endX, endY, hovered, usePadding, powered, argb);
-	}
-	
-	public void renderWire(TesseractGuiGraphics graphics, List<WirePathing.Position> path, int startX, int startY, int endX, int endY, boolean hovered, boolean usePadding, boolean powered, int argb)
-	{
-		if(path.isEmpty())
+		if(!path.isPopulated())
 		{
 			return;
 		}
@@ -196,30 +137,28 @@ public final class MicrochipRenderWiresPanel extends MicrochipRenderPanel
 		int maxX = microchip.size().bounds().maxX();
 		int maxY = microchip.size().bounds().maxY();
 		
+		int startX = key.startX();
+		int startY = key.startY();
+		int endX = key.endX();
+		int endY = key.endY();
+		
+		boolean usePadding = true; // TODO
 		int portPadding = usePadding ? wirePortPadding : 0;
 		boolean renderStart = startX >= 0 && startX < maxX && startY >= 0 && startY < maxY;
 		boolean renderEnd = endX - portPadding >= 0 && endX - portPadding < maxX && endY >= 0 && endY < maxY;
 		
 		if(renderStart || renderEnd)
 		{
-			if(hovered)
+			if(metadata.hovered())
 			{
 				graphics = graphics.inner();
 				graphics.enableBatching();
 				graphics.setTextureShader(LBRClientShaders::pulsingTextureLightness);
 			}
 			
-			graphics.setColor(argb);
-			graphics.setTexture(LBR.id("textures/gui/container/microchip/wire_%s.png".formatted(powered ? "on" : "off")));
-			if(renderStart)
-			{
-				graphics.blit(startX, startY, startX, startY, portPadding, wireSize, 16, 16);
-			}
-			if(renderEnd)
-			{
-				graphics.blit(endX - portPadding, endY, endX - portPadding, endY, portPadding, wireSize, 16, 16);
-			}
-			for(var position : path)
+			graphics.setColor(metadata.argb());
+			graphics.setTexture(LBR.id("textures/gui/container/microchip/wire_%s.png".formatted(metadata.powered() ? "on" : "off")));
+			for(var position : path.positions())
 			{
 				if(position.x() < 0 || position.y() < 0 || position.x() >= maxX || position.y() >= maxY)
 				{
@@ -229,7 +168,7 @@ public final class MicrochipRenderWiresPanel extends MicrochipRenderPanel
 			}
 			graphics.resetColor();
 			
-			if(hovered)
+			if(metadata.hovered())
 			{
 				graphics.resetTextureShader();
 				graphics.end();
