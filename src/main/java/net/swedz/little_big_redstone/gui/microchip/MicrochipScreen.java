@@ -1,5 +1,6 @@
 package net.swedz.little_big_redstone.gui.microchip;
 
+import com.google.common.collect.Maps;
 import com.mojang.blaze3d.platform.InputConstants;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.Screen;
@@ -19,14 +20,16 @@ import net.swedz.little_big_redstone.gui.logicarray.slot.LogicArrayPlayerSlot;
 import net.swedz.little_big_redstone.gui.microchip.logic.LogicRenderer;
 import net.swedz.little_big_redstone.gui.microchip.logic.LogicRenderers;
 import net.swedz.little_big_redstone.gui.microchip.widget.MicrochipWidget;
-import net.swedz.little_big_redstone.gui.microchip.wire.WireEndpoints;
+import net.swedz.little_big_redstone.gui.microchip.wire.WireMetadata;
+import net.swedz.little_big_redstone.gui.microchip.wire.WirePath;
+import net.swedz.little_big_redstone.gui.microchip.wire.WirePathKey;
 import net.swedz.little_big_redstone.item.stickynote.StickyNoteItem;
 import net.swedz.little_big_redstone.microchip.object.logic.LogicComponent;
+import net.swedz.little_big_redstone.microchip.wire.Wire;
 import net.swedz.little_big_redstone.network.packet.StoreMicrochipViewPositionPacket;
-import net.swedz.tesseract.neoforge.api.Bounds;
 import net.swedz.tesseract.neoforge.helper.guigraphics.TesseractGuiGraphics;
 
-import java.util.List;
+import java.util.Map;
 
 public final class MicrochipScreen extends AbstractContainerScreen<MicrochipMenu>
 {
@@ -188,24 +191,34 @@ public final class MicrochipScreen extends AbstractContainerScreen<MicrochipMenu
 		super.renderFloatingItem(vanilla, stack, localX, localY, text);
 	}
 	
+	private record CarriedWiresData(WirePathKey key, WirePath path)
+	{
+	}
+	
 	private void renderCarriedWires(TesseractGuiGraphics graphics, int logicX, int logicY, LogicRenderer.Context context, LogicComponent<?, ?> component)
 	{
 		if(menu.getCarriedWires() != null)
 		{
-			var microchip = menu.microchip();
-			var size = microchip.size();
+			var wirePanel = microchipWidget.panel().wires();
+			
+			Map<Wire, CarriedWiresData> paths = Maps.newConcurrentMap();
+			for(var wire : menu.getCarriedWires())
+			{
+				var key = WirePathKey.carried(microchipWidget.context(), menu.getCarriedComponentSlot(), component, wire, logicX, logicY);
+				var path = wirePanel.pathing().get(key, false);
+				paths.put(wire, new CarriedWiresData(key, path));
+			}
+			WirePath.blockAllOf(paths.values().stream().map(CarriedWiresData::path).toList());
 			
 			graphics.pose().pushPose();
 			graphics.enableBatching();
-			
-			for(var wire : menu.getCarriedWires())
+			for(var entry : paths.entrySet())
 			{
-				var endpoints = WireEndpoints.carried(microchipWidget.context(), menu.getCarriedComponentSlot(), component, wire, logicX, logicY);
-				List<Bounds> avoidBounds = List.of(microchipWidget.panel().wires().pathing().mutateComponentBounds(component.size().toBounds(logicX, logicY)));
-				
-				microchipWidget.panel().wires().renderWire(graphics, avoidBounds, endpoints, true);
+				var wire = entry.getKey();
+				var data = entry.getValue();
+				var metadata = WireMetadata.carried(microchipWidget.microchip(), microchipWidget.color(), menu.getCarriedComponentSlot(), component, wire);
+				wirePanel.renderWire(graphics, data.key(), data.path(), metadata);
 			}
-			
 			graphics.drawBatches();
 			graphics.pose().popPose();
 		}

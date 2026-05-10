@@ -43,4 +43,15 @@ public interface LBRClientConfig
 	{
 		return 40;
 	}
+	
+	@ConfigKey
+	@ConfigComment({
+			"The number of threads to use for pathfinding wires in microchips.",
+			"Be careful editing this value."
+	})
+	@Range.Integer(min = 0, max = Integer.MAX_VALUE)
+	default int microchipWirePathfindingThreads()
+	{
+		return 2;
+	}
 }

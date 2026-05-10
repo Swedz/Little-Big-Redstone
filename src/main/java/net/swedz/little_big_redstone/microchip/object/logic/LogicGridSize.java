@@ -80,7 +80,7 @@ public record LogicGridSize(int width, int height)
 	
 	public int wireInEndX(int x)
 	{
-		return x;
+		return x - 2;
 	}
 	
 	public int wireInEndY(int y, int portIndex, int totalPorts)

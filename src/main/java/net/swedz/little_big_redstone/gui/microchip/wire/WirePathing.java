@@ -1,8 +1,10 @@
 package net.swedz.little_big_redstone.gui.microchip.wire;
 
+import com.google.common.cache.CacheBuilder;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import it.unimi.dsi.fastutil.objects.ObjectHeapPriorityQueue;
+import net.swedz.little_big_redstone.LBRClient;
 import net.swedz.little_big_redstone.microchip.Microchip;
 import net.swedz.little_big_redstone.microchip.wire.Wire;
 import net.swedz.tesseract.neoforge.api.Bounds;
@@ -12,19 +14,43 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicLong;
 import java.util.function.Function;
 
 public final class WirePathing
 {
+	private static final AtomicLong GENERATION_ID = new AtomicLong();
+	
+	private static boolean isCurrentGeneration(long generationId)
+	{
+		return generationId == GENERATION_ID.get();
+	}
+	
+	private static final ExecutorService PATHFINDER_PLACED_SERVICE  = Executors.newWorkStealingPool(LBRClient.config().microchipWirePathfindingThreads());
+	private static final ExecutorService PATHFINDER_CARRIED_SERVICE = Executors.newWorkStealingPool(LBRClient.config().microchipWirePathfindingThreads());
+	
+	public static void shutdownExecutor()
+	{
+		PATHFINDER_PLACED_SERVICE.shutdownNow();
+		PATHFINDER_CARRIED_SERVICE.shutdownNow();
+	}
+	
 	private final Microchip microchip;
 	
 	private final int                      areaPaddingXY;
 	private final Function<Bounds, Bounds> componentBoundMutator;
 	
-	private final Map<Wire, List<Position>> paths = Maps.newHashMap();
+	private final Map<WirePathKey, WirePath> pathsByKey  = CacheBuilder.newBuilder().expireAfterAccess(10, TimeUnit.SECONDS).<WirePathKey, WirePath>build().asMap();
+	private final Map<Wire, WirePath>        pathsByWire = Maps.newHashMap();
 	
 	public WirePathing(Microchip microchip, int areaPaddingXY, Function<Bounds, Bounds> componentBoundMutator)
 	{
+		GENERATION_ID.incrementAndGet();
+		
 		this.microchip = microchip;
 		
 		this.areaPaddingXY = areaPaddingXY;
@@ -36,16 +62,48 @@ public final class WirePathing
 		return componentBoundMutator.apply(bounds);
 	}
 	
-	public List<Position> get(Wire wire, int startX, int startY, int endX, int endY)
+	public WirePath get(WirePathKey key, boolean placed)
 	{
-		return wire == null ?
-				this.build(startX, startY, endX, endY) :
-				paths.computeIfAbsent(wire, (__) -> this.build(startX, startY, endX, endY));
+		if(key.wire().isPresent())
+		{
+			var wire = key.wire().get();
+			if(pathsByWire.containsKey(wire))
+			{
+				return pathsByWire.get(wire);
+			}
+		}
+		
+		if(pathsByKey.containsKey(key))
+		{
+			return pathsByKey.get(key);
+		}
+		else
+		{
+			long generationId = GENERATION_ID.get();
+			
+			List<WirePathPosition> positions = Lists.newArrayList();
+			
+			var future = CompletableFuture.runAsync(
+					() -> positions.addAll(this.build(generationId, key)),
+					placed ? PATHFINDER_PLACED_SERVICE : PATHFINDER_CARRIED_SERVICE
+			);
+			var path = new WirePath(positions, future);
+			
+			pathsByKey.put(key, path);
+			key.wire().ifPresent((wire) -> pathsByWire.put(wire, path));
+			
+			return path;
+		}
 	}
 	
-	public List<Position> build(int startX, int startY, int endX, int endY, List<Bounds> avoidBounds)
+	private List<WirePathPosition> build(long generationId, WirePathKey key)
 	{
-		avoidBounds = Lists.newArrayList(avoidBounds);
+		if(!isCurrentGeneration(generationId))
+		{
+			return List.of();
+		}
+		List<Bounds> avoidBounds = Lists.newArrayList();
+		key.additionalAvoidBounds().ifPresent(avoidBounds::addAll);
 		for(var entry : microchip.components())
 		{
 			if(entry.component().config().isVisible())
@@ -53,23 +111,18 @@ public final class WirePathing
 				avoidBounds.add(this.mutateComponentBounds(entry.toBounds()));
 			}
 		}
-		return path(startX, startY, endX, endY, microchip, areaPaddingXY, avoidBounds);
-	}
-	
-	public List<Position> build(int startX, int startY, int endX, int endY)
-	{
-		return this.build(startX, startY, endX, endY, List.of());
+		return path(generationId, key.startX(), key.startY(), key.endX(), key.endY(), microchip, areaPaddingXY, avoidBounds);
 	}
 	
 	public boolean contains(Wire wire, int x, int y, int wireSectionSize, int wireSectionPadding)
 	{
-		var path = paths.get(wire);
+		var path = pathsByWire.get(wire);
 		if(path != null)
 		{
-			for(var position : path)
+			for(var position : path.positions())
 			{
-				if(x >= position.x - wireSectionPadding - 1 && x <= position.x + wireSectionSize + wireSectionPadding - 1 &&
-				   y >= position.y - wireSectionPadding - 1 && y <= position.y + wireSectionSize + wireSectionPadding - 1)
+				if(x >= position.x() - wireSectionPadding - 1 && x <= position.x() + wireSectionSize + wireSectionPadding - 1 &&
+				   y >= position.y() - wireSectionPadding - 1 && y <= position.y() + wireSectionSize + wireSectionPadding - 1)
 				{
 					return true;
 				}
@@ -78,9 +131,12 @@ public final class WirePathing
 		return false;
 	}
 	
+	// TODO this is called when only wires are updated. thats not necessary
 	public void forgetEverything()
 	{
-		paths.clear();
+		GENERATION_ID.incrementAndGet();
+		pathsByKey.clear();
+		pathsByWire.clear();
 	}
 	
 	/**
@@ -88,6 +144,7 @@ public final class WirePathing
 	 * implementation. This respects the space of logic components according to the <code>areaPaddingXY</code>
 	 * parameter. Paths that overlap a component are not impossible, but are deprioritized significantly.
 	 *
+	 * @param generationId          the generation ID that requested this search. Used to terminate early
 	 * @param startX                the start x coordinate
 	 * @param startY                the start y coordinate
 	 * @param endX                  the end x coordinate
@@ -97,7 +154,7 @@ public final class WirePathing
 	 * @param componentBoundMutator the function used to create the bounds for components
 	 * @return the list of positions that construct the best path between the points
 	 */
-	private static List<Position> path(int startX, int startY, int endX, int endY, Microchip microchip, int areaPaddingXY, List<Bounds> avoidBounds)
+	private static List<WirePathPosition> path(long generationId, int startX, int startY, int endX, int endY, Microchip microchip, int areaPaddingXY, List<Bounds> avoidBounds)
 	{
 		var innerBounds = microchip.size().bounds().normalize();
 		var bounds = innerBounds.grow(areaPaddingXY, areaPaddingXY);
@@ -111,7 +168,7 @@ public final class WirePathing
 			return List.of();
 		}
 		
-		var avoidAreas = buildAvoidGrid(innerBounds, bounds, avoidBounds);
+		var avoidAreas = buildAvoidGrid(generationId, innerBounds, bounds, avoidBounds);
 		
 		ObjectHeapPriorityQueue<Node> open = new ObjectHeapPriorityQueue<>();
 		
@@ -120,6 +177,11 @@ public final class WirePathing
 		
 		while(!open.isEmpty())
 		{
+			if(!isCurrentGeneration(generationId))
+			{
+				return List.of();
+			}
+			
 			var current = open.dequeue();
 			if(current.closed)
 			{
@@ -129,13 +191,18 @@ public final class WirePathing
 			
 			if(current.equals(end))
 			{
-				return retrace(current);
+				return retrace(generationId, current);
 			}
 			
 			current.closed = true;
 			
 			for(var neighbor : neighbors(nodes, current))
 			{
+				if(!isCurrentGeneration(generationId))
+				{
+					return List.of();
+				}
+				
 				if(neighbor == null || neighbor.closed)
 				{
 					continue;
@@ -163,7 +230,7 @@ public final class WirePathing
 		return List.of();
 	}
 	
-	private static AvoidGrid buildAvoidGrid(Bounds innerBounds, Bounds bounds, List<Bounds> avoidBounds)
+	private static AvoidGrid buildAvoidGrid(long generationId, Bounds innerBounds, Bounds bounds, List<Bounds> avoidBounds)
 	{
 		// These values are based on the standard microchip gui size and give decent results
 		// We dont use the size here because it will yield inconsistent results when rendering smaller microchips
@@ -177,6 +244,11 @@ public final class WirePathing
 		{
 			for(int x = innerBounds.minX(); x <= innerBounds.maxX(); x++)
 			{
+				if(!isCurrentGeneration(generationId))
+				{
+					return avoidAreas;
+				}
+				
 				avoidAreas.setWeight(index, 0);
 				index++;
 			}
@@ -190,6 +262,11 @@ public final class WirePathing
 			{
 				for(int x = avoidBoundsEntry.minX(); x <= avoidBoundsEntry.maxX(); x++)
 				{
+					if(!isCurrentGeneration(generationId))
+					{
+						return avoidAreas;
+					}
+					
 					avoidAreas.setWeight(index, heavyAvoidWeight);
 					index++;
 				}
@@ -216,21 +293,21 @@ public final class WirePathing
 		return neighbors;
 	}
 	
-	private static List<Position> retrace(Node end)
+	private static List<WirePathPosition> retrace(long generationId, Node end)
 	{
-		List<Position> path = Lists.newArrayList();
+		List<WirePathPosition> path = Lists.newArrayList();
 		var current = end;
 		while(current != null)
 		{
+			if(!isCurrentGeneration(generationId))
+			{
+				return List.of();
+			}
 			path.add(current.immutable());
 			current = current.parent;
 		}
 		Collections.reverse(path);
 		return Collections.unmodifiableList(path);
-	}
-	
-	public record Position(int x, int y)
-	{
 	}
 	
 	private static final class Node implements Comparable<Node>
@@ -273,9 +350,9 @@ public final class WirePathing
 			return 10 * (dx + dy) + (14 - 2 * 10) * Math.min(dx, dy);
 		}
 		
-		public Position immutable()
+		public WirePathPosition immutable()
 		{
-			return new Position(x, y);
+			return new WirePathPosition(x, y);
 		}
 		
 		@Override
