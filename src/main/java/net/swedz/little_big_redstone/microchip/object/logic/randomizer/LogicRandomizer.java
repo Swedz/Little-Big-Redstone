@@ -72,13 +72,16 @@ public final class LogicRandomizer extends LogicComponent<LogicRandomizer, Logic
 	{
 		int originalOutputIndex = outputIndex;
 		
-		if(inputs[0] > 0 && RANDOM.nextFloat() <= config.chance)
+		int input = inputs[0];
+		if(input > 0 && RANDOM.nextFloat() <= config.chance)
 		{
 			outputIndex = RANDOM.nextInt(config.outputs);
+			outputState = input;
 		}
 		else
 		{
 			outputIndex = -1;
+			outputState = 0;
 		}
 		
 		if(originalOutputIndex != outputIndex)
