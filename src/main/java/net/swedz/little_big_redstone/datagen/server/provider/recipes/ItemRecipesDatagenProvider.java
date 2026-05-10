@@ -23,13 +23,14 @@ public final class ItemRecipesDatagenProvider extends RecipeProvider
 	private static void microchip(DyeColor color, RecipeOutput output)
 	{
 		new ShapedRecipeBuilder()
-				.pattern("III")
+				.pattern("iIi")
 				.pattern("RCR")
-				.pattern("IFI")
+				.pattern("iDi")
 				.define('I', Tags.Items.STORAGE_BLOCKS_IRON)
+				.define('i', Tags.Items.INGOTS_IRON)
 				.define('R', Tags.Items.DUSTS_REDSTONE)
 				.define('C', LBRItems.REDSTONE_CIRCUIT_BOARD)
-				.define('F', LBRItems.floppyDisk(color))
+				.define('D', color.getTag())
 				.output(LBRBlocks.microchip(color).get(), 1)
 				.offerTo(output, LBR.id("microchip/%s".formatted(color.getName())));
 	}
