@@ -66,7 +66,7 @@ public record WirePathKey(
 				Optional.empty(),
 				startX,
 				startY,
-				context.boardMouseX() + 1,
+				context.boardMouseX() - 4,
 				context.boardMouseY() - 1,
 				Optional.empty()
 		);

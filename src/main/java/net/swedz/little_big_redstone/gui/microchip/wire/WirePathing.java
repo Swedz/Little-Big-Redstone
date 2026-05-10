@@ -102,6 +102,7 @@ public final class WirePathing
 		{
 			return List.of();
 		}
+		
 		List<Bounds> avoidBounds = Lists.newArrayList();
 		key.additionalAvoidBounds().ifPresent(avoidBounds::addAll);
 		for(var entry : microchip.components())
@@ -111,7 +112,16 @@ public final class WirePathing
 				avoidBounds.add(this.mutateComponentBounds(entry.toBounds()));
 			}
 		}
-		return path(generationId, key.startX(), key.startY(), key.endX(), key.endY(), microchip, areaPaddingXY, avoidBounds);
+		
+		// We add a few positions directly so that the pathfinder algorithm doesn't start immediately inside a
+		//  component's bounds.
+		List<WirePathPosition> path = Lists.newArrayList();
+		path.add(new WirePathPosition(key.startX() - 3, key.startY()));
+		path.add(new WirePathPosition(key.startX() - 2, key.startY()));
+		path.addAll(path(generationId, key.startX(), key.startY(), key.endX(), key.endY(), microchip, areaPaddingXY, avoidBounds, true));
+		path.add(new WirePathPosition(key.endX() + 2, key.endY()));
+		path.add(new WirePathPosition(key.endX() + 3, key.endY()));
+		return Collections.unmodifiableList(path);
 	}
 	
 	public boolean contains(Wire wire, int x, int y, int wireSectionSize, int wireSectionPadding)
@@ -138,27 +148,33 @@ public final class WirePathing
 		pathsByWire.clear();
 	}
 	
+	private static List<WirePathPosition> path(long generationId, int startX, int startY, int endX, int endY, Microchip microchip, int areaPaddingXY, List<Bounds> avoidBounds, boolean ignoreWeightUntilEmpty)
+	{
+		var innerBounds = microchip.size().bounds().normalize();
+		var bounds = innerBounds.grow(areaPaddingXY, areaPaddingXY);
+		var nodes = new NodeGrid(bounds);
+		var avoidAreas = buildAvoidGrid(generationId, innerBounds, bounds, avoidBounds);
+		return path(generationId, startX, startY, endX, endY, nodes, avoidAreas, ignoreWeightUntilEmpty);
+	}
+	
 	/**
 	 * Performs a search to find the best path from the start coordinates to the end coordinates using an A*
 	 * implementation. This respects the space of logic components according to the <code>areaPaddingXY</code>
 	 * parameter. Paths that overlap a component are not impossible, but are deprioritized significantly.
 	 *
-	 * @param generationId          the generation ID that requested this search. Used to terminate early
-	 * @param startX                the start x coordinate
-	 * @param startY                the start y coordinate
-	 * @param endX                  the end x coordinate
-	 * @param endY                  the end y coordinate
-	 * @param microchip             the microchip
-	 * @param areaPaddingXY         the margin to apply to the full area of the microchip
-	 * @param componentBoundMutator the function used to create the bounds for components
+	 * @param generationId           the generation ID that requested this search. Used to terminate early
+	 * @param startX                 the start x coordinate
+	 * @param startY                 the start y coordinate
+	 * @param endX                   the end x coordinate
+	 * @param endY                   the end y coordinate
+	 * @param microchip              the microchip
+	 * @param areaPaddingXY          the margin to apply to the full area of the microchip
+	 * @param avoidBounds            the additional boundary boxes to avoid in the path
+	 * @param ignoreWeightUntilEmpty whether the pathfinding should ignore weights until it reaches an empty position
 	 * @return the list of positions that construct the best path between the points
 	 */
-	private static List<WirePathPosition> path(long generationId, int startX, int startY, int endX, int endY, Microchip microchip, int areaPaddingXY, List<Bounds> avoidBounds)
+	private static List<WirePathPosition> path(long generationId, int startX, int startY, int endX, int endY, NodeGrid nodes, AvoidGrid avoidAreas, boolean ignoreWeightUntilEmpty)
 	{
-		var innerBounds = microchip.size().bounds().normalize();
-		var bounds = innerBounds.grow(areaPaddingXY, areaPaddingXY);
-		var nodes = new NodeGrid(bounds);
-		
 		var start = nodes.get(startX, startY);
 		var end = nodes.get(endX, endY);
 		
@@ -166,8 +182,6 @@ public final class WirePathing
 		{
 			return List.of();
 		}
-		
-		var avoidAreas = buildAvoidGrid(generationId, innerBounds, bounds, avoidBounds);
 		
 		ObjectHeapPriorityQueue<Node> open = new ObjectHeapPriorityQueue<>();
 		
@@ -188,6 +202,17 @@ public final class WirePathing
 			}
 			current.open = false;
 			
+			if(ignoreWeightUntilEmpty &&
+			   avoidAreas.getWeight(current) == 0)
+			{
+				var pathSoFar = retrace(generationId, current);
+				var pathRemaining = path(generationId, current.x, current.y, endX, endY, nodes, avoidAreas, false);
+				List<WirePathPosition> path = Lists.newArrayList();
+				path.addAll(pathSoFar);
+				path.addAll(pathRemaining);
+				return Collections.unmodifiableList(path);
+			}
+			
 			if(current.equals(end))
 			{
 				return retrace(generationId, current);
@@ -207,7 +232,8 @@ public final class WirePathing
 					continue;
 				}
 				
-				int g = current.g + 1 + avoidAreas.getWeight(neighbor);
+				int weight = ignoreWeightUntilEmpty ? 0 : avoidAreas.getWeight(neighbor);
+				int g = current.g + 1 + weight;
 				
 				boolean notOpen = !neighbor.open;
 				boolean betterPath = g < neighbor.g;

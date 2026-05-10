@@ -70,7 +70,7 @@ public record LogicGridSize(int width, int height)
 	
 	public int wireOutStartX(int x)
 	{
-		return x + this.widthPixels();
+		return x + this.widthPixels() + 3;
 	}
 	
 	public int wireOutStartY(int y, int portIndex, int totalPorts)
@@ -80,7 +80,7 @@ public record LogicGridSize(int width, int height)
 	
 	public int wireInEndX(int x)
 	{
-		return x - 2;
+		return x - 5;
 	}
 	
 	public int wireInEndY(int y, int portIndex, int totalPorts)
