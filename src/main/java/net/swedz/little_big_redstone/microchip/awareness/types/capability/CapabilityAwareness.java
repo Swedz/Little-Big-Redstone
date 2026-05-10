@@ -4,6 +4,7 @@ import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.Level;
 import net.neoforged.neoforge.capabilities.BlockCapability;
@@ -11,26 +12,40 @@ import net.neoforged.neoforge.capabilities.BlockCapabilityCache;
 import net.swedz.little_big_redstone.LBR;
 import net.swedz.little_big_redstone.microchip.awareness.MicrochipAwareness;
 
+import java.util.List;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 
 public abstract class CapabilityAwareness<A extends CapabilityAwareness<A, T>, T> extends MicrochipAwareness<A>
 {
-	private final BlockCapability<T, Direction> capability;
+	private record CapabilityKey(
+			ResourceLocation name,
+			Direction direction
+	)
+	{
+	}
 	
-	private final Cache<Direction, BlockCapabilityCache<T, Direction>> cache = CacheBuilder.newBuilder()
+	private final Cache<CapabilityKey, BlockCapabilityCache<T, Direction>> cache = CacheBuilder.newBuilder()
 			.expireAfterAccess(1, TimeUnit.MINUTES)
 			.build();
 	
-	public CapabilityAwareness(BlockCapability<T, Direction> capability)
+	public CapabilityAwareness()
 	{
-		this.capability = capability;
 	}
 	
-	private BlockCapabilityCache<T, Direction> create(Level level, BlockPos pos, Direction direction)
+	protected abstract List<? extends BlockCapability<T, Direction>> getCapabilities();
+	
+	private BlockCapabilityCache<T, Direction> create(
+			BlockCapability<T, Direction> capability,
+			Level level,
+			BlockPos pos,
+			Direction direction
+	)
 	{
 		return BlockCapabilityCache.create(
-				capability, (ServerLevel) level, pos.relative(direction),
+				capability,
+				(ServerLevel) level,
+				pos.relative(direction),
 				direction.getOpposite()
 		);
 	}
@@ -39,9 +54,18 @@ public abstract class CapabilityAwareness<A extends CapabilityAwareness<A, T>, T
 	{
 		try
 		{
-			return cache.get(direction, () -> this.create(level, pos, direction)).getCapability();
+			for(var capability : this.getCapabilities())
+			{
+				var key = new CapabilityKey(capability.name(), direction);
+				var instance = cache.get(key, () -> this.create(capability, level, pos, direction)).getCapability();
+				if(instance != null)
+				{
+					return instance;
+				}
+			}
+			return null;
 		}
-		catch (ExecutionException ex)
+		catch(ExecutionException ex)
 		{
 			LBR.LOGGER.error("Failed to fetch cached capability at {}", pos.toShortString(), ex);
 			return null;
