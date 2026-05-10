@@ -36,7 +36,6 @@ public final class MicrochipRenderWiresPanel extends MicrochipRenderPanel
 		int componentPadding = wirePortPadding + 1;
 		pathing = new WirePathing(
 				microchip,
-				// TODO include some area padding so wires can go out of bounds to save performance in some cases
 				0,
 				(b) -> new Bounds(
 						b.minX() - componentPadding, b.minY() - componentPadding,
