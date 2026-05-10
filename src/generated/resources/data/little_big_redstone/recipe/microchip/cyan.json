@@ -5,20 +5,23 @@
     "C": {
       "item": "little_big_redstone:redstone_circuit_board"
     },
-    "F": {
-      "item": "little_big_redstone:cyan_floppy_disk"
+    "D": {
+      "tag": "c:dyes/cyan"
     },
     "I": {
       "tag": "c:storage_blocks/iron"
     },
     "R": {
       "tag": "c:dusts/redstone"
+    },
+    "i": {
+      "tag": "c:ingots/iron"
     }
   },
   "pattern": [
-    "III",
+    "iIi",
     "RCR",
-    "IFI"
+    "iDi"
   ],
   "result": {
     "count": 1,
