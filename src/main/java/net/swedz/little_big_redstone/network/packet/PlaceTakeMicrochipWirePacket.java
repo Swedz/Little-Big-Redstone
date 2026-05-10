@@ -14,8 +14,10 @@ import net.swedz.tesseract.neoforge.packet.PacketContext;
 
 public record PlaceTakeMicrochipWirePacket(
 		int containerId,
-		int outputSlot, int outputPort,
-		int inputSlot, int inputPort,
+		int outputSlot,
+		int outputPort,
+		int inputSlot,
+		int inputPort,
 		boolean place
 ) implements LBRCustomPacket
 {
@@ -64,7 +66,7 @@ public record PlaceTakeMicrochipWirePacket(
 					{
 						if(wires.add(outputSlot, outputPort, inputSlot, inputPort))
 						{
-							microchip.markDirty();
+							microchip.markDirty(false);
 							carried.consume(1, player);
 						}
 						else
@@ -78,7 +80,7 @@ public record PlaceTakeMicrochipWirePacket(
 						if(wire != null)
 						{
 							wires.remove(wire);
-							microchip.markDirty();
+							microchip.markDirty(false);
 							if(!player.hasInfiniteMaterials())
 							{
 								carried.grow(1);
@@ -111,7 +113,7 @@ public record PlaceTakeMicrochipWirePacket(
 					if(wire != null)
 					{
 						wires.remove(wire);
-						microchip.markDirty();
+						microchip.markDirty(false);
 						menu.setCarried(LBRItems.REDSTONE_BIT.asItem().getDefaultInstance());
 					}
 					else

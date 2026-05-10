@@ -57,7 +57,7 @@ public record PlaceTakeMicrochipObjectPacket(
 						var stickyNote = microchip.stickyNotes().add(x, y, heldItem);
 						if(stickyNote != null)
 						{
-							microchip.markDirty();
+							microchip.markDirty(false);
 							if(!player.hasInfiniteMaterials() || leftClick)
 							{
 								heldItem.shrink(1);
@@ -83,7 +83,7 @@ public record PlaceTakeMicrochipObjectPacket(
 						{
 							microchip.components().updateValidity();
 							menu.placeCarriedWires(logic.slot());
-							microchip.markDirty();
+							microchip.markDirty(true);
 							if(!player.hasInfiniteMaterials() || leftClick)
 							{
 								heldItem.shrink(1);
@@ -117,7 +117,7 @@ public record PlaceTakeMicrochipObjectPacket(
 						{
 							menu.setCarried(stack);
 						}
-						microchip.markDirty();
+						microchip.markDirty(false);
 					}
 					else if(object instanceof LogicEntry logic)
 					{
@@ -132,7 +132,7 @@ public record PlaceTakeMicrochipObjectPacket(
 						{
 							ItemHandlerHelper.giveItemToPlayer(player, new ItemStack(LBRItems.REDSTONE_BIT, wiresPopped.size()));
 						}
-						microchip.markDirty();
+						microchip.markDirty(true);
 					}
 					else
 					{

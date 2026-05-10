@@ -141,7 +141,7 @@ public final class MicrochipWidget implements GuiEventListener, Renderable, Narr
 		return selectedPort;
 	}
 	
-	public void handleUpdate()
+	public void handleUpdate(boolean rerouteWires)
 	{
 		if(this.hasSelectedPort())
 		{
@@ -153,7 +153,10 @@ public final class MicrochipWidget implements GuiEventListener, Renderable, Narr
 			}
 		}
 		
-		panel.wires().rebuildPaths();
+		if(rerouteWires)
+		{
+			panel.wires().rebuildPaths();
+		}
 	}
 	
 	private boolean dyeComponent(int x, int y, int button)
@@ -171,7 +174,7 @@ public final class MicrochipWidget implements GuiEventListener, Renderable, Narr
 			{
 				if(entry.setColor(result.color()))
 				{
-					microchip.markDirty();
+					microchip.markDirty(false);
 					if(result.consume())
 					{
 						carried.consume(1, screen.getMinecraft().player);
@@ -198,7 +201,7 @@ public final class MicrochipWidget implements GuiEventListener, Renderable, Narr
 		   carried.isEmpty())
 		{
 			microchip.stickyNotes().remove(note);
-			microchip.markDirty();
+			microchip.markDirty(false);
 			var stack = note.toStack();
 			if(!shift || TransferHelper.insert(menu.getDestinationInventoryItemHandler(Minecraft.getInstance().player), stack) <= 0)
 			{
@@ -218,7 +221,7 @@ public final class MicrochipWidget implements GuiEventListener, Renderable, Narr
 		
 		if(wire != null && microchip.wires().remove(wire))
 		{
-			microchip.markDirty();
+			microchip.markDirty(false);
 			if(carried.isEmpty())
 			{
 				menu.setCarried(LBRItems.REDSTONE_BIT.asItem().getDefaultInstance());
@@ -300,8 +303,7 @@ public final class MicrochipWidget implements GuiEventListener, Renderable, Narr
 		   carried.isEmpty())
 		{
 			var wiresPopped = microchip.components().remove(logic);
-			microchip.markDirty();
-			panel.wires().rebuildPaths();
+			microchip.markDirty(true);
 			var stack = logic.toStack();
 			if(!shift || TransferHelper.insert(menu.getDestinationInventoryItemHandler(Minecraft.getInstance().player), stack) <= 0)
 			{
@@ -335,7 +337,7 @@ public final class MicrochipWidget implements GuiEventListener, Renderable, Narr
 				var stickyNote = microchip.stickyNotes().add(placeX, placeY, carried);
 				if(stickyNote != null)
 				{
-					microchip.markDirty();
+					microchip.markDirty(false);
 					if(!player.hasInfiniteMaterials() || leftClick)
 					{
 						carried.shrink(1);
@@ -364,7 +366,7 @@ public final class MicrochipWidget implements GuiEventListener, Renderable, Narr
 			   context.isPortEmpty() &&
 			   microchip.wires().add(selectedPort, port))
 			{
-				microchip.markDirty();
+				microchip.markDirty(false);
 				carried.consume(1, screen.getMinecraft().player);
 				new PlaceTakeMicrochipWirePacket(menu.containerId, selectedPort, port, true).sendToServer();
 				if(carried.isEmpty())
@@ -404,8 +406,7 @@ public final class MicrochipWidget implements GuiEventListener, Renderable, Narr
 				if(logic != null)
 				{
 					menu.placeCarriedWires(logic.slot());
-					microchip.markDirty();
-					panel.wires().rebuildPaths();
+					microchip.markDirty(true);
 					if(!player.hasInfiniteMaterials() || leftClick)
 					{
 						carried.shrink(1);

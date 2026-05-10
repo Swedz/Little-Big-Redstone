@@ -188,6 +188,7 @@ public final class MicrochipBlockEntity extends BlockEntity implements MenuProvi
 		var contextDirty = logicContext.isDirty();
 		if(microchipDirty || contextDirty)
 		{
+			var rerouteWires = microchip.isWireRouteDirty();
 			microchip.markClean();
 			
 			awarenesses.postTick(awarenessContext, microchipDirty, contextDirty);
@@ -203,7 +204,7 @@ public final class MicrochipBlockEntity extends BlockEntity implements MenuProvi
 					this.sync();
 				}
 				this.publishUpdatePacket(
-						(container) -> new UpdateMicrochipMenuPacket(container, microchip),
+						(container) -> new UpdateMicrochipMenuPacket(container, microchip, rerouteWires),
 						() -> new UpdateMicrochipWatcherPacket(microchip)
 				);
 			}

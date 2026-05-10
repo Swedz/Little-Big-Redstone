@@ -34,7 +34,7 @@ public record MicrochipLogicConfigReference(
 				{
 					ItemHandlerHelper.giveItemToPlayer(player, new ItemStack(LBRItems.REDSTONE_BIT, wiresPopped));
 				}
-				microchip.markDirty();
+				microchip.markDirty(false);
 				
 				blockEntity.openMenu(player, returnViewPosition);
 			}

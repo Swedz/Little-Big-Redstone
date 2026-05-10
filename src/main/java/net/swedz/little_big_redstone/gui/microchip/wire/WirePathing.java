@@ -131,7 +131,6 @@ public final class WirePathing
 		return false;
 	}
 	
-	// TODO this is called when only wires are updated. thats not necessary
 	public void forgetEverything()
 	{
 		GENERATION_ID.incrementAndGet();

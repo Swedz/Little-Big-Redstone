@@ -24,7 +24,7 @@ import java.util.List;
 public class LBRClientProxy extends LBRProxy
 {
 	@Override
-	public void handleUpdateMicrochip(int containerId, Microchip microchip)
+	public void handleUpdateMicrochip(int containerId, Microchip microchip, boolean rerouteWires)
 	{
 		if(Minecraft.getInstance().player.containerMenu instanceof MicrochipMenu menu &&
 		   menu.containerId == containerId)
@@ -32,7 +32,7 @@ public class LBRClientProxy extends LBRProxy
 			menu.microchip().loadFrom(microchip);
 			if(Minecraft.getInstance().screen instanceof MicrochipScreen screen)
 			{
-				screen.handleUpdate();
+				screen.handleUpdate(rerouteWires);
 			}
 		}
 		else

@@ -51,7 +51,7 @@ public final class Microchip
 	
 	private final MicrochipAwarenesses awarenesses;
 	
-	private boolean dirty;
+	private boolean dirty, rerouteWires;
 	
 	private Microchip(MicrochipSize size, MicrochipStickyNotes stickyNotes, LogicComponents components, MicrochipWires wires)
 	{
@@ -183,7 +183,7 @@ public final class Microchip
 		stickyNotes.loadFrom(other.stickyNotes());
 		components.loadFrom(other.components());
 		wires.loadFrom(other.wires());
-		this.markDirty();
+		this.markDirty(true);
 	}
 	
 	public void loadFrom(Immutable other)
@@ -191,7 +191,7 @@ public final class Microchip
 		stickyNotes.loadFrom(other.stickyNotes);
 		components.loadFrom(other.components);
 		wires.loadFrom(other.wires);
-		this.markDirty();
+		this.markDirty(true);
 	}
 	
 	public Immutable immutable()
@@ -204,7 +204,7 @@ public final class Microchip
 		stickyNotes.clear();
 		components.clear();
 		wires.clear();
-		this.markDirty();
+		this.markDirty(true);
 	}
 	
 	public boolean isDirty()
@@ -212,17 +212,27 @@ public final class Microchip
 		return dirty;
 	}
 	
-	public void markDirty()
+	public boolean isWireRouteDirty()
+	{
+		return rerouteWires;
+	}
+	
+	public void markDirty(boolean rerouteWires)
 	{
 		components.rebuildTraversal();
 		awarenesses.rebuild(this);
 		awarenesses.load(this);
 		dirty = true;
+		if(rerouteWires)
+		{
+			this.rerouteWires = true;
+		}
 	}
 	
 	public void markClean()
 	{
 		dirty = false;
+		rerouteWires = false;
 	}
 	
 	public void tickLogic(LogicContext context)

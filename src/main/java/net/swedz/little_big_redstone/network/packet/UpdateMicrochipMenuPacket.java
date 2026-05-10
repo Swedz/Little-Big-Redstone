@@ -9,11 +9,16 @@ import net.swedz.little_big_redstone.proxy.LBRProxy;
 import net.swedz.tesseract.neoforge.packet.PacketContext;
 import net.swedz.tesseract.neoforge.proxy.Proxies;
 
-public record UpdateMicrochipMenuPacket(int containerId, Microchip microchip) implements LBRCustomPacket
+public record UpdateMicrochipMenuPacket(
+		int containerId,
+		Microchip microchip,
+		boolean rerouteWires
+) implements LBRCustomPacket
 {
 	public static final StreamCodec<ByteBuf, UpdateMicrochipMenuPacket> STREAM_CODEC = StreamCodec.composite(
 			ByteBufCodecs.VAR_INT, UpdateMicrochipMenuPacket::containerId,
 			Microchip.STREAM_CODEC, UpdateMicrochipMenuPacket::microchip,
+			ByteBufCodecs.BOOL, UpdateMicrochipMenuPacket::rerouteWires,
 			UpdateMicrochipMenuPacket::new
 	);
 	
@@ -22,6 +27,6 @@ public record UpdateMicrochipMenuPacket(int containerId, Microchip microchip) im
 	{
 		context.assertClientbound();
 		
-		Proxies.get(LBRProxy.class).handleUpdateMicrochip(containerId, microchip);
+		Proxies.get(LBRProxy.class).handleUpdateMicrochip(containerId, microchip, rerouteWires);
 	}
 }

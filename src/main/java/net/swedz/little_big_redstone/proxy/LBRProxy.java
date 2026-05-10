@@ -14,7 +14,7 @@ import java.util.List;
 @ProxyEntrypoint
 public class LBRProxy implements Proxy
 {
-	public void handleUpdateMicrochip(int containerId, Microchip microchip)
+	public void handleUpdateMicrochip(int containerId, Microchip microchip, boolean rerouteWires)
 	{
 	}
 	
