@@ -141,10 +141,8 @@ public final class MicrochipRenderWiresPanel extends MicrochipRenderPanel
 		int endX = key.endX();
 		int endY = key.endY();
 		
-		boolean usePadding = true; // TODO
-		int portPadding = usePadding ? wirePortPadding : 0;
 		boolean renderStart = startX >= 0 && startX < maxX && startY >= 0 && startY < maxY;
-		boolean renderEnd = endX - portPadding >= 0 && endX - portPadding < maxX && endY >= 0 && endY < maxY;
+		boolean renderEnd = endX - wirePortPadding >= 0 && endX - wirePortPadding < maxX && endY >= 0 && endY < maxY;
 		
 		if(renderStart || renderEnd)
 		{
