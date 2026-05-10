@@ -11,15 +11,23 @@ import net.swedz.tesseract.neoforge.api.Assert;
 
 public record WireEndpoints(
 		boolean valid,
-		int startX, int startY,
-		int endX, int endY,
-		boolean usePadding, boolean powered, int argb
+		int startX,
+		int startY,
+		int endX,
+		int endY,
+		boolean usePadding,
+		boolean powered,
+		int argb
 )
 {
 	public WireEndpoints(
-			int startX, int startY,
-			int endX, int endY,
-			boolean usePadding, boolean powered, int argb
+			int startX,
+			int startY,
+			int endX,
+			int endY,
+			boolean usePadding,
+			boolean powered,
+			int argb
 	)
 	{
 		this(true, startX, startY, endX, endY, usePadding, powered, argb);
