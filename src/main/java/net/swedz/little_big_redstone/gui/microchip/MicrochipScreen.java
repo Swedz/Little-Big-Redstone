@@ -57,9 +57,9 @@ public final class MicrochipScreen extends AbstractContainerScreen<MicrochipMenu
 		imageHeight = 227;
 	}
 	
-	public void handleUpdate()
+	public void handleUpdate(boolean rerouteWires)
 	{
-		microchipWidget.handleUpdate();
+		microchipWidget.handleUpdate(rerouteWires);
 	}
 	
 	private boolean isWithinBoard(int x, int y)

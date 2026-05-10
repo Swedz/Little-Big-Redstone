@@ -238,7 +238,7 @@ public final class MicrochipGuidebookScene extends LytBox implements ExportableR
 		var entry = microchip.components().addUnsafe(x + marginWidth, y + marginHeight, component);
 		logicDefaults.put(entry.slot(), component);
 		logic.put(name, entry.slot());
-		microchip.markDirty();
+		microchip.markDirty(true);
 	}
 	
 	public void addWire(String from, String to, int fromPort, int toPort,
@@ -271,7 +271,7 @@ public final class MicrochipGuidebookScene extends LytBox implements ExportableR
 		}
 		
 		microchip.wires().add(fromSlot, fromPort, toSlot, toPort);
-		microchip.markDirty();
+		microchip.markDirty(false);
 	}
 	
 	public void setRedstoneSignal(Integer step, Direction direction, int signal)

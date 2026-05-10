@@ -62,7 +62,7 @@ public final class MicrochipStickyNoteReference implements StickyNoteReference
 			if(entry != null)
 			{
 				entry.setNote(new StickyNote(text));
-				menu.microchip().markDirty();
+				menu.microchip().markDirty(false);
 			}
 		}
 	}

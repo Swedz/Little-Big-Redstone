@@ -44,7 +44,7 @@ public record DyeMicrochipObjectPacket(
 				{
 					if(entry.setColor(result.color()))
 					{
-						microchip.markDirty();
+						microchip.markDirty(true);
 						if(result.consume())
 						{
 							heldItem.consume(1, player);
