@@ -1,6 +1,7 @@
 package net.swedz.little_big_redstone;
 
 import net.minecraft.core.Direction;
+import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.Style;
 import net.minecraft.network.chat.TextColor;
 import net.minecraft.resources.ResourceLocation;
@@ -16,6 +17,7 @@ import net.swedz.little_big_redstone.microchip.awareness.AwarenessTypes;
 import net.swedz.little_big_redstone.microchip.object.logic.LogicMode;
 import net.swedz.little_big_redstone.microchip.object.logic.LogicTypes;
 import net.swedz.little_big_redstone.microchip.object.logic.config.LogicComparisonMode;
+import net.swedz.little_big_redstone.microchip.object.logic.reader.LogicReaderThreshold;
 import net.swedz.little_big_redstone.network.LBRPackets;
 import net.swedz.tesseract.neoforge.api.Assert;
 import net.swedz.tesseract.neoforge.capabilities.CapabilitiesListeners;
@@ -101,6 +103,7 @@ public final class LBR
 				.parser(Direction.class, () -> LBRTooltips.DIRECTION_PARSER)
 				.parser(LogicMode.class, () -> LogicMode::label)
 				.parser(LogicComparisonMode.class, () -> LogicComparisonMode::symbol)
+				.parser(LogicReaderThreshold.class, () -> (threshold) -> threshold.isPercentage() ? Parser.FLOAT_PERCENTAGE.parse(threshold.percentage(), 2) : Component.literal(String.format("%,d", threshold.number())))
 				
 				.build(LBRText.class)
 				.load();

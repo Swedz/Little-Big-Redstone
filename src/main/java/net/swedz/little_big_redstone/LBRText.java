@@ -5,6 +5,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.swedz.little_big_redstone.microchip.object.logic.LogicMode;
 import net.swedz.little_big_redstone.microchip.object.logic.config.LogicComparisonMode;
+import net.swedz.little_big_redstone.microchip.object.logic.reader.LogicReaderThreshold;
 import net.swedz.tesseract.neoforge.lang.annotation.LangKey;
 import net.swedz.tesseract.neoforge.lang.annotation.Parsed;
 import net.swedz.tesseract.neoforge.lang.annotation.WithStyle;
@@ -321,7 +322,7 @@ public interface LBRText
 	@LangKey(text = "The direction this reader should read block capacity from.")
 	MutableComponent logicConfigButtonTooltipReaderDirection();
 	
-	@LangKey(text = "The percentage filled the container capacity must be for the output to be on.")
+	@LangKey(text = "The filled amount or percentage the container capacity must be for the output to be on.")
 	MutableComponent logicConfigButtonTooltipReaderFillThreshold();
 	
 	@LangKey(text = "The type of information to read from the adjacent block.")
@@ -330,14 +331,14 @@ public interface LBRText
 	@LangKey(text = "The input signal (as per a comparator) required for the output to be on.")
 	MutableComponent logicConfigButtonTooltipReaderSignalThreshold();
 	
-	@LangKey(text = "The fill percentage must be equal to %s.")
-	MutableComponent logicConfigButtonTooltipReaderThresholdComparisonModeEqualTo(@Parsed("percentage") float threshold);
+	@LangKey(text = "The container content must be equal to %s.")
+	MutableComponent logicConfigButtonTooltipReaderThresholdComparisonModeEqualTo(LogicReaderThreshold threshold);
 	
-	@LangKey(text = "The fill percentage must be greater than or equal to %s.")
-	MutableComponent logicConfigButtonTooltipReaderThresholdComparisonModeGreaterThanOrEqualTo(@Parsed("percentage") float threshold);
+	@LangKey(text = "The container content must be greater than or equal to %s.")
+	MutableComponent logicConfigButtonTooltipReaderThresholdComparisonModeGreaterThanOrEqualTo(LogicReaderThreshold threshold);
 	
-	@LangKey(text = "The fill percentage must be less than or equal to %s.")
-	MutableComponent logicConfigButtonTooltipReaderThresholdComparisonModeLessThanOrEqualTo(@Parsed("percentage") float threshold);
+	@LangKey(text = "The container content must be less than or equal to %s.")
+	MutableComponent logicConfigButtonTooltipReaderThresholdComparisonModeLessThanOrEqualTo(LogicReaderThreshold threshold);
 	
 	@LangKey(text = "When the first input is ON, the selected output will move up. When the second input is ON, the selected output will move down.")
 	MutableComponent logicConfigButtonTooltipSelectorModeCounter();
@@ -445,7 +446,7 @@ public interface LBRText
 	@WithStyle("tooltip")
 	MutableComponent logicConfigTooltipReaderFillComparison(
 			@WithStyle("highlighted") LogicComparisonMode comparison,
-			@WithStyle("highlighted") float threshold
+			@WithStyle("highlighted") LogicReaderThreshold threshold
 	);
 	
 	@LangKey(text = "  Signal: %s %s")
@@ -541,7 +542,7 @@ public interface LBRText
 	@WithStyle("tooltip")
 	MutableComponent logicHelpRandomizer();
 	
-	@LangKey(text = "Checks the filled percentage of an adjacent block and yields an ON signal if the block's filled percentage is greater than or equal to the set fill threshold.")
+	@LangKey(text = "Checks the filled amount of an adjacent block and yields an ON signal if the block's filled amount is greater than or equal to the set fill threshold.")
 	@WithStyle("tooltip")
 	MutableComponent logicHelpReader1();
 	
