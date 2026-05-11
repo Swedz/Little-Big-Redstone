@@ -58,6 +58,11 @@ public final class MicrochipWires implements Iterable<Wire>
 		return Collections.unmodifiableList(wires);
 	}
 	
+	public int size()
+	{
+		return wires.size();
+	}
+	
 	@Override
 	public Iterator<Wire> iterator()
 	{

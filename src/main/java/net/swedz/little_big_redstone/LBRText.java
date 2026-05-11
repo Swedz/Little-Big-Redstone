@@ -639,4 +639,60 @@ public interface LBRText
 	
 	@LangKey(text = "All")
 	MutableComponent all();
+	
+	@LangKey(text = "%s (%s)")
+	MutableComponent countAndPercentage(
+			int count,
+			@Parsed("percentage") float percentage
+	);
+	
+	@LangKey(text = "Low (%s)")
+	@WithStyle("complexity.low")
+	MutableComponent thermometerComplexityLow(@Parsed("percentage") float percentage);
+	
+	@LangKey(text = "Moderate (%s)")
+	@WithStyle("complexity.moderate")
+	MutableComponent thermometerComplexityModerate(@Parsed("percentage") float percentage);
+	
+	@LangKey(text = "High (%s)")
+	@WithStyle("complexity.high")
+	MutableComponent thermometerComplexityHigh(@Parsed("percentage") float percentage);
+	
+	@LangKey(text = "Very High (%s)")
+	@WithStyle("complexity.very_high")
+	MutableComponent thermometerComplexityVeryHigh(@Parsed("percentage") float percentage);
+	
+	@LangKey(text = "Thermometer")
+	@WithStyle("tooltip.header")
+	MutableComponent thermometerTooltipHeader();
+	
+	@LangKey(text = "  Complexity: %s")
+	@WithStyle("tooltip")
+	MutableComponent thermometerTooltipComplexity(Component complexity);
+	
+	@LangKey(text = "  Logic: %s")
+	@WithStyle("tooltip")
+	MutableComponent thermometerTooltipLogic(@WithStyle("highlighted") int count);
+	
+	@LangKey(text = "  Wires: %s")
+	@WithStyle("tooltip")
+	MutableComponent thermometerTooltipWires(@WithStyle("highlighted") Component count);
+	
+	default MutableComponent thermometerTooltipWires(int count)
+	{
+		return this.thermometerTooltipWires(Component.literal(Integer.toString(count)));
+	}
+	
+	default MutableComponent thermometerTooltipWires(int count, float percentage)
+	{
+		return this.thermometerTooltipWires(this.countAndPercentage(count, percentage));
+	}
+	
+	@LangKey(text = "  Notes: %s")
+	@WithStyle("tooltip")
+	MutableComponent thermometerTooltipNotes(@WithStyle("highlighted") int count);
+	
+	@LangKey(text = "Wires are loading... You may still interact with the microchip while it loads.")
+	@WithStyle("no")
+	MutableComponent thermometerTooltipLoadingWires();
 }

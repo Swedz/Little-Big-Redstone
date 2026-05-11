@@ -43,6 +43,7 @@ import java.util.function.Supplier;
 public final class MicrochipBlockEntity extends BlockEntity implements MenuProvider, Tickable
 {
 	public static final Bounds CIRCUIT_BOUNDS = new Bounds(0, 0, 240, 128);
+	public static final float  CIRCUIT_SCALE  = 0.5f;
 	
 	private final Microchip microchip;
 	
@@ -57,7 +58,7 @@ public final class MicrochipBlockEntity extends BlockEntity implements MenuProvi
 	{
 		super(LBRBlocks.MICROCHIP_ENTITY.get(), pos, blockState);
 		
-		microchip = new Microchip(MicrochipSize.create(CIRCUIT_BOUNDS, 0.5f));
+		microchip = new Microchip(MicrochipSize.create(CIRCUIT_BOUNDS, CIRCUIT_SCALE));
 	}
 	
 	public Microchip microchip()
@@ -151,13 +152,15 @@ public final class MicrochipBlockEntity extends BlockEntity implements MenuProvi
 			{
 				this.setPlacedBy(player.getUUID());
 			}
-			player.openMenu(this, (buf) ->
-			{
-				buf.writeBlockPos(worldPosition);
-				Microchip.STREAM_CODEC.encode(buf, microchip);
-				DyeColor.STREAM_CODEC.encode(buf, this.color());
-				MicrochipViewPosition.STREAM_CODEC.encode(buf, viewPosition);
-			});
+			player.openMenu(
+					this, (buf) ->
+					{
+						buf.writeBlockPos(worldPosition);
+						Microchip.STREAM_CODEC.encode(buf, microchip);
+						DyeColor.STREAM_CODEC.encode(buf, this.color());
+						MicrochipViewPosition.STREAM_CODEC.encode(buf, viewPosition);
+					}
+			);
 			return true;
 		}
 		return false;

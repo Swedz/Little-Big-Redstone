@@ -89,6 +89,7 @@
   "text.little_big_redstone.capability_energy": "Energy",
   "text.little_big_redstone.capability_fluid": "Fluid",
   "text.little_big_redstone.capability_item": "Item",
+  "text.little_big_redstone.count_and_percentage": "%s (%s)",
   "text.little_big_redstone.direction_down": "Down",
   "text.little_big_redstone.direction_east": "East",
   "text.little_big_redstone.direction_north": "North",
@@ -258,5 +259,15 @@
   "text.little_big_redstone.sensor": "Sensor",
   "text.little_big_redstone.sticky_note": "Sticky Note",
   "text.little_big_redstone.sticky_note_edit": "Edit",
+  "text.little_big_redstone.thermometer_complexity_high": "High (%s)",
+  "text.little_big_redstone.thermometer_complexity_low": "Low (%s)",
+  "text.little_big_redstone.thermometer_complexity_moderate": "Moderate (%s)",
+  "text.little_big_redstone.thermometer_complexity_very_high": "Very High (%s)",
+  "text.little_big_redstone.thermometer_tooltip_complexity": "  Complexity: %s",
+  "text.little_big_redstone.thermometer_tooltip_header": "Thermometer",
+  "text.little_big_redstone.thermometer_tooltip_loading_wires": "Wires are loading... You may still interact with the microchip while it loads.",
+  "text.little_big_redstone.thermometer_tooltip_logic": "  Logic: %s",
+  "text.little_big_redstone.thermometer_tooltip_notes": "  Notes: %s",
+  "text.little_big_redstone.thermometer_tooltip_wires": "  Wires: %s",
   "text.little_big_redstone.yes": "Yes"
 }
