@@ -5,6 +5,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.swedz.little_big_redstone.microchip.object.logic.LogicMode;
 import net.swedz.little_big_redstone.microchip.object.logic.config.LogicComparisonMode;
+import net.swedz.little_big_redstone.microchip.object.logic.io.LogicPowerOutputType;
 import net.swedz.little_big_redstone.microchip.object.logic.reader.LogicReaderThreshold;
 import net.swedz.tesseract.neoforge.lang.annotation.LangKey;
 import net.swedz.tesseract.neoforge.lang.annotation.Parsed;
@@ -193,6 +194,9 @@ public interface LBRText
 	@LangKey(text = "Signal Strength: ")
 	MutableComponent logicConfigButtonLabelIoSignalStrength();
 	
+	@LangKey(text = "Power")
+	MutableComponent logicConfigButtonLabelOutputPower();
+	
 	@LangKey(text = "Mode")
 	MutableComponent logicConfigButtonLabelMode();
 	
@@ -246,6 +250,12 @@ public interface LBRText
 	
 	@LangKey(text = "Whether any or all input(s) need to match the signal strength comparison for the output to be ON.")
 	MutableComponent logicConfigButtonTooltipComparatorMode();
+	
+	@LangKey(text = "The block at this output will be weakly powered when the output is ON.")
+	MutableComponent logicConfigButtonTooltipOutputPowerWeak();
+	
+	@LangKey(text = "The block at this output will be strongly powered when the output is ON.")
+	MutableComponent logicConfigButtonTooltipOutputPowerStrong();
 	
 	@LangKey(text = "The input signal must be equal to %s.")
 	MutableComponent logicConfigButtonTooltipReaderSignalComparisonModeEqualTo(int signal);
@@ -433,6 +443,10 @@ public interface LBRText
 			@WithStyle("highlighted") LogicComparisonMode comparison,
 			@WithStyle("highlighted") int signal
 	);
+	
+	@LangKey(text = "  Power: %s")
+	@WithStyle("tooltip")
+	MutableComponent logicConfigTooltipIoPowerOutput(@WithStyle("highlighted") LogicPowerOutputType powerType);
 	
 	@LangKey(text = "  Mode: %s")
 	@WithStyle("tooltip")
@@ -639,6 +653,12 @@ public interface LBRText
 	
 	@LangKey(text = "All")
 	MutableComponent all();
+	
+	@LangKey(text = "Weak")
+	MutableComponent powerTypeWeak();
+	
+	@LangKey(text = "Strong")
+	MutableComponent powerTypeStrong();
 	
 	@LangKey(text = "%s (%s)")
 	MutableComponent countAndPercentage(

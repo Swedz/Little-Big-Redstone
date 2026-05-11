@@ -4,6 +4,7 @@ import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
 import net.swedz.little_big_redstone.LBR;
 import net.swedz.little_big_redstone.LBRTooltips;
+import net.swedz.little_big_redstone.microchip.object.logic.LogicMode;
 import net.swedz.little_big_redstone.microchip.object.logic.config.LogicComparisonMode;
 import net.swedz.little_big_redstone.microchip.object.logic.config.menu.LogicConfigButtonReference;
 import net.swedz.little_big_redstone.microchip.object.logic.config.menu.LogicConfigMenuBuilder;
@@ -14,9 +15,10 @@ import java.util.List;
 
 final class LogicIOConfigMenuProvider extends LogicConfigMenuProvider<LogicIOConfig>
 {
-	private LogicConfigButtonReference<LogicComparisonMode> comparisonButton;
-	private LogicConfigButtonReference<Double>              inputSignalStrengthSlider;
-	private LogicConfigButtonReference<Double>              outputSignalStrengthSlider;
+	private LogicConfigButtonReference<LogicComparisonMode>  comparisonButton;
+	private LogicConfigButtonReference<Double>               inputSignalStrengthSlider;
+	private LogicConfigButtonReference<Double>               outputSignalStrengthSlider;
+	private LogicConfigButtonReference<LogicPowerOutputType> powerTypeButton;
 	
 	public LogicIOConfigMenuProvider(LogicIOConfig config)
 	{
@@ -45,6 +47,7 @@ final class LogicIOConfigMenuProvider extends LogicConfigMenuProvider<LogicIOCon
 					}
 					this.updateSignalStrengthButton();
 					this.updateComparisonButton();
+					this.updatePowerTypeButton();
 				}
 		);
 	}
@@ -66,7 +69,7 @@ final class LogicIOConfigMenuProvider extends LogicConfigMenuProvider<LogicIOCon
 		);
 	}
 	
-	private Component signalComparisonTooltip()
+	private Component tooltipSignalComparison()
 	{
 		if(config.input)
 		{
@@ -90,7 +93,7 @@ final class LogicIOConfigMenuProvider extends LogicConfigMenuProvider<LogicIOCon
 	private void createComparison(LogicConfigMenuBuilder builder, int width, int height)
 	{
 		comparisonButton = builder.addCycleButton(
-				this.signalComparisonTooltip(),
+				this.tooltipSignalComparison(),
 				0,
 				22 * 2,
 				LBR.id("textures/gui/slot_atlas.png"),
@@ -111,7 +114,7 @@ final class LogicIOConfigMenuProvider extends LogicConfigMenuProvider<LogicIOCon
 		if(comparisonButton != null)
 		{
 			comparisonButton.setActive(config.input);
-			comparisonButton.setTooltip(this.signalComparisonTooltip());
+			comparisonButton.setTooltip(this.tooltipSignalComparison());
 		}
 	}
 	
@@ -178,6 +181,49 @@ final class LogicIOConfigMenuProvider extends LogicConfigMenuProvider<LogicIOCon
 		}
 	}
 	
+	private Component tooltipPowerType()
+	{
+		return switch(config.powerType)
+		{
+			case WEAK -> LBR.text().logicConfigButtonTooltipOutputPowerWeak();
+			case STRONG -> LBR.text().logicConfigButtonTooltipOutputPowerStrong();
+		};
+	}
+	
+	private void createPowerType(LogicConfigMenuBuilder builder, int width, int height)
+	{
+		powerTypeButton = builder.addCycleButton(
+				LBR.text().logicConfigButtonLabelOutputPower(),
+				this.tooltipPowerType(),
+				0,
+				22 * 3,
+				width,
+				18,
+				false,
+				config.powerType,
+				Arrays.asList(LogicPowerOutputType.values()),
+				LogicMode::label,
+				(value) ->
+				{
+					config.powerType = value;
+					if(powerTypeButton != null)
+					{
+						powerTypeButton.setTooltip(this.tooltipPowerType());
+					}
+				}
+		);
+		
+		this.updatePowerTypeButton();
+	}
+	
+	private void updatePowerTypeButton()
+	{
+		if(powerTypeButton != null)
+		{
+			powerTypeButton.setVisible(!config.input);
+		}
+	}
+	
 	@Override
 	public void create(LogicConfigMenuBuilder builder, int width, int height)
 	{
@@ -185,5 +231,6 @@ final class LogicIOConfigMenuProvider extends LogicConfigMenuProvider<LogicIOCon
 		this.createDirection(builder, width, height);
 		this.createComparison(builder, width, height);
 		this.createSignalStrength(builder, width, height);
+		this.createPowerType(builder, width, height);
 	}
 }
