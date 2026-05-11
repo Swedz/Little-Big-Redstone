@@ -19,6 +19,7 @@ import net.swedz.little_big_redstone.block.microchip.MicrochipBlockEntity;
 import net.swedz.little_big_redstone.gui.logicarray.slot.LogicArrayPlayerSlot;
 import net.swedz.little_big_redstone.gui.microchip.logic.LogicRenderer;
 import net.swedz.little_big_redstone.gui.microchip.logic.LogicRenderers;
+import net.swedz.little_big_redstone.gui.microchip.widget.MicrochipThermostatWidget;
 import net.swedz.little_big_redstone.gui.microchip.widget.MicrochipWidget;
 import net.swedz.little_big_redstone.gui.microchip.wire.WireMetadata;
 import net.swedz.little_big_redstone.gui.microchip.wire.WirePath;
@@ -42,6 +43,7 @@ public final class MicrochipScreen extends AbstractContainerScreen<MicrochipMenu
 	}
 	
 	private MicrochipWidget microchipWidget;
+	private MicrochipThermostatWidget thermostatWidget;
 	
 	private float partialTicks;
 	
@@ -73,6 +75,24 @@ public final class MicrochipScreen extends AbstractContainerScreen<MicrochipMenu
 		super.init();
 		
 		this.addRenderableWidget(microchipWidget = new MicrochipWidget(leftPos + 8, topPos + 8, this, menu.viewPosition()));
+		
+		this.addRenderableWidget(thermostatWidget = new MicrochipThermostatWidget(leftPos, topPos, this));
+	}
+	
+	public MicrochipWidget getMicrochipWidget()
+	{
+		return microchipWidget;
+	}
+	
+	public MicrochipThermostatWidget getThermostatWidget()
+	{
+		return thermostatWidget;
+	}
+	
+	@Override
+	protected void containerTick()
+	{
+		thermostatWidget.tick();
 	}
 	
 	@Override

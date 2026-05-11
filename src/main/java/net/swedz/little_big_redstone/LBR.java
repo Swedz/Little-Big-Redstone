@@ -84,6 +84,7 @@ public final class LBR
 		var instance = new LangManager(ID)
 				.builtinColorStyles()
 				.style("tooltip", () -> Style.EMPTY.withColor(TextColor.fromRgb(0xA9A9A9)).withItalic(false))
+				.style("tooltip.header", () -> Style.EMPTY.withUnderlined(true))
 				.style("highlighted", () -> Style.EMPTY.withColor(TextColor.fromRgb(0xFFDE7D)).withItalic(false))
 				.style("yes", () -> Style.EMPTY.withColor(TextColor.fromRgb(0x7FFF7D)).withItalic(false))
 				.style("no", () -> Style.EMPTY.withColor(TextColor.fromRgb(0xFF7D7F)).withItalic(false))
@@ -95,6 +96,10 @@ public final class LBR
 				.style("direction.east", () -> Style.EMPTY.withColor(TextColor.fromRgb(0xFF0000)).withItalic(false))
 				.style("input", () -> Style.EMPTY.withColor(TextColor.fromRgb(0x7D9EFF)).withItalic(false))
 				.style("output", () -> Style.EMPTY.withColor(TextColor.fromRgb(0xFF9D7D)).withItalic(false))
+				.style("complexity.low", () -> Style.EMPTY.withColor(TextColor.fromRgb(0x7FFF7D)).withItalic(false))
+				.style("complexity.moderate", () -> Style.EMPTY.withColor(TextColor.fromRgb(0xFFDE7D)).withItalic(false))
+				.style("complexity.high", () -> Style.EMPTY.withColor(TextColor.fromRgb(0xFFA67D)).withItalic(false))
+				.style("complexity.very_high", () -> Style.EMPTY.withColor(TextColor.fromRgb(0xFF7D7F)).withItalic(false))
 				
 				.builtinParsers()
 				.parser("percentage", float.class, () -> (value) -> Parser.FLOAT_PERCENTAGE.parse(value, 0))

@@ -52,6 +52,11 @@ public abstract class MicrochipObjectContainer<T extends MicrochipObject, S exte
 		return List.copyOf(objects.values());
 	}
 	
+	public final int size()
+	{
+		return objects.size();
+	}
+	
 	@Override
 	public final Iterator<T> iterator()
 	{
