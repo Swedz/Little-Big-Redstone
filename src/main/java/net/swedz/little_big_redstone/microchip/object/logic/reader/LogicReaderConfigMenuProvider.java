@@ -15,7 +15,7 @@ import java.util.Arrays;
 final class LogicReaderConfigMenuProvider extends LogicConfigMenuProvider<LogicReaderConfig>
 {
 	private LogicConfigButtonReference<LogicComparisonMode> comparisonButton;
-	private LogicConfigButtonReference<Double>              thresholdFillSlider;
+	private LogicConfigButtonReference<String>              thresholdFillTextBox;
 	private LogicConfigButtonReference<Double>              thresholdSignalSlider;
 	
 	public LogicReaderConfigMenuProvider(LogicReaderConfig config)
@@ -34,7 +34,7 @@ final class LogicReaderConfigMenuProvider extends LogicConfigMenuProvider<LogicR
 	private void updateThresholdSlider()
 	{
 		boolean readsSignal = config.mode.readsSignal();
-		thresholdFillSlider.setVisible(!readsSignal);
+		thresholdFillTextBox.setVisible(!readsSignal);
 		thresholdSignalSlider.setVisible(readsSignal);
 	}
 	
@@ -43,8 +43,10 @@ final class LogicReaderConfigMenuProvider extends LogicConfigMenuProvider<LogicR
 		builder.addCycleButton(
 				LBR.text().logicConfigButtonLabelMode(),
 				LBR.text().logicConfigButtonTooltipReaderMode(),
-				0, 0,
-				width, 18,
+				0,
+				0,
+				width,
+				18,
 				false,
 				config.mode,
 				Arrays.asList(LogicReaderMode.values()),
@@ -67,8 +69,10 @@ final class LogicReaderConfigMenuProvider extends LogicConfigMenuProvider<LogicR
 		builder.addCycleButton(
 				LBR.text().logicConfigButtonLabelDirection(),
 				LBR.text().logicConfigButtonTooltipReaderDirection(),
-				0, 22,
-				width, 18,
+				0,
+				22,
+				width,
+				18,
 				false,
 				config.direction,
 				Arrays.asList(Direction.values()),
@@ -86,7 +90,7 @@ final class LogicReaderConfigMenuProvider extends LogicConfigMenuProvider<LogicR
 	
 	private MutableComponent tooltipFillComparison()
 	{
-		return switch (config.comparison)
+		return switch(config.comparison)
 		{
 			case LESS_THAN_OR_EQUAL_TO -> LBR.text().logicConfigButtonTooltipReaderThresholdComparisonModeLessThanOrEqualTo(config.fillThreshold);
 			case EQUAL_TO -> LBR.text().logicConfigButtonTooltipReaderThresholdComparisonModeEqualTo(config.fillThreshold);
@@ -96,7 +100,7 @@ final class LogicReaderConfigMenuProvider extends LogicConfigMenuProvider<LogicR
 	
 	private MutableComponent tooltipSignalComparison()
 	{
-		return switch (config.comparison)
+		return switch(config.comparison)
 		{
 			case LESS_THAN_OR_EQUAL_TO -> LBR.text().logicConfigButtonTooltipReaderSignalComparisonModeLessThanOrEqualTo(config.signalThreshold);
 			case EQUAL_TO -> LBR.text().logicConfigButtonTooltipReaderSignalComparisonModeEqualTo(config.signalThreshold);
@@ -108,7 +112,8 @@ final class LogicReaderConfigMenuProvider extends LogicConfigMenuProvider<LogicR
 	{
 		comparisonButton = builder.addCycleButton(
 				this.tooltipComparison(),
-				0, 22 * 2,
+				0,
+				22 * 2,
 				LBR.id("textures/gui/slot_atlas.png"),
 				config.comparison,
 				Arrays.asList(LogicComparisonMode.values()),
@@ -124,18 +129,19 @@ final class LogicReaderConfigMenuProvider extends LogicConfigMenuProvider<LogicR
 	
 	private void createThreshold(LogicConfigMenuBuilder builder, int width, int height)
 	{
-		thresholdFillSlider = builder.addSlider(
+		thresholdFillTextBox = builder.addTextBox(
 				LBR.text().logicConfigButtonLabelReaderFillThreshold(),
-				Component.literal("%"),
 				LBR.text().logicConfigButtonTooltipReaderFillThreshold(),
-				18 + 4, 22 * 2,
-				width - 18 - 4, 18,
-				0, 100,
-				config.fillThreshold * 100,
-				1, 0,
+				18 + 4,
+				22 * 2,
+				width - 18 - 4,
+				18,
+				config.fillThreshold.value(),
+				LogicReaderThreshold.MAX_LENGTH,
+				LogicReaderThreshold::isValid,
 				(value) ->
 				{
-					config.fillThreshold = (float) (value / 100f);
+					config.fillThreshold = LogicReaderThreshold.from(value);
 					this.updateComparisonButton();
 				}
 		).setVisible(false);
@@ -144,11 +150,15 @@ final class LogicReaderConfigMenuProvider extends LogicConfigMenuProvider<LogicR
 				LBR.text().logicConfigButtonLabelReaderSignalThreshold(),
 				Component.empty(),
 				LBR.text().logicConfigButtonTooltipReaderSignalThreshold(),
-				18 + 4, 22 * 2,
-				width - 18 - 4, 18,
-				1, 15,
+				18 + 4,
+				22 * 2,
+				width - 18 - 4,
+				18,
+				1,
+				15,
 				config.signalThreshold,
-				1, 0,
+				1,
+				0,
 				(value) ->
 				{
 					config.signalThreshold = (int) Math.round(value);

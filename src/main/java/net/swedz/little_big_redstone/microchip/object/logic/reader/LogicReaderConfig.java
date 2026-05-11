@@ -24,7 +24,7 @@ public final class LogicReaderConfig extends LogicConfig<LogicReaderConfig>
 			.group(
 					CodecHelper.forLowercaseEnum(LogicReaderMode.class).optionalFieldOf("mode", LogicReaderMode.ITEM).forGetter((config) -> config.mode),
 					Direction.CODEC.optionalFieldOf("direction", Direction.NORTH).forGetter((config) -> config.direction),
-					Codec.FLOAT.optionalFieldOf("fill_threshold", 0.5f).forGetter((config) -> config.fillThreshold),
+					LogicReaderThreshold.CODEC.optionalFieldOf("fill_threshold", LogicReaderThreshold.DEFAULT).forGetter((config) -> config.fillThreshold),
 					Codec.intRange(1, 15).optionalFieldOf("signal_threshold", 1).forGetter((config) -> config.signalThreshold),
 					CodecHelper.forLowercaseEnum(LogicComparisonMode.class).optionalFieldOf("comparison", LogicComparisonMode.GREATER_THAN_OR_EQUAL_TO).forGetter((config) -> config.comparison)
 			)
@@ -33,7 +33,7 @@ public final class LogicReaderConfig extends LogicConfig<LogicReaderConfig>
 	public static final StreamCodec<ByteBuf, LogicReaderConfig> STREAM_CODEC = StreamCodec.composite(
 			CodecHelper.forLowercaseEnumStream(LogicReaderMode.class), (config) -> config.mode,
 			Direction.STREAM_CODEC, (config) -> config.direction,
-			ByteBufCodecs.FLOAT, (config) -> config.fillThreshold,
+			LogicReaderThreshold.STREAM_CODEC, (config) -> config.fillThreshold,
 			ByteBufCodecs.INT, (config) -> config.signalThreshold,
 			CodecHelper.forEnumStream(LogicComparisonMode.class), (config) -> config.comparison,
 			LogicReaderConfig::new
@@ -43,11 +43,11 @@ public final class LogicReaderConfig extends LogicConfig<LogicReaderConfig>
 	
 	public Direction direction;
 	
-	public float fillThreshold;
-	public int signalThreshold;
-	public LogicComparisonMode comparison;
+	public LogicReaderThreshold fillThreshold;
+	public int                  signalThreshold;
+	public LogicComparisonMode  comparison;
 	
-	private LogicReaderConfig(LogicReaderMode mode, Direction direction, float fillThreshold, int signalThreshold, LogicComparisonMode comparison)
+	private LogicReaderConfig(LogicReaderMode mode, Direction direction, LogicReaderThreshold fillThreshold, int signalThreshold, LogicComparisonMode comparison)
 	{
 		this.mode = mode;
 		this.direction = direction;
@@ -58,7 +58,7 @@ public final class LogicReaderConfig extends LogicConfig<LogicReaderConfig>
 	
 	public LogicReaderConfig()
 	{
-		this(LogicReaderMode.ITEM, Direction.NORTH, 0.5f, 1, LogicComparisonMode.GREATER_THAN_OR_EQUAL_TO);
+		this(LogicReaderMode.ITEM, Direction.NORTH, LogicReaderThreshold.DEFAULT, 1, LogicComparisonMode.GREATER_THAN_OR_EQUAL_TO);
 	}
 	
 	@Override

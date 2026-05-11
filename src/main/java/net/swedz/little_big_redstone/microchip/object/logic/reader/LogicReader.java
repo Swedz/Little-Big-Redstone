@@ -62,7 +62,7 @@ public final class LogicReader extends LogicComponent<LogicReader, LogicReaderCo
 	@Override
 	public AwarenessType<?>[] awarenessTypes()
 	{
-		return new AwarenessType[]{switch (config.mode)
+		return new AwarenessType[]{switch(config.mode)
 		{
 			case ITEM -> AwarenessTypes.CAPABILITY_ITEM;
 			case FLUID -> AwarenessTypes.CAPABILITY_FLUID;
@@ -82,7 +82,9 @@ public final class LogicReader extends LogicComponent<LogicReader, LogicReaderCo
 	{
 		boolean originalOutputState = outputState;
 		
-		float fill = 0;
+		boolean isPercentage = config.fillThreshold.isPercentage();
+		Number fill = 0;
+		Number compareAgainst = isPercentage ? config.fillThreshold.percentage() : config.fillThreshold.number();
 		int signal = 0;
 		
 		if(context.level() instanceof ServerLevel)
@@ -108,7 +110,9 @@ public final class LogicReader extends LogicComponent<LogicReader, LogicReaderCo
 							maxItems += stack.getMaxStackSize();
 						}
 					}
-					fill = (float) totalItems / maxItems;
+					fill = isPercentage ?
+							((float) totalItems / maxItems) :
+							totalItems;
 				}
 			}
 			
@@ -125,7 +129,9 @@ public final class LogicReader extends LogicComponent<LogicReader, LogicReaderCo
 						totalFluid += handler.getFluidInTank(tank).getAmount();
 						maxFluid += handler.getTankCapacity(tank);
 					}
-					fill = (float) totalFluid / maxFluid;
+					fill = isPercentage ?
+							((float) totalFluid / maxFluid) :
+							totalFluid;
 				}
 			}
 			
@@ -137,7 +143,9 @@ public final class LogicReader extends LogicComponent<LogicReader, LogicReaderCo
 				{
 					int totalEnergy = handler.getEnergyStored();
 					int maxEnergy = handler.getMaxEnergyStored();
-					fill = (float) totalEnergy / maxEnergy;
+					fill = isPercentage ?
+							((float) totalEnergy / maxEnergy) :
+							totalEnergy;
 				}
 			}
 			
@@ -150,7 +158,7 @@ public final class LogicReader extends LogicComponent<LogicReader, LogicReaderCo
 		
 		outputState = config.mode.readsSignal() ?
 				config.comparison.test(signal, config.signalThreshold) :
-				config.comparison.test(fill, config.fillThreshold);
+				config.comparison.test(fill, compareAgainst);
 		if(outputState != originalOutputState)
 		{
 			context.markDirty(this);
