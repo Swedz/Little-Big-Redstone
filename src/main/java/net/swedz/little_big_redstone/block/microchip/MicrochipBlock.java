@@ -125,6 +125,18 @@ public final class MicrochipBlock extends Block implements TickableBlock, DyeCol
 	}
 	
 	@Override
+	protected int getDirectSignal(BlockState state, BlockGetter level, BlockPos pos, Direction direction)
+	{
+		if(!(level.getBlockEntity(pos) instanceof MicrochipBlockEntity blockEntity))
+		{
+			return 0;
+		}
+		
+		var redstone = blockEntity.microchip().awarenesses().get(AwarenessTypes.REDSTONE);
+		return redstone != null && redstone.isOutputStrong(direction) ? this.getSignal(state, level, pos, direction) : 0;
+	}
+	
+	@Override
 	protected void neighborChanged(BlockState state, Level level, BlockPos pos, Block neighborBlock, BlockPos neighborPos, boolean movedByPiston)
 	{
 		if(level.isClientSide() ||

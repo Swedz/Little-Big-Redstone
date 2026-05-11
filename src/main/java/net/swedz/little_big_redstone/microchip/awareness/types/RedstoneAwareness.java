@@ -15,6 +15,7 @@ import net.swedz.little_big_redstone.microchip.awareness.AwarenessType;
 import net.swedz.little_big_redstone.microchip.awareness.AwarenessTypes;
 import net.swedz.little_big_redstone.microchip.awareness.MicrochipAwareness;
 import net.swedz.little_big_redstone.microchip.object.logic.io.LogicIO;
+import net.swedz.little_big_redstone.microchip.object.logic.io.LogicPowerOutputType;
 
 import java.util.EnumSet;
 
@@ -22,8 +23,9 @@ public final class RedstoneAwareness extends MicrochipAwareness<RedstoneAwarenes
 {
 	private boolean initialized;
 	
-	private boolean[] inputSides  = new boolean[6];
-	private boolean[] outputSides = new boolean[6];
+	private boolean[] inputSides        = new boolean[6];
+	private boolean[] outputSides       = new boolean[6];
+	private boolean[] outputStrongSides = new boolean[6];
 	
 	private int[] inputPower           = new int[6];
 	private int[] outputPower          = new int[6];
@@ -83,6 +85,13 @@ public final class RedstoneAwareness extends MicrochipAwareness<RedstoneAwarenes
 		return powered ? outputPower[index] : 0;
 	}
 	
+	public boolean isOutputStrong(Direction direction)
+	{
+		direction = direction.getOpposite();
+		int index = direction.ordinal();
+		return outputStrongSides[index];
+	}
+	
 	@Override
 	public AwarenessType<RedstoneAwareness> type()
 	{
@@ -94,6 +103,7 @@ public final class RedstoneAwareness extends MicrochipAwareness<RedstoneAwarenes
 	{
 		boolean[] inputSides = new boolean[6];
 		boolean[] outputSides = new boolean[6];
+		boolean[] outputStrongSides = new boolean[6];
 		for(var entry : microchip.components())
 		{
 			if(entry.component() instanceof LogicIO io)
@@ -110,11 +120,13 @@ public final class RedstoneAwareness extends MicrochipAwareness<RedstoneAwarenes
 				else
 				{
 					outputSides[direction] = true;
+					outputStrongSides[direction] = io.config().powerType == LogicPowerOutputType.STRONG;
 				}
 			}
 		}
 		this.inputSides = inputSides;
 		this.outputSides = outputSides;
+		this.outputStrongSides = outputStrongSides;
 	}
 	
 	@Override
@@ -187,8 +199,19 @@ public final class RedstoneAwareness extends MicrochipAwareness<RedstoneAwarenes
 		if(powerChanged || newState != state)
 		{
 			level.setBlock(pos, newState, Block.UPDATE_CLIENTS);
-			this.sendUpdates(level, pos, state, newState, powerChanges);
+			this.sendUpdates(level, pos, state, newState, powerChanges, true);
 		}
+	}
+	
+	private boolean[] getUpdateDirectionsForStrongSignal(Direction direction)
+	{
+		var oppositeDirection = direction.getOpposite();
+		boolean[] updateDirections = new boolean[6];
+		for(int index = 0; index < 6; index++)
+		{
+			updateDirections[index] = index != oppositeDirection.ordinal();
+		}
+		return updateDirections;
 	}
 	
 	/**
@@ -196,15 +219,16 @@ public final class RedstoneAwareness extends MicrochipAwareness<RedstoneAwarenes
 	 * where an output state has changed. This reduces the number of neighbor notifications that are executed and helps
 	 * with situations where microchips are updating frequently.</p>
 	 *
-	 * @param level    the {@link Level}
-	 * @param pos      the {@link BlockPos} of the block updated
-	 * @param oldState the previous {@link BlockState} of the block updated
-	 * @param newState the new {@link BlockState} of the block updated
-	 * @param changes  an array of booleans stating which directions (as per the index of {@link Direction#ordinal()})
-	 *                 have had changes
+	 * @param level           the {@link Level}
+	 * @param pos             the {@link BlockPos} of the block updated
+	 * @param oldState        the previous {@link BlockState} of the block updated
+	 * @param newState        the new {@link BlockState} of the block updated
+	 * @param changes         an array of booleans stating which directions (as per the index of {@link Direction#ordinal()})
+	 *                        have had changes
+	 * @param doStrongUpdates if updates should also be sent to blocks adjacent to the updated blocks
 	 * @see ServerLevel#updateNeighborsAt(BlockPos, Block)
 	 */
-	private void sendUpdates(Level level, BlockPos pos, BlockState oldState, BlockState newState, boolean[] changes)
+	private void sendUpdates(Level level, BlockPos pos, BlockState oldState, BlockState newState, boolean[] changes, boolean doStrongUpdates)
 	{
 		var updateDirections = EnumSet.allOf(Direction.class);
 		updateDirections.removeIf((direction) -> !changes[direction.ordinal()]);
@@ -212,9 +236,16 @@ public final class RedstoneAwareness extends MicrochipAwareness<RedstoneAwarenes
 		
 		for(var direction : NeighborUpdater.UPDATE_ORDER)
 		{
-			if(changes[direction.ordinal()])
+			int index = direction.ordinal();
+			if(changes[index])
 			{
-				level.neighborChanged(pos.relative(direction), oldState.getBlock(), pos);
+				var relativePos = pos.relative(direction);
+				level.neighborChanged(relativePos, oldState.getBlock(), pos);
+				if(doStrongUpdates && outputStrongSides[index])
+				{
+					var relativeBlockState = level.getBlockState(relativePos);
+					this.sendUpdates(level, relativePos, relativeBlockState, relativeBlockState, this.getUpdateDirectionsForStrongSignal(direction), false);
+				}
 			}
 		}
 	}

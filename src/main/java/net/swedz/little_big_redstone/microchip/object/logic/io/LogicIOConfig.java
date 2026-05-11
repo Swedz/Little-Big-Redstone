@@ -28,9 +28,10 @@ public final class LogicIOConfig extends LogicConfig<LogicIOConfig>
 					Codec.BOOL.optionalFieldOf("input", true).forGetter((config) -> config.input),
 					Direction.CODEC.optionalFieldOf("direction", Direction.NORTH).forGetter((config) -> config.direction),
 					Codec.intRange(0, 15).optionalFieldOf("signal_strength", 0).forGetter((config) -> config.signalStrength),
-					CodecHelper.forLowercaseEnum(LogicComparisonMode.class).optionalFieldOf("signal_comparison", LogicComparisonMode.GREATER_THAN_OR_EQUAL_TO).forGetter((config) -> config.signalComparison)
+					CodecHelper.forLowercaseEnum(LogicComparisonMode.class).optionalFieldOf("signal_comparison", LogicComparisonMode.GREATER_THAN_OR_EQUAL_TO).forGetter((config) -> config.signalComparison),
+					CodecHelper.forLowercaseEnum(LogicPowerOutputType.class).optionalFieldOf("power_type", LogicPowerOutputType.WEAK).forGetter((config) -> config.powerType)
 			)
-			.apply(instance, (input, direction, signalStrength, precise) -> new LogicIOConfig(true, input, direction, signalStrength, precise)));
+			.apply(instance, (input, direction, signalStrength, precise, strong) -> new LogicIOConfig(true, input, direction, signalStrength, precise, strong)));
 	
 	public static final StreamCodec<ByteBuf, LogicIOConfig> STREAM_CODEC = StreamCodec.composite(
 			ByteBufCodecs.BOOL, (config) -> config.valid,
@@ -38,6 +39,7 @@ public final class LogicIOConfig extends LogicConfig<LogicIOConfig>
 			Direction.STREAM_CODEC, (config) -> config.direction,
 			ByteBufCodecs.INT, (config) -> config.signalStrength,
 			CodecHelper.forEnumStream(LogicComparisonMode.class), (config) -> config.signalComparison,
+			CodecHelper.forEnumStream(LogicPowerOutputType.class), (config) -> config.powerType,
 			LogicIOConfig::new
 	);
 	
@@ -48,18 +50,21 @@ public final class LogicIOConfig extends LogicConfig<LogicIOConfig>
 	public int signalStrength;
 	public LogicComparisonMode signalComparison;
 	
-	private LogicIOConfig(boolean valid, boolean input, Direction direction, int signalStrength, LogicComparisonMode signalComparison)
+	public LogicPowerOutputType powerType;
+	
+	private LogicIOConfig(boolean valid, boolean input, Direction direction, int signalStrength, LogicComparisonMode signalComparison, LogicPowerOutputType powerType)
 	{
 		this.valid = valid;
 		this.input = input;
 		this.direction = direction;
 		this.signalStrength = Mth.clamp(signalStrength, input ? 1 : 0, 15);
 		this.signalComparison = signalComparison;
+		this.powerType = powerType;
 	}
 	
 	public LogicIOConfig()
 	{
-		this(true, true, Direction.NORTH, 1, LogicComparisonMode.GREATER_THAN_OR_EQUAL_TO);
+		this(true, true, Direction.NORTH, 1, LogicComparisonMode.GREATER_THAN_OR_EQUAL_TO, LogicPowerOutputType.WEAK);
 	}
 	
 	@Override
@@ -114,6 +119,7 @@ public final class LogicIOConfig extends LogicConfig<LogicIOConfig>
 			lines.add(signalStrength == 0 ?
 					LBR.text().logicConfigTooltipSignal(LBR.text().pass()) :
 					LBR.text().logicConfigTooltipSignal(signalStrength));
+			lines.add(LBR.text().logicConfigTooltipIoPowerOutput(powerType));
 		}
 	}
 	
@@ -136,6 +142,7 @@ public final class LogicIOConfig extends LogicConfig<LogicIOConfig>
 		direction = other.direction;
 		signalStrength = other.signalStrength;
 		signalComparison = other.signalComparison;
+		powerType = other.powerType;
 	}
 	
 	@Override
@@ -147,13 +154,13 @@ public final class LogicIOConfig extends LogicConfig<LogicIOConfig>
 	@Override
 	public int hashCode()
 	{
-		return Objects.hash(input, direction, signalStrength, signalComparison);
+		return Objects.hash(input, direction, signalStrength, signalComparison, powerType);
 	}
 	
 	@Override
 	public boolean equals(Object o)
 	{
 		return this == o ||
-			   (o instanceof LogicIOConfig other && input == other.input && direction == other.direction && signalStrength == other.signalStrength && signalComparison == other.signalComparison);
+			   (o instanceof LogicIOConfig other && input == other.input && direction == other.direction && signalStrength == other.signalStrength && signalComparison == other.signalComparison && powerType == other.powerType);
 	}
 }
