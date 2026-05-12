@@ -1,5 +1,6 @@
 package net.swedz.little_big_redstone.gui.logicconfig.widget.iconcycle;
 
+import com.mojang.blaze3d.platform.InputConstants;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.AbstractButton;
 import net.minecraft.client.gui.narration.NarrationElementOutput;
@@ -57,17 +58,47 @@ public class IconCycleLogicConfigButton<T extends IconCycleLogicConfigButtonIcon
 		onValueChange.onValueChange(this, value);
 	}
 	
-	private void next()
+	private void step(int step)
 	{
-		valueIndex = (valueIndex + 1) % allowedValues.size();
+		valueIndex = (valueIndex + step) % allowedValues.size();
 		value = allowedValues.get(valueIndex);
 		onValueChange.onValueChange(this, value);
+	}
+	
+	private void previous()
+	{
+		this.step(allowedValues.size() - 1);
+	}
+	
+	private void next()
+	{
+		this.step(1);
 	}
 	
 	@Override
 	public void onPress()
 	{
-		this.next();
+		// We use the Neo onClick(double, double, int) method instead
+	}
+	
+	@Override
+	protected boolean isValidClickButton(int button)
+	{
+		return button == InputConstants.MOUSE_BUTTON_LEFT ||
+			   button == InputConstants.MOUSE_BUTTON_RIGHT;
+	}
+	
+	@Override
+	public void onClick(double mouseX, double mouseY, int button)
+	{
+		if(button == InputConstants.MOUSE_BUTTON_LEFT)
+		{
+			this.next();
+		}
+		else if(button == InputConstants.MOUSE_BUTTON_RIGHT)
+		{
+			this.previous();
+		}
 	}
 	
 	@Override
