@@ -13,7 +13,10 @@ item_ids:
 # Вентиль И
 
 <FloatingColumn width="100" align="right">
-	### Truth Table
+	### Булевый
+	Вентили всегда выдают только значение 0 (ВЫКЛ) или 1 (ВКЛ).
+
+	### Таблица истинности
 	<TruthTable inputs="2">
 		<TruthState input="0,0" output="0" />
 		<TruthState input="0,1" output="0" />

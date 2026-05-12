@@ -12,6 +12,11 @@ item_ids:
 
 # Считыватель
 
+<FloatingColumn width="100" align="right">
+	### Булевый
+	Считыватели всегда выдают только значение 0 (ВЫКЛ) или 1 (ВКЛ).
+</FloatingColumn>
+
 <RecipeFor id="reader" />
 
 Считыватель — это логический компонент без внутреннего входа в схеме. Вместо этого он выдаёт сигнал в зависимости от заполненности контейнера, 
@@ -46,7 +51,7 @@ item_ids:
 				<Logic name="reader" x="0" y="0" type="reader" data="{config:{direction:'west'}}" />
 				<Logic name="output" x="32" y="0" type="io" data="{config:{direction:'east',input:false,signal_strength:15}}" />
 
-				<Wire from="reader" fromPort="0" to="output" toPort="0" powered={true} />
+				<Wire from="reader" fromPort="0" to="output" toPort="0" powered="1" />
 			</MicrochipScene>
 		</Column>
 	</Row>
