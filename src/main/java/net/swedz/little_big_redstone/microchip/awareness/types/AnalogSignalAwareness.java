@@ -71,13 +71,15 @@ public final class AnalogSignalAwareness extends MicrochipAwareness<AnalogSignal
 		signals[neighborDirectionIndex] = 0;
 	}
 	
+	private int tick = 0;
+	
 	@Override
 	public void preTick(AwarenessContext context)
 	{
 		var level = context.level();
 		var pos = context.blockPos();
 		
-		if(!initialized)
+		if(++tick >= 10 || !initialized)
 		{
 			int[] signals = new int[6];
 			for(int directionIndex = 0; directionIndex < sides.length; directionIndex++)
@@ -96,6 +98,7 @@ public final class AnalogSignalAwareness extends MicrochipAwareness<AnalogSignal
 			}
 			this.signals = signals;
 			initialized = true;
+			tick = 0;
 		}
 	}
 }
