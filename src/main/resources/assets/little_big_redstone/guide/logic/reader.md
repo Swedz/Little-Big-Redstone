@@ -14,7 +14,8 @@ item_ids:
 
 <FloatingColumn width="100" align="right">
 	### Boolean
-	Readers will only ever yield an output value of 0 (OFF) or 1 (ON).
+	When in comparator mode, the reader will yield an output value equal to the analog signal strength emitted by the
+	block for comparators. Otherwise, readers will only ever yield an output value of 0 (OFF) or 1 (ON).
 </FloatingColumn>
 
 <RecipeFor id="reader" />

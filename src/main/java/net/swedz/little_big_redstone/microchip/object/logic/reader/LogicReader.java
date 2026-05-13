@@ -29,26 +29,26 @@ public final class LogicReader extends LogicComponent<LogicReader, LogicReaderCo
 			.group(
 					LogicReaderConfig.CODEC.fieldOf("config").forGetter(LogicReader::config),
 					DyeColor.CODEC.optionalFieldOf("color").forGetter(LogicReader::color),
-					Codec.BOOL.optionalFieldOf("output", false).forGetter(LogicReader::output)
+					Codec.INT.optionalFieldOf("output", 0).forGetter(LogicReader::output)
 			)
 			.apply(instance, LogicReader::new));
 	
 	public static final StreamCodec<ByteBuf, LogicReader> STREAM_CODEC = StreamCodec.composite(
 			LogicReaderConfig.STREAM_CODEC, LogicReader::config,
 			ByteBufCodecs.optional(DyeColor.STREAM_CODEC), LogicReader::color,
-			ByteBufCodecs.BOOL, LogicReader::output,
+			ByteBufCodecs.INT, LogicReader::output,
 			LogicReader::new
 	);
 	
-	private boolean outputState;
+	private int outputState;
 	
-	private LogicReader(LogicReaderConfig config, Optional<DyeColor> color, boolean outputState)
+	private LogicReader(LogicReaderConfig config, Optional<DyeColor> color, int outputState)
 	{
 		super(config, color);
 		this.outputState = outputState;
 	}
 	
-	private LogicReader(Optional<DyeColor> color, boolean outputState)
+	private LogicReader(Optional<DyeColor> color, int outputState)
 	{
 		super(color);
 		this.outputState = outputState;
@@ -56,7 +56,7 @@ public final class LogicReader extends LogicComponent<LogicReader, LogicReaderCo
 	
 	public LogicReader()
 	{
-		this(Optional.empty(), false);
+		this(Optional.empty(), 0);
 	}
 	
 	@Override
@@ -80,7 +80,7 @@ public final class LogicReader extends LogicComponent<LogicReader, LogicReaderCo
 	@Override
 	protected void processTickInternal(LogicContext context, int[] inputs)
 	{
-		boolean originalOutputState = outputState;
+		int originalOutputState = outputState;
 		
 		boolean isPercentage = config.fillThreshold.isPercentage();
 		Number fill = 0;
@@ -156,9 +156,14 @@ public final class LogicReader extends LogicComponent<LogicReader, LogicReaderCo
 			}
 		}
 		
-		outputState = config.mode.readsSignal() ?
-				config.comparison.test(signal, config.signalThreshold) :
-				config.comparison.test(fill, compareAgainst);
+		if(config.mode.readsSignal())
+		{
+			outputState = config.comparison.test(signal, config.signalThreshold) ? signal : 0;
+		}
+		else
+		{
+			outputState = config.comparison.test(fill, compareAgainst) ? 1 : 0;
+		}
 		if(outputState != originalOutputState)
 		{
 			context.markDirty(this);
@@ -174,12 +179,12 @@ public final class LogicReader extends LogicComponent<LogicReader, LogicReaderCo
 	@Override
 	protected int outputInternal(int index)
 	{
-		return outputState ? 1 : 0;
+		return outputState;
 	}
 	
-	public boolean output()
+	public int output()
 	{
-		return this.output(0) > 0;
+		return this.output(0);
 	}
 	
 	@Override
@@ -198,7 +203,7 @@ public final class LogicReader extends LogicComponent<LogicReader, LogicReaderCo
 	@Override
 	public void internalResetForPickup()
 	{
-		outputState = false;
+		outputState = 0;
 	}
 	
 	@Override
