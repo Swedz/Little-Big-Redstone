@@ -492,7 +492,8 @@ public final class MicrochipWidget implements GuiEventListener, Renderable, Narr
 			var size = microchip.size();
 			int boardMouseX = size.boardCoord(this.toLocalX(mouseX), viewPosition.zoom(), viewPosition.x());
 			int boardMouseY = size.boardCoord(this.toLocalY(mouseY), viewPosition.zoom(), viewPosition.y());
-			return allowDragging = !this.mouseClickedOnBoard(mouseX, mouseY, boardMouseX, boardMouseY, button);
+			return allowDragging = button == InputConstants.MOUSE_BUTTON_MIDDLE ||
+								   !this.mouseClickedOnBoard(mouseX, mouseY, boardMouseX, boardMouseY, button);
 		}
 		else
 		{
