@@ -55,6 +55,9 @@ public interface LBRText
 	@LangKey(text = "Failed to install microchip program.")
 	MutableComponent floppyDiskApplyFailure();
 	
+	@LangKey(text = "Cannot install microchip program because it is malformed.")
+	MutableComponent floppyDiskApplyFailureMalformed();
+	
 	@LangKey(text = "Installed microchip program to the microchip from the floppy disk.")
 	MutableComponent floppyDiskApplySuccess();
 	
