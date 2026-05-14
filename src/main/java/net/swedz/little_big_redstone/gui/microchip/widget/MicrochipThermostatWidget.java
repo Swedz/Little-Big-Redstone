@@ -105,10 +105,7 @@ public final class MicrochipThermostatWidget implements GuiEventListener, Render
 	public void render(GuiGraphics vanilla, int mouseX, int mouseY, float partialTick)
 	{
 		var graphics = new TesseractGuiGraphics(vanilla);
-		
 		this.renderThermometer(graphics, mouseX, mouseY);
-		
-		this.renderTooltip(vanilla, mouseX, mouseY);
 	}
 	
 	private void renderThermometerJuice(TesseractGuiGraphics graphics, int mouseX, int mouseY, float fullness)
@@ -186,7 +183,7 @@ public final class MicrochipThermostatWidget implements GuiEventListener, Render
 		return lines;
 	}
 	
-	private void renderTooltip(GuiGraphics graphics, int mouseX, int mouseY)
+	public void renderTooltip(GuiGraphics graphics, int mouseX, int mouseY)
 	{
 		if(this.isMouseOver(mouseX, mouseY))
 		{

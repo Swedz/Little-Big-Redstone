@@ -536,8 +536,6 @@ public final class MicrochipWidget implements GuiEventListener, Renderable, Narr
 		panel.render(graphics);
 		graphics.pose().popPose();
 		vanilla.disableScissor();
-		
-		this.renderTooltip(graphics);
 	}
 	
 	private void renderTooltipStickyNote(TesseractGuiGraphics graphics, int x, int y)
@@ -610,7 +608,7 @@ public final class MicrochipWidget implements GuiEventListener, Renderable, Narr
 		graphics.renderTooltip(lines, x, y, backgroundColor, backgroundColor, borderColor, borderColor);
 	}
 	
-	private void renderTooltip(TesseractGuiGraphics graphics)
+	public void renderTooltip(TesseractGuiGraphics graphics)
 	{
 		if(context.shouldRenderTooltip())
 		{

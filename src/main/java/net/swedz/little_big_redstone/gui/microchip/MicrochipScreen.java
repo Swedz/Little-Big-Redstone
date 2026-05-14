@@ -116,6 +116,8 @@ public final class MicrochipScreen extends AbstractContainerScreen<MicrochipMenu
 		super.render(graphics, mouseX, mouseY, partialTicks);
 		
 		this.renderTooltip(graphics, mouseX, mouseY);
+		microchipWidget.renderTooltip(new TesseractGuiGraphics(graphics));
+		thermostatWidget.renderTooltip(graphics, mouseX, mouseY);
 	}
 	
 	@Override
