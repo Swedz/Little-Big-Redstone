@@ -106,7 +106,10 @@ public final class MicrochipScreen extends AbstractContainerScreen<MicrochipMenu
 	@Override
 	public boolean mouseDragged(double mouseX, double mouseY, int button, double dragX, double dragY)
 	{
-		boolean drag = this.getFocused() != null && this.isDragging() && button == InputConstants.MOUSE_BUTTON_LEFT && this.getFocused().mouseDragged(mouseX, mouseY, button, dragX, dragY);
+		boolean drag = this.getFocused() != null &&
+					   this.isDragging() &&
+					   (button == InputConstants.MOUSE_BUTTON_LEFT || button == InputConstants.MOUSE_BUTTON_MIDDLE) &&
+					   this.getFocused().mouseDragged(mouseX, mouseY, button, dragX, dragY);
 		return drag || super.mouseDragged(mouseX, mouseY, button, dragX, dragY);
 	}
 	
