@@ -93,6 +93,11 @@ public final class FloppyDiskItem extends Item implements DyeColoredItem
 					var blockEntity = event.getLevel().getBlockEntity(event.getPos());
 					if(blockEntity instanceof MicrochipBlockEntity microchipBlockEntity)
 					{
+						if(!microchip.isValid(microchipBlockEntity.microchip().size()))
+						{
+							player.displayClientMessage(LBR.text().floppyDiskApplyFailureMalformed(), true);
+							return;
+						}
 						var targetMicrochip = microchipBlockEntity.microchip().immutable();
 						var result = FloppyDiskInstaller.consumeItems(player, microchip, targetMicrochip, true);
 						if(result.isSuccess())
@@ -137,6 +142,11 @@ public final class FloppyDiskItem extends Item implements DyeColoredItem
 							var microchip = stack.get(LBRComponents.FLOPPY_DISK);
 							if(microchip != null)
 							{
+								if(!microchip.isValid(microchipBlockEntity.microchip().size()))
+								{
+									player.displayClientMessage(LBR.text().floppyDiskApplyFailureMalformed(), true);
+									return InteractionResult.sidedSuccess(context.getLevel().isClientSide());
+								}
 								var targetMicrochip = microchipBlockEntity.microchip().immutable();
 								var result = FloppyDiskInstaller.consumeItems(player, microchip, targetMicrochip, true);
 								if(result.isSuccess())

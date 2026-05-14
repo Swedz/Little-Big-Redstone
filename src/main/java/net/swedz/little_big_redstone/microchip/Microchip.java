@@ -2,6 +2,7 @@ package net.swedz.little_big_redstone.microchip;
 
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
+import com.google.common.collect.Sets;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import io.netty.buffer.ByteBuf;
@@ -18,11 +19,13 @@ import net.swedz.little_big_redstone.microchip.object.logic.LogicEntry;
 import net.swedz.little_big_redstone.microchip.object.note.MicrochipStickyNotes;
 import net.swedz.little_big_redstone.microchip.object.note.StickyNoteEntry;
 import net.swedz.little_big_redstone.microchip.wire.MicrochipWires;
+import net.swedz.little_big_redstone.microchip.wire.Wire;
 import net.swedz.tesseract.neoforge.api.Bounds;
 
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.Set;
 
 public final class Microchip
 {
@@ -121,7 +124,7 @@ public final class Microchip
 	
 	private MicrochipObjectContainer<?, ?> getContainer(MicrochipObjectContainerType containerType)
 	{
-		return switch (containerType)
+		return switch(containerType)
 		{
 			case STICKY_NOTE -> stickyNotes;
 			case LOGIC_COMPONENT -> components;
@@ -387,6 +390,55 @@ public final class Microchip
 		public int wireCount()
 		{
 			return wires.values().size();
+		}
+		
+		public boolean isValid(MicrochipSize targetSize)
+		{
+			Set<Wire> uniqueWires = Sets.newHashSet();
+			for(var wire : wires)
+			{
+				// Check that the wire is unique
+				if(!uniqueWires.add(wire) ||
+				   // Check that a component exists at the output slot
+				   !components.has(wire.output().slot()) ||
+				   // Check that a component exists at the input slot
+				   !components.has(wire.input().slot()))
+				{
+					return false;
+				}
+				var outputComponent = components.get(wire.output().slot());
+				var inputComponent = components.get(wire.input().slot());
+				// Check that a port exists at the output index
+				if(wire.output().index() >= outputComponent.component().outputs() ||
+				   wire.output().index() < 0 ||
+				   // Check that a port exists at the input index
+				   wire.input().index() >= inputComponent.component().inputs() ||
+				   wire.input().index() < 0)
+				{
+					return false;
+				}
+			}
+			Set<Integer> uniqueObjects = Sets.newHashSet();
+			for(var object : this.objects())
+			{
+				// Check that the object is unique
+				if(!uniqueObjects.add(object.slot()) ||
+				   // Check that the object fits in the microchip
+				   !targetSize.bounds().normalize().contains(object.toBounds()))
+				{
+					return false;
+				}
+				// Check that the object doesn't overlap any other objects
+				for(var otherObject : this.objects())
+				{
+					if(object != otherObject &&
+					   object.overlaps(otherObject.toBounds()))
+					{
+						return false;
+					}
+				}
+			}
+			return true;
 		}
 		
 		@Override

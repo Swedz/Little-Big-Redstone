@@ -99,6 +99,7 @@
   "text.little_big_redstone.emitter": "Emitter",
   "text.little_big_redstone.floppy_disk": "Floppy Disk",
   "text.little_big_redstone.floppy_disk_apply_failure": "Failed to install microchip program.",
+  "text.little_big_redstone.floppy_disk_apply_failure_malformed": "Cannot install microchip program because it is malformed.",
   "text.little_big_redstone.floppy_disk_apply_success": "Installed microchip program to the microchip from the floppy disk.",
   "text.little_big_redstone.floppy_disk_button_close": "Close",
   "text.little_big_redstone.floppy_disk_button_load": "Load",
