@@ -1,15 +1,16 @@
 package net.swedz.little_big_redstone.compat.emi.recipe;
 
-import dev.emi.emi.EmiUtil;
 import dev.emi.emi.api.recipe.EmiPatternCraftingRecipe;
 import dev.emi.emi.api.stack.EmiIngredient;
 import dev.emi.emi.api.stack.EmiStack;
 import dev.emi.emi.api.widget.GeneratedSlotWidget;
 import dev.emi.emi.api.widget.SlotWidget;
+import net.minecraft.client.Minecraft;
 import net.minecraft.core.Holder;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.swedz.little_big_redstone.LBRTags;
+import net.swedz.tesseract.neoforge.helper.RegistryHelper;
 import org.apache.commons.lang3.mutable.MutableInt;
 
 import java.util.List;
@@ -27,7 +28,7 @@ public final class CopyStickyNoteEmiRecipe extends EmiPatternCraftingRecipe
 				EmiStack.EMPTY,
 				id
 		);
-		this.inputItems = EmiUtil.values(LBRTags.Items.STICKY_NOTES).map(Holder::value).toList();
+		this.inputItems = RegistryHelper.values(Minecraft.getInstance().level.registryAccess(), LBRTags.Items.STICKY_NOTES).map(Holder::value).toList();
 	}
 	
 	private Item getItem(MutableInt index)
