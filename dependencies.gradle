@@ -38,10 +38,11 @@ dependencies {
 	implementation "net.swedz:tesseract-api-neoforge:${tesseract_version}"
 
 	if (project.runtime_include_emi.toBoolean()) {
-		localImplementation "dev.emi:emi-neoforge:${emi_version}"
+		localImplementation "dev.emi:emi-neoforge:${emi_version}:api"
 	} else {
-		compileOnly "dev.emi:emi-neoforge:${emi_version}"
+		compileOnly "dev.emi:emi-neoforge:${emi_version}:api"
 	}
+	runtimeOnly "dev.emi:emi-neoforge:${emi_version}"
 
 	localImplementation "org.appliedenergistics:guideme:${guideme_version}"
 }
