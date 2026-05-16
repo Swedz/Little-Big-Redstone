@@ -7,8 +7,10 @@ import net.neoforged.neoforge.items.ItemHandlerHelper;
 import net.swedz.little_big_redstone.LBR;
 import net.swedz.little_big_redstone.LBRItems;
 import net.swedz.little_big_redstone.block.microchip.MicrochipBlockEntity;
+import net.swedz.little_big_redstone.gui.microchip.MicrochipMenu;
 import net.swedz.little_big_redstone.gui.microchip.MicrochipViewPosition;
 import net.swedz.little_big_redstone.microchip.object.logic.LogicComponent;
+import net.swedz.tesseract.neoforge.helper.TransferHelper;
 
 public record MicrochipLogicConfigReference(
 		BlockPos pos,
@@ -30,13 +32,26 @@ public record MicrochipLogicConfigReference(
 				targetEntry.component().config().loadFrom(component.config());
 				microchip.components().updateValidity();
 				int wiresPopped = microchip.wires().cleanup(targetEntry);
-				if(wiresPopped > 0)
-				{
-					ItemHandlerHelper.giveItemToPlayer(player, new ItemStack(LBRItems.REDSTONE_BIT, wiresPopped));
-				}
 				microchip.markDirty(false);
 				
 				blockEntity.openMenu(player, returnViewPosition);
+				
+				if(wiresPopped > 0)
+				{
+					if(player.containerMenu instanceof MicrochipMenu menu)
+					{
+						int givenAmount = TransferHelper.insert(menu.getDestinationInventoryItemHandler(player), new ItemStack(LBRItems.REDSTONE_BIT, wiresPopped));
+						if(givenAmount != wiresPopped)
+						{
+							int remainderAmount = wiresPopped - givenAmount;
+							player.drop(new ItemStack(LBRItems.REDSTONE_BIT, remainderAmount), false);
+						}
+					}
+					else
+					{
+						ItemHandlerHelper.giveItemToPlayer(player, new ItemStack(LBRItems.REDSTONE_BIT, wiresPopped));
+					}
+				}
 			}
 			else
 			{

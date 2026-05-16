@@ -9,7 +9,6 @@ import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.neoforge.items.IItemHandler;
-import net.neoforged.neoforge.items.ItemHandlerHelper;
 import net.neoforged.neoforge.items.wrapper.CombinedInvWrapper;
 import net.neoforged.neoforge.items.wrapper.PlayerMainInvWrapper;
 import net.swedz.little_big_redstone.LBR;
@@ -185,7 +184,12 @@ public final class MicrochipMenu extends PlayerInventoryContainerMenu
 				
 				if(!player.level().isClientSide() && !player.hasInfiniteMaterials())
 				{
-					ItemHandlerHelper.giveItemToPlayer(player, new ItemStack(LBRItems.REDSTONE_BIT, wiresPopped));
+					int givenAmount = TransferHelper.insert(this.getDestinationInventoryItemHandler(player), new ItemStack(LBRItems.REDSTONE_BIT, wiresPopped));
+					if(givenAmount != wiresPopped)
+					{
+						int remainderAmount = wiresPopped - givenAmount;
+						player.drop(new ItemStack(LBRItems.REDSTONE_BIT, remainderAmount), false);
+					}
 				}
 				
 				carriedComponentSlot = -1;
@@ -218,14 +222,14 @@ public final class MicrochipMenu extends PlayerInventoryContainerMenu
 	@Override
 	public void clicked(int slotId, int button, ClickType clickType, Player player)
 	{
-		this.dropCarriedWires(slotId, button, clickType, player);
-		
 		if(this.pickLogicArray(slotId, button, clickType, player))
 		{
 			return;
 		}
 		
 		super.clicked(slotId, button, clickType, player);
+		
+		this.dropCarriedWires(slotId, button, clickType, player);
 	}
 	
 	@Override
