@@ -457,7 +457,14 @@ public interface LBRText
 	
 	@LangKey(text = "  Signal: %s %s")
 	@WithStyle("tooltip")
-	MutableComponent logicConfigTooltipIoSignalComparison(
+	MutableComponent logicConfigTooltipSignalComparison(
+			@WithStyle("highlighted") LogicComparisonMode comparison,
+			@WithStyle("highlighted") Component signal
+	);
+	
+	@LangKey(datagen = false)
+	@WithStyle("tooltip")
+	MutableComponent logicConfigTooltipSignalComparison(
 			@WithStyle("highlighted") LogicComparisonMode comparison,
 			@WithStyle("highlighted") int signal
 	);
