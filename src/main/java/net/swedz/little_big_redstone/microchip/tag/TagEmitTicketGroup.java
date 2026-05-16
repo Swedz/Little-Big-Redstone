@@ -24,20 +24,8 @@ public final class TagEmitTicketGroup
 		return this.size() == 0;
 	}
 	
-	public void add(TagEmitTicket ticket, int signal)
+	private void updateSignal()
 	{
-		tickets.put(ticket, signal);
-		
-		if(signal > this.signal)
-		{
-			this.signal = signal;
-		}
-	}
-	
-	public void remove(TagEmitTicket ticket)
-	{
-		tickets.remove(ticket);
-		
 		int strongestSignal = 0;
 		for(int signal : tickets.values())
 		{
@@ -47,6 +35,18 @@ public final class TagEmitTicketGroup
 			}
 		}
 		signal = strongestSignal;
+	}
+	
+	public void add(TagEmitTicket ticket, int signal)
+	{
+		tickets.put(ticket, signal);
+		this.updateSignal();
+	}
+	
+	public void remove(TagEmitTicket ticket)
+	{
+		tickets.remove(ticket);
+		this.updateSignal();
 	}
 	
 	public int getSignal()
