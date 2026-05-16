@@ -141,7 +141,7 @@
       "chars": [
         "?"
       ],
-      "file": "little_big_redstone:font/logic/t_flip_flop.png",
+      "file": "little_big_redstone:font/logic/calculator.png",
       "height": 7
     },
     {
@@ -149,6 +149,15 @@
       "ascent": 7,
       "chars": [
         "@"
+      ],
+      "file": "little_big_redstone:font/logic/t_flip_flop.png",
+      "height": 7
+    },
+    {
+      "type": "bitmap",
+      "ascent": 7,
+      "chars": [
+        "A"
       ],
       "file": "little_big_redstone:font/logic/rs_nor_latch.png",
       "height": 7

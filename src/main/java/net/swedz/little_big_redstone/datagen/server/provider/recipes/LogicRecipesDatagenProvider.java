@@ -33,6 +33,7 @@ public final class LogicRecipesDatagenProvider extends RecipeProvider
 			'E', Either.left(Items.REPEATER),
 			'Q', Either.right(Tags.Items.GEMS_QUARTZ),
 			'G', Either.right(Tags.Items.INGOTS_GOLD),
+			'C', Either.right(Tags.Items.INGOTS_COPPER),
 			'p', Either.left(Items.STICKY_PISTON),
 			'P', Either.right(Tags.Items.ENDER_PEARLS)
 	);
@@ -132,6 +133,11 @@ public final class LogicRecipesDatagenProvider extends RecipeProvider
 				.pattern("RT ")
 				.pattern("QrT")
 				.pattern("RT "));
+		
+		logicComponent(output, LogicTypes.CALCULATOR, (b) -> b
+				.pattern("CCG")
+				.pattern("RrQ")
+				.pattern("CCG"));
 		
 		logicComponent(output, LogicTypes.T_FLIP_FLOP, (b) -> b
 				.pattern("1  ")
