@@ -36,7 +36,7 @@ public record MicrochipLogicConfigReference(
 				
 				blockEntity.openMenu(player, returnViewPosition);
 				
-				if(wiresPopped > 0)
+				if(wiresPopped > 0 && !player.hasInfiniteMaterials())
 				{
 					if(player.containerMenu instanceof MicrochipMenu menu)
 					{
