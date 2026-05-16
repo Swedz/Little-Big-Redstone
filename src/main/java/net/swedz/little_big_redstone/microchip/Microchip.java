@@ -392,6 +392,31 @@ public final class Microchip
 			return wires.values().size();
 		}
 		
+		private boolean validateObjects(MicrochipSize targetSize, Iterable<? extends MicrochipObject> objects)
+		{
+			Set<Integer> uniqueObjects = Sets.newHashSet();
+			for(var object : objects)
+			{
+				// Check that the object is unique
+				if(!uniqueObjects.add(object.slot()) ||
+				   // Check that the object fits in the microchip
+				   !targetSize.bounds().normalize().contains(object.toBounds()))
+				{
+					return false;
+				}
+				// Check that the object doesn't overlap any other objects
+				for(var otherObject : this.objects())
+				{
+					if(object != otherObject &&
+					   object.overlaps(otherObject.toBounds()))
+					{
+						return false;
+					}
+				}
+			}
+			return true;
+		}
+		
 		public boolean isValid(MicrochipSize targetSize)
 		{
 			Set<Wire> uniqueWires = Sets.newHashSet();
@@ -418,27 +443,8 @@ public final class Microchip
 					return false;
 				}
 			}
-			Set<Integer> uniqueObjects = Sets.newHashSet();
-			for(var object : this.objects())
-			{
-				// Check that the object is unique
-				if(!uniqueObjects.add(object.slot()) ||
-				   // Check that the object fits in the microchip
-				   !targetSize.bounds().normalize().contains(object.toBounds()))
-				{
-					return false;
-				}
-				// Check that the object doesn't overlap any other objects
-				for(var otherObject : this.objects())
-				{
-					if(object != otherObject &&
-					   object.overlaps(otherObject.toBounds()))
-					{
-						return false;
-					}
-				}
-			}
-			return true;
+			return this.validateObjects(targetSize, this.components()) &&
+				   this.validateObjects(targetSize, this.stickyNotes());
 		}
 		
 		@Override
