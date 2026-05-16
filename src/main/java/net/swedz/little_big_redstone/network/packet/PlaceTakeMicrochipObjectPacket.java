@@ -5,7 +5,6 @@ import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.item.ItemStack;
-import net.neoforged.neoforge.items.ItemHandlerHelper;
 import net.swedz.little_big_redstone.LBR;
 import net.swedz.little_big_redstone.LBRComponents;
 import net.swedz.little_big_redstone.LBRItems;
@@ -130,7 +129,12 @@ public record PlaceTakeMicrochipObjectPacket(
 						}
 						else if(!player.hasInfiniteMaterials() && !wiresPopped.isEmpty())
 						{
-							ItemHandlerHelper.giveItemToPlayer(player, new ItemStack(LBRItems.REDSTONE_BIT, wiresPopped.size()));
+							int givenAmount = TransferHelper.insert(menu.getDestinationInventoryItemHandler(player), new ItemStack(LBRItems.REDSTONE_BIT, wiresPopped.size()));
+							if(givenAmount != wiresPopped.size())
+							{
+								int remainderAmount = wiresPopped.size() - givenAmount;
+								player.drop(new ItemStack(LBRItems.REDSTONE_BIT, remainderAmount), false);
+							}
 						}
 						microchip.markDirty(true);
 					}
