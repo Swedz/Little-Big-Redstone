@@ -21,19 +21,19 @@ public final class NORGate extends LogicGate<NORGate, MultiLogicGateConfig>
 	
 	public static final StreamCodec<ByteBuf, NORGate> STREAM_CODEC = streamCodec(MultiLogicGateConfig.STREAM_CODEC, NORGate::new);
 	
-	private NORGate(MultiLogicGateConfig config, Optional<DyeColor> color, boolean outputState)
+	private NORGate(MultiLogicGateConfig config, Optional<DyeColor> color, int outputState)
 	{
 		super(config, color, outputState);
 	}
 	
-	private NORGate(Optional<DyeColor> color, boolean outputState)
+	private NORGate(Optional<DyeColor> color, int outputState)
 	{
 		super(color, outputState);
 	}
 	
 	public NORGate()
 	{
-		this(Optional.empty(), false);
+		this(Optional.empty(), 0);
 	}
 	
 	@Override
@@ -49,16 +49,16 @@ public final class NORGate extends LogicGate<NORGate, MultiLogicGateConfig>
 	}
 	
 	@Override
-	public boolean processInputs(LogicContext context, boolean[] inputs)
+	public int processInputs(LogicContext context, int[] inputs)
 	{
-		for(boolean input : inputs)
+		for(int input : inputs)
 		{
-			if(input)
+			if(input > 0)
 			{
-				return false;
+				return 0;
 			}
 		}
-		return true;
+		return 1;
 	}
 	
 	@Override

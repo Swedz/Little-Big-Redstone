@@ -13,7 +13,7 @@ item_ids:
 # Reader
 
 <FloatingColumn width="100" align="right">
-	### Boolean
+	### Analog
 	When in comparator mode, the reader will yield an output value equal to the analog signal strength emitted by the
 	block for comparators. Otherwise, readers will only ever yield an output value of 0 (OFF) or 1 (ON).
 </FloatingColumn>

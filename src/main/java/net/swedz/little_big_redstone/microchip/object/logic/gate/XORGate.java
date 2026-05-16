@@ -21,19 +21,19 @@ public final class XORGate extends LogicGate<XORGate, MultiLogicGateConfig>
 	
 	public static final StreamCodec<ByteBuf, XORGate> STREAM_CODEC = streamCodec(MultiLogicGateConfig.STREAM_CODEC, XORGate::new);
 	
-	private XORGate(MultiLogicGateConfig config, Optional<DyeColor> color, boolean outputState)
+	private XORGate(MultiLogicGateConfig config, Optional<DyeColor> color, int outputState)
 	{
 		super(config, color, outputState);
 	}
 	
-	private XORGate(Optional<DyeColor> color, boolean outputState)
+	private XORGate(Optional<DyeColor> color, int outputState)
 	{
 		super(color, outputState);
 	}
 	
 	public XORGate()
 	{
-		this(Optional.empty(), false);
+		this(Optional.empty(), 0);
 	}
 	
 	@Override
@@ -49,17 +49,22 @@ public final class XORGate extends LogicGate<XORGate, MultiLogicGateConfig>
 	}
 	
 	@Override
-	public boolean processInputs(LogicContext context, boolean[] inputs)
+	public int processInputs(LogicContext context, int[] inputs)
 	{
 		int trueCount = 0;
-		for(boolean input : inputs)
+		int greatest = 0;
+		for(int input : inputs)
 		{
-			if(input)
+			if(input > 0)
 			{
 				trueCount++;
 			}
+			if(input > greatest)
+			{
+				greatest = input;
+			}
 		}
-		return trueCount % 2 != 0;
+		return trueCount % 2 != 0 ? greatest : 0;
 	}
 	
 	@Override
