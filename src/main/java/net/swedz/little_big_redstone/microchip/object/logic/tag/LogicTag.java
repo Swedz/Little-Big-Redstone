@@ -82,6 +82,8 @@ public final class LogicTag extends LogicComponent<LogicTag, LogicTagConfig> imp
 	@Override
 	protected void processTickInternal(LogicContext context, int[] inputs)
 	{
+		int originalOutputState = outputState;
+		
 		if(config.input)
 		{
 			var owner = context.placedBy() == null || config.global ?
@@ -98,6 +100,11 @@ public final class LogicTag extends LogicComponent<LogicTag, LogicTagConfig> imp
 			{
 				awareness.emit(config.label, outputState);
 			}
+		}
+		
+		if(outputState != originalOutputState)
+		{
+			context.markDirty(this);
 		}
 	}
 	
