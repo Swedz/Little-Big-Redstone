@@ -239,6 +239,9 @@ public interface LBRText
 	@LangKey(text = "Global")
 	MutableComponent logicConfigButtonLabelTagGlobal();
 	
+	@LangKey(text = "Pass Signal")
+	MutableComponent logicConfigButtonLabelPassSignal();
+	
 	@LangKey(text = "The time for the output to be on.")
 	MutableComponent logicConfigButtonTooltipDuration();
 	
@@ -389,6 +392,9 @@ public interface LBRText
 	@LangKey(text = "Whether this tag sensor should detect emitters in microchips placed by anybody, or just yourself.")
 	MutableComponent logicConfigButtonTooltipTagGlobal();
 	
+	@LangKey(text = "Whether this selector should pass through the input strength to the output, or if the output signal should equal the index (1-based) of the output port.")
+	MutableComponent logicConfigButtonTooltipPassSignal();
+	
 	@LangKey(text = "Counter")
 	MutableComponent logicConfigSelectorModeCounter();
 	
@@ -458,6 +464,10 @@ public interface LBRText
 	@LangKey(text = "  Outputs: %s")
 	@WithStyle("tooltip")
 	MutableComponent logicConfigTooltipOutputs(@WithStyle("highlighted") int outputs);
+	
+	@LangKey(text = "  Pass Signal: %s")
+	@WithStyle("tooltip")
+	MutableComponent logicConfigTooltipPassSignal(@Parsed("yes_no") boolean passSignal);
 	
 	@LangKey(text = "  Fill: %s %s")
 	@WithStyle("tooltip")

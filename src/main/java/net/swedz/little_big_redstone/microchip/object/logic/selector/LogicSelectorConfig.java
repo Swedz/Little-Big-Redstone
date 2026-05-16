@@ -21,13 +21,15 @@ public final class LogicSelectorConfig extends LogicConfig<LogicSelectorConfig>
 	public static final MapCodec<LogicSelectorConfig> CODEC = RecordCodecBuilder.mapCodec((instance) -> instance
 			.group(
 					CodecHelper.forLowercaseEnum(LogicSelectorMode.class).optionalFieldOf("mode", LogicSelectorMode.COUNTER).forGetter((config) -> config.mode),
-					Codec.intRange(2, 10).optionalFieldOf("outputs", 2).forGetter((config) -> config.outputs)
+					Codec.intRange(2, 10).optionalFieldOf("outputs", 2).forGetter((config) -> config.outputs),
+					Codec.BOOL.optionalFieldOf("pass_signal", true).forGetter((config) -> config.passSignal)
 			)
 			.apply(instance, LogicSelectorConfig::new));
 	
 	public static final StreamCodec<ByteBuf, LogicSelectorConfig> STREAM_CODEC = StreamCodec.composite(
 			CodecHelper.forLowercaseEnumStream(LogicSelectorMode.class), (config) -> config.mode,
 			ByteBufCodecs.INT, (config) -> config.outputs,
+			ByteBufCodecs.BOOL, (config) -> config.passSignal,
 			LogicSelectorConfig::new
 	);
 	
@@ -35,15 +37,18 @@ public final class LogicSelectorConfig extends LogicConfig<LogicSelectorConfig>
 	
 	public int outputs;
 	
-	private LogicSelectorConfig(LogicSelectorMode mode, int outputs)
+	public boolean passSignal;
+	
+	private LogicSelectorConfig(LogicSelectorMode mode, int outputs, boolean passSignal)
 	{
 		this.mode = mode;
 		this.outputs = outputs;
+		this.passSignal = passSignal;
 	}
 	
 	public LogicSelectorConfig()
 	{
-		this(LogicSelectorMode.COUNTER, 2);
+		this(LogicSelectorMode.COUNTER, 2, true);
 	}
 	
 	@Override
@@ -51,6 +56,7 @@ public final class LogicSelectorConfig extends LogicConfig<LogicSelectorConfig>
 	{
 		lines.add(LBR.text().logicConfigTooltipMode(mode));
 		lines.add(LBR.text().logicConfigTooltipOutputs(outputs));
+		lines.add(LBR.text().logicConfigTooltipPassSignal(passSignal));
 	}
 	
 	@Override
@@ -70,6 +76,7 @@ public final class LogicSelectorConfig extends LogicConfig<LogicSelectorConfig>
 	{
 		mode = other.mode;
 		outputs = other.outputs;
+		passSignal = other.passSignal;
 	}
 	
 	@Override
@@ -104,13 +111,13 @@ public final class LogicSelectorConfig extends LogicConfig<LogicSelectorConfig>
 	@Override
 	public int hashCode()
 	{
-		return Objects.hash(mode, outputs);
+		return Objects.hash(mode, outputs, passSignal);
 	}
 	
 	@Override
 	public boolean equals(Object o)
 	{
 		return this == o ||
-			   (o instanceof LogicSelectorConfig other && mode == other.mode && outputs == other.outputs);
+			   (o instanceof LogicSelectorConfig other && mode == other.mode && outputs == other.outputs && passSignal == other.passSignal);
 	}
 }
