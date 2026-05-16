@@ -22,8 +22,10 @@ final class LogicSelectorConfigMenuProvider extends LogicConfigMenuProvider<Logi
 		modeButton = builder.addCycleButton(
 				LBR.text().logicConfigButtonLabelMode(),
 				config.mode.tooltip(),
-				0, 0,
-				width, 18,
+				0,
+				0,
+				width,
+				18,
 				false,
 				config.mode,
 				Arrays.asList(LogicSelectorMode.values()),
@@ -45,12 +47,28 @@ final class LogicSelectorConfigMenuProvider extends LogicConfigMenuProvider<Logi
 				LBR.text().logicConfigButtonLabelOutputs(),
 				Component.empty(),
 				LBR.text().logicConfigButtonTooltipOutputs(),
-				0, 22,
-				width, 18,
-				config.outputsAllowed().min(), config.outputsAllowed().max(),
+				0,
+				22,
+				width,
+				18,
+				config.outputsAllowed().min(),
+				config.outputsAllowed().max(),
 				config.outputs,
-				1, 0,
+				1,
+				0,
 				(value) -> config.outputs = (int) Math.round(value)
+		);
+	}
+	
+	private void createPassSignal(LogicConfigMenuBuilder builder, int width, int height)
+	{
+		builder.addCheckbox(
+				LBR.text().logicConfigButtonLabelPassSignal(),
+				LBR.text().logicConfigButtonTooltipPassSignal(),
+				0,
+				22 * 2,
+				config.passSignal,
+				(value) -> config.passSignal = value
 		);
 	}
 	
@@ -59,5 +77,6 @@ final class LogicSelectorConfigMenuProvider extends LogicConfigMenuProvider<Logi
 	{
 		this.createMode(builder, width, height);
 		this.createOutputs(builder, width, height);
+		this.createPassSignal(builder, width, height);
 	}
 }

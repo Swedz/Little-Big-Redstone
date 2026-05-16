@@ -68,6 +68,7 @@ public final class LogicSelector extends LogicComponent<LogicSelector, LogicSele
 	protected void processTickInternal(LogicContext context, int[] inputs)
 	{
 		int originalSelected = selected;
+		int originalOutputState = outputState;
 		
 		if(config.mode == LogicSelectorMode.COUNTER)
 		{
@@ -90,8 +91,11 @@ public final class LogicSelector extends LogicComponent<LogicSelector, LogicSele
 					newSelected = 0;
 				}
 			}
-			selected = newSelected;
-			outputState = Math.max(inputs[0], inputs[1]);
+			if(decrement || increment)
+			{
+				selected = newSelected;
+				outputState = Math.max(inputs[0], inputs[1]);
+			}
 		}
 		else if(config.mode == LogicSelectorMode.SETTER)
 		{
@@ -107,7 +111,8 @@ public final class LogicSelector extends LogicComponent<LogicSelector, LogicSele
 			}
 		}
 		
-		if(selected != originalSelected)
+		if(selected != originalSelected ||
+		   outputState != originalOutputState)
 		{
 			context.markDirty(this);
 		}
@@ -116,7 +121,7 @@ public final class LogicSelector extends LogicComponent<LogicSelector, LogicSele
 	@Override
 	protected int outputInternal(int index)
 	{
-		return index == selected ? outputState : 0;
+		return index == selected ? (config.passSignal ? outputState : (index + 1)) : 0;
 	}
 	
 	public int output()
@@ -141,12 +146,14 @@ public final class LogicSelector extends LogicComponent<LogicSelector, LogicSele
 	protected void internalLoadFrom(LogicSelector other)
 	{
 		selected = other.selected;
+		outputState = other.outputState;
 	}
 	
 	@Override
 	protected void internalResetForPickup()
 	{
 		selected = 0;
+		outputState = 0;
 	}
 	
 	@Override
