@@ -150,6 +150,10 @@ public final class RedstoneAwareness extends MicrochipAwareness<RedstoneAwarenes
 		{
 			var level = context.level();
 			var pos = context.blockPos();
+			if(!level.isLoaded(pos))
+			{
+				return;
+			}
 			var state = context.state();
 			this.sendUpdates(level, pos, state, state, removedSides, removedStrongSides);
 		}
