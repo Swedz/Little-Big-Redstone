@@ -85,8 +85,8 @@ public final class LogicComparatorConfig extends LogicConfig<LogicComparatorConf
 		lines.add(LBR.text().logicConfigTooltipMode(mode));
 		
 		lines.add(signalStrength == 0 ?
-				LBR.text().logicConfigTooltipSignal(LBR.text().pass()) :
-				LBR.text().logicConfigTooltipIoSignalComparison(signalComparison, signalStrength));
+				LBR.text().logicConfigTooltipSignalComparison(signalComparison, LBR.text().pass()) :
+				LBR.text().logicConfigTooltipSignalComparison(signalComparison, signalStrength));
 		
 		lines.add(LBR.text().logicConfigTooltipInputs(inputs));
 	}

@@ -112,7 +112,7 @@ public final class LogicIOConfig extends LogicConfig<LogicIOConfig>
 		lines.add(LBR.text().logicConfigTooltipDirection(direction));
 		if(input)
 		{
-			lines.add(LBR.text().logicConfigTooltipIoSignalComparison(signalComparison, signalStrength));
+			lines.add(LBR.text().logicConfigTooltipSignalComparison(signalComparison, signalStrength));
 		}
 		else
 		{
