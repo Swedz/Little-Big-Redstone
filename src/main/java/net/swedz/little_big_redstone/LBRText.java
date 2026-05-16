@@ -257,6 +257,9 @@ public interface LBRText
 	@LangKey(text = "Whether any or all input(s) need to match the signal strength comparison for the output to be ON.")
 	MutableComponent logicConfigButtonTooltipComparatorMode();
 	
+	@LangKey(text = "The mathematical operation this component will perform on the inputs signal strengths.")
+	MutableComponent logicConfigButtonTooltipCalculatorMode();
+	
 	@LangKey(text = "The block at this output will be weakly powered when the output is ON.")
 	MutableComponent logicConfigButtonTooltipOutputPowerWeak();
 	
@@ -409,6 +412,12 @@ public interface LBRText
 	
 	@LangKey(text = "Weak")
 	MutableComponent logicConfigSequencerModeWeak();
+	
+	@LangKey(text = "Addition")
+	MutableComponent logicConfigCalculatorModeAddition();
+	
+	@LangKey(text = "Subtraction")
+	MutableComponent logicConfigCalculatorModeSubtraction();
 	
 	@LangKey(text = "Configuration:")
 	@WithStyle("tooltip")
@@ -636,6 +645,14 @@ public interface LBRText
 	@LangKey(text = "When the output is ON, the signal strength will always equal the strength being compared against.")
 	@WithStyle("tooltip")
 	MutableComponent logicHelpComparator2();
+	
+	@LangKey(text = "The mode determines whether the component will add or subtract the input signal strength values.")
+	@WithStyle("tooltip")
+	MutableComponent logicHelpCalculator1();
+	
+	@LangKey(text = "The output signal strength will be the total calculated value.")
+	@WithStyle("tooltip")
+	MutableComponent logicHelpCalculator2();
 	
 	@LangKey(text = "No")
 	@WithStyle("no")

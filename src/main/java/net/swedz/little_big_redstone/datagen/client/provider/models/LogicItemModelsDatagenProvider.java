@@ -11,6 +11,7 @@ import net.swedz.little_big_redstone.LBRColors;
 import net.swedz.little_big_redstone.client.model.logic.LogicBakingModelData;
 import net.swedz.little_big_redstone.microchip.object.logic.LogicType;
 import net.swedz.little_big_redstone.microchip.object.logic.LogicTypes;
+import net.swedz.little_big_redstone.microchip.object.logic.calculator.LogicCalculatorMode;
 
 import java.util.Locale;
 import java.util.Set;
@@ -48,6 +49,9 @@ public final class LogicItemModelsDatagenProvider extends ItemModelProvider
 		this.logicComponent(LogicTypes.SELECTOR, BackgroundType.SQUARE, true);
 		this.logicComponent(LogicTypes.RANDOMIZER, BackgroundType.SQUARE, true);
 		this.logicComponent(LogicTypes.COMPARATOR, BackgroundType.SQUARE, true);
+		this.logicComponent(LogicTypes.CALCULATOR, BackgroundType.SQUARE, false, (b) -> b
+				.boardTexture(LogicCalculatorMode.ADDITION.textureKey(), LBR.id("logic/calculator_addition"))
+				.boardTexture(LogicCalculatorMode.SUBTRACTION.textureKey(), LBR.id("logic/calculator_subtraction")));
 		
 		this.logicComponent(LogicTypes.T_FLIP_FLOP, BackgroundType.SQUARE, false, (b) -> b
 				.boardTexture("on", LBR.id("logic/t_flip_flop_on"))

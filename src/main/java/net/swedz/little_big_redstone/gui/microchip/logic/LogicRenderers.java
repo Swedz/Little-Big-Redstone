@@ -2,6 +2,7 @@ package net.swedz.little_big_redstone.gui.microchip.logic;
 
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Maps;
+import net.swedz.little_big_redstone.gui.microchip.logic.renderer.CalculatorLogicRenderer;
 import net.swedz.little_big_redstone.gui.microchip.logic.renderer.IORenderer;
 import net.swedz.little_big_redstone.gui.microchip.logic.renderer.OnOffLogicRenderer;
 import net.swedz.little_big_redstone.gui.microchip.logic.renderer.SequencerRenderer;
@@ -39,6 +40,7 @@ public final class LogicRenderers
 		register(LogicTypes.SELECTOR, SimpleLogicRenderer::new);
 		register(LogicTypes.RANDOMIZER, SimpleLogicRenderer::new);
 		register(LogicTypes.COMPARATOR, SimpleLogicRenderer::new);
+		register(LogicTypes.CALCULATOR, CalculatorLogicRenderer::new);
 		
 		register(LogicTypes.T_FLIP_FLOP, OnOffLogicRenderer::new);
 		register(LogicTypes.RS_NOR_LATCH, OnOffLogicRenderer::new);

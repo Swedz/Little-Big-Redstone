@@ -8,6 +8,7 @@ import com.mojang.serialization.MapCodec;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
+import net.swedz.little_big_redstone.microchip.object.logic.calculator.LogicCalculator;
 import net.swedz.little_big_redstone.microchip.object.logic.comparator.LogicComparator;
 import net.swedz.little_big_redstone.microchip.object.logic.debug.LogicDebugger;
 import net.swedz.little_big_redstone.microchip.object.logic.gate.ANDGate;
@@ -65,6 +66,7 @@ public final class LogicTypes
 	public static final LogicType<LogicSelector>   SELECTOR        = register("selector", "Selector", LogicSelector.CODEC, LogicSelector.STREAM_CODEC, LogicSelector::new);
 	public static final LogicType<LogicRandomizer> RANDOMIZER      = register("randomizer", "Randomizer", LogicRandomizer.CODEC, LogicRandomizer.STREAM_CODEC, LogicRandomizer::new);
 	public static final LogicType<LogicComparator> COMPARATOR      = register("comparator", "Comparator", LogicComparator.CODEC, LogicComparator.STREAM_CODEC, LogicComparator::new);
+	public static final LogicType<LogicCalculator> CALCULATOR      = register("calculator", "Calculator", LogicCalculator.CODEC, LogicCalculator.STREAM_CODEC, LogicCalculator::new);
 	
 	public static final LogicType<TFlipFlop>  T_FLIP_FLOP  = register("t_flip_flop", "T Flip-Flop", TFlipFlop.CODEC, TFlipFlop.STREAM_CODEC, TFlipFlop::new);
 	public static final LogicType<RSNORLatch> RS_NOR_LATCH = register("rs_nor_latch", "RS NOR Latch", RSNORLatch.CODEC, RSNORLatch.STREAM_CODEC, RSNORLatch::new);
