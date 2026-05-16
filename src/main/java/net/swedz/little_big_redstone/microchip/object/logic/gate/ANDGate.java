@@ -21,19 +21,19 @@ public final class ANDGate extends LogicGate<ANDGate, MultiLogicGateConfig>
 	
 	public static final StreamCodec<ByteBuf, ANDGate> STREAM_CODEC = streamCodec(MultiLogicGateConfig.STREAM_CODEC, ANDGate::new);
 	
-	private ANDGate(MultiLogicGateConfig config, Optional<DyeColor> color, boolean outputState)
+	private ANDGate(MultiLogicGateConfig config, Optional<DyeColor> color, int outputState)
 	{
 		super(config, color, outputState);
 	}
 	
-	private ANDGate(Optional<DyeColor> color, boolean outputState)
+	private ANDGate(Optional<DyeColor> color, int outputState)
 	{
 		super(color, outputState);
 	}
 	
 	public ANDGate()
 	{
-		this(Optional.empty(), false);
+		this(Optional.empty(), 0);
 	}
 	
 	@Override
@@ -49,16 +49,21 @@ public final class ANDGate extends LogicGate<ANDGate, MultiLogicGateConfig>
 	}
 	
 	@Override
-	public boolean processInputs(LogicContext context, boolean[] inputs)
+	public int processInputs(LogicContext context, int[] inputs)
 	{
-		for(boolean input : inputs)
+		int greatest = 0;
+		for(int input : inputs)
 		{
-			if(!input)
+			if(input == 0)
 			{
-				return false;
+				return 0;
+			}
+			if(input > greatest)
+			{
+				greatest = input;
 			}
 		}
-		return true;
+		return greatest;
 	}
 	
 	@Override

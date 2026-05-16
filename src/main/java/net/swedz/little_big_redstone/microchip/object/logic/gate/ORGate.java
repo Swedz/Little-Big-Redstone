@@ -21,19 +21,19 @@ public final class ORGate extends LogicGate<ORGate, MultiLogicGateConfig>
 	
 	public static final StreamCodec<ByteBuf, ORGate> STREAM_CODEC = streamCodec(MultiLogicGateConfig.STREAM_CODEC, ORGate::new);
 	
-	private ORGate(MultiLogicGateConfig config, Optional<DyeColor> color, boolean outputState)
+	private ORGate(MultiLogicGateConfig config, Optional<DyeColor> color, int outputState)
 	{
 		super(config, color, outputState);
 	}
 	
-	private ORGate(Optional<DyeColor> color, boolean outputState)
+	private ORGate(Optional<DyeColor> color, int outputState)
 	{
 		super(color, outputState);
 	}
 	
 	public ORGate()
 	{
-		this(Optional.empty(), false);
+		this(Optional.empty(), 0);
 	}
 	
 	@Override
@@ -49,16 +49,17 @@ public final class ORGate extends LogicGate<ORGate, MultiLogicGateConfig>
 	}
 	
 	@Override
-	public boolean processInputs(LogicContext context, boolean[] inputs)
+	public int processInputs(LogicContext context, int[] inputs)
 	{
-		for(boolean input : inputs)
+		int greatest = 0;
+		for(int input : inputs)
 		{
-			if(input)
+			if(input > greatest)
 			{
-				return true;
+				greatest = input;
 			}
 		}
-		return false;
+		return greatest;
 	}
 	
 	@Override

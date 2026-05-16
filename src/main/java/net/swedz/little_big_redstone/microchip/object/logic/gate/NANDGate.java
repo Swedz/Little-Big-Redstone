@@ -21,19 +21,19 @@ public final class NANDGate extends LogicGate<NANDGate, MultiLogicGateConfig>
 	
 	public static final StreamCodec<ByteBuf, NANDGate> STREAM_CODEC = streamCodec(MultiLogicGateConfig.STREAM_CODEC, NANDGate::new);
 	
-	private NANDGate(MultiLogicGateConfig config, Optional<DyeColor> color, boolean outputState)
+	private NANDGate(MultiLogicGateConfig config, Optional<DyeColor> color, int outputState)
 	{
 		super(config, color, outputState);
 	}
 	
-	private NANDGate(Optional<DyeColor> color, boolean outputState)
+	private NANDGate(Optional<DyeColor> color, int outputState)
 	{
 		super(color, outputState);
 	}
 	
 	public NANDGate()
 	{
-		this(Optional.empty(), false);
+		this(Optional.empty(), 0);
 	}
 	
 	@Override
@@ -49,16 +49,16 @@ public final class NANDGate extends LogicGate<NANDGate, MultiLogicGateConfig>
 	}
 	
 	@Override
-	public boolean processInputs(LogicContext context, boolean[] inputs)
+	public int processInputs(LogicContext context, int[] inputs)
 	{
-		for(boolean input : inputs)
+		for(int input : inputs)
 		{
-			if(!input)
+			if(input == 0)
 			{
-				return true;
+				return 1;
 			}
 		}
-		return false;
+		return 0;
 	}
 	
 	@Override

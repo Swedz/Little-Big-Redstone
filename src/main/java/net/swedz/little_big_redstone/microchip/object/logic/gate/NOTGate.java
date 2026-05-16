@@ -21,14 +21,14 @@ public final class NOTGate extends LogicGate<NOTGate, SingleLogicGateConfig>
 	
 	public static final StreamCodec<ByteBuf, NOTGate> STREAM_CODEC = streamCodec(NOTGate::new);
 	
-	private NOTGate(Optional<DyeColor> color, boolean outputState)
+	private NOTGate(Optional<DyeColor> color, int outputState)
 	{
 		super(color, outputState);
 	}
 	
 	public NOTGate()
 	{
-		this(Optional.empty(), false);
+		this(Optional.empty(), 0);
 	}
 	
 	@Override
@@ -44,9 +44,9 @@ public final class NOTGate extends LogicGate<NOTGate, SingleLogicGateConfig>
 	}
 	
 	@Override
-	public boolean processInputs(LogicContext context, boolean[] inputs)
+	public int processInputs(LogicContext context, int[] inputs)
 	{
-		return !inputs[0];
+		return inputs[0] == 0 ? 1 : 0;
 	}
 	
 	@Override
