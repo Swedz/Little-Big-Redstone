@@ -1,0 +1,35 @@
+{
+  "providers": [
+    {
+      "type": "space",
+      "advances": {
+        " ": 8.0,
+        "1": 1.0
+      }
+    },
+    {
+      "type": "bitmap",
+      "ascent": 7,
+      "chars": [
+        "-"
+      ],
+      "file": "little_big_redstone:font/sticky_note/bulletpoint.png"
+    },
+    {
+      "type": "bitmap",
+      "ascent": 7,
+      "chars": [
+        "o"
+      ],
+      "file": "little_big_redstone:font/sticky_note/checkbox_unchecked.png"
+    },
+    {
+      "type": "bitmap",
+      "ascent": 7,
+      "chars": [
+        "x"
+      ],
+      "file": "little_big_redstone:font/sticky_note/checkbox_checked.png"
+    }
+  ]
+}

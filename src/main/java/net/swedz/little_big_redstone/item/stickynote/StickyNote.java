@@ -7,27 +7,36 @@ import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.chat.Style;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
+import net.swedz.little_big_redstone.LBR;
 import net.swedz.little_big_redstone.microchip.object.logic.LogicTypes;
 
 import java.util.Objects;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public final class StickyNote
 {
-	private static final Pattern MARKDOWN_PATTERN = Pattern.compile(
-			"(?<!\\*)\\*\\*\\*(?<bolditalic>.+?)\\*\\*\\*(?!\\*)" +
-			"|(?<!\\*)\\*\\*(?<bold>.+?)\\*\\*(?!\\*)" +
-			"|(?<!\\*)\\*(?<italic>.+?)\\*(?!\\*)" +
-			"|(?<!_)__(?<underline>.+?)__(?!_)" +
-			"|(?<!~)~~(?<strikethrough>.+?)~~(?!~)" +
-			"|(?<placeholder><(?<placeholderkey>[^>]+)>)"
-	);
+	private static Pattern getMarkdownPattern()
+	{
+		// TODO escaping support
+		return Pattern.compile(
+				"(?<!\\*)\\*\\*\\*(?<bolditalic>[\\s\\S]+?)\\*\\*\\*(?!\\*)" +
+				"|(?<!\\*)\\*\\*(?<bold>[\\s\\S]+?)\\*\\*(?!\\*)" +
+				"|(?<!\\*)\\*(?<italic>[\\s\\S]+?)\\*(?!\\*)" +
+				"|(?<!_)__(?<underline>[\\s\\S]+?)__(?!_)" +
+				"|(?<!~)~~(?<strikethrough>[\\s\\S]+?)~~(?!~)" +
+				"|(?<placeholder><(?<placeholderkey>[^>]+)>)" +
+				"|(?<checkbox>^(?<checkboxspaces>\\s*)[-*]\\s\\[(?<checkboxfilled>[\\sxX])]\\s)" +
+				"|(?<bulletpoint>^(?<bulletpointspaces>\\s*)[-*]\\s)",
+				Pattern.MULTILINE
+		);
+	}
 	
 	public static MutableComponent parse(String text)
 	{
 		var result = Component.empty();
 		
-		var matcher = MARKDOWN_PATTERN.matcher(text);
+		var matcher = getMarkdownPattern().matcher(text);
 		int lastEndIndex = 0;
 		
 		while(matcher.find())
@@ -37,47 +46,37 @@ public final class StickyNote
 				result = result.append(Component.literal(text.substring(lastEndIndex, matcher.start())));
 			}
 			
-			Style style = Style.EMPTY;
-			String matchedText;
-			if((matchedText = matcher.group("bolditalic")) != null)
+			if(appendStyle(matcher, result))
 			{
-				style = style.withBold(true).withItalic(true);
-			}
-			else if((matchedText = matcher.group("bold")) != null)
-			{
-				style = style.withBold(true);
-			}
-			else if((matchedText = matcher.group("italic")) != null)
-			{
-				style = style.withItalic(true);
-			}
-			else if((matchedText = matcher.group("underline")) != null)
-			{
-				style = style.withUnderlined(true);
-			}
-			else if((matchedText = matcher.group("strikethrough")) != null)
-			{
-				style = style.withStrikethrough(true);
+				continue;
 			}
 			
-			if(matchedText != null)
-			{
-				result = result.append(parse(matchedText).withStyle(style));
-			}
-			else if((matchedText = matcher.group("placeholder")) != null)
+			String matchedText;
+			if((matchedText = matcher.group("placeholder")) != null)
 			{
 				var placeholderKey = matcher.group("placeholderkey");
 				if(LogicTypes.exists(placeholderKey))
 				{
 					var logicType = LogicTypes.get(placeholderKey);
-					result = result.append(logicType.displaySymbol().withStyle(style));
+					result = result.append(logicType.displaySymbol());
 				}
 				else
 				{
 					result = result
-							.append(Component.literal(Character.toString(matchedText.charAt(0))).withStyle(style))
-							.append(parse(matchedText.substring(1))).withStyle(style);
+							.append(Component.literal(Character.toString(matchedText.charAt(0))))
+							.append(parse(matchedText.substring(1)));
 				}
+			}
+			else if((matchedText = matcher.group("checkbox")) != null)
+			{
+				var spaces = matcher.group("checkboxspaces");
+				boolean filled = !matcher.group("checkboxfilled").matches("\\s");
+				result = result.append(Component.literal(spaces + "1" + (filled ? "x" : "o") + "1 ").withStyle(Style.EMPTY.withFont(LBR.id("sticky_note"))));
+			}
+			else if((matchedText = matcher.group("bulletpoint")) != null)
+			{
+				var spaces = matcher.group("bulletpointspaces");
+				result = result.append(Component.literal(spaces + "11-11 ").withStyle(Style.EMPTY.withFont(LBR.id("sticky_note"))));
 			}
 			
 			lastEndIndex = matcher.end();
@@ -89,6 +88,39 @@ public final class StickyNote
 		}
 		
 		return result;
+	}
+	
+	private static boolean appendStyle(Matcher matcher, MutableComponent result)
+	{
+		Style style = Style.EMPTY;
+		String matchedText;
+		if((matchedText = matcher.group("bolditalic")) != null)
+		{
+			style = style.withBold(true).withItalic(true);
+		}
+		else if((matchedText = matcher.group("bold")) != null)
+		{
+			style = style.withBold(true);
+		}
+		else if((matchedText = matcher.group("italic")) != null)
+		{
+			style = style.withItalic(true);
+		}
+		else if((matchedText = matcher.group("underline")) != null)
+		{
+			style = style.withUnderlined(true);
+		}
+		else if((matchedText = matcher.group("strikethrough")) != null)
+		{
+			style = style.withStrikethrough(true);
+		}
+		
+		if(matchedText != null)
+		{
+			result.append(parse(matchedText).withStyle(style));
+			return true;
+		}
+		return false;
 	}
 	
 	public static final StickyNote EMPTY = new StickyNote("");
