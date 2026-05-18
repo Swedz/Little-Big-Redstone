@@ -107,6 +107,10 @@ The text written on a sticky note supports basic markdown functionality:
 
 \**italics*\*, \*\***bold**\*\*, \_\_<Underlined>underline</Underlined>\_\_, and \~\~~strikethrough~\~\~
 
+Logic component symbols can be typed into sticky notes using placeholder formatting. Simply write the ID of the logic
+component you want to display surrounded by the less than and greater than signs. For example: \<io\> \<not_gate\>
+\<and_gate\>
+
 Bullet point lists can also be made by starting a line with a hyphen (\-) or asterisk (\*) followed by a space. You may
 have as many spaces as you want at the start of the line to create indented line items. Additionally, you can put check
 boxes by putting \[ \] or \[x\] after the space after the bullet point symbol. For example:
