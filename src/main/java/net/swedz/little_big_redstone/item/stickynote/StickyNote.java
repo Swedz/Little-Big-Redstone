@@ -7,6 +7,7 @@ import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.chat.Style;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
+import net.neoforged.fml.loading.FMLEnvironment;
 import net.swedz.little_big_redstone.LBR;
 import net.swedz.little_big_redstone.microchip.object.logic.LogicTypes;
 
@@ -16,20 +17,25 @@ import java.util.regex.Pattern;
 
 public final class StickyNote
 {
+	private static Pattern PATTERN;
+	
 	private static Pattern getMarkdownPattern()
 	{
-		// TODO escaping support
-		return Pattern.compile(
-				"(?<!\\*)\\*\\*\\*(?<bolditalic>[\\s\\S]+?)\\*\\*\\*(?!\\*)" +
-				"|(?<!\\*)\\*\\*(?<bold>[\\s\\S]+?)\\*\\*(?!\\*)" +
-				"|(?<!\\*)\\*(?<italic>[\\s\\S]+?)\\*(?!\\*)" +
-				"|(?<!_)__(?<underline>[\\s\\S]+?)__(?!_)" +
-				"|(?<!~)~~(?<strikethrough>[\\s\\S]+?)~~(?!~)" +
-				"|(?<placeholder><(?<placeholderkey>[^>]+)>)" +
-				"|(?<checkbox>^(?<checkboxspaces>\\s*)[-*]\\s\\[(?<checkboxfilled>[\\sxX])]\\s)" +
-				"|(?<bulletpoint>^(?<bulletpointspaces>\\s*)[-*]\\s)",
-				Pattern.MULTILINE
-		);
+		if(!FMLEnvironment.production || PATTERN == null)
+		{
+			PATTERN = Pattern.compile(
+					"(?<!\\*)\\*\\*\\*(?<bolditalic>[\\s\\S]+?)\\*\\*\\*(?!\\*)" +
+					"|(?<!\\*)\\*\\*(?<bold>[\\s\\S]+?)\\*\\*(?!\\*)" +
+					"|(?<!\\*)\\*(?<italic>[\\s\\S]+?)\\*(?!\\*)" +
+					"|(?<!_)__(?<underline>[\\s\\S]+?)__(?!_)" +
+					"|(?<!~)~~(?<strikethrough>[\\s\\S]+?)~~(?!~)" +
+					"|(?<placeholder><(?<placeholderkey>[^>]+)>)" +
+					"|(?<checkbox>^(?<checkboxspaces>\\s*)[-*]\\s\\[(?<checkboxfilled>[\\sxX])]\\s)" +
+					"|(?<bulletpoint>^(?<bulletpointspaces>\\s*)[-*]\\s)",
+					Pattern.MULTILINE
+			);
+		}
+		return PATTERN;
 	}
 	
 	public static MutableComponent parse(String text)
@@ -46,38 +52,9 @@ public final class StickyNote
 				result = result.append(Component.literal(text.substring(lastEndIndex, matcher.start())));
 			}
 			
-			if(appendStyle(matcher, result))
-			{
-				continue;
-			}
-			
-			String matchedText;
-			if((matchedText = matcher.group("placeholder")) != null)
-			{
-				var placeholderKey = matcher.group("placeholderkey");
-				if(LogicTypes.exists(placeholderKey))
-				{
-					var logicType = LogicTypes.get(placeholderKey);
-					result = result.append(logicType.displaySymbol());
-				}
-				else
-				{
-					result = result
-							.append(Component.literal(Character.toString(matchedText.charAt(0))))
-							.append(parse(matchedText.substring(1)));
-				}
-			}
-			else if((matchedText = matcher.group("checkbox")) != null)
-			{
-				var spaces = matcher.group("checkboxspaces");
-				boolean filled = !matcher.group("checkboxfilled").matches("\\s");
-				result = result.append(Component.literal(spaces + "1" + (filled ? "x" : "o") + "1 ").withStyle(Style.EMPTY.withFont(LBR.id("sticky_note"))));
-			}
-			else if((matchedText = matcher.group("bulletpoint")) != null)
-			{
-				var spaces = matcher.group("bulletpointspaces");
-				result = result.append(Component.literal(spaces + "11-11 ").withStyle(Style.EMPTY.withFont(LBR.id("sticky_note"))));
-			}
+			boolean appended = appendStyle(matcher, result) ||
+							   appendPlaceholder(matcher, result) ||
+							   appendLineItems(matcher, result);
 			
 			lastEndIndex = matcher.end();
 		}
@@ -118,6 +95,46 @@ public final class StickyNote
 		if(matchedText != null)
 		{
 			result.append(parse(matchedText).withStyle(style));
+			return true;
+		}
+		return false;
+	}
+	
+	private static boolean appendPlaceholder(Matcher matcher, MutableComponent result)
+	{
+		String matchedText;
+		if((matchedText = matcher.group("placeholder")) != null)
+		{
+			var placeholderKey = matcher.group("placeholderkey");
+			if(LogicTypes.exists(placeholderKey))
+			{
+				var logicType = LogicTypes.get(placeholderKey);
+				result.append(logicType.displaySymbol());
+			}
+			else
+			{
+				result
+						.append(Component.literal(Character.toString(matchedText.charAt(0))))
+						.append(parse(matchedText.substring(1)));
+			}
+			return true;
+		}
+		return false;
+	}
+	
+	private static boolean appendLineItems(Matcher matcher, MutableComponent result)
+	{
+		if(matcher.group("checkbox") != null)
+		{
+			var spaces = matcher.group("checkboxspaces");
+			boolean filled = !matcher.group("checkboxfilled").matches("\\s");
+			result.append(Component.literal(spaces + "1" + (filled ? "x" : "o") + "1 ").withStyle(Style.EMPTY.withFont(LBR.id("sticky_note"))));
+			return true;
+		}
+		else if(matcher.group("bulletpoint") != null)
+		{
+			var spaces = matcher.group("bulletpointspaces");
+			result.append(Component.literal(spaces + "11-11 ").withStyle(Style.EMPTY.withFont(LBR.id("sticky_note"))));
 			return true;
 		}
 		return false;
