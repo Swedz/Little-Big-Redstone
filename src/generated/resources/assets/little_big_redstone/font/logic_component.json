@@ -2,12 +2,12 @@
   "providers": [
     {
       "type": "bitmap",
-      "ascent": 7,
+      "ascent": 8,
       "chars": [
         "0"
       ],
       "file": "little_big_redstone:font/logic/debugger.png",
-      "height": 7
+      "height": 10
     },
     {
       "type": "bitmap",
@@ -15,8 +15,7 @@
       "chars": [
         "1"
       ],
-      "file": "little_big_redstone:font/logic/io.png",
-      "height": 7
+      "file": "little_big_redstone:font/logic/io.png"
     },
     {
       "type": "bitmap",
@@ -24,8 +23,7 @@
       "chars": [
         "2"
       ],
-      "file": "little_big_redstone:font/logic/reader.png",
-      "height": 7
+      "file": "little_big_redstone:font/logic/reader.png"
     },
     {
       "type": "bitmap",
@@ -33,8 +31,7 @@
       "chars": [
         "3"
       ],
-      "file": "little_big_redstone:font/logic/tag.png",
-      "height": 7
+      "file": "little_big_redstone:font/logic/tag.png"
     },
     {
       "type": "bitmap",
@@ -42,8 +39,7 @@
       "chars": [
         "4"
       ],
-      "file": "little_big_redstone:font/logic/not_gate.png",
-      "height": 7
+      "file": "little_big_redstone:font/logic/not_gate.png"
     },
     {
       "type": "bitmap",
@@ -51,8 +47,7 @@
       "chars": [
         "5"
       ],
-      "file": "little_big_redstone:font/logic/and_gate.png",
-      "height": 7
+      "file": "little_big_redstone:font/logic/and_gate.png"
     },
     {
       "type": "bitmap",
@@ -60,8 +55,7 @@
       "chars": [
         "6"
       ],
-      "file": "little_big_redstone:font/logic/nand_gate.png",
-      "height": 7
+      "file": "little_big_redstone:font/logic/nand_gate.png"
     },
     {
       "type": "bitmap",
@@ -69,8 +63,7 @@
       "chars": [
         "7"
       ],
-      "file": "little_big_redstone:font/logic/or_gate.png",
-      "height": 7
+      "file": "little_big_redstone:font/logic/or_gate.png"
     },
     {
       "type": "bitmap",
@@ -78,8 +71,7 @@
       "chars": [
         "8"
       ],
-      "file": "little_big_redstone:font/logic/nor_gate.png",
-      "height": 7
+      "file": "little_big_redstone:font/logic/nor_gate.png"
     },
     {
       "type": "bitmap",
@@ -87,8 +79,7 @@
       "chars": [
         "9"
       ],
-      "file": "little_big_redstone:font/logic/xor_gate.png",
-      "height": 7
+      "file": "little_big_redstone:font/logic/xor_gate.png"
     },
     {
       "type": "bitmap",
@@ -96,8 +87,7 @@
       "chars": [
         ":"
       ],
-      "file": "little_big_redstone:font/logic/sequencer.png",
-      "height": 7
+      "file": "little_big_redstone:font/logic/sequencer.png"
     },
     {
       "type": "bitmap",
@@ -105,8 +95,7 @@
       "chars": [
         ";"
       ],
-      "file": "little_big_redstone:font/logic/pulse_throttler.png",
-      "height": 7
+      "file": "little_big_redstone:font/logic/pulse_throttler.png"
     },
     {
       "type": "bitmap",
@@ -114,8 +103,7 @@
       "chars": [
         "<"
       ],
-      "file": "little_big_redstone:font/logic/selector.png",
-      "height": 7
+      "file": "little_big_redstone:font/logic/selector.png"
     },
     {
       "type": "bitmap",
@@ -123,8 +111,7 @@
       "chars": [
         "="
       ],
-      "file": "little_big_redstone:font/logic/randomizer.png",
-      "height": 7
+      "file": "little_big_redstone:font/logic/randomizer.png"
     },
     {
       "type": "bitmap",
@@ -132,8 +119,7 @@
       "chars": [
         ">"
       ],
-      "file": "little_big_redstone:font/logic/comparator.png",
-      "height": 7
+      "file": "little_big_redstone:font/logic/comparator.png"
     },
     {
       "type": "bitmap",
@@ -141,8 +127,7 @@
       "chars": [
         "?"
       ],
-      "file": "little_big_redstone:font/logic/calculator.png",
-      "height": 7
+      "file": "little_big_redstone:font/logic/calculator.png"
     },
     {
       "type": "bitmap",
@@ -150,8 +135,7 @@
       "chars": [
         "@"
       ],
-      "file": "little_big_redstone:font/logic/t_flip_flop.png",
-      "height": 7
+      "file": "little_big_redstone:font/logic/t_flip_flop.png"
     },
     {
       "type": "bitmap",
@@ -159,8 +143,7 @@
       "chars": [
         "A"
       ],
-      "file": "little_big_redstone:font/logic/rs_nor_latch.png",
-      "height": 7
+      "file": "little_big_redstone:font/logic/rs_nor_latch.png"
     }
   ]
 }
