@@ -107,6 +107,16 @@ The text written on a sticky note supports basic markdown functionality:
 
 \**italics*\*, \*\***bold**\*\*, \_\_<Underlined>underline</Underlined>\_\_, and \~\~~strikethrough~\~\~
 
+Bullet point lists can also be made by starting a line with a hyphen (\-) or asterisk (\*) followed by a space. You may
+have as many spaces as you want at the start of the line to create indented line items. Additionally, you can put check
+boxes by putting \[ \] or \[x\] after the space after the bullet point symbol. For example:
+
+\- A normal line item.
+
+\- \[ \] An unchecked box item.
+
+\- \[x\] A checked box item.
+
 ### Coloring
 
 The text on sticky notes can be colored by pressing **<KeyBind id="key.use" />** with dye.
