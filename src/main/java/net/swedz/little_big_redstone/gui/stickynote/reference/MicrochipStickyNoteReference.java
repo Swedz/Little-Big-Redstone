@@ -16,17 +16,20 @@ public final class MicrochipStickyNoteReference implements StickyNoteReference
 	
 	private final String text;
 	
+	private final boolean editable;
+	
 	public MicrochipStickyNoteReference(StickyNoteEntry entry)
 	{
-		this(entry.slot(), entry.noteColor(), entry.textColor(), entry.note().text());
+		this(entry.slot(), entry.noteColor(), entry.textColor(), entry.note().text(), entry.isEditable());
 	}
 	
-	private MicrochipStickyNoteReference(int slot, DyeColor color, DyeColor textColor, String text)
+	private MicrochipStickyNoteReference(int slot, DyeColor color, DyeColor textColor, String text, boolean editable)
 	{
 		this.slot = slot;
 		this.color = color;
 		this.textColor = textColor;
 		this.text = text;
+		this.editable = editable;
 	}
 	
 	@Override
@@ -48,9 +51,15 @@ public final class MicrochipStickyNoteReference implements StickyNoteReference
 	}
 	
 	@Override
+	public boolean canEdit()
+	{
+		return editable;
+	}
+	
+	@Override
 	public StickyNoteReference withText(String text)
 	{
-		return new MicrochipStickyNoteReference(slot, color, textColor, text);
+		return new MicrochipStickyNoteReference(slot, color, textColor, text, editable);
 	}
 	
 	private void save(Player player)
@@ -59,7 +68,8 @@ public final class MicrochipStickyNoteReference implements StickyNoteReference
 		   menu.stillValid(player))
 		{
 			var entry = menu.microchip().stickyNotes().get(slot);
-			if(entry != null)
+			if(entry != null &&
+			   entry.isEditable())
 			{
 				entry.setNote(new StickyNote(text));
 				menu.microchip().markDirty(false);

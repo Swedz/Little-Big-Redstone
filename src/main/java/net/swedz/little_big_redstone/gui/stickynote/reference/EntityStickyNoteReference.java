@@ -15,17 +15,20 @@ public final class EntityStickyNoteReference implements StickyNoteReference
 	
 	private final String text;
 	
+	private final boolean editable;
+	
 	public EntityStickyNoteReference(StickyNoteEntity entity)
 	{
-		this(entity.getId(), entity.getColor(), entity.getTextColor(), entity.getNote().text());
+		this(entity.getId(), entity.getColor(), entity.getTextColor(), entity.getNote().text(), entity.isEditable());
 	}
 	
-	private EntityStickyNoteReference(int entityId, DyeColor color, DyeColor textColor, String text)
+	private EntityStickyNoteReference(int entityId, DyeColor color, DyeColor textColor, String text, boolean editable)
 	{
 		this.entityId = entityId;
 		this.color = color;
 		this.textColor = textColor;
 		this.text = text;
+		this.editable = editable;
 	}
 	
 	@Override
@@ -47,9 +50,15 @@ public final class EntityStickyNoteReference implements StickyNoteReference
 	}
 	
 	@Override
+	public boolean canEdit()
+	{
+		return editable;
+	}
+	
+	@Override
 	public StickyNoteReference withText(String text)
 	{
-		return new EntityStickyNoteReference(entityId, color, textColor, text);
+		return new EntityStickyNoteReference(entityId, color, textColor, text, editable);
 	}
 	
 	@Override
@@ -62,7 +71,8 @@ public final class EntityStickyNoteReference implements StickyNoteReference
 	public void saveServer(Level level, Player player)
 	{
 		if(level.getEntity(entityId) instanceof StickyNoteEntity entity &&
-		   entity.distanceTo(player) <= 16)
+		   entity.distanceTo(player) <= 16 &&
+		   entity.isEditable())
 		{
 			entity.setNote(new StickyNote(text));
 		}

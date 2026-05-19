@@ -449,7 +449,7 @@ public final class MicrochipWidget implements GuiEventListener, Renderable, Narr
 		   context.shouldInteractNote() &&
 		   carried.isEmpty())
 		{
-			Proxies.get(LBRProxy.class).openStickyNote(new MicrochipStickyNoteReference(note), true);
+			Proxies.get(LBRProxy.class).openStickyNote(new MicrochipStickyNoteReference(note), note.isEditable());
 			return true;
 		}
 		

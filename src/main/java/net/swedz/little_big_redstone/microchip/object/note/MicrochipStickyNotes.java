@@ -43,10 +43,10 @@ public final class MicrochipStickyNotes extends MicrochipObjectContainer<StickyN
 		this(microchip, Lists.newArrayList());
 	}
 	
-	private StickyNoteEntry add(int x, int y, DyeColor color, StickyNote note, DyeColor textColor)
+	private StickyNoteEntry add(int x, int y, DyeColor color, StickyNote note, DyeColor textColor, boolean editable)
 	{
 		int slot = this.pickAvailableSlot();
-		var entry = new StickyNoteEntry(slot, x, y, color, note, textColor);
+		var entry = new StickyNoteEntry(slot, x, y, color, note, textColor, editable);
 		if(microchip.canFit(entry.toBounds()))
 		{
 			objects.put(slot, entry);
@@ -62,7 +62,8 @@ public final class MicrochipStickyNotes extends MicrochipObjectContainer<StickyN
 			var color = stickyNote.color();
 			var note = stack.get(LBRComponents.STICKY_NOTE);
 			var textColor = stack.get(LBRComponents.STICKY_NOTE_TEXT_COLOR);
-			return this.add(x, y, color, note, textColor);
+			var editable = stack.get(LBRComponents.STICKY_NOTE_EDITABLE);
+			return this.add(x, y, color, note, textColor, editable);
 		}
 		return null;
 	}

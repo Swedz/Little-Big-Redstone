@@ -7,6 +7,7 @@ import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.ItemStack;
+import net.neoforged.neoforge.network.codec.NeoForgeStreamCodecs;
 import net.swedz.little_big_redstone.LBRComponents;
 import net.swedz.little_big_redstone.LBRItems;
 import net.swedz.little_big_redstone.item.stickynote.StickyNote;
@@ -27,31 +28,42 @@ public final class StickyNoteEntry implements MicrochipObject
 					Codec.INT.fieldOf("y").forGetter(StickyNoteEntry::y),
 					DyeColor.CODEC.fieldOf("color").forGetter(StickyNoteEntry::noteColor),
 					StickyNote.CODEC.fieldOf("note").forGetter(StickyNoteEntry::note),
-					DyeColor.CODEC.fieldOf("text_color").forGetter(StickyNoteEntry::textColor)
+					DyeColor.CODEC.fieldOf("text_color").forGetter(StickyNoteEntry::textColor),
+					Codec.BOOL.fieldOf("editable").forGetter(StickyNoteEntry::isEditable)
 			)
 			.apply(instance, StickyNoteEntry::new));
 	
-	public static final StreamCodec<ByteBuf, StickyNoteEntry> STREAM_CODEC = StreamCodec.composite(
+	public static final StreamCodec<ByteBuf, StickyNoteEntry> STREAM_CODEC = NeoForgeStreamCodecs.composite(
 			ByteBufCodecs.VAR_INT, StickyNoteEntry::slot,
 			ByteBufCodecs.VAR_INT, StickyNoteEntry::x,
 			ByteBufCodecs.VAR_INT, StickyNoteEntry::y,
 			DyeColor.STREAM_CODEC, StickyNoteEntry::noteColor,
 			StickyNote.STREAM_CODEC, StickyNoteEntry::note,
 			DyeColor.STREAM_CODEC, StickyNoteEntry::textColor,
+			ByteBufCodecs.BOOL, StickyNoteEntry::isEditable,
 			StickyNoteEntry::new
 	);
 	
-	private final int slot;
-	private final int x;
-	private final int y;
+	private final int      slot;
+	private final int      x;
+	private final int      y;
 	private final DyeColor color;
 	
 	private StickyNote note;
 	
 	private DyeColor textColor;
 	
-	public StickyNoteEntry(int slot, int x, int y,
-						   DyeColor color, StickyNote note, DyeColor textColor)
+	private boolean editable;
+	
+	public StickyNoteEntry(
+			int slot,
+			int x,
+			int y,
+			DyeColor color,
+			StickyNote note,
+			DyeColor textColor,
+			boolean editable
+	)
 	{
 		this.slot = slot;
 		this.x = x;
@@ -59,6 +71,7 @@ public final class StickyNoteEntry implements MicrochipObject
 		this.color = color;
 		this.note = note;
 		this.textColor = textColor;
+		this.editable = editable;
 	}
 	
 	@Override
@@ -114,6 +127,11 @@ public final class StickyNoteEntry implements MicrochipObject
 		return !original.equals(resolvedColor);
 	}
 	
+	public boolean isEditable()
+	{
+		return editable;
+	}
+	
 	@Override
 	public MicrochipObjectContainerType containerType()
 	{
@@ -126,6 +144,7 @@ public final class StickyNoteEntry implements MicrochipObject
 		var stack = new ItemStack(LBRItems.stickyNote(color));
 		stack.set(LBRComponents.STICKY_NOTE, note);
 		stack.set(LBRComponents.STICKY_NOTE_TEXT_COLOR, textColor);
+		stack.set(LBRComponents.STICKY_NOTE_EDITABLE, editable);
 		return stack;
 	}
 	
@@ -152,12 +171,13 @@ public final class StickyNoteEntry implements MicrochipObject
 			   y == other.y &&
 			   Objects.equals(color, other.color) &&
 			   Objects.equals(note, other.note) &&
-			   Objects.equals(textColor, other.textColor);
+			   Objects.equals(textColor, other.textColor) &&
+			   Objects.equals(editable, other.editable);
 	}
 	
 	@Override
 	public int hashCode()
 	{
-		return Objects.hash(slot, x, y, color, note, textColor);
+		return Objects.hash(slot, x, y, color, note, textColor, editable);
 	}
 }

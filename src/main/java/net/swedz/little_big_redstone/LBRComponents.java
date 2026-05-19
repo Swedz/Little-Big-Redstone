@@ -4,6 +4,7 @@ import com.mojang.serialization.Codec;
 import net.minecraft.core.component.DataComponentType;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.component.ItemContainerContents;
@@ -27,6 +28,7 @@ public final class LBRComponents
 	public static final Supplier<DataComponentType<FloppyDiskProgramName>> FLOPPY_DISK_PROGRAM_NAME = create("floppy_disk_program_name", FloppyDiskProgramName.CODEC, FloppyDiskProgramName.STREAM_CODEC);
 	public static final Supplier<DataComponentType<StickyNote>>            STICKY_NOTE              = create("sticky_note", StickyNote.CODEC, StickyNote.STREAM_CODEC);
 	public static final Supplier<DataComponentType<DyeColor>>              STICKY_NOTE_TEXT_COLOR   = create("sticky_note_text_color", DyeColor.CODEC, DyeColor.STREAM_CODEC);
+	public static final Supplier<DataComponentType<Boolean>>               STICKY_NOTE_EDITABLE     = create("sticky_note_editable", Codec.BOOL, ByteBufCodecs.BOOL);
 	
 	public static void init(IEventBus bus)
 	{
