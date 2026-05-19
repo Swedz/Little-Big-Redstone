@@ -15,6 +15,7 @@ import net.neoforged.neoforge.client.event.ModelEvent;
 import net.neoforged.neoforge.client.event.RegisterClientTooltipComponentFactoriesEvent;
 import net.neoforged.neoforge.client.event.RegisterGuiLayersEvent;
 import net.neoforged.neoforge.client.event.RegisterMenuScreensEvent;
+import net.neoforged.neoforge.client.event.RenderHandEvent;
 import net.neoforged.neoforge.client.extensions.common.IClientItemExtensions;
 import net.neoforged.neoforge.client.extensions.common.RegisterClientExtensionsEvent;
 import net.neoforged.neoforge.client.gui.VanillaGuiLayers;
@@ -24,6 +25,7 @@ import net.swedz.little_big_redstone.client.entity.StickyNoteEntityRenderer;
 import net.swedz.little_big_redstone.client.hud.FloppyDiskConsumeItemsGuiOverlay;
 import net.swedz.little_big_redstone.client.hud.StickyNoteViewContentsGuiOverlay;
 import net.swedz.little_big_redstone.client.item.LogicItemRenderer;
+import net.swedz.little_big_redstone.client.item.StickyNoteInHandItemRenderer;
 import net.swedz.little_big_redstone.client.item.StickyNoteItemRenderer;
 import net.swedz.little_big_redstone.client.model.logic.LogicUnbakedModel;
 import net.swedz.little_big_redstone.client.model.microchip.MicrochipUnbakedModel;
@@ -100,6 +102,25 @@ public final class LBRClient
 	{
 		registerCustomItemRenderer(event, LogicItemRenderer::new, LogicItem.class);
 		registerCustomItemRenderer(event, StickyNoteItemRenderer::new, StickyNoteItem.class);
+	}
+	
+	@SubscribeEvent
+	private static void renderHand(RenderHandEvent event)
+	{
+		if(event.getItemStack().getItem() instanceof StickyNoteItem)
+		{
+			StickyNoteInHandItemRenderer.renderItemFirstPerson(
+					event.getPoseStack(),
+					event.getMultiBufferSource(),
+					event.getPackedLight(),
+					event.getHand(),
+					event.getInterpolatedPitch(),
+					event.getEquipProgress(),
+					event.getSwingProgress(),
+					event.getItemStack()
+			);
+			event.setCanceled(true);
+		}
 	}
 	
 	@SubscribeEvent
