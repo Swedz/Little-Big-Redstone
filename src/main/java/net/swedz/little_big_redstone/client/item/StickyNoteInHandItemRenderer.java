@@ -46,6 +46,9 @@ public final class StickyNoteInHandItemRenderer
 		pose.popPose();
 	}
 	
+	/**
+	 * @see <a href="https://github.com/cc-tweaked/CC-Tweaked/blob/mc-1.21.x/projects/common/src/client/java/dan200/computercraft/client/render/ItemMapLikeRenderer.java">CC-Tweaked's ItemMapLikeRenderer.java</a>
+	 */
 	public static void renderItemFirstPerson(PoseStack pose, MultiBufferSource bufferSource, int packedLight, InteractionHand hand, float pitch, float equipProgress, float swingProgress, ItemStack stack)
 	{
 		var player = Minecraft.getInstance().player;
@@ -63,6 +66,9 @@ public final class StickyNoteInHandItemRenderer
 		pose.popPose();
 	}
 	
+	/**
+	 * @see <a href="https://github.com/cc-tweaked/CC-Tweaked/blob/mc-1.21.x/projects/common/src/client/java/dan200/computercraft/client/render/ItemMapLikeRenderer.java">CC-Tweaked's ItemMapLikeRenderer.java</a>
+	 */
 	private static void renderItemFirstPersonSide(PoseStack pose, MultiBufferSource bufferSource, int packedLight, HumanoidArm arm, float equipProgress, float swingProgress, ItemStack stack)
 	{
 		var minecraft = Minecraft.getInstance();
@@ -93,6 +99,9 @@ public final class StickyNoteInHandItemRenderer
 		pose.popPose();
 	}
 	
+	/**
+	 * @see <a href="https://github.com/cc-tweaked/CC-Tweaked/blob/mc-1.21.x/projects/common/src/client/java/dan200/computercraft/client/render/ItemMapLikeRenderer.java">CC-Tweaked's ItemMapLikeRenderer.java</a>
+	 */
 	private static void renderItemFirstPersonCenter(PoseStack pose, MultiBufferSource bufferSource, int packedLight, float pitch, float equipProgress, float swingProgress, ItemStack stack)
 	{
 		var minecraft = Minecraft.getInstance();
