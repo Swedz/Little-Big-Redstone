@@ -101,6 +101,10 @@ contents and colors when broken and placed.
 
 Text lines will only appear on the sticky notes in-world when text is written on them.
 
+Sticky notes can be sealed using Honeycomb, much like signs. A sealed sticky note can no longer be edited. This can be
+done either through crafting a sticky note with a Honeycomb, or by using **<KeyBind id="key.use" />** on a sticky note
+placed in world with a Honeycomb.
+
 ### Markdown
 
 The text written on a sticky note supports basic markdown functionality:
