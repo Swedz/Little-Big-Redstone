@@ -24,14 +24,17 @@ public final class StickyNote
 		if(!FMLEnvironment.production || PATTERN == null)
 		{
 			PATTERN = Pattern.compile(
-					"(?<!\\*)\\*\\*\\*(?<bolditalic>[\\s\\S]+?)\\*\\*\\*(?!\\*)" +
-					"|(?<!\\*)\\*\\*(?<bold>[\\s\\S]+?)\\*\\*(?!\\*)" +
-					"|(?<!\\*)\\*(?<italic>[\\s\\S]+?)\\*(?!\\*)" +
-					"|(?<!_)__(?<underline>[\\s\\S]+?)__(?!_)" +
-					"|(?<!~)~~(?<strikethrough>[\\s\\S]+?)~~(?!~)" +
-					"|(?<placeholder><(?<placeholderkey>[^>]+)>)" +
-					"|(?<checkbox>^(?<checkboxspaces>\\s*)[-*]\\s\\[(?<checkboxfilled>[\\sxX])]\\s)" +
-					"|(?<bulletpoint>^(?<bulletpointspaces>\\s*)[-*]\\s)",
+					"""
+					(\\\\(?<escaped>[\\\\*_~<>\\-\\[\\]]))\
+					|(?<checkbox>^(?<checkboxspaces>\\s*)[-*]\\s\\[(?<checkboxfilled>[\\sxX])]\\s)\
+					|(?<bulletpoint>^(?<bulletpointspaces>\\s*)[-*]\\s)\
+					|(?<!\\*)\\*\\*\\*(?<bolditalic>[\\s\\S]+?)\\*\\*\\*(?!\\*)\
+					|(?<!\\*)\\*\\*(?<bold>[\\s\\S]+?)\\*\\*(?!\\*)\
+					|(?<!\\*)\\*(?<italic>[\\s\\S]+?)\\*(?!\\*)\
+					|(?<!_)__(?<underline>[\\s\\S]+?)__(?!_)\
+					|(?<!~)~~(?<strikethrough>[\\s\\S]+?)~~(?!~)\
+					|(?<placeholder><(?<placeholderkey>[^>]+)>)\
+					""",
 					Pattern.MULTILINE
 			);
 		}
@@ -52,9 +55,10 @@ public final class StickyNote
 				result = result.append(Component.literal(text.substring(lastEndIndex, matcher.start())));
 			}
 			
-			boolean appended = appendStyle(matcher, result) ||
-							   appendPlaceholder(matcher, result) ||
-							   appendLineItems(matcher, result);
+			boolean appended = appendEscaped(matcher, result) ||
+							   appendLineItems(matcher, result) ||
+							   appendStyle(matcher, result) ||
+							   appendPlaceholder(matcher, result);
 			
 			lastEndIndex = matcher.end();
 		}
@@ -65,6 +69,17 @@ public final class StickyNote
 		}
 		
 		return result;
+	}
+	
+	private static boolean appendEscaped(Matcher matcher, MutableComponent result)
+	{
+		String matchedText = matcher.group("escaped");
+		if(matchedText != null)
+		{
+			result.append(Component.literal(matchedText));
+			return true;
+		}
+		return false;
 	}
 	
 	private static boolean appendStyle(Matcher matcher, MutableComponent result)
