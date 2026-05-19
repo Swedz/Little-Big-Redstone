@@ -3,6 +3,7 @@ package net.swedz.little_big_redstone.item.stickynote;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.component.DataComponents;
+import net.minecraft.network.chat.Component;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.InteractionResultHolder;
@@ -12,11 +13,13 @@ import net.minecraft.world.inventory.tooltip.TooltipComponent;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.component.CustomData;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.phys.Vec3;
+import net.swedz.little_big_redstone.LBR;
 import net.swedz.little_big_redstone.LBRComponents;
 import net.swedz.little_big_redstone.entity.stickynote.StickyNoteEntity;
 import net.swedz.little_big_redstone.entity.stickynote.StickyNoteView;
@@ -27,6 +30,7 @@ import net.swedz.little_big_redstone.proxy.LBRProxy;
 import net.swedz.tesseract.neoforge.helper.DirectionHelper;
 import net.swedz.tesseract.neoforge.proxy.Proxies;
 
+import java.util.List;
 import java.util.Optional;
 
 public final class StickyNoteItem extends Item implements DyeColoredItem
@@ -46,7 +50,8 @@ public final class StickyNoteItem extends Item implements DyeColoredItem
 	{
 		super(properties
 				.component(LBRComponents.STICKY_NOTE, StickyNote.EMPTY)
-				.component(LBRComponents.STICKY_NOTE_TEXT_COLOR, getDefaultTextColor(color)));
+				.component(LBRComponents.STICKY_NOTE_TEXT_COLOR, getDefaultTextColor(color))
+				.component(LBRComponents.STICKY_NOTE_EDITABLE, true));
 		this.color = color;
 	}
 	
@@ -66,6 +71,10 @@ public final class StickyNoteItem extends Item implements DyeColoredItem
 	public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand)
 	{
 		var stack = player.getItemInHand(hand);
+		if(!stack.get(LBRComponents.STICKY_NOTE_EDITABLE))
+		{
+			return InteractionResultHolder.pass(stack);
+		}
 		if(level.isClientSide())
 		{
 			Proxies.get(LBRProxy.class).openStickyNote(new HeldItemStickyNoteReference(hand, stack), player.isCrouching());
@@ -118,8 +127,10 @@ public final class StickyNoteItem extends Item implements DyeColoredItem
 		
 		var textColor = stack.get(LBRComponents.STICKY_NOTE_TEXT_COLOR);
 		
+		var editable = stack.get(LBRComponents.STICKY_NOTE_EDITABLE);
+		
 		var level = context.getLevel();
-		var entity = new StickyNoteEntity(level, placePos, direction, facing, quadrant, color, textColor);
+		var entity = new StickyNoteEntity(level, placePos, direction, facing, quadrant, color, textColor, editable);
 		
 		CustomData customData = stack.getOrDefault(DataComponents.ENTITY_DATA, CustomData.EMPTY);
 		if(!customData.isEmpty())
@@ -163,5 +174,14 @@ public final class StickyNoteItem extends Item implements DyeColoredItem
 		return note.isEmpty() ?
 				Optional.empty() :
 				Optional.of(new StickyNoteTooltipData(new StickyNoteView(color, textColor, note.parsed())));
+	}
+	
+	@Override
+	public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> lines, TooltipFlag flag)
+	{
+		if(!stack.get(LBRComponents.STICKY_NOTE_EDITABLE))
+		{
+			lines.add(LBR.text().sealed());
+		}
 	}
 }

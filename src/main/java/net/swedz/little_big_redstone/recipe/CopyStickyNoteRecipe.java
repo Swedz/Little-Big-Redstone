@@ -107,7 +107,9 @@ public final class CopyStickyNoteRecipe extends CustomRecipe
 		
 		if(color != null && textColor != null && !source.isEmpty() && !target.isEmpty())
 		{
-			return source.copyWithCount(2);
+			var result = source.copyWithCount(2);
+			result.set(LBRComponents.STICKY_NOTE_EDITABLE, true);
+			return result;
 		}
 		
 		return ItemStack.EMPTY;

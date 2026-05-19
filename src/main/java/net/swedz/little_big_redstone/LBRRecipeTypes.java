@@ -8,6 +8,7 @@ import net.neoforged.neoforge.registries.DeferredRegister;
 import net.swedz.little_big_redstone.recipe.ClearConfigRecipe;
 import net.swedz.little_big_redstone.recipe.CopyStickyNoteRecipe;
 import net.swedz.little_big_redstone.recipe.DataRetainingDyeRecipe;
+import net.swedz.little_big_redstone.recipe.SealStickyNoteRecipe;
 
 import java.util.function.Supplier;
 
@@ -23,6 +24,11 @@ public final class LBRRecipeTypes
 	public static final Supplier<RecipeSerializer<CopyStickyNoteRecipe>> COPY_STICKY_NOTE_RECIPE_SERIALIZER = RECIPE_SERIALIZERS.register(
 			"copy_sticky_note",
 			() -> new SimpleCraftingRecipeSerializer<>(CopyStickyNoteRecipe::new)
+	);
+	
+	public static final Supplier<RecipeSerializer<SealStickyNoteRecipe>> SEAL_STICKY_NOTE_RECIPE_SERIALIZER = RECIPE_SERIALIZERS.register(
+			"seal_sticky_note",
+			() -> new SimpleCraftingRecipeSerializer<>(SealStickyNoteRecipe::new)
 	);
 	
 	public static final Supplier<RecipeSerializer<ClearConfigRecipe>> CLEAR_CONFIG_RECIPE_SERIALIZER = RECIPE_SERIALIZERS.register(

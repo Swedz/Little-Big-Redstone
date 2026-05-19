@@ -12,6 +12,8 @@ public interface StickyNoteReference
 	
 	String text();
 	
+	boolean canEdit();
+	
 	/**
 	 * Creates a new instance of the reference with a modified text value.
 	 *

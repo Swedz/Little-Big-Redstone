@@ -272,6 +272,7 @@
   "text.little_big_redstone.pass": "Pass",
   "text.little_big_redstone.power_type_strong": "Strong",
   "text.little_big_redstone.power_type_weak": "Weak",
+  "text.little_big_redstone.sealed": "Sealed",
   "text.little_big_redstone.sensor": "Sensor",
   "text.little_big_redstone.sticky_note": "Sticky Note",
   "text.little_big_redstone.sticky_note_edit": "Edit",

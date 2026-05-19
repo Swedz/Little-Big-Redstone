@@ -19,6 +19,8 @@ public final class HeldItemStickyNoteReference implements StickyNoteReference
 	
 	private final String text;
 	
+	private final boolean editable;
+	
 	public HeldItemStickyNoteReference(InteractionHand hand, ItemStack stack)
 	{
 		if(!(stack.getItem() instanceof StickyNoteItem item))
@@ -29,14 +31,16 @@ public final class HeldItemStickyNoteReference implements StickyNoteReference
 		this.color = item.color();
 		this.textColor = stack.get(LBRComponents.STICKY_NOTE_TEXT_COLOR);
 		this.text = stack.getOrDefault(LBRComponents.STICKY_NOTE, StickyNote.EMPTY).text();
+		this.editable = stack.get(LBRComponents.STICKY_NOTE_EDITABLE);
 	}
 	
-	private HeldItemStickyNoteReference(InteractionHand hand, DyeColor color, DyeColor textColor, String text)
+	private HeldItemStickyNoteReference(InteractionHand hand, DyeColor color, DyeColor textColor, String text, boolean editable)
 	{
 		this.hand = hand;
 		this.color = color;
 		this.textColor = textColor;
 		this.text = text;
+		this.editable = editable;
 	}
 	
 	@Override
@@ -58,9 +62,15 @@ public final class HeldItemStickyNoteReference implements StickyNoteReference
 	}
 	
 	@Override
+	public boolean canEdit()
+	{
+		return editable;
+	}
+	
+	@Override
 	public StickyNoteReference withText(String text)
 	{
-		return new HeldItemStickyNoteReference(hand, color, textColor, text);
+		return new HeldItemStickyNoteReference(hand, color, textColor, text, editable);
 	}
 	
 	@Override
@@ -73,7 +83,8 @@ public final class HeldItemStickyNoteReference implements StickyNoteReference
 	public void saveServer(Level level, Player player)
 	{
 		var stack = player.getItemInHand(hand);
-		if(stack.getItem() instanceof StickyNoteItem item)
+		if(stack.getItem() instanceof StickyNoteItem item &&
+		   stack.get(LBRComponents.STICKY_NOTE_EDITABLE))
 		{
 			stack.set(LBRComponents.STICKY_NOTE, new StickyNote(text));
 		}

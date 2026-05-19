@@ -19,7 +19,10 @@ import net.swedz.tesseract.neoforge.packet.PacketContext;
 import net.swedz.tesseract.neoforge.proxy.Proxies;
 
 public record StickyNotePacket(
-		ReferenceType referenceType, int data, Action action, String text
+		ReferenceType referenceType,
+		int data,
+		Action action,
+		String text
 ) implements LBRCustomPacket
 {
 	public static final StreamCodec<ByteBuf, StickyNotePacket> STREAM_CODEC = StreamCodec.composite(

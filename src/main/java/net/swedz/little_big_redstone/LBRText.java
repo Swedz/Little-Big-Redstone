@@ -752,4 +752,8 @@ public interface LBRText
 	@LangKey(text = "Wires are loading... You may still interact with the microchip while it loads.")
 	@WithStyle("no")
 	MutableComponent thermometerTooltipLoadingWires();
+	
+	@LangKey(text = "Sealed")
+	@WithStyle("tooltip")
+	MutableComponent sealed();
 }
