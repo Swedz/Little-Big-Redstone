@@ -35,7 +35,7 @@ public final class StickyNoteInHandItemRenderer
 		var view = new StickyNoteView(((StickyNoteItem) stack.getItem()).color(), textColor, note.parsed());
 		
 		graphics.setPackedLight(packedLight);
-		graphics.setTextureShader(GameRenderer::getPositionColorTexLightmapShader, VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_COLOR_TEX_LIGHTMAP);
+		graphics.setTextureShader(GameRenderer::getRendertypeTextShader, VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_COLOR_TEX_LIGHTMAP);
 		
 		StickyNoteViewRenderer.renderBackground(graphics, view);
 		StickyNoteViewRenderer.renderText(graphics, view);
