@@ -368,49 +368,52 @@ public final class StickyNoteEntity extends HangingEntity
 			var stack = player.getItemInHand(hand);
 			if(this.isEditable())
 			{
-				if(stack.getItem() instanceof DyeItem dyeItem &&
-				   dyeItem.getDyeColor() != this.getTextColor())
+				if(player.isShiftKeyDown())
 				{
-					player.awardStat(Stats.ITEM_USED.get(stack.getItem()));
-					this.playSound(SoundEvents.DYE_USE);
-					this.setTextColor(dyeItem.getDyeColor());
-					stack.consume(1, player);
-					return InteractionResult.CONSUME;
-				}
-				else if(stack.is(LBRTags.Items.DYE_WASHER))
-				{
-					var defaultTextColor = StickyNoteItem.getDefaultTextColor(this.getColor());
-					if(this.getTextColor() != defaultTextColor)
+					if(stack.getItem() instanceof DyeItem dyeItem &&
+					   dyeItem.getDyeColor() != this.getTextColor())
 					{
 						player.awardStat(Stats.ITEM_USED.get(stack.getItem()));
-						this.playSound(SoundEvents.BUCKET_EMPTY);
-						this.setTextColor(defaultTextColor);
-						if(stack.is(LBRTags.Items.DYE_WASHER_CONSUMED))
+						this.playSound(SoundEvents.DYE_USE);
+						this.setTextColor(dyeItem.getDyeColor());
+						stack.consume(1, player);
+						return InteractionResult.CONSUME;
+					}
+					else if(stack.is(LBRTags.Items.DYE_WASHER))
+					{
+						var defaultTextColor = StickyNoteItem.getDefaultTextColor(this.getColor());
+						if(this.getTextColor() != defaultTextColor)
 						{
-							stack.consume(1, player);
+							player.awardStat(Stats.ITEM_USED.get(stack.getItem()));
+							this.playSound(SoundEvents.BUCKET_EMPTY);
+							this.setTextColor(defaultTextColor);
+							if(stack.is(LBRTags.Items.DYE_WASHER_CONSUMED))
+							{
+								stack.consume(1, player);
+							}
+							return InteractionResult.CONSUME;
 						}
+					}
+					else if(stack.is(LBRTags.Items.STICKY_NOTE_SEALANT))
+					{
+						this.setEditable(false);
+						this.level().playSound(null, this.blockPosition(), SoundEvents.HONEYCOMB_WAX_ON, SoundSource.BLOCKS);
+						((ServerLevel) this.level()).sendParticles(
+								ParticleTypes.WAX_ON,
+								this.getX(),
+								this.getY(),
+								this.getZ(),
+								6,
+								0.125,
+								0.125,
+								0.125,
+								Mth.nextDouble(random, -0.5f, 0.5f)
+						);
+						stack.consume(1, player);
 						return InteractionResult.CONSUME;
 					}
 				}
-				else if(stack.is(LBRTags.Items.STICKY_NOTE_SEALANT))
-				{
-					this.setEditable(false);
-					this.level().playSound(null, this.blockPosition(), SoundEvents.HONEYCOMB_WAX_ON, SoundSource.BLOCKS);
-					((ServerLevel) this.level()).sendParticles(
-							ParticleTypes.WAX_ON,
-							this.getX(),
-							this.getY(),
-							this.getZ(),
-							6,
-							0.125,
-							0.125,
-							0.125,
-							Mth.nextDouble(random, -0.5f, 0.5f)
-					);
-					stack.consume(1, player);
-					return InteractionResult.CONSUME;
-				}
-				else if(!stack.isEmpty())
+				if(!stack.isEmpty())
 				{
 					this.setDisplayItem(stack.copy());
 					this.level().playSound(null, this.blockPosition(), SoundEvents.ITEM_FRAME_ADD_ITEM, SoundSource.BLOCKS);
