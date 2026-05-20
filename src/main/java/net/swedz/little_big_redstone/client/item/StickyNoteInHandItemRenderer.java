@@ -37,8 +37,10 @@ public final class StickyNoteInHandItemRenderer
 		graphics.setPackedLight(packedLight);
 		graphics.setTextureShader(GameRenderer::getRendertypeTextShader, VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_COLOR_TEX_LIGHTMAP);
 		
-		StickyNoteViewRenderer.renderBackground(graphics, view);
-		StickyNoteViewRenderer.renderText(graphics, view);
+		var shift = Minecraft.getInstance().player.isShiftKeyDown();
+		var alpha = shift ? 0.5f : 1f;
+		StickyNoteViewRenderer.renderBackground(graphics, view, alpha);
+		StickyNoteViewRenderer.renderText(graphics, view, alpha);
 		
 		graphics.resetTextureShader();
 		graphics.resetPackedLight();
