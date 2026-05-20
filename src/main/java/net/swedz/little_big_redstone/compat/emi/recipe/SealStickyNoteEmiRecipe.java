@@ -9,8 +9,6 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.core.Holder;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
-import net.minecraft.world.item.Items;
-import net.minecraft.world.item.crafting.Ingredient;
 import net.swedz.little_big_redstone.LBRComponents;
 import net.swedz.little_big_redstone.LBRTags;
 import net.swedz.tesseract.neoforge.helper.RegistryHelper;
@@ -20,25 +18,27 @@ import java.util.List;
 
 public final class SealStickyNoteEmiRecipe extends EmiPatternCraftingRecipe
 {
-	private final List<Item> inputItems;
+	private final List<Item> stickyNotes;
+	private final List<Item> sealants;
 	
 	public SealStickyNoteEmiRecipe(ResourceLocation id)
 	{
 		super(
 				List.of(
 						EmiIngredient.of(LBRTags.Items.STICKY_NOTES),
-						EmiIngredient.of(Ingredient.of(Items.HONEYCOMB))
+						EmiIngredient.of(LBRTags.Items.STICKY_NOTE_SEALANT)
 				),
 				EmiStack.EMPTY,
 				id
 		);
-		this.inputItems = RegistryHelper.values(Minecraft.getInstance().level.registryAccess(), LBRTags.Items.STICKY_NOTES).map(Holder::value).toList();
+		this.stickyNotes = RegistryHelper.values(Minecraft.getInstance().level.registryAccess(), LBRTags.Items.STICKY_NOTES).map(Holder::value).toList();
+		this.sealants = RegistryHelper.values(Minecraft.getInstance().level.registryAccess(), LBRTags.Items.STICKY_NOTE_SEALANT).map(Holder::value).toList();
 	}
 	
-	private Item getItem(MutableInt index)
+	private Item getItem(List<Item> items, MutableInt index)
 	{
-		var item = inputItems.get(index.getAndIncrement());
-		if(index.getValue() >= inputItems.size())
+		var item = items.get(index.getAndIncrement());
+		if(index.getValue() >= items.size())
 		{
 			index.setValue(0);
 		}
@@ -52,13 +52,17 @@ public final class SealStickyNoteEmiRecipe extends EmiPatternCraftingRecipe
 		{
 			MutableInt itemIndex = new MutableInt();
 			return new GeneratedSlotWidget(
-					(random) -> EmiStack.of(this.getItem(itemIndex)),
+					(random) -> EmiStack.of(this.getItem(stickyNotes, itemIndex)),
 					unique, x, y
 			);
 		}
 		else if(slot == 1)
 		{
-			return new SlotWidget(EmiIngredient.of(Ingredient.of(Items.HONEYCOMB)), x, y);
+			MutableInt itemIndex = new MutableInt();
+			return new GeneratedSlotWidget(
+					(random) -> EmiStack.of(this.getItem(sealants, itemIndex)),
+					unique, x, y
+			);
 		}
 		return new SlotWidget(EmiStack.EMPTY, x, y);
 	}
@@ -70,7 +74,7 @@ public final class SealStickyNoteEmiRecipe extends EmiPatternCraftingRecipe
 		return new GeneratedSlotWidget(
 				(random) ->
 				{
-					var result = this.getItem(itemIndex).getDefaultInstance().copyWithCount(1);
+					var result = this.getItem(stickyNotes, itemIndex).getDefaultInstance().copyWithCount(1);
 					result.set(LBRComponents.STICKY_NOTE_EDITABLE, false);
 					return EmiStack.of(result);
 				},
