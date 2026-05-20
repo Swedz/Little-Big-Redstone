@@ -438,7 +438,7 @@ public final class StickyNoteEntity extends HangingEntity
 		{
 			return false;
 		}
-		else if(!source.is(DamageTypeTags.IS_EXPLOSION) && !this.getDisplayItem().isEmpty())
+		else if(!source.is(DamageTypeTags.IS_EXPLOSION) && !this.getDisplayItem().isEmpty() && this.isEditable())
 		{
 			if(!this.level().isClientSide())
 			{
