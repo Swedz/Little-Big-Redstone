@@ -32,7 +32,6 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.DyeItem;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
 import net.minecraft.world.level.GameRules;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
@@ -393,7 +392,7 @@ public final class StickyNoteEntity extends HangingEntity
 						return InteractionResult.CONSUME;
 					}
 				}
-				else if(stack.is(Items.HONEYCOMB))
+				else if(stack.is(LBRTags.Items.STICKY_NOTE_SEALANT))
 				{
 					this.setEditable(false);
 					this.level().playSound(null, this.blockPosition(), SoundEvents.HONEYCOMB_WAX_ON, SoundSource.BLOCKS);

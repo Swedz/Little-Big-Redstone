@@ -32,6 +32,12 @@ public final class ItemTagDatagenProvider extends ItemTagsProvider
 				.addTag(Tags.Items.BUCKETS_WATER);
 	}
 	
+	private void sealant()
+	{
+		this.tag(LBRTags.Items.STICKY_NOTE_SEALANT)
+				.add(Items.HONEYCOMB);
+	}
+	
 	@Override
 	protected void addTags(HolderLookup.Provider provider)
 	{
@@ -44,6 +50,7 @@ public final class ItemTagDatagenProvider extends ItemTagsProvider
 		}
 		
 		this.dyeWasher();
+		this.sealant();
 	}
 	
 	@Override
