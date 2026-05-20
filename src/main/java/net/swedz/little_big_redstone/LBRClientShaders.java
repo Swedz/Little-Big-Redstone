@@ -49,11 +49,19 @@ public final class LBRClientShaders
 		return PULSING_TEXTURE_ALPHA_INSTANCE;
 	}
 	
+	private static ShaderInstance TINTED_ITEM_INSTANCE;
+	
+	public static ShaderInstance tintedItem()
+	{
+		return TINTED_ITEM_INSTANCE;
+	}
+	
 	public static final RenderStateShard.ShaderStateShard LOGIC_ITEM_SCANLINE       = new RenderStateShard.ShaderStateShard(LBRClientShaders::logicItemScanline);
 	public static final RenderStateShard.ShaderStateShard LOGIC_SCANLINE            = new RenderStateShard.ShaderStateShard(LBRClientShaders::logicScanline);
 	public static final RenderStateShard.ShaderStateShard PULSING_ALPHA             = new RenderStateShard.ShaderStateShard(LBRClientShaders::pulsingAlpha);
 	public static final RenderStateShard.ShaderStateShard PULSING_TEXTURE_LIGHTNESS = new RenderStateShard.ShaderStateShard(LBRClientShaders::pulsingTextureLightness);
 	public static final RenderStateShard.ShaderStateShard PULSING_TEXTURE_ALPHA     = new RenderStateShard.ShaderStateShard(LBRClientShaders::pulsingTextureAlpha);
+	public static final RenderStateShard.ShaderStateShard TINTED_ITEM               = new RenderStateShard.ShaderStateShard(LBRClientShaders::tintedItem);
 	
 	@SubscribeEvent
 	private static void registerShaders(RegisterShadersEvent event)
@@ -65,8 +73,9 @@ public final class LBRClientShaders
 			event.registerShader(new ShaderInstance(event.getResourceProvider(), LBR.id("pulsing_alpha"), POSITION_COLOR), (shader) -> PULSING_ALPHA_INSTANCE = shader);
 			event.registerShader(new ShaderInstance(event.getResourceProvider(), LBR.id("pulsing_texture_lightness"), POSITION_TEX_COLOR), (shader) -> PULSING_TEXTURE_LIGHTNESS_INSTANCE = shader);
 			event.registerShader(new ShaderInstance(event.getResourceProvider(), LBR.id("pulsing_texture_alpha"), POSITION_TEX_COLOR), (shader) -> PULSING_TEXTURE_ALPHA_INSTANCE = shader);
+			event.registerShader(new ShaderInstance(event.getResourceProvider(), LBR.id("tinted_item"), NEW_ENTITY), (shader) -> TINTED_ITEM_INSTANCE = shader);
 		}
-		catch (IOException ex)
+		catch(IOException ex)
 		{
 			throw new RuntimeException(ex);
 		}
