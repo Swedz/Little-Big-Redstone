@@ -23,6 +23,7 @@ public final class StickyNoteInHandItemRenderer
 	private static void renderItem(PoseStack pose, MultiBufferSource bufferSource, ItemStack stack, int packedLight, boolean center)
 	{
 		pose.pushPose();
+		
 		pose.mulPose(Axis.YP.rotationDegrees(180f));
 		pose.mulPose(Axis.ZP.rotationDegrees(180f));
 		pose.scale(0.0025f, 0.0025f, 0.0025f);
@@ -37,10 +38,8 @@ public final class StickyNoteInHandItemRenderer
 		graphics.setPackedLight(packedLight);
 		graphics.setTextureShader(GameRenderer::getRendertypeTextShader, VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_COLOR_TEX_LIGHTMAP);
 		
-		var shift = Minecraft.getInstance().player.isShiftKeyDown();
-		var alpha = shift ? 0.5f : 1f;
-		StickyNoteViewRenderer.renderBackground(graphics, view, alpha);
-		StickyNoteViewRenderer.renderText(graphics, view, alpha);
+		StickyNoteViewRenderer.renderBackground(graphics, view);
+		StickyNoteViewRenderer.renderText(graphics, view);
 		
 		graphics.resetTextureShader();
 		graphics.resetPackedLight();
@@ -54,27 +53,12 @@ public final class StickyNoteInHandItemRenderer
 	public static void renderItemFirstPerson(PoseStack pose, MultiBufferSource bufferSource, int packedLight, InteractionHand hand, float pitch, float equipProgress, float swingProgress, ItemStack stack)
 	{
 		var player = Minecraft.getInstance().player;
-		
-		pose.pushPose();
-		if(hand == InteractionHand.MAIN_HAND && player.getOffhandItem().isEmpty())
-		{
-			renderItemFirstPersonCenter(pose, bufferSource, packedLight, pitch, equipProgress, swingProgress, stack);
-		}
-		else
-		{
-			var arm = hand == InteractionHand.MAIN_HAND ? player.getMainArm() : player.getMainArm().getOpposite();
-			renderItemFirstPersonSide(pose, bufferSource, packedLight, arm, equipProgress, swingProgress, stack);
-		}
-		pose.popPose();
-	}
-	
-	/**
-	 * @see <a href="https://github.com/cc-tweaked/CC-Tweaked/blob/mc-1.21.x/projects/common/src/client/java/dan200/computercraft/client/render/ItemMapLikeRenderer.java">CC-Tweaked's ItemMapLikeRenderer.java</a>
-	 */
-	private static void renderItemFirstPersonSide(PoseStack pose, MultiBufferSource bufferSource, int packedLight, HumanoidArm arm, float equipProgress, float swingProgress, ItemStack stack)
-	{
+		var arm = hand == InteractionHand.MAIN_HAND ? player.getMainArm() : player.getMainArm().getOpposite();
 		var minecraft = Minecraft.getInstance();
 		var offset = arm == HumanoidArm.RIGHT ? 1f : -1f;
+		
+		pose.pushPose();
+		
 		pose.translate(offset * 0.125f, -0.125f, 0f);
 		
 		if(!minecraft.player.isInvisible())
@@ -85,7 +69,6 @@ public final class StickyNoteInHandItemRenderer
 			pose.popPose();
 		}
 		
-		pose.pushPose();
 		pose.translate(offset * 0.51f, -0.08f + equipProgress * -1.2f, -0.75f);
 		var f1 = Mth.sqrt(swingProgress);
 		var f2 = Mth.sin(f1 * (float) Math.PI);
@@ -99,37 +82,5 @@ public final class StickyNoteInHandItemRenderer
 		renderItem(pose, bufferSource, stack, packedLight, false);
 		
 		pose.popPose();
-	}
-	
-	/**
-	 * @see <a href="https://github.com/cc-tweaked/CC-Tweaked/blob/mc-1.21.x/projects/common/src/client/java/dan200/computercraft/client/render/ItemMapLikeRenderer.java">CC-Tweaked's ItemMapLikeRenderer.java</a>
-	 */
-	private static void renderItemFirstPersonCenter(PoseStack pose, MultiBufferSource bufferSource, int packedLight, float pitch, float equipProgress, float swingProgress, ItemStack stack)
-	{
-		var minecraft = Minecraft.getInstance();
-		var renderer = minecraft.getEntityRenderDispatcher().getItemInHandRenderer();
-		
-		var swingRt = Mth.sqrt(swingProgress);
-		var tX = -0.2f * Mth.sin(swingProgress * (float) Math.PI);
-		var tZ = -0.4f * Mth.sin(swingRt * (float) Math.PI);
-		pose.translate(0, -tX / 2, tZ);
-		
-		var pitchAngle = renderer.calculateMapTilt(pitch);
-		pose.translate(0, 0.04f + equipProgress * -1.2f + pitchAngle * -0.5f, -0.72f);
-		pose.mulPose(Axis.XP.rotationDegrees(pitchAngle * -85f));
-		if(!minecraft.player.isInvisible())
-		{
-			pose.pushPose();
-			pose.mulPose(Axis.YP.rotationDegrees(90f));
-			renderer.renderMapHand(pose, bufferSource, packedLight, HumanoidArm.RIGHT);
-			renderer.renderMapHand(pose, bufferSource, packedLight, HumanoidArm.LEFT);
-			pose.popPose();
-		}
-		
-		var rX = Mth.sin(swingRt * (float) Math.PI);
-		pose.mulPose(Axis.XP.rotationDegrees(rX * 20f));
-		pose.scale(1.5f, 1.5f, 1.5f);
-		
-		renderItem(pose, bufferSource, stack, packedLight, true);
 	}
 }
