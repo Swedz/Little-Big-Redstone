@@ -4,8 +4,10 @@ import com.google.common.collect.Lists;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.font.TextFieldHelper;
+import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.Style;
 import net.minecraft.util.StringUtil;
+import net.swedz.little_big_redstone.item.stickynote.StickyNote;
 import net.swedz.tesseract.neoforge.api.Bounds;
 import org.apache.commons.lang3.mutable.MutableInt;
 
@@ -186,6 +188,8 @@ public final class StickyNoteEdit
 		private final DisplayLine[] lines;
 		private final int           lineHeight;
 		
+		private final Component parsed;
+		
 		private final int cursorX, cursorY;
 		private final int cursorScreenX, cursorScreenY;
 		private final boolean cursorAtEndOfLine;
@@ -196,6 +200,8 @@ public final class StickyNoteEdit
 		{
 			this.fullText = text;
 			this.lineHeight = font.lineHeight;
+			
+			this.parsed = StickyNote.parse(fullText);
 			
 			int cursorIndex = editor.getCursorPos();
 			int selectionIndex = editor.getSelectionPos();
@@ -286,6 +292,11 @@ public final class StickyNoteEdit
 		public int lineHeight()
 		{
 			return lineHeight;
+		}
+		
+		public Component parsed()
+		{
+			return parsed;
 		}
 		
 		public int cursorX()
