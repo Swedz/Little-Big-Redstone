@@ -138,4 +138,4 @@ Text will appear colored both in-world and in the viewing/editing menu.
 
 Items can be placed onto sticky notes using **<KeyBind id="key.use" />** in world. The item will display on the sticky
 note instead of text lines. The item will be tinted to match the color of the text for the sticky note, unless the text
-color is the default color for that type of note.
+color is the default color for that color of note.
