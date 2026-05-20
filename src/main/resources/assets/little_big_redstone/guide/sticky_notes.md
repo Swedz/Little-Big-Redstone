@@ -102,8 +102,8 @@ contents and colors when broken and placed.
 Text lines will only appear on the sticky notes in-world when text is written on them.
 
 Sticky notes can be sealed using Honeycomb, much like signs. A sealed sticky note can no longer be edited. This can be
-done either through crafting a sticky note with a Honeycomb, or by using **<KeyBind id="key.use" />** on a sticky note
-placed in world with a Honeycomb.
+done either through crafting a sticky note with a Honeycomb, or by using **<KeyBind id="key.sneak" />** and
+**<KeyBind id="key.use" />** on a sticky note placed in world with a Honeycomb.
 
 ### Markdown
 
@@ -127,7 +127,8 @@ boxes by putting \[ \] or \[x\] after the space after the bullet point symbol. F
 
 ### Coloring
 
-The text on sticky notes can be colored by pressing **<KeyBind id="key.use" />** with dye.
+The text on sticky notes can be colored by pressing **<KeyBind id="key.sneak" />** and **<KeyBind id="key.use" />**
+with dye.
 
 Similarly, you can use a water bucket or snowballs to clear the color from the logic component. Note that snowballs
 will be consumed, whereas water buckets will not.
