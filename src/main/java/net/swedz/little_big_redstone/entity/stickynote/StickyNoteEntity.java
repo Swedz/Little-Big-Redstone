@@ -19,12 +19,10 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.stats.Stats;
-import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.util.ByIdMap;
 import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
-import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.decoration.HangingEntity;
@@ -51,6 +49,7 @@ import net.swedz.little_big_redstone.item.stickynote.StickyNoteItem;
 import net.swedz.little_big_redstone.network.packet.StickyNotePacket;
 import net.swedz.tesseract.neoforge.api.Assert;
 import net.swedz.tesseract.neoforge.helper.DirectionHelper;
+import net.swedz.tesseract.neoforge.item.ItemInstance;
 
 import java.util.function.IntFunction;
 
@@ -136,6 +135,7 @@ public final class StickyNoteEntity extends HangingEntity
 			stack.set(LBRComponents.STICKY_NOTE, note);
 			stack.set(LBRComponents.STICKY_NOTE_TEXT_COLOR, this.getTextColor());
 			stack.set(LBRComponents.STICKY_NOTE_EDITABLE, this.isEditable());
+			stack.set(LBRComponents.STICKY_NOTE_DISPLAY_ITEM, new ItemInstance(this.getDisplayItem()));
 			if(itemName != null)
 			{
 				stack.set(DataComponents.CUSTOM_NAME, itemName);
@@ -360,94 +360,119 @@ public final class StickyNoteEntity extends HangingEntity
 		return notInsideBlock && notInsideHangingEntity;
 	}
 	
+	private InteractionResult interactDye(Player player, ItemStack stack)
+	{
+		if(player.isShiftKeyDown() &&
+		   stack.getItem() instanceof DyeItem dyeItem &&
+		   dyeItem.getDyeColor() != this.getTextColor())
+		{
+			player.awardStat(Stats.ITEM_USED.get(stack.getItem()));
+			this.playSound(SoundEvents.DYE_USE);
+			this.setTextColor(dyeItem.getDyeColor());
+			stack.consume(1, player);
+			return InteractionResult.CONSUME;
+		}
+		return InteractionResult.PASS;
+	}
+	
+	private InteractionResult interactDyeWash(Player player, ItemStack stack)
+	{
+		if(player.isShiftKeyDown() &&
+		   stack.is(LBRTags.Items.DYE_WASHER))
+		{
+			var defaultTextColor = StickyNoteItem.getDefaultTextColor(this.getColor());
+			if(this.getTextColor() != defaultTextColor)
+			{
+				player.awardStat(Stats.ITEM_USED.get(stack.getItem()));
+				this.playSound(SoundEvents.BUCKET_EMPTY);
+				this.setTextColor(defaultTextColor);
+				if(stack.is(LBRTags.Items.DYE_WASHER_CONSUMED))
+				{
+					stack.consume(1, player);
+				}
+				return InteractionResult.CONSUME;
+			}
+		}
+		return InteractionResult.PASS;
+	}
+	
+	private InteractionResult interactSeal(Player player, ItemStack stack)
+	{
+		if(player.isShiftKeyDown() &&
+		   stack.is(LBRTags.Items.STICKY_NOTE_SEALANT))
+		{
+			this.setEditable(false);
+			this.level().playSound(null, this.blockPosition(), SoundEvents.HONEYCOMB_WAX_ON, SoundSource.BLOCKS);
+			((ServerLevel) this.level()).sendParticles(
+					ParticleTypes.WAX_ON,
+					this.getX(),
+					this.getY(),
+					this.getZ(),
+					6,
+					0.125,
+					0.125,
+					0.125,
+					Mth.nextDouble(random, -0.5f, 0.5f)
+			);
+			stack.consume(1, player);
+			return InteractionResult.CONSUME;
+		}
+		return InteractionResult.PASS;
+	}
+	
+	private InteractionResult interactDisplayItem(Player player, ItemStack stack)
+	{
+		boolean place = !stack.isEmpty() &&
+						!ItemStack.isSameItemSameComponents(stack, this.getDisplayItem());
+		boolean remove = stack.isEmpty() &&
+						 player.isShiftKeyDown() &&
+						 !this.getDisplayItem().isEmpty();
+		if(place || remove)
+		{
+			this.setDisplayItem(stack.copy());
+			var sound = remove ? SoundEvents.ITEM_FRAME_REMOVE_ITEM : SoundEvents.ITEM_FRAME_ADD_ITEM;
+			this.level().playSound(null, this.blockPosition(), sound, SoundSource.BLOCKS);
+			return InteractionResult.CONSUME;
+		}
+		return InteractionResult.PASS;
+	}
+	
 	@Override
 	public InteractionResult interact(Player player, InteractionHand hand)
 	{
 		if(!this.level().isClientSide())
 		{
 			var stack = player.getItemInHand(hand);
+			
 			if(this.isEditable())
 			{
-				if(player.isShiftKeyDown())
+				var result = this.interactDye(player, stack);
+				if(!result.consumesAction())
 				{
-					if(stack.getItem() instanceof DyeItem dyeItem &&
-					   dyeItem.getDyeColor() != this.getTextColor())
-					{
-						player.awardStat(Stats.ITEM_USED.get(stack.getItem()));
-						this.playSound(SoundEvents.DYE_USE);
-						this.setTextColor(dyeItem.getDyeColor());
-						stack.consume(1, player);
-						return InteractionResult.CONSUME;
-					}
-					else if(stack.is(LBRTags.Items.DYE_WASHER))
-					{
-						var defaultTextColor = StickyNoteItem.getDefaultTextColor(this.getColor());
-						if(this.getTextColor() != defaultTextColor)
-						{
-							player.awardStat(Stats.ITEM_USED.get(stack.getItem()));
-							this.playSound(SoundEvents.BUCKET_EMPTY);
-							this.setTextColor(defaultTextColor);
-							if(stack.is(LBRTags.Items.DYE_WASHER_CONSUMED))
-							{
-								stack.consume(1, player);
-							}
-							return InteractionResult.CONSUME;
-						}
-					}
-					else if(stack.is(LBRTags.Items.STICKY_NOTE_SEALANT))
-					{
-						this.setEditable(false);
-						this.level().playSound(null, this.blockPosition(), SoundEvents.HONEYCOMB_WAX_ON, SoundSource.BLOCKS);
-						((ServerLevel) this.level()).sendParticles(
-								ParticleTypes.WAX_ON,
-								this.getX(),
-								this.getY(),
-								this.getZ(),
-								6,
-								0.125,
-								0.125,
-								0.125,
-								Mth.nextDouble(random, -0.5f, 0.5f)
-						);
-						stack.consume(1, player);
-						return InteractionResult.CONSUME;
-					}
+					result = this.interactDyeWash(player, stack);
 				}
-				if(!stack.isEmpty())
+				if(!result.consumesAction())
 				{
-					this.setDisplayItem(stack.copy());
-					this.level().playSound(null, this.blockPosition(), SoundEvents.ITEM_FRAME_ADD_ITEM, SoundSource.BLOCKS);
-					return InteractionResult.CONSUME;
+					result = this.interactSeal(player, stack);
+				}
+				if(!result.consumesAction())
+				{
+					result = this.interactDisplayItem(player, stack);
+				}
+				if(result.consumesAction())
+				{
+					return result;
 				}
 			}
 			
-			var action = player.isShiftKeyDown() && this.isEditable() ? StickyNotePacket.Action.OPEN_EDIT : StickyNotePacket.Action.OPEN_VIEW;
-			new StickyNotePacket(StickyNotePacket.ReferenceType.ENTITY, this.getId(), action, note.text()).sendToClient((ServerPlayer) player);
+			new StickyNotePacket(StickyNotePacket.ReferenceType.ENTITY, this.getId(), StickyNotePacket.Action.OPEN_VIEW, note.text()).sendToClient((ServerPlayer) player);
+			
 			return InteractionResult.CONSUME;
 		}
 		else
 		{
 			return InteractionResult.SUCCESS;
 		}
-	}
-	
-	@Override
-	public boolean hurt(DamageSource source, float amount)
-	{
-		if(this.isInvulnerableTo(source))
-		{
-			return false;
-		}
-		else if(!source.is(DamageTypeTags.IS_EXPLOSION) && !this.getDisplayItem().isEmpty() && this.isEditable())
-		{
-			if(!this.level().isClientSide())
-			{
-				this.setDisplayItem(ItemStack.EMPTY);
-				this.playSound(SoundEvents.ITEM_FRAME_REMOVE_ITEM, 1, 1);
-			}
-			return true;
-		}
-		return super.hurt(source, amount);
 	}
 	
 	@Override
