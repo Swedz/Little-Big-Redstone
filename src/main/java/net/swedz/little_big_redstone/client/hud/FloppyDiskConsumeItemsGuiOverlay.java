@@ -103,6 +103,11 @@ public final class FloppyDiskConsumeItemsGuiOverlay
 	
 	public static void render(GuiGraphics vanilla, DeltaTracker delta)
 	{
+		if(Minecraft.getInstance().options.hideGui)
+		{
+			return;
+		}
+		
 		if(ITEMS != null && ITEMS.size() > 0 && DISPLAY_TIME > 0)
 		{
 			int alpha = Math.min((int) ((DISPLAY_TIME - delta.getGameTimeDeltaPartialTick(false)) * (255f / 20f)), 255);

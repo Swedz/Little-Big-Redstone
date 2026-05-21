@@ -57,6 +57,11 @@ public final class StickyNoteViewContentsGuiOverlay
 			return;
 		}
 		
+		if(Minecraft.getInstance().options.hideGui)
+		{
+			return;
+		}
+		
 		if(STICKY_NOTE != null)
 		{
 			int alpha = Math.min((int) ((DISPLAY_TIME - delta.getGameTimeDeltaPartialTick(false)) * (255f / 20f)), 255);
