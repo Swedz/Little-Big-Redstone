@@ -28,6 +28,7 @@ import net.swedz.little_big_redstone.item.DyeColoredItem;
 import net.swedz.little_big_redstone.item.stickynote.tooltip.StickyNoteTooltipData;
 import net.swedz.little_big_redstone.proxy.LBRProxy;
 import net.swedz.tesseract.neoforge.helper.DirectionHelper;
+import net.swedz.tesseract.neoforge.item.ItemInstance;
 import net.swedz.tesseract.neoforge.proxy.Proxies;
 
 import java.util.List;
@@ -51,7 +52,8 @@ public final class StickyNoteItem extends Item implements DyeColoredItem
 		super(properties
 				.component(LBRComponents.STICKY_NOTE, StickyNote.EMPTY)
 				.component(LBRComponents.STICKY_NOTE_TEXT_COLOR, getDefaultTextColor(color))
-				.component(LBRComponents.STICKY_NOTE_EDITABLE, true));
+				.component(LBRComponents.STICKY_NOTE_EDITABLE, true)
+				.component(LBRComponents.STICKY_NOTE_DISPLAY_ITEM, ItemInstance.EMPTY));
 		this.color = color;
 	}
 	
@@ -122,11 +124,8 @@ public final class StickyNoteItem extends Item implements DyeColoredItem
 		}
 		
 		var facing = direction.getAxis().isVertical() ? Direction.fromYRot(player.getYRot()).getOpposite() : Direction.SOUTH;
-		
 		var quadrant = findClosestQuadrant(context.getClickedPos(), direction, facing, context.getClickLocation());
-		
 		var textColor = stack.get(LBRComponents.STICKY_NOTE_TEXT_COLOR);
-		
 		var editable = stack.get(LBRComponents.STICKY_NOTE_EDITABLE);
 		
 		var level = context.getLevel();
@@ -143,6 +142,9 @@ public final class StickyNoteItem extends Item implements DyeColoredItem
 		{
 			entity.setNote(note);
 		}
+		
+		var displayItem = stack.get(LBRComponents.STICKY_NOTE_DISPLAY_ITEM);
+		entity.setDisplayItem(displayItem.asStack());
 		
 		var itemName = stack.get(DataComponents.CUSTOM_NAME);
 		if(itemName != null)
