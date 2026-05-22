@@ -12,10 +12,8 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.HumanoidArm;
 import net.minecraft.world.item.ItemStack;
-import net.swedz.little_big_redstone.LBRComponents;
 import net.swedz.little_big_redstone.client.StickyNoteViewRenderer;
 import net.swedz.little_big_redstone.entity.stickynote.StickyNoteView;
-import net.swedz.little_big_redstone.item.stickynote.StickyNoteItem;
 import net.swedz.tesseract.neoforge.helper.guigraphics.TesseractGuiGraphics;
 
 public final class StickyNoteInHandItemRenderer
@@ -31,13 +29,10 @@ public final class StickyNoteInHandItemRenderer
 		
 		var graphics = new TesseractGuiGraphics(new GuiGraphics(Minecraft.getInstance(), pose, (MultiBufferSource.BufferSource) bufferSource));
 		
-		var textColor = stack.get(LBRComponents.STICKY_NOTE_TEXT_COLOR);
-		var note = stack.get(LBRComponents.STICKY_NOTE);
-		var view = new StickyNoteView(((StickyNoteItem) stack.getItem()).color(), textColor, note.parsed());
-		
 		graphics.setPackedLight(packedLight);
 		graphics.setTextureShader(GameRenderer::getRendertypeTextShader, VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_COLOR_TEX_LIGHTMAP);
 		
+		var view = new StickyNoteView(stack);
 		StickyNoteViewRenderer.renderBackground(graphics, view);
 		StickyNoteViewRenderer.renderText(graphics, view);
 		

@@ -8,7 +8,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.inventory.Slot;
 import net.swedz.little_big_redstone.LBR;
-import net.swedz.little_big_redstone.gui.logicarray.slot.LogicArrayPlayerSlot;
+import net.swedz.little_big_redstone.gui.slot.MaybeLockedPlayerSlot;
 
 public final class LogicArrayScreen extends AbstractContainerScreen<LogicArrayMenu> implements MenuAccess<LogicArrayMenu>
 {
@@ -32,7 +32,7 @@ public final class LogicArrayScreen extends AbstractContainerScreen<LogicArrayMe
 	@Override
 	protected void renderSlot(GuiGraphics graphics, Slot slot)
 	{
-		if(slot instanceof LogicArrayPlayerSlot && slot.getSlotIndex() == menu.getLogicArraySlot())
+		if(slot instanceof MaybeLockedPlayerSlot && slot.getSlotIndex() == menu.getLogicArraySlot())
 		{
 			graphics.pose().pushPose();
 			graphics.pose().translate(0, 0, 100);

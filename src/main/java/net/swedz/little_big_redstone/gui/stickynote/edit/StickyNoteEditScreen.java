@@ -11,8 +11,11 @@ import net.swedz.little_big_redstone.client.StickyNoteViewRenderer;
 import net.swedz.little_big_redstone.entity.stickynote.StickyNoteView;
 import net.swedz.little_big_redstone.gui.microchip.MicrochipMenu;
 import net.swedz.little_big_redstone.gui.microchip.MicrochipScreen;
+import net.swedz.little_big_redstone.gui.noteboard.NoteBoardMenu;
+import net.swedz.little_big_redstone.gui.noteboard.NoteBoardScreen;
 import net.swedz.little_big_redstone.gui.stickynote.StickyNoteScreen;
 import net.swedz.little_big_redstone.gui.stickynote.reference.MicrochipStickyNoteReference;
+import net.swedz.little_big_redstone.gui.stickynote.reference.NoteBoardStickyNoteReference;
 import net.swedz.little_big_redstone.gui.stickynote.reference.StickyNoteReference;
 import net.swedz.little_big_redstone.gui.stickynote.view.StickyNoteViewScreen;
 import net.swedz.tesseract.neoforge.helper.guigraphics.TesseractGuiGraphics;
@@ -65,6 +68,11 @@ public final class StickyNoteEditScreen extends StickyNoteScreen
 				minecraft.player.containerMenu instanceof MicrochipMenu menu)
 		{
 			screen = new MicrochipScreen(menu, minecraft.player.getInventory(), Component.empty());
+		}
+		else if(reference instanceof NoteBoardStickyNoteReference noteBoardReference &&
+				minecraft.player.containerMenu instanceof NoteBoardMenu menu)
+		{
+			screen = new NoteBoardScreen(menu, minecraft.player.getInventory(), Component.empty());
 		}
 		minecraft.setScreen(screen);
 	}

@@ -1,8 +1,10 @@
 package net.swedz.little_big_redstone;
 
+import net.swedz.little_big_redstone.gui.noteboard.contents.NoteBoardStickyNote;
 import net.swedz.tesseract.neoforge.config.annotation.ConfigComment;
 import net.swedz.tesseract.neoforge.config.annotation.ConfigKey;
 import net.swedz.tesseract.neoforge.config.annotation.Range;
+import net.swedz.tesseract.neoforge.config.annotation.SubSection;
 
 public interface LBRClientConfig
 {
@@ -15,14 +17,49 @@ public interface LBRClientConfig
 	}
 	
 	@ConfigKey
-	@ConfigComment({
-			"The scale to apply to the in-world sticky note view on the screen.",
-			"1 results in the sticky note view being 180x180."
-	})
-	@Range.Double(min = 0, max = 4)
-	default double stickyNoteInWorldViewScale()
+	@SubSection
+	StickyNoteInWorldView stickyNoteInWorldView();
+	
+	interface StickyNoteInWorldView
 	{
-		return 0.5;
+		@ConfigKey
+		@ConfigComment("The width and height to display the in-world sticky note view on the screen.")
+		@Range.Integer(min = NoteBoardStickyNote.MIN_NOTE_SIZE, max = NoteBoardStickyNote.MAX_NOTE_SIZE)
+		default int size()
+		{
+			return NoteBoardStickyNote.DEFAULT_NOTE_SIZE;
+		}
+		
+		@ConfigKey
+		void size(int value);
+		
+		@ConfigKey
+		@ConfigComment({
+				"The X position where the in-world sticky note view should display on the screen.",
+				"Stored as a percentage."
+		})
+		@Range.Double(min = 0, max = 1)
+		default double x()
+		{
+			return 0.01;
+		}
+		
+		@ConfigKey
+		void x(double value);
+		
+		@ConfigKey
+		@ConfigComment({
+				"The Y position where the in-world sticky note view should display on the screen.",
+				"Stored as a percentage."
+		})
+		@Range.Double(min = 0, max = 1)
+		default double y()
+		{
+			return 0.01;
+		}
+		
+		@ConfigKey
+		void y(double value);
 	}
 	
 	@ConfigKey

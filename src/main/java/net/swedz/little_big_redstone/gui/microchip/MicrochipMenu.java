@@ -14,8 +14,9 @@ import net.neoforged.neoforge.items.wrapper.PlayerMainInvWrapper;
 import net.swedz.little_big_redstone.LBR;
 import net.swedz.little_big_redstone.LBRItems;
 import net.swedz.little_big_redstone.LBRMenus;
+import net.swedz.little_big_redstone.LBRTags;
 import net.swedz.little_big_redstone.gui.logicarray.LogicArrayMenu;
-import net.swedz.little_big_redstone.gui.logicarray.slot.LogicArrayPlayerSlot;
+import net.swedz.little_big_redstone.gui.slot.MaybeLockedPlayerSlot;
 import net.swedz.little_big_redstone.gui.logicarray.slot.LogicArraySlot;
 import net.swedz.little_big_redstone.gui.microchip.logicarray.MicrochipLogicArrayItemHandler;
 import net.swedz.little_big_redstone.item.logicarray.LogicArrayItem;
@@ -90,7 +91,7 @@ public final class MicrochipMenu extends PlayerInventoryContainerMenu
 	{
 		LogicArrayMenu.setupLogicArrayInventory(logicArrayItemHandler, this::addSlot, logicArrayItemHandler::shouldDisplay, -75, 10, LogicArrayItem.COLUMNS, LogicArrayItem.ROWS);
 		
-		this.setupPlayerInventory(playerInventory, 48, 145, LogicArrayPlayerSlot::new);
+		this.setupPlayerInventory(playerInventory, 48, 145, MaybeLockedPlayerSlot::new);
 	}
 	
 	public BlockPos blockPos()
@@ -203,7 +204,7 @@ public final class MicrochipMenu extends PlayerInventoryContainerMenu
 		if(slotId >= 0)
 		{
 			var slot = slots.get(slotId);
-			if(slot instanceof LogicArrayPlayerSlot playerSlot && playerSlot.containsLogicArray())
+			if(slot instanceof MaybeLockedPlayerSlot playerSlot && playerSlot.getItem().is(LBRTags.Items.LOGIC_ARRAYS))
 			{
 				if(slotId == logicArrayItemHandler.getSelectedSlot())
 				{

@@ -16,7 +16,7 @@ import net.swedz.little_big_redstone.LBRComponents;
 import net.swedz.little_big_redstone.LBRItemDisplayContext;
 import net.swedz.little_big_redstone.LBRItems;
 import net.swedz.little_big_redstone.block.microchip.MicrochipBlockEntity;
-import net.swedz.little_big_redstone.gui.logicarray.slot.LogicArrayPlayerSlot;
+import net.swedz.little_big_redstone.gui.slot.MaybeLockedPlayerSlot;
 import net.swedz.little_big_redstone.gui.microchip.logic.LogicRenderer;
 import net.swedz.little_big_redstone.gui.microchip.logic.LogicRenderers;
 import net.swedz.little_big_redstone.gui.microchip.widget.MicrochipThermostatWidget;
@@ -128,7 +128,7 @@ public final class MicrochipScreen extends AbstractContainerScreen<MicrochipMenu
 	{
 		var graphics = new TesseractGuiGraphics(vanilla);
 		
-		if(slot instanceof LogicArrayPlayerSlot && slot.index == menu.getLogicArrayItemHandler().getSelectedSlot())
+		if(slot instanceof MaybeLockedPlayerSlot && slot.index == menu.getLogicArrayItemHandler().getSelectedSlot())
 		{
 			graphics.pose().pushPose();
 			graphics.pose().translate(0, 0, 100);

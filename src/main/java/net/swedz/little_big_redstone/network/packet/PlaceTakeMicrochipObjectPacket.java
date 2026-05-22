@@ -19,9 +19,11 @@ import net.swedz.tesseract.neoforge.packet.PacketContext;
 
 public record PlaceTakeMicrochipObjectPacket(
 		int containerId,
-		int x, int y,
+		int x,
+		int y,
 		boolean place,
-		boolean leftClick, boolean shift
+		boolean leftClick,
+		boolean shift
 ) implements LBRCustomPacket
 {
 	public static final StreamCodec<ByteBuf, PlaceTakeMicrochipObjectPacket> STREAM_CODEC = StreamCodec.composite(

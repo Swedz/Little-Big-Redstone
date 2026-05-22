@@ -5,11 +5,14 @@ import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.player.Player;
+import net.swedz.little_big_redstone.LBRAttachments;
 import net.swedz.little_big_redstone.entity.stickynote.StickyNoteEntity;
 import net.swedz.little_big_redstone.gui.microchip.MicrochipMenu;
+import net.swedz.little_big_redstone.gui.noteboard.NoteBoardMenu;
 import net.swedz.little_big_redstone.gui.stickynote.reference.EntityStickyNoteReference;
 import net.swedz.little_big_redstone.gui.stickynote.reference.HeldItemStickyNoteReference;
 import net.swedz.little_big_redstone.gui.stickynote.reference.MicrochipStickyNoteReference;
+import net.swedz.little_big_redstone.gui.stickynote.reference.NoteBoardStickyNoteReference;
 import net.swedz.little_big_redstone.gui.stickynote.reference.StickyNoteReference;
 import net.swedz.little_big_redstone.item.stickynote.StickyNoteItem;
 import net.swedz.little_big_redstone.network.LBRCustomPacket;
@@ -80,6 +83,19 @@ public record StickyNotePacket(
 				if(entry != null)
 				{
 					return new MicrochipStickyNoteReference(entry);
+				}
+			}
+			return null;
+		}),
+		
+		NOTE_BOARD((player, data) ->
+		{
+			if(player.containerMenu instanceof NoteBoardMenu)
+			{
+				var noteBoard = player.getData(LBRAttachments.NOTE_BOARD);
+				if(noteBoard.has(data))
+				{
+					return NoteBoardStickyNoteReference.from(data, noteBoard.get(data));
 				}
 			}
 			return null;

@@ -9,5 +9,6 @@ public interface LBRSortOrder
 	SortOrder LOGIC        = new SortOrder(2);
 	SortOrder LOGIC_ARRAYS = new SortOrder(3);
 	SortOrder FLOPPY_DISKS = new SortOrder(4);
-	SortOrder STICKY_NOTES = new SortOrder(5);
+	SortOrder NOTE_BOARD   = new SortOrder(5);
+	SortOrder STICKY_NOTES = new SortOrder(6);
 }
