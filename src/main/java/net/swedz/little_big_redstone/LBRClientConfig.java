@@ -44,6 +44,11 @@ public interface LBRClientConfig
 			return 0.01;
 		}
 		
+		default int x(int width, int size)
+		{
+			return NoteBoardStickyNote.unscaled((float) this.x(), width, size);
+		}
+		
 		@ConfigKey
 		void x(double value);
 		
@@ -56,6 +61,11 @@ public interface LBRClientConfig
 		default double y()
 		{
 			return 0.01;
+		}
+		
+		default int y(int height, int size)
+		{
+			return NoteBoardStickyNote.unscaled((float) this.y(), height, size);
 		}
 		
 		@ConfigKey

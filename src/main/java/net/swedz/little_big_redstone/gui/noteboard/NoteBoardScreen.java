@@ -139,29 +139,28 @@ public final class NoteBoardScreen extends AbstractContainerScreen<NoteBoardMenu
 	{
 		if(button == InputConstants.MOUSE_BUTTON_LEFT)
 		{
-			if(holdingHudNote)
-			{
-				int placeXRaw = x - (carriedNoteSize / 2);
-				int placeYRaw = y - (carriedNoteSize / 2);
-				float placeX = NoteBoardStickyNote.scaled(placeXRaw, width, carriedNoteSize);
-				float placeY = NoteBoardStickyNote.scaled(placeYRaw, height, carriedNoteSize);
-				LBRClient.config().stickyNoteInWorldView().x(placeX);
-				LBRClient.config().stickyNoteInWorldView().y(placeY);
-				LBRClient.config().stickyNoteInWorldView().size(carriedNoteSize);
-				holdingHudNote = false;
-				return true;
-			}
 			var carried = menu.getCarried();
-			if(carried.getItem() instanceof StickyNoteItem)
+			if(holdingHudNote ||
+			   carried.getItem() instanceof StickyNoteItem)
 			{
-				var stack = carried.copyWithCount(1);
-				carried.shrink(1);
 				int placeXRaw = x - (carriedNoteSize / 2);
 				int placeYRaw = y - (carriedNoteSize / 2);
 				float placeX = NoteBoardStickyNote.scaled(placeXRaw, width, carriedNoteSize);
 				float placeY = NoteBoardStickyNote.scaled(placeYRaw, height, carriedNoteSize);
-				contents = contents.add(new NoteBoardStickyNote(placeX, placeY, carriedNoteSize, stack));
-				PlaceTakeNoteBoardStickyNotePacket.place(menu.containerId, placeX, placeY, carriedNoteSize).sendToServer();
+				if(holdingHudNote)
+				{
+					LBRClient.config().stickyNoteInWorldView().x(placeX);
+					LBRClient.config().stickyNoteInWorldView().y(placeY);
+					LBRClient.config().stickyNoteInWorldView().size(carriedNoteSize);
+					holdingHudNote = false;
+				}
+				else
+				{
+					var stack = carried.copyWithCount(1);
+					carried.shrink(1);
+					contents = contents.add(new NoteBoardStickyNote(placeX, placeY, carriedNoteSize, stack));
+					PlaceTakeNoteBoardStickyNotePacket.place(menu.containerId, placeX, placeY, carriedNoteSize).sendToServer();
+				}
 				return true;
 			}
 		}
@@ -298,6 +297,7 @@ public final class NoteBoardScreen extends AbstractContainerScreen<NoteBoardMenu
 			float atYScaled = NoteBoardStickyNote.scaled(atYRaw, height, carriedNoteSize);
 			int atX = NoteBoardStickyNote.unscaled(atXScaled, width, carriedNoteSize);
 			int atY = NoteBoardStickyNote.unscaled(atYScaled, height, carriedNoteSize);
+			
 			this.renderNote(graphics, atX, atY, carriedNoteSize, stack, -1, -1);
 		}
 	}
@@ -306,6 +306,50 @@ public final class NoteBoardScreen extends AbstractContainerScreen<NoteBoardMenu
 	{
 		int step = scrollY > 0 ? NoteBoardStickyNote.STEP_NOTE_SIZE : (scrollY < 0 ? -NoteBoardStickyNote.STEP_NOTE_SIZE : 0);
 		return Mth.clamp(originalSize + step, NoteBoardStickyNote.MIN_NOTE_SIZE, NoteBoardStickyNote.MAX_NOTE_SIZE);
+	}
+	
+	private boolean scrollHudNote(int mouseX, int mouseY, double scrollY)
+	{
+		if(this.isHoveringHudNote(mouseX, mouseY))
+		{
+			int noteSize = LBRClient.config().stickyNoteInWorldView().size();
+			int size = this.resize(noteSize, scrollY);
+			int sizeDifference = noteSize - size;
+			
+			int toXRaw = LBRClient.config().stickyNoteInWorldView().x(width, noteSize) + (sizeDifference / 2);
+			int toYRaw = LBRClient.config().stickyNoteInWorldView().y(height, noteSize) + (sizeDifference / 2);
+			float toX = NoteBoardStickyNote.scaled(toXRaw, width, size);
+			float toY = NoteBoardStickyNote.scaled(toYRaw, height, size);
+			
+			LBRClient.config().stickyNoteInWorldView().x(toX);
+			LBRClient.config().stickyNoteInWorldView().y(toY);
+			LBRClient.config().stickyNoteInWorldView().size(size);
+			return true;
+		}
+		return false;
+	}
+	
+	private boolean scrollHoveredNote(int mouseX, int mouseY, double scrollY)
+	{
+		int hoveredNoteIndex = contents.findAt(mouseX, mouseY, width, height);
+		if(hoveredNoteIndex >= 0)
+		{
+			var hoveredNote = contents.get(hoveredNoteIndex);
+			int noteSize = hoveredNote.size();
+			
+			int size = this.resize(noteSize, scrollY);
+			int sizeDifference = noteSize - size;
+			
+			int toXRaw = hoveredNote.x(width) + (sizeDifference / 2);
+			int toYRaw = hoveredNote.y(height) + (sizeDifference / 2);
+			float toX = NoteBoardStickyNote.scaled(toXRaw, width, size);
+			float toY = NoteBoardStickyNote.scaled(toYRaw, height, size);
+			
+			contents = contents.update(hoveredNoteIndex, hoveredNote.moveTo(toX, toY, size));
+			new MoveNoteBoardStickyNotePacket(menu.containerId, hoveredNoteIndex, toX, toY, size).sendToServer();
+			return true;
+		}
+		return false;
 	}
 	
 	@Override
@@ -324,50 +368,17 @@ public final class NoteBoardScreen extends AbstractContainerScreen<NoteBoardMenu
 			{
 				int mouseX = (int) Math.round(mx);
 				int mouseY = (int) Math.round(my);
-				if(this.isHoveringHudNote(mouseX, mouseY))
-				{
-					int previousSize = carriedNoteSize;
-					int size = this.resize(previousSize, scrollY);
-					int sizeDifference = previousSize - size;
-					
-					int toXRaw = NoteBoardStickyNote.unscaled((float) LBRClient.config().stickyNoteInWorldView().x(), width, previousSize) + (sizeDifference / 2);
-					int toYRaw = NoteBoardStickyNote.unscaled((float) LBRClient.config().stickyNoteInWorldView().y(), height, previousSize) + (sizeDifference / 2);
-					float toX = NoteBoardStickyNote.scaled(toXRaw, width, carriedNoteSize);
-					float toY = NoteBoardStickyNote.scaled(toYRaw, height, carriedNoteSize);
-					
-					LBRClient.config().stickyNoteInWorldView().x(toX);
-					LBRClient.config().stickyNoteInWorldView().y(toY);
-					LBRClient.config().stickyNoteInWorldView().size(size);
-					return true;
-				}
-				int hoveredNoteIndex = contents.findAt(mouseX, mouseY, width, height);
-				if(hoveredNoteIndex >= 0)
-				{
-					var hoveredNote = contents.get(hoveredNoteIndex);
-					
-					int previousSize = hoveredNote.size();
-					int size = this.resize(previousSize, scrollY);
-					int sizeDifference = previousSize - size;
-					
-					int toXRaw = hoveredNote.x(width) + (sizeDifference / 2);
-					int toYRaw = hoveredNote.y(height) + (sizeDifference / 2);
-					float toX = NoteBoardStickyNote.scaled(toXRaw, width, carriedNoteSize);
-					float toY = NoteBoardStickyNote.scaled(toYRaw, height, carriedNoteSize);
-					
-					contents = contents.update(hoveredNoteIndex, hoveredNote.moveTo(toX, toY, size));
-					new MoveNoteBoardStickyNotePacket(menu.containerId, hoveredNoteIndex, toX, toY, size).sendToServer();
-					return true;
-				}
+				return this.scrollHudNote(mouseX, mouseY, scrollY) ||
+					   this.scrollHoveredNote(mouseX, mouseY, scrollY);
 			}
 		}
-		
 		return super.mouseScrolled(mx, my, scrollX, scrollY);
 	}
 	
 	@Override
 	protected void renderLabels(GuiGraphics graphics, int mouseX, int mouseY)
 	{
-		// Do not render the inventory labelF
+		// Do not render the inventory label
 	}
 	
 	@Override
