@@ -140,3 +140,11 @@ Text will appear colored both in-world and in the viewing/editing menu.
 Items can be placed onto sticky notes using **<KeyBind id="key.use" />** in world. The item will display on the sticky
 note instead of text lines. The item will be tinted to match the color of the text for the sticky note, unless the text
 color is the default color for that color of note.
+
+### Note Board
+
+The note board is a menu where you can move where notes in-world will be shown on screen when looked at, as well as
+pinning notes you have made to your screen! Open the note board using the keybind "Open Note Board"
+(**<KeyBind id="key.little_big_redstone.open_note_board" />**). Sticky notes that are in your inventory can then be
+placed in the menu wherever you'd like. Pinned notes in the note board can also be edited using **Right Button**. Notes
+in the note board are saved per-world and per-player. Dying does not remove the notes out of the note board.
