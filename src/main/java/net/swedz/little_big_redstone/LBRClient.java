@@ -23,6 +23,7 @@ import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.GameShuttingDownEvent;
 import net.swedz.little_big_redstone.client.entity.StickyNoteEntityRenderer;
 import net.swedz.little_big_redstone.client.hud.FloppyDiskConsumeItemsGuiOverlay;
+import net.swedz.little_big_redstone.client.hud.NoteBoardGuiOverlay;
 import net.swedz.little_big_redstone.client.hud.StickyNoteViewContentsGuiOverlay;
 import net.swedz.little_big_redstone.client.item.LogicItemRenderer;
 import net.swedz.little_big_redstone.client.item.StickyNoteInHandItemRenderer;
@@ -37,6 +38,7 @@ import net.swedz.little_big_redstone.gui.logicconfig.LogicConfigScreen;
 import net.swedz.little_big_redstone.gui.microchip.MicrochipScreen;
 import net.swedz.little_big_redstone.gui.microchip.logic.LogicRenderers;
 import net.swedz.little_big_redstone.gui.microchip.wire.WirePathing;
+import net.swedz.little_big_redstone.gui.noteboard.NoteBoardScreen;
 import net.swedz.little_big_redstone.item.LogicItem;
 import net.swedz.little_big_redstone.item.stickynote.StickyNoteItem;
 import net.swedz.little_big_redstone.item.stickynote.tooltip.StickyNoteClientTooltip;
@@ -57,6 +59,7 @@ public final class LBRClient
 	{
 		setupConfig(bus, container);
 		
+		LBRKeybinds.init(bus);
 		FloppyDiskScreen.createPath();
 		LBRTooltips.init();
 		LogicRenderers.init();
@@ -127,7 +130,8 @@ public final class LBRClient
 	private static void register(RegisterGuiLayersEvent event)
 	{
 		event.registerAbove(VanillaGuiLayers.HOTBAR, LBR.id("floppy_disk_consume_items"), FloppyDiskConsumeItemsGuiOverlay::render);
-		event.registerBelow(VanillaGuiLayers.DEBUG_OVERLAY, LBR.id("sticky_note_view_contents"), StickyNoteViewContentsGuiOverlay::render);
+		event.registerBelow(VanillaGuiLayers.HOTBAR, LBR.id("sticky_note_view_contents"), StickyNoteViewContentsGuiOverlay::render);
+		event.registerBelow(LBR.id("sticky_note_view_contents"), LBR.id("note_board"), NoteBoardGuiOverlay::render);
 	}
 	
 	@SubscribeEvent
@@ -149,6 +153,7 @@ public final class LBRClient
 		event.register(LBRMenus.MICROCHIP.get(), MicrochipScreen::new);
 		event.register(LBRMenus.LOGIC_CONFIG.get(), LogicConfigScreen::new);
 		event.register(LBRMenus.LOGIC_ARRAY.get(), LogicArrayScreen::new);
+		event.register(LBRMenus.NOTE_BOARD.get(), NoteBoardScreen::new);
 	}
 	
 	@SubscribeEvent

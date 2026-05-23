@@ -26,7 +26,7 @@ public record RequestStickyNoteWatcherPacket(Integer entityId, boolean start) im
 		
 		if(start && entityId != null && context.getPlayer().level().getEntity(entityId) instanceof StickyNoteEntity entity)
 		{
-			new UpdateStickyNoteWatcherPacket(new StickyNoteView(entity.getColor(), entity.getTextColor(), entity.getNote().parsed())).sendToClient((ServerPlayer) context.getPlayer());
+			new UpdateStickyNoteWatcherPacket(new StickyNoteView(entity)).sendToClient((ServerPlayer) context.getPlayer());
 			context.getPlayer().setWatchedStickyNote(entityId);
 		}
 		else

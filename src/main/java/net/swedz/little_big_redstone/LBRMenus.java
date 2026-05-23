@@ -9,6 +9,7 @@ import net.neoforged.neoforge.registries.DeferredRegister;
 import net.swedz.little_big_redstone.gui.logicarray.LogicArrayMenu;
 import net.swedz.little_big_redstone.gui.logicconfig.LogicConfigMenu;
 import net.swedz.little_big_redstone.gui.microchip.MicrochipMenu;
+import net.swedz.little_big_redstone.gui.noteboard.NoteBoardMenu;
 
 import java.util.function.Supplier;
 
@@ -19,6 +20,7 @@ public final class LBRMenus
 	public static final Supplier<MenuType<MicrochipMenu>>   MICROCHIP    = REGISTRY.register("microchip", () -> new MenuType<>((IContainerFactory<MicrochipMenu>) MicrochipMenu::new, FeatureFlags.DEFAULT_FLAGS));
 	public static final Supplier<MenuType<LogicConfigMenu>> LOGIC_CONFIG = REGISTRY.register("logic_config", () -> new MenuType<>((IContainerFactory<LogicConfigMenu>) LogicConfigMenu::new, FeatureFlags.DEFAULT_FLAGS));
 	public static final Supplier<MenuType<LogicArrayMenu>>  LOGIC_ARRAY  = REGISTRY.register("logic_array", () -> new MenuType<>((IContainerFactory<LogicArrayMenu>) LogicArrayMenu::new, FeatureFlags.DEFAULT_FLAGS));
+	public static final Supplier<MenuType<NoteBoardMenu>>   NOTE_BOARD   = REGISTRY.register("note_board", () -> new MenuType<>(NoteBoardMenu::new, FeatureFlags.DEFAULT_FLAGS));
 	
 	public static void init(IEventBus bus)
 	{

@@ -10,6 +10,8 @@ import net.swedz.little_big_redstone.entity.stickynote.StickyNoteView;
 import net.swedz.little_big_redstone.gui.floppydisk.FloppyDiskScreen;
 import net.swedz.little_big_redstone.gui.microchip.MicrochipMenu;
 import net.swedz.little_big_redstone.gui.microchip.MicrochipScreen;
+import net.swedz.little_big_redstone.gui.noteboard.NoteBoardScreen;
+import net.swedz.little_big_redstone.gui.noteboard.contents.NoteBoardContents;
 import net.swedz.little_big_redstone.gui.stickynote.edit.StickyNoteEditScreen;
 import net.swedz.little_big_redstone.gui.stickynote.reference.StickyNoteReference;
 import net.swedz.little_big_redstone.gui.stickynote.view.StickyNoteViewScreen;
@@ -128,5 +130,14 @@ public class LBRClientProxy extends LBRProxy
 		
 		inventory.setPickedItem(stack);
 		minecraft.gameMode.handleCreativeModeItemAdd(player.getItemInHand(InteractionHand.MAIN_HAND), 36 + inventory.selected);
+	}
+	
+	@Override
+	public void updateNoteBoardContentsInScreen(NoteBoardContents contents)
+	{
+		if(Minecraft.getInstance().screen instanceof NoteBoardScreen screen)
+		{
+			screen.setContents(contents);
+		}
 	}
 }

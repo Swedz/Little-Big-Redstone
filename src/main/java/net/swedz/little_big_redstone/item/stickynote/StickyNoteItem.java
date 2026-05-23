@@ -171,11 +171,10 @@ public final class StickyNoteItem extends Item implements DyeColoredItem
 	@Override
 	public Optional<TooltipComponent> getTooltipImage(ItemStack stack)
 	{
-		var textColor = stack.get(LBRComponents.STICKY_NOTE_TEXT_COLOR);
 		var note = stack.get(LBRComponents.STICKY_NOTE);
 		return note.isEmpty() ?
 				Optional.empty() :
-				Optional.of(new StickyNoteTooltipData(new StickyNoteView(color, textColor, note.parsed())));
+				Optional.of(new StickyNoteTooltipData(new StickyNoteView(stack)));
 	}
 	
 	@Override

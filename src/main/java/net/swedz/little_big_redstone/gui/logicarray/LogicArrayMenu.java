@@ -9,7 +9,8 @@ import net.neoforged.neoforge.items.IItemHandler;
 import net.neoforged.neoforge.items.ItemStackHandler;
 import net.neoforged.neoforge.items.wrapper.PlayerMainInvWrapper;
 import net.swedz.little_big_redstone.LBRMenus;
-import net.swedz.little_big_redstone.gui.logicarray.slot.LogicArrayPlayerSlot;
+import net.swedz.little_big_redstone.LBRTags;
+import net.swedz.little_big_redstone.gui.slot.MaybeLockedPlayerSlot;
 import net.swedz.little_big_redstone.gui.logicarray.slot.LogicArraySlot;
 import net.swedz.little_big_redstone.item.logicarray.LogicArrayItem;
 import net.swedz.tesseract.neoforge.helper.TransferHelper;
@@ -31,7 +32,20 @@ public final class LogicArrayMenu extends PlayerInventoryContainerMenu
 		
 		setupLogicArrayInventory(itemHandler, this::addSlot, 26, 18, LogicArrayItem.ROWS, LogicArrayItem.COLUMNS);
 		
-		this.setupPlayerInventory(playerInventory, 8, 104, (container, slot, x, y) -> new LogicArrayPlayerSlot(container, slot, x, y, () -> slot == logicArraySlot));
+		this.setupPlayerInventory(
+				playerInventory,
+				8,
+				104,
+				(container, slot, x, y) -> new MaybeLockedPlayerSlot(
+						container,
+						slot,
+						x,
+						y,
+						(stack) ->
+								slot == logicArraySlot ||
+								stack.is(LBRTags.Items.LOGIC_ARRAYS)
+				)
+		);
 	}
 	
 	public LogicArrayMenu(int containerId, Inventory playerInventory, RegistryFriendlyByteBuf buf)

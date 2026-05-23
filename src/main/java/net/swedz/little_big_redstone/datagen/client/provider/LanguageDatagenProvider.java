@@ -5,6 +5,7 @@ import net.neoforged.neoforge.common.data.LanguageProvider;
 import net.neoforged.neoforge.data.event.GatherDataEvent;
 import net.swedz.little_big_redstone.LBR;
 import net.swedz.little_big_redstone.LBRItems;
+import net.swedz.little_big_redstone.LBRKeybinds;
 import net.swedz.tesseract.neoforge.lang.LangInstance;
 import net.swedz.tesseract.neoforge.registry.holder.ItemHolder;
 
@@ -38,5 +39,12 @@ public final class LanguageDatagenProvider extends LanguageProvider
 		}
 		
 		this.add(LBR.id(LBR.ID).toLanguageKey("itemGroup"), LBR.NAME);
+		
+		this.add(LBRKeybinds.CATEGORY, LBR.NAME);
+		
+		for(var keybind : LBRKeybinds.Registry.getMappings())
+		{
+			this.add(keybind.descriptionId(), keybind.englishName());
+		}
 	}
 }

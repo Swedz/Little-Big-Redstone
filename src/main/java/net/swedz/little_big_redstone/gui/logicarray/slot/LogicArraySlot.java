@@ -10,8 +10,13 @@ public final class LogicArraySlot extends SlotItemHandler
 {
 	private final Supplier<Boolean> isActive;
 	
-	public LogicArraySlot(IItemHandler itemHandler, int index, int x, int y,
-						  Supplier<Boolean> isActive)
+	public LogicArraySlot(
+			IItemHandler itemHandler,
+			int index,
+			int x,
+			int y,
+			Supplier<Boolean> isActive
+	)
 	{
 		super(itemHandler, index, x, y);
 		this.isActive = isActive;

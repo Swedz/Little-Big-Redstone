@@ -1,37 +1,41 @@
-package net.swedz.little_big_redstone.gui.logicarray.slot;
+package net.swedz.little_big_redstone.gui.slot;
 
 import net.minecraft.world.Container;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
-import net.swedz.little_big_redstone.LBRTags;
 
-import java.util.function.Supplier;
+import java.util.function.Predicate;
 
-public final class LogicArrayPlayerSlot extends Slot
+public final class MaybeLockedPlayerSlot extends Slot
 {
-	private final Supplier<Boolean> isLocked;
+	private final Predicate<ItemStack> isLocked;
 	
-	public LogicArrayPlayerSlot(Container container, int slot, int x, int y,
-								Supplier<Boolean> isLocked)
+	public MaybeLockedPlayerSlot(
+			Container container,
+			int slot,
+			int x,
+			int y,
+			Predicate<ItemStack> isLocked
+	)
 	{
 		super(container, slot, x, y);
 		this.isLocked = isLocked;
 	}
 	
-	public LogicArrayPlayerSlot(Container container, int slot, int x, int y)
+	public MaybeLockedPlayerSlot(
+			Container container,
+			int slot,
+			int x,
+			int y
+	)
 	{
 		this(container, slot, x, y, null);
 	}
 	
 	public boolean isLocked()
 	{
-		return isLocked != null ? isLocked.get() : this.containsLogicArray();
-	}
-	
-	public boolean containsLogicArray()
-	{
-		return this.getItem().is(LBRTags.Items.LOGIC_ARRAYS);
+		return isLocked != null && isLocked.test(this.getItem());
 	}
 	
 	@Override

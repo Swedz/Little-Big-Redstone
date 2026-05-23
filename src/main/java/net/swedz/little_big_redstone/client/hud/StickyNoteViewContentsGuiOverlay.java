@@ -14,6 +14,7 @@ import net.swedz.little_big_redstone.LBRClient;
 import net.swedz.little_big_redstone.client.StickyNoteViewRenderer;
 import net.swedz.little_big_redstone.entity.stickynote.StickyNoteEntity;
 import net.swedz.little_big_redstone.entity.stickynote.StickyNoteView;
+import net.swedz.little_big_redstone.gui.noteboard.contents.NoteBoardStickyNote;
 import net.swedz.little_big_redstone.network.packet.RequestStickyNoteWatcherPacket;
 import net.swedz.little_big_redstone.proxy.LBRProxy;
 import net.swedz.tesseract.neoforge.helper.guigraphics.TesseractGuiGraphics;
@@ -69,10 +70,17 @@ public final class StickyNoteViewContentsGuiOverlay
 			{
 				var graphics = new TesseractGuiGraphics(internal);
 				
-				float scale = (float) LBRClient.config().stickyNoteInWorldViewScale();
+				int size = LBRClient.config().stickyNoteInWorldView().size();
 				
 				graphics.pose().pushPose();
-				graphics.pose().translate(10, 10, 0);
+				
+				float scaledX = (float) LBRClient.config().stickyNoteInWorldView().x();
+				float scaledY = (float) LBRClient.config().stickyNoteInWorldView().y();
+				int x = NoteBoardStickyNote.toPixelCoord(scaledX, Minecraft.getInstance().getWindow().getGuiScaledWidth(), size);
+				int y = NoteBoardStickyNote.toPixelCoord(scaledY, Minecraft.getInstance().getWindow().getGuiScaledHeight(), size);
+				graphics.pose().translate(x, y, 0);
+				
+				float scale = size / ((float) NoteBoardStickyNote.FULL_NOTE_SIZE);
 				graphics.pose().scale(scale, scale, 1);
 				
 				StickyNoteViewRenderer.renderBackground(graphics, STICKY_NOTE, alpha / 255f);
