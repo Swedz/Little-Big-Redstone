@@ -72,9 +72,9 @@
     }
   },
   "item_textures": {
-    "background": "little_big_redstone:item/logic_background_square",
-    "border": "little_big_redstone:item/logic_border_square",
-    "icon": "little_big_redstone:item/not_gate"
+    "background": "little_big_redstone:item/logic/background_square",
+    "border": "little_big_redstone:item/logic/border_square",
+    "icon": "little_big_redstone:item/logic/not_gate"
   },
   "loader": "little_big_redstone:logic"
 }

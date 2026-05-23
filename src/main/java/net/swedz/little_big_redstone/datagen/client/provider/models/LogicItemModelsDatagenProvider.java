@@ -99,12 +99,12 @@ public final class LogicItemModelsDatagenProvider extends ItemModelProvider
 		
 		public ResourceLocation itemBackground()
 		{
-			return LBR.id("item/logic_background_%s".formatted(key));
+			return LBR.id("item/logic/background_%s".formatted(key));
 		}
 		
 		public ResourceLocation itemBorder()
 		{
-			return LBR.id("item/logic_border_%s".formatted(key));
+			return LBR.id("item/logic/border_%s".formatted(key));
 		}
 		
 		public ResourceLocation boardBackground()
@@ -129,7 +129,7 @@ public final class LogicItemModelsDatagenProvider extends ItemModelProvider
 					var builder = LogicBakingModelData.builder(parent, efh)
 							.itemTexture("background", backgroundType.itemBackground())
 							.itemTexture("border", backgroundType.itemBorder())
-							.itemTexture("icon", LBR.id("item/%s".formatted(id)))
+							.itemTexture("icon", LBR.id("item/logic/%s".formatted(id)))
 							.boardTexture("background", backgroundType.boardBackground())
 							.boardTexture("border", backgroundType.boardBorder());
 					if(icon)
