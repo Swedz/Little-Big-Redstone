@@ -73,9 +73,9 @@
     }
   },
   "item_textures": {
-    "background": "little_big_redstone:item/logic_background_circle",
-    "border": "little_big_redstone:item/logic_border_circle",
-    "icon": "little_big_redstone:item/io"
+    "background": "little_big_redstone:item/logic/background_circle",
+    "border": "little_big_redstone:item/logic/border_circle",
+    "icon": "little_big_redstone:item/logic/io"
   },
   "loader": "little_big_redstone:logic"
 }
