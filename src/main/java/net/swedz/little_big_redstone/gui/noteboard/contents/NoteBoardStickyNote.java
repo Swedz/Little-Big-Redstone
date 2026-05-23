@@ -62,12 +62,12 @@ public record NoteBoardStickyNote(
 	
 	public int x(int width)
 	{
-		return unscaled(x, width, size);
+		return toPixelCoord(x, width, size);
 	}
 	
 	public int y(int height)
 	{
-		return unscaled(y, height, size);
+		return toPixelCoord(y, height, size);
 	}
 	
 	public StickyNoteView asView()
@@ -92,17 +92,35 @@ public record NoteBoardStickyNote(
 		return stack.get(LBRComponents.STICKY_NOTE_EDITABLE);
 	}
 	
-	public static int unscaled(float coord, int dimension, int size)
+	/**
+	 * Converts a percentage coordinate value to a literal pixel coordinate.
+	 *
+	 * @param coord the percentage coordinate
+	 * @param dimension the dimension's length (width or height) in pixels
+	 * @param size the size of the note in pixels
+	 * @return the literal pixel coordinate, the top left of the note
+	 */
+	public static int toPixelCoord(float coord, int dimension, int size)
 	{
 		int rawCoord = Math.round(coord * dimension);
-		int offset = coord >= 0.5 ? -size : 0;
+		int offset = coord >= 0.6 ? -size : (coord >= 0.4 ? -(size / 2) : 0);
 		return rawCoord + offset;
 	}
 	
-	public static float scaled(int coord, int dimension, int size)
+	/**
+	 * Converts a literal pixel coordinate to a percentage coordinate.
+	 *
+	 * @param coord the literal pixel coordinate, the top left of the note
+	 * @param dimension the dimension's length (width or height) in pixels
+	 * @param size the size of the note in pixels
+	 * @return the percentage coordinate
+	 */
+	public static float toPercentageCoord(int coord, int dimension, int size)
 	{
-		int middle = Math.round(dimension / 2f);
-		int offset = coord >= middle ? -size : 0;
+		int end = Math.round(dimension * 0.6f);
+		int middle = Math.round(dimension * 0.4f);
+		int centerCoord = coord + (size / 2);
+		int offset = centerCoord >= end ? -size : (centerCoord >= middle ? -(size / 2) : 0);
 		return (float) (coord - offset) / dimension;
 	}
 }

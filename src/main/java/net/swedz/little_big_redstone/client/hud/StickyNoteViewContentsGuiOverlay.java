@@ -76,8 +76,8 @@ public final class StickyNoteViewContentsGuiOverlay
 				
 				float scaledX = (float) LBRClient.config().stickyNoteInWorldView().x();
 				float scaledY = (float) LBRClient.config().stickyNoteInWorldView().y();
-				int x = NoteBoardStickyNote.unscaled(scaledX, Minecraft.getInstance().getWindow().getGuiScaledWidth(), size);
-				int y = NoteBoardStickyNote.unscaled(scaledY, Minecraft.getInstance().getWindow().getGuiScaledHeight(), size);
+				int x = NoteBoardStickyNote.toPixelCoord(scaledX, Minecraft.getInstance().getWindow().getGuiScaledWidth(), size);
+				int y = NoteBoardStickyNote.toPixelCoord(scaledY, Minecraft.getInstance().getWindow().getGuiScaledHeight(), size);
 				graphics.pose().translate(x, y, 0);
 				
 				float scale = size / ((float) NoteBoardStickyNote.FULL_NOTE_SIZE);

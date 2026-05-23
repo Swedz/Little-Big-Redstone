@@ -46,7 +46,7 @@ public interface LBRClientConfig
 		
 		default int x(int width, int size)
 		{
-			return NoteBoardStickyNote.unscaled((float) this.x(), width, size);
+			return NoteBoardStickyNote.toPixelCoord((float) this.x(), width, size);
 		}
 		
 		@ConfigKey
@@ -65,7 +65,7 @@ public interface LBRClientConfig
 		
 		default int y(int height, int size)
 		{
-			return NoteBoardStickyNote.unscaled((float) this.y(), height, size);
+			return NoteBoardStickyNote.toPixelCoord((float) this.y(), height, size);
 		}
 		
 		@ConfigKey

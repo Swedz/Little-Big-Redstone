@@ -88,8 +88,8 @@ public final class NoteBoardScreen extends AbstractContainerScreen<NoteBoardMenu
 		int size = LBRClient.config().stickyNoteInWorldView().size();
 		float scaledX = (float) LBRClient.config().stickyNoteInWorldView().x();
 		float scaledY = (float) LBRClient.config().stickyNoteInWorldView().y();
-		int x = NoteBoardStickyNote.unscaled(scaledX, Minecraft.getInstance().getWindow().getGuiScaledWidth(), size);
-		int y = NoteBoardStickyNote.unscaled(scaledY, Minecraft.getInstance().getWindow().getGuiScaledHeight(), size);
+		int x = NoteBoardStickyNote.toPixelCoord(scaledX, Minecraft.getInstance().getWindow().getGuiScaledWidth(), size);
+		int y = NoteBoardStickyNote.toPixelCoord(scaledY, Minecraft.getInstance().getWindow().getGuiScaledHeight(), size);
 		return mouseX >= x &&
 			   mouseX <= x + size &&
 			   mouseY >= y &&
@@ -103,13 +103,13 @@ public final class NoteBoardScreen extends AbstractContainerScreen<NoteBoardMenu
 		graphics.pose().pushPose();
 		
 		float scaledX = holdingHudNote ?
-				NoteBoardStickyNote.scaled(mouseX - (size / 2), width, size) :
+				Mth.clamp(NoteBoardStickyNote.toPercentageCoord(mouseX - (size / 2), width, size), 0, 1) :
 				(float) LBRClient.config().stickyNoteInWorldView().x();
 		float scaledY = holdingHudNote ?
-				NoteBoardStickyNote.scaled(mouseY - (size / 2), height, size) :
+				Mth.clamp(NoteBoardStickyNote.toPercentageCoord(mouseY - (size / 2), height, size), 0, 1) :
 				(float) LBRClient.config().stickyNoteInWorldView().y();
-		int x = NoteBoardStickyNote.unscaled(scaledX, width, size);
-		int y = NoteBoardStickyNote.unscaled(scaledY, height, size);
+		int x = NoteBoardStickyNote.toPixelCoord(scaledX, width, size);
+		int y = NoteBoardStickyNote.toPixelCoord(scaledY, height, size);
 		graphics.pose().translate(x, y, 0);
 		
 		float scale = size / ((float) NoteBoardStickyNote.FULL_NOTE_SIZE);
@@ -145,8 +145,8 @@ public final class NoteBoardScreen extends AbstractContainerScreen<NoteBoardMenu
 			{
 				int placeXRaw = x - (carriedNoteSize / 2);
 				int placeYRaw = y - (carriedNoteSize / 2);
-				float placeX = NoteBoardStickyNote.scaled(placeXRaw, width, carriedNoteSize);
-				float placeY = NoteBoardStickyNote.scaled(placeYRaw, height, carriedNoteSize);
+				float placeX = Mth.clamp(NoteBoardStickyNote.toPercentageCoord(placeXRaw, width, carriedNoteSize), 0, 1);
+				float placeY = Mth.clamp(NoteBoardStickyNote.toPercentageCoord(placeYRaw, height, carriedNoteSize), 0, 1);
 				if(holdingHudNote)
 				{
 					LBRClient.config().stickyNoteInWorldView().x(placeX);
@@ -293,10 +293,10 @@ public final class NoteBoardScreen extends AbstractContainerScreen<NoteBoardMenu
 		{
 			int atXRaw = mouseX - (carriedNoteSize / 2);
 			int atYRaw = mouseY - (carriedNoteSize / 2);
-			float atXScaled = NoteBoardStickyNote.scaled(atXRaw, width, carriedNoteSize);
-			float atYScaled = NoteBoardStickyNote.scaled(atYRaw, height, carriedNoteSize);
-			int atX = NoteBoardStickyNote.unscaled(atXScaled, width, carriedNoteSize);
-			int atY = NoteBoardStickyNote.unscaled(atYScaled, height, carriedNoteSize);
+			float atXScaled = Mth.clamp(NoteBoardStickyNote.toPercentageCoord(atXRaw, width, carriedNoteSize), 0, 1);
+			float atYScaled = Mth.clamp(NoteBoardStickyNote.toPercentageCoord(atYRaw, height, carriedNoteSize), 0, 1);
+			int atX = NoteBoardStickyNote.toPixelCoord(atXScaled, width, carriedNoteSize);
+			int atY = NoteBoardStickyNote.toPixelCoord(atYScaled, height, carriedNoteSize);
 			
 			this.renderNote(graphics, atX, atY, carriedNoteSize, stack, -1, -1);
 		}
@@ -318,8 +318,8 @@ public final class NoteBoardScreen extends AbstractContainerScreen<NoteBoardMenu
 			
 			int toXRaw = LBRClient.config().stickyNoteInWorldView().x(width, noteSize) + (sizeDifference / 2);
 			int toYRaw = LBRClient.config().stickyNoteInWorldView().y(height, noteSize) + (sizeDifference / 2);
-			float toX = NoteBoardStickyNote.scaled(toXRaw, width, size);
-			float toY = NoteBoardStickyNote.scaled(toYRaw, height, size);
+			float toX = Mth.clamp(NoteBoardStickyNote.toPercentageCoord(toXRaw, width, size), 0, 1);
+			float toY = Mth.clamp(NoteBoardStickyNote.toPercentageCoord(toYRaw, height, size), 0, 1);
 			
 			LBRClient.config().stickyNoteInWorldView().x(toX);
 			LBRClient.config().stickyNoteInWorldView().y(toY);
@@ -342,8 +342,8 @@ public final class NoteBoardScreen extends AbstractContainerScreen<NoteBoardMenu
 			
 			int toXRaw = hoveredNote.x(width) + (sizeDifference / 2);
 			int toYRaw = hoveredNote.y(height) + (sizeDifference / 2);
-			float toX = NoteBoardStickyNote.scaled(toXRaw, width, size);
-			float toY = NoteBoardStickyNote.scaled(toYRaw, height, size);
+			float toX = Mth.clamp(NoteBoardStickyNote.toPercentageCoord(toXRaw, width, size), 0, 1);
+			float toY = Mth.clamp(NoteBoardStickyNote.toPercentageCoord(toYRaw, height, size), 0, 1);
 			
 			contents = contents.update(hoveredNoteIndex, hoveredNote.moveTo(toX, toY, size));
 			new MoveNoteBoardStickyNotePacket(menu.containerId, hoveredNoteIndex, toX, toY, size).sendToServer();
