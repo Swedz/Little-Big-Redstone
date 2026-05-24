@@ -10,6 +10,7 @@ import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.config.ModConfig;
 import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
+import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.neoforged.neoforge.client.event.EntityRenderersEvent;
 import net.neoforged.neoforge.client.event.ModelEvent;
 import net.neoforged.neoforge.client.event.RegisterClientTooltipComponentFactoriesEvent;
@@ -79,10 +80,11 @@ public final class LBRClient
 	private static void setupConfig(IEventBus bus, ModContainer container)
 	{
 		var file = new ModConfigFileAccess(container, ModConfig.Type.CLIENT);
-		CONFIG = new ConfigManager(file)
+		var instance = new ConfigManager(file)
 				.build(LBRClientConfig.class)
-				.load()
-				.config();
+				.load();
+		bus.addListener(FMLCommonSetupEvent.class, (event) -> instance.load(false));
+		CONFIG = instance.config();
 	}
 	
 	private static void registerCustomItemRenderer(RegisterClientExtensionsEvent event, Supplier<BlockEntityWithoutLevelRenderer> renderer, Class<?> itemType)
