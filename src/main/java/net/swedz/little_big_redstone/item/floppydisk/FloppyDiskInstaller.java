@@ -15,7 +15,7 @@ import net.neoforged.neoforge.items.ItemStackHandler;
 import net.swedz.little_big_redstone.LBRComponents;
 import net.swedz.little_big_redstone.LBRItems;
 import net.swedz.little_big_redstone.microchip.Microchip;
-import net.swedz.tesseract.neoforge.api.tuple.Pair;
+import net.swedz.tesseract.api.tuple.Pair;
 import net.swedz.tesseract.neoforge.helper.TransferHelper;
 
 import java.util.Comparator;

@@ -6,7 +6,7 @@ import net.neoforged.neoforge.client.model.data.ModelData;
 import net.neoforged.neoforge.client.model.data.ModelProperty;
 import net.swedz.little_big_redstone.LBRComponents;
 import net.swedz.little_big_redstone.item.stickynote.StickyNoteItem;
-import net.swedz.tesseract.neoforge.api.Assert;
+import net.swedz.tesseract.api.Assert;
 
 import java.util.Objects;
 

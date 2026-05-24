@@ -47,7 +47,7 @@ import net.swedz.little_big_redstone.client.model.stickynote.StickyNoteModelData
 import net.swedz.little_big_redstone.item.stickynote.StickyNote;
 import net.swedz.little_big_redstone.item.stickynote.StickyNoteItem;
 import net.swedz.little_big_redstone.network.packet.StickyNotePacket;
-import net.swedz.tesseract.neoforge.api.Assert;
+import net.swedz.tesseract.api.Assert;
 import net.swedz.tesseract.neoforge.helper.DirectionHelper;
 import net.swedz.tesseract.neoforge.item.ItemInstance;
 

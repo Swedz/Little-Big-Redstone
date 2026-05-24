@@ -20,7 +20,7 @@ import net.swedz.little_big_redstone.microchip.object.logic.config.LogicComparis
 import net.swedz.little_big_redstone.microchip.object.logic.io.LogicPowerOutputType;
 import net.swedz.little_big_redstone.microchip.object.logic.reader.LogicReaderThreshold;
 import net.swedz.little_big_redstone.network.LBRPackets;
-import net.swedz.tesseract.neoforge.api.Assert;
+import net.swedz.tesseract.api.Assert;
 import net.swedz.tesseract.neoforge.capabilities.CapabilitiesListeners;
 import net.swedz.tesseract.neoforge.lang.LangManager;
 import net.swedz.tesseract.neoforge.registry.holder.BlockHolder;
