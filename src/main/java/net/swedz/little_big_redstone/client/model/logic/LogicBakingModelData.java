@@ -17,7 +17,7 @@ import net.neoforged.neoforge.client.model.generators.ModelProvider;
 import net.neoforged.neoforge.common.data.ExistingFileHelper;
 import net.swedz.little_big_redstone.LBR;
 import net.swedz.little_big_redstone.microchip.object.logic.LogicComponent;
-import net.swedz.tesseract.neoforge.api.Assert;
+import net.swedz.tesseract.api.Assert;
 import net.swedz.tesseract.neoforge.helper.CodecHelper;
 
 import java.util.Collections;

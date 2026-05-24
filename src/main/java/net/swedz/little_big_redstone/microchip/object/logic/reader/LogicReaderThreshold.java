@@ -4,7 +4,7 @@ import com.mojang.serialization.Codec;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
-import net.swedz.tesseract.neoforge.api.Assert;
+import net.swedz.tesseract.api.Assert;
 
 import java.security.InvalidParameterException;
 import java.util.regex.Pattern;

@@ -20,7 +20,7 @@ import net.swedz.little_big_redstone.item.floppydisk.FloppyDiskProgramName;
 import net.swedz.little_big_redstone.microchip.Microchip;
 import net.swedz.little_big_redstone.network.packet.FloppyDiskLoadPacket;
 import net.swedz.little_big_redstone.network.packet.FloppyDiskSavePacket;
-import net.swedz.tesseract.neoforge.api.Assert;
+import net.swedz.tesseract.api.Assert;
 import net.swedz.tesseract.neoforge.gui.widget.AutoFillEditBox;
 import net.swedz.tesseract.neoforge.helper.guigraphics.TesseractGuiGraphics;
 

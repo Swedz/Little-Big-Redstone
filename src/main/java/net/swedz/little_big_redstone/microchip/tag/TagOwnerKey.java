@@ -1,6 +1,6 @@
 package net.swedz.little_big_redstone.microchip.tag;
 
-import net.swedz.tesseract.neoforge.api.Assert;
+import net.swedz.tesseract.api.Assert;
 
 import java.util.UUID;
 

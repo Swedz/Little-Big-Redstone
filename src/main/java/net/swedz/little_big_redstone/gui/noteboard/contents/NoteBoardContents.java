@@ -5,7 +5,7 @@ import com.mojang.serialization.Codec;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
-import net.swedz.tesseract.neoforge.api.Assert;
+import net.swedz.tesseract.api.Assert;
 
 import java.util.Collections;
 import java.util.Iterator;

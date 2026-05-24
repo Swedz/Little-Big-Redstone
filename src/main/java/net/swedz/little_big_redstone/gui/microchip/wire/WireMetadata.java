@@ -6,7 +6,7 @@ import net.swedz.little_big_redstone.microchip.Microchip;
 import net.swedz.little_big_redstone.microchip.object.logic.LogicComponent;
 import net.swedz.little_big_redstone.microchip.wire.PortReference;
 import net.swedz.little_big_redstone.microchip.wire.Wire;
-import net.swedz.tesseract.neoforge.api.Assert;
+import net.swedz.tesseract.api.Assert;
 
 public record WireMetadata(
 		boolean hovered,

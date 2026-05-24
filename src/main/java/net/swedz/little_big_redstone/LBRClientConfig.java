@@ -1,10 +1,10 @@
 package net.swedz.little_big_redstone;
 
 import net.swedz.little_big_redstone.gui.noteboard.contents.NoteBoardStickyNote;
-import net.swedz.tesseract.neoforge.config.annotation.ConfigComment;
-import net.swedz.tesseract.neoforge.config.annotation.ConfigKey;
-import net.swedz.tesseract.neoforge.config.annotation.Range;
-import net.swedz.tesseract.neoforge.config.annotation.SubSection;
+import net.swedz.tesseract.config.annotation.ConfigComment;
+import net.swedz.tesseract.config.annotation.ConfigKey;
+import net.swedz.tesseract.config.annotation.Range;
+import net.swedz.tesseract.config.annotation.SubSection;
 
 public interface LBRClientConfig
 {

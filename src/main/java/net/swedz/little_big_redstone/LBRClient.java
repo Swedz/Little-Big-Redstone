@@ -45,8 +45,9 @@ import net.swedz.little_big_redstone.item.stickynote.tooltip.StickyNoteClientToo
 import net.swedz.little_big_redstone.item.stickynote.tooltip.StickyNoteTooltipData;
 import net.swedz.little_big_redstone.item.tooltip.ItemContainerContentsClientTooltip;
 import net.swedz.little_big_redstone.item.tooltip.ItemContainerContentsTooltipData;
-import net.swedz.tesseract.neoforge.api.Assert;
-import net.swedz.tesseract.neoforge.config.ConfigManager;
+import net.swedz.tesseract.api.Assert;
+import net.swedz.tesseract.config.ConfigManager;
+import net.swedz.tesseract.neoforge.config.ModConfigFileAccess;
 import net.swedz.tesseract.neoforge.registry.holder.ItemHolder;
 
 import java.util.function.Supplier;
@@ -77,11 +78,10 @@ public final class LBRClient
 	
 	private static void setupConfig(IEventBus bus, ModContainer container)
 	{
-		CONFIG = new ConfigManager()
-				.includeDefaultValueComments()
+		var file = new ModConfigFileAccess(container, ModConfig.Type.CLIENT);
+		CONFIG = new ConfigManager(file)
 				.build(LBRClientConfig.class)
-				.register(container, ModConfig.Type.CLIENT)
-				.listenToLoad(bus)
+				.load()
 				.config();
 	}
 	

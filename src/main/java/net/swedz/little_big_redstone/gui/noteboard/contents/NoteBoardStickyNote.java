@@ -10,7 +10,7 @@ import net.swedz.little_big_redstone.LBRComponents;
 import net.swedz.little_big_redstone.entity.stickynote.StickyNoteView;
 import net.swedz.little_big_redstone.item.stickynote.StickyNote;
 import net.swedz.little_big_redstone.item.stickynote.StickyNoteItem;
-import net.swedz.tesseract.neoforge.api.Assert;
+import net.swedz.tesseract.api.Assert;
 
 public record NoteBoardStickyNote(
 		float x,

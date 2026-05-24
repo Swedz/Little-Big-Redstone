@@ -6,7 +6,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.world.item.DyeColor;
 import net.swedz.little_big_redstone.microchip.object.logic.config.LogicConfig;
-import net.swedz.tesseract.neoforge.api.Assert;
+import net.swedz.tesseract.api.Assert;
 import net.swedz.tesseract.neoforge.api.range.IntRange;
 
 import java.util.List;
