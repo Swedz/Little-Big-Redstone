@@ -1,7 +1,7 @@
 package net.swedz.little_big_redstone.microchip.object.logic.config.menu;
 
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.swedz.little_big_redstone.gui.logicconfig.widget.iconcycle.CheckboxState;
 import net.swedz.little_big_redstone.gui.logicconfig.widget.cycle.CycleLogicConfigButton;
 import net.swedz.little_big_redstone.gui.logicconfig.widget.iconcycle.IconCycleLogicConfigButtonIcon;
@@ -24,7 +24,7 @@ public interface LogicConfigMenuBuilder
 	
 	LogicConfigButtonReference<CheckboxState> addCheckbox(Component text, Component tooltip, int x, int y, boolean initialValue, Consumer<Boolean> onChange);
 	
-	<T extends IconCycleLogicConfigButtonIcon> LogicConfigButtonReference<T> addCycleButton(Component tooltip, int x, int y, ResourceLocation atlas, T initialValue, List<T> values, Consumer<T> onChange);
+	<T extends IconCycleLogicConfigButtonIcon> LogicConfigButtonReference<T> addCycleButton(Component tooltip, int x, int y, Identifier atlas, T initialValue, List<T> values, Consumer<T> onChange);
 	
 	LogicConfigButtonReference<String> addTextBox(Component name, Component tooltip, int x, int y, int width, int height, String initialValue, int maxLength, Predicate<String> filter, Consumer<String> onChange);
 }

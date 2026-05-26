@@ -1,8 +1,6 @@
 package net.swedz.little_big_redstone.gui.floppydisk;
 
-import net.minecraft.FileUtil;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.nbt.NbtOps;
@@ -22,13 +20,13 @@ import net.swedz.little_big_redstone.network.packet.FloppyDiskLoadPacket;
 import net.swedz.little_big_redstone.network.packet.FloppyDiskSavePacket;
 import net.swedz.tesseract.api.Assert;
 import net.swedz.tesseract.neoforge.gui.widget.AutoFillEditBox;
-import net.swedz.tesseract.neoforge.helper.guigraphics.TesseractGuiGraphics;
 
 import java.io.IOException;
 import java.io.OutputStream;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
 import java.util.Optional;
 
@@ -115,9 +113,10 @@ public final class FloppyDiskScreen extends Screen
 	private static Path path(String name) throws IOException
 	{
 		Assert.notNull(name);
+		Assert.that(!name.isEmpty());
 		var folder = path();
 		Files.createDirectories(folder);
-		return FileUtil.createPathToResource(folder, name, ".snbt");
+		return folder.resolve(Paths.get(name + ".snbt"));
 	}
 	
 	private static List<String> getExistingFiles()
@@ -187,7 +186,7 @@ public final class FloppyDiskScreen extends Screen
 			{
 				try(var inputStream = new FastBufferedInputStream(Files.newInputStream(path)))
 				{
-					var tag = TagParser.parseTag(new String(inputStream.readAllBytes(), StandardCharsets.UTF_8));
+					var tag = TagParser.parseCompoundFully(new String(inputStream.readAllBytes(), StandardCharsets.UTF_8));
 					var microchip = Microchip.Immutable.CODEC.parse(NbtOps.INSTANCE, tag).getOrThrow();
 					return Optional.of(microchip);
 				}
@@ -271,10 +270,10 @@ public final class FloppyDiskScreen extends Screen
 	}
 	
 	@Override
-	public void resize(Minecraft minecraft, int width, int height)
+	public void resize(int width, int height)
 	{
 		String inputText = input.getValue();
-		super.resize(minecraft, width, height);
+		super.resize(width, height);
 		input.setValue(inputText);
 	}
 	
@@ -285,15 +284,13 @@ public final class FloppyDiskScreen extends Screen
 	}
 	
 	@Override
-	public void render(GuiGraphics vanilla, int mouseX, int mouseY, float partialTick)
+	public void extractRenderState(GuiGraphicsExtractor graphics, int mouseX, int mouseY, float partialTicks)
 	{
-		super.render(vanilla, mouseX, mouseY, partialTick);
+		super.extractRenderState(graphics, mouseX, mouseY, partialTicks);
 		
-		var graphics = new TesseractGuiGraphics(vanilla);
+		graphics.text(font, title, leftPos + uiWidth / 2 - minecraft.font.width(title) / 2, topPos, 0xFFFFFFFF);
 		
-		graphics.drawString(title, leftPos + uiWidth / 2 - minecraft.font.width(title) / 2, topPos);
-		
-		graphics.drawString(LBR.text().floppyDiskInputProgramName(), input.getX(), input.getY() - minecraft.font.lineHeight);
+		graphics.text(font, LBR.text().floppyDiskInputProgramName(), input.getX(), input.getY() - minecraft.font.lineHeight, 0xFFFFFFFF);
 	}
 	
 	@Override

@@ -3,11 +3,13 @@ package net.swedz.little_big_redstone.gui.logicconfig;
 import com.google.common.collect.Lists;
 import com.mojang.blaze3d.platform.InputConstants;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.Tooltip;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
+import net.minecraft.client.input.KeyEvent;
+import net.minecraft.client.input.MouseButtonEvent;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.item.ItemStack;
 import net.swedz.little_big_redstone.LBR;
@@ -26,7 +28,6 @@ import net.swedz.little_big_redstone.microchip.object.logic.config.menu.LogicCon
 import net.swedz.little_big_redstone.microchip.object.logic.config.menu.LogicConfigMenuBuilder;
 import net.swedz.little_big_redstone.network.packet.ReturnToMicrochipMenuPacket;
 import net.swedz.little_big_redstone.network.packet.WriteLogicConfigPacket;
-import net.swedz.tesseract.neoforge.helper.guigraphics.TesseractGuiGraphics;
 
 import java.util.Arrays;
 import java.util.List;
@@ -46,10 +47,8 @@ public final class LogicConfigScreen extends AbstractContainerScreen<LogicConfig
 	
 	public LogicConfigScreen(LogicConfigMenu menu, Inventory playerInventory, Component title)
 	{
-		super(menu, playerInventory, title);
+		super(menu, playerInventory, title, 176, 196);
 		
-		imageWidth = 176;
-		imageHeight = 196;
 		inventoryLabelY = imageHeight - 94;
 		
 		configWidth = 160 - 4;
@@ -197,15 +196,11 @@ public final class LogicConfigScreen extends AbstractContainerScreen<LogicConfig
 		var button = new IconCycleLogicConfigButton<>(configX + x, configY + y, color, LBR.id("textures/gui/slot_atlas.png"), initialValue ? CheckboxState.YES : CheckboxState.NO, Arrays.asList(CheckboxState.values()), (__, value) -> onChange.accept(value == CheckboxState.YES))
 		{
 			@Override
-			protected void renderWidget(GuiGraphics internal, int mouseX, int mouseY, float partialTick)
+			protected void extractContents(GuiGraphicsExtractor graphics, int mouseX, int mouseY, float partialTick)
 			{
-				super.renderWidget(internal, mouseX, mouseY, partialTick);
+				super.extractContents(graphics, mouseX, mouseY, partialTick);
 				
-				var graphics = new TesseractGuiGraphics(internal);
-				graphics.setColor(color);
-				graphics.setStringDropShadow(false);
-				graphics.drawString(text, this.getX() + width + 6, this.getY() + (18 / 2f) - (Minecraft.getInstance().font.lineHeight / 2f));
-				graphics.resetColor();
+				graphics.text(font, text, this.getX() + width + 6, Math.round(this.getY() + (18 / 2f) - (Minecraft.getInstance().font.lineHeight / 2f)), color, false);
 			}
 		};
 		button.setTooltip(Tooltip.create(tooltip));
@@ -267,7 +262,7 @@ public final class LogicConfigScreen extends AbstractContainerScreen<LogicConfig
 	}
 	
 	@Override
-	public <T extends IconCycleLogicConfigButtonIcon> LogicConfigButtonReference<T> addCycleButton(Component tooltip, int x, int y, ResourceLocation atlas, T initialValue, List<T> values, Consumer<T> onChange)
+	public <T extends IconCycleLogicConfigButtonIcon> LogicConfigButtonReference<T> addCycleButton(Component tooltip, int x, int y, Identifier atlas, T initialValue, List<T> values, Consumer<T> onChange)
 	{
 		var button = new IconCycleLogicConfigButton<>(configX + x, configY + y, color, atlas, initialValue, values, (__, value) -> onChange.accept(value));
 		button.setTooltip(Tooltip.create(tooltip));
@@ -441,41 +436,41 @@ public final class LogicConfigScreen extends AbstractContainerScreen<LogicConfig
 	}
 	
 	@Override
-	protected void renderLabels(GuiGraphics graphics, int mouseX, int mouseY)
+	protected void extractLabels(GuiGraphicsExtractor graphics, int mouseX, int mouseY)
 	{
 	}
 	
 	@Override
-	protected void renderBg(GuiGraphics graphics, float partialTicks, int mouseX, int mouseY)
+	public void extractBackground(GuiGraphicsExtractor graphics, int mouseX, int mouseY, float partialTicks)
 	{
 		graphics.blit(LBR.id("textures/gui/container/logic_config/background.png"), leftPos, topPos, 0, 0, imageWidth, imageHeight);
 		
 		graphics.blit(LBR.id("textures/gui/container/logic_config/item_background.png"), leftPos - 61, topPos, 0, 0, imageWidth, imageHeight);
 		
-		graphics.pose().pushPose();
-		graphics.pose().translate(leftPos - 45, topPos + 18, 0);
-		graphics.pose().scale(2, 2, 1);
-		graphics.renderItem(logicStack, 0, 0);
-		graphics.pose().popPose();
+		graphics.pose().pushMatrix();
+		graphics.pose().translate(leftPos - 45, topPos + 18);
+		graphics.pose().scale(2, 2);
+		graphics.item(logicStack, 0, 0);
+		graphics.pose().popMatrix();
 	}
 	
 	@Override
-	public boolean keyPressed(int keyCode, int scanCode, int modifiers)
+	public boolean keyPressed(KeyEvent event)
 	{
-		var mouseKey = InputConstants.getKey(keyCode, scanCode);
+		var mouseKey = InputConstants.getKey(event);
 		if(minecraft.options.keyInventory.isActiveAndMatches(mouseKey) &&
 		   this.getFocused() != null)
 		{
 			return true;
 		}
-		return super.keyPressed(keyCode, scanCode, modifiers);
+		return super.keyPressed(event);
 	}
 	
 	@Override
-	public boolean mouseDragged(double mouseX, double mouseY, int button, double dragX, double dragY)
+	public boolean mouseDragged(MouseButtonEvent event, double dragX, double dragY)
 	{
-		return this.getFocused() != null && this.isDragging() && button == 0 ?
-				this.getFocused().mouseDragged(mouseX, mouseY, button, dragX, dragY) :
-				super.mouseDragged(mouseX, mouseY, button, dragX, dragY);
+		return this.getFocused() != null && this.isDragging() && event.isLeft() ?
+				this.getFocused().mouseDragged(event, dragX, dragY) :
+				super.mouseDragged(event, dragX, dragY);
 	}
 }

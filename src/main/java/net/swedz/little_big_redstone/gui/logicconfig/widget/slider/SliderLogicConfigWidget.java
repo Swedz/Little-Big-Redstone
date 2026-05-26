@@ -1,12 +1,14 @@
 package net.swedz.little_big_redstone.gui.logicconfig.widget.slider;
 
-import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
+import net.minecraft.client.input.KeyEvent;
+import net.minecraft.client.input.MouseButtonEvent;
 import net.minecraft.network.chat.Component;
 import net.minecraft.util.Mth;
 import net.neoforged.neoforge.client.gui.widget.ExtendedSlider;
 import net.swedz.little_big_redstone.gui.logicconfig.widget.LogicConfigButtonHelper;
-import net.swedz.tesseract.neoforge.helper.guigraphics.TesseractGuiGraphics;
+import net.swedz.tesseract.neoforge.helper.gui.ExtraGuiGraphics;
 import org.lwjgl.glfw.GLFW;
 
 public class SliderLogicConfigWidget extends ExtendedSlider implements LogicConfigButtonHelper
@@ -20,9 +22,23 @@ public class SliderLogicConfigWidget extends ExtendedSlider implements LogicConf
 	
 	private String typed = "";
 	
-	public SliderLogicConfigWidget(int x, int y, int width, int height, int color, Component prefix, Component suffix,
-								   double minValue, double maxValue, double initialValue, double stepSize, int precision, boolean drawString,
-								   ValueStringifier valueStringifier, OnValueChange onChange)
+	public SliderLogicConfigWidget(
+			int x,
+			int y,
+			int width,
+			int height,
+			int color,
+			Component prefix,
+			Component suffix,
+			double minValue,
+			double maxValue,
+			double initialValue,
+			double stepSize,
+			int precision,
+			boolean drawString,
+			ValueStringifier valueStringifier,
+			OnValueChange onChange
+	)
 	{
 		super(x, y, width, height, prefix, suffix, minValue, maxValue, initialValue, stepSize, precision, drawString);
 		
@@ -36,9 +52,21 @@ public class SliderLogicConfigWidget extends ExtendedSlider implements LogicConf
 		this.updateMessage();
 	}
 	
-	public SliderLogicConfigWidget(int x, int y, int width, int height, int color, Component prefix, Component suffix,
-								   double minValue, double maxValue, double initialValue, boolean drawString,
-								   ValueStringifier valueStringifier, OnValueChange onChange)
+	public SliderLogicConfigWidget(
+			int x,
+			int y,
+			int width,
+			int height,
+			int color,
+			Component prefix,
+			Component suffix,
+			double minValue,
+			double maxValue,
+			double initialValue,
+			boolean drawString,
+			ValueStringifier valueStringifier,
+			OnValueChange onChange
+	)
 	{
 		super(x, y, width, height, prefix, suffix, minValue, maxValue, initialValue, drawString);
 		
@@ -71,27 +99,29 @@ public class SliderLogicConfigWidget extends ExtendedSlider implements LogicConf
 	}
 	
 	@Override
-	public void onClick(double mouseX, double mouseY)
+	public void onClick(MouseButtonEvent event, boolean doubleClick)
 	{
-		super.onClick(mouseX, mouseY);
+		super.onClick(event, doubleClick);
 		typed = this.getValueString();
 	}
 	
 	@Override
-	protected void onDrag(double mouseX, double mouseY, double dragX, double dragY)
+	protected void onDrag(MouseButtonEvent event, double dragX, double dragY)
 	{
-		super.onDrag(mouseX, mouseY, dragX, dragY);
+		super.onDrag(event, dragX, dragY);
 		typed = this.getValueString();
 	}
 	
 	@Override
-	public boolean keyPressed(int keyCode, int scanCode, int modifiers)
+	public boolean keyPressed(KeyEvent event)
 	{
 		// We cannot support stepSizes of <= 0 because ExtendedSlider#setSliderValue is private
 		if(stepSize <= 0D)
 		{
 			return false;
 		}
+		
+		int keyCode = event.key();
 		
 		boolean left = keyCode == GLFW.GLFW_KEY_LEFT;
 		if(left || keyCode == GLFW.GLFW_KEY_RIGHT)
@@ -101,7 +131,7 @@ public class SliderLogicConfigWidget extends ExtendedSlider implements LogicConf
 				left = !left;
 			}
 			float step = left ? -1 : 1;
-			if(Screen.hasShiftDown())
+			if(event.hasShiftDown())
 			{
 				step *= 10;
 			}
@@ -146,7 +176,7 @@ public class SliderLogicConfigWidget extends ExtendedSlider implements LogicConf
 			left = !left;
 		}
 		float step = left ? -1 : 1;
-		if(Screen.hasShiftDown())
+		if(Minecraft.getInstance().hasShiftDown())
 		{
 			step *= 10;
 		}
@@ -157,21 +187,14 @@ public class SliderLogicConfigWidget extends ExtendedSlider implements LogicConf
 	}
 	
 	@Override
-	public void renderWidget(GuiGraphics internal, int mouseX, int mouseY, float partialTick)
+	public void extractWidgetRenderState(GuiGraphicsExtractor graphics, int mouseX, int mouseY, float partialTick)
 	{
-		var graphics = new TesseractGuiGraphics(internal);
+		this.extractBackground(graphics, partialTick, this.getX() + (int) (value * (width - 8D)), this.getY(), 8, height, color, active && this.isHoveredOrFocused());
 		
-		graphics.setColor(1, 1, 1, alpha);
+		this.extractBorder(graphics, this.getX(), this.getY(), width, height, color);
+		this.extractBorder(graphics, this.getX() + (int) (value * (width - 8D)), this.getY(), 8, height, color);
 		
-		this.renderBackground(graphics, partialTick, this.getX() + (int) (value * (width - 8D)), this.getY(), 8, height, color, active && this.isHoveredOrFocused());
-		
-		this.renderBorder(graphics, this.getX(), this.getY(), width, height, color);
-		this.renderBorder(graphics, this.getX() + (int) (value * (width - 8D)), this.getY(), 8, height, color);
-		
-		graphics.setColor(color);
-		graphics.setStringDropShadow(false);
-		graphics.drawCenteredString(this.getMessage(), this.getX() + (width / 2f), this.getY() + (height / 2f));
-		graphics.resetColor();
+		ExtraGuiGraphics.centeredText(graphics, Minecraft.getInstance().font, this.getMessage(), Math.round(this.getX() + (width / 2f)), Math.round(this.getY() + (height / 2f)), color, false);
 	}
 	
 	public interface OnValueChange

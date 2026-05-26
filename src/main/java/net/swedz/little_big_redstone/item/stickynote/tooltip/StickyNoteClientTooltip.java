@@ -45,8 +45,8 @@ public final class StickyNoteClientTooltip implements ClientTooltipComponent
 		graphics.pose().translate(x, y, 0);
 		graphics.pose().scale(scale, scale, 1);
 		
-		StickyNoteViewRenderer.renderBackground(graphics, note);
-		StickyNoteViewRenderer.renderText(graphics, note);
+		StickyNoteViewRenderer.extractBackground(graphics, note);
+		StickyNoteViewRenderer.extractText(graphics, note);
 		
 		graphics.pose().popPose();
 	}

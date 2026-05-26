@@ -1,13 +1,16 @@
 package net.swedz.little_big_redstone.gui.logicconfig.widget.cycle;
 
-import com.mojang.blaze3d.platform.InputConstants;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.AbstractButton;
 import net.minecraft.client.gui.narration.NarrationElementOutput;
+import net.minecraft.client.input.InputWithModifiers;
+import net.minecraft.client.input.MouseButtonEvent;
+import net.minecraft.client.input.MouseButtonInfo;
 import net.minecraft.network.chat.CommonComponents;
 import net.minecraft.network.chat.Component;
 import net.swedz.little_big_redstone.gui.logicconfig.widget.LogicConfigButtonHelper;
-import net.swedz.tesseract.neoforge.helper.guigraphics.TesseractGuiGraphics;
+import net.swedz.tesseract.neoforge.helper.gui.ExtraGuiGraphics;
 
 import java.util.List;
 
@@ -77,26 +80,25 @@ public class CycleLogicConfigButton<T> extends AbstractButton implements LogicCo
 	}
 	
 	@Override
-	public void onPress()
+	public void onPress(InputWithModifiers input)
 	{
 		// We use the Neo onClick(double, double, int) method instead
 	}
 	
 	@Override
-	protected boolean isValidClickButton(int button)
+	protected boolean isValidClickButton(MouseButtonInfo button)
 	{
-		return button == InputConstants.MOUSE_BUTTON_LEFT ||
-			   button == InputConstants.MOUSE_BUTTON_RIGHT;
+		return button.isLeft() || button.isRight();
 	}
 	
 	@Override
-	public void onClick(double mouseX, double mouseY, int button)
+	public void onClick(MouseButtonEvent event, boolean doubleClick)
 	{
-		if(button == InputConstants.MOUSE_BUTTON_LEFT)
+		if(event.isLeft())
 		{
 			this.next();
 		}
-		else if(button == InputConstants.MOUSE_BUTTON_RIGHT)
+		else if(event.isRight())
 		{
 			this.previous();
 		}
@@ -108,20 +110,23 @@ public class CycleLogicConfigButton<T> extends AbstractButton implements LogicCo
 	}
 	
 	@Override
-	protected void renderWidget(GuiGraphics internal, int mouseX, int mouseY, float partialTick)
+	protected void extractContents(GuiGraphicsExtractor graphics, int mouseX, int mouseY, float partialTick)
 	{
-		var graphics = new TesseractGuiGraphics(internal);
+		this.extractBackground(graphics, partialTick, this.getX(), this.getY(), width, height, color, active && this.isHoveredOrFocused());
 		
-		this.renderBackground(graphics, partialTick, this.getX(), this.getY(), width, height, color, active && this.isHoveredOrFocused());
+		this.extractBorder(graphics, this.getX(), this.getY(), width, height, color);
 		
-		this.renderBorder(graphics, this.getX(), this.getY(), width, height, color);
-		
-		graphics.setColor(color);
-		graphics.setStringDropShadow(false);
 		var valueText = stringifier.stringify(value);
 		var text = displayOnlyValue ? valueText : CommonComponents.optionNameValue(this.getMessage(), valueText);
-		graphics.drawCenteredString(text, this.getX() + (width / 2f), this.getY() + (height / 2f));
-		graphics.resetColor();
+		ExtraGuiGraphics.centeredText(
+				graphics,
+				Minecraft.getInstance().font,
+				text,
+				Math.round(this.getX() + (width / 2f)),
+				Math.round(this.getY() + (height / 2f)),
+				color,
+				false
+		);
 	}
 	
 	public interface OnValueChange<T>

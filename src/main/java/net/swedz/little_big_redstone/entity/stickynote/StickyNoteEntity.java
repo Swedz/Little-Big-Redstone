@@ -1,12 +1,12 @@
 package net.swedz.little_big_redstone.entity.stickynote;
 
+import com.mojang.serialization.Codec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.particles.ParticleTypes;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.NbtOps;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.ComponentSerialization;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.network.protocol.game.ClientboundAddEntityPacket;
@@ -19,6 +19,7 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.stats.Stats;
+import net.minecraft.tags.ItemTags;
 import net.minecraft.util.ByIdMap;
 import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
@@ -28,17 +29,17 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.decoration.HangingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.DyeColor;
-import net.minecraft.world.item.DyeItem;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.GameRules;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.DiodeBlock;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.gamerules.GameRules;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
-import net.neoforged.neoforge.client.model.data.ModelData;
-import net.swedz.little_big_redstone.LBR;
+import net.neoforged.neoforge.model.data.ModelData;
 import net.swedz.little_big_redstone.LBRComponents;
 import net.swedz.little_big_redstone.LBREntities;
 import net.swedz.little_big_redstone.LBRItems;
@@ -48,8 +49,9 @@ import net.swedz.little_big_redstone.item.stickynote.StickyNote;
 import net.swedz.little_big_redstone.item.stickynote.StickyNoteItem;
 import net.swedz.little_big_redstone.network.packet.StickyNotePacket;
 import net.swedz.tesseract.api.Assert;
+import net.swedz.tesseract.neoforge.helper.CodecHelper;
 import net.swedz.tesseract.neoforge.helper.DirectionHelper;
-import net.swedz.tesseract.neoforge.item.ItemInstance;
+import net.swedz.tesseract.neoforge.item.ItemStackInstance;
 
 import java.util.function.IntFunction;
 
@@ -135,7 +137,7 @@ public final class StickyNoteEntity extends HangingEntity
 			stack.set(LBRComponents.STICKY_NOTE, note);
 			stack.set(LBRComponents.STICKY_NOTE_TEXT_COLOR, this.getTextColor());
 			stack.set(LBRComponents.STICKY_NOTE_EDITABLE, this.isEditable());
-			stack.set(LBRComponents.STICKY_NOTE_DISPLAY_ITEM, new ItemInstance(this.getDisplayItem()));
+			stack.set(LBRComponents.STICKY_NOTE_DISPLAY_ITEM, new ItemStackInstance(this.getDisplayItem()));
 			if(itemName != null)
 			{
 				stack.set(DataComponents.CUSTOM_NAME, itemName);
@@ -145,16 +147,16 @@ public final class StickyNoteEntity extends HangingEntity
 	}
 	
 	@Override
-	public void dropItem(Entity breaker)
+	public void dropItem(ServerLevel level, Entity breaker)
 	{
-		if(this.level().getGameRules().getBoolean(GameRules.RULE_DOENTITYDROPS))
+		if(level.getGameRules().get(GameRules.ENTITY_DROPS))
 		{
 			this.playSound(SoundEvents.WOOL_BREAK, 1, 1);
 			if(breaker instanceof Player player && player.hasInfiniteMaterials())
 			{
 				return;
 			}
-			this.spawnAtLocation(this.asItem(true));
+			this.spawnAtLocation(level, this.asItem(true));
 		}
 	}
 	
@@ -176,7 +178,7 @@ public final class StickyNoteEntity extends HangingEntity
 	{
 		Assert.notNull(direction);
 		
-		this.direction = direction;
+		this.setDirectionRaw(direction);
 		if(direction.getAxis().isHorizontal())
 		{
 			this.setXRot(0);
@@ -197,28 +199,29 @@ public final class StickyNoteEntity extends HangingEntity
 	@Override
 	public float getVisualRotationYInDegrees()
 	{
+		var direction = this.getDirection();
 		int offset = direction.getAxis().isVertical() ? 90 * direction.getAxisDirection().getStep() : 0;
 		return (float) Mth.wrapDegrees(180 + direction.get2DDataValue() * 90 + offset);
 	}
 	
 	public Direction directionRelativeUp()
 	{
-		return DirectionHelper.relativeUp(direction, this.getFacing());
+		return DirectionHelper.relativeUp(this.getDirection(), this.getFacing());
 	}
 	
 	public Direction directionRelativeDown()
 	{
-		return DirectionHelper.relativeDown(direction, this.getFacing());
+		return DirectionHelper.relativeDown(this.getDirection(), this.getFacing());
 	}
 	
 	public Direction directionRelativeLeft()
 	{
-		return DirectionHelper.relativeLeft(direction, this.getFacing());
+		return DirectionHelper.relativeLeft(this.getDirection(), this.getFacing());
 	}
 	
 	public Direction directionRelativeRight()
 	{
-		return DirectionHelper.relativeRight(direction, this.getFacing());
+		return DirectionHelper.relativeRight(this.getDirection(), this.getFacing());
 	}
 	
 	public Direction getFacing()
@@ -330,7 +333,7 @@ public final class StickyNoteEntity extends HangingEntity
 			return false;
 		}
 		boolean notInsideBlock = BlockPos.betweenClosedStream(this.calculateSupportBox())
-				.filter((pos) -> !Block.canSupportCenter(this.level(), pos, this.direction))
+				.filter((pos) -> !Block.canSupportCenter(this.level(), pos, this.getDirection()))
 				.allMatch((pos) ->
 				{
 					BlockState blockstate = this.level().getBlockState(pos);
@@ -363,14 +366,17 @@ public final class StickyNoteEntity extends HangingEntity
 	private InteractionResult interactDye(Player player, ItemStack stack)
 	{
 		if(player.isShiftKeyDown() &&
-		   stack.getItem() instanceof DyeItem dyeItem &&
-		   dyeItem.getDyeColor() != this.getTextColor())
+		   stack.is(ItemTags.DYES))
 		{
-			player.awardStat(Stats.ITEM_USED.get(stack.getItem()));
-			this.playSound(SoundEvents.DYE_USE);
-			this.setTextColor(dyeItem.getDyeColor());
-			stack.consume(1, player);
-			return InteractionResult.CONSUME;
+			var dyeColor = stack.get(DataComponents.DYE);
+			if(dyeColor != this.getTextColor())
+			{
+				player.awardStat(Stats.ITEM_USED.get(stack.getItem()));
+				this.playSound(SoundEvents.DYE_USE);
+				this.setTextColor(dyeColor);
+				stack.consume(1, player);
+				return InteractionResult.CONSUME;
+			}
 		}
 		return InteractionResult.PASS;
 	}
@@ -438,7 +444,7 @@ public final class StickyNoteEntity extends HangingEntity
 	}
 	
 	@Override
-	public InteractionResult interact(Player player, InteractionHand hand)
+	public InteractionResult interact(Player player, InteractionHand hand, Vec3 location)
 	{
 		if(!this.level().isClientSide())
 		{
@@ -507,44 +513,35 @@ public final class StickyNoteEntity extends HangingEntity
 	}
 	
 	@Override
-	public void addAdditionalSaveData(CompoundTag compound)
+	public void addAdditionalSaveData(ValueOutput output)
 	{
-		super.addAdditionalSaveData(compound);
+		super.addAdditionalSaveData(output);
 		
-		compound.putByte("AttachedFace", (byte) this.getDirection().get3DDataValue());
-		compound.putByte("Facing", (byte) this.getFacing().get2DDataValue());
-		compound.putByte("Quadrant", (byte) this.getQuadrant().id());
-		compound.putByte("Color", (byte) this.getColor().getId());
-		compound.putByte("TextColor", (byte) this.getTextColor().getId());
-		if(itemName != null)
-		{
-			compound.putString("ItemName", Component.Serializer.toJson(itemName, this.registryAccess()));
-		}
-		compound.put("StickyNote", StickyNote.CODEC.encodeStart(NbtOps.INSTANCE, note).getOrThrow());
-		compound.putBoolean("Editable", this.isEditable());
-		compound.put("DisplayItem", this.getDisplayItem().saveOptional(this.registryAccess()));
+		output.store("AttachedFace", Direction.CODEC, this.getDirection());
+		output.store("Facing", Direction.CODEC, this.getFacing());
+		output.store("Quadrant", Quadrant.CODEC, this.getQuadrant());
+		output.store("Color", DyeColor.CODEC, this.getColor());
+		output.store("TextColor", DyeColor.CODEC, this.getTextColor());
+		output.storeNullable("ItemName", ComponentSerialization.CODEC, itemName);
+		output.store("StickyNote", StickyNote.CODEC, note);
+		output.putBoolean("Editable", this.isEditable());
+		output.store("DisplayItem", ItemStackInstance.CODEC, new ItemStackInstance(this.getDisplayItem()));
 	}
 	
 	@Override
-	public void readAdditionalSaveData(CompoundTag compound)
+	public void readAdditionalSaveData(ValueInput input)
 	{
-		super.readAdditionalSaveData(compound);
+		super.readAdditionalSaveData(input);
 		
-		this.setDirection(Direction.from3DDataValue(compound.getByte("AttachedFace")));
-		this.setFacing(Direction.from2DDataValue(compound.getByte("Facing")));
-		this.setQuadrant(Quadrant.byId(compound.getByte("Quadrant")));
-		this.setColor(DyeColor.byId(compound.getByte("Color")));
-		this.setTextColor(DyeColor.byId(compound.getByte("TextColor")));
-		if(compound.contains("ItemName"))
-		{
-			this.setItemName(Component.Serializer.fromJson(compound.getString("ItemName"), this.registryAccess()));
-		}
-		StickyNote.CODEC.parse(NbtOps.INSTANCE, compound.get("StickyNote"))
-				.ifSuccess(this::setNote)
-				.ifError((error) ->
-						LBR.LOGGER.error("Failed to load sticky note data at {}: {}", pos.toShortString(), error.message()));
-		this.setEditable(compound.getBoolean("Editable"));
-		this.setDisplayItem(ItemStack.parseOptional(this.registryAccess(), compound.getCompound("DisplayItem")));
+		this.setDirection(input.read("AttachedFace", Direction.CODEC).orElseThrow());
+		this.setFacing(input.read("Facing", Direction.CODEC).orElseThrow());
+		this.setQuadrant(input.read("Quadrant", Quadrant.CODEC).orElseThrow());
+		this.setColor(input.read("Color", DyeColor.CODEC).orElseThrow());
+		this.setTextColor(input.read("TextColor", DyeColor.CODEC).orElseThrow());
+		this.setItemName(input.read("ItemName", ComponentSerialization.CODEC).orElse(null));
+		this.setNote(input.read("StickyNote", StickyNote.CODEC).orElseThrow());
+		this.setEditable(input.getBooleanOr("Editable", true));
+		this.setDisplayItem(input.read("DisplayItem", ItemStackInstance.CODEC).orElseThrow().asStack());
 		
 		this.recalculateBoundingBox();
 	}
@@ -593,6 +590,8 @@ public final class StickyNoteEntity extends HangingEntity
 				};
 		
 		private static final IntFunction<Quadrant> BY_ID = ByIdMap.continuous(Quadrant::id, values(), ByIdMap.OutOfBoundsStrategy.WRAP);
+		
+		public static final Codec<Quadrant> CODEC = CodecHelper.forLowercaseEnum(Quadrant.class);
 		
 		private final int id;
 		

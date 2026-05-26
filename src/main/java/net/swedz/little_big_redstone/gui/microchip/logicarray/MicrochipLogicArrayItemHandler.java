@@ -5,12 +5,15 @@ import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.neoforge.capabilities.Capabilities;
 import net.neoforged.neoforge.items.IItemHandlerModifiable;
+import net.neoforged.neoforge.transfer.ResourceHandler;
+import net.neoforged.neoforge.transfer.access.ItemAccess;
+import net.neoforged.neoforge.transfer.item.ItemResource;
 import net.swedz.little_big_redstone.LBRComponents;
 import net.swedz.little_big_redstone.item.logicarray.LogicArrayItemHandler;
 
 import java.util.Optional;
 
-public final class MicrochipLogicArrayItemHandler implements IItemHandlerModifiable
+public final class MicrochipLogicArrayItemHandler implements ResourceHandler<ItemResource>
 {
 	private static final LogicCreativeItemHandler CREATIVE = new LogicCreativeItemHandler();
 	
@@ -54,7 +57,7 @@ public final class MicrochipLogicArrayItemHandler implements IItemHandlerModifia
 	private boolean setPickedLogicArray(int slotId, ItemStack stack)
 	{
 		if(stack.has(LBRComponents.LOGIC_ARRAY_STORAGE) &&
-		   stack.getCapability(Capabilities.ItemHandler.ITEM) instanceof LogicArrayItemHandler logicArrayItemHandler)
+		   ItemAccess.forStack(stack).getCapability(Capabilities.Item.ITEM) instanceof LogicArrayItemHandler logicArrayItemHandler)
 		{
 			logicArraySlot = slotId;
 			logicArray = Optional.of(logicArrayItemHandler);

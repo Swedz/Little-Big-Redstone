@@ -1,13 +1,15 @@
 package net.swedz.little_big_redstone.gui.logicconfig.widget.iconcycle;
 
-import com.mojang.blaze3d.platform.InputConstants;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.AbstractButton;
 import net.minecraft.client.gui.narration.NarrationElementOutput;
+import net.minecraft.client.input.InputWithModifiers;
+import net.minecraft.client.input.MouseButtonEvent;
+import net.minecraft.client.input.MouseButtonInfo;
+import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.swedz.little_big_redstone.gui.logicconfig.widget.LogicConfigButtonHelper;
-import net.swedz.tesseract.neoforge.helper.guigraphics.TesseractGuiGraphics;
 
 import java.util.Collections;
 import java.util.List;
@@ -16,7 +18,7 @@ public class IconCycleLogicConfigButton<T extends IconCycleLogicConfigButtonIcon
 {
 	private final int color;
 	
-	private final ResourceLocation atlas;
+	private final Identifier atlas;
 	private final List<T>          allowedValues;
 	private final OnValueChange<T> onValueChange;
 	
@@ -25,7 +27,7 @@ public class IconCycleLogicConfigButton<T extends IconCycleLogicConfigButtonIcon
 	
 	public IconCycleLogicConfigButton(int x, int y,
 									  int color,
-									  ResourceLocation atlas,
+									  Identifier atlas,
 									  T initialValue,
 									  List<T> allowedValues,
 									  OnValueChange<T> onValueChange)
@@ -76,26 +78,25 @@ public class IconCycleLogicConfigButton<T extends IconCycleLogicConfigButtonIcon
 	}
 	
 	@Override
-	public void onPress()
+	public void onPress(InputWithModifiers input)
 	{
-		// We use the Neo onClick(double, double, int) method instead
+		// We use the onClick(MouseButtonEvent, boolean) method instead
 	}
 	
 	@Override
-	protected boolean isValidClickButton(int button)
+	protected boolean isValidClickButton(MouseButtonInfo button)
 	{
-		return button == InputConstants.MOUSE_BUTTON_LEFT ||
-			   button == InputConstants.MOUSE_BUTTON_RIGHT;
+		return button.isLeft() || button.isRight();
 	}
 	
 	@Override
-	public void onClick(double mouseX, double mouseY, int button)
+	public void onClick(MouseButtonEvent event, boolean doubleClick)
 	{
-		if(button == InputConstants.MOUSE_BUTTON_LEFT)
+		if(event.isLeft())
 		{
 			this.next();
 		}
-		else if(button == InputConstants.MOUSE_BUTTON_RIGHT)
+		else if(event.isRight())
 		{
 			this.previous();
 		}
@@ -107,16 +108,12 @@ public class IconCycleLogicConfigButton<T extends IconCycleLogicConfigButtonIcon
 	}
 	
 	@Override
-	protected void renderWidget(GuiGraphics internal, int mouseX, int mouseY, float partialTick)
+	protected void extractContents(GuiGraphicsExtractor graphics, int mouseX, int mouseY, float partialTick)
 	{
-		var graphics = new TesseractGuiGraphics(internal);
+		this.extractBackground(graphics, partialTick, this.getX(), this.getY(), width, height, color, active && this.isHoveredOrFocused());
 		
-		this.renderBackground(graphics, partialTick, this.getX(), this.getY(), width, height, color, active && this.isHoveredOrFocused());
+		this.extractBorder(graphics, this.getX(), this.getY(), width, height, color);
 		
-		this.renderBorder(graphics, this.getX(), this.getY(), width, height, color);
-		
-		graphics.setTexture(atlas);
-		graphics.setColor(color);
 		int u = value.u();
 		int v = value.v();
 		if(!active)
@@ -127,8 +124,7 @@ public class IconCycleLogicConfigButton<T extends IconCycleLogicConfigButtonIcon
 		{
 			v += height;
 		}
-		graphics.blit(this.getX(), this.getY(), u, v, width, height);
-		graphics.resetColor();
+		graphics.blit(RenderPipelines.GUI_TEXTURED, atlas, this.getX(), this.getY(), u, v, width, height, 256, 256, color);
 	}
 	
 	public interface OnValueChange<T extends IconCycleLogicConfigButtonIcon>

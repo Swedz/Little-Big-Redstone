@@ -7,7 +7,7 @@ import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.client.resources.model.Material;
 import net.minecraft.client.resources.model.ModelBaker;
 import net.minecraft.client.resources.model.ModelState;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.neoforged.neoforge.client.model.geometry.IGeometryBakingContext;
 import net.neoforged.neoforge.client.model.geometry.IGeometryLoader;
 import net.neoforged.neoforge.client.model.geometry.IUnbakedGeometry;
@@ -20,7 +20,7 @@ import java.util.function.Function;
 
 public final class StickyNoteItemUnbakedModel implements IUnbakedGeometry<StickyNoteItemUnbakedModel>
 {
-	public static final ResourceLocation                            ID     = LBR.id("sticky_note_item");
+	public static final Identifier                            ID     = LBR.id("sticky_note_item");
 	public static final IGeometryLoader<StickyNoteItemUnbakedModel> LOADER = (json, context) ->
 			new StickyNoteItemUnbakedModel(ModelHelper.gatherLayerTextures(json, "textures"));
 	

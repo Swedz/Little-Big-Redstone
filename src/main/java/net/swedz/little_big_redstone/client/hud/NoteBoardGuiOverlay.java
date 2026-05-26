@@ -2,7 +2,7 @@ package net.swedz.little_big_redstone.client.hud;
 
 import net.minecraft.client.DeltaTracker;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
@@ -12,21 +12,18 @@ import net.swedz.little_big_redstone.LBRAttachments;
 import net.swedz.little_big_redstone.client.StickyNoteViewRenderer;
 import net.swedz.little_big_redstone.entity.stickynote.StickyNoteView;
 import net.swedz.little_big_redstone.gui.noteboard.contents.NoteBoardContents;
-import net.swedz.tesseract.neoforge.helper.guigraphics.TesseractGuiGraphics;
 
 @EventBusSubscriber(modid = LBR.ID, value = Dist.CLIENT)
 public final class NoteBoardGuiOverlay
 {
 	private static NoteBoardContents CONTENTS = NoteBoardContents.EMPTY;
 	
-	public static void render(GuiGraphics internal, DeltaTracker delta)
+	public static void extract(GuiGraphicsExtractor graphics, DeltaTracker delta)
 	{
 		if(Minecraft.getInstance().options.hideGui)
 		{
 			return;
 		}
-		
-		var graphics = new TesseractGuiGraphics(internal);
 		
 		for(var note : CONTENTS)
 		{
@@ -34,17 +31,17 @@ public final class NoteBoardGuiOverlay
 		}
 	}
 	
-	private static void renderNote(TesseractGuiGraphics graphics, int x, int y, int size, StickyNoteView view)
+	private static void renderNote(GuiGraphicsExtractor graphics, int x, int y, int size, StickyNoteView view)
 	{
-		graphics.pose().pushPose();
-		graphics.pose().translate(x, y, 0);
+		graphics.pose().pushMatrix();
+		graphics.pose().translate(x, y);
 		float scale = size / 180f;
-		graphics.pose().scale(scale, scale, 1);
+		graphics.pose().scale(scale, scale);
 		
-		StickyNoteViewRenderer.renderBackground(graphics, view);
-		StickyNoteViewRenderer.renderText(graphics, view);
+		StickyNoteViewRenderer.extractBackground(graphics, view);
+		StickyNoteViewRenderer.extractText(graphics, view);
 		
-		graphics.pose().popPose();
+		graphics.pose().popMatrix();
 	}
 	
 	@SubscribeEvent

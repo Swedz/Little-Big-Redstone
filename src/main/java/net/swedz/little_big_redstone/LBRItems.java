@@ -149,7 +149,7 @@ public final class LBRItems
 		return create(id, englishName, (p) -> new LogicArrayItem(p, color), LBRSortOrder.LOGIC_ARRAYS.and(order))
 				.tag(LBRTags.Items.LOGIC_ARRAYS)
 				.withCapabilities((item, event) ->
-						event.registerItem(Capabilities.ItemHandler.ITEM, (stack, __) -> new LogicArrayItemHandler(stack), item))
+						event.registerItem(Capabilities.Item.ITEM, (__, access) -> new LogicArrayItemHandler(access), item))
 				.withModel((holder) -> (provider) ->
 						provider.getBuilder(holder.identifier().id())
 								.parent(new ModelFile.UncheckedModelFile("item/generated"))

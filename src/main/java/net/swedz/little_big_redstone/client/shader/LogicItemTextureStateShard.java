@@ -2,13 +2,13 @@ package net.swedz.little_big_redstone.client.shader;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.renderer.RenderStateShard;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 
 public final class LogicItemTextureStateShard extends RenderStateShard.TextureStateShard
 {
-	private final ResourceLocation scanline;
+	private final Identifier scanline;
 	
-	public LogicItemTextureStateShard(ResourceLocation texture, ResourceLocation scanline, boolean blur, boolean mipmap)
+	public LogicItemTextureStateShard(Identifier texture, Identifier scanline, boolean blur, boolean mipmap)
 	{
 		super(texture, blur, mipmap);
 		this.scanline = scanline;

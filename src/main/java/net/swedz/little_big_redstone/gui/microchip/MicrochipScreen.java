@@ -2,11 +2,12 @@ package net.swedz.little_big_redstone.gui.microchip;
 
 import com.google.common.collect.Maps;
 import com.mojang.blaze3d.platform.InputConstants;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
+import net.minecraft.client.input.MouseButtonEvent;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
@@ -28,21 +29,21 @@ import net.swedz.little_big_redstone.item.stickynote.StickyNoteItem;
 import net.swedz.little_big_redstone.microchip.object.logic.LogicComponent;
 import net.swedz.little_big_redstone.microchip.wire.Wire;
 import net.swedz.little_big_redstone.network.packet.StoreMicrochipViewPositionPacket;
-import net.swedz.tesseract.neoforge.helper.guigraphics.TesseractGuiGraphics;
+import org.jspecify.annotations.Nullable;
 
 import java.util.Map;
 
 public final class MicrochipScreen extends AbstractContainerScreen<MicrochipMenu>
 {
-	private static final ResourceLocation MICROCHIP_BACKGROUND   = LBR.id("textures/gui/container/microchip/inventory_background.png");
-	private static final ResourceLocation LOGIC_ARRAY_BACKGROUND = LBR.id("textures/gui/container/logic_array/microchip_inventory_background.png");
+	private static final Identifier MICROCHIP_BACKGROUND   = LBR.id("textures/gui/container/microchip/inventory_background.png");
+	private static final Identifier LOGIC_ARRAY_BACKGROUND = LBR.id("textures/gui/container/logic_array/microchip_inventory_background.png");
 	
 	public static int getGridSnappedCoord(int coord)
 	{
 		return (coord / 16) * 16;
 	}
 	
-	private MicrochipWidget microchipWidget;
+	private MicrochipWidget           microchipWidget;
 	private MicrochipThermostatWidget thermostatWidget;
 	
 	private float partialTicks;
@@ -53,10 +54,7 @@ public final class MicrochipScreen extends AbstractContainerScreen<MicrochipMenu
 			Component title
 	)
 	{
-		super(menu, playerInventory, title);
-		
-		imageWidth = 256;
-		imageHeight = 227;
+		super(menu, playerInventory, title, 256, 227);
 	}
 	
 	public void handleUpdate(boolean rerouteWires)
@@ -104,50 +102,40 @@ public final class MicrochipScreen extends AbstractContainerScreen<MicrochipMenu
 	}
 	
 	@Override
-	public boolean mouseDragged(double mouseX, double mouseY, int button, double dragX, double dragY)
+	public boolean mouseDragged(MouseButtonEvent event, double dragX, double dragY)
 	{
 		boolean drag = this.getFocused() != null &&
 					   this.isDragging() &&
-					   (button == InputConstants.MOUSE_BUTTON_LEFT || button == InputConstants.MOUSE_BUTTON_MIDDLE) &&
-					   this.getFocused().mouseDragged(mouseX, mouseY, button, dragX, dragY);
-		return drag || super.mouseDragged(mouseX, mouseY, button, dragX, dragY);
+					   (event.isLeft() || event.button() == InputConstants.MOUSE_BUTTON_MIDDLE) &&
+					   this.getFocused().mouseDragged(event, dragX, dragY);
+		return drag || super.mouseDragged(event, dragX, dragY);
 	}
 	
 	@Override
-	public void render(GuiGraphics graphics, int mouseX, int mouseY, float partialTicks)
+	public void extractRenderState(GuiGraphicsExtractor graphics, int mouseX, int mouseY, float partialTicks)
 	{
-		super.render(graphics, mouseX, mouseY, partialTicks);
+		super.extractRenderState(graphics, mouseX, mouseY, partialTicks);
 		
-		this.renderTooltip(graphics, mouseX, mouseY);
-		microchipWidget.renderTooltip(new TesseractGuiGraphics(graphics));
-		thermostatWidget.renderTooltip(graphics, mouseX, mouseY);
+		this.extractTooltip(graphics, mouseX, mouseY);
+		microchipWidget.renderTooltip(graphics);
 	}
 	
 	@Override
-	protected void renderSlot(GuiGraphics vanilla, Slot slot)
+	protected void extractSlot(GuiGraphicsExtractor graphics, Slot slot, int mouseX, int mouseY)
 	{
-		var graphics = new TesseractGuiGraphics(vanilla);
-		
 		if(slot instanceof MaybeLockedPlayerSlot && slot.index == menu.getLogicArrayItemHandler().getSelectedSlot())
 		{
-			graphics.pose().pushPose();
-			graphics.pose().translate(0, 0, 100);
+			graphics.blit(LBR.id("textures/gui/slot_atlas.png"), slot.x - 1, slot.y - 1, 0, 18, 18, 18);
 			
-			graphics.setTexture(LBR.id("textures/gui/slot_atlas.png"));
-			graphics.blit(slot.x - 1, slot.y - 1, 0, 18, 18, 18);
-			
-			this.renderSlotContents(vanilla, slot.getItem(), slot, null);
-			
-			graphics.pose().popPose();
-			
+			this.renderSlotContents(graphics, slot.getItem(), slot, null);
 			return;
 		}
 		
-		super.renderSlot(vanilla, slot);
+		super.extractSlot(graphics, slot, mouseX, mouseY);
 	}
 	
 	@Override
-	public void renderFloatingItem(GuiGraphics vanilla, ItemStack stack, int localX, int localY, String text)
+	public void extractFloatingItem(GuiGraphicsExtractor graphics, ItemStack carried, int localX, int localY, String itemCount)
 	{
 		int mouseX = localX + leftPos + 8;
 		int mouseY = localY + topPos + 8;
@@ -159,68 +147,65 @@ public final class MicrochipScreen extends AbstractContainerScreen<MicrochipMenu
 			int boardMouseX = size.boardCoord(localX, microchipWidget.viewPosition().zoom(), microchipWidget.viewPosition().x());
 			int boardMouseY = size.boardCoord(localY, microchipWidget.viewPosition().zoom(), microchipWidget.viewPosition().y());
 			
-			var graphics = new TesseractGuiGraphics(vanilla);
+			graphics.enableScissor(microchipWidget.x(), microchipWidget.y(), microchipWidget.x() + MicrochipBlockEntity.CIRCUIT_BOUNDS.width(), microchipWidget.y() + MicrochipBlockEntity.CIRCUIT_BOUNDS.height());
+			graphics.pose().pushMatrix();
+			graphics.pose().translate(8, 8);
+			graphics.pose().scale(size.scale(), size.scale());
+			graphics.pose().scale(microchipWidget.viewPosition().zoom(), microchipWidget.viewPosition().zoom());
+			graphics.pose().translate((int) -microchipWidget.viewPosition().x(), (int) -microchipWidget.viewPosition().y());
 			
-			vanilla.enableScissor(microchipWidget.x(), microchipWidget.y(), microchipWidget.x() + MicrochipBlockEntity.CIRCUIT_BOUNDS.width(), microchipWidget.y() + MicrochipBlockEntity.CIRCUIT_BOUNDS.height());
-			graphics.pose().pushPose();
-			graphics.pose().translate(8, 8, 232);
-			graphics.pose().scale(size.scale(), size.scale(), 1);
-			graphics.pose().scale(microchipWidget.viewPosition().zoom(), microchipWidget.viewPosition().zoom(), 1);
-			graphics.pose().translate(-microchipWidget.viewPosition().x(), -microchipWidget.viewPosition().y(), 0);
-			
-			if(stack.getItem() instanceof StickyNoteItem)
+			if(carried.getItem() instanceof StickyNoteItem)
 			{
-				int itemX = Screen.hasControlDown() ? getGridSnappedCoord(boardMouseX) : (boardMouseX - 8);
-				int itemY = Screen.hasControlDown() ? getGridSnappedCoord(boardMouseY) : (boardMouseY - 8);
+				int itemX = minecraft.hasControlDown() ? getGridSnappedCoord(boardMouseX) : (boardMouseX - 8);
+				int itemY = minecraft.hasControlDown() ? getGridSnappedCoord(boardMouseY) : (boardMouseY - 8);
 				
-				graphics.renderItem(stack, LBRItemDisplayContext.MICROCHIP_GUI, itemX, itemY);
+				graphics.item(carried, LBRItemDisplayContext.MICROCHIP_GUI, itemX, itemY);
 				
-				graphics.pose().popPose();
-				vanilla.disableScissor();
+				graphics.pose().popMatrix();
+				graphics.disableScissor();
 				return;
 			}
-			else if(stack.has(LBRComponents.LOGIC))
+			else if(carried.has(LBRComponents.LOGIC))
 			{
-				var component = stack.get(LBRComponents.LOGIC);
+				var component = carried.get(LBRComponents.LOGIC);
 				var context = LogicRenderer.Context.create(menu.color(), component, menu.getCarriedWires() != null, microchipWidget.hasSelectedPort(), false);
 				
-				int logicX = Screen.hasControlDown() ? getGridSnappedCoord(component.size().topLeftCornerX(boardMouseX) + 8) : component.size().topLeftCornerX(boardMouseX);
-				int logicY = Screen.hasControlDown() ? getGridSnappedCoord(component.size().topLeftCornerY(boardMouseY) + 8) : component.size().topLeftCornerY(boardMouseY);
+				int logicX = minecraft.hasControlDown() ? getGridSnappedCoord(component.size().topLeftCornerX(boardMouseX) + 8) : component.size().topLeftCornerX(boardMouseX);
+				int logicY = minecraft.hasControlDown() ? getGridSnappedCoord(component.size().topLeftCornerY(boardMouseY) + 8) : component.size().topLeftCornerY(boardMouseY);
 				
 				this.renderCarriedWires(graphics, logicX, logicY, context, component);
 				this.renderCarriedLogic(graphics, logicX, logicY, context, component);
 				
-				graphics.pose().popPose();
-				vanilla.disableScissor();
+				graphics.pose().popMatrix();
+				graphics.disableScissor();
 				return;
 			}
-			else if(stack.is(LBRItems.REDSTONE_BIT.asItem()))
+			else if(carried.is(LBRItems.REDSTONE_BIT.asItem()))
 			{
-				graphics.setTexture(LBR.id("textures/item/redstone_bit.png"));
 				if(!microchipWidget.context().hasPort())
 				{
-					graphics.setTextureShader(LBRClientShaders::pulsingTextureAlpha);
+					// TODO graphics.setTextureShader(LBRClientShaders::pulsingTextureAlpha);
 				}
-				graphics.blit(boardMouseX - 8, boardMouseY - 8, 0, 0, 16, 16, 16, 16);
-				graphics.renderItemDecorations(stack, boardMouseX - 8, boardMouseY - 8);
+				graphics.blit(LBR.id("textures/item/redstone_bit.png"), boardMouseX - 8, boardMouseY - 8, 0, 0, 16, 16, 16, 16);
+				graphics.itemDecorations(font, carried, boardMouseX - 8, boardMouseY - 8);
 				
-				graphics.pose().popPose();
-				vanilla.disableScissor();
+				graphics.pose().popMatrix();
+				graphics.disableScissor();
 				return;
 			}
 			
-			graphics.pose().popPose();
-			vanilla.disableScissor();
+			graphics.pose().popMatrix();
+			graphics.disableScissor();
 		}
 		
-		super.renderFloatingItem(vanilla, stack, localX, localY, text);
+		super.extractFloatingItem(graphics, carried, localX, localY, itemCount);
 	}
 	
 	private record CarriedWiresData(WirePathKey key, WirePath path)
 	{
 	}
 	
-	private void renderCarriedWires(TesseractGuiGraphics graphics, int logicX, int logicY, LogicRenderer.Context context, LogicComponent<?, ?> component)
+	private void renderCarriedWires(GuiGraphicsExtractor graphics, int logicX, int logicY, LogicRenderer.Context context, LogicComponent<?, ?> component)
 	{
 		if(menu.getCarriedWires() != null)
 		{
@@ -235,8 +220,8 @@ public final class MicrochipScreen extends AbstractContainerScreen<MicrochipMenu
 			}
 			WirePath.blockAllOf(paths.values().stream().map(CarriedWiresData::path).toList());
 			
-			graphics.pose().pushPose();
-			graphics.enableBatching();
+			// TODO batching??
+			graphics.pose().pushMatrix();
 			for(var entry : paths.entrySet())
 			{
 				var wire = entry.getKey();
@@ -244,38 +229,35 @@ public final class MicrochipScreen extends AbstractContainerScreen<MicrochipMenu
 				var metadata = WireMetadata.carried(microchipWidget.microchip(), microchipWidget.color(), menu.getCarriedComponentSlot(), component, wire);
 				wirePanel.renderWire(graphics, data.key(), data.path(), metadata);
 			}
-			graphics.drawBatches();
-			graphics.pose().popPose();
+			graphics.pose().popMatrix();
 		}
 	}
 	
-	private void renderCarriedLogic(TesseractGuiGraphics graphics, int logicX, int logicY, LogicRenderer.Context context, LogicComponent<?, ?> component)
+	private void renderCarriedLogic(GuiGraphicsExtractor graphics, int logicX, int logicY, LogicRenderer.Context context, LogicComponent<?, ?> component)
 	{
 		var microchip = menu.microchip();
 		var size = microchip.size();
 		
-		graphics.pose().pushPose();
-		graphics.enableBatching();
+		graphics.pose().pushMatrix();
 		
 		LogicRenderers.render(context, graphics, component, logicX, logicY);
 		
-		graphics.drawBatches();
-		graphics.pose().popPose();
+		graphics.pose().popMatrix();
 	}
 	
 	@Override
-	protected void renderLabels(GuiGraphics graphics, int mouseX, int mouseY)
+	protected void extractLabels(GuiGraphicsExtractor graphics, int mouseX, int mouseY)
 	{
 		// Dont render the "Microchip" and "Inventory" labels
 	}
 	
 	@Override
-	protected void renderBg(GuiGraphics graphics, float partialTicks, int mouseX, int mouseY)
+	public void extractBackground(GuiGraphicsExtractor graphics, int mouseX, int mouseY, float partialTicks)
 	{
 		this.partialTicks = partialTicks;
 		
-		graphics.pose().pushPose();
-		graphics.pose().translate(leftPos, topPos, 0);
+		graphics.pose().pushMatrix();
+		graphics.pose().translate(leftPos, topPos);
 		
 		graphics.blit(MICROCHIP_BACKGROUND, 0, 0, 0, 0, 256, 256);
 		
@@ -284,6 +266,6 @@ public final class MicrochipScreen extends AbstractContainerScreen<MicrochipMenu
 			graphics.blit(LOGIC_ARRAY_BACKGROUND, -83, 0, 0, 0, 256, 256);
 		}
 		
-		graphics.pose().popPose();
+		graphics.pose().popMatrix();
 	}
 }

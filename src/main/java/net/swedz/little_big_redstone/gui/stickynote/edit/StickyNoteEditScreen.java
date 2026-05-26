@@ -1,7 +1,7 @@
 package net.swedz.little_big_redstone.gui.stickynote.edit;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.CommonComponents;
@@ -18,7 +18,6 @@ import net.swedz.little_big_redstone.gui.stickynote.reference.MicrochipStickyNot
 import net.swedz.little_big_redstone.gui.stickynote.reference.NoteBoardStickyNoteReference;
 import net.swedz.little_big_redstone.gui.stickynote.reference.StickyNoteReference;
 import net.swedz.little_big_redstone.gui.stickynote.view.StickyNoteViewScreen;
-import net.swedz.tesseract.neoforge.helper.guigraphics.TesseractGuiGraphics;
 
 import java.util.function.Supplier;
 
@@ -98,23 +97,22 @@ public final class StickyNoteEditScreen extends StickyNoteScreen
 		}
 	}
 	
-	private void renderPreview(TesseractGuiGraphics graphics)
+	private void renderPreview(GuiGraphicsExtractor graphics)
 	{
-		graphics.pose().pushPose();
-		graphics.pose().translate(leftPos + uiWidth + 20, topPos, 0);
+		graphics.pose().pushMatrix();
+		graphics.pose().translate(leftPos + uiWidth + 20, topPos);
 		
-		StickyNoteViewRenderer.renderBackground(graphics, new StickyNoteView(color, textColor, Component.empty()));
-		StickyNoteViewRenderer.renderText(graphics, new StickyNoteView(color, textColor, editWidget.note().getDisplay().parsed()));
+		StickyNoteViewRenderer.extractBackground(graphics, new StickyNoteView(color, textColor, Component.empty()));
+		StickyNoteViewRenderer.extractText(graphics, new StickyNoteView(color, textColor, editWidget.note().getDisplay().parsed()));
 		
-		graphics.pose().popPose();
+		graphics.pose().popMatrix();
 	}
 	
 	@Override
-	public void render(GuiGraphics vanilla, int mouseX, int mouseY, float partialTick)
+	public void extractRenderState(GuiGraphicsExtractor graphics, int mouseX, int mouseY, float partialTick)
 	{
-		super.render(vanilla, mouseX, mouseY, partialTick);
+		super.extractRenderState(graphics, mouseX, mouseY, partialTick);
 		
-		var graphics = new TesseractGuiGraphics(vanilla);
 		this.renderPreview(graphics);
 	}
 }

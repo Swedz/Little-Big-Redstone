@@ -8,7 +8,7 @@ import net.minecraft.network.chat.Style;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.neoforged.fml.loading.FMLEnvironment;
-import net.swedz.little_big_redstone.LBR;
+import net.swedz.little_big_redstone.LBRFonts;
 import net.swedz.little_big_redstone.microchip.object.logic.LogicTypes;
 
 import java.util.Objects;
@@ -21,7 +21,7 @@ public final class StickyNote
 	
 	private static Pattern getMarkdownPattern()
 	{
-		if(!FMLEnvironment.production || PATTERN == null)
+		if(!FMLEnvironment.isProduction() || PATTERN == null)
 		{
 			PATTERN = Pattern.compile(
 					"""
@@ -143,13 +143,13 @@ public final class StickyNote
 		{
 			var spaces = matcher.group("checkboxspaces");
 			boolean filled = !matcher.group("checkboxfilled").matches("\\s");
-			result.append(Component.literal(spaces + "1" + (filled ? "x" : "o") + "1 ").withStyle(Style.EMPTY.withFont(LBR.id("sticky_note"))));
+			result.append(Component.literal(spaces + "1" + (filled ? "x" : "o") + "1 ").withStyle(Style.EMPTY.withFont(LBRFonts.STICKY_NOTE)));
 			return true;
 		}
 		else if(matcher.group("bulletpoint") != null)
 		{
 			var spaces = matcher.group("bulletpointspaces");
-			result.append(Component.literal(spaces + "11-11 ").withStyle(Style.EMPTY.withFont(LBR.id("sticky_note"))));
+			result.append(Component.literal(spaces + "11-11 ").withStyle(Style.EMPTY.withFont(LBRFonts.STICKY_NOTE)));
 			return true;
 		}
 		return false;

@@ -2,12 +2,13 @@ package net.swedz.little_big_redstone.gui.microchip.widget;
 
 import com.google.common.collect.Lists;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.Renderable;
 import net.minecraft.client.gui.components.events.GuiEventListener;
 import net.minecraft.client.gui.narration.NarratableEntry;
 import net.minecraft.client.gui.narration.NarrationElementOutput;
 import net.minecraft.client.gui.navigation.ScreenRectangle;
+import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.util.Mth;
@@ -16,10 +17,8 @@ import net.swedz.little_big_redstone.LBRColors;
 import net.swedz.little_big_redstone.block.microchip.MicrochipBlockEntity;
 import net.swedz.little_big_redstone.gui.microchip.MicrochipScreen;
 import net.swedz.little_big_redstone.gui.microchip.wire.WirePathKey;
-import net.swedz.tesseract.neoforge.helper.guigraphics.TesseractGuiGraphics;
 
 import java.util.List;
-import java.util.Optional;
 
 public final class MicrochipThermostatWidget implements GuiEventListener, Renderable, NarratableEntry
 {
@@ -102,44 +101,42 @@ public final class MicrochipThermostatWidget implements GuiEventListener, Render
 	}
 	
 	@Override
-	public void render(GuiGraphics vanilla, int mouseX, int mouseY, float partialTick)
+	public void extractRenderState(GuiGraphicsExtractor graphics, int mouseX, int mouseY, float partialTick)
 	{
-		var graphics = new TesseractGuiGraphics(vanilla);
 		this.renderThermometer(graphics, mouseX, mouseY);
+		
+		if(this.isMouseOver(mouseX, mouseY))
+		{
+			graphics.setComponentTooltipForNextFrame(Minecraft.getInstance().font, this.formatTooltip(), mouseX, mouseY);
+		}
 	}
 	
-	private void renderThermometerJuice(TesseractGuiGraphics graphics, int mouseX, int mouseY, float fullness)
+	private void renderThermometerJuice(GuiGraphicsExtractor graphics, int mouseX, int mouseY, float fullness, int color)
 	{
 		int fullBarHeight = 50;
 		int bar = Math.round(fullBarHeight * fullness);
-		graphics.blit(0, 2 + (fullBarHeight - bar), 14, 2 + (fullBarHeight - bar), 14, bar + (64 - fullBarHeight), 42, 64);
+		graphics.blit(RenderPipelines.GUI_TEXTURED, LBR.id("textures/gui/container/microchip/thermometer.png"), 0, 2 + (fullBarHeight - bar), 14, 2 + (fullBarHeight - bar), 14, bar + (64 - fullBarHeight), 42, 64, color);
 	}
 	
-	private void renderThermometer(TesseractGuiGraphics graphics, int mouseX, int mouseY)
+	private void renderThermometer(GuiGraphicsExtractor graphics, int mouseX, int mouseY)
 	{
-		graphics.pose().pushPose();
-		graphics.pose().translate(x, y, 0);
+		graphics.pose().pushMatrix();
+		graphics.pose().translate(x, y);
 		
-		graphics.setTexture(LBR.id("textures/gui/container/microchip/thermometer.png"));
+		int color = LBRColors.componentForeground(screen.getMenu().color());
 		
 		if(fullnessTotal != fullnessVisible)
 		{
-			graphics.setColor(LBRColors.componentForeground(screen.getMenu().color()));
-			this.renderThermometerJuice(graphics, mouseX, mouseY, fullnessTotal);
-			graphics.resetColor();
+			this.renderThermometerJuice(graphics, mouseX, mouseY, fullnessTotal, color);
 			
-			graphics.setColor(0, 0, 0, 0.5f);
-			this.renderThermometerJuice(graphics, mouseX, mouseY, fullnessTotal);
-			graphics.resetColor();
+			this.renderThermometerJuice(graphics, mouseX, mouseY, fullnessTotal, 0x7F000000);
 		}
 		
-		graphics.setColor(LBRColors.componentForeground(screen.getMenu().color()));
-		this.renderThermometerJuice(graphics, mouseX, mouseY, fullnessVisible);
-		graphics.resetColor();
+		this.renderThermometerJuice(graphics, mouseX, mouseY, fullnessVisible, color);
 		
-		graphics.blit(0, 0, 28, 0, 14, 64, 42, 64);
+		graphics.blit(LBR.id("textures/gui/container/microchip/thermometer.png"), 0, 0, 28, 0, 14, 64, 42, 64);
 		
-		graphics.pose().popPose();
+		graphics.pose().popMatrix();
 	}
 	
 	private MutableComponent formatComplexity(float percentage)
@@ -181,14 +178,6 @@ public final class MicrochipThermostatWidget implements GuiEventListener, Render
 		}
 		
 		return lines;
-	}
-	
-	public void renderTooltip(GuiGraphics graphics, int mouseX, int mouseY)
-	{
-		if(this.isMouseOver(mouseX, mouseY))
-		{
-			graphics.renderTooltip(Minecraft.getInstance().font, this.formatTooltip(), Optional.empty(), mouseX, mouseY);
-		}
 	}
 	
 	@Override

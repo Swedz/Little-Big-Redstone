@@ -15,7 +15,7 @@ import net.swedz.little_big_redstone.item.floppydisk.FloppyDiskProgramName;
 import net.swedz.little_big_redstone.item.stickynote.StickyNote;
 import net.swedz.little_big_redstone.microchip.Microchip;
 import net.swedz.little_big_redstone.microchip.object.logic.LogicComponent;
-import net.swedz.tesseract.neoforge.item.ItemInstance;
+import net.swedz.tesseract.neoforge.item.ItemStackInstance;
 
 import java.util.function.Supplier;
 
@@ -30,7 +30,7 @@ public final class LBRComponents
 	public static final Supplier<DataComponentType<StickyNote>>            STICKY_NOTE              = create("sticky_note", StickyNote.CODEC, StickyNote.STREAM_CODEC);
 	public static final Supplier<DataComponentType<DyeColor>>              STICKY_NOTE_TEXT_COLOR   = create("sticky_note_text_color", DyeColor.CODEC, DyeColor.STREAM_CODEC);
 	public static final Supplier<DataComponentType<Boolean>>               STICKY_NOTE_EDITABLE     = create("sticky_note_editable", Codec.BOOL, ByteBufCodecs.BOOL);
-	public static final Supplier<DataComponentType<ItemInstance>>          STICKY_NOTE_DISPLAY_ITEM = create("sticky_note_display_item", ItemInstance.CODEC, ItemInstance.STREAM_CODEC);
+	public static final Supplier<DataComponentType<ItemStackInstance>>     STICKY_NOTE_DISPLAY_ITEM = create("sticky_note_display_item", ItemStackInstance.CODEC, ItemStackInstance.STREAM_CODEC);
 	
 	public static void init(IEventBus bus)
 	{

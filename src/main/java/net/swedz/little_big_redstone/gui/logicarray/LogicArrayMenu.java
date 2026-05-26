@@ -5,13 +5,14 @@ import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
-import net.neoforged.neoforge.items.IItemHandler;
-import net.neoforged.neoforge.items.ItemStackHandler;
-import net.neoforged.neoforge.items.wrapper.PlayerMainInvWrapper;
+import net.neoforged.neoforge.transfer.ResourceHandler;
+import net.neoforged.neoforge.transfer.item.ItemResource;
+import net.neoforged.neoforge.transfer.item.ItemStacksResourceHandler;
+import net.neoforged.neoforge.transfer.item.PlayerInventoryWrapper;
 import net.swedz.little_big_redstone.LBRMenus;
 import net.swedz.little_big_redstone.LBRTags;
-import net.swedz.little_big_redstone.gui.slot.MaybeLockedPlayerSlot;
 import net.swedz.little_big_redstone.gui.logicarray.slot.LogicArraySlot;
+import net.swedz.little_big_redstone.gui.slot.MaybeLockedPlayerSlot;
 import net.swedz.little_big_redstone.item.logicarray.LogicArrayItem;
 import net.swedz.tesseract.neoforge.helper.TransferHelper;
 import net.swedz.tesseract.neoforge.helper.gui.PlayerInventoryContainerMenu;
@@ -20,10 +21,10 @@ import java.util.function.Supplier;
 
 public final class LogicArrayMenu extends PlayerInventoryContainerMenu
 {
-	private final IItemHandler itemHandler;
+	private final ResourceHandler<ItemResource> itemHandler;
 	private final int          logicArraySlot;
 	
-	public LogicArrayMenu(int containerId, Inventory playerInventory, IItemHandler itemHandler, int logicArraySlot)
+	public LogicArrayMenu(int containerId, Inventory playerInventory, ResourceHandler<ItemResource> itemHandler, int logicArraySlot)
 	{
 		super(LBRMenus.LOGIC_ARRAY.get(), containerId);
 		
@@ -50,10 +51,10 @@ public final class LogicArrayMenu extends PlayerInventoryContainerMenu
 	
 	public LogicArrayMenu(int containerId, Inventory playerInventory, RegistryFriendlyByteBuf buf)
 	{
-		this(containerId, playerInventory, new ItemStackHandler(LogicArrayItem.MAX_SLOTS), buf.readVarInt());
+		this(containerId, playerInventory, new ItemStacksResourceHandler(LogicArrayItem.MAX_SLOTS), buf.readVarInt());
 	}
 	
-	public static void setupLogicArrayInventory(IItemHandler itemHandler, SlotAdder slotAdder, Supplier<Boolean> isActive, int startX, int startY, int rows, int columns)
+	public static void setupLogicArrayInventory(ResourceHandler<ItemResource> itemHandler, SlotAdder slotAdder, Supplier<Boolean> isActive, int startX, int startY, int rows, int columns)
 	{
 		for(int row = 0; row < rows; row++)
 		{
@@ -64,7 +65,7 @@ public final class LogicArrayMenu extends PlayerInventoryContainerMenu
 		}
 	}
 	
-	public static void setupLogicArrayInventory(IItemHandler itemHandler, SlotAdder slotAdder, int startX, int startY, int rows, int columns)
+	public static void setupLogicArrayInventory(ResourceHandler<ItemResource> itemHandler, SlotAdder slotAdder, int startX, int startY, int rows, int columns)
 	{
 		setupLogicArrayInventory(itemHandler, slotAdder, null, startX, startY, rows, columns);
 	}
@@ -89,7 +90,7 @@ public final class LogicArrayMenu extends PlayerInventoryContainerMenu
 			var stack = slot.getItem();
 			originalStack = stack.copy();
 			
-			var target = index < LogicArrayItem.MAX_SLOTS ? new PlayerMainInvWrapper(player.getInventory()) : itemHandler;
+			var target = index < LogicArrayItem.MAX_SLOTS ? PlayerInventoryWrapper.of(player) : itemHandler;
 			int inserted = TransferHelper.insert(target, stack);
 			if(inserted > 0)
 			{

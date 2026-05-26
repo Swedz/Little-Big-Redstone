@@ -9,7 +9,7 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.mojang.serialization.codecs.UnboundedMapCodec;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.model.ModelResourceLocation;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.DyeColor;
 import net.neoforged.neoforge.client.model.generators.CustomLoaderBuilder;
 import net.neoforged.neoforge.client.model.generators.ModelBuilder;
@@ -25,7 +25,7 @@ import java.util.Map;
 
 public final class LogicBakingModelData
 {
-	private static final UnboundedMapCodec<String, ResourceLocation> TEXTURE_MAP_CODEC = Codec.unboundedMap(Codec.STRING, ResourceLocation.CODEC);
+	private static final UnboundedMapCodec<String, Identifier> TEXTURE_MAP_CODEC = Codec.unboundedMap(Codec.STRING, Identifier.CODEC);
 	
 	public static final Codec<LogicBakingModelData> CODEC = RecordCodecBuilder.create((instance) -> instance
 			.group(
@@ -41,12 +41,12 @@ public final class LogicBakingModelData
 	}
 	
 	private final Map<DyeColor, LogicModelColorSet> colorPalette;
-	private final Map<String, ResourceLocation>     itemTextures;
-	private final Map<String, ResourceLocation>     boardTextures;
+	private final Map<String, Identifier>     itemTextures;
+	private final Map<String, Identifier>     boardTextures;
 	
 	private LogicBakingModelData(Map<DyeColor, LogicModelColorSet> colorPalette,
-								 Map<String, ResourceLocation> itemTextures,
-								 Map<String, ResourceLocation> boardTextures)
+								 Map<String, Identifier> itemTextures,
+								 Map<String, Identifier> boardTextures)
 	{
 		this.colorPalette = Collections.unmodifiableMap(colorPalette);
 		this.itemTextures = Collections.unmodifiableMap(itemTextures);
@@ -63,22 +63,22 @@ public final class LogicBakingModelData
 		return this.getColorSet(component.color().orElse(fallback));
 	}
 	
-	public ResourceLocation getItemTexture(String texture)
+	public Identifier getItemTexture(String texture)
 	{
-		return itemTextures.getOrDefault(texture, ResourceLocation.withDefaultNamespace("missingno"));
+		return itemTextures.getOrDefault(texture, Identifier.withDefaultNamespace("missingno"));
 	}
 	
-	public ResourceLocation getItemTextureLocation(String texture)
+	public Identifier getItemTextureLocation(String texture)
 	{
 		return this.getItemTexture(texture).withPath("textures/%s.png"::formatted);
 	}
 	
-	public ResourceLocation getBoardTexture(String texture)
+	public Identifier getBoardTexture(String texture)
 	{
-		return boardTextures.getOrDefault(texture, ResourceLocation.withDefaultNamespace("missingno"));
+		return boardTextures.getOrDefault(texture, Identifier.withDefaultNamespace("missingno"));
 	}
 	
-	public ResourceLocation getBoardTextureLocation(String texture)
+	public Identifier getBoardTextureLocation(String texture)
 	{
 		return this.getBoardTexture(texture).withPath("textures/%s.png"::formatted);
 	}
@@ -91,8 +91,8 @@ public final class LogicBakingModelData
 	public static final class Builder<T extends ModelBuilder<T>> extends CustomLoaderBuilder<T>
 	{
 		private final Map<DyeColor, LogicModelColorSet> colorPalette  = Maps.newHashMap();
-		private final Map<String, ResourceLocation>     itemTextures  = Maps.newHashMap();
-		private final Map<String, ResourceLocation>     boardTextures = Maps.newHashMap();
+		private final Map<String, Identifier>     itemTextures  = Maps.newHashMap();
+		private final Map<String, Identifier>     boardTextures = Maps.newHashMap();
 		
 		private Builder(T parent, ExistingFileHelper existingFileHelper)
 		{
@@ -127,7 +127,7 @@ public final class LogicBakingModelData
 			return this;
 		}
 		
-		public Builder<T> itemTexture(String key, ResourceLocation texture)
+		public Builder<T> itemTexture(String key, Identifier texture)
 		{
 			Assert.notNull(key);
 			Assert.notNull(texture);
@@ -136,7 +136,7 @@ public final class LogicBakingModelData
 			return this;
 		}
 		
-		public Builder<T> boardTexture(String key, ResourceLocation texture)
+		public Builder<T> boardTexture(String key, Identifier texture)
 		{
 			Assert.notNull(key);
 			Assert.notNull(texture);

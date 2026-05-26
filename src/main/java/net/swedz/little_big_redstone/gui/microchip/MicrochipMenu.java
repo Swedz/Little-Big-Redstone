@@ -4,7 +4,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.inventory.ClickType;
+import net.minecraft.world.inventory.ContainerInput;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.ItemStack;
@@ -175,7 +175,7 @@ public final class MicrochipMenu extends PlayerInventoryContainerMenu
 		}
 	}
 	
-	private void dropCarriedWires(int slotId, int button, ClickType clickType, Player player)
+	private void dropCarriedWires(int slotId, int button, ContainerInput input, Player player)
 	{
 		if(carriedComponentSlot != -1 && carriedWires != null)
 		{
@@ -199,7 +199,7 @@ public final class MicrochipMenu extends PlayerInventoryContainerMenu
 		}
 	}
 	
-	private boolean pickLogicArray(int slotId, int button, ClickType clickType, Player player)
+	private boolean pickLogicArray(int slotId, int button, ContainerInput input, Player player)
 	{
 		if(slotId >= 0)
 		{
@@ -221,16 +221,16 @@ public final class MicrochipMenu extends PlayerInventoryContainerMenu
 	}
 	
 	@Override
-	public void clicked(int slotId, int button, ClickType clickType, Player player)
+	public void clicked(int slotId, int button, ContainerInput input, Player player)
 	{
-		if(this.pickLogicArray(slotId, button, clickType, player))
+		if(this.pickLogicArray(slotId, button, input, player))
 		{
 			return;
 		}
 		
-		super.clicked(slotId, button, clickType, player);
+		super.clicked(slotId, button, input, player);
 		
-		this.dropCarriedWires(slotId, button, clickType, player);
+		this.dropCarriedWires(slotId, button, input, player);
 	}
 	
 	@Override

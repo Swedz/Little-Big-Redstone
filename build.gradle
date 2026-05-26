@@ -2,7 +2,7 @@ plugins {
     id 'java-library'
     id 'idea'
     id 'maven-publish'
-    id 'net.neoforged.moddev' version '1.0.14'
+    id 'net.neoforged.moddev'
     id 'com.modrinth.minotaur' version '2.+'
 }
 
@@ -35,7 +35,7 @@ apply from: 'deploy.gradle'
 
 apply from: 'neoforge.gradle'
 
-java.toolchain.languageVersion = JavaLanguageVersion.of(21)
+java.toolchain.languageVersion = JavaLanguageVersion.of(25)
 
 sourceSets.main.resources {
     srcDir 'src/generated/resources'

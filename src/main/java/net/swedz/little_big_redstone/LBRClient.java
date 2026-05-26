@@ -116,7 +116,7 @@ public final class LBRClient
 		{
 			StickyNoteInHandItemRenderer.renderItemFirstPerson(
 					event.getPoseStack(),
-					event.getMultiBufferSource(),
+					event.getSubmitNodeCollector(),
 					event.getPackedLight(),
 					event.getHand(),
 					event.getInterpolatedPitch(),
@@ -132,8 +132,8 @@ public final class LBRClient
 	private static void register(RegisterGuiLayersEvent event)
 	{
 		event.registerAbove(VanillaGuiLayers.HOTBAR, LBR.id("floppy_disk_consume_items"), FloppyDiskConsumeItemsGuiOverlay::render);
-		event.registerBelow(VanillaGuiLayers.HOTBAR, LBR.id("sticky_note_view_contents"), StickyNoteViewContentsGuiOverlay::render);
-		event.registerBelow(LBR.id("sticky_note_view_contents"), LBR.id("note_board"), NoteBoardGuiOverlay::render);
+		event.registerBelow(VanillaGuiLayers.HOTBAR, LBR.id("sticky_note_view_contents"), StickyNoteViewContentsGuiOverlay::extract);
+		event.registerBelow(LBR.id("sticky_note_view_contents"), LBR.id("note_board"), NoteBoardGuiOverlay::extract);
 	}
 	
 	@SubscribeEvent

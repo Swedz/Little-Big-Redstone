@@ -4,7 +4,7 @@ import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.stats.Stats;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResultHolder;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.MenuProvider;
 import net.minecraft.world.entity.SlotAccess;
 import net.minecraft.world.entity.player.Inventory;
@@ -19,6 +19,8 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.component.ItemContainerContents;
 import net.minecraft.world.level.Level;
 import net.neoforged.neoforge.capabilities.Capabilities;
+import net.neoforged.neoforge.items.IItemHandler;
+import net.neoforged.neoforge.transfer.access.ItemAccess;
 import net.swedz.little_big_redstone.LBRComponents;
 import net.swedz.little_big_redstone.gui.logicarray.LogicArrayMenu;
 import net.swedz.little_big_redstone.item.DyeColoredItem;
@@ -48,12 +50,12 @@ public final class LogicArrayItem extends Item implements DyeColoredItem
 	}
 	
 	@Override
-	public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand)
+	public InteractionResult use(Level level, Player player, InteractionHand hand)
 	{
 		var stack = player.getItemInHand(hand);
 		var storage = stack.get(LBRComponents.LOGIC_ARRAY_STORAGE);
 		
-		int logicArraySlot = player.getInventory().selected;
+		int logicArraySlot = player.getInventory().getSelectedSlot();
 		
 		player.awardStat(Stats.ITEM_USED.get(this));
 		player.openMenu(
@@ -68,18 +70,18 @@ public final class LogicArrayItem extends Item implements DyeColoredItem
 					@Override
 					public AbstractContainerMenu createMenu(int containerId, Inventory playerInventory, Player player)
 					{
-						return new LogicArrayMenu(containerId, playerInventory, stack.getCapability(Capabilities.ItemHandler.ITEM), logicArraySlot);
+						return new LogicArrayMenu(containerId, playerInventory, ItemAccess.forStack(stack).getCapability(Capabilities.Item.ITEM), logicArraySlot);
 					}
 				},
 				(buf) -> buf.writeVarInt(logicArraySlot)
 		);
 		
-		return InteractionResultHolder.sidedSuccess(stack, level.isClientSide());
+		return InteractionResult.SUCCESS;
 	}
 	
 	private boolean overrideStackedOn(ItemStack stack, ItemStack other, Slot slot, ClickAction action, Player player, SlotAccess access)
 	{
-		var capability = stack.getCapability(Capabilities.ItemHandler.ITEM);
+		var capability = IItemHandler.of(stack.getCapability(Capabilities.Item.ITEM, ItemAccess.forStack(stack)));
 		if(capability != null)
 		{
 			if(other.isEmpty())

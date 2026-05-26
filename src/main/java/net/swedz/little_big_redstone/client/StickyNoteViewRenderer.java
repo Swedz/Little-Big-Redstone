@@ -1,72 +1,68 @@
 package net.swedz.little_big_redstone.client;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
+import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.DyeColor;
 import net.swedz.little_big_redstone.LBR;
 import net.swedz.little_big_redstone.LBRColors;
 import net.swedz.little_big_redstone.entity.stickynote.StickyNoteView;
-import net.swedz.tesseract.neoforge.helper.guigraphics.TesseractGuiGraphics;
+import net.swedz.tesseract.neoforge.helper.gui.ExtraGuiGraphics;
 
 public final class StickyNoteViewRenderer
 {
-	public static void renderBackground(TesseractGuiGraphics graphics, DyeColor color, boolean pin, float alpha)
+	public static void extractBackground(GuiGraphicsExtractor graphics, DyeColor color, boolean pin, float alpha, int packedLight)
 	{
-		graphics.pose().pushPose();
-		graphics.setColor(1, 1, 1, alpha);
+		int argb = (Math.round(alpha * 255f) << 24) | 0x00FFFFFF;
 		
-		graphics.setTexture(LBR.id("textures/gui/sticky_note/background_%s.png".formatted(color.getName())));
-		graphics.nineSlice(0, 0, 180, 180, 64, 64, 21);
+		var backgroundTexture = LBR.id("textures/gui/sticky_note/background_%s.png".formatted(color.getName()));
+		ExtraGuiGraphics.nineSlice(graphics, backgroundTexture, argb, packedLight, 0, 0, 180, 180, 64, 64, 21);
 		
 		if(pin)
 		{
-			graphics.setTexture(LBR.id("textures/gui/sticky_note/pin_%s.png".formatted(color.getName())));
-			graphics.blit((180 / 2) - 9, 4, 0, 0, 32, 32, 32, 32);
+			var pinTexture = LBR.id("textures/gui/sticky_note/pin_%s.png".formatted(color.getName()));
+			graphics.blitLight(RenderPipelines.GUI, pinTexture, (180 / 2) - 9, 4, 0, 0, 32, 32, 32, 32, 32, 32, argb, packedLight);
 		}
-		
-		graphics.resetColor();
-		graphics.pose().popPose();
 	}
 	
-	public static void renderBackground(TesseractGuiGraphics graphics, StickyNoteView note, float alpha)
+	public static void extractBackground(GuiGraphicsExtractor graphics, StickyNoteView note, float alpha, int packedLight)
 	{
-		renderBackground(graphics, note.color(), true, alpha);
+		extractBackground(graphics, note.color(), true, alpha, packedLight);
 	}
 	
-	public static void renderBackground(TesseractGuiGraphics graphics, StickyNoteView note)
+	public static void extractBackground(GuiGraphicsExtractor graphics, StickyNoteView note)
 	{
-		renderBackground(graphics, note, 1);
+		extractBackground(graphics, note, 1, 0xFFFFFFFF);
 	}
 	
-	public static void renderText(TesseractGuiGraphics graphics, DyeColor textColor, Component text, float alpha)
+	// TODO packedLight
+	public static void extractText(GuiGraphicsExtractor graphics, DyeColor textColor, Component text, float alpha)
 	{
 		var font = Minecraft.getInstance().font;
 		
-		graphics.pose().pushPose();
-		graphics.pose().translate(5, 27, 0);
+		graphics.pose().pushMatrix();
+		graphics.pose().translate(5, 27);
 		
-		graphics.setColor(LBRColors.stickyNoteText(textColor, alpha));
-		graphics.setStringDropShadow(false);
+		int argb = LBRColors.stickyNoteText(textColor, alpha);
 		int index = 0;
 		for(var line : font.split(text, 170))
 		{
 			int y = index * font.lineHeight;
-			graphics.drawString(line, 0, y);
+			graphics.text(Minecraft.getInstance().font, line, 0, y, argb, false);
 			index++;
 		}
-		graphics.setStringDropShadow(true);
-		graphics.resetColor();
 		
-		graphics.pose().popPose();
+		graphics.pose().popMatrix();
 	}
 	
-	public static void renderText(TesseractGuiGraphics graphics, StickyNoteView note, float alpha)
+	public static void extractText(GuiGraphicsExtractor graphics, StickyNoteView note, float alpha)
 	{
-		renderText(graphics, note.textColor(), note.text(), alpha);
+		extractText(graphics, note.textColor(), note.text(), alpha);
 	}
 	
-	public static void renderText(TesseractGuiGraphics graphics, StickyNoteView note)
+	public static void extractText(GuiGraphicsExtractor graphics, StickyNoteView note)
 	{
-		renderText(graphics, note, 1);
+		extractText(graphics, note, 1);
 	}
 }

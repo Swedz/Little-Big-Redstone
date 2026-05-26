@@ -1,14 +1,13 @@
 package net.swedz.little_big_redstone.gui.stickynote;
 
 import net.minecraft.client.GameNarrator;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.DyeColor;
 import net.swedz.little_big_redstone.client.StickyNoteViewRenderer;
 import net.swedz.little_big_redstone.entity.stickynote.StickyNoteView;
 import net.swedz.little_big_redstone.gui.stickynote.reference.StickyNoteReference;
-import net.swedz.tesseract.neoforge.helper.guigraphics.TesseractGuiGraphics;
 
 public abstract class StickyNoteScreen extends Screen
 {
@@ -50,17 +49,15 @@ public abstract class StickyNoteScreen extends Screen
 	}
 	
 	@Override
-	public void renderBackground(GuiGraphics vanilla, int mouseX, int mouseY, float partialTick)
+	public void extractBackground(GuiGraphicsExtractor graphics, int mouseX, int mouseY, float partialTick)
 	{
-		super.renderBackground(vanilla, mouseX, mouseY, partialTick);
+		super.extractBackground(graphics, mouseX, mouseY, partialTick);
 		
-		var graphics = new TesseractGuiGraphics(vanilla);
+		graphics.pose().pushMatrix();
+		graphics.pose().translate(leftPos, topPos);
 		
-		graphics.pose().pushPose();
-		graphics.pose().translate(leftPos, topPos, 0);
+		StickyNoteViewRenderer.extractBackground(graphics, new StickyNoteView(color, textColor, Component.empty()));
 		
-		StickyNoteViewRenderer.renderBackground(graphics, new StickyNoteView(color, textColor, Component.empty()));
-		
-		graphics.pose().popPose();
+		graphics.pose().popMatrix();
 	}
 }

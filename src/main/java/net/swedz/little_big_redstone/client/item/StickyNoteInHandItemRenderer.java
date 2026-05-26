@@ -1,24 +1,21 @@
 package net.swedz.little_big_redstone.client.item;
 
-import com.mojang.blaze3d.vertex.DefaultVertexFormat;
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.blaze3d.vertex.VertexFormat;
 import com.mojang.math.Axis;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.client.renderer.GameRenderer;
-import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
+import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.HumanoidArm;
 import net.minecraft.world.item.ItemStack;
 import net.swedz.little_big_redstone.client.StickyNoteViewRenderer;
 import net.swedz.little_big_redstone.entity.stickynote.StickyNoteView;
-import net.swedz.tesseract.neoforge.helper.guigraphics.TesseractGuiGraphics;
+import org.joml.Matrix3x2fStack;
 
 public final class StickyNoteInHandItemRenderer
 {
-	private static void renderItem(PoseStack pose, MultiBufferSource bufferSource, ItemStack stack, int packedLight, boolean center)
+	private static void renderItem(PoseStack pose, SubmitNodeCollector submitNodeCollector, ItemStack stack, int packedLight, boolean center)
 	{
 		pose.pushPose();
 		
@@ -27,17 +24,12 @@ public final class StickyNoteInHandItemRenderer
 		pose.scale(0.0025f, 0.0025f, 0.0025f);
 		pose.translate(-90.5f, center ? -75f : -90.5f, 0);
 		
-		var graphics = new TesseractGuiGraphics(new GuiGraphics(Minecraft.getInstance(), pose, (MultiBufferSource.BufferSource) bufferSource));
-		
-		graphics.setPackedLight(packedLight);
-		graphics.setTextureShader(GameRenderer::getRendertypeTextShader, VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_COLOR_TEX_LIGHTMAP);
+		var minecraft = Minecraft.getInstance();
+		var graphics = new GuiGraphicsExtractor(minecraft, new Matrix3x2fStack(16), minecraft.gameRenderer.getGameRenderState().guiRenderState, -1, -1);
 		
 		var view = new StickyNoteView(stack);
-		StickyNoteViewRenderer.renderBackground(graphics, view);
-		StickyNoteViewRenderer.renderText(graphics, view);
-		
-		graphics.resetTextureShader();
-		graphics.resetPackedLight();
+		StickyNoteViewRenderer.extractBackground(graphics, view, 1, packedLight);
+		StickyNoteViewRenderer.extractText(graphics, view);
 		
 		pose.popPose();
 	}
@@ -45,7 +37,7 @@ public final class StickyNoteInHandItemRenderer
 	/**
 	 * @see <a href="https://github.com/cc-tweaked/CC-Tweaked/blob/mc-1.21.x/projects/common/src/client/java/dan200/computercraft/client/render/ItemMapLikeRenderer.java">CC-Tweaked's ItemMapLikeRenderer.java</a>
 	 */
-	public static void renderItemFirstPerson(PoseStack pose, MultiBufferSource bufferSource, int packedLight, InteractionHand hand, float pitch, float equipProgress, float swingProgress, ItemStack stack)
+	public static void renderItemFirstPerson(PoseStack pose, SubmitNodeCollector submitNodeCollector, int packedLight, InteractionHand hand, float pitch, float equipProgress, float swingProgress, ItemStack stack)
 	{
 		var player = Minecraft.getInstance().player;
 		var arm = hand == InteractionHand.MAIN_HAND ? player.getMainArm() : player.getMainArm().getOpposite();
@@ -60,7 +52,7 @@ public final class StickyNoteInHandItemRenderer
 		{
 			pose.pushPose();
 			pose.mulPose(Axis.ZP.rotationDegrees(offset * 10f));
-			minecraft.getEntityRenderDispatcher().getItemInHandRenderer().renderPlayerArm(pose, bufferSource, packedLight, equipProgress, swingProgress, arm);
+			minecraft.getEntityRenderDispatcher().getItemInHandRenderer().renderPlayerArm(pose, submitNodeCollector, packedLight, equipProgress, swingProgress, arm);
 			pose.popPose();
 		}
 		
@@ -74,7 +66,7 @@ public final class StickyNoteInHandItemRenderer
 		pose.mulPose(Axis.XP.rotationDegrees(f2 * -45f));
 		pose.mulPose(Axis.YP.rotationDegrees(offset * f2 * -30f));
 		
-		renderItem(pose, bufferSource, stack, packedLight, false);
+		renderItem(pose, submitNodeCollector, stack, packedLight, false);
 		
 		pose.popPose();
 	}

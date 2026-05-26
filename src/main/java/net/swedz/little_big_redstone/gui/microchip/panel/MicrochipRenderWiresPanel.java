@@ -1,9 +1,11 @@
 package net.swedz.little_big_redstone.gui.microchip.panel;
 
 import com.google.common.collect.Lists;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
+import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.world.item.DyeColor;
 import net.swedz.little_big_redstone.LBR;
-import net.swedz.little_big_redstone.LBRClientShaders;
+import net.swedz.little_big_redstone.LBRRenderPipelines;
 import net.swedz.little_big_redstone.gui.microchip.widget.MicrochipWidgetContext;
 import net.swedz.little_big_redstone.gui.microchip.wire.WireMetadata;
 import net.swedz.little_big_redstone.gui.microchip.wire.WirePath;
@@ -12,7 +14,6 @@ import net.swedz.little_big_redstone.gui.microchip.wire.WirePathing;
 import net.swedz.little_big_redstone.microchip.Microchip;
 import net.swedz.little_big_redstone.microchip.wire.Wire;
 import net.swedz.tesseract.neoforge.api.Bounds;
-import net.swedz.tesseract.neoforge.helper.guigraphics.TesseractGuiGraphics;
 
 import java.util.Collections;
 import java.util.List;
@@ -79,12 +80,12 @@ public final class MicrochipRenderWiresPanel extends MicrochipRenderPanel
 	}
 	
 	@Override
-	public void render(TesseractGuiGraphics graphics)
+	public void render(GuiGraphicsExtractor graphics)
 	{
 		this.renderAllWires(graphics);
 	}
 	
-	private void renderAllWires(TesseractGuiGraphics graphics)
+	private void renderAllWires(GuiGraphicsExtractor graphics)
 	{
 		var context = this.context();
 		
@@ -102,8 +103,6 @@ public final class MicrochipRenderWiresPanel extends MicrochipRenderPanel
 		
 		if(context != null)
 		{
-			graphics = graphics.inner();
-			graphics.enableBatching();
 			for(var wire : context.topLayerWires())
 			{
 				var key = WirePathKey.placed(microchip, wire);
@@ -122,11 +121,10 @@ public final class MicrochipRenderWiresPanel extends MicrochipRenderPanel
 				var metadata = WireMetadata.of(microchip, color, context.widget().getSelectedPort(), true);
 				this.renderWire(graphics, key, path, metadata);
 			}
-			graphics.end();
 		}
 	}
 	
-	public void renderWire(TesseractGuiGraphics graphics, WirePathKey key, WirePath path, WireMetadata metadata)
+	public void renderWire(GuiGraphicsExtractor graphics, WirePathKey key, WirePath path, WireMetadata metadata)
 	{
 		if(!path.isPopulated())
 		{
@@ -146,29 +144,20 @@ public final class MicrochipRenderWiresPanel extends MicrochipRenderPanel
 		
 		if(renderStart || renderEnd)
 		{
+			var pipeline = RenderPipelines.GUI_TEXTURED;
 			if(metadata.hovered())
 			{
-				graphics = graphics.inner();
-				graphics.enableBatching();
-				graphics.setTextureShader(LBRClientShaders::pulsingTextureLightness);
+				pipeline = LBRRenderPipelines.PULSING_TEXTURE_LIGHTNESS;
 			}
 			
-			graphics.setColor(metadata.argb());
-			graphics.setTexture(LBR.id("textures/gui/container/microchip/wire_%s.png".formatted(metadata.powered() ? "on" : "off")));
+			var texture = LBR.id("textures/gui/container/microchip/wire_%s.png".formatted(metadata.powered() ? "on" : "off"));
 			for(var position : path.positions())
 			{
 				if(position.x() < 0 || position.y() < 0 || position.x() >= maxX || position.y() >= maxY)
 				{
 					continue;
 				}
-				graphics.blit(position.x(), position.y(), position.x(), position.y(), wireSize, wireSize, 16, 16);
-			}
-			graphics.resetColor();
-			
-			if(metadata.hovered())
-			{
-				graphics.resetTextureShader();
-				graphics.end();
+				graphics.blit(pipeline, texture, position.x(), position.y(), position.x(), position.y(), wireSize, wireSize, 16, 16, metadata.argb());
 			}
 		}
 	}

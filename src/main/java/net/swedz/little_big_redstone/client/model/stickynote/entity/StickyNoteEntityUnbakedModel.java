@@ -11,7 +11,7 @@ import net.minecraft.client.resources.model.Material;
 import net.minecraft.client.resources.model.ModelBaker;
 import net.minecraft.client.resources.model.ModelState;
 import net.minecraft.client.resources.model.UnbakedModel;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.neoforged.neoforge.client.model.geometry.IGeometryBakingContext;
 import net.neoforged.neoforge.client.model.geometry.IGeometryLoader;
 import net.neoforged.neoforge.client.model.geometry.IUnbakedGeometry;
@@ -21,7 +21,7 @@ import java.util.function.Function;
 
 public final class StickyNoteEntityUnbakedModel implements IUnbakedGeometry<StickyNoteEntityUnbakedModel>
 {
-	public static final ResourceLocation                              ID     = LBR.id("sticky_note_entity");
+	public static final Identifier                              ID     = LBR.id("sticky_note_entity");
 	public static final IGeometryLoader<StickyNoteEntityUnbakedModel> LOADER = (json, context) ->
 			new StickyNoteEntityUnbakedModel(loadModels(json, context, "base_layer"), loadModels(json, context, "text_layer"));
 	
@@ -71,7 +71,7 @@ public final class StickyNoteEntityUnbakedModel implements IUnbakedGeometry<Stic
 		);
 	}
 	
-	private static void resolveParents(Function<ResourceLocation, UnbakedModel> modelGetter,
+	private static void resolveParents(Function<Identifier, UnbakedModel> modelGetter,
 									   ImmutableList<BlockModel> unbakedModels)
 	{
 		for(var model : unbakedModels)
@@ -81,7 +81,7 @@ public final class StickyNoteEntityUnbakedModel implements IUnbakedGeometry<Stic
 	}
 	
 	@Override
-	public void resolveParents(Function<ResourceLocation, UnbakedModel> modelGetter, IGeometryBakingContext context)
+	public void resolveParents(Function<Identifier, UnbakedModel> modelGetter, IGeometryBakingContext context)
 	{
 		resolveParents(modelGetter, baseLayer);
 		resolveParents(modelGetter, textLayer);

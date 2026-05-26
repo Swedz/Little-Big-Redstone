@@ -2,7 +2,7 @@ package net.swedz.little_big_redstone.client.hud;
 
 import net.minecraft.client.DeltaTracker;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.phys.EntityHitResult;
 import net.neoforged.api.distmarker.Dist;
@@ -17,7 +17,6 @@ import net.swedz.little_big_redstone.entity.stickynote.StickyNoteView;
 import net.swedz.little_big_redstone.gui.noteboard.contents.NoteBoardStickyNote;
 import net.swedz.little_big_redstone.network.packet.RequestStickyNoteWatcherPacket;
 import net.swedz.little_big_redstone.proxy.LBRProxy;
-import net.swedz.tesseract.neoforge.helper.guigraphics.TesseractGuiGraphics;
 import net.swedz.tesseract.neoforge.proxy.Proxies;
 
 import java.util.Objects;
@@ -43,7 +42,7 @@ public final class StickyNoteViewContentsGuiOverlay
 		}
 	}
 	
-	public static void render(GuiGraphics internal, DeltaTracker delta)
+	public static void extract(GuiGraphicsExtractor graphics, DeltaTracker delta)
 	{
 		// If a screen is open, stop viewing the sticky note
 		if(Minecraft.getInstance().screen != null)
@@ -68,25 +67,23 @@ public final class StickyNoteViewContentsGuiOverlay
 			int alpha = Math.min((int) ((DISPLAY_TIME - delta.getGameTimeDeltaPartialTick(false)) * (255f / 20f)), 255);
 			if(alpha > 8)
 			{
-				var graphics = new TesseractGuiGraphics(internal);
-				
 				int size = LBRClient.config().stickyNoteInWorldView().size();
 				
-				graphics.pose().pushPose();
+				graphics.pose().pushMatrix();
 				
 				float scaledX = (float) LBRClient.config().stickyNoteInWorldView().x();
 				float scaledY = (float) LBRClient.config().stickyNoteInWorldView().y();
 				int x = NoteBoardStickyNote.toPixelCoord(scaledX, Minecraft.getInstance().getWindow().getGuiScaledWidth(), size);
 				int y = NoteBoardStickyNote.toPixelCoord(scaledY, Minecraft.getInstance().getWindow().getGuiScaledHeight(), size);
-				graphics.pose().translate(x, y, 0);
+				graphics.pose().translate(x, y);
 				
 				float scale = size / ((float) NoteBoardStickyNote.FULL_NOTE_SIZE);
-				graphics.pose().scale(scale, scale, 1);
+				graphics.pose().scale(scale, scale);
 				
-				StickyNoteViewRenderer.renderBackground(graphics, STICKY_NOTE, alpha / 255f);
-				StickyNoteViewRenderer.renderText(graphics, STICKY_NOTE, alpha / 255f);
+				StickyNoteViewRenderer.extractBackground(graphics, STICKY_NOTE, alpha / 255f);
+				StickyNoteViewRenderer.extractText(graphics, STICKY_NOTE, alpha / 255f);
 				
-				graphics.pose().popPose();
+				graphics.pose().popMatrix();
 			}
 		}
 	}

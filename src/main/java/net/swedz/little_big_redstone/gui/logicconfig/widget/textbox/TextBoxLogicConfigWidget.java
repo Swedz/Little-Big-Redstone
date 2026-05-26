@@ -1,13 +1,12 @@
 package net.swedz.little_big_redstone.gui.logicconfig.widget.textbox;
 
 import net.minecraft.client.gui.Font;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.network.chat.Component;
 import net.minecraft.util.Mth;
 import net.swedz.little_big_redstone.gui.logicconfig.widget.LogicConfigButtonHelper;
 import net.swedz.little_big_redstone.gui.logicconfig.widget.TickableLogicConfigWidget;
-import net.swedz.tesseract.neoforge.helper.guigraphics.TesseractGuiGraphics;
 
 public class TextBoxLogicConfigWidget extends EditBox implements LogicConfigButtonHelper, TickableLogicConfigWidget
 {
@@ -27,17 +26,14 @@ public class TextBoxLogicConfigWidget extends EditBox implements LogicConfigButt
 		tick++;
 	}
 	
-	private void renderText(TesseractGuiGraphics graphics)
+	private void renderText(GuiGraphicsExtractor graphics)
 	{
 		var displayedText = font.plainSubstrByWidth(value.substring(displayPos), this.getInnerWidth());
 		
 		int startX = this.getX() + 4;
 		int textY = this.getY() + (height - 8) / 2;
 		
-		graphics.setColor(color);
-		graphics.setStringDropShadow(false);
-		
-		graphics.drawString(displayedText, startX, textY);
+		graphics.text(font, displayedText, startX, textY, color, false);
 		
 		boolean isHighlighted = highlightPos != cursorPos;
 		if(isHighlighted)
@@ -48,11 +44,9 @@ public class TextBoxLogicConfigWidget extends EditBox implements LogicConfigButt
 			int highlightStartX = startX + font.width(displayedText.substring(0, highlightIndex));
 			int highlightEndX = startX + font.width(displayedText.substring(0, cursorIndex));
 			
-			graphics.fill(highlightStartX, textY, highlightEndX, textY + font.lineHeight - 1);
+			graphics.fill(highlightStartX, textY, highlightEndX, textY + font.lineHeight - 1, color);
 			
-			graphics.setColor(0x00000000);
-			graphics.drawString(displayedText.substring(Math.min(highlightIndex, cursorIndex), Math.max(highlightIndex, cursorIndex)), Math.min(highlightStartX, highlightEndX), textY);
-			graphics.revertColor();
+			graphics.text(font, displayedText.substring(Math.min(highlightIndex, cursorIndex), Math.max(highlightIndex, cursorIndex)), Math.min(highlightStartX, highlightEndX), textY, 0x00000000, false);
 		}
 		
 		if(this.isFocused() && (tick / 6) % 2 == 0)
@@ -63,30 +57,26 @@ public class TextBoxLogicConfigWidget extends EditBox implements LogicConfigButt
 				int cursorX = font.width(displayedText.substring(0, cursorIndex));
 				if(cursorIndex == displayedText.length())
 				{
-					graphics.drawString("_", startX + cursorX, textY);
+					graphics.text(font, "_", startX + cursorX, textY, color, false);
 				}
 				else
 				{
 					int startY = this.getY() + 4;
-					graphics.fill(startX + cursorX - 1, startY, startX + cursorX, startY + font.lineHeight + 1);
+					graphics.fill(startX + cursorX - 1, startY, startX + cursorX, startY + font.lineHeight + 1, color);
 				}
 			}
 		}
-		
-		graphics.resetColor();
 	}
 	
 	@Override
-	public void renderWidget(GuiGraphics internal, int mouseX, int mouseY, float partialTick)
+	public void extractWidgetRenderState(GuiGraphicsExtractor graphics, int mouseX, int mouseY, float partialTick)
 	{
 		if(!this.isVisible())
 		{
 			return;
 		}
 		
-		var graphics = new TesseractGuiGraphics(internal);
-		
-		this.renderBorder(graphics, this.getX(), this.getY(), width, height, color);
+		this.extractBorder(graphics, this.getX(), this.getY(), width, height, color);
 		
 		this.renderText(graphics);
 	}

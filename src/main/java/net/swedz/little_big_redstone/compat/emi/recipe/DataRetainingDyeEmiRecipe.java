@@ -7,7 +7,7 @@ import dev.emi.emi.api.widget.GeneratedSlotWidget;
 import dev.emi.emi.api.widget.SlotWidget;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.Holder;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.DyeItem;
@@ -27,7 +27,7 @@ public final class DataRetainingDyeEmiRecipe extends EmiPatternCraftingRecipe
 	
 	private final List<Item> inputItems;
 	
-	public DataRetainingDyeEmiRecipe(TagKey<Item> inputItemTag, ResourceLocation id)
+	public DataRetainingDyeEmiRecipe(TagKey<Item> inputItemTag, Identifier id)
 	{
 		super(
 				List.of(

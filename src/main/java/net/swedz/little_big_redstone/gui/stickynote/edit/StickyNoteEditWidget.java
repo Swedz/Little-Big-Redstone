@@ -1,16 +1,18 @@
 package net.swedz.little_big_redstone.gui.stickynote.edit;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.Renderable;
 import net.minecraft.client.gui.components.events.GuiEventListener;
 import net.minecraft.client.gui.narration.NarratableEntry;
 import net.minecraft.client.gui.narration.NarrationElementOutput;
 import net.minecraft.client.gui.navigation.ScreenRectangle;
-import net.minecraft.client.gui.screens.Screen;
-import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.input.CharacterEvent;
+import net.minecraft.client.input.KeyEvent;
+import net.minecraft.client.input.MouseButtonEvent;
+import net.minecraft.client.renderer.RenderPipelines;
 import net.swedz.tesseract.neoforge.api.Bounds;
-import net.swedz.tesseract.neoforge.helper.guigraphics.TesseractGuiGraphics;
 
 import java.util.function.Supplier;
 
@@ -67,18 +69,21 @@ public final class StickyNoteEditWidget implements GuiEventListener, Renderable,
 	}
 	
 	@Override
-	public boolean mouseClicked(double mouseX, double mouseY, int button)
+	public boolean mouseClicked(MouseButtonEvent event, boolean doubleClick)
 	{
+		var mouseX = event.x();
+		var mouseY = event.y();
+		
 		if(!this.isMouseOver(mouseX, mouseY))
 		{
 			return false;
 		}
 		
-		if(button == 0)
+		if(event.isLeft())
 		{
 			int localMouseX = (int) (mouseX - x);
 			int localMouseY = (int) (mouseY - y);
-			note.jumpTo(localMouseX, localMouseY, Screen.hasShiftDown());
+			note.jumpTo(localMouseX, localMouseY, event.hasShiftDown());
 			return true;
 		}
 		
@@ -86,14 +91,17 @@ public final class StickyNoteEditWidget implements GuiEventListener, Renderable,
 	}
 	
 	@Override
-	public boolean mouseDragged(double mouseX, double mouseY, int button, double dragX, double dragY)
+	public boolean mouseDragged(MouseButtonEvent event, double dx, double dy)
 	{
+		var mouseX = event.x();
+		var mouseY = event.y();
+		
 		if(!this.isMouseOver(mouseX, mouseY))
 		{
 			return false;
 		}
 		
-		if(button == 0)
+		if(event.isLeft())
 		{
 			int localMouseX = (int) (mouseX - x);
 			int localMouseY = (int) (mouseY - y);
@@ -105,33 +113,33 @@ public final class StickyNoteEditWidget implements GuiEventListener, Renderable,
 	}
 	
 	@Override
-	public boolean keyPressed(int keyCode, int scanCode, int modifiers)
+	public boolean keyPressed(KeyEvent event)
 	{
-		if(Screen.isSelectAll(keyCode))
+		if(event.isSelectAll())
 		{
 			note.selectAll();
 			return true;
 		}
-		else if(Screen.isCopy(keyCode))
+		else if(event.isCopy())
 		{
 			note.copy();
 			return true;
 		}
-		else if(Screen.isPaste(keyCode))
+		else if(event.isPaste())
 		{
 			note.paste();
 			return true;
 		}
-		else if(Screen.isCut(keyCode))
+		else if(event.isCut())
 		{
 			note.cut();
 			return true;
 		}
 		else
 		{
-			boolean ctrl = Screen.hasControlDown();
-			boolean shift = Screen.hasShiftDown();
-			return switch (keyCode)
+			boolean ctrl = event.hasControlDown();
+			boolean shift = event.hasShiftDown();
+			return switch (event.key())
 			{
 				case KEY_RETURN, KEY_NUMPADENTER ->
 				{
@@ -174,62 +182,54 @@ public final class StickyNoteEditWidget implements GuiEventListener, Renderable,
 	}
 	
 	@Override
-	public boolean charTyped(char character, int modifiers)
+	public boolean charTyped(CharacterEvent event)
 	{
-		return note.type(character);
+		return note.type(event);
 	}
 	
 	@Override
-	public void render(GuiGraphics vanilla, int mouseX, int mouseY, float partialTick)
+	public void extractRenderState(GuiGraphicsExtractor graphics, int mouseX, int mouseY, float partialTick)
 	{
-		var graphics = new TesseractGuiGraphics(vanilla);
-		
-		graphics.pose().pushPose();
-		graphics.pose().translate(x, y, 0);
+		graphics.pose().pushMatrix();
+		graphics.pose().translate(x, y);
 		
 		this.renderLines(graphics);
 		this.renderHighlights(graphics);
 		this.renderCursor(graphics);
 		
-		graphics.pose().popPose();
+		graphics.pose().popMatrix();
 	}
 	
-	private void renderLines(TesseractGuiGraphics graphics)
+	private void renderLines(GuiGraphicsExtractor graphics)
 	{
-		graphics.setColor(color.get());
-		graphics.setStringDropShadow(false);
+		int color = this.color.get();
 		var display = note.getDisplay();
 		for(var line : display.lines())
 		{
-			graphics.drawString(line.text(), 0, line.y());
+			graphics.text(Minecraft.getInstance().font, line.text(), 0, line.y(), color, false);
 		}
-		graphics.setStringDropShadow(true);
-		graphics.resetColor();
 	}
 	
-	private void renderCursor(TesseractGuiGraphics graphics)
+	private void renderCursor(GuiGraphicsExtractor graphics)
 	{
 		if(this.isFocused() && (tick / 6) % 2 == 0)
 		{
-			graphics.setColor(color.get());
+			int color = this.color.get();
 			var display = note.getDisplay();
 			int x = display.cursorScreenX();
 			int y = display.cursorScreenY();
 			if(display.isCursorAtEndOfLine())
 			{
-				graphics.setStringDropShadow(false);
-				graphics.drawString("_", x, y);
-				graphics.setStringDropShadow(true);
+				graphics.text(Minecraft.getInstance().font, "_", x, y, color, false);
 			}
 			else
 			{
-				graphics.fill(x - 1, y - 1, x, y + display.lineHeight());
+				graphics.fill(x - 1, y - 1, x, y + display.lineHeight(), color);
 			}
-			graphics.resetColor();
 		}
 	}
 	
-	private void renderHighlights(TesseractGuiGraphics graphics)
+	private void renderHighlights(GuiGraphicsExtractor graphics)
 	{
 		for(var area : note.getDisplay().highlightedAreas())
 		{
@@ -237,11 +237,9 @@ public final class StickyNoteEditWidget implements GuiEventListener, Renderable,
 		}
 	}
 	
-	private void renderHighlight(TesseractGuiGraphics graphics, Bounds area)
+	private void renderHighlight(GuiGraphicsExtractor graphics, Bounds area)
 	{
-		graphics.setColor(0, 0, 1, 1);
-		graphics.fill(RenderType.guiTextHighlight(), area.minX(), area.minY(), area.maxX(), area.maxY());
-		graphics.revertColor();
+		graphics.fill(RenderPipelines.GUI_TEXT_HIGHLIGHT, area.minX(), area.minY(), area.maxX(), area.maxY(), 0xFF0000FF);
 	}
 	
 	@Override

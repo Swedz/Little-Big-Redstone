@@ -4,7 +4,7 @@ import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.Style;
 import net.minecraft.network.chat.TextColor;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.ModContainer;
 import net.neoforged.fml.common.Mod;
@@ -35,9 +35,9 @@ public final class LBR
 	public static final String ID   = "little_big_redstone";
 	public static final String NAME = "Little Big Redstone";
 	
-	public static ResourceLocation id(String path)
+	public static Identifier id(String path)
 	{
-		return ResourceLocation.fromNamespaceAndPath(ID, path);
+		return Identifier.fromNamespaceAndPath(ID, path);
 	}
 	
 	public static final Logger LOGGER = LoggerFactory.getLogger(NAME);

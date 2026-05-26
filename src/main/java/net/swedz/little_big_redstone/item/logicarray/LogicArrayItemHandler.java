@@ -1,21 +1,28 @@
 package net.swedz.little_big_redstone.item.logicarray;
 
-import net.minecraft.world.item.ItemStack;
-import net.neoforged.neoforge.common.MutableDataComponentHolder;
-import net.neoforged.neoforge.items.ComponentItemHandler;
+import net.neoforged.neoforge.transfer.access.ItemAccess;
+import net.neoforged.neoforge.transfer.item.ItemAccessItemHandler;
+import net.neoforged.neoforge.transfer.item.ItemResource;
 import net.swedz.little_big_redstone.LBRComponents;
 import net.swedz.little_big_redstone.LBRItems;
 
-public final class LogicArrayItemHandler extends ComponentItemHandler
+public final class LogicArrayItemHandler extends ItemAccessItemHandler
 {
-	public LogicArrayItemHandler(MutableDataComponentHolder parent)
+	public LogicArrayItemHandler(ItemAccess access)
 	{
-		super(parent, LBRComponents.LOGIC_ARRAY_STORAGE.get(), LogicArrayItem.MAX_SLOTS);
+		super(access, LBRComponents.LOGIC_ARRAY_STORAGE.get(), LogicArrayItem.MAX_SLOTS);
 	}
 	
 	@Override
-	public boolean isItemValid(int slot, ItemStack stack)
+	public boolean isValid(int index, ItemResource resource)
 	{
-		return stack.isEmpty() || stack.has(LBRComponents.LOGIC) || stack.is(LBRItems.REDSTONE_BIT.asItem());
+		return resource.isEmpty() ||
+			   resource.has(LBRComponents.LOGIC) ||
+			   resource.is(LBRItems.REDSTONE_BIT.asItem());
+	}
+	
+	public ItemResource set(int index, ItemResource newResource, int newAmount)
+	{
+		return this.update(itemAccess.getResource(), index, newResource, newAmount);
 	}
 }

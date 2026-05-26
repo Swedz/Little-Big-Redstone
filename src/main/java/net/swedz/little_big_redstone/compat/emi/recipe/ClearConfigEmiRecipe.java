@@ -7,7 +7,7 @@ import dev.emi.emi.api.widget.GeneratedSlotWidget;
 import dev.emi.emi.api.widget.SlotWidget;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.Holder;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.Item;
 import net.swedz.little_big_redstone.LBRTags;
 import net.swedz.tesseract.neoforge.helper.RegistryHelper;
@@ -19,7 +19,7 @@ public final class ClearConfigEmiRecipe extends EmiPatternCraftingRecipe
 {
 	private final List<Item> inputItems;
 	
-	public ClearConfigEmiRecipe(ResourceLocation id)
+	public ClearConfigEmiRecipe(Identifier id)
 	{
 		super(
 				List.of(

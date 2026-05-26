@@ -2,6 +2,7 @@ package net.swedz.little_big_redstone.gui.microchip.logic;
 
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Maps;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.swedz.little_big_redstone.gui.microchip.logic.renderer.CalculatorLogicRenderer;
 import net.swedz.little_big_redstone.gui.microchip.logic.renderer.IORenderer;
 import net.swedz.little_big_redstone.gui.microchip.logic.renderer.OnOffLogicRenderer;
@@ -10,7 +11,6 @@ import net.swedz.little_big_redstone.gui.microchip.logic.renderer.SimpleLogicRen
 import net.swedz.little_big_redstone.microchip.object.logic.LogicComponent;
 import net.swedz.little_big_redstone.microchip.object.logic.LogicType;
 import net.swedz.little_big_redstone.microchip.object.logic.LogicTypes;
-import net.swedz.tesseract.neoforge.helper.guigraphics.TesseractGuiGraphics;
 
 import java.util.Map;
 
@@ -73,7 +73,7 @@ public final class LogicRenderers
 		return builder.build();
 	}
 	
-	public static <L extends LogicComponent> void render(LogicRenderer.Context context, TesseractGuiGraphics graphics, L component, int x, int y)
+	public static <L extends LogicComponent> void render(LogicRenderer.Context context, GuiGraphicsExtractor graphics, L component, int x, int y)
 	{
 		var renderer = (LogicRenderer<L>) RENDERERS.get(component.type());
 		if(renderer != null)

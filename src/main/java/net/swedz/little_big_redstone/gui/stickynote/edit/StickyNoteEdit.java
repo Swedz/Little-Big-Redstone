@@ -4,6 +4,7 @@ import com.google.common.collect.Lists;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.font.TextFieldHelper;
+import net.minecraft.client.input.CharacterEvent;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.Style;
 import net.minecraft.util.StringUtil;
@@ -153,8 +154,9 @@ public final class StickyNoteEdit
 		this.moveVertically(1, shift);
 	}
 	
-	public boolean type(char character)
+	public boolean type(CharacterEvent event)
 	{
+		var character = event.codepoint();
 		if(StringUtil.isAllowedChatCharacter(character))
 		{
 			editor.insertText(Character.toString(character));

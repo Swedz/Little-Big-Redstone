@@ -11,7 +11,7 @@ import guideme.document.flow.InlineBlockAlignment;
 import guideme.document.flow.LytFlowInlineBlock;
 import guideme.document.flow.LytFlowParent;
 import guideme.libs.mdast.mdx.model.MdxJsxElementFields;
-import net.minecraft.ResourceLocationException;
+import net.minecraft.IdentifierException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -54,7 +54,7 @@ public final class MarginFloatingImageCompiler extends FlowTagCompiler
 			}
 			image.setImage(imageId, imageContent);
 		}
-		catch (ResourceLocationException e)
+		catch (IdentifierException e)
 		{
 			LOG.error("Invalid image id: {}", src);
 			image.setTitle("Invalid image URL: " + src);

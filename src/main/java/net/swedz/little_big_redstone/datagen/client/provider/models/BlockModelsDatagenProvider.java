@@ -1,23 +1,23 @@
 package net.swedz.little_big_redstone.datagen.client.provider.models;
 
+import net.minecraft.client.data.models.BlockModelGenerators;
+import net.minecraft.client.data.models.ItemModelGenerators;
+import net.minecraft.client.data.models.ModelProvider;
 import net.minecraft.world.item.DyeColor;
-import net.neoforged.neoforge.client.model.generators.BlockStateProvider;
-import net.neoforged.neoforge.client.model.generators.ModelFile;
 import net.neoforged.neoforge.data.event.GatherDataEvent;
 import net.swedz.little_big_redstone.LBR;
 import net.swedz.little_big_redstone.LBRBlocks;
-import net.swedz.little_big_redstone.client.model.stickynote.entity.StickyNoteEntityModelLoaderBuilder;
 import net.swedz.tesseract.neoforge.registry.holder.BlockHolder;
 
-public final class BlockModelsDatagenProvider extends BlockStateProvider
+public final class BlockModelsDatagenProvider extends ModelProvider
 {
 	public BlockModelsDatagenProvider(GatherDataEvent event)
 	{
-		super(event.getGenerator().getPackOutput(), LBR.ID, event.getExistingFileHelper());
+		super(event.getGenerator().getPackOutput(), LBR.ID);
 	}
 	
 	@Override
-	protected void registerStatesAndModels()
+	protected void registerModels(BlockModelGenerators blockModels, ItemModelGenerators itemModels)
 	{
 		for(BlockHolder block : LBRBlocks.values())
 		{

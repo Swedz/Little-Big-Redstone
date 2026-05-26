@@ -4,12 +4,14 @@ import com.google.common.collect.Lists;
 import com.mojang.blaze3d.platform.InputConstants;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.Renderable;
 import net.minecraft.client.gui.components.events.GuiEventListener;
 import net.minecraft.client.gui.narration.NarratableEntry;
 import net.minecraft.client.gui.narration.NarrationElementOutput;
 import net.minecraft.client.gui.navigation.ScreenRectangle;
 import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.client.input.MouseButtonEvent;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.Style;
 import net.minecraft.world.item.DyeColor;
@@ -159,13 +161,13 @@ public final class MicrochipWidget implements GuiEventListener, Renderable, Narr
 		}
 	}
 	
-	private boolean dyeComponent(int x, int y, int button)
+	private boolean dyeComponent(int x, int y, MouseButtonEvent event)
 	{
 		var menu = this.menu();
 		var carried = menu.getCarried();
 		var entry = context.object();
 		
-		if(button == InputConstants.MOUSE_BUTTON_RIGHT &&
+		if(event.isRight() &&
 		   context.shouldDyeObject())
 		{
 			int slot = entry.slot();
@@ -189,20 +191,20 @@ public final class MicrochipWidget implements GuiEventListener, Renderable, Narr
 		return false;
 	}
 	
-	private boolean pickupNote(int x, int y, int button)
+	private boolean pickupNote(int x, int y, MouseButtonEvent event)
 	{
 		var menu = this.menu();
 		var carried = menu.getCarried();
 		var note = context.note();
 		
-		boolean shift = Screen.hasShiftDown();
-		if(button == InputConstants.MOUSE_BUTTON_LEFT &&
+		if(event.isLeft() &&
 		   context.shouldInteractNote() &&
 		   carried.isEmpty())
 		{
 			microchip.stickyNotes().remove(note);
 			microchip.markDirty(false);
 			var stack = note.toStack();
+			boolean shift = event.hasShiftDown();
 			if(!shift || TransferHelper.insert(menu.getDestinationInventoryItemHandler(Minecraft.getInstance().player), stack) <= 0)
 			{
 				menu.setCarried(stack);
@@ -237,12 +239,12 @@ public final class MicrochipWidget implements GuiEventListener, Renderable, Narr
 		return false;
 	}
 	
-	private boolean pickupWire(int x, int y, int button)
+	private boolean pickupWire(int x, int y, MouseButtonEvent event)
 	{
 		var menu = this.menu();
 		var carried = menu.getCarried();
 		
-		if(button == InputConstants.MOUSE_BUTTON_LEFT &&
+		if(event.isLeft() &&
 		   MicrochipWidgetContext.canInteractWire(carried) &&
 		   !this.hasSelectedPort())
 		{
@@ -291,20 +293,20 @@ public final class MicrochipWidget implements GuiEventListener, Renderable, Narr
 		return false;
 	}
 	
-	private boolean pickupLogic(int x, int y, int button)
+	private boolean pickupLogic(int x, int y, MouseButtonEvent event)
 	{
 		var menu = this.menu();
 		var carried = menu.getCarried();
 		var logic = context.logic();
 		
-		boolean shift = Screen.hasShiftDown();
-		if(button == InputConstants.MOUSE_BUTTON_LEFT &&
+		if(event.isLeft() &&
 		   context.shouldInteractLogic() &&
 		   carried.isEmpty())
 		{
 			var wiresPopped = microchip.components().remove(logic);
 			microchip.markDirty(true);
 			var stack = logic.toStack();
+			boolean shift = event.hasShiftDown();
 			if(!shift || TransferHelper.insert(menu.getDestinationInventoryItemHandler(Minecraft.getInstance().player), stack) <= 0)
 			{
 				menu.setCarried(stack);
@@ -317,20 +319,20 @@ public final class MicrochipWidget implements GuiEventListener, Renderable, Narr
 		return false;
 	}
 	
-	private boolean placeNote(int x, int y, int button)
+	private boolean placeNote(int x, int y, MouseButtonEvent event)
 	{
 		var menu = this.menu();
 		var carried = menu.getCarried();
 		var player = screen.getMinecraft().player;
 		
-		boolean leftClick = button == InputConstants.MOUSE_BUTTON_LEFT;
-		boolean rightClick = button == InputConstants.MOUSE_BUTTON_RIGHT;
+		boolean leftClick = event.isLeft();
+		boolean rightClick = event.isRight();
 		if((leftClick || rightClick) &&
 		   carried.getItem() instanceof StickyNoteItem &&
 		   context.shouldInteractBoard())
 		{
-			int placeX = Screen.hasControlDown() ? MicrochipScreen.getGridSnappedCoord(x) : (x - 8);
-			int placeY = Screen.hasControlDown() ? MicrochipScreen.getGridSnappedCoord(y) : (y - 8);
+			int placeX = event.hasControlDown() ? MicrochipScreen.getGridSnappedCoord(x) : (x - 8);
+			int placeY = event.hasControlDown() ? MicrochipScreen.getGridSnappedCoord(y) : (y - 8);
 			
 			if(microchip.size().bounds().normalize().contains(new Bounds(placeX, placeY, 16, 16)))
 			{
@@ -342,7 +344,7 @@ public final class MicrochipWidget implements GuiEventListener, Renderable, Narr
 					{
 						carried.shrink(1);
 					}
-					new PlaceTakeMicrochipObjectPacket(menu.containerId, placeX, placeY, true, leftClick, Screen.hasShiftDown()).sendToServer();
+					new PlaceTakeMicrochipObjectPacket(menu.containerId, placeX, placeY, true, leftClick, event.hasShiftDown()).sendToServer();
 					return true;
 				}
 			}
@@ -351,7 +353,7 @@ public final class MicrochipWidget implements GuiEventListener, Renderable, Narr
 		return false;
 	}
 	
-	private boolean placeWire(int x, int y, int button)
+	private boolean placeWire(int x, int y, MouseButtonEvent event)
 	{
 		var menu = this.menu();
 		var carried = menu.getCarried();
@@ -360,7 +362,7 @@ public final class MicrochipWidget implements GuiEventListener, Renderable, Narr
 		if(carried.is(LBRItems.REDSTONE_BIT.asItem()) &&
 		   this.hasSelectedPort())
 		{
-			if(button == InputConstants.MOUSE_BUTTON_LEFT &&
+			if(event.isLeft() &&
 			   context.shouldInteractPort() &&
 			   context.isPortInput() &&
 			   context.isPortEmpty() &&
@@ -384,21 +386,21 @@ public final class MicrochipWidget implements GuiEventListener, Renderable, Narr
 		return false;
 	}
 	
-	private boolean placeLogic(int x, int y, int button)
+	private boolean placeLogic(int x, int y, MouseButtonEvent event)
 	{
 		var menu = this.menu();
 		var carried = menu.getCarried();
 		var player = screen.getMinecraft().player;
 		
-		boolean leftClick = button == InputConstants.MOUSE_BUTTON_LEFT;
-		boolean rightClick = button == InputConstants.MOUSE_BUTTON_RIGHT;
+		boolean leftClick = event.isLeft();
+		boolean rightClick = event.isRight();
 		if((leftClick || rightClick) &&
 		   carried.has(LBRComponents.LOGIC) &&
 		   context.shouldInteractBoard())
 		{
 			var component = carried.get(LBRComponents.LOGIC);
-			int placeX = Screen.hasControlDown() ? MicrochipScreen.getGridSnappedCoord(component.size().topLeftCornerX(x) + 8) : component.size().topLeftCornerX(x);
-			int placeY = Screen.hasControlDown() ? MicrochipScreen.getGridSnappedCoord(component.size().topLeftCornerY(y) + 8) : component.size().topLeftCornerY(y);
+			int placeX = event.hasControlDown() ? MicrochipScreen.getGridSnappedCoord(component.size().topLeftCornerX(x) + 8) : component.size().topLeftCornerX(x);
+			int placeY = event.hasControlDown() ? MicrochipScreen.getGridSnappedCoord(component.size().topLeftCornerY(y) + 8) : component.size().topLeftCornerY(y);
 			
 			if(microchip.size().bounds().normalize().contains(component.size().toBounds(placeX, placeY)))
 			{
@@ -411,7 +413,7 @@ public final class MicrochipWidget implements GuiEventListener, Renderable, Narr
 					{
 						carried.shrink(1);
 					}
-					new PlaceTakeMicrochipObjectPacket(menu.containerId, placeX, placeY, true, leftClick, Screen.hasShiftDown()).sendToServer();
+					new PlaceTakeMicrochipObjectPacket(menu.containerId, placeX, placeY, true, leftClick, event.hasShiftDown()).sendToServer();
 					return true;
 				}
 			}
@@ -420,13 +422,13 @@ public final class MicrochipWidget implements GuiEventListener, Renderable, Narr
 		return false;
 	}
 	
-	private boolean openLogicConfig(int x, int y, int button)
+	private boolean openLogicConfig(int x, int y, MouseButtonEvent event)
 	{
 		var menu = this.menu();
 		var carried = menu.getCarried();
 		var logic = context.logic();
 		
-		if(button == InputConstants.MOUSE_BUTTON_RIGHT &&
+		if(event.isRight() &&
 		   context.shouldInteractLogic() &&
 		   carried.isEmpty() &&
 		   logic.component().config().hasMenu())
@@ -438,14 +440,14 @@ public final class MicrochipWidget implements GuiEventListener, Renderable, Narr
 		return false;
 	}
 	
-	private boolean openNote(int x, int y, int button)
+	private boolean openNote(int x, int y, MouseButtonEvent event)
 	{
 		var menu = this.menu();
 		var carried = menu.getCarried();
 		var player = screen.getMinecraft().player;
 		var note = context.note();
 		
-		if(button == InputConstants.MOUSE_BUTTON_RIGHT &&
+		if(event.isRight() &&
 		   context.shouldInteractNote() &&
 		   carried.isEmpty())
 		{
@@ -456,23 +458,23 @@ public final class MicrochipWidget implements GuiEventListener, Renderable, Narr
 		return false;
 	}
 	
-	private boolean mouseClickedOnBoard(int mouseX, int mouseY, int boardMouseX, int boardMouseY, int button)
+	private boolean mouseClickedOnBoard(int mouseX, int mouseY, int boardMouseX, int boardMouseY, MouseButtonEvent event)
 	{
 		context = MicrochipWidgetContext.test(this, panel, mouseX, mouseY, boardMouseX, boardMouseY, context);
 		
-		return this.dyeComponent(boardMouseX, boardMouseY, button) ||
-			   this.pickupNote(boardMouseX, boardMouseY, button) ||
-			   this.pickupWire(boardMouseX, boardMouseY, button) ||
-			   this.pickupLogic(boardMouseX, boardMouseY, button) ||
-			   this.placeNote(boardMouseX, boardMouseY, button) ||
-			   this.placeWire(boardMouseX, boardMouseY, button) ||
-			   this.placeLogic(boardMouseX, boardMouseY, button) ||
-			   this.openLogicConfig(boardMouseX, boardMouseY, button) ||
-			   this.openNote(boardMouseX, boardMouseY, button);
+		return this.dyeComponent(boardMouseX, boardMouseY, event) ||
+			   this.pickupNote(boardMouseX, boardMouseY, event) ||
+			   this.pickupWire(boardMouseX, boardMouseY, event) ||
+			   this.pickupLogic(boardMouseX, boardMouseY, event) ||
+			   this.placeNote(boardMouseX, boardMouseY, event) ||
+			   this.placeWire(boardMouseX, boardMouseY, event) ||
+			   this.placeLogic(boardMouseX, boardMouseY, event) ||
+			   this.openLogicConfig(boardMouseX, boardMouseY, event) ||
+			   this.openNote(boardMouseX, boardMouseY, event);
 	}
 	
 	@Override
-	public boolean mouseDragged(double mouseX, double mouseY, int button, double dragX, double dragY)
+	public boolean mouseDragged(MouseButtonEvent event, double dragX, double dragY)
 	{
 		if(allowDragging)
 		{
@@ -483,17 +485,17 @@ public final class MicrochipWidget implements GuiEventListener, Renderable, Narr
 	}
 	
 	@Override
-	public boolean mouseClicked(double mx, double my, int button)
+	public boolean mouseClicked(MouseButtonEvent event, boolean doubleClick)
 	{
-		int mouseX = (int) mx;
-		int mouseY = (int) my;
+		int mouseX = (int) event.x();
+		int mouseY = (int) event.y();
 		if(this.isMouseOver(mouseX, mouseY))
 		{
 			var size = microchip.size();
 			int boardMouseX = size.boardCoord(this.toLocalX(mouseX), viewPosition.zoom(), viewPosition.x());
 			int boardMouseY = size.boardCoord(this.toLocalY(mouseY), viewPosition.zoom(), viewPosition.y());
-			return allowDragging = button == InputConstants.MOUSE_BUTTON_MIDDLE ||
-								   !this.mouseClickedOnBoard(mouseX, mouseY, boardMouseX, boardMouseY, button);
+			return allowDragging = event.button() == InputConstants.MOUSE_BUTTON_MIDDLE ||
+								   !this.mouseClickedOnBoard(mouseX, mouseY, boardMouseX, boardMouseY, event);
 		}
 		else
 		{
@@ -518,7 +520,7 @@ public final class MicrochipWidget implements GuiEventListener, Renderable, Narr
 	}
 	
 	@Override
-	public void render(GuiGraphics vanilla, int mouseX, int mouseY, float partialTick)
+	public void extractRenderState(GuiGraphicsExtractor graphics, int mouseX, int mouseY, float partialTick)
 	{
 		var size = microchip.size();
 		int boardMouseX = size.boardCoord(this.toLocalX(mouseX), viewPosition.zoom(), viewPosition.x());
@@ -526,20 +528,18 @@ public final class MicrochipWidget implements GuiEventListener, Renderable, Narr
 		
 		context = MicrochipWidgetContext.test(this, panel, mouseX, mouseY, boardMouseX, boardMouseY, context);
 		
-		var graphics = new TesseractGuiGraphics(vanilla);
-		
-		vanilla.enableScissor(x, y, x + MicrochipBlockEntity.CIRCUIT_BOUNDS.width(), y + MicrochipBlockEntity.CIRCUIT_BOUNDS.height());
-		graphics.pose().pushPose();
-		graphics.pose().translate(x, y, 0);
-		graphics.pose().scale(microchip.size().scale(), microchip.size().scale(), 1);
-		graphics.pose().scale(viewPosition.zoom(), viewPosition.zoom(), 1);
-		graphics.pose().translate(-viewPosition.x(), -viewPosition.y(), 0);
+		graphics.enableScissor(x, y, x + MicrochipBlockEntity.CIRCUIT_BOUNDS.width(), y + MicrochipBlockEntity.CIRCUIT_BOUNDS.height());
+		graphics.pose().pushMatrix();
+		graphics.pose().translate(x, y);
+		graphics.pose().scale(microchip.size().scale(), microchip.size().scale());
+		graphics.pose().scale(viewPosition.zoom(), viewPosition.zoom());
+		graphics.pose().translate((int) -viewPosition.x(), (int) -viewPosition.y());
 		panel.render(graphics);
-		graphics.pose().popPose();
-		vanilla.disableScissor();
+		graphics.pose().popMatrix();
+		graphics.disableScissor();
 	}
 	
-	private void renderTooltipStickyNote(TesseractGuiGraphics graphics, int x, int y)
+	private void renderTooltipStickyNote(GuiGraphicsExtractor graphics, int x, int y)
 	{
 		var entry = context.note();
 		var note = entry.note();
@@ -565,7 +565,7 @@ public final class MicrochipWidget implements GuiEventListener, Renderable, Narr
 		}
 	}
 	
-	private void renderTooltipLogic(TesseractGuiGraphics graphics, int x, int y)
+	private void renderTooltipLogic(GuiGraphicsExtractor graphics, int x, int y)
 	{
 		var component = context.logic().component();
 		List<Component> lines = Lists.newArrayList();
@@ -595,7 +595,7 @@ public final class MicrochipWidget implements GuiEventListener, Renderable, Narr
 		}
 	}
 	
-	private void renderTooltipWire(TesseractGuiGraphics graphics, int x, int y)
+	private void renderTooltipWire(GuiGraphicsExtractor graphics, int x, int y)
 	{
 		var component = context.logic().component();
 		
@@ -609,7 +609,7 @@ public final class MicrochipWidget implements GuiEventListener, Renderable, Narr
 		graphics.renderTooltip(lines, x, y, backgroundColor, backgroundColor, borderColor, borderColor);
 	}
 	
-	public void renderTooltip(TesseractGuiGraphics graphics)
+	public void renderTooltip(GuiGraphicsExtractor graphics)
 	{
 		if(context.shouldRenderTooltip())
 		{

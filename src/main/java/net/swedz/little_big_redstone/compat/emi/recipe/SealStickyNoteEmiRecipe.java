@@ -7,7 +7,7 @@ import dev.emi.emi.api.widget.GeneratedSlotWidget;
 import dev.emi.emi.api.widget.SlotWidget;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.Holder;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.Item;
 import net.swedz.little_big_redstone.LBRComponents;
 import net.swedz.little_big_redstone.LBRTags;
@@ -21,7 +21,7 @@ public final class SealStickyNoteEmiRecipe extends EmiPatternCraftingRecipe
 	private final List<Item> stickyNotes;
 	private final List<Item> sealants;
 	
-	public SealStickyNoteEmiRecipe(ResourceLocation id)
+	public SealStickyNoteEmiRecipe(Identifier id)
 	{
 		super(
 				List.of(

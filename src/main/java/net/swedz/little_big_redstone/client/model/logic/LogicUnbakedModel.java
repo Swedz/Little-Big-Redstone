@@ -11,7 +11,7 @@ import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.client.resources.model.Material;
 import net.minecraft.client.resources.model.ModelBaker;
 import net.minecraft.client.resources.model.ModelState;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.inventory.InventoryMenu;
 import net.minecraft.world.item.DyeColor;
 import net.neoforged.neoforge.client.NeoForgeRenderTypes;
@@ -30,7 +30,7 @@ import java.util.function.Function;
 
 public final class LogicUnbakedModel implements IUnbakedGeometry<LogicUnbakedModel>
 {
-	public static final ResourceLocation                   ID     = LBR.id("logic");
+	public static final Identifier                   ID     = LBR.id("logic");
 	public static final IGeometryLoader<LogicUnbakedModel> LOADER = (json, context) ->
 			new LogicUnbakedModel(LogicBakingModelData.CODEC.parse(JsonOps.INSTANCE, json).getOrThrow(JsonParseException::new));
 	

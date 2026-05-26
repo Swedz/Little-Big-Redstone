@@ -8,7 +8,7 @@ import net.minecraft.client.resources.model.Material;
 import net.minecraft.client.resources.model.ModelBaker;
 import net.minecraft.client.resources.model.ModelState;
 import net.minecraft.core.Direction;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.neoforged.neoforge.client.model.geometry.IGeometryBakingContext;
 import net.neoforged.neoforge.client.model.geometry.IGeometryLoader;
 import net.neoforged.neoforge.client.model.geometry.IUnbakedGeometry;
@@ -20,7 +20,7 @@ import java.util.function.Function;
 
 public final class MicrochipUnbakedModel implements IUnbakedGeometry<MicrochipUnbakedModel>
 {
-	public static final ResourceLocation                       ID     = LBR.id("microchip");
+	public static final Identifier                       ID     = LBR.id("microchip");
 	public static final IGeometryLoader<MicrochipUnbakedModel> LOADER = (json, context) -> new MicrochipUnbakedModel();
 	
 	private MicrochipUnbakedModel()

@@ -1,27 +1,14 @@
 neoForge {
 	version = neoforge_version
 
-	mods {
-		"${mod_id}" {
-			sourceSet sourceSets.main
-		}
-	}
-
 	validateAccessTransformers = true
 	accessTransformers = [
 			"src/main/resources/${mod_id}.accesstransformer.cfg"
 	]
 	interfaceInjectionData.from "src/main/resources/interfaces.json"
 
-	parchment {
-		mappingsVersion = project.parchment_mappings_version
-		minecraftVersion = project.parchment_mappings_minecraft_version
-	}
-
 	runs {
 		configureEach {
-			mods = [neoForge.mods."${mod_id}"]
-
 			systemProperty 'forge.logging.markers', 'REGISTRIES'
 
 			systemProperty 'forge.logging.console.level', 'debug'
@@ -65,7 +52,7 @@ neoForge {
 		}
 
 		data {
-			data()
+			clientData()
 
 			gameDirectory.set(project.getLayout().getProjectDirectory().dir('runs/data'))
 
@@ -77,12 +64,17 @@ neoForge {
 			systemProperty 'mixin.debug.verbose', 'true'
 		}
 	}
+
+	mods {
+		"${mod_id}" {
+			sourceSet sourceSets.main
+		}
+	}
 }
 
 tasks.withType(ProcessResources).configureEach {
 	var replaceProperties = [
 			minecraft_version       : minecraft_version,
-			minecraft_version_range : minecraft_version_range,
 			neoforge_version        : neoforge_version,
 			loader_version_range    : loader_version_range,
 			mod_id                  : mod_id,

@@ -1,24 +1,25 @@
 package net.swedz.little_big_redstone.gui.logicarray.slot;
 
 import net.minecraft.world.item.ItemStack;
-import net.neoforged.neoforge.items.IItemHandler;
-import net.neoforged.neoforge.items.SlotItemHandler;
+import net.neoforged.neoforge.transfer.ResourceHandler;
+import net.neoforged.neoforge.transfer.item.ItemResource;
+import net.neoforged.neoforge.transfer.item.ResourceHandlerSlot;
 
 import java.util.function.Supplier;
 
-public final class LogicArraySlot extends SlotItemHandler
+public final class LogicArraySlot extends ResourceHandlerSlot
 {
 	private final Supplier<Boolean> isActive;
 	
 	public LogicArraySlot(
-			IItemHandler itemHandler,
+			ResourceHandler<ItemResource> handler,
 			int index,
 			int x,
 			int y,
 			Supplier<Boolean> isActive
 	)
 	{
-		super(itemHandler, index, x, y);
+		super(handler, index, x, y);
 		this.isActive = isActive;
 	}
 	
@@ -26,11 +27,5 @@ public final class LogicArraySlot extends SlotItemHandler
 	public boolean isActive()
 	{
 		return isActive == null || isActive.get();
-	}
-	
-	@Override
-	public ItemStack getItem()
-	{
-		return super.getItem().copy();
 	}
 }

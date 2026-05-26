@@ -11,6 +11,7 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.swedz.little_big_redstone.LBR;
 import net.swedz.little_big_redstone.LBRComponents;
+import net.swedz.little_big_redstone.LBRFonts;
 import net.swedz.little_big_redstone.LBRItems;
 
 import java.util.List;
@@ -32,7 +33,7 @@ public record LogicType<L extends LogicComponent>(
 	
 	public MutableComponent displaySymbol()
 	{
-		return Component.literal(String.valueOf(symbol)).withStyle(Style.EMPTY.withFont(LBR.id("logic_component")));
+		return Component.literal(String.valueOf(symbol)).withStyle(Style.EMPTY.withFont(LBRFonts.LOGIC_COMPONENT));
 	}
 	
 	public Optional<List<Component>> tooltip(L component, boolean shift, boolean config, boolean configHeader)

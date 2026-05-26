@@ -33,12 +33,13 @@ versionRange = "${tesseract_version_range}"
 ordering = "AFTER"
 side = "BOTH"
 
-[[dependencies.${ mod_id }]]
-modId = "emi"
-type = "optional"
-versionRange = "${emi_version_range}"
-ordering = "AFTER"
-side = "CLIENT"
+# TODO wait for EMI
+#[[dependencies.${ mod_id }]]
+#modId = "emi"
+#type = "optional"
+#versionRange = "${emi_version_range}"
+#ordering = "AFTER"
+#side = "CLIENT"
 
 [[dependencies.${ mod_id }]]
 modId = "guideme"

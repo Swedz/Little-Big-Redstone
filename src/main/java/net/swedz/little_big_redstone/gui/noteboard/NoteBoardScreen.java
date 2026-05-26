@@ -1,14 +1,14 @@
 package net.swedz.little_big_redstone.gui.noteboard;
 
-import com.mojang.blaze3d.platform.InputConstants;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
+import net.minecraft.client.input.MouseButtonEvent;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.player.Inventory;
-import net.minecraft.world.inventory.ClickType;
+import net.minecraft.world.inventory.ContainerInput;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
 import net.swedz.little_big_redstone.LBR;
@@ -23,13 +23,12 @@ import net.swedz.little_big_redstone.item.stickynote.StickyNoteItem;
 import net.swedz.little_big_redstone.network.packet.MoveNoteBoardStickyNotePacket;
 import net.swedz.little_big_redstone.network.packet.PlaceTakeNoteBoardStickyNotePacket;
 import net.swedz.little_big_redstone.proxy.LBRProxy;
-import net.swedz.tesseract.neoforge.helper.guigraphics.TesseractGuiGraphics;
 import net.swedz.tesseract.neoforge.proxy.Proxies;
 
 public final class NoteBoardScreen extends AbstractContainerScreen<NoteBoardMenu>
 {
-	private static final ResourceLocation BACKGROUND   = LBR.id("textures/gui/container/note_board/inventory_background.png");
-	private static final ResourceLocation OVERLAY_NOTE = LBR.id("textures/gui/container/note_board/overlay_note.png");
+	private static final Identifier BACKGROUND   = LBR.id("textures/gui/container/note_board/inventory_background.png");
+	private static final Identifier OVERLAY_NOTE = LBR.id("textures/gui/container/note_board/overlay_note.png");
 	
 	private NoteBoardContents contents;
 	
@@ -39,11 +38,9 @@ public final class NoteBoardScreen extends AbstractContainerScreen<NoteBoardMenu
 	
 	public NoteBoardScreen(NoteBoardMenu menu, Inventory playerInventory, Component title)
 	{
-		super(menu, playerInventory, title);
+		super(menu, playerInventory, title, 176, 90);
 		
 		contents = Minecraft.getInstance().player.getData(LBRAttachments.NOTE_BOARD);
-		
-		imageHeight = 90;
 	}
 	
 	public NoteBoardContents contents()
@@ -66,21 +63,21 @@ public final class NoteBoardScreen extends AbstractContainerScreen<NoteBoardMenu
 	
 	private boolean isOutsideInventory(double mouseX, double mouseY)
 	{
-		return this.hasClickedOutside(mouseX, mouseY, leftPos, topPos, 0);
+		return this.hasClickedOutside(mouseX, mouseY, leftPos, topPos);
 	}
 	
-	private void renderNote(TesseractGuiGraphics graphics, int x, int y, int size, ItemStack stack, int mouseX, int mouseY)
+	private void renderNote(GuiGraphicsExtractor graphics, int x, int y, int size, ItemStack stack, int mouseX, int mouseY)
 	{
-		graphics.pose().pushPose();
-		graphics.pose().translate(x, y, 0);
+		graphics.pose().pushMatrix();
+		graphics.pose().translate(x, y);
 		float scale = size / ((float) NoteBoardStickyNote.FULL_NOTE_SIZE);
-		graphics.pose().scale(scale, scale, 1);
+		graphics.pose().scale(scale, scale);
 		
 		var view = new StickyNoteView(stack);
-		StickyNoteViewRenderer.renderBackground(graphics, view);
-		StickyNoteViewRenderer.renderText(graphics, view);
+		StickyNoteViewRenderer.extractBackground(graphics, view);
+		StickyNoteViewRenderer.extractText(graphics, view);
 		
-		graphics.pose().popPose();
+		graphics.pose().popMatrix();
 	}
 	
 	private boolean isHoveringHudNote(int mouseX, int mouseY)
@@ -96,11 +93,11 @@ public final class NoteBoardScreen extends AbstractContainerScreen<NoteBoardMenu
 			   mouseY <= y + size;
 	}
 	
-	private void renderHudNote(TesseractGuiGraphics graphics, int mouseX, int mouseY)
+	private void renderHudNote(GuiGraphicsExtractor graphics, int mouseX, int mouseY)
 	{
 		int size = holdingHudNote ? carriedNoteSize : LBRClient.config().stickyNoteInWorldView().size();
 		
-		graphics.pose().pushPose();
+		graphics.pose().pushMatrix();
 		
 		float scaledX = holdingHudNote ?
 				Mth.clamp(NoteBoardStickyNote.toPercentageCoord(mouseX - (size / 2), width, size), 0, 1) :
@@ -110,20 +107,17 @@ public final class NoteBoardScreen extends AbstractContainerScreen<NoteBoardMenu
 				(float) LBRClient.config().stickyNoteInWorldView().y();
 		int x = NoteBoardStickyNote.toPixelCoord(scaledX, width, size);
 		int y = NoteBoardStickyNote.toPixelCoord(scaledY, height, size);
-		graphics.pose().translate(x, y, 0);
+		graphics.pose().translate(x, y);
 		
 		float scale = size / ((float) NoteBoardStickyNote.FULL_NOTE_SIZE);
-		graphics.pose().scale(scale, scale, 1);
+		graphics.pose().scale(scale, scale);
 		
-		graphics.setColor(1, 1, 1, 0.5f);
-		graphics.setTexture(OVERLAY_NOTE);
-		graphics.blit(0, 0, 0, 0, 180, 180, 180, 180);
-		graphics.resetColor();
+		graphics.blit(OVERLAY_NOTE, 0, 0, 0, 0, 180, 180, 180, 180, 0x7FFFFFFF);
 		
-		graphics.pose().popPose();
+		graphics.pose().popMatrix();
 	}
 	
-	private void renderNotes(TesseractGuiGraphics graphics, int mouseX, int mouseY)
+	private void renderNotes(GuiGraphicsExtractor graphics, int mouseX, int mouseY)
 	{
 		for(var note : contents)
 		{
@@ -135,9 +129,9 @@ public final class NoteBoardScreen extends AbstractContainerScreen<NoteBoardMenu
 		this.renderHudNote(graphics, mouseX, mouseY);
 	}
 	
-	private boolean placeNote(int x, int y, int button)
+	private boolean placeNote(int x, int y, MouseButtonEvent event)
 	{
-		if(button == InputConstants.MOUSE_BUTTON_LEFT)
+		if(event.isLeft())
 		{
 			var carried = menu.getCarried();
 			if(holdingHudNote ||
@@ -167,9 +161,9 @@ public final class NoteBoardScreen extends AbstractContainerScreen<NoteBoardMenu
 		return false;
 	}
 	
-	private boolean takeNote(int x, int y, int button)
+	private boolean takeNote(int x, int y, MouseButtonEvent event)
 	{
-		if(button == InputConstants.MOUSE_BUTTON_LEFT)
+		if(event.isLeft())
 		{
 			if(this.isHoveringHudNote(x, y))
 			{
@@ -204,9 +198,9 @@ public final class NoteBoardScreen extends AbstractContainerScreen<NoteBoardMenu
 		return false;
 	}
 	
-	private boolean editNote(int x, int y, int button)
+	private boolean editNote(int x, int y, MouseButtonEvent event)
 	{
-		if(button == InputConstants.MOUSE_BUTTON_RIGHT &&
+		if(event.isRight() &&
 		   menu.getCarried().isEmpty())
 		{
 			int clickedNoteIndex = contents.findAt(x, y, width, height);
@@ -220,65 +214,67 @@ public final class NoteBoardScreen extends AbstractContainerScreen<NoteBoardMenu
 		return false;
 	}
 	
-	private boolean mouseClickedOutside(int x, int y, int button)
+	private boolean mouseClickedOutside(int x, int y, MouseButtonEvent event)
 	{
-		return this.placeNote(x, y, button) ||
-			   this.takeNote(x, y, button) ||
-			   this.editNote(x, y, button);
+		return this.placeNote(x, y, event) ||
+			   this.takeNote(x, y, event) ||
+			   this.editNote(x, y, event);
 	}
 	
 	@Override
-	public boolean mouseClicked(double mouseX, double mouseY, int button)
+	public boolean mouseClicked(MouseButtonEvent event, boolean doubleClick)
 	{
+		var mouseX = event.x();
+		var mouseY = event.y();
 		if(this.isOutsideInventory(mouseX, mouseY) &&
-		   this.mouseClickedOutside((int) mouseX, (int) mouseY, button))
+		   this.mouseClickedOutside((int) mouseX, (int) mouseY, event))
 		{
 			return true;
 		}
-		return super.mouseClicked(mouseX, mouseY, button);
+		return super.mouseClicked(event, doubleClick);
 	}
 	
 	@Override
-	public boolean mouseReleased(double mouseX, double mouseY, int button)
+	public boolean mouseReleased(MouseButtonEvent event)
 	{
-		if(this.isOutsideInventory(mouseX, mouseY) &&
+		if(this.isOutsideInventory(event.x(), event.y()) &&
 		   menu.getCarried().getItem() instanceof StickyNoteItem)
 		{
 			return false;
 		}
-		return super.mouseReleased(mouseX, mouseY, button);
+		return super.mouseReleased(event);
 	}
 	
 	@Override
-	protected void slotClicked(Slot slot, int slotId, int mouseButton, ClickType type)
+	protected void slotClicked(Slot slot, int slotId, int mouseButton, ContainerInput input)
 	{
 		carriedNoteSize = NoteBoardStickyNote.DEFAULT_NOTE_SIZE;
 		
-		super.slotClicked(slot, slotId, mouseButton, type);
+		super.slotClicked(slot, slotId, mouseButton, input);
 	}
 	
 	@Override
-	public void render(GuiGraphics graphics, int mouseX, int mouseY, float partialTicks)
+	public void extractRenderState(GuiGraphicsExtractor graphics, int mouseX, int mouseY, float partialTicks)
 	{
-		super.render(graphics, mouseX, mouseY, partialTicks);
+		super.extractRenderState(graphics, mouseX, mouseY, partialTicks);
 		
-		this.renderTooltip(graphics, mouseX, mouseY);
+		this.extractTooltip(graphics, mouseX, mouseY);
 	}
 	
 	@Override
-	public void renderFloatingItem(GuiGraphics vanilla, ItemStack stack, int x, int y, String text)
+	public void extractFloatingItem(GuiGraphicsExtractor graphics, ItemStack carried, int x, int y, String itemCount)
 	{
 		int mouseX = x + 8;
 		int mouseY = y + 8;
 		
 		// mouseX and mouseY are relative to the leftPos and topPos position, so we need to add here
-		if(this.shouldRenderFloatingNote(mouseX + leftPos, mouseY + topPos, stack))
+		if(this.shouldRenderFloatingNote(mouseX + leftPos, mouseY + topPos, carried))
 		{
 			// This is handled in renderBg so that it is underneath the slots
 			return;
 		}
 		
-		super.renderFloatingItem(vanilla, stack, x, y, text);
+		super.extractFloatingItem(graphics, carried, x, y, itemCount);
 	}
 	
 	private boolean shouldRenderFloatingNote(int mouseX, int mouseY, ItemStack stack)
@@ -287,7 +283,7 @@ public final class NoteBoardScreen extends AbstractContainerScreen<NoteBoardMenu
 			   stack.getItem() instanceof StickyNoteItem;
 	}
 	
-	private void renderFloatingNote(TesseractGuiGraphics graphics, int mouseX, int mouseY, ItemStack stack)
+	private void renderFloatingNote(GuiGraphicsExtractor graphics, int mouseX, int mouseY, ItemStack stack)
 	{
 		if(this.shouldRenderFloatingNote(mouseX, mouseY, stack))
 		{
@@ -376,20 +372,18 @@ public final class NoteBoardScreen extends AbstractContainerScreen<NoteBoardMenu
 	}
 	
 	@Override
-	protected void renderLabels(GuiGraphics graphics, int mouseX, int mouseY)
+	protected void extractLabels(GuiGraphicsExtractor graphics, int mouseX, int mouseY)
 	{
 		// Do not render the inventory label
 	}
 	
 	@Override
-	protected void renderBg(GuiGraphics vanilla, float partialTick, int mouseX, int mouseY)
+	public void extractBackground(GuiGraphicsExtractor graphics, int mouseX, int mouseY, float partialTicks)
 	{
-		var graphics = new TesseractGuiGraphics(vanilla);
-		
 		this.renderNotes(graphics, mouseX, mouseY);
 		
 		this.renderFloatingNote(graphics, mouseX, mouseY, menu.getCarried());
 		
-		vanilla.blit(BACKGROUND, leftPos, topPos, 0, 0, imageWidth, imageHeight);
+		graphics.blit(BACKGROUND, leftPos, topPos, 0, 0, imageWidth, imageHeight);
 	}
 }

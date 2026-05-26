@@ -1,7 +1,7 @@
 package net.swedz.little_big_redstone.datagen.client.provider.models;
 
 import com.google.common.collect.Sets;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.DyeColor;
 import net.neoforged.neoforge.client.model.generators.ItemModelProvider;
 import net.neoforged.neoforge.client.model.generators.ModelFile;
@@ -97,22 +97,22 @@ public final class LogicItemModelsDatagenProvider extends ItemModelProvider
 			return key;
 		}
 		
-		public ResourceLocation itemBackground()
+		public Identifier itemBackground()
 		{
 			return LBR.id("item/logic/background_%s".formatted(key));
 		}
 		
-		public ResourceLocation itemBorder()
+		public Identifier itemBorder()
 		{
 			return LBR.id("item/logic/border_%s".formatted(key));
 		}
 		
-		public ResourceLocation boardBackground()
+		public Identifier boardBackground()
 		{
 			return LBR.id("logic/background_%s".formatted(key));
 		}
 		
-		public ResourceLocation boardBorder()
+		public Identifier boardBorder()
 		{
 			return LBR.id("logic/border_%s".formatted(key));
 		}

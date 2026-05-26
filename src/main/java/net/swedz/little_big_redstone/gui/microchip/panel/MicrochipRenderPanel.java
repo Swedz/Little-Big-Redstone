@@ -1,9 +1,9 @@
 package net.swedz.little_big_redstone.gui.microchip.panel;
 
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.world.item.DyeColor;
 import net.swedz.little_big_redstone.gui.microchip.widget.MicrochipWidgetContext;
 import net.swedz.little_big_redstone.microchip.Microchip;
-import net.swedz.tesseract.neoforge.helper.guigraphics.TesseractGuiGraphics;
 
 import java.util.function.Supplier;
 
@@ -31,5 +31,5 @@ abstract class MicrochipRenderPanel
 		return context == null ? null : context.get();
 	}
 	
-	public abstract void render(TesseractGuiGraphics graphics);
+	public abstract void render(GuiGraphicsExtractor graphics);
 }

@@ -2,9 +2,9 @@ package net.swedz.little_big_redstone.block.microchip;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderLookup;
+import net.minecraft.core.UUIDUtil;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtOps;
-import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
@@ -18,8 +18,9 @@ import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
-import net.neoforged.neoforge.client.model.data.ModelData;
-import net.swedz.little_big_redstone.LBR;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
+import net.neoforged.neoforge.model.data.ModelData;
 import net.swedz.little_big_redstone.LBRBlocks;
 import net.swedz.little_big_redstone.client.model.microchip.MicrochipModelData;
 import net.swedz.little_big_redstone.gui.microchip.MicrochipMenu;
@@ -266,72 +267,43 @@ public final class MicrochipBlockEntity extends BlockEntity implements MenuProvi
 	}
 	
 	@Override
-	protected void loadAdditional(CompoundTag tag, HolderLookup.Provider registries)
+	protected void loadAdditional(ValueInput input)
 	{
-		super.loadAdditional(tag, registries);
+		super.loadAdditional(input);
 		
-		if(tag.contains("microchip", Tag.TAG_COMPOUND))
-		{
-			Microchip.CODEC.parse(NbtOps.INSTANCE, tag.getCompound("microchip"))
-					.ifSuccess(microchip::loadFrom)
-					.ifError((error) ->
-							LBR.LOGGER.error("Failed to load microchip data at {}: {}", worldPosition.toShortString(), error.message()));
-		}
-		else
-		{
-			microchip.clear();
-		}
+		input.read("microchip", Microchip.CODEC).ifPresentOrElse(
+				microchip::loadFrom,
+				microchip::clear
+		);
 		
-		placedBy = tag.hasUUID("placed_by") ? tag.getUUID("placed_by") : null;
+		placedBy = input.read("placed_by", UUIDUtil.CODEC).orElse(null);
 		
-		if(tag.contains("view_position", Tag.TAG_COMPOUND))
-		{
-			MicrochipViewPosition.CODEC.parse(NbtOps.INSTANCE, tag.getCompound("view_position"))
-					.ifSuccess((result) -> viewPosition = result)
-					.ifError((error) ->
-							LBR.LOGGER.error("Failed to load microchip data at {}: {}", worldPosition.toShortString(), error.message()));
-		}
-		else
-		{
-			viewPosition = null;
-		}
+		input.read("view_position", MicrochipViewPosition.CODEC).ifPresentOrElse(
+				(result) -> viewPosition = result,
+				() -> viewPosition = null
+		);
 		
-		if(level != null && level.isClientSide())
+		if(level != null && level.isClientSide() &&
+		   input.keySet().contains("microchip_model_data"))
 		{
-			if(tag.contains("microchip_model_data", Tag.TAG_COMPOUND))
-			{
-				MicrochipModelData.CODEC.parse(NbtOps.INSTANCE, tag.getCompound("microchip_model_data"))
-						.ifSuccess((modelData) -> this.modelData = modelData)
-						.ifError((error) ->
-						{
-							modelData = null;
-							LBR.LOGGER.error("Failed to load microchip model data at {}: {}", worldPosition.toShortString(), error.message());
-						});
-				level.sendBlockUpdated(worldPosition, null, null, 0);
-				this.requestModelDataUpdate();
-			}
+			input.read("microchip_model_data", MicrochipModelData.CODEC).ifPresentOrElse(
+					(modelData) -> this.modelData = modelData,
+					() -> modelData = null
+			);
+			level.sendBlockUpdated(worldPosition, null, null, 0);
+			this.requestModelDataUpdate();
 		}
 	}
 	
 	@Override
-	protected void saveAdditional(CompoundTag tag, HolderLookup.Provider registries)
+	protected void saveAdditional(ValueOutput output)
 	{
-		super.saveAdditional(tag, registries);
+		super.saveAdditional(output);
 		
-		tag.put("microchip", Microchip.CODEC.encodeStart(NbtOps.INSTANCE, microchip).getOrThrow());
+		output.store("microchip", Microchip.CODEC, microchip);
 		
-		if(placedBy != null)
-		{
-			tag.putUUID("placed_by", placedBy);
-		}
-		else
-		{
-			tag.remove("placed_by");
-		}
+		output.storeNullable("placed_by", UUIDUtil.CODEC, placedBy);
 		
-		if(viewPosition != null)
-		{
-			tag.put("view_position", MicrochipViewPosition.CODEC.encodeStart(NbtOps.INSTANCE, viewPosition).getOrThrow());
-		}
+		output.storeNullable("view_position", MicrochipViewPosition.CODEC, viewPosition);
 	}
 }
