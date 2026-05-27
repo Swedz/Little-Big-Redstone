@@ -31,6 +31,11 @@ public final class StickyNoteViewRenderer
 		extractBackground(graphics, note.color(), true, alpha, packedLight);
 	}
 	
+	public static void extractBackground(GuiGraphicsExtractor graphics, StickyNoteView note, float alpha)
+	{
+		extractBackground(graphics, note, alpha, 0xFFFFFFFF);
+	}
+	
 	public static void extractBackground(GuiGraphicsExtractor graphics, StickyNoteView note)
 	{
 		extractBackground(graphics, note, 1, 0xFFFFFFFF);

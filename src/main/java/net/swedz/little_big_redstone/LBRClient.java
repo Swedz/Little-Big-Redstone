@@ -1,7 +1,5 @@
 package net.swedz.little_big_redstone;
 
-import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer;
-import net.minecraft.world.item.Item;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.bus.api.SubscribeEvent;
@@ -17,8 +15,6 @@ import net.neoforged.neoforge.client.event.RegisterGuiLayersEvent;
 import net.neoforged.neoforge.client.event.RegisterItemModelsEvent;
 import net.neoforged.neoforge.client.event.RegisterMenuScreensEvent;
 import net.neoforged.neoforge.client.event.RenderHandEvent;
-import net.neoforged.neoforge.client.extensions.common.IClientItemExtensions;
-import net.neoforged.neoforge.client.extensions.common.RegisterClientExtensionsEvent;
 import net.neoforged.neoforge.client.gui.VanillaGuiLayers;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.GameShuttingDownEvent;
@@ -27,11 +23,11 @@ import net.swedz.little_big_redstone.client.hud.FloppyDiskConsumeItemsGuiOverlay
 import net.swedz.little_big_redstone.client.hud.NoteBoardGuiOverlay;
 import net.swedz.little_big_redstone.client.hud.StickyNoteViewContentsGuiOverlay;
 import net.swedz.little_big_redstone.client.item.StickyNoteInHandItemRenderer;
-import net.swedz.little_big_redstone.client.item.StickyNoteItemRenderer;
 import net.swedz.little_big_redstone.client.model.logic.LogicItemModel;
 import net.swedz.little_big_redstone.client.model.microchip.MicrochipUnbakedModel;
+import net.swedz.little_big_redstone.client.model.stickynote.StickyNoteEntityModel;
 import net.swedz.little_big_redstone.client.model.stickynote.entity.StickyNoteEntityUnbakedModel;
-import net.swedz.little_big_redstone.client.model.stickynote.item.StickyNoteItemUnbakedModel;
+import net.swedz.little_big_redstone.client.model.stickynote.StickyNoteItemModel;
 import net.swedz.little_big_redstone.gui.floppydisk.FloppyDiskScreen;
 import net.swedz.little_big_redstone.gui.logicarray.LogicArrayScreen;
 import net.swedz.little_big_redstone.gui.logicconfig.LogicConfigScreen;
@@ -48,8 +44,6 @@ import net.swedz.tesseract.api.Assert;
 import net.swedz.tesseract.config.ConfigManager;
 import net.swedz.tesseract.neoforge.config.ModConfigFileAccess;
 import net.swedz.tesseract.neoforge.registry.holder.ItemHolder;
-
-import java.util.function.Supplier;
 
 @Mod(value = LBR.ID, dist = Dist.CLIENT)
 @EventBusSubscriber(modid = LBR.ID, value = Dist.CLIENT)
@@ -83,27 +77,6 @@ public final class LBRClient
 				.load();
 		bus.addListener(FMLCommonSetupEvent.class, (event) -> instance.load(false));
 		CONFIG = instance.config();
-	}
-	
-	private static void registerCustomItemRenderer(RegisterClientExtensionsEvent event, Supplier<BlockEntityWithoutLevelRenderer> renderer, Class<?> itemType)
-	{
-		event.registerItem(
-				new IClientItemExtensions()
-				{
-					@Override
-					public BlockEntityWithoutLevelRenderer getCustomRenderer()
-					{
-						return renderer.get();
-					}
-				},
-				LBRItems.values().stream().filter((i) -> i.get().getClass() == itemType).map(ItemHolder::get).toArray(Item[]::new)
-		);
-	}
-	
-	@SubscribeEvent
-	private static void registerClientExtensions(RegisterClientExtensionsEvent event)
-	{
-		registerCustomItemRenderer(event, StickyNoteItemRenderer::new, StickyNoteItem.class);
 	}
 	
 	@SubscribeEvent
@@ -166,7 +139,7 @@ public final class LBRClient
 	{
 		event.register(LogicItemModel.Unbaked.ID, LogicItemModel.Unbaked.CODEC);
 		event.register(MicrochipUnbakedModel.ID, MicrochipUnbakedModel.LOADER);
-		event.register(StickyNoteEntityUnbakedModel.ID, StickyNoteEntityUnbakedModel.LOADER);
-		event.register(StickyNoteItemUnbakedModel.ID, StickyNoteItemUnbakedModel.LOADER);
+		event.register(StickyNoteEntityModel.Unbaked.ID, StickyNoteEntityModel.Unbaked.CODEC);
+		event.register(StickyNoteItemModel.Unbaked.ID, StickyNoteItemModel.Unbaked.CODEC);
 	}
 }

@@ -50,6 +50,7 @@ public final class StickyNoteItem extends Item implements DyeColoredItem
 	{
 		super(properties
 				.component(LBRComponents.STICKY_NOTE, StickyNote.EMPTY)
+				.component(LBRComponents.STICKY_NOTE_COLOR, color)
 				.component(LBRComponents.STICKY_NOTE_TEXT_COLOR, getDefaultTextColor(color))
 				.component(LBRComponents.STICKY_NOTE_EDITABLE, true)
 				.component(LBRComponents.STICKY_NOTE_DISPLAY_ITEM, ItemStackInstance.EMPTY));

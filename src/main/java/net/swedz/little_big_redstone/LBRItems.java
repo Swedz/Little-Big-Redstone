@@ -9,6 +9,7 @@ import net.minecraft.world.item.Item;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.capabilities.Capabilities;
 import net.neoforged.neoforge.registries.DeferredRegister;
+import net.swedz.little_big_redstone.client.model.stickynote.StickyNoteItemModel;
 import net.swedz.little_big_redstone.item.floppydisk.FloppyDiskItem;
 import net.swedz.little_big_redstone.item.LogicItem;
 import net.swedz.little_big_redstone.item.logicarray.LogicArrayItem;
@@ -23,6 +24,7 @@ import net.swedz.tesseract.neoforge.registry.holder.ItemHolder;
 
 import java.util.Collections;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 import java.util.function.Function;
 
@@ -181,11 +183,12 @@ public final class LBRItems
 		final String englishName = "%s Sticky Note".formatted(colorEnglishName);
 		return create(id, englishName, (p) -> new StickyNoteItem(p, color), LBRSortOrder.STICKY_NOTES.and(order))
 				.tag(LBRTags.Items.STICKY_NOTES)
-				.withModel((holder) -> (provider) ->
-						provider.getBuilder(holder.identifier().id())
-								.parent(new ModelFile.UncheckedModelFile(LBR.id("item/sticky_note")))
-								.customLoader((parent, efh) -> new BasicCustomLoaderBuilder<>(LBR.id("sticky_note_item"), parent, efh)).end()
-								.texture("layer0", LBR.id("item/sticky_note/%s".formatted(colorId)))
-								.texture("layer1", LBR.id("item/sticky_note/text")));
+				.withModel((holder) -> (generators) ->
+						// TODO 26.1 loading client class in common class?
+						generators.item().itemModelOutput.accept(holder.asItem(), new StickyNoteItemModel.Unbaked(
+								Optional.empty(),
+								new Material(LBR.id("item/sticky_note/%s".formatted(colorId))),
+								new Material(LBR.id("item/sticky_note/text"))
+						)));
 	}
 }

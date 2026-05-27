@@ -3,10 +3,10 @@ package net.swedz.little_big_redstone.datagen.client.provider.models;
 import net.minecraft.client.data.models.BlockModelGenerators;
 import net.minecraft.client.data.models.ItemModelGenerators;
 import net.minecraft.client.data.models.ModelProvider;
-import net.minecraft.world.item.DyeColor;
 import net.neoforged.neoforge.data.event.GatherDataEvent;
 import net.swedz.little_big_redstone.LBR;
 import net.swedz.little_big_redstone.LBRBlocks;
+import net.swedz.tesseract.neoforge.model.ModelGenerators;
 import net.swedz.tesseract.neoforge.registry.holder.BlockHolder;
 
 public final class BlockModelsDatagenProvider extends ModelProvider
@@ -19,15 +19,17 @@ public final class BlockModelsDatagenProvider extends ModelProvider
 	@Override
 	protected void registerModels(BlockModelGenerators blockModels, ItemModelGenerators itemModels)
 	{
-		for(BlockHolder block : LBRBlocks.values())
+		var generators = new ModelGenerators(blockModels, itemModels);
+		for(BlockHolder<?> block : LBRBlocks.values())
 		{
 			if(block.hasModelProvider())
 			{
-				block.modelProvider().accept(this);
+				block.modelProvider().accept(generators);
 			}
 		}
 		
-		for(var color : DyeColor.values())
+		// TODO 26.1
+		/*for(var color : DyeColor.values())
 		{
 			String colorId = color.getName();
 			String id = "%s_sticky_note".formatted(colorId);
@@ -42,7 +44,7 @@ public final class BlockModelsDatagenProvider extends ModelProvider
 							.texture("texture", LBR.id("block/sticky_note/text")))
 					.end()
 					.texture("particle", LBR.id("block/sticky_note/%s".formatted(colorId)));
-		}
+		}*/
 	}
 	
 	@Override
