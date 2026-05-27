@@ -12,9 +12,9 @@ import net.neoforged.fml.config.ModConfig;
 import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.neoforged.neoforge.client.event.EntityRenderersEvent;
-import net.neoforged.neoforge.client.event.ModelEvent;
 import net.neoforged.neoforge.client.event.RegisterClientTooltipComponentFactoriesEvent;
 import net.neoforged.neoforge.client.event.RegisterGuiLayersEvent;
+import net.neoforged.neoforge.client.event.RegisterItemModelsEvent;
 import net.neoforged.neoforge.client.event.RegisterMenuScreensEvent;
 import net.neoforged.neoforge.client.event.RenderHandEvent;
 import net.neoforged.neoforge.client.extensions.common.IClientItemExtensions;
@@ -26,10 +26,9 @@ import net.swedz.little_big_redstone.client.entity.StickyNoteEntityRenderer;
 import net.swedz.little_big_redstone.client.hud.FloppyDiskConsumeItemsGuiOverlay;
 import net.swedz.little_big_redstone.client.hud.NoteBoardGuiOverlay;
 import net.swedz.little_big_redstone.client.hud.StickyNoteViewContentsGuiOverlay;
-import net.swedz.little_big_redstone.client.item.LogicItemRenderer;
 import net.swedz.little_big_redstone.client.item.StickyNoteInHandItemRenderer;
 import net.swedz.little_big_redstone.client.item.StickyNoteItemRenderer;
-import net.swedz.little_big_redstone.client.model.logic.LogicUnbakedModel;
+import net.swedz.little_big_redstone.client.model.logic.LogicItemModel;
 import net.swedz.little_big_redstone.client.model.microchip.MicrochipUnbakedModel;
 import net.swedz.little_big_redstone.client.model.stickynote.entity.StickyNoteEntityUnbakedModel;
 import net.swedz.little_big_redstone.client.model.stickynote.item.StickyNoteItemUnbakedModel;
@@ -40,7 +39,6 @@ import net.swedz.little_big_redstone.gui.microchip.MicrochipScreen;
 import net.swedz.little_big_redstone.gui.microchip.logic.LogicRenderers;
 import net.swedz.little_big_redstone.gui.microchip.wire.WirePathing;
 import net.swedz.little_big_redstone.gui.noteboard.NoteBoardScreen;
-import net.swedz.little_big_redstone.item.LogicItem;
 import net.swedz.little_big_redstone.item.stickynote.StickyNoteItem;
 import net.swedz.little_big_redstone.item.stickynote.tooltip.StickyNoteClientTooltip;
 import net.swedz.little_big_redstone.item.stickynote.tooltip.StickyNoteTooltipData;
@@ -105,7 +103,6 @@ public final class LBRClient
 	@SubscribeEvent
 	private static void registerClientExtensions(RegisterClientExtensionsEvent event)
 	{
-		registerCustomItemRenderer(event, LogicItemRenderer::new, LogicItem.class);
 		registerCustomItemRenderer(event, StickyNoteItemRenderer::new, StickyNoteItem.class);
 	}
 	
@@ -165,9 +162,9 @@ public final class LBRClient
 	}
 	
 	@SubscribeEvent
-	private static void registerGeometryLoaders(ModelEvent.RegisterGeometryLoaders event)
+	private static void registerGeometryLoaders(RegisterItemModelsEvent event)
 	{
-		event.register(LogicUnbakedModel.ID, LogicUnbakedModel.LOADER);
+		event.register(LogicItemModel.Unbaked.ID, LogicItemModel.Unbaked.CODEC);
 		event.register(MicrochipUnbakedModel.ID, MicrochipUnbakedModel.LOADER);
 		event.register(StickyNoteEntityUnbakedModel.ID, StickyNoteEntityUnbakedModel.LOADER);
 		event.register(StickyNoteItemUnbakedModel.ID, StickyNoteItemUnbakedModel.LOADER);

@@ -8,22 +8,23 @@ import net.minecraft.world.inventory.ContainerInput;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.ItemStack;
-import net.neoforged.neoforge.items.IItemHandler;
-import net.neoforged.neoforge.items.wrapper.CombinedInvWrapper;
-import net.neoforged.neoforge.items.wrapper.PlayerMainInvWrapper;
+import net.neoforged.neoforge.transfer.CombinedResourceHandler;
+import net.neoforged.neoforge.transfer.ResourceHandler;
+import net.neoforged.neoforge.transfer.ResourceHandlerUtil;
+import net.neoforged.neoforge.transfer.item.ItemResource;
+import net.neoforged.neoforge.transfer.item.PlayerInventoryWrapper;
 import net.swedz.little_big_redstone.LBR;
 import net.swedz.little_big_redstone.LBRItems;
 import net.swedz.little_big_redstone.LBRMenus;
 import net.swedz.little_big_redstone.LBRTags;
 import net.swedz.little_big_redstone.gui.logicarray.LogicArrayMenu;
-import net.swedz.little_big_redstone.gui.slot.MaybeLockedPlayerSlot;
 import net.swedz.little_big_redstone.gui.logicarray.slot.LogicArraySlot;
 import net.swedz.little_big_redstone.gui.microchip.logicarray.MicrochipLogicArrayItemHandler;
+import net.swedz.little_big_redstone.gui.slot.MaybeLockedPlayerSlot;
 import net.swedz.little_big_redstone.item.logicarray.LogicArrayItem;
 import net.swedz.little_big_redstone.microchip.Microchip;
 import net.swedz.little_big_redstone.microchip.wire.Wire;
 import net.swedz.little_big_redstone.microchip.wire.WirePort;
-import net.swedz.tesseract.neoforge.helper.TransferHelper;
 import net.swedz.tesseract.neoforge.helper.gui.PlayerInventoryContainerMenu;
 
 import java.util.Collections;
@@ -89,7 +90,7 @@ public final class MicrochipMenu extends PlayerInventoryContainerMenu
 	
 	private void setupInventory(Inventory playerInventory)
 	{
-		LogicArrayMenu.setupLogicArrayInventory(logicArrayItemHandler, this::addSlot, logicArrayItemHandler::shouldDisplay, -75, 10, LogicArrayItem.COLUMNS, LogicArrayItem.ROWS);
+		LogicArrayMenu.setupLogicArrayInventory(logicArrayItemHandler, logicArrayItemHandler::set, this::addSlot, logicArrayItemHandler::shouldDisplay, -75, 10, LogicArrayItem.COLUMNS, LogicArrayItem.ROWS);
 		
 		this.setupPlayerInventory(playerInventory, 48, 145, MaybeLockedPlayerSlot::new);
 	}
@@ -119,12 +120,12 @@ public final class MicrochipMenu extends PlayerInventoryContainerMenu
 		return logicArrayItemHandler;
 	}
 	
-	public IItemHandler getDestinationInventoryItemHandler(Player player)
+	public ResourceHandler<ItemResource> getDestinationInventoryItemHandler(Player player)
 	{
-		var playerInventory = new PlayerMainInvWrapper(player.getInventory());
+		var playerInventory = PlayerInventoryWrapper.of(player);
 		return logicArrayItemHandler.isCreativeMode() ?
 				playerInventory :
-				new CombinedInvWrapper(logicArrayItemHandler, playerInventory);
+				new CombinedResourceHandler<>(logicArrayItemHandler, playerInventory);
 	}
 	
 	public int getCarriedComponentSlot()
@@ -185,7 +186,8 @@ public final class MicrochipMenu extends PlayerInventoryContainerMenu
 				
 				if(!player.level().isClientSide() && !player.hasInfiniteMaterials())
 				{
-					int givenAmount = TransferHelper.insert(this.getDestinationInventoryItemHandler(player), new ItemStack(LBRItems.REDSTONE_BIT, wiresPopped));
+					var destination = this.getDestinationInventoryItemHandler(player);
+					int givenAmount = ResourceHandlerUtil.insertStacking(destination, ItemResource.of(LBRItems.REDSTONE_BIT), wiresPopped, null);
 					if(givenAmount != wiresPopped)
 					{
 						int remainderAmount = wiresPopped - givenAmount;
@@ -260,8 +262,8 @@ public final class MicrochipMenu extends PlayerInventoryContainerMenu
 			
 			originalStack = stack.copy();
 			
-			var target = clickedArrayInventory ? new PlayerMainInvWrapper(player.getInventory()) : logicArrayItemHandler;
-			int inserted = TransferHelper.insert(target, stack);
+			var target = clickedArrayInventory ? PlayerInventoryWrapper.of(player) : logicArrayItemHandler;
+			int inserted = ResourceHandlerUtil.insertStacking(target, ItemResource.of(stack), stack.getCount(), null);
 			if(inserted > 0)
 			{
 				stack.shrink(inserted);

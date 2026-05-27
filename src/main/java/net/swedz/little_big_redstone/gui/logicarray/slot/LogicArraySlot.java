@@ -1,6 +1,6 @@
 package net.swedz.little_big_redstone.gui.logicarray.slot;
 
-import net.minecraft.world.item.ItemStack;
+import net.neoforged.neoforge.transfer.IndexModifier;
 import net.neoforged.neoforge.transfer.ResourceHandler;
 import net.neoforged.neoforge.transfer.item.ItemResource;
 import net.neoforged.neoforge.transfer.item.ResourceHandlerSlot;
@@ -13,13 +13,14 @@ public final class LogicArraySlot extends ResourceHandlerSlot
 	
 	public LogicArraySlot(
 			ResourceHandler<ItemResource> handler,
+			IndexModifier<ItemResource> indexModifier,
 			int index,
 			int x,
 			int y,
 			Supplier<Boolean> isActive
 	)
 	{
-		super(handler, index, x, y);
+		super(handler, indexModifier, index, x, y);
 		this.isActive = isActive;
 	}
 	

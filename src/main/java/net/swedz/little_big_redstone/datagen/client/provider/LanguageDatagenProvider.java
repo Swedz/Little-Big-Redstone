@@ -40,7 +40,7 @@ public final class LanguageDatagenProvider extends LanguageProvider
 		
 		this.add(LBR.id(LBR.ID).toLanguageKey("itemGroup"), LBR.NAME);
 		
-		this.add(LBRKeybinds.CATEGORY, LBR.NAME);
+		this.add(LBRKeybinds.CATEGORY.id().toLanguageKey("key.category"), LBR.NAME);
 		
 		for(var keybind : LBRKeybinds.Registry.getMappings())
 		{

@@ -7,7 +7,10 @@ import net.neoforged.neoforge.client.model.ExtraFaceData;
 
 import java.util.function.Function;
 
-public record LogicModelColorSet(int foreground, int background)
+public record LogicModelColorSet(
+		int foreground,
+		int background
+)
 {
 	public static final LogicModelColorSet DEFAULT = new LogicModelColorSet(0xFFFFFFFF, 0x00000000);
 	
@@ -25,11 +28,11 @@ public record LogicModelColorSet(int foreground, int background)
 	
 	public ExtraFaceData foregroundFaceData()
 	{
-		return new ExtraFaceData(foreground, ExtraFaceData.DEFAULT.blockLight(), ExtraFaceData.DEFAULT.skyLight(), ExtraFaceData.DEFAULT.ambientOcclusion());
+		return new ExtraFaceData(foreground, ExtraFaceData.DEFAULT.lightEmission(), ExtraFaceData.DEFAULT.ambientOcclusion());
 	}
 	
 	public ExtraFaceData backgroundFaceData()
 	{
-		return new ExtraFaceData(background, ExtraFaceData.DEFAULT.blockLight(), ExtraFaceData.DEFAULT.skyLight(), ExtraFaceData.DEFAULT.ambientOcclusion());
+		return new ExtraFaceData(background, ExtraFaceData.DEFAULT.lightEmission(), ExtraFaceData.DEFAULT.ambientOcclusion());
 	}
 }

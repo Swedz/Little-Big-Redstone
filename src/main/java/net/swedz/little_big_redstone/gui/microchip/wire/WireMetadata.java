@@ -1,7 +1,7 @@
 package net.swedz.little_big_redstone.gui.microchip.wire;
 
 import net.minecraft.world.item.DyeColor;
-import net.swedz.little_big_redstone.client.model.logic.LogicBakingModelData;
+import net.swedz.little_big_redstone.client.model.logic.LogicItemModel;
 import net.swedz.little_big_redstone.microchip.Microchip;
 import net.swedz.little_big_redstone.microchip.object.logic.LogicComponent;
 import net.swedz.little_big_redstone.microchip.wire.PortReference;
@@ -16,7 +16,7 @@ public record WireMetadata(
 {
 	private static int getColor(LogicComponent<?, ?> output, DyeColor fallback)
 	{
-		return LogicBakingModelData.get(output).getColorSet(output.color().orElse(fallback)).foreground();
+		return LogicItemModel.get(output).colorPalette().getColorSet(output.color().orElse(fallback)).foreground();
 	}
 	
 	public static WireMetadata of(Microchip microchip, DyeColor color, PortReference outputPort, boolean hovered)

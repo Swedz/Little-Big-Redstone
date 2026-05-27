@@ -11,17 +11,20 @@ import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.Containers;
 import net.minecraft.world.MenuProvider;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.item.DyeColor;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
 import net.neoforged.neoforge.model.data.ModelData;
 import net.swedz.little_big_redstone.LBRBlocks;
+import net.swedz.little_big_redstone.LBRItems;
 import net.swedz.little_big_redstone.client.model.microchip.MicrochipModelData;
 import net.swedz.little_big_redstone.gui.microchip.MicrochipMenu;
 import net.swedz.little_big_redstone.gui.microchip.MicrochipViewPosition;
@@ -225,6 +228,20 @@ public final class MicrochipBlockEntity extends BlockEntity implements MenuProvi
 		super.setRemoved();
 		
 		microchip.awarenesses().removedAll(new AwarenessContext(this));
+	}
+	
+	@Override
+	public void preRemoveSideEffects(BlockPos pos, BlockState state)
+	{
+		if(level != null)
+		{
+			for(var entry : microchip.objects())
+			{
+				Containers.dropItemStack(level, pos.getX(), pos.getY(), pos.getZ(), entry.toStack());
+			}
+			var redstoneBits = new ItemStack(LBRItems.REDSTONE_BIT, microchip.wires().values().size());
+			Containers.dropItemStack(level, pos.getX(), pos.getY(), pos.getZ(), redstoneBits);
+		}
 	}
 	
 	private void publishUpdatePacket(Function<Integer, CustomPacket> containerPacketCreator, Supplier<CustomPacket> watcherPacketCreator)

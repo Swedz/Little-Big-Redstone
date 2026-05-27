@@ -6,6 +6,7 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.redstone.ExperimentalRedstoneUtils;
 import net.minecraft.world.level.redstone.NeighborUpdater;
 import net.neoforged.neoforge.event.EventHooks;
 import net.swedz.little_big_redstone.block.microchip.MicrochipBlock;
@@ -295,7 +296,7 @@ public final class RedstoneAwareness extends MicrochipAwareness<RedstoneAwarenes
 			if(changes[index])
 			{
 				var relativePos = pos.relative(direction);
-				level.neighborChanged(relativePos, oldState.getBlock(), pos);
+				level.neighborChanged(relativePos, oldState.getBlock(), ExperimentalRedstoneUtils.initialOrientation(level, null, null));
 				if(strongChanges[index])
 				{
 					var relativeBlockState = level.getBlockState(relativePos);

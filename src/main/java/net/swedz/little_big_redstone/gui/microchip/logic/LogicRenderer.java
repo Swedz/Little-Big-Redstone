@@ -6,7 +6,7 @@ import net.minecraft.resources.Identifier;
 import net.minecraft.util.ARGB;
 import net.minecraft.world.item.DyeColor;
 import net.swedz.little_big_redstone.LBR;
-import net.swedz.little_big_redstone.client.model.logic.LogicBakingModelData;
+import net.swedz.little_big_redstone.client.model.logic.LogicItemModel;
 import net.swedz.little_big_redstone.client.model.logic.LogicModelColorSet;
 import net.swedz.little_big_redstone.microchip.object.logic.LogicComponent;
 import net.swedz.little_big_redstone.microchip.object.logic.LogicGridSize;
@@ -104,15 +104,23 @@ public abstract class LogicRenderer<L extends LogicComponent>
 	}
 	
 	public record Context(
-			LogicModelColorSet colorPalette,
+			LogicModelColorSet colorSet,
 			Function<String, Identifier> textureGetter,
-			boolean showPorts, boolean hasSelectedPort, boolean isCarryingWire
+			boolean showPorts,
+			boolean hasSelectedPort,
+			boolean isCarryingWire
 	)
 	{
 		public static Context create(DyeColor menuColor, LogicComponent<?, ?> component, boolean showPorts, boolean hasSelectedPort, boolean isCarryingWire)
 		{
-			var modelData = LogicBakingModelData.get(component);
-			return new Context(modelData.getColorSet(component, menuColor), modelData::getBoardTextureLocation, showPorts, hasSelectedPort, isCarryingWire);
+			var model = LogicItemModel.get(component);
+			return new Context(
+					model.colorPalette().getColorSet(component, menuColor),
+					model.boardTextures()::get,
+					showPorts,
+					hasSelectedPort,
+					isCarryingWire
+			);
 		}
 		
 		public Identifier getTexture(String key)
@@ -122,12 +130,12 @@ public abstract class LogicRenderer<L extends LogicComponent>
 		
 		public int foregroundColor()
 		{
-			return colorPalette.foreground();
+			return colorSet.foreground();
 		}
 		
 		public int backgroundColor()
 		{
-			return colorPalette.background();
+			return colorSet.background();
 		}
 	}
 }

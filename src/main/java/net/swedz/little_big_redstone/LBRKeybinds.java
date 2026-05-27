@@ -2,8 +2,8 @@ package net.swedz.little_big_redstone;
 
 import com.google.common.collect.Sets;
 import com.mojang.blaze3d.platform.InputConstants;
-import net.minecraft.Util;
 import net.minecraft.client.KeyMapping;
+import net.minecraft.util.Util;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.client.event.ClientTickEvent;
 import net.neoforged.neoforge.client.event.RegisterKeyMappingsEvent;
@@ -58,7 +58,7 @@ public final class LBRKeybinds
 		);
 	}
 	
-	public static final String CATEGORY = Util.makeDescriptionId("key.categories", LBR.id(LBR.ID));
+	public static final KeyMapping.Category CATEGORY = new KeyMapping.Category(LBR.id(LBR.ID));
 	
 	public static final Keybind OPEN_NOTE_BOARD = create(
 			"open_note_board",

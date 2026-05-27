@@ -1,6 +1,6 @@
 package net.swedz.little_big_redstone;
 
-import net.minecraft.util.FastColor;
+import net.minecraft.util.ARGB;
 import net.minecraft.world.item.DyeColor;
 import org.apache.commons.lang3.function.TriConsumer;
 
@@ -68,7 +68,7 @@ public final class LBRColors
 	
 	public static int stickyNoteText(DyeColor color, float alpha)
 	{
-		return FastColor.ARGB32.color((int) (alpha * 255), color.getTextColor());
+		return ARGB.color((int) (alpha * 255), color.getTextColor());
 	}
 	
 	private static final List<DyeColor> COLORS = List.of(

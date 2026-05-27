@@ -6,9 +6,9 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.DyeColor;
-import net.minecraft.world.item.ItemStack;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.registries.DeferredRegister;
+import net.neoforged.neoforge.transfer.item.ItemResource;
 import net.swedz.little_big_redstone.microchip.object.logic.LogicType;
 import net.swedz.little_big_redstone.microchip.object.logic.LogicTypes;
 import net.swedz.tesseract.neoforge.registry.holder.ItemHolder;
@@ -35,19 +35,19 @@ public final class LBRCreativeTabs
 			})
 			.build());
 	
-	private static final Supplier<List<ItemStack>> LOGIC_ARRAY_ITEMS = Suppliers.memoize(() ->
+	private static final Supplier<List<ItemResource>> LOGIC_ARRAY_ITEMS = Suppliers.memoize(() ->
 	{
-		List<ItemStack> items = Lists.newArrayList();
-		items.add(LBRItems.REDSTONE_BIT.asItem().getDefaultInstance());
+		List<ItemResource> items = Lists.newArrayList();
+		items.add(ItemResource.of(LBRItems.REDSTONE_BIT));
 		for(LogicType type : LogicTypes.values())
 		{
 			var stack = type.toStack(type.defaultFactory().create());
-			items.add(stack);
+			items.add(ItemResource.of(stack));
 		}
 		return Collections.unmodifiableList(items);
 	});
 	
-	public static List<ItemStack> getLogicArrayItems()
+	public static List<ItemResource> getLogicArrayItems()
 	{
 		return LOGIC_ARRAY_ITEMS.get();
 	}

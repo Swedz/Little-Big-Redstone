@@ -10,7 +10,7 @@ import net.swedz.little_big_redstone.LBRColors;
 import net.swedz.little_big_redstone.LBRComponents;
 import net.swedz.little_big_redstone.LBRItemDisplayContext;
 import net.swedz.little_big_redstone.LBRItems;
-import net.swedz.little_big_redstone.LBRRenderPipelines;
+import net.swedz.little_big_redstone.LBRClientRenderPipelines;
 import net.swedz.little_big_redstone.gui.microchip.MicrochipScreen;
 import net.swedz.little_big_redstone.gui.microchip.logic.LogicRenderer;
 import net.swedz.little_big_redstone.gui.microchip.logic.LogicRenderers;
@@ -173,7 +173,7 @@ public final class MicrochipRenderBoardPanel extends MicrochipRenderPanel
 					width = component.size().widthPixels();
 					height = component.size().heightPixels();
 				}
-				var pipeline = LBRRenderPipelines.PULSING_ALPHA;
+				var pipeline = LBRClientRenderPipelines.PULSING_ALPHA;
 				var texture = LBR.id("textures/gui/container/microchip/grid_snapping_overlay.png");
 				if(y >= size.bounds().minY())
 				{

@@ -15,7 +15,7 @@ public final class LBRAttachments
 	public static final Supplier<AttachmentType<NoteBoardContents>> NOTE_BOARD = ATTACHMENT_TYPES.register(
 			"note_board",
 			() -> AttachmentType.builder(() -> NoteBoardContents.EMPTY)
-					.serialize(NoteBoardContents.CODEC)
+					.serialize(NoteBoardContents.CODEC.fieldOf("note_board"))
 					.sync(NoteBoardContents.STREAM_CODEC)
 					.copyOnDeath()
 					.build()

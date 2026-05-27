@@ -21,8 +21,8 @@ public final class LogicArrayItemHandler extends ItemAccessItemHandler
 			   resource.is(LBRItems.REDSTONE_BIT.asItem());
 	}
 	
-	public ItemResource set(int index, ItemResource newResource, int newAmount)
+	public void set(int index, ItemResource newResource, int newAmount)
 	{
-		return this.update(itemAccess.getResource(), index, newResource, newAmount);
+		// TODO this.update(itemAccess.getResource(), index, newResource, newAmount);
 	}
 }

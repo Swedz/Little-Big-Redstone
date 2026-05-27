@@ -1,15 +1,13 @@
 package net.swedz.little_big_redstone.gui.microchip.logic.renderer;
 
-import net.swedz.little_big_redstone.LBR;
-import net.swedz.little_big_redstone.LBRClientShaders;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.swedz.little_big_redstone.gui.microchip.logic.LogicRenderer;
 import net.swedz.little_big_redstone.microchip.object.logic.sequencer.LogicSequencer;
-import net.swedz.tesseract.neoforge.helper.guigraphics.TesseractGuiGraphics;
 
 public final class SequencerRenderer extends LogicRenderer<LogicSequencer>
 {
 	@Override
-	public void render(Context context, TesseractGuiGraphics graphics, LogicSequencer component, int x, int y)
+	public void render(Context context, GuiGraphicsExtractor graphics, LogicSequencer component, int x, int y)
 	{
 		var size = component.size();
 		
@@ -19,7 +17,8 @@ public final class SequencerRenderer extends LogicRenderer<LogicSequencer>
 		int fillWidth = (int) ((size.widthPixels() - 4) * component.processedPercentage());
 		int fillHeight = size.heightPixels() - 4;
 		
-		graphics.setColor(context.foregroundColor());
+		// TODO 26.1
+		/*graphics.setColor(context.foregroundColor());
 		graphics.setTextureShader(
 				LBRClientShaders::logicScanline,
 				(shader) -> shader.getUniform("LogicUV").set((float) fillWidth, (float) fillHeight)
@@ -30,6 +29,6 @@ public final class SequencerRenderer extends LogicRenderer<LogicSequencer>
 		);
 		graphics.blit(x + 2, y + 2, 0, 0, fillWidth, fillHeight, 12, 12);
 		graphics.resetTextureShader();
-		graphics.resetColor();
+		graphics.resetColor();*/
 	}
 }

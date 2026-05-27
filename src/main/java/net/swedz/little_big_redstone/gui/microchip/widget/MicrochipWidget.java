@@ -3,24 +3,23 @@ package net.swedz.little_big_redstone.gui.microchip.widget;
 import com.google.common.collect.Lists;
 import com.mojang.blaze3d.platform.InputConstants;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.Renderable;
 import net.minecraft.client.gui.components.events.GuiEventListener;
 import net.minecraft.client.gui.narration.NarratableEntry;
 import net.minecraft.client.gui.narration.NarrationElementOutput;
 import net.minecraft.client.gui.navigation.ScreenRectangle;
-import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.input.MouseButtonEvent;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.Style;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.DyeColor;
+import net.neoforged.neoforge.transfer.ResourceHandlerUtil;
+import net.neoforged.neoforge.transfer.item.ItemResource;
 import net.swedz.little_big_redstone.LBR;
-import net.swedz.little_big_redstone.LBRColors;
 import net.swedz.little_big_redstone.LBRComponents;
 import net.swedz.little_big_redstone.LBRItems;
 import net.swedz.little_big_redstone.block.microchip.MicrochipBlockEntity;
-import net.swedz.little_big_redstone.client.model.logic.LogicBakingModelData;
 import net.swedz.little_big_redstone.gui.microchip.MicrochipMenu;
 import net.swedz.little_big_redstone.gui.microchip.MicrochipScreen;
 import net.swedz.little_big_redstone.gui.microchip.MicrochipViewPosition;
@@ -40,11 +39,12 @@ import net.swedz.little_big_redstone.network.packet.PlaceTakeMicrochipWirePacket
 import net.swedz.little_big_redstone.network.packet.QuickGrabMicrochipWireItemPacket;
 import net.swedz.little_big_redstone.proxy.LBRProxy;
 import net.swedz.tesseract.neoforge.api.Bounds;
-import net.swedz.tesseract.neoforge.helper.TransferHelper;
-import net.swedz.tesseract.neoforge.helper.guigraphics.TesseractGuiGraphics;
+import net.swedz.tesseract.neoforge.gui.ExtendedClientTooltipPositioner;
 import net.swedz.tesseract.neoforge.proxy.Proxies;
 
 import java.util.List;
+import java.util.Locale;
+import java.util.Optional;
 import java.util.function.Consumer;
 
 public final class MicrochipWidget implements GuiEventListener, Renderable, NarratableEntry
@@ -205,7 +205,8 @@ public final class MicrochipWidget implements GuiEventListener, Renderable, Narr
 			microchip.markDirty(false);
 			var stack = note.toStack();
 			boolean shift = event.hasShiftDown();
-			if(!shift || TransferHelper.insert(menu.getDestinationInventoryItemHandler(Minecraft.getInstance().player), stack) <= 0)
+			var destination = menu.getDestinationInventoryItemHandler(Minecraft.getInstance().player);
+			if(!shift || ResourceHandlerUtil.insertStacking(destination, ItemResource.of(stack), stack.getCount(), null) <= 0)
 			{
 				menu.setCarried(stack);
 			}
@@ -260,10 +261,10 @@ public final class MicrochipWidget implements GuiEventListener, Renderable, Narr
 				{
 					if(carried.isEmpty())
 					{
-						var extracted = TransferHelper.extractMatching(menu.getLogicArrayItemHandler(), (stack) -> stack.is(LBRItems.REDSTONE_BIT.asItem()), 1);
+						var extracted = ResourceHandlerUtil.extractFirst(menu.getLogicArrayItemHandler(), (stack) -> stack.is(LBRItems.REDSTONE_BIT.asItem()), 1, null);
 						if(!extracted.isEmpty())
 						{
-							menu.setCarried(extracted);
+							menu.setCarried(extracted.resource().toStack(extracted.amount()));
 							selectedPort = context.port();
 							new QuickGrabMicrochipWireItemPacket(menu.containerId).sendToServer();
 							return true;
@@ -307,7 +308,8 @@ public final class MicrochipWidget implements GuiEventListener, Renderable, Narr
 			microchip.markDirty(true);
 			var stack = logic.toStack();
 			boolean shift = event.hasShiftDown();
-			if(!shift || TransferHelper.insert(menu.getDestinationInventoryItemHandler(Minecraft.getInstance().player), stack) <= 0)
+			var destination = menu.getDestinationInventoryItemHandler(Minecraft.getInstance().player);
+			if(!shift || ResourceHandlerUtil.insertStacking(destination, ItemResource.of(stack), stack.getCount(), null) <= 0)
 			{
 				menu.setCarried(stack);
 				menu.setCarriedWires(logic.slot(), wiresPopped);
@@ -539,6 +541,56 @@ public final class MicrochipWidget implements GuiEventListener, Renderable, Narr
 		graphics.disableScissor();
 	}
 	
+	private void renderTooltip(GuiGraphicsExtractor graphics, List<Component> lines, boolean dropShadow, int x, int y, Identifier style, int paddingLeft, int paddingTop, int paddingRight, int paddingBottom)
+	{
+		graphics.tooltip(
+				Minecraft.getInstance().font,
+				lines,
+				dropShadow,
+				Optional.empty(),
+				(screenWidth, screenHeight, x1, y1, tooltipWidth, tooltipHeight) ->
+						new ExtendedClientTooltipPositioner.Result(x, y, paddingLeft, paddingTop, paddingRight, paddingBottom),
+				x,
+				y,
+				true,
+				style
+		);
+	}
+	
+	private void renderTooltipLogic(GuiGraphicsExtractor graphics, List<Component> lines, int x, int y, DyeColor dyeColor)
+	{
+		this.renderTooltip(
+				graphics,
+				lines,
+				true,
+				x,
+				y,
+				LBR.id("logic/%s".formatted(dyeColor.name().toLowerCase(Locale.ROOT))),
+				0,
+				0,
+				0,
+				0
+		);
+	}
+	
+	private void renderTooltipStickyNote(GuiGraphicsExtractor graphics, List<Component> lines, int x, int y, DyeColor dyeColor)
+	{
+		// TODO verify padding numbers
+		// TODO also worth noting that because of where tooltip textures need to be, this means the sticky note textures are duplicated...
+		this.renderTooltip(
+				graphics,
+				lines,
+				false,
+				x,
+				y,
+				LBR.id("sticky_note/%s".formatted(dyeColor.name().toLowerCase(Locale.ROOT))),
+				4,
+				4,
+				4,
+				21
+		);
+	}
+	
 	private void renderTooltipStickyNote(GuiGraphicsExtractor graphics, int x, int y)
 	{
 		var entry = context.note();
@@ -546,22 +598,7 @@ public final class MicrochipWidget implements GuiEventListener, Renderable, Narr
 		if(!note.isEmpty())
 		{
 			int minWidth = graphics.guiWidth() - x - 6;
-			graphics.setColor(LBRColors.stickyNoteText(entry.textColor()));
-			graphics.setStringDropShadow(false);
-			graphics.setTooltipFirstLinePadded(false);
-			graphics.setTooltipBackgroundPadding(4, 21, 4, 4);
-			graphics.renderTooltipBounded(
-					List.of(note.parsed()),
-					x, y,
-					minWidth, minWidth / 2,
-					graphics.guiWidth(), graphics.guiHeight(),
-					LBR.id("textures/gui/sticky_note/background_%s.png".formatted(entry.noteColor().getName())),
-					64, 64, 21
-			);
-			graphics.resetTooltipBackgroundPadding();
-			graphics.setTooltipFirstLinePadded(true);
-			graphics.setStringDropShadow(true);
-			graphics.resetColor();
+			this.renderTooltipStickyNote(graphics, List.of(note.parsed()), x, y, entry.noteColor());
 		}
 	}
 	
@@ -577,21 +614,17 @@ public final class MicrochipWidget implements GuiEventListener, Renderable, Narr
 			lines.add(LBR.text().logicConfigTooltipClickToOpen());
 		}
 		
-		var colorSet = LogicBakingModelData.get(component).getColorSet(component, this.color());
-		int backgroundColor = colorSet.background();
-		int borderColor = colorSet.foreground();
-		graphics.renderTooltip(lines, x, y, backgroundColor, backgroundColor, borderColor, borderColor);
+		var dyeColor = (DyeColor) component.color().orElse(this.color());
+		this.renderTooltipLogic(graphics, lines, x, y, dyeColor);
 		
 		if(microchip.isDebug())
 		{
-			graphics.pose().pushPose();
-			graphics.pose().translate(this.x + 211, this.y + 139, 0);
-			graphics.pose().scale(2, 2, 2);
-			graphics.enableBatching();
+			graphics.pose().pushMatrix();
+			graphics.pose().translate(this.x + 211, this.y + 139);
+			graphics.pose().scale(2, 2);
 			var context = LogicRenderer.Context.create(this.color(), component, this.menu().getCarriedWires() != null, this.hasSelectedPort(), false);
 			LogicRenderers.render(context, graphics, component, 0, 0);
-			graphics.drawBatches();
-			graphics.pose().popPose();
+			graphics.pose().popMatrix();
 		}
 	}
 	
@@ -603,10 +636,8 @@ public final class MicrochipWidget implements GuiEventListener, Renderable, Narr
 		lines.add(LBRItems.REDSTONE_BIT.asItem().getDefaultInstance().getHoverName().copy().withStyle(Style.EMPTY.withUnderlined(true)));
 		lines.add(LBR.text().logicConfigTooltipSignal(context.wireSignal()));
 		
-		var colorSet = LogicBakingModelData.get(component).getColorSet(component, this.color());
-		int backgroundColor = colorSet.background();
-		int borderColor = colorSet.foreground();
-		graphics.renderTooltip(lines, x, y, backgroundColor, backgroundColor, borderColor, borderColor);
+		var dyeColor = (DyeColor) component.color().orElse(this.color());
+		this.renderTooltipLogic(graphics, lines, x, y, dyeColor);
 	}
 	
 	public void renderTooltip(GuiGraphicsExtractor graphics)

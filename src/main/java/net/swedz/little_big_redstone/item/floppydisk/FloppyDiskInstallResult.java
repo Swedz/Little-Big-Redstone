@@ -2,9 +2,8 @@ package net.swedz.little_big_redstone.item.floppydisk;
 
 import com.google.common.collect.Iterators;
 import com.google.common.collect.Lists;
+import net.minecraft.core.NonNullList;
 import net.minecraft.world.item.ItemStack;
-import net.neoforged.neoforge.items.IItemHandler;
-import net.neoforged.neoforge.items.wrapper.EmptyItemHandler;
 
 import java.util.Collections;
 import java.util.Iterator;
@@ -13,13 +12,13 @@ import java.util.List;
 public record FloppyDiskInstallResult(
 		List<ItemStack> present,
 		List<ItemStack> missing,
-		IItemHandler remainingDrops
+		NonNullList<ItemStack> remainingDrops
 ) implements Iterable<ItemStack>
 {
 	public FloppyDiskInstallResult(
 			List<ItemStack> present,
 			List<ItemStack> missing,
-			IItemHandler remainingDrops
+			NonNullList<ItemStack> remainingDrops
 	)
 	{
 		present = Lists.newArrayList(present);
@@ -28,12 +27,12 @@ public record FloppyDiskInstallResult(
 		missing.sort(FloppyDiskInstaller.comparator());
 		this.present = Collections.unmodifiableList(present);
 		this.missing = Collections.unmodifiableList(missing);
-		this.remainingDrops = remainingDrops;
+		this.remainingDrops = NonNullList.copyOf(remainingDrops);
 	}
 	
 	public FloppyDiskInstallResult()
 	{
-		this(List.of(), List.of(), EmptyItemHandler.INSTANCE);
+		this(List.of(), List.of(), NonNullList.copyOf(List.of()));
 	}
 	
 	public boolean isSuccess()

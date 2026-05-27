@@ -11,7 +11,6 @@ import net.minecraft.world.item.ItemStack;
 import net.neoforged.neoforge.client.NeoForgeRenderTypes;
 import net.neoforged.neoforge.client.model.data.ModelData;
 import net.swedz.little_big_redstone.LBRItemDisplayContext;
-import net.swedz.little_big_redstone.client.model.MicrochipGuiContextModelData;
 import net.swedz.little_big_redstone.client.model.stickynote.StickyNoteModelData;
 import net.swedz.little_big_redstone.item.stickynote.StickyNoteItem;
 import net.swedz.tesseract.neoforge.helper.model.QuadColorFix;
@@ -38,7 +37,6 @@ public final class StickyNoteItemRenderer extends BlockEntityWithoutLevelRendere
 		
 		var modelData = ModelData.builder()
 				.with(StickyNoteModelData.KEY, StickyNoteModelData.of(stack))
-				.with(MicrochipGuiContextModelData.KEY, new MicrochipGuiContextModelData(displayContext == LBRItemDisplayContext.MICROCHIP_GUI))
 				.build();
 		
 		var model = itemRenderer.getModel(stack, null, null, 0);

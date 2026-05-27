@@ -3,21 +3,20 @@ package net.swedz.little_big_redstone.gui.microchip;
 import com.google.common.collect.Maps;
 import com.mojang.blaze3d.platform.InputConstants;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
-import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.input.MouseButtonEvent;
+import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
 import net.swedz.little_big_redstone.LBR;
-import net.swedz.little_big_redstone.LBRClientShaders;
 import net.swedz.little_big_redstone.LBRComponents;
 import net.swedz.little_big_redstone.LBRItemDisplayContext;
 import net.swedz.little_big_redstone.LBRItems;
+import net.swedz.little_big_redstone.LBRClientRenderPipelines;
 import net.swedz.little_big_redstone.block.microchip.MicrochipBlockEntity;
-import net.swedz.little_big_redstone.gui.slot.MaybeLockedPlayerSlot;
 import net.swedz.little_big_redstone.gui.microchip.logic.LogicRenderer;
 import net.swedz.little_big_redstone.gui.microchip.logic.LogicRenderers;
 import net.swedz.little_big_redstone.gui.microchip.widget.MicrochipThermostatWidget;
@@ -25,11 +24,11 @@ import net.swedz.little_big_redstone.gui.microchip.widget.MicrochipWidget;
 import net.swedz.little_big_redstone.gui.microchip.wire.WireMetadata;
 import net.swedz.little_big_redstone.gui.microchip.wire.WirePath;
 import net.swedz.little_big_redstone.gui.microchip.wire.WirePathKey;
+import net.swedz.little_big_redstone.gui.slot.MaybeLockedPlayerSlot;
 import net.swedz.little_big_redstone.item.stickynote.StickyNoteItem;
 import net.swedz.little_big_redstone.microchip.object.logic.LogicComponent;
 import net.swedz.little_big_redstone.microchip.wire.Wire;
 import net.swedz.little_big_redstone.network.packet.StoreMicrochipViewPositionPacket;
-import org.jspecify.annotations.Nullable;
 
 import java.util.Map;
 
@@ -182,11 +181,12 @@ public final class MicrochipScreen extends AbstractContainerScreen<MicrochipMenu
 			}
 			else if(carried.is(LBRItems.REDSTONE_BIT.asItem()))
 			{
+				var pipeline = RenderPipelines.GUI_TEXTURED;
 				if(!microchipWidget.context().hasPort())
 				{
-					// TODO graphics.setTextureShader(LBRClientShaders::pulsingTextureAlpha);
+					pipeline = LBRClientRenderPipelines.PULSING_TEXTURE_ALPHA;
 				}
-				graphics.blit(LBR.id("textures/item/redstone_bit.png"), boardMouseX - 8, boardMouseY - 8, 0, 0, 16, 16, 16, 16);
+				graphics.blit(pipeline, LBR.id("textures/item/redstone_bit.png"), boardMouseX - 8, boardMouseY - 8, 0, 0, 16, 16, 16, 16);
 				graphics.itemDecorations(font, carried, boardMouseX - 8, boardMouseY - 8);
 				
 				graphics.pose().popMatrix();

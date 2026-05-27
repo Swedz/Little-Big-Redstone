@@ -1,11 +1,13 @@
 package net.swedz.little_big_redstone;
 
 import com.google.common.collect.Maps;
+import net.minecraft.client.data.models.model.ModelTemplates;
+import net.minecraft.client.data.models.model.TextureMapping;
+import net.minecraft.client.resources.model.sprite.Material;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.Item;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.capabilities.Capabilities;
-import net.neoforged.neoforge.client.model.generators.ModelFile;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import net.swedz.little_big_redstone.item.floppydisk.FloppyDiskItem;
 import net.swedz.little_big_redstone.item.LogicItem;
@@ -15,7 +17,6 @@ import net.swedz.little_big_redstone.item.stickynote.StickyNoteItem;
 import net.swedz.little_big_redstone.microchip.object.logic.LogicType;
 import net.swedz.little_big_redstone.microchip.object.logic.LogicTypes;
 import net.swedz.tesseract.api.Assert;
-import net.swedz.tesseract.neoforge.helper.model.BasicCustomLoaderBuilder;
 import net.swedz.tesseract.neoforge.registry.SortOrder;
 import net.swedz.tesseract.neoforge.registry.common.CommonModelBuilders;
 import net.swedz.tesseract.neoforge.registry.holder.ItemHolder;
@@ -150,10 +151,12 @@ public final class LBRItems
 				.tag(LBRTags.Items.LOGIC_ARRAYS)
 				.withCapabilities((item, event) ->
 						event.registerItem(Capabilities.Item.ITEM, (__, access) -> new LogicArrayItemHandler(access), item))
-				.withModel((holder) -> (provider) ->
-						provider.getBuilder(holder.identifier().id())
-								.parent(new ModelFile.UncheckedModelFile("item/generated"))
-								.texture("layer0", LBR.id("item/logic_array/%s".formatted(colorId))));
+				.withModel((holder) -> (generators) ->
+						ModelTemplates.FLAT_ITEM.create(
+								holder.asItem(),
+								TextureMapping.layer0(new Material(LBR.id("item/logic_array/%s".formatted(colorId)))),
+								generators.item().modelOutput
+						));
 	}
 	
 	private static ItemHolder<FloppyDiskItem> createFloppyDisk(DyeColor color, String colorEnglishName, int order)
@@ -163,10 +166,12 @@ public final class LBRItems
 		final String englishName = "%s Floppy Disk".formatted(colorEnglishName);
 		return create(id, englishName, (p) -> new FloppyDiskItem(p, color), LBRSortOrder.FLOPPY_DISKS.and(order))
 				.tag(LBRTags.Items.FLOPPY_DISKS)
-				.withModel((holder) -> (provider) ->
-						provider.getBuilder(holder.identifier().id())
-								.parent(new ModelFile.UncheckedModelFile("item/generated"))
-								.texture("layer0", LBR.id("item/floppy_disk/%s".formatted(colorId))));
+				.withModel((holder) -> (generators) ->
+						ModelTemplates.FLAT_ITEM.create(
+								holder.asItem(),
+								TextureMapping.layer0(new Material(LBR.id("item/floppy_disk/%s".formatted(colorId)))),
+								generators.item().modelOutput
+						));
 	}
 	
 	private static ItemHolder<StickyNoteItem> createStickyNote(DyeColor color, String colorEnglishName, int order)

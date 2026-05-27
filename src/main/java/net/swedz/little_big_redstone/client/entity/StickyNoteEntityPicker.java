@@ -1,7 +1,6 @@
 package net.swedz.little_big_redstone.client.entity;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.neoforged.api.distmarker.Dist;
@@ -26,8 +25,9 @@ public final class StickyNoteEntityPicker
 	{
 		if(event.isPickBlock())
 		{
-			var player = Minecraft.getInstance().player;
-			var hitResult = Minecraft.getInstance().hitResult;
+			var minecraft = Minecraft.getInstance();
+			var player = minecraft.player;
+			var hitResult = minecraft.hitResult;
 			boolean creative = player.getAbilities().instabuild;
 			
 			if(hitResult.getType() == HitResult.Type.ENTITY && creative &&
@@ -35,7 +35,7 @@ public final class StickyNoteEntityPicker
 			{
 				event.setCanceled(true);
 				
-				new PickStickyNotePacket(entity.getId(), Screen.hasControlDown()).sendToServer();
+				new PickStickyNotePacket(entity.getId(), minecraft.hasControlDown()).sendToServer();
 			}
 		}
 	}

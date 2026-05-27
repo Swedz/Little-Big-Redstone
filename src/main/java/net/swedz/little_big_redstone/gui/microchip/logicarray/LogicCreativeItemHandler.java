@@ -1,54 +1,59 @@
 package net.swedz.little_big_redstone.gui.microchip.logicarray;
 
-import net.minecraft.world.item.ItemStack;
-import net.neoforged.neoforge.items.IItemHandlerModifiable;
+import net.neoforged.neoforge.transfer.ResourceHandler;
+import net.neoforged.neoforge.transfer.item.ItemResource;
+import net.neoforged.neoforge.transfer.transaction.TransactionContext;
 import net.swedz.little_big_redstone.LBRComponents;
 import net.swedz.little_big_redstone.LBRCreativeTabs;
 import net.swedz.little_big_redstone.LBRItems;
 import net.swedz.little_big_redstone.item.logicarray.LogicArrayItem;
 
-public final class LogicCreativeItemHandler implements IItemHandlerModifiable
+public final class LogicCreativeItemHandler implements ResourceHandler<ItemResource>
 {
 	@Override
-	public void setStackInSlot(int slot, ItemStack stack)
-	{
-	}
-	
-	@Override
-	public int getSlots()
+	public int size()
 	{
 		return LogicArrayItem.MAX_SLOTS;
 	}
 	
 	@Override
-	public ItemStack getStackInSlot(int slot)
+	public ItemResource getResource(int index)
 	{
 		var items = LBRCreativeTabs.getLogicArrayItems();
-		return slot < items.size() ? items.get(slot) : ItemStack.EMPTY;
+		return index < items.size() ? items.get(index) : ItemResource.EMPTY;
 	}
 	
 	@Override
-	public ItemStack insertItem(int slot, ItemStack stack, boolean simulate)
-	{
-		return ItemStack.EMPTY;
-	}
-	
-	@Override
-	public ItemStack extractItem(int slot, int amount, boolean simulate)
+	public long getAmountAsLong(int index)
 	{
 		var items = LBRCreativeTabs.getLogicArrayItems();
-		return slot < items.size() ? items.get(slot).copyWithCount(amount) : ItemStack.EMPTY;
+		return index < items.size() ? 1 : 0;
 	}
 	
 	@Override
-	public int getSlotLimit(int slot)
+	public long getCapacityAsLong(int index, ItemResource resource)
 	{
-		return 64;
+		return resource.getMaxStackSize();
 	}
 	
 	@Override
-	public boolean isItemValid(int slot, ItemStack stack)
+	public boolean isValid(int index, ItemResource resource)
 	{
-		return stack.isEmpty() || stack.has(LBRComponents.LOGIC) || stack.is(LBRItems.REDSTONE_BIT.asItem());
+		return resource.isEmpty() ||
+			   resource.has(LBRComponents.LOGIC) ||
+			   resource.is(LBRItems.REDSTONE_BIT.asItem());
+	}
+	
+	@Override
+	public int insert(int index, ItemResource resource, int amount, TransactionContext transaction)
+	{
+		return amount;
+	}
+	
+	@Override
+	public int extract(int index, ItemResource resource, int amount, TransactionContext transaction)
+	{
+		var items = LBRCreativeTabs.getLogicArrayItems();
+		return index < items.size() ? amount : 0;
 	}
 }

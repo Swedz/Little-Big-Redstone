@@ -2,8 +2,9 @@ package net.swedz.little_big_redstone.client.hud;
 
 import net.minecraft.client.DeltaTracker;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.core.BlockPos;
+import net.minecraft.util.ARGB;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
@@ -23,12 +24,12 @@ import net.swedz.little_big_redstone.item.floppydisk.FloppyDiskItem;
 import net.swedz.little_big_redstone.microchip.Microchip;
 import net.swedz.little_big_redstone.network.packet.RequestMicrochipWatcherPacket;
 import net.swedz.little_big_redstone.proxy.LBRProxy;
-import net.swedz.tesseract.neoforge.helper.guigraphics.TesseractGuiGraphics;
+import net.swedz.tesseract.neoforge.helper.gui.ExtraGuiGraphics;
 import net.swedz.tesseract.neoforge.proxy.Proxies;
-import org.apache.commons.lang3.mutable.MutableInt;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.concurrent.atomic.AtomicInteger;
 
 @EventBusSubscriber(modid = LBR.ID, value = Dist.CLIENT)
 public final class FloppyDiskConsumeItemsGuiOverlay
@@ -44,64 +45,56 @@ public final class FloppyDiskConsumeItemsGuiOverlay
 		DISPLAY_TIME = LBRClient.config().floppyDiskViewLingerTime();
 	}
 	
-	private static void renderItem(TesseractGuiGraphics graphics, ItemStack stack, boolean isPresent, int x, float alpha)
+	private static void renderItem(GuiGraphicsExtractor graphics, ItemStack stack, boolean isPresent, int x, int color)
 	{
-		graphics.setTexture(LBR.id("textures/gui/slot_atlas.png"));
-		graphics.blit(x - 1, -1, 0, 0, 18, 18);
+		graphics.blit(LBR.id("textures/gui/slot_atlas.png"), x - 1, -1, 0, 0, 18, 18, color);
 		
-		graphics.renderItem(stack, x, 0);
-		graphics.renderItemDecorations(stack, x, 0);
+		// TODO 26.1 color
+		graphics.item(stack, x, 0);
+		graphics.itemDecorations(Minecraft.getInstance().font, stack, x, 0);
 		
-		graphics.pose().pushPose();
-		graphics.pose().translate(0, 0, 200);
-		graphics.blit(x - 1, -1, 18, isPresent ? 0 : 18, 18, 18);
-		graphics.pose().popPose();
+		graphics.blit(LBR.id("textures/gui/slot_atlas.png"), x - 1, -1, 18, isPresent ? 0 : 18, 18, 18, color);
 	}
 	
-	private static void renderItems(TesseractGuiGraphics graphics, int maxItems, MutableInt index, MutableInt x, List<ItemStack> items, boolean isPresent, float alpha)
+	private static void renderItems(GuiGraphicsExtractor graphics, int maxItems, AtomicInteger index, AtomicInteger x, List<ItemStack> items, boolean isPresent, int color)
 	{
+		var font = Minecraft.getInstance().font;
 		for(int itemIndex = 0;
-			itemIndex < items.size() && index.getValue() < maxItems;
-			itemIndex++, index.increment(), x.add(18))
+			itemIndex < items.size() && index.get() < maxItems;
+			itemIndex++, index.incrementAndGet(), x.addAndGet(18))
 		{
-			if(index.getValue() == maxItems - 1 &&
-			   index.getValue() != ITEMS.size() - 1)
+			if(index.get() == maxItems - 1 &&
+			   index.get() != ITEMS.size() - 1)
 			{
-				graphics.setTexture(LBR.id("textures/gui/slot_atlas.png"));
-				graphics.blit(x.getValue() - 1, -1, 0, 18 * 2, 18, 18);
-				var text = LBR.text().floppyDiskMoreItems(ITEMS.size() - index.getValue());
-				graphics.setStringDropShadow(false);
-				graphics.drawString(text, x.getValue() + 19 - 2 - graphics.getFont().width(text), 9);
-				graphics.setStringDropShadow(true);
+				graphics.blit(LBR.id("textures/gui/slot_atlas.png"), x.get() - 1, -1, 0, 18 * 2, 18, 18, color);
+				var text = LBR.text().floppyDiskMoreItems(ITEMS.size() - index.get());
+				graphics.text(font, text, x.get() + 19 - 2 - font.width(text), 9, color, false);
 				continue;
 			}
 			var stack = items.get(itemIndex);
-			renderItem(graphics, stack, isPresent, x.getValue(), alpha);
+			renderItem(graphics, stack, isPresent, x.get(), color);
 		}
 	}
 	
-	private static void renderItems(TesseractGuiGraphics graphics, float alpha)
+	private static void renderItems(GuiGraphicsExtractor graphics, int color)
 	{
-		graphics.pose().pushPose();
-		graphics.pose().translate(0, -24, 0);
-		graphics.setColor(1, 1, 1, alpha);
+		graphics.pose().pushMatrix();
+		graphics.pose().translate(0, -24);
 		
 		int maxItems = 9;
 		int x = -(Math.min(ITEMS.size(), maxItems) * 18) / 2;
 		
-		graphics.setTexture(LBR.id("textures/gui/slot_background.png"));
-		graphics.nineSlice(x - 2, -2, Math.min(ITEMS.size(), maxItems) * 18 + 2, 20, 32, 32, 4);
+		ExtraGuiGraphics.nineSlice(graphics, LBR.id("textures/gui/slot_background.png"), color, 0xFFFFFFFF, x - 2, -2, Math.min(ITEMS.size(), maxItems) * 18 + 2, 20, 32, 32, 4);
 		
-		MutableInt index = new MutableInt();
-		MutableInt itemX = new MutableInt(x);
-		renderItems(graphics, maxItems, index, itemX, ITEMS.missing(), false, alpha);
-		renderItems(graphics, maxItems, index, itemX, ITEMS.present(), true, alpha);
+		var index = new AtomicInteger();
+		var itemX = new AtomicInteger(x);
+		renderItems(graphics, maxItems, index, itemX, ITEMS.missing(), false, color);
+		renderItems(graphics, maxItems, index, itemX, ITEMS.present(), true, color);
 		
-		graphics.resetColor();
-		graphics.pose().popPose();
+		graphics.pose().popMatrix();
 	}
 	
-	public static void render(GuiGraphics vanilla, DeltaTracker delta)
+	public static void render(GuiGraphicsExtractor graphics, DeltaTracker delta)
 	{
 		if(Minecraft.getInstance().options.hideGui)
 		{
@@ -115,17 +108,15 @@ public final class FloppyDiskConsumeItemsGuiOverlay
 			{
 				var gui = Minecraft.getInstance().gui;
 				
-				var graphics = new TesseractGuiGraphics(vanilla);
-				
-				graphics.pose().pushPose();
+				graphics.pose().pushMatrix();
 				
 				int yShift = Math.max(gui.leftHeight, gui.rightHeight) + (68 - 59);
-				graphics.pose().translate((float) (vanilla.guiWidth() / 2), (float) (vanilla.guiHeight() - Math.max(yShift, 68)), 0);
-				graphics.pose().translate(0, -4, 0);
+				graphics.pose().translate((float) (graphics.guiWidth() / 2), (float) (graphics.guiHeight() - Math.max(yShift, 68)));
+				graphics.pose().translate(0, -4);
 				
-				renderItems(graphics, alpha / 255f);
+				renderItems(graphics, ARGB.color(alpha, 0xFFFFFF));
 				
-				graphics.pose().popPose();
+				graphics.pose().popMatrix();
 			}
 		}
 	}
@@ -177,7 +168,7 @@ public final class FloppyDiskConsumeItemsGuiOverlay
 		}
 		var proxy = Proxies.get(LBRProxy.class);
 		var player = Minecraft.getInstance().player;
-		int selectedSlot = player.getInventory().selected;
+		int selectedSlot = player.getInventory().getSelectedSlot();
 		var targetBlock = Minecraft.getInstance().hitResult instanceof BlockHitResult hitResult ? hitResult.getBlockPos() : null;
 		var watchedMicrochip = proxy.getWatchedMicrochip();
 		

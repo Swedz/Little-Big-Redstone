@@ -14,7 +14,7 @@ import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.item.ItemStack;
 import net.swedz.little_big_redstone.LBR;
 import net.swedz.little_big_redstone.LBRComponents;
-import net.swedz.little_big_redstone.client.model.logic.LogicBakingModelData;
+import net.swedz.little_big_redstone.client.model.logic.LogicItemModel;
 import net.swedz.little_big_redstone.gui.logicconfig.widget.LogicConfigButton;
 import net.swedz.little_big_redstone.gui.logicconfig.widget.TickableLogicConfigWidget;
 import net.swedz.little_big_redstone.gui.logicconfig.widget.cycle.CycleLogicConfigButton;
@@ -55,7 +55,7 @@ public final class LogicConfigScreen extends AbstractContainerScreen<LogicConfig
 		configHeight = 180 - 4;
 		
 		logicComponent = menu.logicComponent();
-		var colorSet = LogicBakingModelData.get(logicComponent).getColorSet(logicComponent, menu.color());
+		var colorSet = LogicItemModel.get(logicComponent).colorPalette().getColorSet(logicComponent, menu.color());
 		color = colorSet.foreground();
 		
 		logicStack = logicComponent.type().toStack(logicComponent);

@@ -4,10 +4,11 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.neoforge.capabilities.Capabilities;
-import net.neoforged.neoforge.items.IItemHandlerModifiable;
+import net.neoforged.neoforge.transfer.IndexModifier;
 import net.neoforged.neoforge.transfer.ResourceHandler;
 import net.neoforged.neoforge.transfer.access.ItemAccess;
 import net.neoforged.neoforge.transfer.item.ItemResource;
+import net.neoforged.neoforge.transfer.transaction.TransactionContext;
 import net.swedz.little_big_redstone.LBRComponents;
 import net.swedz.little_big_redstone.item.logicarray.LogicArrayItemHandler;
 
@@ -20,8 +21,9 @@ public final class MicrochipLogicArrayItemHandler implements ResourceHandler<Ite
 	private final AbstractContainerMenu menu;
 	private final Player                player;
 	
-	private int                              logicArraySlot = -1;
-	private Optional<IItemHandlerModifiable> logicArray     = Optional.empty();
+	private int                                     logicArraySlot    = -1;
+	private Optional<ResourceHandler<ItemResource>> logicArrayHandler       = Optional.empty();
+	private Optional<IndexModifier<ItemResource>>   logicArrayIndexModifier = Optional.empty();
 	
 	public MicrochipLogicArrayItemHandler(AbstractContainerMenu menu, Player player)
 	{
@@ -49,9 +51,9 @@ public final class MicrochipLogicArrayItemHandler implements ResourceHandler<Ite
 		return this.handler().isPresent();
 	}
 	
-	private Optional<IItemHandlerModifiable> handler()
+	private Optional<ResourceHandler<ItemResource>> handler()
 	{
-		return logicArray.isEmpty() && player.hasInfiniteMaterials() ? Optional.of(CREATIVE) : logicArray;
+		return logicArrayHandler.isEmpty() && player.hasInfiniteMaterials() ? Optional.of(CREATIVE) : logicArrayHandler;
 	}
 	
 	private boolean setPickedLogicArray(int slotId, ItemStack stack)
@@ -60,7 +62,8 @@ public final class MicrochipLogicArrayItemHandler implements ResourceHandler<Ite
 		   ItemAccess.forStack(stack).getCapability(Capabilities.Item.ITEM) instanceof LogicArrayItemHandler logicArrayItemHandler)
 		{
 			logicArraySlot = slotId;
-			logicArray = Optional.of(logicArrayItemHandler);
+			logicArrayHandler = Optional.of(logicArrayItemHandler);
+			logicArrayIndexModifier = Optional.of(logicArrayItemHandler::set);
 			return true;
 		}
 		return false;
@@ -69,7 +72,8 @@ public final class MicrochipLogicArrayItemHandler implements ResourceHandler<Ite
 	public void deselectPickedLogicArray()
 	{
 		logicArraySlot = -1;
-		logicArray = Optional.empty();
+		logicArrayHandler = Optional.empty();
+		logicArrayIndexModifier = Optional.empty();
 	}
 	
 	public void setPickedLogicArray(int slotId)
@@ -101,44 +105,49 @@ public final class MicrochipLogicArrayItemHandler implements ResourceHandler<Ite
 	}
 	
 	@Override
-	public void setStackInSlot(int slot, ItemStack stack)
+	public int size()
 	{
-		this.handler().ifPresent((h) -> h.setStackInSlot(slot, stack));
+		return this.handler().map(ResourceHandler::size).orElse(0);
 	}
 	
 	@Override
-	public int getSlots()
+	public ItemResource getResource(int index)
 	{
-		return this.handler().map(IItemHandlerModifiable::getSlots).orElse(0);
+		return this.handler().map((h) -> h.getResource(index)).orElse(ItemResource.EMPTY);
 	}
 	
 	@Override
-	public ItemStack getStackInSlot(int slot)
+	public long getAmountAsLong(int index)
 	{
-		return this.handler().map((h) -> h.getStackInSlot(slot)).orElse(ItemStack.EMPTY);
+		return this.handler().map((h) -> h.getAmountAsLong(index)).orElse(0L);
 	}
 	
 	@Override
-	public ItemStack insertItem(int slot, ItemStack stack, boolean simulate)
+	public long getCapacityAsLong(int index, ItemResource resource)
 	{
-		return this.handler().map((h) -> h.insertItem(slot, stack, simulate)).orElse(stack);
+		return this.handler().map((h) -> h.getCapacityAsLong(index, resource)).orElse(0L);
 	}
 	
 	@Override
-	public ItemStack extractItem(int slot, int amount, boolean simulate)
+	public boolean isValid(int index, ItemResource resource)
 	{
-		return this.handler().map((h) -> h.extractItem(slot, amount, simulate)).orElse(ItemStack.EMPTY);
+		return this.handler().map((h) -> h.isValid(index, resource)).orElse(false);
 	}
 	
 	@Override
-	public int getSlotLimit(int slot)
+	public int insert(int index, ItemResource resource, int amount, TransactionContext transaction)
 	{
-		return this.handler().map((h) -> h.getSlotLimit(slot)).orElse(0);
+		return this.handler().map((h) -> h.insert(index, resource, amount, transaction)).orElse(0);
 	}
 	
 	@Override
-	public boolean isItemValid(int slot, ItemStack stack)
+	public int extract(int index, ItemResource resource, int amount, TransactionContext transaction)
 	{
-		return this.handler().map((h) -> h.isItemValid(slot, stack)).orElse(false);
+		return this.handler().map((h) -> h.extract(index, resource, amount, transaction)).orElse(0);
+	}
+	
+	public void set(int index, ItemResource newResource, int newAmount)
+	{
+		logicArrayIndexModifier.ifPresent((im) -> im.set(index, newResource, newAmount));
 	}
 }

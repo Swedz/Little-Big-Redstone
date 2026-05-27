@@ -64,13 +64,14 @@ public final class LogicArrayItem extends Item implements DyeColoredItem
 					@Override
 					public Component getDisplayName()
 					{
-						return LogicArrayItem.this.getDescription();
+						return stack.get(DataComponents.ITEM_NAME);
 					}
 					
 					@Override
 					public AbstractContainerMenu createMenu(int containerId, Inventory playerInventory, Player player)
 					{
-						return new LogicArrayMenu(containerId, playerInventory, ItemAccess.forStack(stack).getCapability(Capabilities.Item.ITEM), logicArraySlot);
+						var handler = (LogicArrayItemHandler) ItemAccess.forStack(stack).getCapability(Capabilities.Item.ITEM);
+						return new LogicArrayMenu(containerId, playerInventory, handler, handler::set, logicArraySlot);
 					}
 				},
 				(buf) -> buf.writeVarInt(logicArraySlot)
@@ -81,7 +82,7 @@ public final class LogicArrayItem extends Item implements DyeColoredItem
 	
 	private boolean overrideStackedOn(ItemStack stack, ItemStack other, Slot slot, ClickAction action, Player player, SlotAccess access)
 	{
-		var capability = IItemHandler.of(stack.getCapability(Capabilities.Item.ITEM, ItemAccess.forStack(stack)));
+		var capability = IItemHandler.of(ItemAccess.forStack(stack).getCapability(Capabilities.Item.ITEM));
 		if(capability != null)
 		{
 			if(other.isEmpty())
@@ -144,7 +145,8 @@ public final class LogicArrayItem extends Item implements DyeColoredItem
 	@Override
 	public Optional<TooltipComponent> getTooltipImage(ItemStack stack)
 	{
-		return !stack.has(DataComponents.HIDE_TOOLTIP) && !stack.has(DataComponents.HIDE_ADDITIONAL_TOOLTIP) ?
+		var tooltipDisplay = stack.get(DataComponents.TOOLTIP_DISPLAY);
+		return tooltipDisplay.shows(LBRComponents.LOGIC_ARRAY_STORAGE.get()) ?
 				Optional.ofNullable(stack.get(LBRComponents.LOGIC_ARRAY_STORAGE)).map((contents) -> new ItemContainerContentsTooltipData(contents, COLUMNS, ROWS, true)) :
 				Optional.empty();
 	}

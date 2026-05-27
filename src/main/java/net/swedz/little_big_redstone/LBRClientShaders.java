@@ -1,20 +1,13 @@
 package net.swedz.little_big_redstone;
 
-import net.minecraft.client.renderer.RenderStateShard;
-import net.minecraft.client.renderer.ShaderInstance;
 import net.neoforged.api.distmarker.Dist;
-import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
-import net.neoforged.neoforge.client.event.RegisterShadersEvent;
-
-import java.io.IOException;
-
-import static com.mojang.blaze3d.vertex.DefaultVertexFormat.*;
 
 @EventBusSubscriber(modid = LBR.ID, value = Dist.CLIENT)
 public final class LBRClientShaders
 {
-	private static ShaderInstance LOGIC_ITEM_SCANLINE_INSTANCE;
+	// TODO 26.1, this is moving to LBRCLientRenderPipelines
+	/*private static ShaderInstance LOGIC_ITEM_SCANLINE_INSTANCE;
 	
 	public static ShaderInstance logicItemScanline()
 	{
@@ -79,5 +72,5 @@ public final class LBRClientShaders
 		{
 			throw new RuntimeException(ex);
 		}
-	}
+	}*/
 }

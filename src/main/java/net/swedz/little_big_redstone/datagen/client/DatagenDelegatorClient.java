@@ -25,6 +25,6 @@ public final class DatagenDelegatorClient
 	
 	private static void add(GatherDataEvent event, Function<GatherDataEvent, DataProvider> providerCreator)
 	{
-		event.getGenerator().addProvider(event.includeClient(), providerCreator.apply(event));
+		event.getGenerator().addProvider(true, providerCreator.apply(event));
 	}
 }

@@ -5,7 +5,7 @@ import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.world.item.DyeColor;
 import net.swedz.little_big_redstone.LBR;
-import net.swedz.little_big_redstone.LBRRenderPipelines;
+import net.swedz.little_big_redstone.LBRClientRenderPipelines;
 import net.swedz.little_big_redstone.gui.microchip.widget.MicrochipWidgetContext;
 import net.swedz.little_big_redstone.gui.microchip.wire.WireMetadata;
 import net.swedz.little_big_redstone.gui.microchip.wire.WirePath;
@@ -147,7 +147,7 @@ public final class MicrochipRenderWiresPanel extends MicrochipRenderPanel
 			var pipeline = RenderPipelines.GUI_TEXTURED;
 			if(metadata.hovered())
 			{
-				pipeline = LBRRenderPipelines.PULSING_TEXTURE_LIGHTNESS;
+				pipeline = LBRClientRenderPipelines.PULSING_TEXTURE_LIGHTNESS;
 			}
 			
 			var texture = LBR.id("textures/gui/container/microchip/wire_%s.png".formatted(metadata.powered() ? "on" : "off"));

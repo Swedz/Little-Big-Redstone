@@ -73,10 +73,10 @@ public final class LBRBlocks
 	
 	public static final Supplier<BlockEntityType<MicrochipBlockEntity>> MICROCHIP_ENTITY = Registry.BLOCK_ENTITIES.register(
 			"microchip",
-			() -> BlockEntityType.Builder.of(
+			() -> new BlockEntityType(
 					MicrochipBlockEntity::new,
 					MICROCHIPS.values().stream().map(BlockHolder::get).toArray(Block[]::new)
-			).build(null)
+			)
 	);
 	
 	public static Set<BlockHolder> values()

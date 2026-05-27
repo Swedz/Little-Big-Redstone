@@ -2,21 +2,28 @@ package net.swedz.little_big_redstone.item.floppydisk;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+import net.minecraft.core.Holder;
 import net.minecraft.core.NonNullList;
-import net.minecraft.core.component.DataComponentMap;
+import net.minecraft.core.component.DataComponentPatch;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.DyeColor;
-import net.minecraft.world.item.DyeItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.neoforged.neoforge.items.IItemHandler;
-import net.neoforged.neoforge.items.ItemStackHandler;
+import net.neoforged.neoforge.transfer.CombinedResourceHandler;
+import net.neoforged.neoforge.transfer.ResourceHandler;
+import net.neoforged.neoforge.transfer.ResourceHandlerUtil;
+import net.neoforged.neoforge.transfer.VoidingResourceHandler;
+import net.neoforged.neoforge.transfer.item.ItemResource;
+import net.neoforged.neoforge.transfer.item.ItemStacksResourceHandler;
+import net.neoforged.neoforge.transfer.item.PlayerInventoryWrapper;
+import net.neoforged.neoforge.transfer.transaction.Transaction;
 import net.swedz.little_big_redstone.LBRComponents;
 import net.swedz.little_big_redstone.LBRItems;
 import net.swedz.little_big_redstone.microchip.Microchip;
 import net.swedz.tesseract.api.tuple.Pair;
-import net.swedz.tesseract.neoforge.helper.TransferHelper;
+import net.swedz.tesseract.neoforge.item.ItemStackInstance;
 
 import java.util.Comparator;
 import java.util.List;
@@ -25,8 +32,6 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.function.Function;
-import java.util.function.Predicate;
-import java.util.stream.Stream;
 
 public final class FloppyDiskInstaller
 {
@@ -34,119 +39,70 @@ public final class FloppyDiskInstaller
 	{
 		return Comparator
 				.comparingInt(ItemStack::getCount)
-				.thenComparing((stack) -> stack.getItemHolder().getKey())
+				.thenComparing((stack) -> stack.typeHolder().getKey())
 				.reversed();
 	}
 	
-	public record ItemWithCount(
-			Item item,
-			DataComponentMap data,
-			int count
-	)
+	@SuppressWarnings("deprecation")
+	static List<ItemStackInstance> asItems(Microchip.Immutable microchip)
 	{
-		public Stream<ItemStack> stacks()
-		{
-			return toStacks(item, data, count);
-		}
-	}
-	
-	private static Stream<ItemStack> toStacks(Item item, DataComponentMap data, int count)
-	{
-		List<ItemStack> stacks = Lists.newArrayList();
-		int remaining = count;
-		while(remaining > 0)
-		{
-			int stackCount = Math.min(64, remaining);
-			var stack = new ItemStack(item, stackCount);
-			if(!data.isEmpty())
-			{
-				stack.applyComponents(data);
-			}
-			stacks.add(stack);
-			remaining -= stackCount;
-		}
-		return stacks.stream();
-	}
-	
-	static List<ItemWithCount> asItems(Microchip.Immutable microchip)
-	{
-		Map<Pair<Item, DataComponentMap>, Integer> itemCounts = Maps.newHashMap();
+		Map<Pair<Holder<Item>, DataComponentPatch>, Integer> itemCounts = Maps.newHashMap();
 		
 		if(microchip.wireCount() > 0)
 		{
-			itemCounts.put(new Pair<>(LBRItems.REDSTONE_BIT.asItem(), DataComponentMap.EMPTY), microchip.wireCount());
+			itemCounts.put(new Pair<>(LBRItems.REDSTONE_BIT.asItem().builtInRegistryHolder(), DataComponentPatch.EMPTY), microchip.wireCount());
 		}
 		
 		for(var object : microchip.objects())
 		{
 			var stack = object.toStack();
-			itemCounts.compute(new Pair<>(stack.getItem(), stack.getComponents()), (__, count) -> count == null ? 1 : (count + 1));
+			itemCounts.compute(new Pair<>(stack.typeHolder(), stack.getComponentsPatch()), (__, count) -> count == null ? 1 : (count + 1));
 		}
 		
 		return itemCounts.entrySet().stream()
-				.map((entry) -> new ItemWithCount(entry.getKey().a(), entry.getKey().b(), entry.getValue()))
+				.map((entry) -> new ItemStackInstance(entry.getKey().a(), entry.getValue(), entry.getKey().b()))
 				.toList();
 	}
 	
 	static List<ItemStack> asItemStacks(Microchip.Immutable microchip)
 	{
 		return asItems(microchip).stream()
-				.flatMap(ItemWithCount::stacks)
+				.flatMap(ItemStackInstance::asStacks)
 				.toList();
 	}
 	
-	static IItemHandler asItemHandler(Microchip.Immutable microchip)
+	static ItemStacksResourceHandler asItemHandler(Microchip.Immutable microchip)
 	{
 		var stacks = asItemStacks(microchip);
-		return new ItemStackHandler(NonNullList.of(ItemStack.EMPTY, stacks.toArray(ItemStack[]::new)));
+		return new ItemStacksResourceHandler(NonNullList.of(ItemStack.EMPTY, stacks.toArray(ItemStack[]::new)));
 	}
 	
 	private record Context(
 			Inventory playerInventory,
-			IItemHandler targetInventory,
+			ResourceHandler<ItemResource> targetInventory,
 			Microchip.Immutable source,
-			Microchip.Immutable target,
-			boolean simulate,
 			List<ItemStack> presentItems,
 			List<ItemStack> missingItems
 	)
 	{
-	}
-	
-	private static int extractAny(
-			Context context,
-			Predicate<ItemStack> test,
-			int maxAmount
-	)
-	{
-		int toExtract = maxAmount;
-		int amountExtracted = TransferHelper.extractAny(
-				context.targetInventory(),
-				test,
-				toExtract,
-				context.simulate()
-		);
-		toExtract -= amountExtracted;
-		if(toExtract > 0)
+		public ResourceHandler<ItemResource> handler()
 		{
-			amountExtracted += TransferHelper.extractAny(
-					context.playerInventory(),
-					test,
-					toExtract,
-					true,
-					context.simulate()
+			return new CombinedResourceHandler<>(
+					PlayerInventoryWrapper.of(playerInventory),
+					targetInventory
 			);
 		}
-		return amountExtracted;
 	}
 	
-	private static void consumeItemsWires(Context context)
+	private static void consumeItemsWires(Context context, Transaction transaction)
 	{
 		int totalWiresNeeded = context.source().wireCount();
-		int wiresAvailable = extractAny(
-				context,
-				(item) -> item.is(LBRItems.REDSTONE_BIT.get()),
-				totalWiresNeeded
+		int wiresAvailable = ResourceHandlerUtil.move(
+				context.handler(),
+				new VoidingResourceHandler<>(ItemResource.EMPTY),
+				(resource) -> resource.is(LBRItems.REDSTONE_BIT),
+				totalWiresNeeded,
+				transaction
 		);
 		if(wiresAvailable != totalWiresNeeded)
 		{
@@ -161,13 +117,13 @@ public final class FloppyDiskInstaller
 	private record NeededItem(
 			Item item,
 			Optional<DyeColor> color,
-			Function<ItemStack, Optional<DyeColor>> colorGetter,
+			Function<ItemResource, Optional<DyeColor>> colorGetter,
 			Consumer<ItemStack> stackApplier
 	)
 	{
-		public Optional<DyeColor> colorOf(ItemStack stack)
+		public Optional<DyeColor> colorOf(ItemResource resource)
 		{
-			return colorGetter.apply(stack);
+			return colorGetter.apply(resource);
 		}
 		
 		public ItemStack toStack()
@@ -238,66 +194,74 @@ public final class FloppyDiskInstaller
 	
 	private static void consumeItemsObjects(
 			Context context,
-			Map<NeededItem, Integer> neededItems
+			Map<NeededItem, Integer> neededItems,
+			boolean exactMatchesOnly,
+			Transaction transaction
 	)
 	{
-		var neededItemsOriginal = Map.copyOf(neededItems);
-		
-		for(int index = 0; index < 2; index++)
+		for(var entry : neededItems.entrySet())
 		{
-			boolean exactMatchesOnly = index == 0;
+			var item = entry.getKey();
+			var count = entry.getValue();
 			
-			for(var entry : neededItems.entrySet())
+			if(count <= 0 ||
+			   // No color is needed, so we can skip the first check
+			   (item.color().isEmpty() && exactMatchesOnly))
 			{
-				var item = entry.getKey();
-				var count = entry.getValue();
-				
-				if(count <= 0 ||
-				   // No color is needed, so we can skip the first check
-				   (item.color().isEmpty() && exactMatchesOnly))
+				continue;
+			}
+			
+			int amountToExtract = count;
+			if(!exactMatchesOnly &&
+			   item.color().isPresent())
+			{
+				var dyeColor = item.color().get();
+				int dyeExtracted = ResourceHandlerUtil.move(
+						context.handler(),
+						new VoidingResourceHandler<>(ItemResource.EMPTY),
+						(resource) ->
+								resource.has(DataComponents.DYE) &&
+								resource.get(DataComponents.DYE).equals(dyeColor),
+						count,
+						transaction
+				);
+				if(dyeExtracted <= 0)
 				{
 					continue;
 				}
-				
-				int amountToExtract = count;
-				if(!exactMatchesOnly &&
-				   item.color().isPresent())
-				{
-					var dyeItem = DyeItem.byColor(item.color().get());
-					int dyeExtracted = extractAny(
-							context,
-							(stack) -> stack.is(dyeItem),
-							count
-					);
-					if(dyeExtracted <= 0)
-					{
-						continue;
-					}
-					amountToExtract = dyeExtracted;
-				}
-				
-				int extracted = extractAny(
-						context,
-						(stack) ->
-						{
-							if(stack.is(item.item()))
-							{
-								if(exactMatchesOnly)
-								{
-									var color = item.colorOf(stack);
-									return Objects.equals(color, item.color());
-								}
-								return true;
-							}
-							return false;
-						},
-						amountToExtract
-				);
-				
-				entry.setValue(count - extracted);
+				amountToExtract = dyeExtracted;
 			}
+			
+			int extracted = ResourceHandlerUtil.move(
+					context.handler(),
+					new VoidingResourceHandler<>(ItemResource.EMPTY),
+					(resource) ->
+					{
+						if(resource.is(item.item()))
+						{
+							if(exactMatchesOnly)
+							{
+								var color = item.colorOf(resource);
+								return Objects.equals(color, item.color());
+							}
+							return true;
+						}
+						return false;
+					},
+					amountToExtract,
+					transaction
+			);
+			
+			entry.setValue(count - extracted);
 		}
-		
+	}
+	
+	private static void gatherPresentAndMissingItems(
+			Context context,
+			Map<NeededItem, Integer> neededItems,
+			Map<NeededItem, Integer> neededItemsOriginal
+	)
+	{
 		for(var entry : neededItems.entrySet())
 		{
 			var item = entry.getKey();
@@ -332,21 +296,34 @@ public final class FloppyDiskInstaller
 		List<ItemStack> presentItems = Lists.newArrayList();
 		List<ItemStack> missingItems = Lists.newArrayList();
 		
-		var neededItems = gatherNeededItems(source);
 		var targetContents = asItemHandler(target);
 		var context = new Context(
 				player.getInventory(),
 				targetContents,
 				source,
-				target,
-				simulate,
 				presentItems,
 				missingItems
 		);
 		
-		consumeItemsWires(context);
-		consumeItemsObjects(context, neededItems);
+		NonNullList<ItemStack> remainingDrops;
+		try(var transaction = Transaction.openRoot())
+		{
+			consumeItemsWires(context, transaction);
+			
+			var neededItems = gatherNeededItems(source);
+			var neededItemsOriginal = Map.copyOf(neededItems);
+			consumeItemsObjects(context, neededItems, true, transaction);
+			consumeItemsObjects(context, neededItems, false, transaction);
+			gatherPresentAndMissingItems(context, neededItems, neededItemsOriginal);
+			
+			remainingDrops = targetContents.copyToList();
+			
+			if(!simulate)
+			{
+				transaction.commit();
+			}
+		}
 		
-		return new FloppyDiskInstallResult(presentItems, missingItems, targetContents);
+		return new FloppyDiskInstallResult(presentItems, missingItems, remainingDrops);
 	}
 }
