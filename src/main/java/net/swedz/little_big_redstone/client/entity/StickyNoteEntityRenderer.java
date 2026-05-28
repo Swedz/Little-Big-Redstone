@@ -3,113 +3,144 @@ package net.swedz.little_big_redstone.client.entity;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.Sheets;
-import net.minecraft.client.renderer.block.BlockRenderDispatcher;
+import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
+import net.minecraft.client.renderer.entity.state.EntityRenderState;
+import net.minecraft.client.renderer.item.ItemModelResolver;
+import net.minecraft.client.renderer.item.ItemStackRenderState;
+import net.minecraft.client.renderer.state.level.CameraRenderState;
 import net.minecraft.client.renderer.texture.OverlayTexture;
-import net.minecraft.client.resources.model.BakedModel;
-import net.minecraft.client.resources.model.ModelManager;
 import net.minecraft.core.Direction;
 import net.minecraft.resources.Identifier;
 import net.minecraft.util.RandomSource;
-import net.minecraft.world.inventory.InventoryMenu;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
-import net.swedz.little_big_redstone.LBRClientModels;
-import net.swedz.little_big_redstone.LBRColors;
-import net.swedz.little_big_redstone.client.shader.TintedItemBufferSource;
+import net.swedz.little_big_redstone.LBR;
 import net.swedz.little_big_redstone.entity.stickynote.StickyNoteEntity;
-import net.swedz.tesseract.neoforge.helper.model.QuadColorFix;
 
-public final class StickyNoteEntityRenderer extends EntityRenderer<StickyNoteEntity>
+public final class StickyNoteEntityRenderer<T extends StickyNoteEntity> extends EntityRenderer<T, StickyNoteEntityRenderer.RenderState>
 {
-	private final RandomSource          random;
-	private final BlockRenderDispatcher blockRenderer;
+	private final RandomSource      random;
+	private final ItemModelResolver itemModelResolver;
 	
 	public StickyNoteEntityRenderer(EntityRendererProvider.Context context)
 	{
 		super(context);
 		random = RandomSource.create();
-		blockRenderer = context.getBlockRenderDispatcher();
+		itemModelResolver = context.getItemModelResolver();
 	}
 	
 	@Override
-	public Identifier getTextureLocation(StickyNoteEntity entity)
+	public StickyNoteEntityRenderer.RenderState createRenderState()
 	{
-		return InventoryMenu.BLOCK_ATLAS;
+		return new StickyNoteEntityRenderer.RenderState();
+	}
+	
+	public static final class RenderState extends EntityRenderState
+	{
+		public final ItemStackRenderState stickyNoteModel = new ItemStackRenderState();
+		public final ItemStackRenderState itemModel       = new ItemStackRenderState();
+		
+		public Direction                 direction;
+		public Direction                 facing;
+		public StickyNoteEntity.Quadrant quadrant;
+		public float                     xRot;
+		public float                     yRot;
+		public DyeColor                  color;
+		public DyeColor                  textColor;
+		public boolean                   hasText;
 	}
 	
 	@Override
-	public void render(StickyNoteEntity entity, float entityYaw, float partialTick, PoseStack poseStack, MultiBufferSource bufferSource, int packedLight)
+	public void submit(
+			RenderState state,
+			PoseStack pose,
+			SubmitNodeCollector submitNodeCollector,
+			CameraRenderState camera
+	)
 	{
-		super.render(entity, entityYaw, partialTick, poseStack, bufferSource, packedLight);
+		super.submit(state, pose, submitNodeCollector, camera);
 		
-		var attachedFace = entity.getDirection();
+		var attachedFace = state.direction;
 		
-		poseStack.pushPose();
+		pose.pushPose();
 		
-		poseStack.mulPose(Axis.XP.rotationDegrees(entity.getXRot()));
-		poseStack.mulPose(Axis.YP.rotationDegrees(180 - entity.getYRot()));
+		pose.mulPose(Axis.XP.rotationDegrees(state.xRot));
+		pose.mulPose(Axis.YP.rotationDegrees(180 - state.yRot));
 		if(attachedFace.getAxis().isVertical())
 		{
 			boolean up = attachedFace == Direction.UP;
-			Direction facing = entity.getFacing();
-			poseStack.mulPose(Axis.ZP.rotationDegrees(facing.toYRot() * (up ? 1 : -1)));
+			pose.mulPose(Axis.ZP.rotationDegrees(state.facing.toYRot() * (up ? 1 : -1)));
 		}
 		
-		var buffer = bufferSource.getBuffer(Sheets.translucentItemSheet());
-		for(var quad : this.getStickyNoteModel(entity.getColor()).getQuads(null, null, random, entity.getModelData(), null))
+		if(!state.stickyNoteModel.isEmpty())
 		{
-			QuadColorFix.putBulkData(buffer, poseStack.last(), quad, packedLight, OverlayTexture.NO_OVERLAY);
+			state.stickyNoteModel.submit(pose, submitNodeCollector, state.lightCoords, OverlayTexture.NO_OVERLAY, state.outlineColor);
 		}
 		
-		poseStack.popPose();
+		pose.popPose();
 		
-		var displayItem = entity.getDisplayItem();
-		if(!displayItem.isEmpty())
+		if(!state.itemModel.isEmpty())
 		{
-			this.renderStack(entity, poseStack, bufferSource, packedLight, displayItem);
+			this.submitDisplayItem(state, pose, submitNodeCollector, camera);
 		}
 	}
 	
-	private void renderStack(StickyNoteEntity entity, PoseStack poseStack, MultiBufferSource bufferSource, int packedLight, ItemStack stack)
+	private void submitDisplayItem(
+			RenderState state,
+			PoseStack pose,
+			SubmitNodeCollector submitNodeCollector,
+			CameraRenderState camera
+	)
 	{
-		var attachedFace = entity.getDirection();
+		var attachedFace = state.direction;
 		
-		poseStack.pushPose();
+		pose.pushPose();
 		
-		poseStack.mulPose(Axis.XP.rotationDegrees(entity.getXRot()));
-		poseStack.mulPose(Axis.YN.rotationDegrees(entity.getYRot()));
+		pose.mulPose(Axis.XP.rotationDegrees(state.xRot));
+		pose.mulPose(Axis.YN.rotationDegrees(state.yRot));
 		if(attachedFace.getAxis().isVertical())
 		{
 			boolean up = attachedFace == Direction.UP;
-			Direction facing = entity.getFacing();
-			poseStack.mulPose(Axis.ZP.rotationDegrees(facing.toYRot() * (up ? -1 : 1)));
+			pose.mulPose(Axis.ZP.rotationDegrees(state.facing.toYRot() * (up ? -1 : 1)));
 		}
 		
-		poseStack.translate(0, -0.03125f, -0.00625f);
-		poseStack.scale(0.25f, 0.25f, 0.01f);
+		pose.translate(0, -0.03125f, -0.00625f);
+		pose.scale(0.25f, 0.25f, 0.01f);
 		
-		var itemRenderer = Minecraft.getInstance().getItemRenderer();
-		var model = itemRenderer.getModel(stack, null, null, 0);
+		// TODO 26.1 tint item
+		state.itemModel.submit(pose, submitNodeCollector, state.lightCoords, OverlayTexture.NO_OVERLAY, state.outlineColor);
 		
-		if(!entity.isDefaultTextColor())
-		{
-			var textColor = LBRColors.stickyNoteText(entity.getTextColor());
-			bufferSource = new TintedItemBufferSource(bufferSource, textColor);
-		}
-		
-		itemRenderer.render(stack, ItemDisplayContext.GUI, false, poseStack, bufferSource, packedLight, OverlayTexture.NO_OVERLAY, model);
-		
-		poseStack.popPose();
+		pose.popPose();
 	}
 	
-	private BakedModel getStickyNoteModel(DyeColor color)
+	@Override
+	public void extractRenderState(
+			T entity,
+			RenderState state,
+			float partialTicks
+	)
 	{
-		ModelManager modelManager = blockRenderer.getBlockModelShaper().getModelManager();
-		return modelManager.getModel(LBRClientModels.stickyNote(color));
+		super.extractRenderState(entity, state, partialTicks);
+		
+		state.direction = entity.getDirection();
+		state.facing = entity.getFacing();
+		state.quadrant = entity.getQuadrant();
+		state.xRot = entity.getXRot();
+		state.yRot = entity.getYRot();
+		state.color = entity.getColor();
+		state.textColor = entity.getTextColor();
+		state.hasText = entity.hasText();
+		
+		Minecraft.getInstance().getModelManager().getItemModel(this.getStickyNoteModelId(entity)).update(state.stickyNoteModel, ItemStack.EMPTY, Minecraft.getInstance().getItemModelResolver(), ItemDisplayContext.GUI, null, null, 0);
+		
+		itemModelResolver.updateForNonLiving(state.itemModel, entity.getDisplayItem(), ItemDisplayContext.GUI, entity);
+	}
+	
+	private Identifier getStickyNoteModelId(T entity)
+	{
+		return LBR.id("item/sticky_note_entity/" + (entity.hasText() ? "%s_with_text" : "%s_without_text").formatted(entity.getColor().getName()));
 	}
 }

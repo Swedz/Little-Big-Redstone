@@ -17,7 +17,6 @@ import guideme.libs.mdast.mdx.model.MdxJsxElementFields;
 import guideme.render.RenderContext;
 import guideme.siteexport.ExportableResourceProvider;
 import guideme.siteexport.ResourceExporter;
-import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
@@ -36,7 +35,6 @@ import net.swedz.little_big_redstone.microchip.object.logic.LogicContext;
 import net.swedz.little_big_redstone.microchip.object.logic.LogicEntry;
 import net.swedz.little_big_redstone.microchip.object.logic.LogicType;
 import net.swedz.tesseract.neoforge.api.Bounds;
-import net.swedz.tesseract.neoforge.helper.guigraphics.TesseractGuiGraphics;
 
 import java.util.Map;
 import java.util.Optional;
@@ -353,24 +351,19 @@ public final class MicrochipGuidebookScene extends LytBox implements ExportableR
 		}
 		
 		@Override
-		public void renderBatch(RenderContext context, MultiBufferSource buffers)
-		{
-		}
-		
-		@Override
 		public void render(RenderContext context)
 		{
-			var graphics = new TesseractGuiGraphics(context.guiGraphics());
+			var graphics = context.guiGraphics();
 			
-			graphics.pose().pushPose();
+			graphics.pose().pushMatrix();
 			
 			context.renderPanel(bounds);
 			
-			graphics.pose().translate(bounds.x() + PANEL_MARGIN, bounds.y() + PANEL_MARGIN, 10);
+			graphics.pose().translate(bounds.x() + PANEL_MARGIN, bounds.y() + PANEL_MARGIN);
 			
 			panel.render(graphics);
 			
-			graphics.pose().popPose();
+			graphics.pose().popMatrix();
 		}
 		
 		@Override

@@ -2,11 +2,10 @@ package net.swedz.little_big_redstone.guide;
 
 import guideme.color.SymbolicColor;
 import guideme.internal.GuideMEClient;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.Tooltip;
 import net.swedz.little_big_redstone.LBR;
-import net.swedz.tesseract.neoforge.helper.guigraphics.TesseractGuiGraphics;
 
 import java.util.function.Consumer;
 import java.util.function.Supplier;
@@ -47,10 +46,8 @@ public final class PausePlayGuideIconButton extends Button
 	}
 	
 	@Override
-	public void renderWidget(GuiGraphics vanilla, int mouseX, int mouseY, float partialTick)
+	protected void extractContents(GuiGraphicsExtractor graphics, int mouseX, int mouseY, float a)
 	{
-		var graphics = new TesseractGuiGraphics(vanilla);
-		
 		var color = SymbolicColor.ICON_BUTTON_NORMAL;
 		if(!this.isActive())
 		{
@@ -62,7 +59,6 @@ public final class PausePlayGuideIconButton extends Button
 		}
 		var resolved = color.resolve(GuideMEClient.currentLightDarkMode());
 		
-		graphics.setTextures(LBR.id("textures/gui/guide/buttons.png"));
-		graphics.blit(this.getX(), this.getY(), playing ? 0f : 16f, 0f, WIDTH, HEIGHT, 64, 64, resolved);
+		graphics.blit(LBR.id("textures/gui/guide/buttons.png"), this.getX(), this.getY(), playing ? 0 : 16, 0, WIDTH, HEIGHT, 64, 64, resolved);
 	}
 }

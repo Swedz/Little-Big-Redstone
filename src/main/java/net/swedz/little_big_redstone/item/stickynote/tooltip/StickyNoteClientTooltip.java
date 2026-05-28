@@ -1,12 +1,11 @@
 package net.swedz.little_big_redstone.item.stickynote.tooltip;
 
 import net.minecraft.client.gui.Font;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.screens.inventory.tooltip.ClientTooltipComponent;
 import net.swedz.little_big_redstone.LBRClient;
 import net.swedz.little_big_redstone.client.StickyNoteViewRenderer;
 import net.swedz.little_big_redstone.entity.stickynote.StickyNoteView;
-import net.swedz.tesseract.neoforge.helper.guigraphics.TesseractGuiGraphics;
 
 public final class StickyNoteClientTooltip implements ClientTooltipComponent
 {
@@ -23,7 +22,7 @@ public final class StickyNoteClientTooltip implements ClientTooltipComponent
 	}
 	
 	@Override
-	public int getHeight()
+	public int getHeight(Font font)
 	{
 		return this.getSize() + 4;
 	}
@@ -35,19 +34,17 @@ public final class StickyNoteClientTooltip implements ClientTooltipComponent
 	}
 	
 	@Override
-	public void renderImage(Font font, int x, int y, GuiGraphics vanilla)
+	public void extractImage(Font font, int x, int y, int w, int h, GuiGraphicsExtractor graphics)
 	{
-		var graphics = new TesseractGuiGraphics(vanilla);
-		
 		float scale = (float) LBRClient.config().stickyNoteTooltipViewScale();
 		
-		graphics.pose().pushPose();
-		graphics.pose().translate(x, y, 0);
-		graphics.pose().scale(scale, scale, 1);
+		graphics.pose().pushMatrix();
+		graphics.pose().translate(x, y);
+		graphics.pose().scale(scale, scale);
 		
 		StickyNoteViewRenderer.extractBackground(graphics, note);
 		StickyNoteViewRenderer.extractText(graphics, note);
 		
-		graphics.pose().popPose();
+		graphics.pose().popMatrix();
 	}
 }

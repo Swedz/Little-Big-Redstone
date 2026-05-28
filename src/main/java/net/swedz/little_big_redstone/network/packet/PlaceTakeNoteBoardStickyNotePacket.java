@@ -48,7 +48,7 @@ public record PlaceTakeNoteBoardStickyNotePacket(
 		context.assertServerbound();
 		
 		var player = (ServerPlayer) context.getPlayer();
-		var playerName = player.getGameProfile().getName();
+		var playerName = player.getGameProfile().name();
 		
 		if(player.containerMenu instanceof NoteBoardMenu menu &&
 		   menu.containerId == containerId)

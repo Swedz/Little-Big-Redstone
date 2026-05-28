@@ -1,6 +1,7 @@
 package net.swedz.little_big_redstone;
 
 import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
@@ -23,7 +24,7 @@ public final class LBREntities
 	
 	private static <T extends Entity> Supplier<EntityType<T>> create(String name, Supplier<EntityType.Builder<T>> builder)
 	{
-		return ENTITY_TYPES.register(name, () -> builder.get().build(name));
+		return ENTITY_TYPES.register(name, () -> builder.get().build(ResourceKey.create(ENTITY_TYPES.getRegistryKey(), LBR.id(name))));
 	}
 	
 	public static void init(IEventBus bus)

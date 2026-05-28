@@ -3,14 +3,14 @@ package net.swedz.little_big_redstone.gui.logicconfig.reference;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import net.neoforged.neoforge.items.ItemHandlerHelper;
+import net.neoforged.neoforge.transfer.ResourceHandlerUtil;
+import net.neoforged.neoforge.transfer.item.ItemResource;
 import net.swedz.little_big_redstone.LBR;
 import net.swedz.little_big_redstone.LBRItems;
 import net.swedz.little_big_redstone.block.microchip.MicrochipBlockEntity;
 import net.swedz.little_big_redstone.gui.microchip.MicrochipMenu;
 import net.swedz.little_big_redstone.gui.microchip.MicrochipViewPosition;
 import net.swedz.little_big_redstone.microchip.object.logic.LogicComponent;
-import net.swedz.tesseract.neoforge.helper.TransferHelper;
 
 public record MicrochipLogicConfigReference(
 		BlockPos pos,
@@ -21,7 +21,7 @@ public record MicrochipLogicConfigReference(
 	@Override
 	public void save(Player player, LogicComponent component)
 	{
-		var playerName = player.getGameProfile().getName();
+		var playerName = player.getGameProfile().name();
 		
 		if(player.level().getBlockEntity(pos) instanceof MicrochipBlockEntity blockEntity)
 		{
@@ -40,7 +40,8 @@ public record MicrochipLogicConfigReference(
 				{
 					if(player.containerMenu instanceof MicrochipMenu menu)
 					{
-						int givenAmount = TransferHelper.insert(menu.getDestinationInventoryItemHandler(player), new ItemStack(LBRItems.REDSTONE_BIT, wiresPopped));
+						var destination = menu.getDestinationInventoryItemHandler(player);
+						int givenAmount = ResourceHandlerUtil.insertStacking(destination, ItemResource.of(LBRItems.REDSTONE_BIT), wiresPopped, null);
 						if(givenAmount != wiresPopped)
 						{
 							int remainderAmount = wiresPopped - givenAmount;
@@ -49,7 +50,7 @@ public record MicrochipLogicConfigReference(
 					}
 					else
 					{
-						ItemHandlerHelper.giveItemToPlayer(player, new ItemStack(LBRItems.REDSTONE_BIT, wiresPopped));
+						player.getInventory().placeItemBackInInventory(new ItemStack(LBRItems.REDSTONE_BIT, wiresPopped));
 					}
 				}
 			}

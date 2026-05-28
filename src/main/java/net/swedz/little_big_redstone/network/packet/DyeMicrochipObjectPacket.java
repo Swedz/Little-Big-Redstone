@@ -30,7 +30,7 @@ public record DyeMicrochipObjectPacket(
 		context.assertServerbound();
 		
 		var player = (ServerPlayer) context.getPlayer();
-		var playerName = player.getGameProfile().getName();
+		var playerName = player.getGameProfile().name();
 		
 		if(player.hasContainerOpen() && player.containerMenu instanceof MicrochipMenu menu && menu.containerId == containerId)
 		{

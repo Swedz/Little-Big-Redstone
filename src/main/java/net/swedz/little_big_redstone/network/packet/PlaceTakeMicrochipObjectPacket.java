@@ -5,6 +5,8 @@ import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.item.ItemStack;
+import net.neoforged.neoforge.transfer.ResourceHandlerUtil;
+import net.neoforged.neoforge.transfer.item.ItemResource;
 import net.swedz.little_big_redstone.LBR;
 import net.swedz.little_big_redstone.LBRComponents;
 import net.swedz.little_big_redstone.LBRItems;
@@ -14,7 +16,6 @@ import net.swedz.little_big_redstone.microchip.object.logic.LogicEntry;
 import net.swedz.little_big_redstone.microchip.object.note.StickyNoteEntry;
 import net.swedz.little_big_redstone.network.LBRCustomPacket;
 import net.swedz.tesseract.neoforge.api.Bounds;
-import net.swedz.tesseract.neoforge.helper.TransferHelper;
 import net.swedz.tesseract.neoforge.packet.PacketContext;
 
 public record PlaceTakeMicrochipObjectPacket(
@@ -42,7 +43,7 @@ public record PlaceTakeMicrochipObjectPacket(
 		context.assertServerbound();
 		
 		var player = (ServerPlayer) context.getPlayer();
-		var playerName = player.getGameProfile().getName();
+		var playerName = player.getGameProfile().name();
 		
 		if(player.hasContainerOpen() && player.containerMenu instanceof MicrochipMenu menu && menu.containerId == containerId)
 		{
@@ -114,7 +115,8 @@ public record PlaceTakeMicrochipObjectPacket(
 					{
 						microchip.stickyNotes().remove(note);
 						var stack = note.toStack();
-						if(!shift || TransferHelper.insert(menu.getDestinationInventoryItemHandler(player), stack) <= 0)
+						var destination = menu.getDestinationInventoryItemHandler(player);
+						if(!shift || ResourceHandlerUtil.insertStacking(destination, ItemResource.of(stack), stack.getCount(), null) <= 0)
 						{
 							menu.setCarried(stack);
 						}
@@ -124,14 +126,15 @@ public record PlaceTakeMicrochipObjectPacket(
 					{
 						var wiresPopped = components.remove(logic);
 						var stack = logic.toStack();
-						if(!shift || TransferHelper.insert(menu.getDestinationInventoryItemHandler(player), stack) <= 0)
+						var destination = menu.getDestinationInventoryItemHandler(player);
+						if(!shift || ResourceHandlerUtil.insertStacking(destination, ItemResource.of(stack), stack.getCount(), null) <= 0)
 						{
 							menu.setCarried(stack);
 							menu.setCarriedWires(logic.slot(), wiresPopped);
 						}
 						else if(!player.hasInfiniteMaterials() && !wiresPopped.isEmpty())
 						{
-							int givenAmount = TransferHelper.insert(menu.getDestinationInventoryItemHandler(player), new ItemStack(LBRItems.REDSTONE_BIT, wiresPopped.size()));
+							int givenAmount = ResourceHandlerUtil.insertStacking(destination, ItemResource.of(LBRItems.REDSTONE_BIT), wiresPopped.size(), null);
 							if(givenAmount != wiresPopped.size())
 							{
 								int remainderAmount = wiresPopped.size() - givenAmount;

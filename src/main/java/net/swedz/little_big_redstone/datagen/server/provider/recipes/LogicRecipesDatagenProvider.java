@@ -21,11 +21,6 @@ import java.util.function.Consumer;
 
 public final class LogicRecipesDatagenProvider extends RecipeProvider
 {
-	public LogicRecipesDatagenProvider(GatherDataEvent event)
-	{
-		super(event.getGenerator().getPackOutput(), event.getLookupProvider());
-	}
-	
 	private static final Map<Character, Either<ItemLike, TagKey<Item>>> ITEMS = Map.of(
 			'R', Either.right(Tags.Items.DUSTS_REDSTONE),
 			'r', Either.left(LBRItems.REDSTONE_BIT),
@@ -38,9 +33,14 @@ public final class LogicRecipesDatagenProvider extends RecipeProvider
 			'P', Either.right(Tags.Items.ENDER_PEARLS)
 	);
 	
-	private static void logicComponent(RecipeOutput output, LogicType<?> type, Consumer<ShapedRecipeBuilder> action)
+	private LogicRecipesDatagenProvider(HolderLookup.Provider registries, RecipeOutput output)
 	{
-		var builder = new ShapedRecipeBuilder()
+		super(registries, output);
+	}
+	
+	private void logicComponent(LogicType<?> type, Consumer<ShapedRecipeBuilder> action)
+	{
+		var builder = new ShapedRecipeBuilder(registries)
 				.output(type.item(), 1);
 		
 		action.accept(builder);
@@ -62,100 +62,114 @@ public final class LogicRecipesDatagenProvider extends RecipeProvider
 	}
 	
 	@Override
-	protected void buildRecipes(RecipeOutput output, HolderLookup.Provider registries)
+	protected void buildRecipes()
 	{
-		logicComponent(output, LogicTypes.IO, (b) -> b
+		logicComponent(LogicTypes.IO, (b) -> b
 				.pattern("R  ")
 				.pattern(" r ")
 				.pattern("  R"));
 		
-		logicComponent(output, LogicTypes.READER, (b) -> b
+		logicComponent(LogicTypes.READER, (b) -> b
 				.pattern("R  ")
 				.pattern("QrR")
 				.pattern("R  "));
 		
-		logicComponent(output, LogicTypes.TAG, (b) -> b
+		logicComponent(LogicTypes.TAG, (b) -> b
 				.pattern("PQG")
 				.pattern("PrR")
 				.pattern("PQG"));
 		
-		logicComponent(output, LogicTypes.NOT, (b) -> b
+		logicComponent(LogicTypes.NOT, (b) -> b
 				.pattern("RrT"));
 		
-		logicComponent(output, LogicTypes.AND, (b) -> b
+		logicComponent(LogicTypes.AND, (b) -> b
 				.pattern("T  ")
 				.pattern("RrT")
 				.pattern("T  "));
 		
-		logicComponent(output, LogicTypes.NAND, (b) -> b
+		logicComponent(LogicTypes.NAND, (b) -> b
 				.pattern("T  ")
 				.pattern("RrR")
 				.pattern("T  "));
 		
-		logicComponent(output, LogicTypes.OR, (b) -> b
+		logicComponent(LogicTypes.OR, (b) -> b
 				.pattern("R  ")
 				.pattern("RrR")
 				.pattern("R  "));
 		
-		logicComponent(output, LogicTypes.NOR, (b) -> b
+		logicComponent(LogicTypes.NOR, (b) -> b
 				.pattern("R  ")
 				.pattern("RrT")
 				.pattern("R  "));
 		
-		logicComponent(output, LogicTypes.XOR, (b) -> b
+		logicComponent(LogicTypes.XOR, (b) -> b
 				.pattern("1  ")
 				.pattern("Rr2")
 				.pattern("2  ")
 				.define('1', LBRItems.valueOf("and_gate"))
 				.define('2', LBRItems.valueOf("nor_gate")));
 		
-		logicComponent(output, LogicTypes.SEQUENCER, (b) -> b
+		logicComponent(LogicTypes.SEQUENCER, (b) -> b
 				.pattern("GGG")
 				.pattern("ErR")
 				.pattern("GGG"));
 		
-		logicComponent(output, LogicTypes.PULSE_THROTTLER, (b) -> b
+		logicComponent(LogicTypes.PULSE_THROTTLER, (b) -> b
 				.pattern("RrR")
 				.pattern(" p "));
 		
-		logicComponent(output, LogicTypes.SELECTOR, (b) -> b
+		logicComponent(LogicTypes.SELECTOR, (b) -> b
 				.pattern("EGR")
 				.pattern("ErR")
 				.pattern("EGR"));
 		
-		logicComponent(output, LogicTypes.RANDOMIZER, (b) -> b
+		logicComponent(LogicTypes.RANDOMIZER, (b) -> b
 				.pattern("GGR")
 				.pattern("1rR")
 				.pattern("GGR")
 				.define('1', Items.DROPPER));
 		
-		logicComponent(output, LogicTypes.COMPARATOR, (b) -> b
+		logicComponent(LogicTypes.COMPARATOR, (b) -> b
 				.pattern("RT ")
 				.pattern("QrT")
 				.pattern("RT "));
 		
-		logicComponent(output, LogicTypes.CALCULATOR, (b) -> b
+		logicComponent(LogicTypes.CALCULATOR, (b) -> b
 				.pattern("CCG")
 				.pattern("RrQ")
 				.pattern("CCG"));
 		
-		logicComponent(output, LogicTypes.T_FLIP_FLOP, (b) -> b
+		logicComponent(LogicTypes.T_FLIP_FLOP, (b) -> b
 				.pattern("1  ")
 				.pattern("2rR")
 				.pattern("1  ")
 				.define('1', LBRItems.valueOf("nand_gate"))
 				.define('2', LBRItems.valueOf("rs_nor_latch")));
 		
-		logicComponent(output, LogicTypes.RS_NOR_LATCH, (b) -> b
+		logicComponent(LogicTypes.RS_NOR_LATCH, (b) -> b
 				.pattern("R1 ")
 				.pattern(" rR")
 				.pattern("R1 ")
 				.define('1', LBRItems.valueOf("nor_gate")));
 	}
 	
-	@Override
-	public String getName()
+	public static final class Runner extends RecipeProvider.Runner
 	{
-		return this.getClass().getSimpleName();
+		public Runner(GatherDataEvent event)
+		{
+			super(event.getGenerator().getPackOutput(), event.getLookupProvider());
+		}
+		
+		@Override
+		protected RecipeProvider createRecipeProvider(HolderLookup.Provider registries, RecipeOutput output)
+		{
+			return new LogicRecipesDatagenProvider(registries, output);
+		}
+		
+		@Override
+		public String getName()
+		{
+			return this.getClass().getName();
+		}
 	}
 }

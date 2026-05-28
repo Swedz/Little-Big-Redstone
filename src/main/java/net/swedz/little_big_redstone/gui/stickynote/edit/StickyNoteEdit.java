@@ -6,6 +6,7 @@ import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.font.TextFieldHelper;
 import net.minecraft.client.input.CharacterEvent;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.FormattedText;
 import net.minecraft.network.chat.Style;
 import net.minecraft.util.StringUtil;
 import net.swedz.little_big_redstone.item.stickynote.StickyNote;
@@ -36,7 +37,7 @@ public final class StickyNoteEdit
 				this::text, this::setText,
 				() -> TextFieldHelper.getClipboardContents(Minecraft.getInstance()),
 				(copy) -> TextFieldHelper.setClipboardContents(Minecraft.getInstance(), copy),
-				(input) -> font.wordWrapHeight(input, width) <= height
+				(input) -> font.wordWrapHeight(FormattedText.of(input), width) <= height
 		);
 	}
 	

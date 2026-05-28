@@ -55,7 +55,6 @@ public final class LBR
 		LBREntities.init(bus);
 		LBRCreativeTabs.init(bus);
 		LBRMenus.init(bus);
-		LBRRecipeTypes.init(bus);
 		LBRAttachments.init(bus);
 		LBRGuide.init();
 		

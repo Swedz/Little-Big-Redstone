@@ -128,8 +128,8 @@ public class LBRClientProxy extends LBRProxy
 		var player = minecraft.player;
 		var inventory = player.getInventory();
 		
-		inventory.setPickedItem(stack);
-		minecraft.gameMode.handleCreativeModeItemAdd(player.getItemInHand(InteractionHand.MAIN_HAND), 36 + inventory.selected);
+		inventory.setSelectedItem(stack);
+		minecraft.gameMode.handleCreativeModeItemAdd(player.getItemInHand(InteractionHand.MAIN_HAND), 36 + inventory.getSelectedSlot());
 	}
 	
 	@Override

@@ -39,12 +39,10 @@ import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
-import net.neoforged.neoforge.model.data.ModelData;
 import net.swedz.little_big_redstone.LBRComponents;
 import net.swedz.little_big_redstone.LBREntities;
 import net.swedz.little_big_redstone.LBRItems;
 import net.swedz.little_big_redstone.LBRTags;
-import net.swedz.little_big_redstone.client.model.stickynote.StickyNoteModelData;
 import net.swedz.little_big_redstone.item.stickynote.StickyNote;
 import net.swedz.little_big_redstone.item.stickynote.StickyNoteItem;
 import net.swedz.little_big_redstone.network.packet.StickyNotePacket;
@@ -102,13 +100,6 @@ public final class StickyNoteEntity extends HangingEntity
 		this.setEditable(editable);
 		
 		this.recalculateBoundingBox();
-	}
-	
-	public ModelData getModelData()
-	{
-		return ModelData.builder()
-				.with(StickyNoteModelData.KEY, new StickyNoteModelData(this.getColor(), this.getTextColor(), this.hasText() && this.getDisplayItem().isEmpty()))
-				.build();
 	}
 	
 	@Override

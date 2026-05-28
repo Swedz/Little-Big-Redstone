@@ -22,8 +22,8 @@ public final class DatagenDelegatorServer
 	{
 		addLootTable(event, BlockLootTableDatagenProvider::new);
 		
-		add(event, ItemRecipesDatagenProvider::new);
-		add(event, LogicRecipesDatagenProvider::new);
+		add(event, ItemRecipesDatagenProvider.Runner::new);
+		add(event, LogicRecipesDatagenProvider.Runner::new);
 		
 		add(event, BlockTagDatagenProvider::new);
 		add(event, ItemTagDatagenProvider::new);
@@ -31,13 +31,13 @@ public final class DatagenDelegatorServer
 	
 	private static void add(GatherDataEvent event, Function<GatherDataEvent, DataProvider> providerCreator)
 	{
-		event.getGenerator().addProvider(event.includeServer(), providerCreator.apply(event));
+		event.getGenerator().addProvider(true, providerCreator.apply(event));
 	}
 	
 	private static void addLootTable(GatherDataEvent event, Function<HolderLookup.Provider, LootTableSubProvider> providerCreator)
 	{
 		event.getGenerator().addProvider(
-				event.includeServer(),
+				true,
 				new LootTableProvider(
 						event.getGenerator().getPackOutput(),
 						Set.of(),

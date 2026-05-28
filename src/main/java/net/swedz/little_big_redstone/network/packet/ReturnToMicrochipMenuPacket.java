@@ -20,7 +20,7 @@ public record ReturnToMicrochipMenuPacket() implements LBRCustomPacket
 		context.assertServerbound();
 		
 		var player = (ServerPlayer) context.getPlayer();
-		var playerName = player.getGameProfile().getName();
+		var playerName = player.getGameProfile().name();
 		
 		if(player.containerMenu instanceof LogicConfigMenu menu)
 		{

@@ -24,7 +24,7 @@ public record HeldItemLogicConfigReference(
 		}
 		else
 		{
-			LBR.LOGGER.warn("Logic was attempted to be updated by {} targetting mismatching or non-existent component in hand, discarding", player.getGameProfile().getName());
+			LBR.LOGGER.warn("Logic was attempted to be updated by {} targetting mismatching or non-existent component in hand, discarding", player.getGameProfile().name());
 		}
 	}
 	

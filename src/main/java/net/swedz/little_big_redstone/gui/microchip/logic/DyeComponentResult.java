@@ -1,5 +1,6 @@
 package net.swedz.little_big_redstone.gui.microchip.logic;
 
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.entity.Entity;
@@ -41,7 +42,7 @@ public record DyeComponentResult(Result result, Action action, Optional<DyeColor
 		if(carried.is(Tags.Items.DYES) && carried.getItem() instanceof DyeItem dyeItem)
 		{
 			result = Result.SUCCESS;
-			color = Optional.of(dyeItem.getDyeColor());
+			color = Optional.of(carried.get(DataComponents.DYE));
 			action = Action.DYE;
 			consume = true;
 		}

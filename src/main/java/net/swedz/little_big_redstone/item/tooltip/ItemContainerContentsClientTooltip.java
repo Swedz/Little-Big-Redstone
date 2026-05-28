@@ -1,12 +1,12 @@
 package net.swedz.little_big_redstone.item.tooltip;
 
 import net.minecraft.client.gui.Font;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.screens.inventory.tooltip.ClientTooltipComponent;
 import net.minecraft.world.item.component.ItemContainerContents;
 import net.swedz.little_big_redstone.LBR;
 import net.swedz.tesseract.api.Assert;
-import net.swedz.tesseract.neoforge.helper.guigraphics.TesseractGuiGraphics;
+import net.swedz.tesseract.neoforge.helper.gui.ExtraGuiGraphics;
 
 public final class ItemContainerContentsClientTooltip implements ClientTooltipComponent
 {
@@ -26,7 +26,7 @@ public final class ItemContainerContentsClientTooltip implements ClientTooltipCo
 	}
 	
 	@Override
-	public int getHeight()
+	public int getHeight(Font font)
 	{
 		return storage.getSlots() == 0 ? 0 : (this.backgroundHeight() + 4);
 	}
@@ -59,14 +59,11 @@ public final class ItemContainerContentsClientTooltip implements ClientTooltipCo
 	}
 	
 	@Override
-	public void renderImage(Font font, int x, int y, GuiGraphics vanilla)
+	public void extractImage(Font font, int x, int y, int w, int h, GuiGraphicsExtractor graphics)
 	{
-		var graphics = new TesseractGuiGraphics(vanilla);
-		
 		if(storage.getSlots() != 0)
 		{
-			graphics.setTexture(LBR.id("textures/gui/slot_background.png"));
-			graphics.nineSlice(x, y, this.backgroundWidth(), this.backgroundHeight(), 32, 32, 4);
+			ExtraGuiGraphics.nineSlice(graphics, LBR.id("textures/gui/slot_background.png"), x, y, this.backgroundWidth(), this.backgroundHeight(), 32, 32, 4);
 		}
 		
 		int index = 0;
@@ -81,16 +78,15 @@ public final class ItemContainerContentsClientTooltip implements ClientTooltipCo
 		}
 	}
 	
-	private void renderSlot(TesseractGuiGraphics graphics, Font font, int x, int y, int itemIndex)
+	private void renderSlot(GuiGraphicsExtractor graphics, Font font, int x, int y, int itemIndex)
 	{
-		graphics.setTexture(LBR.id("textures/gui/slot_atlas.png"));
-		graphics.blit(x, y, 0, 0, 18, 18);
+		graphics.blit(LBR.id("textures/gui/slot_atlas.png"), x, y, 0, 0, 18, 18);
 		
 		if(itemIndex < storage.getSlots())
 		{
 			var stack = storage.getStackInSlot(itemIndex);
-			graphics.renderItem(stack, x + 1, y + 1, itemIndex);
-			graphics.renderItemDecorations(stack, x + 1, y + 1);
+			graphics.item(stack, x + 1, y + 1, itemIndex);
+			graphics.itemDecorations(font, stack, x + 1, y + 1);
 		}
 	}
 }

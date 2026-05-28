@@ -27,7 +27,7 @@ public record StoreMicrochipViewPositionPacket(
 		context.assertServerbound();
 		
 		var player = (ServerPlayer) context.getPlayer();
-		var playerName = player.getGameProfile().getName();
+		var playerName = player.getGameProfile().name();
 		
 		if(player.level().getBlockEntity(pos) instanceof MicrochipBlockEntity blockEntity)
 		{

@@ -3,86 +3,86 @@ package net.swedz.little_big_redstone.client.model.stickynote;
 import com.mojang.math.Transformation;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import net.minecraft.client.data.models.model.ModelTemplate;
-import net.minecraft.client.data.models.model.TextureSlot;
-import net.minecraft.client.renderer.block.BlockAndTintGetter;
-import net.minecraft.client.renderer.block.dispatch.BlockStateModel;
+import net.minecraft.client.multiplayer.ClientLevel;
+import net.minecraft.client.renderer.block.dispatch.BlockModelRotation;
 import net.minecraft.client.renderer.block.dispatch.BlockStateModelPart;
-import net.minecraft.client.resources.model.ModelBaker;
-import net.minecraft.client.resources.model.sprite.Material;
-import net.minecraft.core.BlockPos;
+import net.minecraft.client.renderer.block.dispatch.ModelState;
+import net.minecraft.client.renderer.item.ItemModel;
+import net.minecraft.client.renderer.item.ItemModelResolver;
+import net.minecraft.client.renderer.item.ItemStackRenderState;
+import net.minecraft.client.resources.model.SimpleModelWrapper;
 import net.minecraft.resources.Identifier;
-import net.minecraft.util.RandomSource;
-import net.minecraft.world.level.block.state.BlockState;
-import net.neoforged.neoforge.client.model.DynamicBlockStateModel;
-import net.neoforged.neoforge.client.model.block.CustomUnbakedBlockStateModel;
+import net.minecraft.world.entity.ItemOwner;
+import net.minecraft.world.item.ItemDisplayContext;
+import net.minecraft.world.item.ItemStack;
+import net.neoforged.neoforge.client.model.ComposedModelState;
 import net.swedz.little_big_redstone.LBR;
+import org.joml.Matrix4fc;
 
-import java.util.List;
 import java.util.Optional;
 
 public record StickyNoteEntityModel(
-
-) implements DynamicBlockStateModel
+		BlockStateModelPart paperModel,
+		Optional<BlockStateModelPart> textModel
+) implements ItemModel
 {
+	private static final ModelState MODEL_STATE = new ComposedModelState(BlockModelRotation.IDENTITY, Transformation.IDENTITY);
+	
 	@Override
-	public void collectParts(
-			BlockAndTintGetter level,
-			BlockPos pos,
-			BlockState state,
-			RandomSource random,
-			List<BlockStateModelPart> parts
+	public void update(
+			ItemStackRenderState output,
+			ItemStack stack,
+			ItemModelResolver modelResolver,
+			ItemDisplayContext displayContext,
+			ClientLevel level,
+			ItemOwner owner,
+			int seed
 	)
 	{
-	
-	}
-	
-	@Override
-	public Material.Baked particleMaterial()
-	{
-		return null;
-	}
-	
-	@Override
-	public int materialFlags()
-	{
-		return 0;
+		var paperLayer = output.newLayer();
+		paperLayer.prepareQuadList().addAll(paperModel.getQuads(null));
+		
+		textModel.ifPresent((model) ->
+		{
+			var textLayer = output.newLayer();
+			textLayer.prepareQuadList().addAll(model.getQuads(null));
+		});
 	}
 	
 	public record Unbaked(
-			Optional<Transformation> transformation,
-			Material paperTexture
-	) implements CustomUnbakedBlockStateModel
+			Identifier paperModel,
+			Optional<Identifier> textModel
+	) implements ItemModel.Unbaked
 	{
 		public static final Identifier ID = LBR.id("sticky_note_entity");
 		
 		public static final MapCodec<Unbaked> CODEC = RecordCodecBuilder.mapCodec((instance) -> instance
 				.group(
-						Transformation.EXTENDED_CODEC.optionalFieldOf("transformation").forGetter(Unbaked::transformation),
-						Material.CODEC.fieldOf("paper_texture").forGetter(Unbaked::paperTexture)
+						Identifier.CODEC.fieldOf("paper_model").forGetter(Unbaked::paperModel),
+						Identifier.CODEC.optionalFieldOf("text_model").forGetter(Unbaked::textModel)
 				)
 				.apply(instance, Unbaked::new));
 		
-		private static ModelTemplate PAPER_TEMPLATE = new ModelTemplate(Optional.of(LBR.id("block/sticky_note_paper")), Optional.empty(), TextureSlot.TEXTURE);
-		
 		@Override
-		public MapCodec<? extends CustomUnbakedBlockStateModel> codec()
+		public MapCodec<? extends ItemModel.Unbaked> type()
 		{
 			return CODEC;
 		}
 		
 		@Override
-		public BlockStateModel bake(ModelBaker baker)
+		public ItemModel bake(BakingContext context, Matrix4fc transformation)
 		{
-			// TODO 26.1 somehow use this to bake the model? PAPER_TEMPLATE.createBaseTemplate()
-			return null;
+			return new StickyNoteEntityModel(
+					SimpleModelWrapper.bake(context.blockModelBaker(), paperModel, MODEL_STATE),
+					textModel.map((modelId) -> SimpleModelWrapper.bake(context.blockModelBaker(), modelId, MODEL_STATE))
+			);
 		}
 		
 		@Override
 		public void resolveDependencies(Resolver resolver)
 		{
-			resolver.markDependency(LBR.id("block/sticky_note_paper"));
-			resolver.markDependency(LBR.id("block/sticky_note_text"));
+			resolver.markDependency(paperModel);
+			textModel.ifPresent(resolver::markDependency);
 		}
 	}
 }

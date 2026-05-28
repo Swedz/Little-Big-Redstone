@@ -4,11 +4,11 @@ import io.netty.buffer.ByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.server.level.ServerPlayer;
+import net.neoforged.neoforge.transfer.ResourceHandlerUtil;
 import net.swedz.little_big_redstone.LBR;
 import net.swedz.little_big_redstone.LBRItems;
 import net.swedz.little_big_redstone.gui.microchip.MicrochipMenu;
 import net.swedz.little_big_redstone.network.LBRCustomPacket;
-import net.swedz.tesseract.neoforge.helper.TransferHelper;
 import net.swedz.tesseract.neoforge.packet.PacketContext;
 
 public record QuickGrabMicrochipWireItemPacket(int containerId) implements LBRCustomPacket
@@ -24,7 +24,7 @@ public record QuickGrabMicrochipWireItemPacket(int containerId) implements LBRCu
 		context.assertServerbound();
 		
 		var player = (ServerPlayer) context.getPlayer();
-		var playerName = player.getGameProfile().getName();
+		var playerName = player.getGameProfile().name();
 		
 		if(player.hasContainerOpen() && player.containerMenu instanceof MicrochipMenu menu && menu.containerId == containerId)
 		{
@@ -32,10 +32,10 @@ public record QuickGrabMicrochipWireItemPacket(int containerId) implements LBRCu
 			
 			if(carried.isEmpty())
 			{
-				var extracted = TransferHelper.extractMatching(menu.getLogicArrayItemHandler(), (stack) -> stack.is(LBRItems.REDSTONE_BIT.asItem()), 1);
+				var extracted = ResourceHandlerUtil.extractFirst(menu.getLogicArrayItemHandler(), (stack) -> stack.is(LBRItems.REDSTONE_BIT.asItem()), 1, null);
 				if(!extracted.isEmpty())
 				{
-					menu.setCarried(extracted);
+					menu.setCarried(extracted.resource().toStack(extracted.amount()));
 				}
 				else
 				{

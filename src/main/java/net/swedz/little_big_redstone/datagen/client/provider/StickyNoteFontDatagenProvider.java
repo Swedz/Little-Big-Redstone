@@ -10,7 +10,7 @@ public final class StickyNoteFontDatagenProvider extends FontDatagenProvider
 {
 	public StickyNoteFontDatagenProvider(GatherDataEvent event)
 	{
-		super(event.getGenerator().getPackOutput(), event.getExistingFileHelper(), LBR.ID, "sticky_note");
+		super(event.getGenerator().getPackOutput(), LBR.ID, "sticky_note");
 	}
 	
 	@Override

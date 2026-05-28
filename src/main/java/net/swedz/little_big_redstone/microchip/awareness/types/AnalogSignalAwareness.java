@@ -63,7 +63,7 @@ public final class AnalogSignalAwareness extends MicrochipAwareness<AnalogSignal
 			var state = level.getBlockState(neighborPos);
 			if(state.hasAnalogOutputSignal())
 			{
-				int signal = state.getAnalogOutputSignal(level, neighborPos);
+				int signal = state.getAnalogOutputSignal(level, neighborPos, neighborDirection);
 				signals[neighborDirectionIndex] = signal;
 				return;
 			}
@@ -91,7 +91,7 @@ public final class AnalogSignalAwareness extends MicrochipAwareness<AnalogSignal
 					var state = level.getBlockState(neighborPos);
 					if(state.hasAnalogOutputSignal())
 					{
-						int signal = state.getAnalogOutputSignal(level, neighborPos);
+						int signal = state.getAnalogOutputSignal(level, neighborPos, direction);
 						signals[directionIndex] = signal;
 					}
 				}

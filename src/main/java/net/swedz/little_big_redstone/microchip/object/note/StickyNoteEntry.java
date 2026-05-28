@@ -7,7 +7,6 @@ import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.ItemStack;
-import net.neoforged.neoforge.network.codec.NeoForgeStreamCodecs;
 import net.swedz.little_big_redstone.LBRComponents;
 import net.swedz.little_big_redstone.LBRItems;
 import net.swedz.little_big_redstone.item.stickynote.StickyNote;
@@ -33,7 +32,7 @@ public final class StickyNoteEntry implements MicrochipObject
 			)
 			.apply(instance, StickyNoteEntry::new));
 	
-	public static final StreamCodec<ByteBuf, StickyNoteEntry> STREAM_CODEC = NeoForgeStreamCodecs.composite(
+	public static final StreamCodec<ByteBuf, StickyNoteEntry> STREAM_CODEC = StreamCodec.composite(
 			ByteBufCodecs.VAR_INT, StickyNoteEntry::slot,
 			ByteBufCodecs.VAR_INT, StickyNoteEntry::x,
 			ByteBufCodecs.VAR_INT, StickyNoteEntry::y,

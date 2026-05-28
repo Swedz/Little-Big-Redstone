@@ -23,7 +23,7 @@ public record PickStickyNotePacket(int entityId, boolean includeData) implements
 		context.assertServerbound();
 		
 		var player = (ServerPlayer) context.getPlayer();
-		var playerName = player.getGameProfile().getName();
+		var playerName = player.getGameProfile().name();
 		var level = player.level();
 		
 		if(player.getAbilities().instabuild)

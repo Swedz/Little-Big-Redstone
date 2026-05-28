@@ -9,7 +9,7 @@ public final class LogicComponentFontDatagenProvider extends FontDatagenProvider
 {
 	public LogicComponentFontDatagenProvider(GatherDataEvent event)
 	{
-		super(event.getGenerator().getPackOutput(), event.getExistingFileHelper(), LBR.ID, "logic_component");
+		super(event.getGenerator().getPackOutput(), LBR.ID, "logic_component");
 	}
 	
 	@Override
