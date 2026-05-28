@@ -97,17 +97,17 @@ public final class LogicReader extends LogicComponent<LogicReader, LogicReaderCo
 				{
 					int totalItems = 0;
 					int maxItems = 0;
-					for(int slot = 0; slot < handler.getSlots(); slot++)
+					for(int slot = 0; slot < handler.size(); slot++)
 					{
-						var stack = handler.getStackInSlot(slot);
-						if(stack.isEmpty())
+						var resource = handler.getResource(slot);
+						if(resource.isEmpty())
 						{
-							maxItems += Mth.clamp(handler.getSlotLimit(slot), 0, 64);
+							maxItems += Mth.clamp(handler.getCapacityAsInt(slot, resource), 0, 64);
 						}
 						else
 						{
-							totalItems += stack.getCount();
-							maxItems += stack.getMaxStackSize();
+							totalItems += handler.getAmountAsInt(slot);
+							maxItems += resource.getMaxStackSize();
 						}
 					}
 					fill = isPercentage ?
@@ -124,10 +124,10 @@ public final class LogicReader extends LogicComponent<LogicReader, LogicReaderCo
 				{
 					int totalFluid = 0;
 					int maxFluid = 0;
-					for(int tank = 0; tank < handler.getTanks(); tank++)
+					for(int tank = 0; tank < handler.size(); tank++)
 					{
-						totalFluid += handler.getFluidInTank(tank).getAmount();
-						maxFluid += handler.getTankCapacity(tank);
+						totalFluid += handler.getAmountAsInt(tank);
+						maxFluid += handler.getCapacityAsInt(tank, handler.getResource(tank));
 					}
 					fill = isPercentage ?
 							((float) totalFluid / maxFluid) :
@@ -141,8 +141,8 @@ public final class LogicReader extends LogicComponent<LogicReader, LogicReaderCo
 				var handler = awareness.get(context.level(), context.blockPos(), config.direction);
 				if(handler != null)
 				{
-					int totalEnergy = handler.getEnergyStored();
-					int maxEnergy = handler.getMaxEnergyStored();
+					int totalEnergy = handler.getAmountAsInt();
+					int maxEnergy = handler.getCapacityAsInt();
 					fill = isPercentage ?
 							((float) totalEnergy / maxEnergy) :
 							totalEnergy;

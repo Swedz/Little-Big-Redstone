@@ -10,6 +10,7 @@ import net.neoforged.fml.config.ModConfig;
 import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.neoforged.neoforge.client.event.EntityRenderersEvent;
+import net.neoforged.neoforge.client.event.RegisterBlockStateModels;
 import net.neoforged.neoforge.client.event.RegisterClientTooltipComponentFactoriesEvent;
 import net.neoforged.neoforge.client.event.RegisterGuiLayersEvent;
 import net.neoforged.neoforge.client.event.RegisterItemModelsEvent;
@@ -24,7 +25,7 @@ import net.swedz.little_big_redstone.client.hud.NoteBoardGuiOverlay;
 import net.swedz.little_big_redstone.client.hud.StickyNoteViewContentsGuiOverlay;
 import net.swedz.little_big_redstone.client.item.StickyNoteInHandItemRenderer;
 import net.swedz.little_big_redstone.client.model.logic.LogicItemModel;
-import net.swedz.little_big_redstone.client.model.microchip.MicrochipUnbakedModel;
+import net.swedz.little_big_redstone.client.model.microchip.MicrochipBlockModel;
 import net.swedz.little_big_redstone.client.model.stickynote.StickyNoteEntityModel;
 import net.swedz.little_big_redstone.client.model.stickynote.StickyNoteItemModel;
 import net.swedz.little_big_redstone.gui.floppydisk.FloppyDiskScreen;
@@ -137,8 +138,13 @@ public final class LBRClient
 	private static void registerItemModels(RegisterItemModelsEvent event)
 	{
 		event.register(LogicItemModel.Unbaked.ID, LogicItemModel.Unbaked.CODEC);
-		event.register(MicrochipUnbakedModel.ID, MicrochipUnbakedModel.LOADER);
 		event.register(StickyNoteEntityModel.Unbaked.ID, StickyNoteEntityModel.Unbaked.CODEC);
 		event.register(StickyNoteItemModel.Unbaked.ID, StickyNoteItemModel.Unbaked.CODEC);
+	}
+	
+	@SubscribeEvent
+	private static void registerBlockModels(RegisterBlockStateModels event)
+	{
+		event.registerModel(MicrochipBlockModel.Unbaked.ID, MicrochipBlockModel.Unbaked.CODEC);
 	}
 }

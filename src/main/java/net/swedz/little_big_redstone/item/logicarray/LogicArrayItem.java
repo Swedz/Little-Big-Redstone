@@ -19,13 +19,13 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.component.ItemContainerContents;
 import net.minecraft.world.level.Level;
 import net.neoforged.neoforge.capabilities.Capabilities;
-import net.neoforged.neoforge.items.IItemHandler;
+import net.neoforged.neoforge.transfer.ResourceHandlerUtil;
 import net.neoforged.neoforge.transfer.access.ItemAccess;
+import net.neoforged.neoforge.transfer.item.ItemResource;
 import net.swedz.little_big_redstone.LBRComponents;
 import net.swedz.little_big_redstone.gui.logicarray.LogicArrayMenu;
 import net.swedz.little_big_redstone.item.DyeColoredItem;
 import net.swedz.little_big_redstone.item.tooltip.ItemContainerContentsTooltipData;
-import net.swedz.tesseract.neoforge.helper.TransferHelper;
 
 import java.util.Optional;
 
@@ -82,27 +82,28 @@ public final class LogicArrayItem extends Item implements DyeColoredItem
 	
 	private boolean overrideStackedOn(ItemStack stack, ItemStack other, Slot slot, ClickAction action, Player player, SlotAccess access)
 	{
-		var capability = IItemHandler.of(ItemAccess.forStack(stack).getCapability(Capabilities.Item.ITEM));
+		var capability = ItemAccess.forStack(stack).getCapability(Capabilities.Item.ITEM);
 		if(capability != null)
 		{
 			if(other.isEmpty())
 			{
-				var extracted = TransferHelper.extractFirst(capability, 64);
+				var extracted = ResourceHandlerUtil.extractFirst(capability, (resource) -> true, 64, null);
 				if(!extracted.isEmpty())
 				{
+					var extractedStack = extracted.resource().toStack(extracted.amount());
 					if(access == null)
 					{
-						slot.safeInsert(extracted);
+						slot.safeInsert(extractedStack);
 					}
 					else
 					{
-						access.set(extracted);
+						access.set(extractedStack);
 					}
 				}
 			}
 			else
 			{
-				var inserted = TransferHelper.insert(capability, other);
+				var inserted = ResourceHandlerUtil.insertStacking(capability, ItemResource.of(other), other.getCount(), null);
 				if(inserted > 0)
 				{
 					other.shrink(inserted);

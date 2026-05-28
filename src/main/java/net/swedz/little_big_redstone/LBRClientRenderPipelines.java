@@ -14,6 +14,7 @@ import net.neoforged.neoforge.client.event.RegisterRenderPipelinesEvent;
 public final class LBRClientRenderPipelines
 {
 	public static final RenderPipeline PULSING_ALPHA = RenderPipeline.builder()
+			.withLocation(LBR.id("pulsing_alpha"))
 			.withVertexShader(LBR.id("pulsing_alpha"))
 			.withFragmentShader(LBR.id("pulsing_alpha"))
 			.withColorTargetState(new ColorTargetState(BlendFunction.TRANSLUCENT))
@@ -21,6 +22,7 @@ public final class LBRClientRenderPipelines
 			.build();
 	
 	public static final RenderPipeline PULSING_TEXTURE_ALPHA = RenderPipeline.builder()
+			.withLocation(LBR.id("pulsing_texture_alpha"))
 			.withVertexShader(LBR.id("pulsing_texture_alpha"))
 			.withFragmentShader(LBR.id("pulsing_texture_alpha"))
 			.withColorTargetState(new ColorTargetState(BlendFunction.TRANSLUCENT))
@@ -29,6 +31,7 @@ public final class LBRClientRenderPipelines
 			.build();
 	
 	public static final RenderPipeline PULSING_TEXTURE_LIGHTNESS = RenderPipeline.builder()
+			.withLocation(LBR.id("pulsing_texture_lightness"))
 			.withVertexShader(LBR.id("pulsing_texture_lightness"))
 			.withFragmentShader(LBR.id("pulsing_texture_lightness"))
 			.withColorTargetState(new ColorTargetState(BlendFunction.TRANSLUCENT))

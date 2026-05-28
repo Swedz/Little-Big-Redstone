@@ -11,7 +11,7 @@ import net.swedz.little_big_redstone.datagen.server.DatagenDelegatorServer;
 public final class DatagenDelegator
 {
 	@SubscribeEvent
-	private static void gatherData(GatherDataEvent event)
+	private static void gatherData(GatherDataEvent.Client event)
 	{
 		DatagenDelegatorClient.configure(event);
 		DatagenDelegatorServer.configure(event);
