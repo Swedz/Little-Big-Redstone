@@ -2,21 +2,11 @@
   "type": "minecraft:crafting_shaped",
   "category": "misc",
   "key": {
-    "G": {
-      "tag": "c:ingots/gold"
-    },
-    "P": {
-      "tag": "c:ender_pearls"
-    },
-    "Q": {
-      "tag": "c:gems/quartz"
-    },
-    "R": {
-      "tag": "c:dusts/redstone"
-    },
-    "r": {
-      "item": "little_big_redstone:redstone_bit"
-    }
+    "G": "#c:ingots/gold",
+    "P": "#c:ender_pearls",
+    "Q": "#c:gems/quartz",
+    "R": "#c:dusts/redstone",
+    "r": "little_big_redstone:redstone_bit"
   },
   "pattern": [
     "PQG",
@@ -24,7 +14,7 @@
     "PQG"
   ],
   "result": {
-    "count": 1,
     "id": "little_big_redstone:tag"
-  }
+  },
+  "show_notification": false
 }

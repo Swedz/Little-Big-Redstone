@@ -2,15 +2,9 @@
   "type": "minecraft:crafting_shaped",
   "category": "misc",
   "key": {
-    "R": {
-      "tag": "c:dusts/redstone"
-    },
-    "T": {
-      "item": "minecraft:redstone_torch"
-    },
-    "r": {
-      "item": "little_big_redstone:redstone_bit"
-    }
+    "R": "#c:dusts/redstone",
+    "T": "minecraft:redstone_torch",
+    "r": "little_big_redstone:redstone_bit"
   },
   "pattern": [
     "R  ",
@@ -18,7 +12,7 @@
     "R  "
   ],
   "result": {
-    "count": 1,
     "id": "little_big_redstone:nor_gate"
-  }
+  },
+  "show_notification": false
 }

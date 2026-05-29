@@ -1,0 +1,81 @@
+{
+  "model": {
+    "type": "little_big_redstone:logic",
+    "board_textures": {
+      "background": "little_big_redstone:logic/background_square",
+      "border": "little_big_redstone:logic/border_square",
+      "icon": "little_big_redstone:logic/selector"
+    },
+    "color_palette": {
+      "black": {
+        "background": "ff000000",
+        "foreground": "ff726d81"
+      },
+      "blue": {
+        "background": "ff000000",
+        "foreground": "ff4ba6f1"
+      },
+      "brown": {
+        "background": "ff000000",
+        "foreground": "ffc66a1a"
+      },
+      "cyan": {
+        "background": "ff000000",
+        "foreground": "ff47d5af"
+      },
+      "gray": {
+        "background": "ff000000",
+        "foreground": "ffa8abbf"
+      },
+      "green": {
+        "background": "ff000000",
+        "foreground": "ff18af2f"
+      },
+      "light_blue": {
+        "background": "ff000000",
+        "foreground": "ff6ae4ff"
+      },
+      "light_gray": {
+        "background": "ff000000",
+        "foreground": "ffc5d2e0"
+      },
+      "lime": {
+        "background": "ff000000",
+        "foreground": "ffa4eb00"
+      },
+      "magenta": {
+        "background": "ff000000",
+        "foreground": "ffff80f7"
+      },
+      "orange": {
+        "background": "ff000000",
+        "foreground": "ffff920f"
+      },
+      "pink": {
+        "background": "ff000000",
+        "foreground": "ffffb8ea"
+      },
+      "purple": {
+        "background": "ff000000",
+        "foreground": "ffd857ff"
+      },
+      "red": {
+        "background": "ff000000",
+        "foreground": "ffff0000"
+      },
+      "white": {
+        "background": "ff000000",
+        "foreground": "ffeff5ff"
+      },
+      "yellow": {
+        "background": "ff000000",
+        "foreground": "ffffe800"
+      }
+    },
+    "item_textures": {
+      "background": "little_big_redstone:item/logic/background_square",
+      "border": "little_big_redstone:item/logic/border_square",
+      "icon": "little_big_redstone:item/logic/selector"
+    }
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_transmute",
+  "category": "misc",
+  "group": "sticky_note_dye",
+  "input": "#little_big_redstone:sticky_notes",
+  "material": {
+    "neoforge:ingredient_type": "neoforge:components",
+    "components": {
+      "minecraft:dye": "light_gray"
+    },
+    "items": "#minecraft:dyes"
+  },
+  "result": {
+    "id": "little_big_redstone:light_gray_sticky_note"
+  }
+}

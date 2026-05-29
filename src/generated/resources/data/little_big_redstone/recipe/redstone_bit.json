@@ -2,9 +2,7 @@
   "type": "minecraft:crafting_shaped",
   "category": "misc",
   "key": {
-    "R": {
-      "tag": "c:dusts/redstone"
-    }
+    "R": "#c:dusts/redstone"
   },
   "pattern": [
     " R ",
@@ -14,5 +12,6 @@
   "result": {
     "count": 8,
     "id": "little_big_redstone:redstone_bit"
-  }
+  },
+  "show_notification": false
 }

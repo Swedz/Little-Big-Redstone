@@ -2,18 +2,10 @@
   "type": "minecraft:crafting_shaped",
   "category": "misc",
   "key": {
-    "1": {
-      "item": "little_big_redstone:and_gate"
-    },
-    "2": {
-      "item": "little_big_redstone:nor_gate"
-    },
-    "R": {
-      "tag": "c:dusts/redstone"
-    },
-    "r": {
-      "item": "little_big_redstone:redstone_bit"
-    }
+    "1": "little_big_redstone:and_gate",
+    "2": "little_big_redstone:nor_gate",
+    "R": "#c:dusts/redstone",
+    "r": "little_big_redstone:redstone_bit"
   },
   "pattern": [
     "1  ",
@@ -21,7 +13,7 @@
     "2  "
   ],
   "result": {
-    "count": 1,
     "id": "little_big_redstone:xor_gate"
-  }
+  },
+  "show_notification": false
 }

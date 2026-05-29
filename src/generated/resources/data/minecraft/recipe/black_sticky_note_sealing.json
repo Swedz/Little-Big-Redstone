@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_transmute",
+  "category": "misc",
+  "group": "sticky_note_sealing",
+  "input": {
+    "neoforge:ingredient_type": "neoforge:components",
+    "components": {
+      "little_big_redstone:sticky_note_editable": true
+    },
+    "items": "little_big_redstone:black_sticky_note"
+  },
+  "material": "#little_big_redstone:sticky_note_sealant",
+  "result": {
+    "components": {
+      "little_big_redstone:sticky_note_editable": false
+    },
+    "id": "little_big_redstone:black_sticky_note"
+  }
+}

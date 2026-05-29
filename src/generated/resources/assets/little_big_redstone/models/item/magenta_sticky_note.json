@@ -1,8 +1,0 @@
-{
-  "parent": "little_big_redstone:item/sticky_note",
-  "loader": "little_big_redstone:sticky_note_item",
-  "textures": {
-    "layer0": "little_big_redstone:item/sticky_note/magenta",
-    "layer1": "little_big_redstone:item/sticky_note/text"
-  }
-}

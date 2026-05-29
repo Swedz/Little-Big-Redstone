@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_transmute",
+  "category": "redstone",
+  "group": "microchip_dye",
+  "input": "#little_big_redstone:microchips",
+  "material": {
+    "neoforge:ingredient_type": "neoforge:components",
+    "components": {
+      "minecraft:dye": "gray"
+    },
+    "items": "#minecraft:dyes"
+  },
+  "result": {
+    "id": "little_big_redstone:gray_microchip"
+  }
+}

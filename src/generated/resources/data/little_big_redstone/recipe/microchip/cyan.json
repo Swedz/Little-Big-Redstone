@@ -2,21 +2,11 @@
   "type": "minecraft:crafting_shaped",
   "category": "misc",
   "key": {
-    "C": {
-      "item": "little_big_redstone:redstone_circuit_board"
-    },
-    "D": {
-      "tag": "c:dyes/cyan"
-    },
-    "I": {
-      "tag": "c:storage_blocks/iron"
-    },
-    "R": {
-      "tag": "c:dusts/redstone"
-    },
-    "i": {
-      "tag": "c:ingots/iron"
-    }
+    "C": "little_big_redstone:redstone_circuit_board",
+    "D": "#c:dyes/cyan",
+    "I": "#c:storage_blocks/iron",
+    "R": "#c:dusts/redstone",
+    "i": "#c:ingots/iron"
   },
   "pattern": [
     "iIi",
@@ -24,7 +14,7 @@
     "iDi"
   ],
   "result": {
-    "count": 1,
     "id": "little_big_redstone:cyan_microchip"
-  }
+  },
+  "show_notification": false
 }

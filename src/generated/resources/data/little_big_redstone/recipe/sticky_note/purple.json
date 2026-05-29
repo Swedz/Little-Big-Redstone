@@ -2,21 +2,13 @@
   "type": "minecraft:crafting_shapeless",
   "category": "misc",
   "ingredients": [
-    {
-      "item": "minecraft:paper"
-    },
-    {
-      "tag": "c:slime_balls"
-    },
-    {
-      "tag": "c:nuggets/iron"
-    },
-    {
-      "tag": "c:dyes/purple"
-    }
+    "minecraft:paper",
+    "#c:slime_balls",
+    "#c:nuggets/iron",
+    "#c:dyes/purple"
   ],
   "result": {
-    "count": 1,
     "id": "little_big_redstone:purple_sticky_note"
-  }
+  },
+  "show_notification": false
 }

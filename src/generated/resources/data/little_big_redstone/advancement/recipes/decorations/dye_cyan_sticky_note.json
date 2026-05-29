@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_sticky_note": {
+      "conditions": {
+        "items": [
+          {
+            "items": "#little_big_redstone:sticky_notes"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "little_big_redstone:dye_cyan_sticky_note"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_sticky_note"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "little_big_redstone:dye_cyan_sticky_note"
+    ]
+  }
+}

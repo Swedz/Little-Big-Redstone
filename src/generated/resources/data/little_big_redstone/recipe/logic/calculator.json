@@ -2,21 +2,11 @@
   "type": "minecraft:crafting_shaped",
   "category": "misc",
   "key": {
-    "C": {
-      "tag": "c:ingots/copper"
-    },
-    "G": {
-      "tag": "c:ingots/gold"
-    },
-    "Q": {
-      "tag": "c:gems/quartz"
-    },
-    "R": {
-      "tag": "c:dusts/redstone"
-    },
-    "r": {
-      "item": "little_big_redstone:redstone_bit"
-    }
+    "C": "#c:ingots/copper",
+    "G": "#c:ingots/gold",
+    "Q": "#c:gems/quartz",
+    "R": "#c:dusts/redstone",
+    "r": "little_big_redstone:redstone_bit"
   },
   "pattern": [
     "CCG",
@@ -24,7 +14,7 @@
     "CCG"
   ],
   "result": {
-    "count": 1,
     "id": "little_big_redstone:calculator"
-  }
+  },
+  "show_notification": false
 }

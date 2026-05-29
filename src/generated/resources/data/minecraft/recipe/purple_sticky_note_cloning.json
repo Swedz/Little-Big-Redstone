@@ -1,0 +1,31 @@
+{
+  "type": "minecraft:crafting_transmute",
+  "add_material_count_to_result": true,
+  "category": "misc",
+  "group": "sticky_note_cloning",
+  "input": {
+    "neoforge:ingredient_type": "neoforge:difference",
+    "base": "little_big_redstone:purple_sticky_note",
+    "subtracted": {
+      "neoforge:ingredient_type": "neoforge:components",
+      "components": {
+        "little_big_redstone:sticky_note": ""
+      },
+      "items": "#little_big_redstone:sticky_notes"
+    }
+  },
+  "material": {
+    "neoforge:ingredient_type": "neoforge:components",
+    "components": {
+      "little_big_redstone:sticky_note": ""
+    },
+    "items": "#little_big_redstone:sticky_notes"
+  },
+  "material_count": {
+    "max": 8,
+    "min": 1
+  },
+  "result": {
+    "id": "little_big_redstone:purple_sticky_note"
+  }
+}
