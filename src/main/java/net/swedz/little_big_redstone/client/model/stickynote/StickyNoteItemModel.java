@@ -58,7 +58,7 @@ public record StickyNoteItemModel(
 		
 		List<ItemModel> models = Lists.newArrayList();
 		models.add(this.bakeLayer(noteTexture, 0, ExtraFaceData.DEFAULT));
-		models.add(this.bakeLayer(textTexture, 1, ExtraFaceData.DEFAULT));
+		models.add(this.bakeLayer(textTexture, 1, textFaceData));
 		models.forEach((model) -> model.update(output, stack, modelResolver, displayContext, level, owner, seed));
 	}
 	
