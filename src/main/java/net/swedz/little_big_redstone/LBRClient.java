@@ -137,9 +137,9 @@ public final class LBRClient
 	@SubscribeEvent
 	private static void registerItemModels(RegisterItemModelsEvent event)
 	{
-		event.register(LogicItemModel.Unbaked.ID, LogicItemModel.Unbaked.CODEC);
-		event.register(StickyNoteEntityModel.Unbaked.ID, StickyNoteEntityModel.Unbaked.CODEC);
-		event.register(StickyNoteItemModel.Unbaked.ID, StickyNoteItemModel.Unbaked.CODEC);
+		event.register(LBR.id("logic"), LogicItemModel.Unbaked.CODEC);
+		event.register(LBR.id("sticky_note_entity"), StickyNoteEntityModel.Unbaked.CODEC);
+		event.register(LBR.id("sticky_note"), StickyNoteItemModel.Unbaked.CODEC);
 	}
 	
 	@SubscribeEvent

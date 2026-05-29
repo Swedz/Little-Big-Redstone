@@ -16,7 +16,6 @@ import net.minecraft.world.entity.ItemOwner;
 import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.neoforge.client.model.ComposedModelState;
-import net.swedz.little_big_redstone.LBR;
 import org.joml.Matrix4fc;
 
 import java.util.Optional;
@@ -54,8 +53,6 @@ public record StickyNoteEntityModel(
 			Optional<Identifier> textModel
 	) implements ItemModel.Unbaked
 	{
-		public static final Identifier ID = LBR.id("sticky_note_entity");
-		
 		public static final MapCodec<Unbaked> CODEC = RecordCodecBuilder.mapCodec((instance) -> instance
 				.group(
 						Identifier.CODEC.fieldOf("paper_model").forGetter(Unbaked::paperModel),

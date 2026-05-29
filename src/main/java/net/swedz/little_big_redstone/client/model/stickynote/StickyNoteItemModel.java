@@ -76,8 +76,6 @@ public record StickyNoteItemModel(
 			Material textTexture
 	) implements ItemModel.Unbaked
 	{
-		public static final Identifier ID = LBR.id("logic");
-		
 		public static final MapCodec<Unbaked> CODEC = RecordCodecBuilder.mapCodec((instance) -> instance
 				.group(
 						Transformation.EXTENDED_CODEC.optionalFieldOf("transformation").forGetter(Unbaked::transformation),
