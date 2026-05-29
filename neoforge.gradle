@@ -7,8 +7,16 @@ neoForge {
 	]
 	interfaceInjectionData.from "src/main/resources/interfaces.json"
 
+	mods {
+		"${mod_id}" {
+			sourceSet sourceSets.main
+		}
+	}
+
 	runs {
 		configureEach {
+			loadedMods = [mods."${mod_id}"]
+
 			systemProperty 'forge.logging.markers', 'REGISTRIES'
 
 			systemProperty 'forge.logging.console.level', 'debug'
@@ -62,12 +70,6 @@ neoForge {
 			systemProperty 'mixin.env.refMapRemappingFile', "${buildDir}/createSrgToMcp/output.srg"
 			systemProperty 'mixin.debug.export', 'true'
 			systemProperty 'mixin.debug.verbose', 'true'
-		}
-	}
-
-	mods {
-		"${mod_id}" {
-			sourceSet sourceSets.main
 		}
 	}
 }

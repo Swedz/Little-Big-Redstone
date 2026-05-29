@@ -1,7 +1,20 @@
 {
   "variants": {
     "": {
-      "model": "little_big_redstone:block/yellow_microchip"
+      "type": "little_big_redstone:microchip",
+      "fallback": {
+        "base": "little_big_redstone:block/microchip/side/yellow",
+        "signal_off_overlay": "little_big_redstone:block/microchip/signal_off_overlay",
+        "signal_on_overlay": "little_big_redstone:block/microchip/signal_on_overlay"
+      },
+      "sides": {
+        "down": {
+          "base": "little_big_redstone:block/microchip/bottom/yellow"
+        },
+        "up": {
+          "base": "little_big_redstone:block/microchip/top/yellow"
+        }
+      }
     }
   }
 }

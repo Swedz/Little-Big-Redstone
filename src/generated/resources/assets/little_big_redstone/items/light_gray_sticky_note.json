@@ -1,0 +1,7 @@
+{
+  "model": {
+    "type": "little_big_redstone:logic",
+    "note_texture": "little_big_redstone:item/sticky_note/light_gray",
+    "text_texture": "little_big_redstone:item/sticky_note/text"
+  }
+}

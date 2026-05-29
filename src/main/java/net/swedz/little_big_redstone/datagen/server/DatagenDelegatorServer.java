@@ -31,13 +31,12 @@ public final class DatagenDelegatorServer
 	
 	private static void add(GatherDataEvent event, Function<GatherDataEvent, DataProvider> providerCreator)
 	{
-		event.getGenerator().addProvider(true, providerCreator.apply(event));
+		event.addProvider(providerCreator.apply(event));
 	}
 	
 	private static void addLootTable(GatherDataEvent event, Function<HolderLookup.Provider, LootTableSubProvider> providerCreator)
 	{
-		event.getGenerator().addProvider(
-				true,
+		event.addProvider(
 				new LootTableProvider(
 						event.getGenerator().getPackOutput(),
 						Set.of(),

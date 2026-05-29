@@ -3,6 +3,8 @@ package net.swedz.little_big_redstone;
 import com.google.common.collect.Maps;
 import net.minecraft.client.data.models.model.ModelTemplates;
 import net.minecraft.client.data.models.model.TextureMapping;
+import net.minecraft.client.renderer.item.ClientItem;
+import net.minecraft.client.renderer.item.CuboidItemModelWrapper;
 import net.minecraft.client.resources.model.sprite.Material;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.Item;
@@ -23,6 +25,7 @@ import net.swedz.tesseract.neoforge.registry.common.CommonModelBuilders;
 import net.swedz.tesseract.neoforge.registry.holder.ItemHolder;
 
 import java.util.Collections;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
@@ -154,11 +157,14 @@ public final class LBRItems
 				.withCapabilities((item, event) ->
 						event.registerItem(Capabilities.Item.ITEM, (__, access) -> new LogicArrayItemHandler(access), item))
 				.withModel((holder) -> (generators) ->
-						ModelTemplates.FLAT_ITEM.create(
-								holder.asItem(),
-								TextureMapping.layer0(new Material(LBR.id("item/logic_array/%s".formatted(colorId)))),
-								generators.item().modelOutput
-						));
+				{
+					var modelId = ModelTemplates.FLAT_ITEM.create(
+							holder.asItem(),
+							TextureMapping.layer0(new Material(LBR.id("item/logic_array/%s".formatted(colorId)))),
+							generators.item().modelOutput
+					);
+					generators.item().itemModelOutput.register(holder.asItem(), new ClientItem(new CuboidItemModelWrapper.Unbaked(modelId, Optional.empty(), List.of()), ClientItem.Properties.DEFAULT));
+				});
 	}
 	
 	private static ItemHolder<FloppyDiskItem> createFloppyDisk(DyeColor color, String colorEnglishName, int order)
@@ -169,11 +175,14 @@ public final class LBRItems
 		return create(id, englishName, (p) -> new FloppyDiskItem(p, color), LBRSortOrder.FLOPPY_DISKS.and(order))
 				.tag(LBRTags.Items.FLOPPY_DISKS)
 				.withModel((holder) -> (generators) ->
-						ModelTemplates.FLAT_ITEM.create(
-								holder.asItem(),
-								TextureMapping.layer0(new Material(LBR.id("item/floppy_disk/%s".formatted(colorId)))),
-								generators.item().modelOutput
-						));
+				{
+					var modelId = ModelTemplates.FLAT_ITEM.create(
+							holder.asItem(),
+							TextureMapping.layer0(new Material(LBR.id("item/floppy_disk/%s".formatted(colorId)))),
+							generators.item().modelOutput
+					);
+					generators.item().itemModelOutput.register(holder.asItem(), new ClientItem(new CuboidItemModelWrapper.Unbaked(modelId, Optional.empty(), List.of()), ClientItem.Properties.DEFAULT));
+				});
 	}
 	
 	private static ItemHolder<StickyNoteItem> createStickyNote(DyeColor color, String colorEnglishName, int order)

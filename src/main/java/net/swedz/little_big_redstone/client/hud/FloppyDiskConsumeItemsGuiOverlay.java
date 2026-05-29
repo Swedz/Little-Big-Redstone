@@ -94,7 +94,7 @@ public final class FloppyDiskConsumeItemsGuiOverlay
 		graphics.pose().popMatrix();
 	}
 	
-	public static void render(GuiGraphicsExtractor graphics, DeltaTracker delta)
+	public static void extract(GuiGraphicsExtractor graphics, DeltaTracker delta)
 	{
 		if(Minecraft.getInstance().options.hideGui)
 		{

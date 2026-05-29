@@ -1,15 +1,11 @@
 package net.swedz.little_big_redstone.datagen.client.provider.models;
 
-import net.minecraft.client.data.models.BlockModelGenerators;
-import net.minecraft.client.data.models.ItemModelGenerators;
-import net.minecraft.client.data.models.ModelProvider;
 import net.minecraft.client.data.models.model.ModelTemplate;
 import net.minecraft.client.data.models.model.TextureMapping;
 import net.minecraft.client.data.models.model.TextureSlot;
 import net.minecraft.client.renderer.item.ClientItem;
 import net.minecraft.client.resources.model.sprite.Material;
 import net.minecraft.world.item.DyeColor;
-import net.neoforged.neoforge.data.event.GatherDataEvent;
 import net.swedz.little_big_redstone.LBR;
 import net.swedz.little_big_redstone.LBRItems;
 import net.swedz.little_big_redstone.client.model.stickynote.StickyNoteEntityModel;
@@ -18,19 +14,12 @@ import net.swedz.tesseract.neoforge.registry.holder.ItemHolder;
 
 import java.util.Optional;
 
-public final class ItemModelsDatagenProvider extends ModelProvider
+final class ItemModelsDatagenProvider
 {
-	public ItemModelsDatagenProvider(GatherDataEvent event)
-	{
-		super(event.getGenerator().getPackOutput(), LBR.ID);
-	}
-	
 	private static ModelTemplate PAPER_TEMPLATE = new ModelTemplate(Optional.of(LBR.id("item/sticky_note_entity/paper")), Optional.empty(), TextureSlot.TEXTURE);
 	
-	@Override
-	protected void registerModels(BlockModelGenerators blockModels, ItemModelGenerators itemModels)
+	static void registerModels(ModelGenerators generators)
 	{
-		var generators = new ModelGenerators(blockModels, itemModels);
 		for(ItemHolder<?> item : LBRItems.values())
 		{
 			if(item.hasModelProvider())
@@ -40,7 +29,7 @@ public final class ItemModelsDatagenProvider extends ModelProvider
 		}
 	}
 	
-	private void stickyNoteEntity(ModelGenerators generators)
+	private static void stickyNoteEntity(ModelGenerators generators)
 	{
 		var textModelId = LBR.id("item/sticky_note_entity/text");
 		for(var color : DyeColor.values())
@@ -76,11 +65,5 @@ public final class ItemModelsDatagenProvider extends ModelProvider
 					)
 			);
 		}
-	}
-	
-	@Override
-	public String getName()
-	{
-		return this.getClass().getSimpleName();
 	}
 }
