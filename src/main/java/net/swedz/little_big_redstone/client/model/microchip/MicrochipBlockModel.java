@@ -113,15 +113,20 @@ public final class MicrochipBlockModel implements DynamicBlockStateModel
 		{
 			if(direction != null)
 			{
-				return data.side(direction) ?
-						textures.signalOnOverlay() :
-						textures.signalOffOverlay();
+				return switch(data.side(direction))
+				{
+					case OFF -> textures.signalOffOverlay();
+					case ON -> textures.signalOnOverlay();
+					default -> Optional.empty();
+				};
 			}
 			return Optional.empty();
 		}, false)));
 		
 		return parts;
 	}
+	
+	private static final Material NO_TEXTURE_MATERIAL = new Material(LBR.id("block/microchip/no_overlay"));
 	
 	private UnbakedModel prepareLayer(BiFunction<Direction, FaceTextures, Optional<Material>> materialFunction, boolean particles)
 	{
@@ -155,7 +160,10 @@ public final class MicrochipBlockModel implements DynamicBlockStateModel
 			{
 				material = materialFunction.apply(direction, fallback);
 			}
-			material.ifPresent((m) -> textures.addTexture(direction.getName(), m));
+			material.ifPresentOrElse(
+					(m) -> textures.addTexture(direction.getName(), m),
+					() -> textures.addTexture(direction.getName(), NO_TEXTURE_MATERIAL)
+			);
 		}
 		return new CuboidModel(
 				new UnbakedCuboidGeometry(List.of(cube)),

@@ -1,10 +1,10 @@
 package net.swedz.little_big_redstone.client.model.microchip;
 
-import com.google.common.primitives.Booleans;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.core.Direction;
 import net.neoforged.neoforge.model.data.ModelProperty;
+import net.swedz.tesseract.neoforge.helper.CodecHelper;
 
 import java.util.Arrays;
 
@@ -16,13 +16,13 @@ public final class MicrochipModelData
 	
 	public static final Codec<MicrochipModelData> CODEC = RecordCodecBuilder.create((instance) -> instance
 			.group(
-					Codec.BOOL.listOf().fieldOf("sides").forGetter((data) -> Booleans.asList(data.sides))
+					CodecHelper.forLowercaseEnum(Side.class).listOf(6, 6).fieldOf("sides").forGetter((data) -> Arrays.asList(data.sides))
 			)
-			.apply(instance, (sides) -> new MicrochipModelData(Booleans.toArray(sides))));
+			.apply(instance, (sides) -> new MicrochipModelData(sides.toArray(Side[]::new))));
 	
-	private boolean[] sides = new boolean[6];
+	private Side[] sides = new Side[]{Side.NONE, Side.NONE, Side.NONE, Side.NONE, Side.NONE, Side.NONE};
 	
-	private MicrochipModelData(boolean[] sides)
+	private MicrochipModelData(Side[] sides)
 	{
 		this.sides = sides;
 	}
@@ -31,15 +31,22 @@ public final class MicrochipModelData
 	{
 	}
 	
-	public boolean side(Direction direction)
+	public Side side(Direction direction)
 	{
 		return sides[direction.ordinal()];
 	}
 	
-	public MicrochipModelData sides(boolean[] sides)
+	public MicrochipModelData side(int index, Side side)
 	{
-		this.sides = sides;
+		this.sides[index] = side;
 		return this;
+	}
+	
+	public enum Side
+	{
+		NONE,
+		OFF,
+		ON
 	}
 	
 	@Override

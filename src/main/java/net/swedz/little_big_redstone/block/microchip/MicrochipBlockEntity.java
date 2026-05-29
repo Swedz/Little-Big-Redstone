@@ -1,6 +1,7 @@
 package net.swedz.little_big_redstone.block.microchip;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.UUIDUtil;
 import net.minecraft.nbt.CompoundTag;
@@ -123,7 +124,19 @@ public final class MicrochipBlockEntity extends BlockEntity implements MenuProvi
 		var redstone = microchip.awarenesses().get(AwarenessTypes.REDSTONE);
 		if(redstone != null)
 		{
-			data.sides(redstone.getSides());
+			var state = this.getBlockState();
+			for(int index = 0; index < redstone.getSides().length; index++)
+			{
+				if(redstone.getSides()[index])
+				{
+					var direction = Direction.values()[index];
+					var powered = state.getValue(MicrochipBlock.getDirectionalState(direction));
+					var side = powered ?
+							MicrochipModelData.Side.ON :
+							MicrochipModelData.Side.OFF;
+					data.side(index, side);
+				}
+			}
 		}
 		return data;
 	}
