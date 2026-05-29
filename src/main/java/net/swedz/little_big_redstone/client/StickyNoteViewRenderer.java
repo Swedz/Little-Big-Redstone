@@ -2,7 +2,6 @@ package net.swedz.little_big_redstone.client;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
-import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.DyeColor;
 import net.swedz.little_big_redstone.LBR;
@@ -22,7 +21,7 @@ public final class StickyNoteViewRenderer
 		if(pin)
 		{
 			var pinTexture = LBR.id("textures/gui/sticky_note/pin_%s.png".formatted(color.getName()));
-			graphics.blitLight(RenderPipelines.GUI, pinTexture, (180 / 2) - 9, 4, 0, 0, 32, 32, 32, 32, 32, 32, argb, packedLight);
+			graphics.blitLight(pinTexture, (180 / 2) - 9, 4, 0, 0, 32, 32, 32, 32, 32, 32, argb, packedLight);
 		}
 	}
 	
