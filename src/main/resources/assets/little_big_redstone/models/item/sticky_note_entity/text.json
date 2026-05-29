@@ -1,6 +1,6 @@
 {
 	"textures": {
-		"texture": "little_big_redstone:block/sticky_note/text"
+		"texture": "little_big_redstone:item/sticky_note_entity/text"
 	},
 	"ambientocclusion": false,
 	"elements": [

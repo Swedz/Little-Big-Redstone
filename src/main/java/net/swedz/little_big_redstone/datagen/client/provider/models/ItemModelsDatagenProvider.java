@@ -27,6 +27,8 @@ final class ItemModelsDatagenProvider
 				item.modelProvider().accept(generators);
 			}
 		}
+		
+		stickyNoteEntity(generators);
 	}
 	
 	private static void stickyNoteEntity(ModelGenerators generators)
@@ -44,7 +46,7 @@ final class ItemModelsDatagenProvider
 			);
 			
 			generators.item().itemModelOutput.register(
-					LBR.id("item/sticky_note_entity/%s_with_text".formatted(colorId)),
+					LBR.id("sticky_note_entity/%s_with_text".formatted(colorId)),
 					new ClientItem(
 							new StickyNoteEntityModel.Unbaked(
 									paperModelId,
@@ -55,7 +57,7 @@ final class ItemModelsDatagenProvider
 			);
 			
 			generators.item().itemModelOutput.register(
-					LBR.id("item/sticky_note_entity/%s_without_text".formatted(colorId)),
+					LBR.id("sticky_note_entity/%s_without_text".formatted(colorId)),
 					new ClientItem(
 							new StickyNoteEntityModel.Unbaked(
 									paperModelId,

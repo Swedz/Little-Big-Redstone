@@ -134,13 +134,14 @@ public final class StickyNoteEntityRenderer<T extends StickyNoteEntity> extends 
 		state.textColor = entity.getTextColor();
 		state.hasText = entity.hasText();
 		
-		Minecraft.getInstance().getModelManager().getItemModel(this.getStickyNoteModelId(entity)).update(state.stickyNoteModel, ItemStack.EMPTY, Minecraft.getInstance().getItemModelResolver(), ItemDisplayContext.GUI, null, null, 0);
+		var model = Minecraft.getInstance().getModelManager().getItemModel(this.getStickyNoteModelId(entity));
+		model.update(state.stickyNoteModel, ItemStack.EMPTY, Minecraft.getInstance().getItemModelResolver(), ItemDisplayContext.GUI, null, null, 0);
 		
 		itemModelResolver.updateForNonLiving(state.itemModel, entity.getDisplayItem(), ItemDisplayContext.GUI, entity);
 	}
 	
 	private Identifier getStickyNoteModelId(T entity)
 	{
-		return LBR.id("item/sticky_note_entity/" + (entity.hasText() ? "%s_with_text" : "%s_without_text").formatted(entity.getColor().getName()));
+		return LBR.id("sticky_note_entity/" + (entity.hasText() && entity.getDisplayItem().isEmpty() ? "%s_with_text" : "%s_without_text").formatted(entity.getColor().getName()));
 	}
 }

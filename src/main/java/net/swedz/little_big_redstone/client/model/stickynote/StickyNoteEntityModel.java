@@ -5,12 +5,11 @@ import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.renderer.block.dispatch.BlockModelRotation;
-import net.minecraft.client.renderer.block.dispatch.BlockStateModelPart;
 import net.minecraft.client.renderer.block.dispatch.ModelState;
+import net.minecraft.client.renderer.item.CuboidItemModelWrapper;
 import net.minecraft.client.renderer.item.ItemModel;
 import net.minecraft.client.renderer.item.ItemModelResolver;
 import net.minecraft.client.renderer.item.ItemStackRenderState;
-import net.minecraft.client.resources.model.SimpleModelWrapper;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.ItemOwner;
 import net.minecraft.world.item.ItemDisplayContext;
@@ -18,11 +17,12 @@ import net.minecraft.world.item.ItemStack;
 import net.neoforged.neoforge.client.model.ComposedModelState;
 import org.joml.Matrix4fc;
 
+import java.util.List;
 import java.util.Optional;
 
 public record StickyNoteEntityModel(
-		BlockStateModelPart paperModel,
-		Optional<BlockStateModelPart> textModel
+		ItemModel paperModel,
+		Optional<ItemModel> textModel
 ) implements ItemModel
 {
 	private static final ModelState MODEL_STATE = new ComposedModelState(BlockModelRotation.IDENTITY, Transformation.IDENTITY);
@@ -31,21 +31,18 @@ public record StickyNoteEntityModel(
 	public void update(
 			ItemStackRenderState output,
 			ItemStack stack,
-			ItemModelResolver modelResolver,
+			ItemModelResolver resolver,
 			ItemDisplayContext displayContext,
 			ClientLevel level,
 			ItemOwner owner,
 			int seed
 	)
 	{
-		var paperLayer = output.newLayer();
-		paperLayer.prepareQuadList().addAll(paperModel.getQuads(null));
+		output.appendModelIdentityElement(this);
+		output.ensureCapacity(textModel.isPresent() ? 2 : 1);
 		
-		textModel.ifPresent((model) ->
-		{
-			var textLayer = output.newLayer();
-			textLayer.prepareQuadList().addAll(model.getQuads(null));
-		});
+		paperModel.update(output, stack, resolver, displayContext, level, owner, seed);
+		textModel.ifPresent((m) -> m.update(output, stack, resolver, displayContext, level, owner, seed));
 	}
 	
 	public record Unbaked(
@@ -66,12 +63,17 @@ public record StickyNoteEntityModel(
 			return CODEC;
 		}
 		
+		private static ItemModel prepare(BakingContext context, Matrix4fc transformation, Identifier id)
+		{
+			return new CuboidItemModelWrapper.Unbaked(id, Optional.empty(), List.of()).bake(context, transformation);
+		}
+		
 		@Override
 		public ItemModel bake(BakingContext context, Matrix4fc transformation)
 		{
 			return new StickyNoteEntityModel(
-					SimpleModelWrapper.bake(context.blockModelBaker(), paperModel, MODEL_STATE),
-					textModel.map((modelId) -> SimpleModelWrapper.bake(context.blockModelBaker(), modelId, MODEL_STATE))
+					prepare(context, transformation, paperModel),
+					textModel.map((m) -> prepare(context, transformation, m))
 			);
 		}
 		

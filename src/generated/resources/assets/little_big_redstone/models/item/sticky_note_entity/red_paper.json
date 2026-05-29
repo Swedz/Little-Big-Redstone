@@ -1,0 +1,6 @@
+{
+  "parent": "little_big_redstone:item/sticky_note_entity/paper",
+  "textures": {
+    "texture": "little_big_redstone:item/sticky_note_entity/red"
+  }
+}

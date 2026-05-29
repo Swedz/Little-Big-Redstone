@@ -70,7 +70,6 @@ public final class StickyNoteEntity extends HangingEntity
 		return 0.5 - (boundsDepth() / 2);
 	}
 	
-	private static final EntityDataAccessor<Direction> DATA_DIRECTION    = SynchedEntityData.defineId(StickyNoteEntity.class, EntityDataSerializers.DIRECTION);
 	private static final EntityDataAccessor<Direction> DATA_FACING       = SynchedEntityData.defineId(StickyNoteEntity.class, EntityDataSerializers.DIRECTION);
 	private static final EntityDataAccessor<Integer>   DATA_QUADRANT     = SynchedEntityData.defineId(StickyNoteEntity.class, EntityDataSerializers.INT);
 	private static final EntityDataAccessor<Integer>   DATA_COLOR        = SynchedEntityData.defineId(StickyNoteEntity.class, EntityDataSerializers.INT);
@@ -154,9 +153,9 @@ public final class StickyNoteEntity extends HangingEntity
 	@Override
 	protected void defineSynchedData(SynchedEntityData.Builder builder)
 	{
-		builder.define(DATA_DIRECTION, Direction.SOUTH);
+		super.defineSynchedData(builder);
 		builder.define(DATA_FACING, Direction.SOUTH);
-		builder.define(DATA_QUADRANT, 0);
+		builder.define(DATA_QUADRANT, Quadrant.TOP_LEFT.id());
 		builder.define(DATA_COLOR, DyeColor.WHITE.getId());
 		builder.define(DATA_TEXT_COLOR, StickyNoteItem.getDefaultTextColor(DyeColor.WHITE).getId());
 		builder.define(DATA_HAS_TEXT, false);
@@ -183,8 +182,6 @@ public final class StickyNoteEntity extends HangingEntity
 		
 		xRotO = this.getXRot();
 		yRotO = this.getYRot();
-		
-		entityData.set(DATA_DIRECTION, direction);
 	}
 	
 	@Override
@@ -492,15 +489,6 @@ public final class StickyNoteEntity extends HangingEntity
 		this.setQuadrant(Quadrant.byId((data >> 6) & 0x3));
 		
 		this.recalculateBoundingBox();
-	}
-	
-	@Override
-	public void onSyncedDataUpdated(EntityDataAccessor<?> key)
-	{
-		if(key.equals(DATA_DIRECTION))
-		{
-			this.setDirection(this.getEntityData().get(DATA_DIRECTION));
-		}
 	}
 	
 	@Override

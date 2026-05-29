@@ -1,0 +1,7 @@
+{
+  "model": {
+    "type": "little_big_redstone:sticky_note_entity",
+    "paper_model": "little_big_redstone:item/sticky_note_entity/red_paper",
+    "text_model": "little_big_redstone:item/sticky_note_entity/text"
+  }
+}
