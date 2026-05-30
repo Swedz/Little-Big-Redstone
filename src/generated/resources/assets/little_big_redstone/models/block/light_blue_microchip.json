@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/cube_bottom_top",
+  "textures": {
+    "bottom": "little_big_redstone:block/microchip/bottom/light_blue",
+    "side": "little_big_redstone:block/microchip/side/light_blue",
+    "top": "little_big_redstone:block/microchip/top/light_blue"
+  }
+}

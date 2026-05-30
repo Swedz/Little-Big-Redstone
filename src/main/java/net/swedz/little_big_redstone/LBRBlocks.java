@@ -2,10 +2,6 @@ package net.swedz.little_big_redstone;
 
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
-import net.minecraft.client.data.models.MultiVariant;
-import net.minecraft.client.data.models.blockstates.MultiVariantGenerator;
-import net.minecraft.client.resources.model.sprite.Material;
-import net.minecraft.core.Direction;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.world.item.BlockItem;
@@ -16,12 +12,9 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.material.MapColor;
 import net.neoforged.bus.api.IEventBus;
-import net.neoforged.neoforge.client.model.block.CustomUnbakedBlockStateModel;
-import net.neoforged.neoforge.client.model.generators.blockstate.CustomBlockStateModelBuilder;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import net.swedz.little_big_redstone.block.microchip.MicrochipBlock;
 import net.swedz.little_big_redstone.block.microchip.MicrochipBlockEntity;
-import net.swedz.little_big_redstone.client.model.microchip.MicrochipBlockModel;
 import net.swedz.tesseract.api.Assert;
 import net.swedz.tesseract.neoforge.registry.SortOrder;
 import net.swedz.tesseract.neoforge.registry.common.CommonLootTableBuilders;
@@ -30,7 +23,6 @@ import net.swedz.tesseract.neoforge.registry.holder.BlockWithItemHolder;
 
 import java.util.Collections;
 import java.util.Map;
-import java.util.Optional;
 import java.util.Set;
 import java.util.function.BiFunction;
 import java.util.function.Function;
@@ -133,40 +125,8 @@ public final class LBRBlocks
 						.destroyTime(4f)
 						.requiresCorrectToolForDrops())
 				.tag(LBRTags.Blocks.MICROCHIPS, BlockTags.MINEABLE_WITH_PICKAXE)
-				.withLootTable(CommonLootTableBuilders::self)
-				.withModel((block) -> (generators) ->
-				{
-					// TODO 26.1 item model
-					// TODO 26.1 this needs to be moved to datagen only classes
-					generators.block().blockStateOutput.accept(customModel(block.get(), new MicrochipBlockModel.Unbaked(
-							new MicrochipBlockModel.FaceTextures(
-									Optional.of(new Material(LBR.id("block/microchip/side/%s".formatted(colorId)))),
-									Optional.of(new Material(LBR.id("block/microchip/signal_on_overlay"))),
-									Optional.of(new Material(LBR.id("block/microchip/signal_off_overlay")))
-							),
-							Map.of(
-									Direction.UP,
-									new MicrochipBlockModel.FaceTextures(
-											Optional.of(new Material(LBR.id("block/microchip/top/%s".formatted(colorId)))),
-											Optional.empty(),
-											Optional.empty()
-									),
-									Direction.DOWN,
-									new MicrochipBlockModel.FaceTextures(
-											Optional.of(new Material(LBR.id("block/microchip/bottom/%s".formatted(colorId)))),
-											Optional.empty(),
-											Optional.empty()
-									)
-							)
-					)));
-				});
+				.withLootTable(CommonLootTableBuilders::self);
 		holder.item().tag(LBRTags.Items.MICROCHIPS);
 		return holder;
-	}
-	
-	// TODO 26.1 this needs to be moved to datagen only classes
-	private static MultiVariantGenerator customModel(Block block, CustomUnbakedBlockStateModel customModel)
-	{
-		return MultiVariantGenerator.dispatch(block, MultiVariant.of(new CustomBlockStateModelBuilder.Simple(customModel)));
 	}
 }
