@@ -22,6 +22,7 @@ public final class ModelsDatagenDelegator extends ModelProvider
 		BlockModelsDatagenProvider.registerModels(generators);
 		ItemModelsDatagenProvider.registerModels(generators);
 		LogicItemModelsDatagenProvider.registerModels(generators);
+		StickyNoteEntityModelsDatagenProvider.registerModels(generators);
 	}
 	
 	@Override

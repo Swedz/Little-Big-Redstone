@@ -1,23 +1,27 @@
 package net.swedz.little_big_redstone.datagen.client.provider.models;
 
-import net.minecraft.client.data.models.model.ModelTemplate;
+import com.google.common.collect.Lists;
+import net.minecraft.client.data.models.model.ItemModelUtils;
+import net.minecraft.client.data.models.model.ModelTemplates;
 import net.minecraft.client.data.models.model.TextureMapping;
 import net.minecraft.client.data.models.model.TextureSlot;
 import net.minecraft.client.renderer.item.ClientItem;
+import net.minecraft.client.renderer.item.CompositeModel;
+import net.minecraft.client.renderer.item.SelectItemModel;
+import net.minecraft.client.renderer.item.properties.select.ComponentContents;
 import net.minecraft.client.resources.model.sprite.Material;
 import net.minecraft.world.item.DyeColor;
 import net.swedz.little_big_redstone.LBR;
+import net.swedz.little_big_redstone.LBRComponents;
 import net.swedz.little_big_redstone.LBRItems;
-import net.swedz.little_big_redstone.client.model.stickynote.StickyNoteEntityModel;
 import net.swedz.tesseract.neoforge.model.ModelGenerators;
 import net.swedz.tesseract.neoforge.registry.holder.ItemHolder;
 
+import java.util.List;
 import java.util.Optional;
 
 final class ItemModelsDatagenProvider
 {
-	private static ModelTemplate PAPER_TEMPLATE = new ModelTemplate(Optional.of(LBR.id("item/sticky_note_entity/paper")), Optional.empty(), TextureSlot.TEXTURE);
-	
 	static void registerModels(ModelGenerators generators)
 	{
 		for(ItemHolder<?> item : LBRItems.values())
@@ -28,39 +32,65 @@ final class ItemModelsDatagenProvider
 			}
 		}
 		
-		stickyNoteEntity(generators);
+		stickyNoteText(generators);
+		stickyNotes(generators);
 	}
 	
-	private static void stickyNoteEntity(ModelGenerators generators)
+	private static void stickyNoteText(ModelGenerators generators)
 	{
-		var textModelId = LBR.id("item/sticky_note_entity/text");
-		for(var color : DyeColor.values())
+		List<SelectItemModel.SwitchCase<DyeColor>> cases = Lists.newArrayList();
+		for(var textColor : DyeColor.values())
 		{
-			var colorId = color.getName();
-			var paperModelId = LBR.id("item/sticky_note_entity/%s_paper".formatted(colorId));
+			// TODO 26.1 for some reason this model doesnt render
+			var textModelId = ModelTemplates.FLAT_ITEM.create(
+					LBR.id("item/sticky_note/text/" + textColor.getName()),
+					new TextureMapping()
+							.put(TextureSlot.LAYER0, new Material(LBR.id("item/sticky_note/text/" + textColor.getName()))),
+					generators.item().modelOutput
+			);
 			
-			PAPER_TEMPLATE.create(
-					paperModelId,
-					TextureMapping.defaultTexture(new Material(LBR.id("item/sticky_note_entity/%s".formatted(colorId)))),
+			cases.add(new SelectItemModel.SwitchCase<>(
+					List.of(textColor),
+					ItemModelUtils.plainModel(textModelId)
+			));
+		}
+		
+		var model = new SelectItemModel.Unbaked(
+				Optional.empty(),
+				new SelectItemModel.UnbakedSwitch<>(
+						new ComponentContents(LBRComponents.STICKY_NOTE_TEXT_COLOR.get()),
+						cases
+				),
+				Optional.empty()
+		);
+		
+		generators.item().modelOutputById().register(
+				LBR.id("item/sticky_note/text"),
+				model
+		);
+	}
+	
+	private static void stickyNotes(ModelGenerators generators)
+	{
+		for(var paperColor : DyeColor.values())
+		{
+			var item = LBRItems.stickyNote(paperColor);
+			
+			var paperModelId = ModelTemplates.FLAT_ITEM.create(
+					LBR.id("item/sticky_note/paper/" + paperColor.getName()),
+					new TextureMapping()
+							.put(TextureSlot.LAYER0, new Material(LBR.id("item/sticky_note/paper/" + paperColor.getName()))),
 					generators.item().modelOutput
 			);
 			
 			generators.item().itemModelOutput.register(
-					LBR.id("sticky_note_entity/%s_with_text".formatted(colorId)),
+					item.asItem(),
 					new ClientItem(
-							new StickyNoteEntityModel.Unbaked(
-									paperModelId,
-									Optional.of(textModelId)
-							),
-							ClientItem.Properties.DEFAULT
-					)
-			);
-			
-			generators.item().itemModelOutput.register(
-					LBR.id("sticky_note_entity/%s_without_text".formatted(colorId)),
-					new ClientItem(
-							new StickyNoteEntityModel.Unbaked(
-									paperModelId,
+							new CompositeModel.Unbaked(
+									List.of(
+											ItemModelUtils.plainModel(paperModelId),
+											ItemModelUtils.plainModel(LBR.id("item/sticky_note/text"))
+									),
 									Optional.empty()
 							),
 							ClientItem.Properties.DEFAULT

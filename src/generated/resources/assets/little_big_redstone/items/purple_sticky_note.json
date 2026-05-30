@@ -1,7 +1,15 @@
 {
   "model": {
-    "type": "little_big_redstone:sticky_note",
-    "note_texture": "little_big_redstone:item/sticky_note/purple",
-    "text_texture": "little_big_redstone:item/sticky_note/text"
+    "type": "minecraft:composite",
+    "models": [
+      {
+        "type": "minecraft:model",
+        "model": "little_big_redstone:item/sticky_note/paper/purple"
+      },
+      {
+        "type": "minecraft:model",
+        "model": "little_big_redstone:item/sticky_note/text"
+      }
+    ]
   }
 }

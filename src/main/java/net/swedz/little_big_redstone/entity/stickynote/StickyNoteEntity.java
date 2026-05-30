@@ -32,13 +32,19 @@ import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.DiodeBlock;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.StateDefinition;
+import net.minecraft.world.level.block.state.properties.BooleanProperty;
+import net.minecraft.world.level.block.state.properties.EnumProperty;
 import net.minecraft.world.level.gamerules.GameRules;
 import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
+import net.neoforged.bus.api.IEventBus;
+import net.swedz.little_big_redstone.LBR;
 import net.swedz.little_big_redstone.LBRComponents;
 import net.swedz.little_big_redstone.LBREntities;
 import net.swedz.little_big_redstone.LBRItems;
@@ -47,6 +53,7 @@ import net.swedz.little_big_redstone.item.stickynote.StickyNote;
 import net.swedz.little_big_redstone.item.stickynote.StickyNoteItem;
 import net.swedz.little_big_redstone.network.packet.StickyNotePacket;
 import net.swedz.tesseract.api.Assert;
+import net.swedz.tesseract.neoforge.event.RegisterFakeBlockStateDefinitionsEvent;
 import net.swedz.tesseract.neoforge.helper.CodecHelper;
 import net.swedz.tesseract.neoforge.helper.DirectionHelper;
 import net.swedz.tesseract.neoforge.item.ItemStackInstance;
@@ -77,6 +84,32 @@ public final class StickyNoteEntity extends HangingEntity
 	private static final EntityDataAccessor<Boolean>   DATA_HAS_TEXT     = SynchedEntityData.defineId(StickyNoteEntity.class, EntityDataSerializers.BOOLEAN);
 	private static final EntityDataAccessor<Boolean>   DATA_EDITABLE     = SynchedEntityData.defineId(StickyNoteEntity.class, EntityDataSerializers.BOOLEAN);
 	private static final EntityDataAccessor<ItemStack> DATA_DISPLAY_ITEM = SynchedEntityData.defineId(StickyNoteEntity.class, EntityDataSerializers.ITEM_STACK);
+	
+	public static final EnumProperty<DyeColor> BLOCKSTATE_PAPER_COLOR = EnumProperty.create("paper_color", DyeColor.class);
+	public static final EnumProperty<DyeColor> BLOCKSTATE_TEXT_COLOR  = EnumProperty.create("text_color", DyeColor.class);
+	public static final BooleanProperty        BLOCKSTATE_SHOW_TEXT   = BooleanProperty.create("show_text");
+	
+	private static final StateDefinition<Block, BlockState> FAKE_BLOCK_STATE_DEFINITION = new StateDefinition.Builder<Block, BlockState>(Blocks.AIR)
+			.add(BLOCKSTATE_PAPER_COLOR)
+			.add(BLOCKSTATE_TEXT_COLOR)
+			.add(BLOCKSTATE_SHOW_TEXT)
+			.create(Block::defaultBlockState, BlockState::new);
+	
+	public static BlockState fakeBlockState(DyeColor paperColor, DyeColor textColor, boolean showText)
+	{
+		return FAKE_BLOCK_STATE_DEFINITION.any()
+				.setValue(BLOCKSTATE_PAPER_COLOR, paperColor)
+				.setValue(BLOCKSTATE_TEXT_COLOR, textColor)
+				.setValue(BLOCKSTATE_SHOW_TEXT, showText);
+	}
+	
+	public static void registerFakeBlockState(IEventBus bus)
+	{
+		bus.addListener(
+				RegisterFakeBlockStateDefinitionsEvent.class,
+				(event) -> event.register(LBR.id("sticky_note"), FAKE_BLOCK_STATE_DEFINITION)
+		);
+	}
 	
 	private StickyNote note = StickyNote.EMPTY;
 	

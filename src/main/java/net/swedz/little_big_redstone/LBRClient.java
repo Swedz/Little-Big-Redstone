@@ -26,8 +26,6 @@ import net.swedz.little_big_redstone.client.hud.StickyNoteViewContentsGuiOverlay
 import net.swedz.little_big_redstone.client.item.StickyNoteInHandItemRenderer;
 import net.swedz.little_big_redstone.client.model.logic.LogicItemModel;
 import net.swedz.little_big_redstone.client.model.microchip.MicrochipBlockModel;
-import net.swedz.little_big_redstone.client.model.stickynote.StickyNoteEntityModel;
-import net.swedz.little_big_redstone.client.model.stickynote.StickyNoteItemModel;
 import net.swedz.little_big_redstone.gui.floppydisk.FloppyDiskScreen;
 import net.swedz.little_big_redstone.gui.logicarray.LogicArrayScreen;
 import net.swedz.little_big_redstone.gui.logicconfig.LogicConfigScreen;
@@ -138,8 +136,6 @@ public final class LBRClient
 	private static void registerItemModels(RegisterItemModelsEvent event)
 	{
 		event.register(LBR.id("logic"), LogicItemModel.Unbaked.CODEC);
-		event.register(LBR.id("sticky_note_entity"), StickyNoteEntityModel.Unbaked.CODEC);
-		event.register(LBR.id("sticky_note"), StickyNoteItemModel.Unbaked.CODEC);
 	}
 	
 	@SubscribeEvent

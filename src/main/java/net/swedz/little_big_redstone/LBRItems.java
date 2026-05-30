@@ -1,19 +1,18 @@
 package net.swedz.little_big_redstone;
 
 import com.google.common.collect.Maps;
+import net.minecraft.client.data.models.model.ItemModelUtils;
 import net.minecraft.client.data.models.model.ModelTemplates;
 import net.minecraft.client.data.models.model.TextureMapping;
 import net.minecraft.client.renderer.item.ClientItem;
-import net.minecraft.client.renderer.item.CuboidItemModelWrapper;
 import net.minecraft.client.resources.model.sprite.Material;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.Item;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.capabilities.Capabilities;
 import net.neoforged.neoforge.registries.DeferredRegister;
-import net.swedz.little_big_redstone.client.model.stickynote.StickyNoteItemModel;
-import net.swedz.little_big_redstone.item.floppydisk.FloppyDiskItem;
 import net.swedz.little_big_redstone.item.LogicItem;
+import net.swedz.little_big_redstone.item.floppydisk.FloppyDiskItem;
 import net.swedz.little_big_redstone.item.logicarray.LogicArrayItem;
 import net.swedz.little_big_redstone.item.logicarray.LogicArrayItemHandler;
 import net.swedz.little_big_redstone.item.stickynote.StickyNoteItem;
@@ -25,9 +24,7 @@ import net.swedz.tesseract.neoforge.registry.common.CommonModelBuilders;
 import net.swedz.tesseract.neoforge.registry.holder.ItemHolder;
 
 import java.util.Collections;
-import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import java.util.Set;
 import java.util.function.Function;
 
@@ -163,7 +160,7 @@ public final class LBRItems
 							TextureMapping.layer0(new Material(LBR.id("item/logic_array/%s".formatted(colorId)))),
 							generators.item().modelOutput
 					);
-					generators.item().itemModelOutput.register(holder.asItem(), new ClientItem(new CuboidItemModelWrapper.Unbaked(modelId, Optional.empty(), List.of()), ClientItem.Properties.DEFAULT));
+					generators.item().itemModelOutput.register(holder.asItem(), new ClientItem(ItemModelUtils.plainModel(modelId), ClientItem.Properties.DEFAULT));
 				});
 	}
 	
@@ -181,7 +178,7 @@ public final class LBRItems
 							TextureMapping.layer0(new Material(LBR.id("item/floppy_disk/%s".formatted(colorId)))),
 							generators.item().modelOutput
 					);
-					generators.item().itemModelOutput.register(holder.asItem(), new ClientItem(new CuboidItemModelWrapper.Unbaked(modelId, Optional.empty(), List.of()), ClientItem.Properties.DEFAULT));
+					generators.item().itemModelOutput.register(holder.asItem(), new ClientItem(ItemModelUtils.plainModel(modelId), ClientItem.Properties.DEFAULT));
 				});
 	}
 	
@@ -191,13 +188,6 @@ public final class LBRItems
 		final String id = "%s_sticky_note".formatted(colorId);
 		final String englishName = "%s Sticky Note".formatted(colorEnglishName);
 		return create(id, englishName, (p) -> new StickyNoteItem(p, color), LBRSortOrder.STICKY_NOTES.and(order))
-				.tag(LBRTags.Items.STICKY_NOTES)
-				.withModel((holder) -> (generators) ->
-						// TODO 26.1 loading client class in common class?
-						generators.item().itemModelOutput.accept(holder.asItem(), new StickyNoteItemModel.Unbaked(
-								Optional.empty(),
-								new Material(LBR.id("item/sticky_note/%s".formatted(colorId))),
-								new Material(LBR.id("item/sticky_note/text"))
-						)));
+				.tag(LBRTags.Items.STICKY_NOTES);
 	}
 }

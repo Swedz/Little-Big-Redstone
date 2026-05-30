@@ -1,0 +1,4868 @@
+{
+  "variants": {
+    "paper_color=black,show_text=false,text_color=black": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/black"
+        }
+      ]
+    },
+    "paper_color=black,show_text=false,text_color=blue": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/black"
+        }
+      ]
+    },
+    "paper_color=black,show_text=false,text_color=brown": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/black"
+        }
+      ]
+    },
+    "paper_color=black,show_text=false,text_color=cyan": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/black"
+        }
+      ]
+    },
+    "paper_color=black,show_text=false,text_color=gray": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/black"
+        }
+      ]
+    },
+    "paper_color=black,show_text=false,text_color=green": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/black"
+        }
+      ]
+    },
+    "paper_color=black,show_text=false,text_color=light_blue": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/black"
+        }
+      ]
+    },
+    "paper_color=black,show_text=false,text_color=light_gray": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/black"
+        }
+      ]
+    },
+    "paper_color=black,show_text=false,text_color=lime": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/black"
+        }
+      ]
+    },
+    "paper_color=black,show_text=false,text_color=magenta": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/black"
+        }
+      ]
+    },
+    "paper_color=black,show_text=false,text_color=orange": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/black"
+        }
+      ]
+    },
+    "paper_color=black,show_text=false,text_color=pink": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/black"
+        }
+      ]
+    },
+    "paper_color=black,show_text=false,text_color=purple": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/black"
+        }
+      ]
+    },
+    "paper_color=black,show_text=false,text_color=red": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/black"
+        }
+      ]
+    },
+    "paper_color=black,show_text=false,text_color=white": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/black"
+        }
+      ]
+    },
+    "paper_color=black,show_text=false,text_color=yellow": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/black"
+        }
+      ]
+    },
+    "paper_color=black,show_text=true,text_color=black": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/black"
+        },
+        {
+          "model": "little_big_redstone:block/sticky_note/text/black"
+        }
+      ]
+    },
+    "paper_color=black,show_text=true,text_color=blue": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/black"
+        },
+        {
+          "model": "little_big_redstone:block/sticky_note/text/blue"
+        }
+      ]
+    },
+    "paper_color=black,show_text=true,text_color=brown": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/black"
+        },
+        {
+          "model": "little_big_redstone:block/sticky_note/text/brown"
+        }
+      ]
+    },
+    "paper_color=black,show_text=true,text_color=cyan": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/black"
+        },
+        {
+          "model": "little_big_redstone:block/sticky_note/text/cyan"
+        }
+      ]
+    },
+    "paper_color=black,show_text=true,text_color=gray": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/black"
+        },
+        {
+          "model": "little_big_redstone:block/sticky_note/text/gray"
+        }
+      ]
+    },
+    "paper_color=black,show_text=true,text_color=green": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/black"
+        },
+        {
+          "model": "little_big_redstone:block/sticky_note/text/green"
+        }
+      ]
+    },
+    "paper_color=black,show_text=true,text_color=light_blue": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/black"
+        },
+        {
+          "model": "little_big_redstone:block/sticky_note/text/light_blue"
+        }
+      ]
+    },
+    "paper_color=black,show_text=true,text_color=light_gray": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/black"
+        },
+        {
+          "model": "little_big_redstone:block/sticky_note/text/light_gray"
+        }
+      ]
+    },
+    "paper_color=black,show_text=true,text_color=lime": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/black"
+        },
+        {
+          "model": "little_big_redstone:block/sticky_note/text/lime"
+        }
+      ]
+    },
+    "paper_color=black,show_text=true,text_color=magenta": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/black"
+        },
+        {
+          "model": "little_big_redstone:block/sticky_note/text/magenta"
+        }
+      ]
+    },
+    "paper_color=black,show_text=true,text_color=orange": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/black"
+        },
+        {
+          "model": "little_big_redstone:block/sticky_note/text/orange"
+        }
+      ]
+    },
+    "paper_color=black,show_text=true,text_color=pink": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/black"
+        },
+        {
+          "model": "little_big_redstone:block/sticky_note/text/pink"
+        }
+      ]
+    },
+    "paper_color=black,show_text=true,text_color=purple": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/black"
+        },
+        {
+          "model": "little_big_redstone:block/sticky_note/text/purple"
+        }
+      ]
+    },
+    "paper_color=black,show_text=true,text_color=red": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/black"
+        },
+        {
+          "model": "little_big_redstone:block/sticky_note/text/red"
+        }
+      ]
+    },
+    "paper_color=black,show_text=true,text_color=white": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/black"
+        },
+        {
+          "model": "little_big_redstone:block/sticky_note/text/white"
+        }
+      ]
+    },
+    "paper_color=black,show_text=true,text_color=yellow": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/black"
+        },
+        {
+          "model": "little_big_redstone:block/sticky_note/text/yellow"
+        }
+      ]
+    },
+    "paper_color=blue,show_text=false,text_color=black": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/blue"
+        }
+      ]
+    },
+    "paper_color=blue,show_text=false,text_color=blue": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/blue"
+        }
+      ]
+    },
+    "paper_color=blue,show_text=false,text_color=brown": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/blue"
+        }
+      ]
+    },
+    "paper_color=blue,show_text=false,text_color=cyan": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/blue"
+        }
+      ]
+    },
+    "paper_color=blue,show_text=false,text_color=gray": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/blue"
+        }
+      ]
+    },
+    "paper_color=blue,show_text=false,text_color=green": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/blue"
+        }
+      ]
+    },
+    "paper_color=blue,show_text=false,text_color=light_blue": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/blue"
+        }
+      ]
+    },
+    "paper_color=blue,show_text=false,text_color=light_gray": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/blue"
+        }
+      ]
+    },
+    "paper_color=blue,show_text=false,text_color=lime": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/blue"
+        }
+      ]
+    },
+    "paper_color=blue,show_text=false,text_color=magenta": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/blue"
+        }
+      ]
+    },
+    "paper_color=blue,show_text=false,text_color=orange": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/blue"
+        }
+      ]
+    },
+    "paper_color=blue,show_text=false,text_color=pink": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/blue"
+        }
+      ]
+    },
+    "paper_color=blue,show_text=false,text_color=purple": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/blue"
+        }
+      ]
+    },
+    "paper_color=blue,show_text=false,text_color=red": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/blue"
+        }
+      ]
+    },
+    "paper_color=blue,show_text=false,text_color=white": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/blue"
+        }
+      ]
+    },
+    "paper_color=blue,show_text=false,text_color=yellow": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/blue"
+        }
+      ]
+    },
+    "paper_color=blue,show_text=true,text_color=black": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/blue"
+        },
+        {
+          "model": "little_big_redstone:block/sticky_note/text/black"
+        }
+      ]
+    },
+    "paper_color=blue,show_text=true,text_color=blue": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/blue"
+        },
+        {
+          "model": "little_big_redstone:block/sticky_note/text/blue"
+        }
+      ]
+    },
+    "paper_color=blue,show_text=true,text_color=brown": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/blue"
+        },
+        {
+          "model": "little_big_redstone:block/sticky_note/text/brown"
+        }
+      ]
+    },
+    "paper_color=blue,show_text=true,text_color=cyan": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/blue"
+        },
+        {
+          "model": "little_big_redstone:block/sticky_note/text/cyan"
+        }
+      ]
+    },
+    "paper_color=blue,show_text=true,text_color=gray": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/blue"
+        },
+        {
+          "model": "little_big_redstone:block/sticky_note/text/gray"
+        }
+      ]
+    },
+    "paper_color=blue,show_text=true,text_color=green": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/blue"
+        },
+        {
+          "model": "little_big_redstone:block/sticky_note/text/green"
+        }
+      ]
+    },
+    "paper_color=blue,show_text=true,text_color=light_blue": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/blue"
+        },
+        {
+          "model": "little_big_redstone:block/sticky_note/text/light_blue"
+        }
+      ]
+    },
+    "paper_color=blue,show_text=true,text_color=light_gray": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/blue"
+        },
+        {
+          "model": "little_big_redstone:block/sticky_note/text/light_gray"
+        }
+      ]
+    },
+    "paper_color=blue,show_text=true,text_color=lime": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/blue"
+        },
+        {
+          "model": "little_big_redstone:block/sticky_note/text/lime"
+        }
+      ]
+    },
+    "paper_color=blue,show_text=true,text_color=magenta": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/blue"
+        },
+        {
+          "model": "little_big_redstone:block/sticky_note/text/magenta"
+        }
+      ]
+    },
+    "paper_color=blue,show_text=true,text_color=orange": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/blue"
+        },
+        {
+          "model": "little_big_redstone:block/sticky_note/text/orange"
+        }
+      ]
+    },
+    "paper_color=blue,show_text=true,text_color=pink": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/blue"
+        },
+        {
+          "model": "little_big_redstone:block/sticky_note/text/pink"
+        }
+      ]
+    },
+    "paper_color=blue,show_text=true,text_color=purple": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/blue"
+        },
+        {
+          "model": "little_big_redstone:block/sticky_note/text/purple"
+        }
+      ]
+    },
+    "paper_color=blue,show_text=true,text_color=red": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/blue"
+        },
+        {
+          "model": "little_big_redstone:block/sticky_note/text/red"
+        }
+      ]
+    },
+    "paper_color=blue,show_text=true,text_color=white": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/blue"
+        },
+        {
+          "model": "little_big_redstone:block/sticky_note/text/white"
+        }
+      ]
+    },
+    "paper_color=blue,show_text=true,text_color=yellow": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/blue"
+        },
+        {
+          "model": "little_big_redstone:block/sticky_note/text/yellow"
+        }
+      ]
+    },
+    "paper_color=brown,show_text=false,text_color=black": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/brown"
+        }
+      ]
+    },
+    "paper_color=brown,show_text=false,text_color=blue": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/brown"
+        }
+      ]
+    },
+    "paper_color=brown,show_text=false,text_color=brown": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/brown"
+        }
+      ]
+    },
+    "paper_color=brown,show_text=false,text_color=cyan": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/brown"
+        }
+      ]
+    },
+    "paper_color=brown,show_text=false,text_color=gray": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/brown"
+        }
+      ]
+    },
+    "paper_color=brown,show_text=false,text_color=green": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/brown"
+        }
+      ]
+    },
+    "paper_color=brown,show_text=false,text_color=light_blue": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/brown"
+        }
+      ]
+    },
+    "paper_color=brown,show_text=false,text_color=light_gray": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/brown"
+        }
+      ]
+    },
+    "paper_color=brown,show_text=false,text_color=lime": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/brown"
+        }
+      ]
+    },
+    "paper_color=brown,show_text=false,text_color=magenta": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/brown"
+        }
+      ]
+    },
+    "paper_color=brown,show_text=false,text_color=orange": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/brown"
+        }
+      ]
+    },
+    "paper_color=brown,show_text=false,text_color=pink": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/brown"
+        }
+      ]
+    },
+    "paper_color=brown,show_text=false,text_color=purple": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/brown"
+        }
+      ]
+    },
+    "paper_color=brown,show_text=false,text_color=red": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/brown"
+        }
+      ]
+    },
+    "paper_color=brown,show_text=false,text_color=white": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/brown"
+        }
+      ]
+    },
+    "paper_color=brown,show_text=false,text_color=yellow": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/brown"
+        }
+      ]
+    },
+    "paper_color=brown,show_text=true,text_color=black": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/brown"
+        },
+        {
+          "model": "little_big_redstone:block/sticky_note/text/black"
+        }
+      ]
+    },
+    "paper_color=brown,show_text=true,text_color=blue": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/brown"
+        },
+        {
+          "model": "little_big_redstone:block/sticky_note/text/blue"
+        }
+      ]
+    },
+    "paper_color=brown,show_text=true,text_color=brown": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/brown"
+        },
+        {
+          "model": "little_big_redstone:block/sticky_note/text/brown"
+        }
+      ]
+    },
+    "paper_color=brown,show_text=true,text_color=cyan": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/brown"
+        },
+        {
+          "model": "little_big_redstone:block/sticky_note/text/cyan"
+        }
+      ]
+    },
+    "paper_color=brown,show_text=true,text_color=gray": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/brown"
+        },
+        {
+          "model": "little_big_redstone:block/sticky_note/text/gray"
+        }
+      ]
+    },
+    "paper_color=brown,show_text=true,text_color=green": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/brown"
+        },
+        {
+          "model": "little_big_redstone:block/sticky_note/text/green"
+        }
+      ]
+    },
+    "paper_color=brown,show_text=true,text_color=light_blue": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/brown"
+        },
+        {
+          "model": "little_big_redstone:block/sticky_note/text/light_blue"
+        }
+      ]
+    },
+    "paper_color=brown,show_text=true,text_color=light_gray": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/brown"
+        },
+        {
+          "model": "little_big_redstone:block/sticky_note/text/light_gray"
+        }
+      ]
+    },
+    "paper_color=brown,show_text=true,text_color=lime": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/brown"
+        },
+        {
+          "model": "little_big_redstone:block/sticky_note/text/lime"
+        }
+      ]
+    },
+    "paper_color=brown,show_text=true,text_color=magenta": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/brown"
+        },
+        {
+          "model": "little_big_redstone:block/sticky_note/text/magenta"
+        }
+      ]
+    },
+    "paper_color=brown,show_text=true,text_color=orange": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/brown"
+        },
+        {
+          "model": "little_big_redstone:block/sticky_note/text/orange"
+        }
+      ]
+    },
+    "paper_color=brown,show_text=true,text_color=pink": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/brown"
+        },
+        {
+          "model": "little_big_redstone:block/sticky_note/text/pink"
+        }
+      ]
+    },
+    "paper_color=brown,show_text=true,text_color=purple": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/brown"
+        },
+        {
+          "model": "little_big_redstone:block/sticky_note/text/purple"
+        }
+      ]
+    },
+    "paper_color=brown,show_text=true,text_color=red": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/brown"
+        },
+        {
+          "model": "little_big_redstone:block/sticky_note/text/red"
+        }
+      ]
+    },
+    "paper_color=brown,show_text=true,text_color=white": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/brown"
+        },
+        {
+          "model": "little_big_redstone:block/sticky_note/text/white"
+        }
+      ]
+    },
+    "paper_color=brown,show_text=true,text_color=yellow": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/brown"
+        },
+        {
+          "model": "little_big_redstone:block/sticky_note/text/yellow"
+        }
+      ]
+    },
+    "paper_color=cyan,show_text=false,text_color=black": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/cyan"
+        }
+      ]
+    },
+    "paper_color=cyan,show_text=false,text_color=blue": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/cyan"
+        }
+      ]
+    },
+    "paper_color=cyan,show_text=false,text_color=brown": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/cyan"
+        }
+      ]
+    },
+    "paper_color=cyan,show_text=false,text_color=cyan": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/cyan"
+        }
+      ]
+    },
+    "paper_color=cyan,show_text=false,text_color=gray": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/cyan"
+        }
+      ]
+    },
+    "paper_color=cyan,show_text=false,text_color=green": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/cyan"
+        }
+      ]
+    },
+    "paper_color=cyan,show_text=false,text_color=light_blue": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/cyan"
+        }
+      ]
+    },
+    "paper_color=cyan,show_text=false,text_color=light_gray": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/cyan"
+        }
+      ]
+    },
+    "paper_color=cyan,show_text=false,text_color=lime": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/cyan"
+        }
+      ]
+    },
+    "paper_color=cyan,show_text=false,text_color=magenta": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/cyan"
+        }
+      ]
+    },
+    "paper_color=cyan,show_text=false,text_color=orange": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/cyan"
+        }
+      ]
+    },
+    "paper_color=cyan,show_text=false,text_color=pink": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/cyan"
+        }
+      ]
+    },
+    "paper_color=cyan,show_text=false,text_color=purple": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/cyan"
+        }
+      ]
+    },
+    "paper_color=cyan,show_text=false,text_color=red": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/cyan"
+        }
+      ]
+    },
+    "paper_color=cyan,show_text=false,text_color=white": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/cyan"
+        }
+      ]
+    },
+    "paper_color=cyan,show_text=false,text_color=yellow": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/cyan"
+        }
+      ]
+    },
+    "paper_color=cyan,show_text=true,text_color=black": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/cyan"
+        },
+        {
+          "model": "little_big_redstone:block/sticky_note/text/black"
+        }
+      ]
+    },
+    "paper_color=cyan,show_text=true,text_color=blue": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/cyan"
+        },
+        {
+          "model": "little_big_redstone:block/sticky_note/text/blue"
+        }
+      ]
+    },
+    "paper_color=cyan,show_text=true,text_color=brown": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/cyan"
+        },
+        {
+          "model": "little_big_redstone:block/sticky_note/text/brown"
+        }
+      ]
+    },
+    "paper_color=cyan,show_text=true,text_color=cyan": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/cyan"
+        },
+        {
+          "model": "little_big_redstone:block/sticky_note/text/cyan"
+        }
+      ]
+    },
+    "paper_color=cyan,show_text=true,text_color=gray": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/cyan"
+        },
+        {
+          "model": "little_big_redstone:block/sticky_note/text/gray"
+        }
+      ]
+    },
+    "paper_color=cyan,show_text=true,text_color=green": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/cyan"
+        },
+        {
+          "model": "little_big_redstone:block/sticky_note/text/green"
+        }
+      ]
+    },
+    "paper_color=cyan,show_text=true,text_color=light_blue": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/cyan"
+        },
+        {
+          "model": "little_big_redstone:block/sticky_note/text/light_blue"
+        }
+      ]
+    },
+    "paper_color=cyan,show_text=true,text_color=light_gray": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/cyan"
+        },
+        {
+          "model": "little_big_redstone:block/sticky_note/text/light_gray"
+        }
+      ]
+    },
+    "paper_color=cyan,show_text=true,text_color=lime": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/cyan"
+        },
+        {
+          "model": "little_big_redstone:block/sticky_note/text/lime"
+        }
+      ]
+    },
+    "paper_color=cyan,show_text=true,text_color=magenta": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/cyan"
+        },
+        {
+          "model": "little_big_redstone:block/sticky_note/text/magenta"
+        }
+      ]
+    },
+    "paper_color=cyan,show_text=true,text_color=orange": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/cyan"
+        },
+        {
+          "model": "little_big_redstone:block/sticky_note/text/orange"
+        }
+      ]
+    },
+    "paper_color=cyan,show_text=true,text_color=pink": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/cyan"
+        },
+        {
+          "model": "little_big_redstone:block/sticky_note/text/pink"
+        }
+      ]
+    },
+    "paper_color=cyan,show_text=true,text_color=purple": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/cyan"
+        },
+        {
+          "model": "little_big_redstone:block/sticky_note/text/purple"
+        }
+      ]
+    },
+    "paper_color=cyan,show_text=true,text_color=red": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/cyan"
+        },
+        {
+          "model": "little_big_redstone:block/sticky_note/text/red"
+        }
+      ]
+    },
+    "paper_color=cyan,show_text=true,text_color=white": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/cyan"
+        },
+        {
+          "model": "little_big_redstone:block/sticky_note/text/white"
+        }
+      ]
+    },
+    "paper_color=cyan,show_text=true,text_color=yellow": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/cyan"
+        },
+        {
+          "model": "little_big_redstone:block/sticky_note/text/yellow"
+        }
+      ]
+    },
+    "paper_color=gray,show_text=false,text_color=black": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/gray"
+        }
+      ]
+    },
+    "paper_color=gray,show_text=false,text_color=blue": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/gray"
+        }
+      ]
+    },
+    "paper_color=gray,show_text=false,text_color=brown": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/gray"
+        }
+      ]
+    },
+    "paper_color=gray,show_text=false,text_color=cyan": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/gray"
+        }
+      ]
+    },
+    "paper_color=gray,show_text=false,text_color=gray": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/gray"
+        }
+      ]
+    },
+    "paper_color=gray,show_text=false,text_color=green": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/gray"
+        }
+      ]
+    },
+    "paper_color=gray,show_text=false,text_color=light_blue": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/gray"
+        }
+      ]
+    },
+    "paper_color=gray,show_text=false,text_color=light_gray": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/gray"
+        }
+      ]
+    },
+    "paper_color=gray,show_text=false,text_color=lime": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/gray"
+        }
+      ]
+    },
+    "paper_color=gray,show_text=false,text_color=magenta": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/gray"
+        }
+      ]
+    },
+    "paper_color=gray,show_text=false,text_color=orange": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/gray"
+        }
+      ]
+    },
+    "paper_color=gray,show_text=false,text_color=pink": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/gray"
+        }
+      ]
+    },
+    "paper_color=gray,show_text=false,text_color=purple": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/gray"
+        }
+      ]
+    },
+    "paper_color=gray,show_text=false,text_color=red": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/gray"
+        }
+      ]
+    },
+    "paper_color=gray,show_text=false,text_color=white": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/gray"
+        }
+      ]
+    },
+    "paper_color=gray,show_text=false,text_color=yellow": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/gray"
+        }
+      ]
+    },
+    "paper_color=gray,show_text=true,text_color=black": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/gray"
+        },
+        {
+          "model": "little_big_redstone:block/sticky_note/text/black"
+        }
+      ]
+    },
+    "paper_color=gray,show_text=true,text_color=blue": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/gray"
+        },
+        {
+          "model": "little_big_redstone:block/sticky_note/text/blue"
+        }
+      ]
+    },
+    "paper_color=gray,show_text=true,text_color=brown": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/gray"
+        },
+        {
+          "model": "little_big_redstone:block/sticky_note/text/brown"
+        }
+      ]
+    },
+    "paper_color=gray,show_text=true,text_color=cyan": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/gray"
+        },
+        {
+          "model": "little_big_redstone:block/sticky_note/text/cyan"
+        }
+      ]
+    },
+    "paper_color=gray,show_text=true,text_color=gray": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/gray"
+        },
+        {
+          "model": "little_big_redstone:block/sticky_note/text/gray"
+        }
+      ]
+    },
+    "paper_color=gray,show_text=true,text_color=green": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/gray"
+        },
+        {
+          "model": "little_big_redstone:block/sticky_note/text/green"
+        }
+      ]
+    },
+    "paper_color=gray,show_text=true,text_color=light_blue": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/gray"
+        },
+        {
+          "model": "little_big_redstone:block/sticky_note/text/light_blue"
+        }
+      ]
+    },
+    "paper_color=gray,show_text=true,text_color=light_gray": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/gray"
+        },
+        {
+          "model": "little_big_redstone:block/sticky_note/text/light_gray"
+        }
+      ]
+    },
+    "paper_color=gray,show_text=true,text_color=lime": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/gray"
+        },
+        {
+          "model": "little_big_redstone:block/sticky_note/text/lime"
+        }
+      ]
+    },
+    "paper_color=gray,show_text=true,text_color=magenta": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/gray"
+        },
+        {
+          "model": "little_big_redstone:block/sticky_note/text/magenta"
+        }
+      ]
+    },
+    "paper_color=gray,show_text=true,text_color=orange": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/gray"
+        },
+        {
+          "model": "little_big_redstone:block/sticky_note/text/orange"
+        }
+      ]
+    },
+    "paper_color=gray,show_text=true,text_color=pink": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/gray"
+        },
+        {
+          "model": "little_big_redstone:block/sticky_note/text/pink"
+        }
+      ]
+    },
+    "paper_color=gray,show_text=true,text_color=purple": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/gray"
+        },
+        {
+          "model": "little_big_redstone:block/sticky_note/text/purple"
+        }
+      ]
+    },
+    "paper_color=gray,show_text=true,text_color=red": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/gray"
+        },
+        {
+          "model": "little_big_redstone:block/sticky_note/text/red"
+        }
+      ]
+    },
+    "paper_color=gray,show_text=true,text_color=white": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/gray"
+        },
+        {
+          "model": "little_big_redstone:block/sticky_note/text/white"
+        }
+      ]
+    },
+    "paper_color=gray,show_text=true,text_color=yellow": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/gray"
+        },
+        {
+          "model": "little_big_redstone:block/sticky_note/text/yellow"
+        }
+      ]
+    },
+    "paper_color=green,show_text=false,text_color=black": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/green"
+        }
+      ]
+    },
+    "paper_color=green,show_text=false,text_color=blue": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/green"
+        }
+      ]
+    },
+    "paper_color=green,show_text=false,text_color=brown": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/green"
+        }
+      ]
+    },
+    "paper_color=green,show_text=false,text_color=cyan": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/green"
+        }
+      ]
+    },
+    "paper_color=green,show_text=false,text_color=gray": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/green"
+        }
+      ]
+    },
+    "paper_color=green,show_text=false,text_color=green": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/green"
+        }
+      ]
+    },
+    "paper_color=green,show_text=false,text_color=light_blue": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/green"
+        }
+      ]
+    },
+    "paper_color=green,show_text=false,text_color=light_gray": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/green"
+        }
+      ]
+    },
+    "paper_color=green,show_text=false,text_color=lime": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/green"
+        }
+      ]
+    },
+    "paper_color=green,show_text=false,text_color=magenta": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/green"
+        }
+      ]
+    },
+    "paper_color=green,show_text=false,text_color=orange": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/green"
+        }
+      ]
+    },
+    "paper_color=green,show_text=false,text_color=pink": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/green"
+        }
+      ]
+    },
+    "paper_color=green,show_text=false,text_color=purple": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/green"
+        }
+      ]
+    },
+    "paper_color=green,show_text=false,text_color=red": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/green"
+        }
+      ]
+    },
+    "paper_color=green,show_text=false,text_color=white": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/green"
+        }
+      ]
+    },
+    "paper_color=green,show_text=false,text_color=yellow": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/green"
+        }
+      ]
+    },
+    "paper_color=green,show_text=true,text_color=black": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/green"
+        },
+        {
+          "model": "little_big_redstone:block/sticky_note/text/black"
+        }
+      ]
+    },
+    "paper_color=green,show_text=true,text_color=blue": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/green"
+        },
+        {
+          "model": "little_big_redstone:block/sticky_note/text/blue"
+        }
+      ]
+    },
+    "paper_color=green,show_text=true,text_color=brown": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/green"
+        },
+        {
+          "model": "little_big_redstone:block/sticky_note/text/brown"
+        }
+      ]
+    },
+    "paper_color=green,show_text=true,text_color=cyan": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/green"
+        },
+        {
+          "model": "little_big_redstone:block/sticky_note/text/cyan"
+        }
+      ]
+    },
+    "paper_color=green,show_text=true,text_color=gray": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/green"
+        },
+        {
+          "model": "little_big_redstone:block/sticky_note/text/gray"
+        }
+      ]
+    },
+    "paper_color=green,show_text=true,text_color=green": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/green"
+        },
+        {
+          "model": "little_big_redstone:block/sticky_note/text/green"
+        }
+      ]
+    },
+    "paper_color=green,show_text=true,text_color=light_blue": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/green"
+        },
+        {
+          "model": "little_big_redstone:block/sticky_note/text/light_blue"
+        }
+      ]
+    },
+    "paper_color=green,show_text=true,text_color=light_gray": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/green"
+        },
+        {
+          "model": "little_big_redstone:block/sticky_note/text/light_gray"
+        }
+      ]
+    },
+    "paper_color=green,show_text=true,text_color=lime": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/green"
+        },
+        {
+          "model": "little_big_redstone:block/sticky_note/text/lime"
+        }
+      ]
+    },
+    "paper_color=green,show_text=true,text_color=magenta": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/green"
+        },
+        {
+          "model": "little_big_redstone:block/sticky_note/text/magenta"
+        }
+      ]
+    },
+    "paper_color=green,show_text=true,text_color=orange": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/green"
+        },
+        {
+          "model": "little_big_redstone:block/sticky_note/text/orange"
+        }
+      ]
+    },
+    "paper_color=green,show_text=true,text_color=pink": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/green"
+        },
+        {
+          "model": "little_big_redstone:block/sticky_note/text/pink"
+        }
+      ]
+    },
+    "paper_color=green,show_text=true,text_color=purple": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/green"
+        },
+        {
+          "model": "little_big_redstone:block/sticky_note/text/purple"
+        }
+      ]
+    },
+    "paper_color=green,show_text=true,text_color=red": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/green"
+        },
+        {
+          "model": "little_big_redstone:block/sticky_note/text/red"
+        }
+      ]
+    },
+    "paper_color=green,show_text=true,text_color=white": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/green"
+        },
+        {
+          "model": "little_big_redstone:block/sticky_note/text/white"
+        }
+      ]
+    },
+    "paper_color=green,show_text=true,text_color=yellow": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/green"
+        },
+        {
+          "model": "little_big_redstone:block/sticky_note/text/yellow"
+        }
+      ]
+    },
+    "paper_color=light_blue,show_text=false,text_color=black": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/light_blue"
+        }
+      ]
+    },
+    "paper_color=light_blue,show_text=false,text_color=blue": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/light_blue"
+        }
+      ]
+    },
+    "paper_color=light_blue,show_text=false,text_color=brown": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/light_blue"
+        }
+      ]
+    },
+    "paper_color=light_blue,show_text=false,text_color=cyan": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/light_blue"
+        }
+      ]
+    },
+    "paper_color=light_blue,show_text=false,text_color=gray": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/light_blue"
+        }
+      ]
+    },
+    "paper_color=light_blue,show_text=false,text_color=green": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/light_blue"
+        }
+      ]
+    },
+    "paper_color=light_blue,show_text=false,text_color=light_blue": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/light_blue"
+        }
+      ]
+    },
+    "paper_color=light_blue,show_text=false,text_color=light_gray": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/light_blue"
+        }
+      ]
+    },
+    "paper_color=light_blue,show_text=false,text_color=lime": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/light_blue"
+        }
+      ]
+    },
+    "paper_color=light_blue,show_text=false,text_color=magenta": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/light_blue"
+        }
+      ]
+    },
+    "paper_color=light_blue,show_text=false,text_color=orange": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/light_blue"
+        }
+      ]
+    },
+    "paper_color=light_blue,show_text=false,text_color=pink": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/light_blue"
+        }
+      ]
+    },
+    "paper_color=light_blue,show_text=false,text_color=purple": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/light_blue"
+        }
+      ]
+    },
+    "paper_color=light_blue,show_text=false,text_color=red": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/light_blue"
+        }
+      ]
+    },
+    "paper_color=light_blue,show_text=false,text_color=white": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/light_blue"
+        }
+      ]
+    },
+    "paper_color=light_blue,show_text=false,text_color=yellow": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/light_blue"
+        }
+      ]
+    },
+    "paper_color=light_blue,show_text=true,text_color=black": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/light_blue"
+        },
+        {
+          "model": "little_big_redstone:block/sticky_note/text/black"
+        }
+      ]
+    },
+    "paper_color=light_blue,show_text=true,text_color=blue": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/light_blue"
+        },
+        {
+          "model": "little_big_redstone:block/sticky_note/text/blue"
+        }
+      ]
+    },
+    "paper_color=light_blue,show_text=true,text_color=brown": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/light_blue"
+        },
+        {
+          "model": "little_big_redstone:block/sticky_note/text/brown"
+        }
+      ]
+    },
+    "paper_color=light_blue,show_text=true,text_color=cyan": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/light_blue"
+        },
+        {
+          "model": "little_big_redstone:block/sticky_note/text/cyan"
+        }
+      ]
+    },
+    "paper_color=light_blue,show_text=true,text_color=gray": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/light_blue"
+        },
+        {
+          "model": "little_big_redstone:block/sticky_note/text/gray"
+        }
+      ]
+    },
+    "paper_color=light_blue,show_text=true,text_color=green": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/light_blue"
+        },
+        {
+          "model": "little_big_redstone:block/sticky_note/text/green"
+        }
+      ]
+    },
+    "paper_color=light_blue,show_text=true,text_color=light_blue": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/light_blue"
+        },
+        {
+          "model": "little_big_redstone:block/sticky_note/text/light_blue"
+        }
+      ]
+    },
+    "paper_color=light_blue,show_text=true,text_color=light_gray": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/light_blue"
+        },
+        {
+          "model": "little_big_redstone:block/sticky_note/text/light_gray"
+        }
+      ]
+    },
+    "paper_color=light_blue,show_text=true,text_color=lime": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/light_blue"
+        },
+        {
+          "model": "little_big_redstone:block/sticky_note/text/lime"
+        }
+      ]
+    },
+    "paper_color=light_blue,show_text=true,text_color=magenta": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/light_blue"
+        },
+        {
+          "model": "little_big_redstone:block/sticky_note/text/magenta"
+        }
+      ]
+    },
+    "paper_color=light_blue,show_text=true,text_color=orange": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/light_blue"
+        },
+        {
+          "model": "little_big_redstone:block/sticky_note/text/orange"
+        }
+      ]
+    },
+    "paper_color=light_blue,show_text=true,text_color=pink": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/light_blue"
+        },
+        {
+          "model": "little_big_redstone:block/sticky_note/text/pink"
+        }
+      ]
+    },
+    "paper_color=light_blue,show_text=true,text_color=purple": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/light_blue"
+        },
+        {
+          "model": "little_big_redstone:block/sticky_note/text/purple"
+        }
+      ]
+    },
+    "paper_color=light_blue,show_text=true,text_color=red": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/light_blue"
+        },
+        {
+          "model": "little_big_redstone:block/sticky_note/text/red"
+        }
+      ]
+    },
+    "paper_color=light_blue,show_text=true,text_color=white": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/light_blue"
+        },
+        {
+          "model": "little_big_redstone:block/sticky_note/text/white"
+        }
+      ]
+    },
+    "paper_color=light_blue,show_text=true,text_color=yellow": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/light_blue"
+        },
+        {
+          "model": "little_big_redstone:block/sticky_note/text/yellow"
+        }
+      ]
+    },
+    "paper_color=light_gray,show_text=false,text_color=black": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/light_gray"
+        }
+      ]
+    },
+    "paper_color=light_gray,show_text=false,text_color=blue": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/light_gray"
+        }
+      ]
+    },
+    "paper_color=light_gray,show_text=false,text_color=brown": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/light_gray"
+        }
+      ]
+    },
+    "paper_color=light_gray,show_text=false,text_color=cyan": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/light_gray"
+        }
+      ]
+    },
+    "paper_color=light_gray,show_text=false,text_color=gray": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/light_gray"
+        }
+      ]
+    },
+    "paper_color=light_gray,show_text=false,text_color=green": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/light_gray"
+        }
+      ]
+    },
+    "paper_color=light_gray,show_text=false,text_color=light_blue": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/light_gray"
+        }
+      ]
+    },
+    "paper_color=light_gray,show_text=false,text_color=light_gray": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/light_gray"
+        }
+      ]
+    },
+    "paper_color=light_gray,show_text=false,text_color=lime": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/light_gray"
+        }
+      ]
+    },
+    "paper_color=light_gray,show_text=false,text_color=magenta": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/light_gray"
+        }
+      ]
+    },
+    "paper_color=light_gray,show_text=false,text_color=orange": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/light_gray"
+        }
+      ]
+    },
+    "paper_color=light_gray,show_text=false,text_color=pink": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/light_gray"
+        }
+      ]
+    },
+    "paper_color=light_gray,show_text=false,text_color=purple": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/light_gray"
+        }
+      ]
+    },
+    "paper_color=light_gray,show_text=false,text_color=red": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/light_gray"
+        }
+      ]
+    },
+    "paper_color=light_gray,show_text=false,text_color=white": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/light_gray"
+        }
+      ]
+    },
+    "paper_color=light_gray,show_text=false,text_color=yellow": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/light_gray"
+        }
+      ]
+    },
+    "paper_color=light_gray,show_text=true,text_color=black": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/light_gray"
+        },
+        {
+          "model": "little_big_redstone:block/sticky_note/text/black"
+        }
+      ]
+    },
+    "paper_color=light_gray,show_text=true,text_color=blue": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/light_gray"
+        },
+        {
+          "model": "little_big_redstone:block/sticky_note/text/blue"
+        }
+      ]
+    },
+    "paper_color=light_gray,show_text=true,text_color=brown": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/light_gray"
+        },
+        {
+          "model": "little_big_redstone:block/sticky_note/text/brown"
+        }
+      ]
+    },
+    "paper_color=light_gray,show_text=true,text_color=cyan": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/light_gray"
+        },
+        {
+          "model": "little_big_redstone:block/sticky_note/text/cyan"
+        }
+      ]
+    },
+    "paper_color=light_gray,show_text=true,text_color=gray": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/light_gray"
+        },
+        {
+          "model": "little_big_redstone:block/sticky_note/text/gray"
+        }
+      ]
+    },
+    "paper_color=light_gray,show_text=true,text_color=green": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/light_gray"
+        },
+        {
+          "model": "little_big_redstone:block/sticky_note/text/green"
+        }
+      ]
+    },
+    "paper_color=light_gray,show_text=true,text_color=light_blue": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/light_gray"
+        },
+        {
+          "model": "little_big_redstone:block/sticky_note/text/light_blue"
+        }
+      ]
+    },
+    "paper_color=light_gray,show_text=true,text_color=light_gray": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/light_gray"
+        },
+        {
+          "model": "little_big_redstone:block/sticky_note/text/light_gray"
+        }
+      ]
+    },
+    "paper_color=light_gray,show_text=true,text_color=lime": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/light_gray"
+        },
+        {
+          "model": "little_big_redstone:block/sticky_note/text/lime"
+        }
+      ]
+    },
+    "paper_color=light_gray,show_text=true,text_color=magenta": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/light_gray"
+        },
+        {
+          "model": "little_big_redstone:block/sticky_note/text/magenta"
+        }
+      ]
+    },
+    "paper_color=light_gray,show_text=true,text_color=orange": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/light_gray"
+        },
+        {
+          "model": "little_big_redstone:block/sticky_note/text/orange"
+        }
+      ]
+    },
+    "paper_color=light_gray,show_text=true,text_color=pink": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/light_gray"
+        },
+        {
+          "model": "little_big_redstone:block/sticky_note/text/pink"
+        }
+      ]
+    },
+    "paper_color=light_gray,show_text=true,text_color=purple": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/light_gray"
+        },
+        {
+          "model": "little_big_redstone:block/sticky_note/text/purple"
+        }
+      ]
+    },
+    "paper_color=light_gray,show_text=true,text_color=red": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/light_gray"
+        },
+        {
+          "model": "little_big_redstone:block/sticky_note/text/red"
+        }
+      ]
+    },
+    "paper_color=light_gray,show_text=true,text_color=white": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/light_gray"
+        },
+        {
+          "model": "little_big_redstone:block/sticky_note/text/white"
+        }
+      ]
+    },
+    "paper_color=light_gray,show_text=true,text_color=yellow": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/light_gray"
+        },
+        {
+          "model": "little_big_redstone:block/sticky_note/text/yellow"
+        }
+      ]
+    },
+    "paper_color=lime,show_text=false,text_color=black": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/lime"
+        }
+      ]
+    },
+    "paper_color=lime,show_text=false,text_color=blue": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/lime"
+        }
+      ]
+    },
+    "paper_color=lime,show_text=false,text_color=brown": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/lime"
+        }
+      ]
+    },
+    "paper_color=lime,show_text=false,text_color=cyan": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/lime"
+        }
+      ]
+    },
+    "paper_color=lime,show_text=false,text_color=gray": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/lime"
+        }
+      ]
+    },
+    "paper_color=lime,show_text=false,text_color=green": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/lime"
+        }
+      ]
+    },
+    "paper_color=lime,show_text=false,text_color=light_blue": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/lime"
+        }
+      ]
+    },
+    "paper_color=lime,show_text=false,text_color=light_gray": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/lime"
+        }
+      ]
+    },
+    "paper_color=lime,show_text=false,text_color=lime": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/lime"
+        }
+      ]
+    },
+    "paper_color=lime,show_text=false,text_color=magenta": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/lime"
+        }
+      ]
+    },
+    "paper_color=lime,show_text=false,text_color=orange": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/lime"
+        }
+      ]
+    },
+    "paper_color=lime,show_text=false,text_color=pink": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/lime"
+        }
+      ]
+    },
+    "paper_color=lime,show_text=false,text_color=purple": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/lime"
+        }
+      ]
+    },
+    "paper_color=lime,show_text=false,text_color=red": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/lime"
+        }
+      ]
+    },
+    "paper_color=lime,show_text=false,text_color=white": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/lime"
+        }
+      ]
+    },
+    "paper_color=lime,show_text=false,text_color=yellow": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/lime"
+        }
+      ]
+    },
+    "paper_color=lime,show_text=true,text_color=black": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/lime"
+        },
+        {
+          "model": "little_big_redstone:block/sticky_note/text/black"
+        }
+      ]
+    },
+    "paper_color=lime,show_text=true,text_color=blue": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/lime"
+        },
+        {
+          "model": "little_big_redstone:block/sticky_note/text/blue"
+        }
+      ]
+    },
+    "paper_color=lime,show_text=true,text_color=brown": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/lime"
+        },
+        {
+          "model": "little_big_redstone:block/sticky_note/text/brown"
+        }
+      ]
+    },
+    "paper_color=lime,show_text=true,text_color=cyan": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/lime"
+        },
+        {
+          "model": "little_big_redstone:block/sticky_note/text/cyan"
+        }
+      ]
+    },
+    "paper_color=lime,show_text=true,text_color=gray": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/lime"
+        },
+        {
+          "model": "little_big_redstone:block/sticky_note/text/gray"
+        }
+      ]
+    },
+    "paper_color=lime,show_text=true,text_color=green": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/lime"
+        },
+        {
+          "model": "little_big_redstone:block/sticky_note/text/green"
+        }
+      ]
+    },
+    "paper_color=lime,show_text=true,text_color=light_blue": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/lime"
+        },
+        {
+          "model": "little_big_redstone:block/sticky_note/text/light_blue"
+        }
+      ]
+    },
+    "paper_color=lime,show_text=true,text_color=light_gray": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/lime"
+        },
+        {
+          "model": "little_big_redstone:block/sticky_note/text/light_gray"
+        }
+      ]
+    },
+    "paper_color=lime,show_text=true,text_color=lime": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/lime"
+        },
+        {
+          "model": "little_big_redstone:block/sticky_note/text/lime"
+        }
+      ]
+    },
+    "paper_color=lime,show_text=true,text_color=magenta": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/lime"
+        },
+        {
+          "model": "little_big_redstone:block/sticky_note/text/magenta"
+        }
+      ]
+    },
+    "paper_color=lime,show_text=true,text_color=orange": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/lime"
+        },
+        {
+          "model": "little_big_redstone:block/sticky_note/text/orange"
+        }
+      ]
+    },
+    "paper_color=lime,show_text=true,text_color=pink": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/lime"
+        },
+        {
+          "model": "little_big_redstone:block/sticky_note/text/pink"
+        }
+      ]
+    },
+    "paper_color=lime,show_text=true,text_color=purple": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/lime"
+        },
+        {
+          "model": "little_big_redstone:block/sticky_note/text/purple"
+        }
+      ]
+    },
+    "paper_color=lime,show_text=true,text_color=red": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/lime"
+        },
+        {
+          "model": "little_big_redstone:block/sticky_note/text/red"
+        }
+      ]
+    },
+    "paper_color=lime,show_text=true,text_color=white": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/lime"
+        },
+        {
+          "model": "little_big_redstone:block/sticky_note/text/white"
+        }
+      ]
+    },
+    "paper_color=lime,show_text=true,text_color=yellow": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/lime"
+        },
+        {
+          "model": "little_big_redstone:block/sticky_note/text/yellow"
+        }
+      ]
+    },
+    "paper_color=magenta,show_text=false,text_color=black": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/magenta"
+        }
+      ]
+    },
+    "paper_color=magenta,show_text=false,text_color=blue": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/magenta"
+        }
+      ]
+    },
+    "paper_color=magenta,show_text=false,text_color=brown": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/magenta"
+        }
+      ]
+    },
+    "paper_color=magenta,show_text=false,text_color=cyan": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/magenta"
+        }
+      ]
+    },
+    "paper_color=magenta,show_text=false,text_color=gray": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/magenta"
+        }
+      ]
+    },
+    "paper_color=magenta,show_text=false,text_color=green": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/magenta"
+        }
+      ]
+    },
+    "paper_color=magenta,show_text=false,text_color=light_blue": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/magenta"
+        }
+      ]
+    },
+    "paper_color=magenta,show_text=false,text_color=light_gray": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/magenta"
+        }
+      ]
+    },
+    "paper_color=magenta,show_text=false,text_color=lime": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/magenta"
+        }
+      ]
+    },
+    "paper_color=magenta,show_text=false,text_color=magenta": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/magenta"
+        }
+      ]
+    },
+    "paper_color=magenta,show_text=false,text_color=orange": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/magenta"
+        }
+      ]
+    },
+    "paper_color=magenta,show_text=false,text_color=pink": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/magenta"
+        }
+      ]
+    },
+    "paper_color=magenta,show_text=false,text_color=purple": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/magenta"
+        }
+      ]
+    },
+    "paper_color=magenta,show_text=false,text_color=red": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/magenta"
+        }
+      ]
+    },
+    "paper_color=magenta,show_text=false,text_color=white": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/magenta"
+        }
+      ]
+    },
+    "paper_color=magenta,show_text=false,text_color=yellow": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/magenta"
+        }
+      ]
+    },
+    "paper_color=magenta,show_text=true,text_color=black": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/magenta"
+        },
+        {
+          "model": "little_big_redstone:block/sticky_note/text/black"
+        }
+      ]
+    },
+    "paper_color=magenta,show_text=true,text_color=blue": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/magenta"
+        },
+        {
+          "model": "little_big_redstone:block/sticky_note/text/blue"
+        }
+      ]
+    },
+    "paper_color=magenta,show_text=true,text_color=brown": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/magenta"
+        },
+        {
+          "model": "little_big_redstone:block/sticky_note/text/brown"
+        }
+      ]
+    },
+    "paper_color=magenta,show_text=true,text_color=cyan": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/magenta"
+        },
+        {
+          "model": "little_big_redstone:block/sticky_note/text/cyan"
+        }
+      ]
+    },
+    "paper_color=magenta,show_text=true,text_color=gray": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/magenta"
+        },
+        {
+          "model": "little_big_redstone:block/sticky_note/text/gray"
+        }
+      ]
+    },
+    "paper_color=magenta,show_text=true,text_color=green": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/magenta"
+        },
+        {
+          "model": "little_big_redstone:block/sticky_note/text/green"
+        }
+      ]
+    },
+    "paper_color=magenta,show_text=true,text_color=light_blue": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/magenta"
+        },
+        {
+          "model": "little_big_redstone:block/sticky_note/text/light_blue"
+        }
+      ]
+    },
+    "paper_color=magenta,show_text=true,text_color=light_gray": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/magenta"
+        },
+        {
+          "model": "little_big_redstone:block/sticky_note/text/light_gray"
+        }
+      ]
+    },
+    "paper_color=magenta,show_text=true,text_color=lime": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/magenta"
+        },
+        {
+          "model": "little_big_redstone:block/sticky_note/text/lime"
+        }
+      ]
+    },
+    "paper_color=magenta,show_text=true,text_color=magenta": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/magenta"
+        },
+        {
+          "model": "little_big_redstone:block/sticky_note/text/magenta"
+        }
+      ]
+    },
+    "paper_color=magenta,show_text=true,text_color=orange": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/magenta"
+        },
+        {
+          "model": "little_big_redstone:block/sticky_note/text/orange"
+        }
+      ]
+    },
+    "paper_color=magenta,show_text=true,text_color=pink": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/magenta"
+        },
+        {
+          "model": "little_big_redstone:block/sticky_note/text/pink"
+        }
+      ]
+    },
+    "paper_color=magenta,show_text=true,text_color=purple": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/magenta"
+        },
+        {
+          "model": "little_big_redstone:block/sticky_note/text/purple"
+        }
+      ]
+    },
+    "paper_color=magenta,show_text=true,text_color=red": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/magenta"
+        },
+        {
+          "model": "little_big_redstone:block/sticky_note/text/red"
+        }
+      ]
+    },
+    "paper_color=magenta,show_text=true,text_color=white": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/magenta"
+        },
+        {
+          "model": "little_big_redstone:block/sticky_note/text/white"
+        }
+      ]
+    },
+    "paper_color=magenta,show_text=true,text_color=yellow": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/magenta"
+        },
+        {
+          "model": "little_big_redstone:block/sticky_note/text/yellow"
+        }
+      ]
+    },
+    "paper_color=orange,show_text=false,text_color=black": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/orange"
+        }
+      ]
+    },
+    "paper_color=orange,show_text=false,text_color=blue": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/orange"
+        }
+      ]
+    },
+    "paper_color=orange,show_text=false,text_color=brown": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/orange"
+        }
+      ]
+    },
+    "paper_color=orange,show_text=false,text_color=cyan": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/orange"
+        }
+      ]
+    },
+    "paper_color=orange,show_text=false,text_color=gray": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/orange"
+        }
+      ]
+    },
+    "paper_color=orange,show_text=false,text_color=green": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/orange"
+        }
+      ]
+    },
+    "paper_color=orange,show_text=false,text_color=light_blue": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/orange"
+        }
+      ]
+    },
+    "paper_color=orange,show_text=false,text_color=light_gray": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/orange"
+        }
+      ]
+    },
+    "paper_color=orange,show_text=false,text_color=lime": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/orange"
+        }
+      ]
+    },
+    "paper_color=orange,show_text=false,text_color=magenta": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/orange"
+        }
+      ]
+    },
+    "paper_color=orange,show_text=false,text_color=orange": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/orange"
+        }
+      ]
+    },
+    "paper_color=orange,show_text=false,text_color=pink": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/orange"
+        }
+      ]
+    },
+    "paper_color=orange,show_text=false,text_color=purple": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/orange"
+        }
+      ]
+    },
+    "paper_color=orange,show_text=false,text_color=red": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/orange"
+        }
+      ]
+    },
+    "paper_color=orange,show_text=false,text_color=white": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/orange"
+        }
+      ]
+    },
+    "paper_color=orange,show_text=false,text_color=yellow": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/orange"
+        }
+      ]
+    },
+    "paper_color=orange,show_text=true,text_color=black": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/orange"
+        },
+        {
+          "model": "little_big_redstone:block/sticky_note/text/black"
+        }
+      ]
+    },
+    "paper_color=orange,show_text=true,text_color=blue": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/orange"
+        },
+        {
+          "model": "little_big_redstone:block/sticky_note/text/blue"
+        }
+      ]
+    },
+    "paper_color=orange,show_text=true,text_color=brown": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/orange"
+        },
+        {
+          "model": "little_big_redstone:block/sticky_note/text/brown"
+        }
+      ]
+    },
+    "paper_color=orange,show_text=true,text_color=cyan": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/orange"
+        },
+        {
+          "model": "little_big_redstone:block/sticky_note/text/cyan"
+        }
+      ]
+    },
+    "paper_color=orange,show_text=true,text_color=gray": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/orange"
+        },
+        {
+          "model": "little_big_redstone:block/sticky_note/text/gray"
+        }
+      ]
+    },
+    "paper_color=orange,show_text=true,text_color=green": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/orange"
+        },
+        {
+          "model": "little_big_redstone:block/sticky_note/text/green"
+        }
+      ]
+    },
+    "paper_color=orange,show_text=true,text_color=light_blue": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/orange"
+        },
+        {
+          "model": "little_big_redstone:block/sticky_note/text/light_blue"
+        }
+      ]
+    },
+    "paper_color=orange,show_text=true,text_color=light_gray": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/orange"
+        },
+        {
+          "model": "little_big_redstone:block/sticky_note/text/light_gray"
+        }
+      ]
+    },
+    "paper_color=orange,show_text=true,text_color=lime": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/orange"
+        },
+        {
+          "model": "little_big_redstone:block/sticky_note/text/lime"
+        }
+      ]
+    },
+    "paper_color=orange,show_text=true,text_color=magenta": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/orange"
+        },
+        {
+          "model": "little_big_redstone:block/sticky_note/text/magenta"
+        }
+      ]
+    },
+    "paper_color=orange,show_text=true,text_color=orange": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/orange"
+        },
+        {
+          "model": "little_big_redstone:block/sticky_note/text/orange"
+        }
+      ]
+    },
+    "paper_color=orange,show_text=true,text_color=pink": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/orange"
+        },
+        {
+          "model": "little_big_redstone:block/sticky_note/text/pink"
+        }
+      ]
+    },
+    "paper_color=orange,show_text=true,text_color=purple": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/orange"
+        },
+        {
+          "model": "little_big_redstone:block/sticky_note/text/purple"
+        }
+      ]
+    },
+    "paper_color=orange,show_text=true,text_color=red": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/orange"
+        },
+        {
+          "model": "little_big_redstone:block/sticky_note/text/red"
+        }
+      ]
+    },
+    "paper_color=orange,show_text=true,text_color=white": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/orange"
+        },
+        {
+          "model": "little_big_redstone:block/sticky_note/text/white"
+        }
+      ]
+    },
+    "paper_color=orange,show_text=true,text_color=yellow": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/orange"
+        },
+        {
+          "model": "little_big_redstone:block/sticky_note/text/yellow"
+        }
+      ]
+    },
+    "paper_color=pink,show_text=false,text_color=black": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/pink"
+        }
+      ]
+    },
+    "paper_color=pink,show_text=false,text_color=blue": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/pink"
+        }
+      ]
+    },
+    "paper_color=pink,show_text=false,text_color=brown": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/pink"
+        }
+      ]
+    },
+    "paper_color=pink,show_text=false,text_color=cyan": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/pink"
+        }
+      ]
+    },
+    "paper_color=pink,show_text=false,text_color=gray": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/pink"
+        }
+      ]
+    },
+    "paper_color=pink,show_text=false,text_color=green": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/pink"
+        }
+      ]
+    },
+    "paper_color=pink,show_text=false,text_color=light_blue": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/pink"
+        }
+      ]
+    },
+    "paper_color=pink,show_text=false,text_color=light_gray": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/pink"
+        }
+      ]
+    },
+    "paper_color=pink,show_text=false,text_color=lime": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/pink"
+        }
+      ]
+    },
+    "paper_color=pink,show_text=false,text_color=magenta": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/pink"
+        }
+      ]
+    },
+    "paper_color=pink,show_text=false,text_color=orange": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/pink"
+        }
+      ]
+    },
+    "paper_color=pink,show_text=false,text_color=pink": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/pink"
+        }
+      ]
+    },
+    "paper_color=pink,show_text=false,text_color=purple": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/pink"
+        }
+      ]
+    },
+    "paper_color=pink,show_text=false,text_color=red": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/pink"
+        }
+      ]
+    },
+    "paper_color=pink,show_text=false,text_color=white": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/pink"
+        }
+      ]
+    },
+    "paper_color=pink,show_text=false,text_color=yellow": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/pink"
+        }
+      ]
+    },
+    "paper_color=pink,show_text=true,text_color=black": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/pink"
+        },
+        {
+          "model": "little_big_redstone:block/sticky_note/text/black"
+        }
+      ]
+    },
+    "paper_color=pink,show_text=true,text_color=blue": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/pink"
+        },
+        {
+          "model": "little_big_redstone:block/sticky_note/text/blue"
+        }
+      ]
+    },
+    "paper_color=pink,show_text=true,text_color=brown": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/pink"
+        },
+        {
+          "model": "little_big_redstone:block/sticky_note/text/brown"
+        }
+      ]
+    },
+    "paper_color=pink,show_text=true,text_color=cyan": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/pink"
+        },
+        {
+          "model": "little_big_redstone:block/sticky_note/text/cyan"
+        }
+      ]
+    },
+    "paper_color=pink,show_text=true,text_color=gray": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/pink"
+        },
+        {
+          "model": "little_big_redstone:block/sticky_note/text/gray"
+        }
+      ]
+    },
+    "paper_color=pink,show_text=true,text_color=green": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/pink"
+        },
+        {
+          "model": "little_big_redstone:block/sticky_note/text/green"
+        }
+      ]
+    },
+    "paper_color=pink,show_text=true,text_color=light_blue": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/pink"
+        },
+        {
+          "model": "little_big_redstone:block/sticky_note/text/light_blue"
+        }
+      ]
+    },
+    "paper_color=pink,show_text=true,text_color=light_gray": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/pink"
+        },
+        {
+          "model": "little_big_redstone:block/sticky_note/text/light_gray"
+        }
+      ]
+    },
+    "paper_color=pink,show_text=true,text_color=lime": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/pink"
+        },
+        {
+          "model": "little_big_redstone:block/sticky_note/text/lime"
+        }
+      ]
+    },
+    "paper_color=pink,show_text=true,text_color=magenta": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/pink"
+        },
+        {
+          "model": "little_big_redstone:block/sticky_note/text/magenta"
+        }
+      ]
+    },
+    "paper_color=pink,show_text=true,text_color=orange": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/pink"
+        },
+        {
+          "model": "little_big_redstone:block/sticky_note/text/orange"
+        }
+      ]
+    },
+    "paper_color=pink,show_text=true,text_color=pink": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/pink"
+        },
+        {
+          "model": "little_big_redstone:block/sticky_note/text/pink"
+        }
+      ]
+    },
+    "paper_color=pink,show_text=true,text_color=purple": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/pink"
+        },
+        {
+          "model": "little_big_redstone:block/sticky_note/text/purple"
+        }
+      ]
+    },
+    "paper_color=pink,show_text=true,text_color=red": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/pink"
+        },
+        {
+          "model": "little_big_redstone:block/sticky_note/text/red"
+        }
+      ]
+    },
+    "paper_color=pink,show_text=true,text_color=white": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/pink"
+        },
+        {
+          "model": "little_big_redstone:block/sticky_note/text/white"
+        }
+      ]
+    },
+    "paper_color=pink,show_text=true,text_color=yellow": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/pink"
+        },
+        {
+          "model": "little_big_redstone:block/sticky_note/text/yellow"
+        }
+      ]
+    },
+    "paper_color=purple,show_text=false,text_color=black": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/purple"
+        }
+      ]
+    },
+    "paper_color=purple,show_text=false,text_color=blue": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/purple"
+        }
+      ]
+    },
+    "paper_color=purple,show_text=false,text_color=brown": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/purple"
+        }
+      ]
+    },
+    "paper_color=purple,show_text=false,text_color=cyan": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/purple"
+        }
+      ]
+    },
+    "paper_color=purple,show_text=false,text_color=gray": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/purple"
+        }
+      ]
+    },
+    "paper_color=purple,show_text=false,text_color=green": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/purple"
+        }
+      ]
+    },
+    "paper_color=purple,show_text=false,text_color=light_blue": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/purple"
+        }
+      ]
+    },
+    "paper_color=purple,show_text=false,text_color=light_gray": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/purple"
+        }
+      ]
+    },
+    "paper_color=purple,show_text=false,text_color=lime": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/purple"
+        }
+      ]
+    },
+    "paper_color=purple,show_text=false,text_color=magenta": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/purple"
+        }
+      ]
+    },
+    "paper_color=purple,show_text=false,text_color=orange": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/purple"
+        }
+      ]
+    },
+    "paper_color=purple,show_text=false,text_color=pink": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/purple"
+        }
+      ]
+    },
+    "paper_color=purple,show_text=false,text_color=purple": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/purple"
+        }
+      ]
+    },
+    "paper_color=purple,show_text=false,text_color=red": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/purple"
+        }
+      ]
+    },
+    "paper_color=purple,show_text=false,text_color=white": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/purple"
+        }
+      ]
+    },
+    "paper_color=purple,show_text=false,text_color=yellow": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/purple"
+        }
+      ]
+    },
+    "paper_color=purple,show_text=true,text_color=black": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/purple"
+        },
+        {
+          "model": "little_big_redstone:block/sticky_note/text/black"
+        }
+      ]
+    },
+    "paper_color=purple,show_text=true,text_color=blue": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/purple"
+        },
+        {
+          "model": "little_big_redstone:block/sticky_note/text/blue"
+        }
+      ]
+    },
+    "paper_color=purple,show_text=true,text_color=brown": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/purple"
+        },
+        {
+          "model": "little_big_redstone:block/sticky_note/text/brown"
+        }
+      ]
+    },
+    "paper_color=purple,show_text=true,text_color=cyan": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/purple"
+        },
+        {
+          "model": "little_big_redstone:block/sticky_note/text/cyan"
+        }
+      ]
+    },
+    "paper_color=purple,show_text=true,text_color=gray": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/purple"
+        },
+        {
+          "model": "little_big_redstone:block/sticky_note/text/gray"
+        }
+      ]
+    },
+    "paper_color=purple,show_text=true,text_color=green": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/purple"
+        },
+        {
+          "model": "little_big_redstone:block/sticky_note/text/green"
+        }
+      ]
+    },
+    "paper_color=purple,show_text=true,text_color=light_blue": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/purple"
+        },
+        {
+          "model": "little_big_redstone:block/sticky_note/text/light_blue"
+        }
+      ]
+    },
+    "paper_color=purple,show_text=true,text_color=light_gray": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/purple"
+        },
+        {
+          "model": "little_big_redstone:block/sticky_note/text/light_gray"
+        }
+      ]
+    },
+    "paper_color=purple,show_text=true,text_color=lime": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/purple"
+        },
+        {
+          "model": "little_big_redstone:block/sticky_note/text/lime"
+        }
+      ]
+    },
+    "paper_color=purple,show_text=true,text_color=magenta": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/purple"
+        },
+        {
+          "model": "little_big_redstone:block/sticky_note/text/magenta"
+        }
+      ]
+    },
+    "paper_color=purple,show_text=true,text_color=orange": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/purple"
+        },
+        {
+          "model": "little_big_redstone:block/sticky_note/text/orange"
+        }
+      ]
+    },
+    "paper_color=purple,show_text=true,text_color=pink": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/purple"
+        },
+        {
+          "model": "little_big_redstone:block/sticky_note/text/pink"
+        }
+      ]
+    },
+    "paper_color=purple,show_text=true,text_color=purple": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/purple"
+        },
+        {
+          "model": "little_big_redstone:block/sticky_note/text/purple"
+        }
+      ]
+    },
+    "paper_color=purple,show_text=true,text_color=red": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/purple"
+        },
+        {
+          "model": "little_big_redstone:block/sticky_note/text/red"
+        }
+      ]
+    },
+    "paper_color=purple,show_text=true,text_color=white": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/purple"
+        },
+        {
+          "model": "little_big_redstone:block/sticky_note/text/white"
+        }
+      ]
+    },
+    "paper_color=purple,show_text=true,text_color=yellow": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/purple"
+        },
+        {
+          "model": "little_big_redstone:block/sticky_note/text/yellow"
+        }
+      ]
+    },
+    "paper_color=red,show_text=false,text_color=black": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/red"
+        }
+      ]
+    },
+    "paper_color=red,show_text=false,text_color=blue": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/red"
+        }
+      ]
+    },
+    "paper_color=red,show_text=false,text_color=brown": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/red"
+        }
+      ]
+    },
+    "paper_color=red,show_text=false,text_color=cyan": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/red"
+        }
+      ]
+    },
+    "paper_color=red,show_text=false,text_color=gray": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/red"
+        }
+      ]
+    },
+    "paper_color=red,show_text=false,text_color=green": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/red"
+        }
+      ]
+    },
+    "paper_color=red,show_text=false,text_color=light_blue": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/red"
+        }
+      ]
+    },
+    "paper_color=red,show_text=false,text_color=light_gray": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/red"
+        }
+      ]
+    },
+    "paper_color=red,show_text=false,text_color=lime": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/red"
+        }
+      ]
+    },
+    "paper_color=red,show_text=false,text_color=magenta": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/red"
+        }
+      ]
+    },
+    "paper_color=red,show_text=false,text_color=orange": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/red"
+        }
+      ]
+    },
+    "paper_color=red,show_text=false,text_color=pink": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/red"
+        }
+      ]
+    },
+    "paper_color=red,show_text=false,text_color=purple": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/red"
+        }
+      ]
+    },
+    "paper_color=red,show_text=false,text_color=red": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/red"
+        }
+      ]
+    },
+    "paper_color=red,show_text=false,text_color=white": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/red"
+        }
+      ]
+    },
+    "paper_color=red,show_text=false,text_color=yellow": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/red"
+        }
+      ]
+    },
+    "paper_color=red,show_text=true,text_color=black": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/red"
+        },
+        {
+          "model": "little_big_redstone:block/sticky_note/text/black"
+        }
+      ]
+    },
+    "paper_color=red,show_text=true,text_color=blue": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/red"
+        },
+        {
+          "model": "little_big_redstone:block/sticky_note/text/blue"
+        }
+      ]
+    },
+    "paper_color=red,show_text=true,text_color=brown": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/red"
+        },
+        {
+          "model": "little_big_redstone:block/sticky_note/text/brown"
+        }
+      ]
+    },
+    "paper_color=red,show_text=true,text_color=cyan": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/red"
+        },
+        {
+          "model": "little_big_redstone:block/sticky_note/text/cyan"
+        }
+      ]
+    },
+    "paper_color=red,show_text=true,text_color=gray": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/red"
+        },
+        {
+          "model": "little_big_redstone:block/sticky_note/text/gray"
+        }
+      ]
+    },
+    "paper_color=red,show_text=true,text_color=green": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/red"
+        },
+        {
+          "model": "little_big_redstone:block/sticky_note/text/green"
+        }
+      ]
+    },
+    "paper_color=red,show_text=true,text_color=light_blue": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/red"
+        },
+        {
+          "model": "little_big_redstone:block/sticky_note/text/light_blue"
+        }
+      ]
+    },
+    "paper_color=red,show_text=true,text_color=light_gray": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/red"
+        },
+        {
+          "model": "little_big_redstone:block/sticky_note/text/light_gray"
+        }
+      ]
+    },
+    "paper_color=red,show_text=true,text_color=lime": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/red"
+        },
+        {
+          "model": "little_big_redstone:block/sticky_note/text/lime"
+        }
+      ]
+    },
+    "paper_color=red,show_text=true,text_color=magenta": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/red"
+        },
+        {
+          "model": "little_big_redstone:block/sticky_note/text/magenta"
+        }
+      ]
+    },
+    "paper_color=red,show_text=true,text_color=orange": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/red"
+        },
+        {
+          "model": "little_big_redstone:block/sticky_note/text/orange"
+        }
+      ]
+    },
+    "paper_color=red,show_text=true,text_color=pink": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/red"
+        },
+        {
+          "model": "little_big_redstone:block/sticky_note/text/pink"
+        }
+      ]
+    },
+    "paper_color=red,show_text=true,text_color=purple": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/red"
+        },
+        {
+          "model": "little_big_redstone:block/sticky_note/text/purple"
+        }
+      ]
+    },
+    "paper_color=red,show_text=true,text_color=red": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/red"
+        },
+        {
+          "model": "little_big_redstone:block/sticky_note/text/red"
+        }
+      ]
+    },
+    "paper_color=red,show_text=true,text_color=white": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/red"
+        },
+        {
+          "model": "little_big_redstone:block/sticky_note/text/white"
+        }
+      ]
+    },
+    "paper_color=red,show_text=true,text_color=yellow": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/red"
+        },
+        {
+          "model": "little_big_redstone:block/sticky_note/text/yellow"
+        }
+      ]
+    },
+    "paper_color=white,show_text=false,text_color=black": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/white"
+        }
+      ]
+    },
+    "paper_color=white,show_text=false,text_color=blue": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/white"
+        }
+      ]
+    },
+    "paper_color=white,show_text=false,text_color=brown": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/white"
+        }
+      ]
+    },
+    "paper_color=white,show_text=false,text_color=cyan": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/white"
+        }
+      ]
+    },
+    "paper_color=white,show_text=false,text_color=gray": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/white"
+        }
+      ]
+    },
+    "paper_color=white,show_text=false,text_color=green": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/white"
+        }
+      ]
+    },
+    "paper_color=white,show_text=false,text_color=light_blue": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/white"
+        }
+      ]
+    },
+    "paper_color=white,show_text=false,text_color=light_gray": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/white"
+        }
+      ]
+    },
+    "paper_color=white,show_text=false,text_color=lime": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/white"
+        }
+      ]
+    },
+    "paper_color=white,show_text=false,text_color=magenta": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/white"
+        }
+      ]
+    },
+    "paper_color=white,show_text=false,text_color=orange": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/white"
+        }
+      ]
+    },
+    "paper_color=white,show_text=false,text_color=pink": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/white"
+        }
+      ]
+    },
+    "paper_color=white,show_text=false,text_color=purple": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/white"
+        }
+      ]
+    },
+    "paper_color=white,show_text=false,text_color=red": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/white"
+        }
+      ]
+    },
+    "paper_color=white,show_text=false,text_color=white": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/white"
+        }
+      ]
+    },
+    "paper_color=white,show_text=false,text_color=yellow": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/white"
+        }
+      ]
+    },
+    "paper_color=white,show_text=true,text_color=black": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/white"
+        },
+        {
+          "model": "little_big_redstone:block/sticky_note/text/black"
+        }
+      ]
+    },
+    "paper_color=white,show_text=true,text_color=blue": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/white"
+        },
+        {
+          "model": "little_big_redstone:block/sticky_note/text/blue"
+        }
+      ]
+    },
+    "paper_color=white,show_text=true,text_color=brown": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/white"
+        },
+        {
+          "model": "little_big_redstone:block/sticky_note/text/brown"
+        }
+      ]
+    },
+    "paper_color=white,show_text=true,text_color=cyan": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/white"
+        },
+        {
+          "model": "little_big_redstone:block/sticky_note/text/cyan"
+        }
+      ]
+    },
+    "paper_color=white,show_text=true,text_color=gray": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/white"
+        },
+        {
+          "model": "little_big_redstone:block/sticky_note/text/gray"
+        }
+      ]
+    },
+    "paper_color=white,show_text=true,text_color=green": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/white"
+        },
+        {
+          "model": "little_big_redstone:block/sticky_note/text/green"
+        }
+      ]
+    },
+    "paper_color=white,show_text=true,text_color=light_blue": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/white"
+        },
+        {
+          "model": "little_big_redstone:block/sticky_note/text/light_blue"
+        }
+      ]
+    },
+    "paper_color=white,show_text=true,text_color=light_gray": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/white"
+        },
+        {
+          "model": "little_big_redstone:block/sticky_note/text/light_gray"
+        }
+      ]
+    },
+    "paper_color=white,show_text=true,text_color=lime": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/white"
+        },
+        {
+          "model": "little_big_redstone:block/sticky_note/text/lime"
+        }
+      ]
+    },
+    "paper_color=white,show_text=true,text_color=magenta": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/white"
+        },
+        {
+          "model": "little_big_redstone:block/sticky_note/text/magenta"
+        }
+      ]
+    },
+    "paper_color=white,show_text=true,text_color=orange": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/white"
+        },
+        {
+          "model": "little_big_redstone:block/sticky_note/text/orange"
+        }
+      ]
+    },
+    "paper_color=white,show_text=true,text_color=pink": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/white"
+        },
+        {
+          "model": "little_big_redstone:block/sticky_note/text/pink"
+        }
+      ]
+    },
+    "paper_color=white,show_text=true,text_color=purple": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/white"
+        },
+        {
+          "model": "little_big_redstone:block/sticky_note/text/purple"
+        }
+      ]
+    },
+    "paper_color=white,show_text=true,text_color=red": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/white"
+        },
+        {
+          "model": "little_big_redstone:block/sticky_note/text/red"
+        }
+      ]
+    },
+    "paper_color=white,show_text=true,text_color=white": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/white"
+        },
+        {
+          "model": "little_big_redstone:block/sticky_note/text/white"
+        }
+      ]
+    },
+    "paper_color=white,show_text=true,text_color=yellow": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/white"
+        },
+        {
+          "model": "little_big_redstone:block/sticky_note/text/yellow"
+        }
+      ]
+    },
+    "paper_color=yellow,show_text=false,text_color=black": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/yellow"
+        }
+      ]
+    },
+    "paper_color=yellow,show_text=false,text_color=blue": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/yellow"
+        }
+      ]
+    },
+    "paper_color=yellow,show_text=false,text_color=brown": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/yellow"
+        }
+      ]
+    },
+    "paper_color=yellow,show_text=false,text_color=cyan": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/yellow"
+        }
+      ]
+    },
+    "paper_color=yellow,show_text=false,text_color=gray": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/yellow"
+        }
+      ]
+    },
+    "paper_color=yellow,show_text=false,text_color=green": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/yellow"
+        }
+      ]
+    },
+    "paper_color=yellow,show_text=false,text_color=light_blue": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/yellow"
+        }
+      ]
+    },
+    "paper_color=yellow,show_text=false,text_color=light_gray": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/yellow"
+        }
+      ]
+    },
+    "paper_color=yellow,show_text=false,text_color=lime": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/yellow"
+        }
+      ]
+    },
+    "paper_color=yellow,show_text=false,text_color=magenta": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/yellow"
+        }
+      ]
+    },
+    "paper_color=yellow,show_text=false,text_color=orange": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/yellow"
+        }
+      ]
+    },
+    "paper_color=yellow,show_text=false,text_color=pink": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/yellow"
+        }
+      ]
+    },
+    "paper_color=yellow,show_text=false,text_color=purple": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/yellow"
+        }
+      ]
+    },
+    "paper_color=yellow,show_text=false,text_color=red": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/yellow"
+        }
+      ]
+    },
+    "paper_color=yellow,show_text=false,text_color=white": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/yellow"
+        }
+      ]
+    },
+    "paper_color=yellow,show_text=false,text_color=yellow": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/yellow"
+        }
+      ]
+    },
+    "paper_color=yellow,show_text=true,text_color=black": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/yellow"
+        },
+        {
+          "model": "little_big_redstone:block/sticky_note/text/black"
+        }
+      ]
+    },
+    "paper_color=yellow,show_text=true,text_color=blue": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/yellow"
+        },
+        {
+          "model": "little_big_redstone:block/sticky_note/text/blue"
+        }
+      ]
+    },
+    "paper_color=yellow,show_text=true,text_color=brown": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/yellow"
+        },
+        {
+          "model": "little_big_redstone:block/sticky_note/text/brown"
+        }
+      ]
+    },
+    "paper_color=yellow,show_text=true,text_color=cyan": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/yellow"
+        },
+        {
+          "model": "little_big_redstone:block/sticky_note/text/cyan"
+        }
+      ]
+    },
+    "paper_color=yellow,show_text=true,text_color=gray": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/yellow"
+        },
+        {
+          "model": "little_big_redstone:block/sticky_note/text/gray"
+        }
+      ]
+    },
+    "paper_color=yellow,show_text=true,text_color=green": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/yellow"
+        },
+        {
+          "model": "little_big_redstone:block/sticky_note/text/green"
+        }
+      ]
+    },
+    "paper_color=yellow,show_text=true,text_color=light_blue": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/yellow"
+        },
+        {
+          "model": "little_big_redstone:block/sticky_note/text/light_blue"
+        }
+      ]
+    },
+    "paper_color=yellow,show_text=true,text_color=light_gray": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/yellow"
+        },
+        {
+          "model": "little_big_redstone:block/sticky_note/text/light_gray"
+        }
+      ]
+    },
+    "paper_color=yellow,show_text=true,text_color=lime": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/yellow"
+        },
+        {
+          "model": "little_big_redstone:block/sticky_note/text/lime"
+        }
+      ]
+    },
+    "paper_color=yellow,show_text=true,text_color=magenta": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/yellow"
+        },
+        {
+          "model": "little_big_redstone:block/sticky_note/text/magenta"
+        }
+      ]
+    },
+    "paper_color=yellow,show_text=true,text_color=orange": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/yellow"
+        },
+        {
+          "model": "little_big_redstone:block/sticky_note/text/orange"
+        }
+      ]
+    },
+    "paper_color=yellow,show_text=true,text_color=pink": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/yellow"
+        },
+        {
+          "model": "little_big_redstone:block/sticky_note/text/pink"
+        }
+      ]
+    },
+    "paper_color=yellow,show_text=true,text_color=purple": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/yellow"
+        },
+        {
+          "model": "little_big_redstone:block/sticky_note/text/purple"
+        }
+      ]
+    },
+    "paper_color=yellow,show_text=true,text_color=red": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/yellow"
+        },
+        {
+          "model": "little_big_redstone:block/sticky_note/text/red"
+        }
+      ]
+    },
+    "paper_color=yellow,show_text=true,text_color=white": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/yellow"
+        },
+        {
+          "model": "little_big_redstone:block/sticky_note/text/white"
+        }
+      ]
+    },
+    "paper_color=yellow,show_text=true,text_color=yellow": {
+      "type": "neoforge:composite",
+      "models": [
+        {
+          "model": "little_big_redstone:block/sticky_note/paper/yellow"
+        },
+        {
+          "model": "little_big_redstone:block/sticky_note/text/yellow"
+        }
+      ]
+    }
+  }
+}

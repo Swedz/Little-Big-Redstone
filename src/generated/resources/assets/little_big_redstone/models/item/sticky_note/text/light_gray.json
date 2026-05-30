@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "little_big_redstone:item/sticky_note/text/light_gray"
+  }
+}

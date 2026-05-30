@@ -30,5 +30,6 @@ public final class LBREntities
 	public static void init(IEventBus bus)
 	{
 		ENTITY_TYPES.register(bus);
+		StickyNoteEntity.registerFakeBlockState(bus);
 	}
 }
