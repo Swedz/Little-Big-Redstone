@@ -10,6 +10,7 @@ import net.minecraft.client.gui.narration.NarratableEntry;
 import net.minecraft.client.gui.narration.NarrationElementOutput;
 import net.minecraft.client.gui.navigation.ScreenRectangle;
 import net.minecraft.client.input.MouseButtonEvent;
+import net.minecraft.client.resources.metadata.gui.GuiSpriteScaling;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.Style;
 import net.minecraft.resources.Identifier;
@@ -40,10 +41,10 @@ import net.swedz.little_big_redstone.network.packet.QuickGrabMicrochipWireItemPa
 import net.swedz.little_big_redstone.proxy.LBRProxy;
 import net.swedz.tesseract.neoforge.api.Bounds;
 import net.swedz.tesseract.neoforge.gui.ExtendedClientTooltipPositioner;
+import net.swedz.tesseract.neoforge.helper.gui.SpriteGraphics;
 import net.swedz.tesseract.neoforge.proxy.Proxies;
 
 import java.util.List;
-import java.util.Locale;
 import java.util.Optional;
 import java.util.function.Consumer;
 
@@ -543,6 +544,7 @@ public final class MicrochipWidget implements GuiEventListener, Renderable, Narr
 	
 	private void renderTooltip(GuiGraphicsExtractor graphics, List<Component> lines, boolean dropShadow, int x, int y, Identifier style, int paddingLeft, int paddingTop, int paddingRight, int paddingBottom)
 	{
+		int maxWidth = graphics.guiWidth() - x - 8;
 		graphics.tooltip(
 				Minecraft.getInstance().font,
 				lines,
@@ -552,6 +554,7 @@ public final class MicrochipWidget implements GuiEventListener, Renderable, Narr
 						new ExtendedClientTooltipPositioner.Result(x, y, paddingLeft, paddingTop, paddingRight, paddingBottom),
 				x,
 				y,
+				maxWidth,
 				true,
 				style
 		);
@@ -565,7 +568,7 @@ public final class MicrochipWidget implements GuiEventListener, Renderable, Narr
 				true,
 				x,
 				y,
-				LBR.id("logic/%s".formatted(dyeColor.name().toLowerCase(Locale.ROOT))),
+				LBR.id("logic/" + dyeColor.getName()),
 				0,
 				0,
 				0,
@@ -575,19 +578,23 @@ public final class MicrochipWidget implements GuiEventListener, Renderable, Narr
 	
 	private void renderTooltipStickyNote(GuiGraphicsExtractor graphics, List<Component> lines, int x, int y, DyeColor dyeColor)
 	{
-		// TODO verify padding numbers
-		// TODO also worth noting that because of where tooltip textures need to be, this means the sticky note textures are duplicated...
+		int paddingBottom = 0;
+		var tooltipBackgroundSprite = SpriteGraphics.getSpriteScaling(SpriteGraphics.getSprite(LBR.id("tooltip/sticky_note/" + dyeColor.getName() + "_background")));
+		if(tooltipBackgroundSprite instanceof GuiSpriteScaling.NineSlice nineSlice)
+		{
+			paddingBottom = nineSlice.border().bottom();
+		}
 		this.renderTooltip(
 				graphics,
 				lines,
 				false,
 				x,
 				y,
-				LBR.id("sticky_note/%s".formatted(dyeColor.name().toLowerCase(Locale.ROOT))),
-				4,
-				4,
-				4,
-				21
+				LBR.id("sticky_note/" + dyeColor.getName()),
+				0,
+				0,
+				0,
+				paddingBottom
 		);
 	}
 	
