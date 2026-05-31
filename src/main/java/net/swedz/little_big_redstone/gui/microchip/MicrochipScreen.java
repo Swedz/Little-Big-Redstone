@@ -19,7 +19,7 @@ import net.swedz.little_big_redstone.LBRClientRenderPipelines;
 import net.swedz.little_big_redstone.block.microchip.MicrochipBlockEntity;
 import net.swedz.little_big_redstone.gui.microchip.logic.LogicRenderer;
 import net.swedz.little_big_redstone.gui.microchip.logic.LogicRenderers;
-import net.swedz.little_big_redstone.gui.microchip.widget.MicrochipThermostatWidget;
+import net.swedz.little_big_redstone.gui.microchip.widget.MicrochipThermometerWidget;
 import net.swedz.little_big_redstone.gui.microchip.widget.MicrochipWidget;
 import net.swedz.little_big_redstone.gui.microchip.wire.WireMetadata;
 import net.swedz.little_big_redstone.gui.microchip.wire.WirePath;
@@ -42,8 +42,8 @@ public final class MicrochipScreen extends AbstractContainerScreen<MicrochipMenu
 		return (coord / 16) * 16;
 	}
 	
-	private MicrochipWidget           microchipWidget;
-	private MicrochipThermostatWidget thermostatWidget;
+	private MicrochipWidget            microchipWidget;
+	private MicrochipThermometerWidget thermostatWidget;
 	
 	private float partialTicks;
 	
@@ -73,7 +73,7 @@ public final class MicrochipScreen extends AbstractContainerScreen<MicrochipMenu
 		
 		this.addRenderableWidget(microchipWidget = new MicrochipWidget(leftPos + 8, topPos + 8, this, menu.viewPosition()));
 		
-		this.addRenderableWidget(thermostatWidget = new MicrochipThermostatWidget(leftPos, topPos, this));
+		this.addRenderableWidget(thermostatWidget = new MicrochipThermometerWidget(leftPos, topPos, this));
 	}
 	
 	public MicrochipWidget getMicrochipWidget()
@@ -81,7 +81,7 @@ public final class MicrochipScreen extends AbstractContainerScreen<MicrochipMenu
 		return microchipWidget;
 	}
 	
-	public MicrochipThermostatWidget getThermostatWidget()
+	public MicrochipThermometerWidget getThermostatWidget()
 	{
 		return thermostatWidget;
 	}

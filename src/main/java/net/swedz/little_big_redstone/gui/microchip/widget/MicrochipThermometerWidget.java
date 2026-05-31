@@ -20,7 +20,7 @@ import net.swedz.little_big_redstone.gui.microchip.wire.WirePathKey;
 
 import java.util.List;
 
-public final class MicrochipThermostatWidget implements GuiEventListener, Renderable, NarratableEntry
+public final class MicrochipThermometerWidget implements GuiEventListener, Renderable, NarratableEntry
 {
 	private record ThermometerStats(
 			int logic,
@@ -45,7 +45,7 @@ public final class MicrochipThermostatWidget implements GuiEventListener, Render
 	
 	private float fullnessTotal, fullnessVisible;
 	
-	public MicrochipThermostatWidget(int x, int y, MicrochipScreen screen)
+	public MicrochipThermometerWidget(int x, int y, MicrochipScreen screen)
 	{
 		this.x = x + 14;
 		this.y = y + 150;
@@ -134,7 +134,7 @@ public final class MicrochipThermostatWidget implements GuiEventListener, Render
 		
 		this.renderThermometerJuice(graphics, mouseX, mouseY, fullnessVisible, color);
 		
-		graphics.blit(LBR.id("textures/gui/container/microchip/thermometer.png"), 0, 0, 28, 0, 14, 64, 42, 64);
+		graphics.blit(RenderPipelines.GUI_TEXTURED, LBR.id("textures/gui/container/microchip/thermometer.png"), 0, 0, 28, 0, 14, 64, 42, 64);
 		
 		graphics.pose().popMatrix();
 	}
