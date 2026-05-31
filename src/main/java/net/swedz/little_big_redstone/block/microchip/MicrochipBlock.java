@@ -2,12 +2,14 @@ package net.swedz.little_big_redstone.block.microchip;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.FrontAndTop;
 import net.minecraft.world.Containers;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
@@ -15,6 +17,7 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.phys.BlockHitResult;
 import net.swedz.little_big_redstone.LBRItems;
@@ -34,7 +37,7 @@ public final class MicrochipBlock extends Block implements TickableBlock, DyeCol
 	
 	public static BooleanProperty getDirectionalState(Direction direction)
 	{
-		return switch (direction)
+		return switch(direction)
 		{
 			case UP -> MicrochipBlock.UP;
 			case DOWN -> MicrochipBlock.DOWN;
@@ -54,6 +57,7 @@ public final class MicrochipBlock extends Block implements TickableBlock, DyeCol
 		this.color = color;
 		
 		this.registerDefaultState(stateDefinition.any()
+				.setValue(BlockStateProperties.ORIENTATION, FrontAndTop.UP_NORTH)
 				.setValue(UP, false)
 				.setValue(DOWN, false)
 				.setValue(NORTH, false)
@@ -89,7 +93,18 @@ public final class MicrochipBlock extends Block implements TickableBlock, DyeCol
 	@Override
 	protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder)
 	{
-		builder.add(UP, DOWN, NORTH, SOUTH, EAST, WEST);
+		builder.add(BlockStateProperties.ORIENTATION, UP, DOWN, NORTH, SOUTH, EAST, WEST);
+	}
+	
+	@Override
+	public BlockState getStateForPlacement(BlockPlaceContext context)
+	{
+		var frontDirection = context.getClickedFace();
+		var topDirection = frontDirection.getAxis() == Direction.Axis.Y ?
+				context.getHorizontalDirection().getOpposite() :
+				Direction.UP;
+		return this.defaultBlockState()
+				.setValue(BlockStateProperties.ORIENTATION, FrontAndTop.fromFrontAndTop(frontDirection, topDirection));
 	}
 	
 	@Override

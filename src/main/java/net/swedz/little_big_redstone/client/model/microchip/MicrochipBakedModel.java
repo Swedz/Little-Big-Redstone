@@ -13,7 +13,7 @@ import net.minecraft.client.renderer.block.model.ItemOverrides;
 import net.minecraft.client.renderer.block.model.ItemTransforms;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.resources.model.BakedModel;
-import net.minecraft.client.resources.model.BlockModelRotation;
+import net.minecraft.client.resources.model.ModelState;
 import net.minecraft.core.Direction;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.item.ItemDisplayContext;
@@ -36,22 +36,30 @@ public final class MicrochipBakedModel implements IDynamicBakedModel
 	private final boolean        useAmbientOcclusion;
 	private final boolean        isGui3d;
 	private final boolean        usesBlockLight;
+	private final ModelState     modelState;
 	
 	private final TextureAtlasSprite                 particle;
 	private final Map<Direction, TextureAtlasSprite> baseTextures;
 	private final Map<Direction, TextureAtlasSprite> signalOnOverlayTextures;
 	private final Map<Direction, TextureAtlasSprite> signalOffOverlayTextures;
 	
-	MicrochipBakedModel(ItemTransforms transforms, boolean useAmbientOcclusion, boolean isGui3d, boolean usesBlockLight,
-						TextureAtlasSprite particle,
-						Map<Direction, TextureAtlasSprite> baseTextures,
-						Map<Direction, TextureAtlasSprite> signalOnOverlayTextures,
-						Map<Direction, TextureAtlasSprite> signalOffOverlayTextures)
+	MicrochipBakedModel(
+			ItemTransforms transforms,
+			boolean useAmbientOcclusion,
+			boolean isGui3d,
+			boolean usesBlockLight,
+			ModelState modelState,
+			TextureAtlasSprite particle,
+			Map<Direction, TextureAtlasSprite> baseTextures,
+			Map<Direction, TextureAtlasSprite> signalOnOverlayTextures,
+			Map<Direction, TextureAtlasSprite> signalOffOverlayTextures
+	)
 	{
 		this.transforms = transforms;
 		this.useAmbientOcclusion = useAmbientOcclusion;
 		this.isGui3d = isGui3d;
 		this.usesBlockLight = usesBlockLight;
+		this.modelState = modelState;
 		this.particle = particle;
 		this.baseTextures = baseTextures;
 		this.signalOnOverlayTextures = signalOnOverlayTextures;
@@ -79,7 +87,7 @@ public final class MicrochipBakedModel implements IDynamicBakedModel
 		return quads;
 	}
 	
-	private final static class ElementBuilder
+	private final class ElementBuilder
 	{
 		private final Map<Direction, BlockElementFace> faces = Maps.newHashMap();
 		
@@ -112,7 +120,7 @@ public final class MicrochipBakedModel implements IDynamicBakedModel
 			var element = new BlockElement(new Vector3f(0, 0, 0), new Vector3f(16, 16, 16), faces, null, true);
 			for(var direction : faces.keySet())
 			{
-				quads.add(BlockModel.bakeFace(element, faces.get(direction), spriteGetter.apply(direction), direction, BlockModelRotation.X0_Y0));
+				quads.add(BlockModel.bakeFace(element, faces.get(direction), spriteGetter.apply(direction), direction, modelState));
 			}
 			return quads;
 		}

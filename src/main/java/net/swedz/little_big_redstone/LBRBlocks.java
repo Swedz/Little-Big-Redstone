@@ -2,6 +2,7 @@ package net.swedz.little_big_redstone;
 
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
+import net.minecraft.core.Direction;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.world.item.BlockItem;
@@ -10,8 +11,10 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.material.MapColor;
 import net.neoforged.bus.api.IEventBus;
+import net.neoforged.neoforge.client.model.generators.ConfiguredModel;
 import net.neoforged.neoforge.client.model.generators.ModelFile;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import net.swedz.little_big_redstone.block.microchip.MicrochipBlock;
@@ -129,15 +132,41 @@ public final class LBRBlocks
 				.tag(LBRTags.Blocks.MICROCHIPS, BlockTags.MINEABLE_WITH_PICKAXE)
 				.withLootTable(CommonLootTableBuilders::self)
 				.withModel((block) -> (provider) ->
-						provider.simpleBlockWithItem(block.get(), provider.models().getBuilder(block.identifier().id())
-								.parent(new ModelFile.UncheckedModelFile("block/block"))
-								.customLoader((parent, efh) -> new BasicCustomLoaderBuilder<>(LBR.id("microchip"), parent, efh)).end()
-								.texture("particle", LBR.id("block/microchip/side/%s".formatted(colorId)))
-								.texture("base_up", LBR.id("block/microchip/top/%s".formatted(colorId)))
-								.texture("base", LBR.id("block/microchip/side/%s".formatted(colorId)))
-								.texture("base_down", LBR.id("block/microchip/bottom/%s".formatted(colorId)))
-								.texture("signal_on_overlay", LBR.id("block/microchip/signal_on_overlay"))
-								.texture("signal_off_overlay", LBR.id("block/microchip/signal_off_overlay"))));
+				{
+					var model = provider.models().getBuilder(block.identifier().id())
+							.parent(new ModelFile.UncheckedModelFile("block/block"))
+							.customLoader((parent, efh) -> new BasicCustomLoaderBuilder<>(LBR.id("microchip"), parent, efh)).end()
+							.texture("particle", LBR.id("block/microchip/side/%s".formatted(colorId)))
+							.texture("base_up", LBR.id("block/microchip/top/%s".formatted(colorId)))
+							.texture("base", LBR.id("block/microchip/side/%s".formatted(colorId)))
+							.texture("base_down", LBR.id("block/microchip/bottom/%s".formatted(colorId)))
+							.texture("signal_on_overlay", LBR.id("block/microchip/signal_on_overlay"))
+							.texture("signal_off_overlay", LBR.id("block/microchip/signal_off_overlay"));
+					provider.getVariantBuilder(block.get()).forAllStates((state) ->
+					{
+						var orientation = state.getValue(BlockStateProperties.ORIENTATION);
+						int rotationX = switch(orientation.front())
+						{
+							case DOWN -> 180;
+							case UP -> 0;
+							case NORTH, SOUTH, EAST, WEST -> 90;
+						};
+						var directionY = orientation.top() == Direction.UP ? orientation.front() : orientation.top();
+						int rotationY = switch(directionY)
+						{
+							case NORTH -> 0;
+							case SOUTH -> 180;
+							case WEST -> 270;
+							case EAST -> 90;
+							default -> throw new IllegalStateException("Orientation " + (orientation.top() == Direction.UP ? "front" : "top") + " cannot be " + directionY);
+						};
+						return ConfiguredModel.builder()
+								.modelFile(model)
+								.rotationX(rotationX)
+								.rotationY(rotationY)
+								.build();
+					});
+				});
 		holder.item().tag(LBRTags.Items.MICROCHIPS);
 		return holder;
 	}

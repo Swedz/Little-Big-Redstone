@@ -48,6 +48,7 @@ public final class MicrochipUnbakedModel implements IUnbakedGeometry<MicrochipUn
 				context.useAmbientOcclusion(),
 				context.isGui3d(),
 				context.useBlockLight(),
+				state,
 				spriteGetter.apply(context.getMaterial("particle")),
 				baseTextures,
 				signalOnOverlayTextures, signalOffOverlayTextures

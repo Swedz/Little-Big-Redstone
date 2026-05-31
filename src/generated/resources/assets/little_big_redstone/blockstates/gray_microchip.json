@@ -1,7 +1,3396 @@
 {
   "variants": {
-    "": {
+    "down=false,east=false,north=false,orientation=down_east,south=false,up=false,west=false": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 180,
+      "y": 90
+    },
+    "down=false,east=false,north=false,orientation=down_east,south=false,up=false,west=true": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 180,
+      "y": 90
+    },
+    "down=false,east=false,north=false,orientation=down_east,south=false,up=true,west=false": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 180,
+      "y": 90
+    },
+    "down=false,east=false,north=false,orientation=down_east,south=false,up=true,west=true": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 180,
+      "y": 90
+    },
+    "down=false,east=false,north=false,orientation=down_east,south=true,up=false,west=false": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 180,
+      "y": 90
+    },
+    "down=false,east=false,north=false,orientation=down_east,south=true,up=false,west=true": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 180,
+      "y": 90
+    },
+    "down=false,east=false,north=false,orientation=down_east,south=true,up=true,west=false": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 180,
+      "y": 90
+    },
+    "down=false,east=false,north=false,orientation=down_east,south=true,up=true,west=true": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 180,
+      "y": 90
+    },
+    "down=false,east=false,north=false,orientation=down_north,south=false,up=false,west=false": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 180
+    },
+    "down=false,east=false,north=false,orientation=down_north,south=false,up=false,west=true": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 180
+    },
+    "down=false,east=false,north=false,orientation=down_north,south=false,up=true,west=false": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 180
+    },
+    "down=false,east=false,north=false,orientation=down_north,south=false,up=true,west=true": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 180
+    },
+    "down=false,east=false,north=false,orientation=down_north,south=true,up=false,west=false": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 180
+    },
+    "down=false,east=false,north=false,orientation=down_north,south=true,up=false,west=true": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 180
+    },
+    "down=false,east=false,north=false,orientation=down_north,south=true,up=true,west=false": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 180
+    },
+    "down=false,east=false,north=false,orientation=down_north,south=true,up=true,west=true": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 180
+    },
+    "down=false,east=false,north=false,orientation=down_south,south=false,up=false,west=false": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 180,
+      "y": 180
+    },
+    "down=false,east=false,north=false,orientation=down_south,south=false,up=false,west=true": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 180,
+      "y": 180
+    },
+    "down=false,east=false,north=false,orientation=down_south,south=false,up=true,west=false": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 180,
+      "y": 180
+    },
+    "down=false,east=false,north=false,orientation=down_south,south=false,up=true,west=true": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 180,
+      "y": 180
+    },
+    "down=false,east=false,north=false,orientation=down_south,south=true,up=false,west=false": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 180,
+      "y": 180
+    },
+    "down=false,east=false,north=false,orientation=down_south,south=true,up=false,west=true": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 180,
+      "y": 180
+    },
+    "down=false,east=false,north=false,orientation=down_south,south=true,up=true,west=false": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 180,
+      "y": 180
+    },
+    "down=false,east=false,north=false,orientation=down_south,south=true,up=true,west=true": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 180,
+      "y": 180
+    },
+    "down=false,east=false,north=false,orientation=down_west,south=false,up=false,west=false": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 180,
+      "y": 270
+    },
+    "down=false,east=false,north=false,orientation=down_west,south=false,up=false,west=true": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 180,
+      "y": 270
+    },
+    "down=false,east=false,north=false,orientation=down_west,south=false,up=true,west=false": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 180,
+      "y": 270
+    },
+    "down=false,east=false,north=false,orientation=down_west,south=false,up=true,west=true": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 180,
+      "y": 270
+    },
+    "down=false,east=false,north=false,orientation=down_west,south=true,up=false,west=false": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 180,
+      "y": 270
+    },
+    "down=false,east=false,north=false,orientation=down_west,south=true,up=false,west=true": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 180,
+      "y": 270
+    },
+    "down=false,east=false,north=false,orientation=down_west,south=true,up=true,west=false": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 180,
+      "y": 270
+    },
+    "down=false,east=false,north=false,orientation=down_west,south=true,up=true,west=true": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 180,
+      "y": 270
+    },
+    "down=false,east=false,north=false,orientation=east_up,south=false,up=false,west=false": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 90,
+      "y": 90
+    },
+    "down=false,east=false,north=false,orientation=east_up,south=false,up=false,west=true": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 90,
+      "y": 90
+    },
+    "down=false,east=false,north=false,orientation=east_up,south=false,up=true,west=false": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 90,
+      "y": 90
+    },
+    "down=false,east=false,north=false,orientation=east_up,south=false,up=true,west=true": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 90,
+      "y": 90
+    },
+    "down=false,east=false,north=false,orientation=east_up,south=true,up=false,west=false": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 90,
+      "y": 90
+    },
+    "down=false,east=false,north=false,orientation=east_up,south=true,up=false,west=true": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 90,
+      "y": 90
+    },
+    "down=false,east=false,north=false,orientation=east_up,south=true,up=true,west=false": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 90,
+      "y": 90
+    },
+    "down=false,east=false,north=false,orientation=east_up,south=true,up=true,west=true": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 90,
+      "y": 90
+    },
+    "down=false,east=false,north=false,orientation=north_up,south=false,up=false,west=false": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 90
+    },
+    "down=false,east=false,north=false,orientation=north_up,south=false,up=false,west=true": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 90
+    },
+    "down=false,east=false,north=false,orientation=north_up,south=false,up=true,west=false": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 90
+    },
+    "down=false,east=false,north=false,orientation=north_up,south=false,up=true,west=true": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 90
+    },
+    "down=false,east=false,north=false,orientation=north_up,south=true,up=false,west=false": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 90
+    },
+    "down=false,east=false,north=false,orientation=north_up,south=true,up=false,west=true": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 90
+    },
+    "down=false,east=false,north=false,orientation=north_up,south=true,up=true,west=false": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 90
+    },
+    "down=false,east=false,north=false,orientation=north_up,south=true,up=true,west=true": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 90
+    },
+    "down=false,east=false,north=false,orientation=south_up,south=false,up=false,west=false": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 90,
+      "y": 180
+    },
+    "down=false,east=false,north=false,orientation=south_up,south=false,up=false,west=true": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 90,
+      "y": 180
+    },
+    "down=false,east=false,north=false,orientation=south_up,south=false,up=true,west=false": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 90,
+      "y": 180
+    },
+    "down=false,east=false,north=false,orientation=south_up,south=false,up=true,west=true": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 90,
+      "y": 180
+    },
+    "down=false,east=false,north=false,orientation=south_up,south=true,up=false,west=false": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 90,
+      "y": 180
+    },
+    "down=false,east=false,north=false,orientation=south_up,south=true,up=false,west=true": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 90,
+      "y": 180
+    },
+    "down=false,east=false,north=false,orientation=south_up,south=true,up=true,west=false": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 90,
+      "y": 180
+    },
+    "down=false,east=false,north=false,orientation=south_up,south=true,up=true,west=true": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 90,
+      "y": 180
+    },
+    "down=false,east=false,north=false,orientation=up_east,south=false,up=false,west=false": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "y": 90
+    },
+    "down=false,east=false,north=false,orientation=up_east,south=false,up=false,west=true": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "y": 90
+    },
+    "down=false,east=false,north=false,orientation=up_east,south=false,up=true,west=false": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "y": 90
+    },
+    "down=false,east=false,north=false,orientation=up_east,south=false,up=true,west=true": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "y": 90
+    },
+    "down=false,east=false,north=false,orientation=up_east,south=true,up=false,west=false": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "y": 90
+    },
+    "down=false,east=false,north=false,orientation=up_east,south=true,up=false,west=true": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "y": 90
+    },
+    "down=false,east=false,north=false,orientation=up_east,south=true,up=true,west=false": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "y": 90
+    },
+    "down=false,east=false,north=false,orientation=up_east,south=true,up=true,west=true": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "y": 90
+    },
+    "down=false,east=false,north=false,orientation=up_north,south=false,up=false,west=false": {
       "model": "little_big_redstone:block/gray_microchip"
+    },
+    "down=false,east=false,north=false,orientation=up_north,south=false,up=false,west=true": {
+      "model": "little_big_redstone:block/gray_microchip"
+    },
+    "down=false,east=false,north=false,orientation=up_north,south=false,up=true,west=false": {
+      "model": "little_big_redstone:block/gray_microchip"
+    },
+    "down=false,east=false,north=false,orientation=up_north,south=false,up=true,west=true": {
+      "model": "little_big_redstone:block/gray_microchip"
+    },
+    "down=false,east=false,north=false,orientation=up_north,south=true,up=false,west=false": {
+      "model": "little_big_redstone:block/gray_microchip"
+    },
+    "down=false,east=false,north=false,orientation=up_north,south=true,up=false,west=true": {
+      "model": "little_big_redstone:block/gray_microchip"
+    },
+    "down=false,east=false,north=false,orientation=up_north,south=true,up=true,west=false": {
+      "model": "little_big_redstone:block/gray_microchip"
+    },
+    "down=false,east=false,north=false,orientation=up_north,south=true,up=true,west=true": {
+      "model": "little_big_redstone:block/gray_microchip"
+    },
+    "down=false,east=false,north=false,orientation=up_south,south=false,up=false,west=false": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "y": 180
+    },
+    "down=false,east=false,north=false,orientation=up_south,south=false,up=false,west=true": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "y": 180
+    },
+    "down=false,east=false,north=false,orientation=up_south,south=false,up=true,west=false": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "y": 180
+    },
+    "down=false,east=false,north=false,orientation=up_south,south=false,up=true,west=true": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "y": 180
+    },
+    "down=false,east=false,north=false,orientation=up_south,south=true,up=false,west=false": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "y": 180
+    },
+    "down=false,east=false,north=false,orientation=up_south,south=true,up=false,west=true": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "y": 180
+    },
+    "down=false,east=false,north=false,orientation=up_south,south=true,up=true,west=false": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "y": 180
+    },
+    "down=false,east=false,north=false,orientation=up_south,south=true,up=true,west=true": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "y": 180
+    },
+    "down=false,east=false,north=false,orientation=up_west,south=false,up=false,west=false": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "y": 270
+    },
+    "down=false,east=false,north=false,orientation=up_west,south=false,up=false,west=true": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "y": 270
+    },
+    "down=false,east=false,north=false,orientation=up_west,south=false,up=true,west=false": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "y": 270
+    },
+    "down=false,east=false,north=false,orientation=up_west,south=false,up=true,west=true": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "y": 270
+    },
+    "down=false,east=false,north=false,orientation=up_west,south=true,up=false,west=false": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "y": 270
+    },
+    "down=false,east=false,north=false,orientation=up_west,south=true,up=false,west=true": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "y": 270
+    },
+    "down=false,east=false,north=false,orientation=up_west,south=true,up=true,west=false": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "y": 270
+    },
+    "down=false,east=false,north=false,orientation=up_west,south=true,up=true,west=true": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "y": 270
+    },
+    "down=false,east=false,north=false,orientation=west_up,south=false,up=false,west=false": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 90,
+      "y": 270
+    },
+    "down=false,east=false,north=false,orientation=west_up,south=false,up=false,west=true": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 90,
+      "y": 270
+    },
+    "down=false,east=false,north=false,orientation=west_up,south=false,up=true,west=false": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 90,
+      "y": 270
+    },
+    "down=false,east=false,north=false,orientation=west_up,south=false,up=true,west=true": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 90,
+      "y": 270
+    },
+    "down=false,east=false,north=false,orientation=west_up,south=true,up=false,west=false": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 90,
+      "y": 270
+    },
+    "down=false,east=false,north=false,orientation=west_up,south=true,up=false,west=true": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 90,
+      "y": 270
+    },
+    "down=false,east=false,north=false,orientation=west_up,south=true,up=true,west=false": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 90,
+      "y": 270
+    },
+    "down=false,east=false,north=false,orientation=west_up,south=true,up=true,west=true": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 90,
+      "y": 270
+    },
+    "down=false,east=false,north=true,orientation=down_east,south=false,up=false,west=false": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 180,
+      "y": 90
+    },
+    "down=false,east=false,north=true,orientation=down_east,south=false,up=false,west=true": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 180,
+      "y": 90
+    },
+    "down=false,east=false,north=true,orientation=down_east,south=false,up=true,west=false": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 180,
+      "y": 90
+    },
+    "down=false,east=false,north=true,orientation=down_east,south=false,up=true,west=true": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 180,
+      "y": 90
+    },
+    "down=false,east=false,north=true,orientation=down_east,south=true,up=false,west=false": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 180,
+      "y": 90
+    },
+    "down=false,east=false,north=true,orientation=down_east,south=true,up=false,west=true": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 180,
+      "y": 90
+    },
+    "down=false,east=false,north=true,orientation=down_east,south=true,up=true,west=false": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 180,
+      "y": 90
+    },
+    "down=false,east=false,north=true,orientation=down_east,south=true,up=true,west=true": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 180,
+      "y": 90
+    },
+    "down=false,east=false,north=true,orientation=down_north,south=false,up=false,west=false": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 180
+    },
+    "down=false,east=false,north=true,orientation=down_north,south=false,up=false,west=true": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 180
+    },
+    "down=false,east=false,north=true,orientation=down_north,south=false,up=true,west=false": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 180
+    },
+    "down=false,east=false,north=true,orientation=down_north,south=false,up=true,west=true": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 180
+    },
+    "down=false,east=false,north=true,orientation=down_north,south=true,up=false,west=false": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 180
+    },
+    "down=false,east=false,north=true,orientation=down_north,south=true,up=false,west=true": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 180
+    },
+    "down=false,east=false,north=true,orientation=down_north,south=true,up=true,west=false": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 180
+    },
+    "down=false,east=false,north=true,orientation=down_north,south=true,up=true,west=true": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 180
+    },
+    "down=false,east=false,north=true,orientation=down_south,south=false,up=false,west=false": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 180,
+      "y": 180
+    },
+    "down=false,east=false,north=true,orientation=down_south,south=false,up=false,west=true": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 180,
+      "y": 180
+    },
+    "down=false,east=false,north=true,orientation=down_south,south=false,up=true,west=false": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 180,
+      "y": 180
+    },
+    "down=false,east=false,north=true,orientation=down_south,south=false,up=true,west=true": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 180,
+      "y": 180
+    },
+    "down=false,east=false,north=true,orientation=down_south,south=true,up=false,west=false": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 180,
+      "y": 180
+    },
+    "down=false,east=false,north=true,orientation=down_south,south=true,up=false,west=true": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 180,
+      "y": 180
+    },
+    "down=false,east=false,north=true,orientation=down_south,south=true,up=true,west=false": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 180,
+      "y": 180
+    },
+    "down=false,east=false,north=true,orientation=down_south,south=true,up=true,west=true": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 180,
+      "y": 180
+    },
+    "down=false,east=false,north=true,orientation=down_west,south=false,up=false,west=false": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 180,
+      "y": 270
+    },
+    "down=false,east=false,north=true,orientation=down_west,south=false,up=false,west=true": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 180,
+      "y": 270
+    },
+    "down=false,east=false,north=true,orientation=down_west,south=false,up=true,west=false": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 180,
+      "y": 270
+    },
+    "down=false,east=false,north=true,orientation=down_west,south=false,up=true,west=true": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 180,
+      "y": 270
+    },
+    "down=false,east=false,north=true,orientation=down_west,south=true,up=false,west=false": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 180,
+      "y": 270
+    },
+    "down=false,east=false,north=true,orientation=down_west,south=true,up=false,west=true": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 180,
+      "y": 270
+    },
+    "down=false,east=false,north=true,orientation=down_west,south=true,up=true,west=false": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 180,
+      "y": 270
+    },
+    "down=false,east=false,north=true,orientation=down_west,south=true,up=true,west=true": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 180,
+      "y": 270
+    },
+    "down=false,east=false,north=true,orientation=east_up,south=false,up=false,west=false": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 90,
+      "y": 90
+    },
+    "down=false,east=false,north=true,orientation=east_up,south=false,up=false,west=true": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 90,
+      "y": 90
+    },
+    "down=false,east=false,north=true,orientation=east_up,south=false,up=true,west=false": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 90,
+      "y": 90
+    },
+    "down=false,east=false,north=true,orientation=east_up,south=false,up=true,west=true": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 90,
+      "y": 90
+    },
+    "down=false,east=false,north=true,orientation=east_up,south=true,up=false,west=false": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 90,
+      "y": 90
+    },
+    "down=false,east=false,north=true,orientation=east_up,south=true,up=false,west=true": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 90,
+      "y": 90
+    },
+    "down=false,east=false,north=true,orientation=east_up,south=true,up=true,west=false": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 90,
+      "y": 90
+    },
+    "down=false,east=false,north=true,orientation=east_up,south=true,up=true,west=true": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 90,
+      "y": 90
+    },
+    "down=false,east=false,north=true,orientation=north_up,south=false,up=false,west=false": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 90
+    },
+    "down=false,east=false,north=true,orientation=north_up,south=false,up=false,west=true": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 90
+    },
+    "down=false,east=false,north=true,orientation=north_up,south=false,up=true,west=false": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 90
+    },
+    "down=false,east=false,north=true,orientation=north_up,south=false,up=true,west=true": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 90
+    },
+    "down=false,east=false,north=true,orientation=north_up,south=true,up=false,west=false": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 90
+    },
+    "down=false,east=false,north=true,orientation=north_up,south=true,up=false,west=true": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 90
+    },
+    "down=false,east=false,north=true,orientation=north_up,south=true,up=true,west=false": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 90
+    },
+    "down=false,east=false,north=true,orientation=north_up,south=true,up=true,west=true": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 90
+    },
+    "down=false,east=false,north=true,orientation=south_up,south=false,up=false,west=false": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 90,
+      "y": 180
+    },
+    "down=false,east=false,north=true,orientation=south_up,south=false,up=false,west=true": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 90,
+      "y": 180
+    },
+    "down=false,east=false,north=true,orientation=south_up,south=false,up=true,west=false": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 90,
+      "y": 180
+    },
+    "down=false,east=false,north=true,orientation=south_up,south=false,up=true,west=true": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 90,
+      "y": 180
+    },
+    "down=false,east=false,north=true,orientation=south_up,south=true,up=false,west=false": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 90,
+      "y": 180
+    },
+    "down=false,east=false,north=true,orientation=south_up,south=true,up=false,west=true": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 90,
+      "y": 180
+    },
+    "down=false,east=false,north=true,orientation=south_up,south=true,up=true,west=false": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 90,
+      "y": 180
+    },
+    "down=false,east=false,north=true,orientation=south_up,south=true,up=true,west=true": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 90,
+      "y": 180
+    },
+    "down=false,east=false,north=true,orientation=up_east,south=false,up=false,west=false": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "y": 90
+    },
+    "down=false,east=false,north=true,orientation=up_east,south=false,up=false,west=true": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "y": 90
+    },
+    "down=false,east=false,north=true,orientation=up_east,south=false,up=true,west=false": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "y": 90
+    },
+    "down=false,east=false,north=true,orientation=up_east,south=false,up=true,west=true": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "y": 90
+    },
+    "down=false,east=false,north=true,orientation=up_east,south=true,up=false,west=false": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "y": 90
+    },
+    "down=false,east=false,north=true,orientation=up_east,south=true,up=false,west=true": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "y": 90
+    },
+    "down=false,east=false,north=true,orientation=up_east,south=true,up=true,west=false": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "y": 90
+    },
+    "down=false,east=false,north=true,orientation=up_east,south=true,up=true,west=true": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "y": 90
+    },
+    "down=false,east=false,north=true,orientation=up_north,south=false,up=false,west=false": {
+      "model": "little_big_redstone:block/gray_microchip"
+    },
+    "down=false,east=false,north=true,orientation=up_north,south=false,up=false,west=true": {
+      "model": "little_big_redstone:block/gray_microchip"
+    },
+    "down=false,east=false,north=true,orientation=up_north,south=false,up=true,west=false": {
+      "model": "little_big_redstone:block/gray_microchip"
+    },
+    "down=false,east=false,north=true,orientation=up_north,south=false,up=true,west=true": {
+      "model": "little_big_redstone:block/gray_microchip"
+    },
+    "down=false,east=false,north=true,orientation=up_north,south=true,up=false,west=false": {
+      "model": "little_big_redstone:block/gray_microchip"
+    },
+    "down=false,east=false,north=true,orientation=up_north,south=true,up=false,west=true": {
+      "model": "little_big_redstone:block/gray_microchip"
+    },
+    "down=false,east=false,north=true,orientation=up_north,south=true,up=true,west=false": {
+      "model": "little_big_redstone:block/gray_microchip"
+    },
+    "down=false,east=false,north=true,orientation=up_north,south=true,up=true,west=true": {
+      "model": "little_big_redstone:block/gray_microchip"
+    },
+    "down=false,east=false,north=true,orientation=up_south,south=false,up=false,west=false": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "y": 180
+    },
+    "down=false,east=false,north=true,orientation=up_south,south=false,up=false,west=true": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "y": 180
+    },
+    "down=false,east=false,north=true,orientation=up_south,south=false,up=true,west=false": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "y": 180
+    },
+    "down=false,east=false,north=true,orientation=up_south,south=false,up=true,west=true": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "y": 180
+    },
+    "down=false,east=false,north=true,orientation=up_south,south=true,up=false,west=false": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "y": 180
+    },
+    "down=false,east=false,north=true,orientation=up_south,south=true,up=false,west=true": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "y": 180
+    },
+    "down=false,east=false,north=true,orientation=up_south,south=true,up=true,west=false": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "y": 180
+    },
+    "down=false,east=false,north=true,orientation=up_south,south=true,up=true,west=true": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "y": 180
+    },
+    "down=false,east=false,north=true,orientation=up_west,south=false,up=false,west=false": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "y": 270
+    },
+    "down=false,east=false,north=true,orientation=up_west,south=false,up=false,west=true": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "y": 270
+    },
+    "down=false,east=false,north=true,orientation=up_west,south=false,up=true,west=false": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "y": 270
+    },
+    "down=false,east=false,north=true,orientation=up_west,south=false,up=true,west=true": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "y": 270
+    },
+    "down=false,east=false,north=true,orientation=up_west,south=true,up=false,west=false": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "y": 270
+    },
+    "down=false,east=false,north=true,orientation=up_west,south=true,up=false,west=true": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "y": 270
+    },
+    "down=false,east=false,north=true,orientation=up_west,south=true,up=true,west=false": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "y": 270
+    },
+    "down=false,east=false,north=true,orientation=up_west,south=true,up=true,west=true": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "y": 270
+    },
+    "down=false,east=false,north=true,orientation=west_up,south=false,up=false,west=false": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 90,
+      "y": 270
+    },
+    "down=false,east=false,north=true,orientation=west_up,south=false,up=false,west=true": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 90,
+      "y": 270
+    },
+    "down=false,east=false,north=true,orientation=west_up,south=false,up=true,west=false": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 90,
+      "y": 270
+    },
+    "down=false,east=false,north=true,orientation=west_up,south=false,up=true,west=true": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 90,
+      "y": 270
+    },
+    "down=false,east=false,north=true,orientation=west_up,south=true,up=false,west=false": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 90,
+      "y": 270
+    },
+    "down=false,east=false,north=true,orientation=west_up,south=true,up=false,west=true": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 90,
+      "y": 270
+    },
+    "down=false,east=false,north=true,orientation=west_up,south=true,up=true,west=false": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 90,
+      "y": 270
+    },
+    "down=false,east=false,north=true,orientation=west_up,south=true,up=true,west=true": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 90,
+      "y": 270
+    },
+    "down=false,east=true,north=false,orientation=down_east,south=false,up=false,west=false": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 180,
+      "y": 90
+    },
+    "down=false,east=true,north=false,orientation=down_east,south=false,up=false,west=true": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 180,
+      "y": 90
+    },
+    "down=false,east=true,north=false,orientation=down_east,south=false,up=true,west=false": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 180,
+      "y": 90
+    },
+    "down=false,east=true,north=false,orientation=down_east,south=false,up=true,west=true": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 180,
+      "y": 90
+    },
+    "down=false,east=true,north=false,orientation=down_east,south=true,up=false,west=false": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 180,
+      "y": 90
+    },
+    "down=false,east=true,north=false,orientation=down_east,south=true,up=false,west=true": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 180,
+      "y": 90
+    },
+    "down=false,east=true,north=false,orientation=down_east,south=true,up=true,west=false": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 180,
+      "y": 90
+    },
+    "down=false,east=true,north=false,orientation=down_east,south=true,up=true,west=true": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 180,
+      "y": 90
+    },
+    "down=false,east=true,north=false,orientation=down_north,south=false,up=false,west=false": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 180
+    },
+    "down=false,east=true,north=false,orientation=down_north,south=false,up=false,west=true": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 180
+    },
+    "down=false,east=true,north=false,orientation=down_north,south=false,up=true,west=false": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 180
+    },
+    "down=false,east=true,north=false,orientation=down_north,south=false,up=true,west=true": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 180
+    },
+    "down=false,east=true,north=false,orientation=down_north,south=true,up=false,west=false": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 180
+    },
+    "down=false,east=true,north=false,orientation=down_north,south=true,up=false,west=true": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 180
+    },
+    "down=false,east=true,north=false,orientation=down_north,south=true,up=true,west=false": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 180
+    },
+    "down=false,east=true,north=false,orientation=down_north,south=true,up=true,west=true": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 180
+    },
+    "down=false,east=true,north=false,orientation=down_south,south=false,up=false,west=false": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 180,
+      "y": 180
+    },
+    "down=false,east=true,north=false,orientation=down_south,south=false,up=false,west=true": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 180,
+      "y": 180
+    },
+    "down=false,east=true,north=false,orientation=down_south,south=false,up=true,west=false": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 180,
+      "y": 180
+    },
+    "down=false,east=true,north=false,orientation=down_south,south=false,up=true,west=true": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 180,
+      "y": 180
+    },
+    "down=false,east=true,north=false,orientation=down_south,south=true,up=false,west=false": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 180,
+      "y": 180
+    },
+    "down=false,east=true,north=false,orientation=down_south,south=true,up=false,west=true": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 180,
+      "y": 180
+    },
+    "down=false,east=true,north=false,orientation=down_south,south=true,up=true,west=false": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 180,
+      "y": 180
+    },
+    "down=false,east=true,north=false,orientation=down_south,south=true,up=true,west=true": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 180,
+      "y": 180
+    },
+    "down=false,east=true,north=false,orientation=down_west,south=false,up=false,west=false": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 180,
+      "y": 270
+    },
+    "down=false,east=true,north=false,orientation=down_west,south=false,up=false,west=true": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 180,
+      "y": 270
+    },
+    "down=false,east=true,north=false,orientation=down_west,south=false,up=true,west=false": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 180,
+      "y": 270
+    },
+    "down=false,east=true,north=false,orientation=down_west,south=false,up=true,west=true": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 180,
+      "y": 270
+    },
+    "down=false,east=true,north=false,orientation=down_west,south=true,up=false,west=false": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 180,
+      "y": 270
+    },
+    "down=false,east=true,north=false,orientation=down_west,south=true,up=false,west=true": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 180,
+      "y": 270
+    },
+    "down=false,east=true,north=false,orientation=down_west,south=true,up=true,west=false": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 180,
+      "y": 270
+    },
+    "down=false,east=true,north=false,orientation=down_west,south=true,up=true,west=true": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 180,
+      "y": 270
+    },
+    "down=false,east=true,north=false,orientation=east_up,south=false,up=false,west=false": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 90,
+      "y": 90
+    },
+    "down=false,east=true,north=false,orientation=east_up,south=false,up=false,west=true": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 90,
+      "y": 90
+    },
+    "down=false,east=true,north=false,orientation=east_up,south=false,up=true,west=false": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 90,
+      "y": 90
+    },
+    "down=false,east=true,north=false,orientation=east_up,south=false,up=true,west=true": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 90,
+      "y": 90
+    },
+    "down=false,east=true,north=false,orientation=east_up,south=true,up=false,west=false": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 90,
+      "y": 90
+    },
+    "down=false,east=true,north=false,orientation=east_up,south=true,up=false,west=true": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 90,
+      "y": 90
+    },
+    "down=false,east=true,north=false,orientation=east_up,south=true,up=true,west=false": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 90,
+      "y": 90
+    },
+    "down=false,east=true,north=false,orientation=east_up,south=true,up=true,west=true": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 90,
+      "y": 90
+    },
+    "down=false,east=true,north=false,orientation=north_up,south=false,up=false,west=false": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 90
+    },
+    "down=false,east=true,north=false,orientation=north_up,south=false,up=false,west=true": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 90
+    },
+    "down=false,east=true,north=false,orientation=north_up,south=false,up=true,west=false": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 90
+    },
+    "down=false,east=true,north=false,orientation=north_up,south=false,up=true,west=true": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 90
+    },
+    "down=false,east=true,north=false,orientation=north_up,south=true,up=false,west=false": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 90
+    },
+    "down=false,east=true,north=false,orientation=north_up,south=true,up=false,west=true": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 90
+    },
+    "down=false,east=true,north=false,orientation=north_up,south=true,up=true,west=false": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 90
+    },
+    "down=false,east=true,north=false,orientation=north_up,south=true,up=true,west=true": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 90
+    },
+    "down=false,east=true,north=false,orientation=south_up,south=false,up=false,west=false": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 90,
+      "y": 180
+    },
+    "down=false,east=true,north=false,orientation=south_up,south=false,up=false,west=true": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 90,
+      "y": 180
+    },
+    "down=false,east=true,north=false,orientation=south_up,south=false,up=true,west=false": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 90,
+      "y": 180
+    },
+    "down=false,east=true,north=false,orientation=south_up,south=false,up=true,west=true": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 90,
+      "y": 180
+    },
+    "down=false,east=true,north=false,orientation=south_up,south=true,up=false,west=false": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 90,
+      "y": 180
+    },
+    "down=false,east=true,north=false,orientation=south_up,south=true,up=false,west=true": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 90,
+      "y": 180
+    },
+    "down=false,east=true,north=false,orientation=south_up,south=true,up=true,west=false": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 90,
+      "y": 180
+    },
+    "down=false,east=true,north=false,orientation=south_up,south=true,up=true,west=true": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 90,
+      "y": 180
+    },
+    "down=false,east=true,north=false,orientation=up_east,south=false,up=false,west=false": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "y": 90
+    },
+    "down=false,east=true,north=false,orientation=up_east,south=false,up=false,west=true": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "y": 90
+    },
+    "down=false,east=true,north=false,orientation=up_east,south=false,up=true,west=false": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "y": 90
+    },
+    "down=false,east=true,north=false,orientation=up_east,south=false,up=true,west=true": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "y": 90
+    },
+    "down=false,east=true,north=false,orientation=up_east,south=true,up=false,west=false": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "y": 90
+    },
+    "down=false,east=true,north=false,orientation=up_east,south=true,up=false,west=true": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "y": 90
+    },
+    "down=false,east=true,north=false,orientation=up_east,south=true,up=true,west=false": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "y": 90
+    },
+    "down=false,east=true,north=false,orientation=up_east,south=true,up=true,west=true": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "y": 90
+    },
+    "down=false,east=true,north=false,orientation=up_north,south=false,up=false,west=false": {
+      "model": "little_big_redstone:block/gray_microchip"
+    },
+    "down=false,east=true,north=false,orientation=up_north,south=false,up=false,west=true": {
+      "model": "little_big_redstone:block/gray_microchip"
+    },
+    "down=false,east=true,north=false,orientation=up_north,south=false,up=true,west=false": {
+      "model": "little_big_redstone:block/gray_microchip"
+    },
+    "down=false,east=true,north=false,orientation=up_north,south=false,up=true,west=true": {
+      "model": "little_big_redstone:block/gray_microchip"
+    },
+    "down=false,east=true,north=false,orientation=up_north,south=true,up=false,west=false": {
+      "model": "little_big_redstone:block/gray_microchip"
+    },
+    "down=false,east=true,north=false,orientation=up_north,south=true,up=false,west=true": {
+      "model": "little_big_redstone:block/gray_microchip"
+    },
+    "down=false,east=true,north=false,orientation=up_north,south=true,up=true,west=false": {
+      "model": "little_big_redstone:block/gray_microchip"
+    },
+    "down=false,east=true,north=false,orientation=up_north,south=true,up=true,west=true": {
+      "model": "little_big_redstone:block/gray_microchip"
+    },
+    "down=false,east=true,north=false,orientation=up_south,south=false,up=false,west=false": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "y": 180
+    },
+    "down=false,east=true,north=false,orientation=up_south,south=false,up=false,west=true": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "y": 180
+    },
+    "down=false,east=true,north=false,orientation=up_south,south=false,up=true,west=false": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "y": 180
+    },
+    "down=false,east=true,north=false,orientation=up_south,south=false,up=true,west=true": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "y": 180
+    },
+    "down=false,east=true,north=false,orientation=up_south,south=true,up=false,west=false": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "y": 180
+    },
+    "down=false,east=true,north=false,orientation=up_south,south=true,up=false,west=true": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "y": 180
+    },
+    "down=false,east=true,north=false,orientation=up_south,south=true,up=true,west=false": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "y": 180
+    },
+    "down=false,east=true,north=false,orientation=up_south,south=true,up=true,west=true": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "y": 180
+    },
+    "down=false,east=true,north=false,orientation=up_west,south=false,up=false,west=false": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "y": 270
+    },
+    "down=false,east=true,north=false,orientation=up_west,south=false,up=false,west=true": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "y": 270
+    },
+    "down=false,east=true,north=false,orientation=up_west,south=false,up=true,west=false": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "y": 270
+    },
+    "down=false,east=true,north=false,orientation=up_west,south=false,up=true,west=true": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "y": 270
+    },
+    "down=false,east=true,north=false,orientation=up_west,south=true,up=false,west=false": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "y": 270
+    },
+    "down=false,east=true,north=false,orientation=up_west,south=true,up=false,west=true": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "y": 270
+    },
+    "down=false,east=true,north=false,orientation=up_west,south=true,up=true,west=false": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "y": 270
+    },
+    "down=false,east=true,north=false,orientation=up_west,south=true,up=true,west=true": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "y": 270
+    },
+    "down=false,east=true,north=false,orientation=west_up,south=false,up=false,west=false": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 90,
+      "y": 270
+    },
+    "down=false,east=true,north=false,orientation=west_up,south=false,up=false,west=true": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 90,
+      "y": 270
+    },
+    "down=false,east=true,north=false,orientation=west_up,south=false,up=true,west=false": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 90,
+      "y": 270
+    },
+    "down=false,east=true,north=false,orientation=west_up,south=false,up=true,west=true": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 90,
+      "y": 270
+    },
+    "down=false,east=true,north=false,orientation=west_up,south=true,up=false,west=false": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 90,
+      "y": 270
+    },
+    "down=false,east=true,north=false,orientation=west_up,south=true,up=false,west=true": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 90,
+      "y": 270
+    },
+    "down=false,east=true,north=false,orientation=west_up,south=true,up=true,west=false": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 90,
+      "y": 270
+    },
+    "down=false,east=true,north=false,orientation=west_up,south=true,up=true,west=true": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 90,
+      "y": 270
+    },
+    "down=false,east=true,north=true,orientation=down_east,south=false,up=false,west=false": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 180,
+      "y": 90
+    },
+    "down=false,east=true,north=true,orientation=down_east,south=false,up=false,west=true": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 180,
+      "y": 90
+    },
+    "down=false,east=true,north=true,orientation=down_east,south=false,up=true,west=false": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 180,
+      "y": 90
+    },
+    "down=false,east=true,north=true,orientation=down_east,south=false,up=true,west=true": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 180,
+      "y": 90
+    },
+    "down=false,east=true,north=true,orientation=down_east,south=true,up=false,west=false": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 180,
+      "y": 90
+    },
+    "down=false,east=true,north=true,orientation=down_east,south=true,up=false,west=true": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 180,
+      "y": 90
+    },
+    "down=false,east=true,north=true,orientation=down_east,south=true,up=true,west=false": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 180,
+      "y": 90
+    },
+    "down=false,east=true,north=true,orientation=down_east,south=true,up=true,west=true": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 180,
+      "y": 90
+    },
+    "down=false,east=true,north=true,orientation=down_north,south=false,up=false,west=false": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 180
+    },
+    "down=false,east=true,north=true,orientation=down_north,south=false,up=false,west=true": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 180
+    },
+    "down=false,east=true,north=true,orientation=down_north,south=false,up=true,west=false": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 180
+    },
+    "down=false,east=true,north=true,orientation=down_north,south=false,up=true,west=true": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 180
+    },
+    "down=false,east=true,north=true,orientation=down_north,south=true,up=false,west=false": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 180
+    },
+    "down=false,east=true,north=true,orientation=down_north,south=true,up=false,west=true": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 180
+    },
+    "down=false,east=true,north=true,orientation=down_north,south=true,up=true,west=false": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 180
+    },
+    "down=false,east=true,north=true,orientation=down_north,south=true,up=true,west=true": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 180
+    },
+    "down=false,east=true,north=true,orientation=down_south,south=false,up=false,west=false": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 180,
+      "y": 180
+    },
+    "down=false,east=true,north=true,orientation=down_south,south=false,up=false,west=true": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 180,
+      "y": 180
+    },
+    "down=false,east=true,north=true,orientation=down_south,south=false,up=true,west=false": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 180,
+      "y": 180
+    },
+    "down=false,east=true,north=true,orientation=down_south,south=false,up=true,west=true": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 180,
+      "y": 180
+    },
+    "down=false,east=true,north=true,orientation=down_south,south=true,up=false,west=false": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 180,
+      "y": 180
+    },
+    "down=false,east=true,north=true,orientation=down_south,south=true,up=false,west=true": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 180,
+      "y": 180
+    },
+    "down=false,east=true,north=true,orientation=down_south,south=true,up=true,west=false": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 180,
+      "y": 180
+    },
+    "down=false,east=true,north=true,orientation=down_south,south=true,up=true,west=true": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 180,
+      "y": 180
+    },
+    "down=false,east=true,north=true,orientation=down_west,south=false,up=false,west=false": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 180,
+      "y": 270
+    },
+    "down=false,east=true,north=true,orientation=down_west,south=false,up=false,west=true": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 180,
+      "y": 270
+    },
+    "down=false,east=true,north=true,orientation=down_west,south=false,up=true,west=false": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 180,
+      "y": 270
+    },
+    "down=false,east=true,north=true,orientation=down_west,south=false,up=true,west=true": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 180,
+      "y": 270
+    },
+    "down=false,east=true,north=true,orientation=down_west,south=true,up=false,west=false": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 180,
+      "y": 270
+    },
+    "down=false,east=true,north=true,orientation=down_west,south=true,up=false,west=true": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 180,
+      "y": 270
+    },
+    "down=false,east=true,north=true,orientation=down_west,south=true,up=true,west=false": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 180,
+      "y": 270
+    },
+    "down=false,east=true,north=true,orientation=down_west,south=true,up=true,west=true": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 180,
+      "y": 270
+    },
+    "down=false,east=true,north=true,orientation=east_up,south=false,up=false,west=false": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 90,
+      "y": 90
+    },
+    "down=false,east=true,north=true,orientation=east_up,south=false,up=false,west=true": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 90,
+      "y": 90
+    },
+    "down=false,east=true,north=true,orientation=east_up,south=false,up=true,west=false": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 90,
+      "y": 90
+    },
+    "down=false,east=true,north=true,orientation=east_up,south=false,up=true,west=true": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 90,
+      "y": 90
+    },
+    "down=false,east=true,north=true,orientation=east_up,south=true,up=false,west=false": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 90,
+      "y": 90
+    },
+    "down=false,east=true,north=true,orientation=east_up,south=true,up=false,west=true": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 90,
+      "y": 90
+    },
+    "down=false,east=true,north=true,orientation=east_up,south=true,up=true,west=false": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 90,
+      "y": 90
+    },
+    "down=false,east=true,north=true,orientation=east_up,south=true,up=true,west=true": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 90,
+      "y": 90
+    },
+    "down=false,east=true,north=true,orientation=north_up,south=false,up=false,west=false": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 90
+    },
+    "down=false,east=true,north=true,orientation=north_up,south=false,up=false,west=true": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 90
+    },
+    "down=false,east=true,north=true,orientation=north_up,south=false,up=true,west=false": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 90
+    },
+    "down=false,east=true,north=true,orientation=north_up,south=false,up=true,west=true": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 90
+    },
+    "down=false,east=true,north=true,orientation=north_up,south=true,up=false,west=false": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 90
+    },
+    "down=false,east=true,north=true,orientation=north_up,south=true,up=false,west=true": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 90
+    },
+    "down=false,east=true,north=true,orientation=north_up,south=true,up=true,west=false": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 90
+    },
+    "down=false,east=true,north=true,orientation=north_up,south=true,up=true,west=true": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 90
+    },
+    "down=false,east=true,north=true,orientation=south_up,south=false,up=false,west=false": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 90,
+      "y": 180
+    },
+    "down=false,east=true,north=true,orientation=south_up,south=false,up=false,west=true": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 90,
+      "y": 180
+    },
+    "down=false,east=true,north=true,orientation=south_up,south=false,up=true,west=false": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 90,
+      "y": 180
+    },
+    "down=false,east=true,north=true,orientation=south_up,south=false,up=true,west=true": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 90,
+      "y": 180
+    },
+    "down=false,east=true,north=true,orientation=south_up,south=true,up=false,west=false": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 90,
+      "y": 180
+    },
+    "down=false,east=true,north=true,orientation=south_up,south=true,up=false,west=true": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 90,
+      "y": 180
+    },
+    "down=false,east=true,north=true,orientation=south_up,south=true,up=true,west=false": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 90,
+      "y": 180
+    },
+    "down=false,east=true,north=true,orientation=south_up,south=true,up=true,west=true": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 90,
+      "y": 180
+    },
+    "down=false,east=true,north=true,orientation=up_east,south=false,up=false,west=false": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "y": 90
+    },
+    "down=false,east=true,north=true,orientation=up_east,south=false,up=false,west=true": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "y": 90
+    },
+    "down=false,east=true,north=true,orientation=up_east,south=false,up=true,west=false": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "y": 90
+    },
+    "down=false,east=true,north=true,orientation=up_east,south=false,up=true,west=true": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "y": 90
+    },
+    "down=false,east=true,north=true,orientation=up_east,south=true,up=false,west=false": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "y": 90
+    },
+    "down=false,east=true,north=true,orientation=up_east,south=true,up=false,west=true": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "y": 90
+    },
+    "down=false,east=true,north=true,orientation=up_east,south=true,up=true,west=false": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "y": 90
+    },
+    "down=false,east=true,north=true,orientation=up_east,south=true,up=true,west=true": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "y": 90
+    },
+    "down=false,east=true,north=true,orientation=up_north,south=false,up=false,west=false": {
+      "model": "little_big_redstone:block/gray_microchip"
+    },
+    "down=false,east=true,north=true,orientation=up_north,south=false,up=false,west=true": {
+      "model": "little_big_redstone:block/gray_microchip"
+    },
+    "down=false,east=true,north=true,orientation=up_north,south=false,up=true,west=false": {
+      "model": "little_big_redstone:block/gray_microchip"
+    },
+    "down=false,east=true,north=true,orientation=up_north,south=false,up=true,west=true": {
+      "model": "little_big_redstone:block/gray_microchip"
+    },
+    "down=false,east=true,north=true,orientation=up_north,south=true,up=false,west=false": {
+      "model": "little_big_redstone:block/gray_microchip"
+    },
+    "down=false,east=true,north=true,orientation=up_north,south=true,up=false,west=true": {
+      "model": "little_big_redstone:block/gray_microchip"
+    },
+    "down=false,east=true,north=true,orientation=up_north,south=true,up=true,west=false": {
+      "model": "little_big_redstone:block/gray_microchip"
+    },
+    "down=false,east=true,north=true,orientation=up_north,south=true,up=true,west=true": {
+      "model": "little_big_redstone:block/gray_microchip"
+    },
+    "down=false,east=true,north=true,orientation=up_south,south=false,up=false,west=false": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "y": 180
+    },
+    "down=false,east=true,north=true,orientation=up_south,south=false,up=false,west=true": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "y": 180
+    },
+    "down=false,east=true,north=true,orientation=up_south,south=false,up=true,west=false": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "y": 180
+    },
+    "down=false,east=true,north=true,orientation=up_south,south=false,up=true,west=true": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "y": 180
+    },
+    "down=false,east=true,north=true,orientation=up_south,south=true,up=false,west=false": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "y": 180
+    },
+    "down=false,east=true,north=true,orientation=up_south,south=true,up=false,west=true": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "y": 180
+    },
+    "down=false,east=true,north=true,orientation=up_south,south=true,up=true,west=false": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "y": 180
+    },
+    "down=false,east=true,north=true,orientation=up_south,south=true,up=true,west=true": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "y": 180
+    },
+    "down=false,east=true,north=true,orientation=up_west,south=false,up=false,west=false": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "y": 270
+    },
+    "down=false,east=true,north=true,orientation=up_west,south=false,up=false,west=true": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "y": 270
+    },
+    "down=false,east=true,north=true,orientation=up_west,south=false,up=true,west=false": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "y": 270
+    },
+    "down=false,east=true,north=true,orientation=up_west,south=false,up=true,west=true": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "y": 270
+    },
+    "down=false,east=true,north=true,orientation=up_west,south=true,up=false,west=false": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "y": 270
+    },
+    "down=false,east=true,north=true,orientation=up_west,south=true,up=false,west=true": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "y": 270
+    },
+    "down=false,east=true,north=true,orientation=up_west,south=true,up=true,west=false": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "y": 270
+    },
+    "down=false,east=true,north=true,orientation=up_west,south=true,up=true,west=true": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "y": 270
+    },
+    "down=false,east=true,north=true,orientation=west_up,south=false,up=false,west=false": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 90,
+      "y": 270
+    },
+    "down=false,east=true,north=true,orientation=west_up,south=false,up=false,west=true": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 90,
+      "y": 270
+    },
+    "down=false,east=true,north=true,orientation=west_up,south=false,up=true,west=false": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 90,
+      "y": 270
+    },
+    "down=false,east=true,north=true,orientation=west_up,south=false,up=true,west=true": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 90,
+      "y": 270
+    },
+    "down=false,east=true,north=true,orientation=west_up,south=true,up=false,west=false": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 90,
+      "y": 270
+    },
+    "down=false,east=true,north=true,orientation=west_up,south=true,up=false,west=true": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 90,
+      "y": 270
+    },
+    "down=false,east=true,north=true,orientation=west_up,south=true,up=true,west=false": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 90,
+      "y": 270
+    },
+    "down=false,east=true,north=true,orientation=west_up,south=true,up=true,west=true": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 90,
+      "y": 270
+    },
+    "down=true,east=false,north=false,orientation=down_east,south=false,up=false,west=false": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 180,
+      "y": 90
+    },
+    "down=true,east=false,north=false,orientation=down_east,south=false,up=false,west=true": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 180,
+      "y": 90
+    },
+    "down=true,east=false,north=false,orientation=down_east,south=false,up=true,west=false": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 180,
+      "y": 90
+    },
+    "down=true,east=false,north=false,orientation=down_east,south=false,up=true,west=true": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 180,
+      "y": 90
+    },
+    "down=true,east=false,north=false,orientation=down_east,south=true,up=false,west=false": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 180,
+      "y": 90
+    },
+    "down=true,east=false,north=false,orientation=down_east,south=true,up=false,west=true": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 180,
+      "y": 90
+    },
+    "down=true,east=false,north=false,orientation=down_east,south=true,up=true,west=false": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 180,
+      "y": 90
+    },
+    "down=true,east=false,north=false,orientation=down_east,south=true,up=true,west=true": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 180,
+      "y": 90
+    },
+    "down=true,east=false,north=false,orientation=down_north,south=false,up=false,west=false": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 180
+    },
+    "down=true,east=false,north=false,orientation=down_north,south=false,up=false,west=true": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 180
+    },
+    "down=true,east=false,north=false,orientation=down_north,south=false,up=true,west=false": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 180
+    },
+    "down=true,east=false,north=false,orientation=down_north,south=false,up=true,west=true": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 180
+    },
+    "down=true,east=false,north=false,orientation=down_north,south=true,up=false,west=false": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 180
+    },
+    "down=true,east=false,north=false,orientation=down_north,south=true,up=false,west=true": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 180
+    },
+    "down=true,east=false,north=false,orientation=down_north,south=true,up=true,west=false": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 180
+    },
+    "down=true,east=false,north=false,orientation=down_north,south=true,up=true,west=true": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 180
+    },
+    "down=true,east=false,north=false,orientation=down_south,south=false,up=false,west=false": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 180,
+      "y": 180
+    },
+    "down=true,east=false,north=false,orientation=down_south,south=false,up=false,west=true": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 180,
+      "y": 180
+    },
+    "down=true,east=false,north=false,orientation=down_south,south=false,up=true,west=false": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 180,
+      "y": 180
+    },
+    "down=true,east=false,north=false,orientation=down_south,south=false,up=true,west=true": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 180,
+      "y": 180
+    },
+    "down=true,east=false,north=false,orientation=down_south,south=true,up=false,west=false": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 180,
+      "y": 180
+    },
+    "down=true,east=false,north=false,orientation=down_south,south=true,up=false,west=true": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 180,
+      "y": 180
+    },
+    "down=true,east=false,north=false,orientation=down_south,south=true,up=true,west=false": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 180,
+      "y": 180
+    },
+    "down=true,east=false,north=false,orientation=down_south,south=true,up=true,west=true": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 180,
+      "y": 180
+    },
+    "down=true,east=false,north=false,orientation=down_west,south=false,up=false,west=false": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 180,
+      "y": 270
+    },
+    "down=true,east=false,north=false,orientation=down_west,south=false,up=false,west=true": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 180,
+      "y": 270
+    },
+    "down=true,east=false,north=false,orientation=down_west,south=false,up=true,west=false": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 180,
+      "y": 270
+    },
+    "down=true,east=false,north=false,orientation=down_west,south=false,up=true,west=true": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 180,
+      "y": 270
+    },
+    "down=true,east=false,north=false,orientation=down_west,south=true,up=false,west=false": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 180,
+      "y": 270
+    },
+    "down=true,east=false,north=false,orientation=down_west,south=true,up=false,west=true": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 180,
+      "y": 270
+    },
+    "down=true,east=false,north=false,orientation=down_west,south=true,up=true,west=false": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 180,
+      "y": 270
+    },
+    "down=true,east=false,north=false,orientation=down_west,south=true,up=true,west=true": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 180,
+      "y": 270
+    },
+    "down=true,east=false,north=false,orientation=east_up,south=false,up=false,west=false": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 90,
+      "y": 90
+    },
+    "down=true,east=false,north=false,orientation=east_up,south=false,up=false,west=true": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 90,
+      "y": 90
+    },
+    "down=true,east=false,north=false,orientation=east_up,south=false,up=true,west=false": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 90,
+      "y": 90
+    },
+    "down=true,east=false,north=false,orientation=east_up,south=false,up=true,west=true": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 90,
+      "y": 90
+    },
+    "down=true,east=false,north=false,orientation=east_up,south=true,up=false,west=false": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 90,
+      "y": 90
+    },
+    "down=true,east=false,north=false,orientation=east_up,south=true,up=false,west=true": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 90,
+      "y": 90
+    },
+    "down=true,east=false,north=false,orientation=east_up,south=true,up=true,west=false": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 90,
+      "y": 90
+    },
+    "down=true,east=false,north=false,orientation=east_up,south=true,up=true,west=true": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 90,
+      "y": 90
+    },
+    "down=true,east=false,north=false,orientation=north_up,south=false,up=false,west=false": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 90
+    },
+    "down=true,east=false,north=false,orientation=north_up,south=false,up=false,west=true": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 90
+    },
+    "down=true,east=false,north=false,orientation=north_up,south=false,up=true,west=false": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 90
+    },
+    "down=true,east=false,north=false,orientation=north_up,south=false,up=true,west=true": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 90
+    },
+    "down=true,east=false,north=false,orientation=north_up,south=true,up=false,west=false": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 90
+    },
+    "down=true,east=false,north=false,orientation=north_up,south=true,up=false,west=true": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 90
+    },
+    "down=true,east=false,north=false,orientation=north_up,south=true,up=true,west=false": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 90
+    },
+    "down=true,east=false,north=false,orientation=north_up,south=true,up=true,west=true": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 90
+    },
+    "down=true,east=false,north=false,orientation=south_up,south=false,up=false,west=false": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 90,
+      "y": 180
+    },
+    "down=true,east=false,north=false,orientation=south_up,south=false,up=false,west=true": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 90,
+      "y": 180
+    },
+    "down=true,east=false,north=false,orientation=south_up,south=false,up=true,west=false": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 90,
+      "y": 180
+    },
+    "down=true,east=false,north=false,orientation=south_up,south=false,up=true,west=true": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 90,
+      "y": 180
+    },
+    "down=true,east=false,north=false,orientation=south_up,south=true,up=false,west=false": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 90,
+      "y": 180
+    },
+    "down=true,east=false,north=false,orientation=south_up,south=true,up=false,west=true": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 90,
+      "y": 180
+    },
+    "down=true,east=false,north=false,orientation=south_up,south=true,up=true,west=false": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 90,
+      "y": 180
+    },
+    "down=true,east=false,north=false,orientation=south_up,south=true,up=true,west=true": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 90,
+      "y": 180
+    },
+    "down=true,east=false,north=false,orientation=up_east,south=false,up=false,west=false": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "y": 90
+    },
+    "down=true,east=false,north=false,orientation=up_east,south=false,up=false,west=true": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "y": 90
+    },
+    "down=true,east=false,north=false,orientation=up_east,south=false,up=true,west=false": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "y": 90
+    },
+    "down=true,east=false,north=false,orientation=up_east,south=false,up=true,west=true": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "y": 90
+    },
+    "down=true,east=false,north=false,orientation=up_east,south=true,up=false,west=false": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "y": 90
+    },
+    "down=true,east=false,north=false,orientation=up_east,south=true,up=false,west=true": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "y": 90
+    },
+    "down=true,east=false,north=false,orientation=up_east,south=true,up=true,west=false": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "y": 90
+    },
+    "down=true,east=false,north=false,orientation=up_east,south=true,up=true,west=true": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "y": 90
+    },
+    "down=true,east=false,north=false,orientation=up_north,south=false,up=false,west=false": {
+      "model": "little_big_redstone:block/gray_microchip"
+    },
+    "down=true,east=false,north=false,orientation=up_north,south=false,up=false,west=true": {
+      "model": "little_big_redstone:block/gray_microchip"
+    },
+    "down=true,east=false,north=false,orientation=up_north,south=false,up=true,west=false": {
+      "model": "little_big_redstone:block/gray_microchip"
+    },
+    "down=true,east=false,north=false,orientation=up_north,south=false,up=true,west=true": {
+      "model": "little_big_redstone:block/gray_microchip"
+    },
+    "down=true,east=false,north=false,orientation=up_north,south=true,up=false,west=false": {
+      "model": "little_big_redstone:block/gray_microchip"
+    },
+    "down=true,east=false,north=false,orientation=up_north,south=true,up=false,west=true": {
+      "model": "little_big_redstone:block/gray_microchip"
+    },
+    "down=true,east=false,north=false,orientation=up_north,south=true,up=true,west=false": {
+      "model": "little_big_redstone:block/gray_microchip"
+    },
+    "down=true,east=false,north=false,orientation=up_north,south=true,up=true,west=true": {
+      "model": "little_big_redstone:block/gray_microchip"
+    },
+    "down=true,east=false,north=false,orientation=up_south,south=false,up=false,west=false": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "y": 180
+    },
+    "down=true,east=false,north=false,orientation=up_south,south=false,up=false,west=true": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "y": 180
+    },
+    "down=true,east=false,north=false,orientation=up_south,south=false,up=true,west=false": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "y": 180
+    },
+    "down=true,east=false,north=false,orientation=up_south,south=false,up=true,west=true": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "y": 180
+    },
+    "down=true,east=false,north=false,orientation=up_south,south=true,up=false,west=false": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "y": 180
+    },
+    "down=true,east=false,north=false,orientation=up_south,south=true,up=false,west=true": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "y": 180
+    },
+    "down=true,east=false,north=false,orientation=up_south,south=true,up=true,west=false": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "y": 180
+    },
+    "down=true,east=false,north=false,orientation=up_south,south=true,up=true,west=true": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "y": 180
+    },
+    "down=true,east=false,north=false,orientation=up_west,south=false,up=false,west=false": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "y": 270
+    },
+    "down=true,east=false,north=false,orientation=up_west,south=false,up=false,west=true": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "y": 270
+    },
+    "down=true,east=false,north=false,orientation=up_west,south=false,up=true,west=false": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "y": 270
+    },
+    "down=true,east=false,north=false,orientation=up_west,south=false,up=true,west=true": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "y": 270
+    },
+    "down=true,east=false,north=false,orientation=up_west,south=true,up=false,west=false": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "y": 270
+    },
+    "down=true,east=false,north=false,orientation=up_west,south=true,up=false,west=true": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "y": 270
+    },
+    "down=true,east=false,north=false,orientation=up_west,south=true,up=true,west=false": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "y": 270
+    },
+    "down=true,east=false,north=false,orientation=up_west,south=true,up=true,west=true": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "y": 270
+    },
+    "down=true,east=false,north=false,orientation=west_up,south=false,up=false,west=false": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 90,
+      "y": 270
+    },
+    "down=true,east=false,north=false,orientation=west_up,south=false,up=false,west=true": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 90,
+      "y": 270
+    },
+    "down=true,east=false,north=false,orientation=west_up,south=false,up=true,west=false": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 90,
+      "y": 270
+    },
+    "down=true,east=false,north=false,orientation=west_up,south=false,up=true,west=true": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 90,
+      "y": 270
+    },
+    "down=true,east=false,north=false,orientation=west_up,south=true,up=false,west=false": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 90,
+      "y": 270
+    },
+    "down=true,east=false,north=false,orientation=west_up,south=true,up=false,west=true": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 90,
+      "y": 270
+    },
+    "down=true,east=false,north=false,orientation=west_up,south=true,up=true,west=false": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 90,
+      "y": 270
+    },
+    "down=true,east=false,north=false,orientation=west_up,south=true,up=true,west=true": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 90,
+      "y": 270
+    },
+    "down=true,east=false,north=true,orientation=down_east,south=false,up=false,west=false": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 180,
+      "y": 90
+    },
+    "down=true,east=false,north=true,orientation=down_east,south=false,up=false,west=true": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 180,
+      "y": 90
+    },
+    "down=true,east=false,north=true,orientation=down_east,south=false,up=true,west=false": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 180,
+      "y": 90
+    },
+    "down=true,east=false,north=true,orientation=down_east,south=false,up=true,west=true": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 180,
+      "y": 90
+    },
+    "down=true,east=false,north=true,orientation=down_east,south=true,up=false,west=false": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 180,
+      "y": 90
+    },
+    "down=true,east=false,north=true,orientation=down_east,south=true,up=false,west=true": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 180,
+      "y": 90
+    },
+    "down=true,east=false,north=true,orientation=down_east,south=true,up=true,west=false": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 180,
+      "y": 90
+    },
+    "down=true,east=false,north=true,orientation=down_east,south=true,up=true,west=true": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 180,
+      "y": 90
+    },
+    "down=true,east=false,north=true,orientation=down_north,south=false,up=false,west=false": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 180
+    },
+    "down=true,east=false,north=true,orientation=down_north,south=false,up=false,west=true": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 180
+    },
+    "down=true,east=false,north=true,orientation=down_north,south=false,up=true,west=false": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 180
+    },
+    "down=true,east=false,north=true,orientation=down_north,south=false,up=true,west=true": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 180
+    },
+    "down=true,east=false,north=true,orientation=down_north,south=true,up=false,west=false": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 180
+    },
+    "down=true,east=false,north=true,orientation=down_north,south=true,up=false,west=true": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 180
+    },
+    "down=true,east=false,north=true,orientation=down_north,south=true,up=true,west=false": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 180
+    },
+    "down=true,east=false,north=true,orientation=down_north,south=true,up=true,west=true": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 180
+    },
+    "down=true,east=false,north=true,orientation=down_south,south=false,up=false,west=false": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 180,
+      "y": 180
+    },
+    "down=true,east=false,north=true,orientation=down_south,south=false,up=false,west=true": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 180,
+      "y": 180
+    },
+    "down=true,east=false,north=true,orientation=down_south,south=false,up=true,west=false": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 180,
+      "y": 180
+    },
+    "down=true,east=false,north=true,orientation=down_south,south=false,up=true,west=true": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 180,
+      "y": 180
+    },
+    "down=true,east=false,north=true,orientation=down_south,south=true,up=false,west=false": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 180,
+      "y": 180
+    },
+    "down=true,east=false,north=true,orientation=down_south,south=true,up=false,west=true": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 180,
+      "y": 180
+    },
+    "down=true,east=false,north=true,orientation=down_south,south=true,up=true,west=false": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 180,
+      "y": 180
+    },
+    "down=true,east=false,north=true,orientation=down_south,south=true,up=true,west=true": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 180,
+      "y": 180
+    },
+    "down=true,east=false,north=true,orientation=down_west,south=false,up=false,west=false": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 180,
+      "y": 270
+    },
+    "down=true,east=false,north=true,orientation=down_west,south=false,up=false,west=true": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 180,
+      "y": 270
+    },
+    "down=true,east=false,north=true,orientation=down_west,south=false,up=true,west=false": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 180,
+      "y": 270
+    },
+    "down=true,east=false,north=true,orientation=down_west,south=false,up=true,west=true": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 180,
+      "y": 270
+    },
+    "down=true,east=false,north=true,orientation=down_west,south=true,up=false,west=false": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 180,
+      "y": 270
+    },
+    "down=true,east=false,north=true,orientation=down_west,south=true,up=false,west=true": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 180,
+      "y": 270
+    },
+    "down=true,east=false,north=true,orientation=down_west,south=true,up=true,west=false": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 180,
+      "y": 270
+    },
+    "down=true,east=false,north=true,orientation=down_west,south=true,up=true,west=true": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 180,
+      "y": 270
+    },
+    "down=true,east=false,north=true,orientation=east_up,south=false,up=false,west=false": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 90,
+      "y": 90
+    },
+    "down=true,east=false,north=true,orientation=east_up,south=false,up=false,west=true": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 90,
+      "y": 90
+    },
+    "down=true,east=false,north=true,orientation=east_up,south=false,up=true,west=false": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 90,
+      "y": 90
+    },
+    "down=true,east=false,north=true,orientation=east_up,south=false,up=true,west=true": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 90,
+      "y": 90
+    },
+    "down=true,east=false,north=true,orientation=east_up,south=true,up=false,west=false": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 90,
+      "y": 90
+    },
+    "down=true,east=false,north=true,orientation=east_up,south=true,up=false,west=true": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 90,
+      "y": 90
+    },
+    "down=true,east=false,north=true,orientation=east_up,south=true,up=true,west=false": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 90,
+      "y": 90
+    },
+    "down=true,east=false,north=true,orientation=east_up,south=true,up=true,west=true": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 90,
+      "y": 90
+    },
+    "down=true,east=false,north=true,orientation=north_up,south=false,up=false,west=false": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 90
+    },
+    "down=true,east=false,north=true,orientation=north_up,south=false,up=false,west=true": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 90
+    },
+    "down=true,east=false,north=true,orientation=north_up,south=false,up=true,west=false": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 90
+    },
+    "down=true,east=false,north=true,orientation=north_up,south=false,up=true,west=true": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 90
+    },
+    "down=true,east=false,north=true,orientation=north_up,south=true,up=false,west=false": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 90
+    },
+    "down=true,east=false,north=true,orientation=north_up,south=true,up=false,west=true": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 90
+    },
+    "down=true,east=false,north=true,orientation=north_up,south=true,up=true,west=false": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 90
+    },
+    "down=true,east=false,north=true,orientation=north_up,south=true,up=true,west=true": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 90
+    },
+    "down=true,east=false,north=true,orientation=south_up,south=false,up=false,west=false": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 90,
+      "y": 180
+    },
+    "down=true,east=false,north=true,orientation=south_up,south=false,up=false,west=true": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 90,
+      "y": 180
+    },
+    "down=true,east=false,north=true,orientation=south_up,south=false,up=true,west=false": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 90,
+      "y": 180
+    },
+    "down=true,east=false,north=true,orientation=south_up,south=false,up=true,west=true": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 90,
+      "y": 180
+    },
+    "down=true,east=false,north=true,orientation=south_up,south=true,up=false,west=false": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 90,
+      "y": 180
+    },
+    "down=true,east=false,north=true,orientation=south_up,south=true,up=false,west=true": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 90,
+      "y": 180
+    },
+    "down=true,east=false,north=true,orientation=south_up,south=true,up=true,west=false": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 90,
+      "y": 180
+    },
+    "down=true,east=false,north=true,orientation=south_up,south=true,up=true,west=true": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 90,
+      "y": 180
+    },
+    "down=true,east=false,north=true,orientation=up_east,south=false,up=false,west=false": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "y": 90
+    },
+    "down=true,east=false,north=true,orientation=up_east,south=false,up=false,west=true": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "y": 90
+    },
+    "down=true,east=false,north=true,orientation=up_east,south=false,up=true,west=false": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "y": 90
+    },
+    "down=true,east=false,north=true,orientation=up_east,south=false,up=true,west=true": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "y": 90
+    },
+    "down=true,east=false,north=true,orientation=up_east,south=true,up=false,west=false": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "y": 90
+    },
+    "down=true,east=false,north=true,orientation=up_east,south=true,up=false,west=true": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "y": 90
+    },
+    "down=true,east=false,north=true,orientation=up_east,south=true,up=true,west=false": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "y": 90
+    },
+    "down=true,east=false,north=true,orientation=up_east,south=true,up=true,west=true": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "y": 90
+    },
+    "down=true,east=false,north=true,orientation=up_north,south=false,up=false,west=false": {
+      "model": "little_big_redstone:block/gray_microchip"
+    },
+    "down=true,east=false,north=true,orientation=up_north,south=false,up=false,west=true": {
+      "model": "little_big_redstone:block/gray_microchip"
+    },
+    "down=true,east=false,north=true,orientation=up_north,south=false,up=true,west=false": {
+      "model": "little_big_redstone:block/gray_microchip"
+    },
+    "down=true,east=false,north=true,orientation=up_north,south=false,up=true,west=true": {
+      "model": "little_big_redstone:block/gray_microchip"
+    },
+    "down=true,east=false,north=true,orientation=up_north,south=true,up=false,west=false": {
+      "model": "little_big_redstone:block/gray_microchip"
+    },
+    "down=true,east=false,north=true,orientation=up_north,south=true,up=false,west=true": {
+      "model": "little_big_redstone:block/gray_microchip"
+    },
+    "down=true,east=false,north=true,orientation=up_north,south=true,up=true,west=false": {
+      "model": "little_big_redstone:block/gray_microchip"
+    },
+    "down=true,east=false,north=true,orientation=up_north,south=true,up=true,west=true": {
+      "model": "little_big_redstone:block/gray_microchip"
+    },
+    "down=true,east=false,north=true,orientation=up_south,south=false,up=false,west=false": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "y": 180
+    },
+    "down=true,east=false,north=true,orientation=up_south,south=false,up=false,west=true": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "y": 180
+    },
+    "down=true,east=false,north=true,orientation=up_south,south=false,up=true,west=false": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "y": 180
+    },
+    "down=true,east=false,north=true,orientation=up_south,south=false,up=true,west=true": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "y": 180
+    },
+    "down=true,east=false,north=true,orientation=up_south,south=true,up=false,west=false": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "y": 180
+    },
+    "down=true,east=false,north=true,orientation=up_south,south=true,up=false,west=true": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "y": 180
+    },
+    "down=true,east=false,north=true,orientation=up_south,south=true,up=true,west=false": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "y": 180
+    },
+    "down=true,east=false,north=true,orientation=up_south,south=true,up=true,west=true": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "y": 180
+    },
+    "down=true,east=false,north=true,orientation=up_west,south=false,up=false,west=false": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "y": 270
+    },
+    "down=true,east=false,north=true,orientation=up_west,south=false,up=false,west=true": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "y": 270
+    },
+    "down=true,east=false,north=true,orientation=up_west,south=false,up=true,west=false": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "y": 270
+    },
+    "down=true,east=false,north=true,orientation=up_west,south=false,up=true,west=true": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "y": 270
+    },
+    "down=true,east=false,north=true,orientation=up_west,south=true,up=false,west=false": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "y": 270
+    },
+    "down=true,east=false,north=true,orientation=up_west,south=true,up=false,west=true": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "y": 270
+    },
+    "down=true,east=false,north=true,orientation=up_west,south=true,up=true,west=false": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "y": 270
+    },
+    "down=true,east=false,north=true,orientation=up_west,south=true,up=true,west=true": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "y": 270
+    },
+    "down=true,east=false,north=true,orientation=west_up,south=false,up=false,west=false": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 90,
+      "y": 270
+    },
+    "down=true,east=false,north=true,orientation=west_up,south=false,up=false,west=true": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 90,
+      "y": 270
+    },
+    "down=true,east=false,north=true,orientation=west_up,south=false,up=true,west=false": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 90,
+      "y": 270
+    },
+    "down=true,east=false,north=true,orientation=west_up,south=false,up=true,west=true": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 90,
+      "y": 270
+    },
+    "down=true,east=false,north=true,orientation=west_up,south=true,up=false,west=false": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 90,
+      "y": 270
+    },
+    "down=true,east=false,north=true,orientation=west_up,south=true,up=false,west=true": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 90,
+      "y": 270
+    },
+    "down=true,east=false,north=true,orientation=west_up,south=true,up=true,west=false": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 90,
+      "y": 270
+    },
+    "down=true,east=false,north=true,orientation=west_up,south=true,up=true,west=true": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 90,
+      "y": 270
+    },
+    "down=true,east=true,north=false,orientation=down_east,south=false,up=false,west=false": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 180,
+      "y": 90
+    },
+    "down=true,east=true,north=false,orientation=down_east,south=false,up=false,west=true": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 180,
+      "y": 90
+    },
+    "down=true,east=true,north=false,orientation=down_east,south=false,up=true,west=false": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 180,
+      "y": 90
+    },
+    "down=true,east=true,north=false,orientation=down_east,south=false,up=true,west=true": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 180,
+      "y": 90
+    },
+    "down=true,east=true,north=false,orientation=down_east,south=true,up=false,west=false": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 180,
+      "y": 90
+    },
+    "down=true,east=true,north=false,orientation=down_east,south=true,up=false,west=true": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 180,
+      "y": 90
+    },
+    "down=true,east=true,north=false,orientation=down_east,south=true,up=true,west=false": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 180,
+      "y": 90
+    },
+    "down=true,east=true,north=false,orientation=down_east,south=true,up=true,west=true": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 180,
+      "y": 90
+    },
+    "down=true,east=true,north=false,orientation=down_north,south=false,up=false,west=false": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 180
+    },
+    "down=true,east=true,north=false,orientation=down_north,south=false,up=false,west=true": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 180
+    },
+    "down=true,east=true,north=false,orientation=down_north,south=false,up=true,west=false": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 180
+    },
+    "down=true,east=true,north=false,orientation=down_north,south=false,up=true,west=true": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 180
+    },
+    "down=true,east=true,north=false,orientation=down_north,south=true,up=false,west=false": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 180
+    },
+    "down=true,east=true,north=false,orientation=down_north,south=true,up=false,west=true": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 180
+    },
+    "down=true,east=true,north=false,orientation=down_north,south=true,up=true,west=false": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 180
+    },
+    "down=true,east=true,north=false,orientation=down_north,south=true,up=true,west=true": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 180
+    },
+    "down=true,east=true,north=false,orientation=down_south,south=false,up=false,west=false": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 180,
+      "y": 180
+    },
+    "down=true,east=true,north=false,orientation=down_south,south=false,up=false,west=true": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 180,
+      "y": 180
+    },
+    "down=true,east=true,north=false,orientation=down_south,south=false,up=true,west=false": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 180,
+      "y": 180
+    },
+    "down=true,east=true,north=false,orientation=down_south,south=false,up=true,west=true": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 180,
+      "y": 180
+    },
+    "down=true,east=true,north=false,orientation=down_south,south=true,up=false,west=false": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 180,
+      "y": 180
+    },
+    "down=true,east=true,north=false,orientation=down_south,south=true,up=false,west=true": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 180,
+      "y": 180
+    },
+    "down=true,east=true,north=false,orientation=down_south,south=true,up=true,west=false": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 180,
+      "y": 180
+    },
+    "down=true,east=true,north=false,orientation=down_south,south=true,up=true,west=true": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 180,
+      "y": 180
+    },
+    "down=true,east=true,north=false,orientation=down_west,south=false,up=false,west=false": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 180,
+      "y": 270
+    },
+    "down=true,east=true,north=false,orientation=down_west,south=false,up=false,west=true": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 180,
+      "y": 270
+    },
+    "down=true,east=true,north=false,orientation=down_west,south=false,up=true,west=false": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 180,
+      "y": 270
+    },
+    "down=true,east=true,north=false,orientation=down_west,south=false,up=true,west=true": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 180,
+      "y": 270
+    },
+    "down=true,east=true,north=false,orientation=down_west,south=true,up=false,west=false": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 180,
+      "y": 270
+    },
+    "down=true,east=true,north=false,orientation=down_west,south=true,up=false,west=true": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 180,
+      "y": 270
+    },
+    "down=true,east=true,north=false,orientation=down_west,south=true,up=true,west=false": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 180,
+      "y": 270
+    },
+    "down=true,east=true,north=false,orientation=down_west,south=true,up=true,west=true": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 180,
+      "y": 270
+    },
+    "down=true,east=true,north=false,orientation=east_up,south=false,up=false,west=false": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 90,
+      "y": 90
+    },
+    "down=true,east=true,north=false,orientation=east_up,south=false,up=false,west=true": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 90,
+      "y": 90
+    },
+    "down=true,east=true,north=false,orientation=east_up,south=false,up=true,west=false": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 90,
+      "y": 90
+    },
+    "down=true,east=true,north=false,orientation=east_up,south=false,up=true,west=true": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 90,
+      "y": 90
+    },
+    "down=true,east=true,north=false,orientation=east_up,south=true,up=false,west=false": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 90,
+      "y": 90
+    },
+    "down=true,east=true,north=false,orientation=east_up,south=true,up=false,west=true": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 90,
+      "y": 90
+    },
+    "down=true,east=true,north=false,orientation=east_up,south=true,up=true,west=false": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 90,
+      "y": 90
+    },
+    "down=true,east=true,north=false,orientation=east_up,south=true,up=true,west=true": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 90,
+      "y": 90
+    },
+    "down=true,east=true,north=false,orientation=north_up,south=false,up=false,west=false": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 90
+    },
+    "down=true,east=true,north=false,orientation=north_up,south=false,up=false,west=true": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 90
+    },
+    "down=true,east=true,north=false,orientation=north_up,south=false,up=true,west=false": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 90
+    },
+    "down=true,east=true,north=false,orientation=north_up,south=false,up=true,west=true": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 90
+    },
+    "down=true,east=true,north=false,orientation=north_up,south=true,up=false,west=false": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 90
+    },
+    "down=true,east=true,north=false,orientation=north_up,south=true,up=false,west=true": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 90
+    },
+    "down=true,east=true,north=false,orientation=north_up,south=true,up=true,west=false": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 90
+    },
+    "down=true,east=true,north=false,orientation=north_up,south=true,up=true,west=true": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 90
+    },
+    "down=true,east=true,north=false,orientation=south_up,south=false,up=false,west=false": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 90,
+      "y": 180
+    },
+    "down=true,east=true,north=false,orientation=south_up,south=false,up=false,west=true": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 90,
+      "y": 180
+    },
+    "down=true,east=true,north=false,orientation=south_up,south=false,up=true,west=false": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 90,
+      "y": 180
+    },
+    "down=true,east=true,north=false,orientation=south_up,south=false,up=true,west=true": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 90,
+      "y": 180
+    },
+    "down=true,east=true,north=false,orientation=south_up,south=true,up=false,west=false": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 90,
+      "y": 180
+    },
+    "down=true,east=true,north=false,orientation=south_up,south=true,up=false,west=true": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 90,
+      "y": 180
+    },
+    "down=true,east=true,north=false,orientation=south_up,south=true,up=true,west=false": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 90,
+      "y": 180
+    },
+    "down=true,east=true,north=false,orientation=south_up,south=true,up=true,west=true": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 90,
+      "y": 180
+    },
+    "down=true,east=true,north=false,orientation=up_east,south=false,up=false,west=false": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "y": 90
+    },
+    "down=true,east=true,north=false,orientation=up_east,south=false,up=false,west=true": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "y": 90
+    },
+    "down=true,east=true,north=false,orientation=up_east,south=false,up=true,west=false": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "y": 90
+    },
+    "down=true,east=true,north=false,orientation=up_east,south=false,up=true,west=true": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "y": 90
+    },
+    "down=true,east=true,north=false,orientation=up_east,south=true,up=false,west=false": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "y": 90
+    },
+    "down=true,east=true,north=false,orientation=up_east,south=true,up=false,west=true": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "y": 90
+    },
+    "down=true,east=true,north=false,orientation=up_east,south=true,up=true,west=false": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "y": 90
+    },
+    "down=true,east=true,north=false,orientation=up_east,south=true,up=true,west=true": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "y": 90
+    },
+    "down=true,east=true,north=false,orientation=up_north,south=false,up=false,west=false": {
+      "model": "little_big_redstone:block/gray_microchip"
+    },
+    "down=true,east=true,north=false,orientation=up_north,south=false,up=false,west=true": {
+      "model": "little_big_redstone:block/gray_microchip"
+    },
+    "down=true,east=true,north=false,orientation=up_north,south=false,up=true,west=false": {
+      "model": "little_big_redstone:block/gray_microchip"
+    },
+    "down=true,east=true,north=false,orientation=up_north,south=false,up=true,west=true": {
+      "model": "little_big_redstone:block/gray_microchip"
+    },
+    "down=true,east=true,north=false,orientation=up_north,south=true,up=false,west=false": {
+      "model": "little_big_redstone:block/gray_microchip"
+    },
+    "down=true,east=true,north=false,orientation=up_north,south=true,up=false,west=true": {
+      "model": "little_big_redstone:block/gray_microchip"
+    },
+    "down=true,east=true,north=false,orientation=up_north,south=true,up=true,west=false": {
+      "model": "little_big_redstone:block/gray_microchip"
+    },
+    "down=true,east=true,north=false,orientation=up_north,south=true,up=true,west=true": {
+      "model": "little_big_redstone:block/gray_microchip"
+    },
+    "down=true,east=true,north=false,orientation=up_south,south=false,up=false,west=false": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "y": 180
+    },
+    "down=true,east=true,north=false,orientation=up_south,south=false,up=false,west=true": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "y": 180
+    },
+    "down=true,east=true,north=false,orientation=up_south,south=false,up=true,west=false": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "y": 180
+    },
+    "down=true,east=true,north=false,orientation=up_south,south=false,up=true,west=true": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "y": 180
+    },
+    "down=true,east=true,north=false,orientation=up_south,south=true,up=false,west=false": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "y": 180
+    },
+    "down=true,east=true,north=false,orientation=up_south,south=true,up=false,west=true": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "y": 180
+    },
+    "down=true,east=true,north=false,orientation=up_south,south=true,up=true,west=false": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "y": 180
+    },
+    "down=true,east=true,north=false,orientation=up_south,south=true,up=true,west=true": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "y": 180
+    },
+    "down=true,east=true,north=false,orientation=up_west,south=false,up=false,west=false": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "y": 270
+    },
+    "down=true,east=true,north=false,orientation=up_west,south=false,up=false,west=true": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "y": 270
+    },
+    "down=true,east=true,north=false,orientation=up_west,south=false,up=true,west=false": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "y": 270
+    },
+    "down=true,east=true,north=false,orientation=up_west,south=false,up=true,west=true": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "y": 270
+    },
+    "down=true,east=true,north=false,orientation=up_west,south=true,up=false,west=false": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "y": 270
+    },
+    "down=true,east=true,north=false,orientation=up_west,south=true,up=false,west=true": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "y": 270
+    },
+    "down=true,east=true,north=false,orientation=up_west,south=true,up=true,west=false": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "y": 270
+    },
+    "down=true,east=true,north=false,orientation=up_west,south=true,up=true,west=true": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "y": 270
+    },
+    "down=true,east=true,north=false,orientation=west_up,south=false,up=false,west=false": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 90,
+      "y": 270
+    },
+    "down=true,east=true,north=false,orientation=west_up,south=false,up=false,west=true": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 90,
+      "y": 270
+    },
+    "down=true,east=true,north=false,orientation=west_up,south=false,up=true,west=false": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 90,
+      "y": 270
+    },
+    "down=true,east=true,north=false,orientation=west_up,south=false,up=true,west=true": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 90,
+      "y": 270
+    },
+    "down=true,east=true,north=false,orientation=west_up,south=true,up=false,west=false": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 90,
+      "y": 270
+    },
+    "down=true,east=true,north=false,orientation=west_up,south=true,up=false,west=true": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 90,
+      "y": 270
+    },
+    "down=true,east=true,north=false,orientation=west_up,south=true,up=true,west=false": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 90,
+      "y": 270
+    },
+    "down=true,east=true,north=false,orientation=west_up,south=true,up=true,west=true": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 90,
+      "y": 270
+    },
+    "down=true,east=true,north=true,orientation=down_east,south=false,up=false,west=false": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 180,
+      "y": 90
+    },
+    "down=true,east=true,north=true,orientation=down_east,south=false,up=false,west=true": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 180,
+      "y": 90
+    },
+    "down=true,east=true,north=true,orientation=down_east,south=false,up=true,west=false": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 180,
+      "y": 90
+    },
+    "down=true,east=true,north=true,orientation=down_east,south=false,up=true,west=true": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 180,
+      "y": 90
+    },
+    "down=true,east=true,north=true,orientation=down_east,south=true,up=false,west=false": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 180,
+      "y": 90
+    },
+    "down=true,east=true,north=true,orientation=down_east,south=true,up=false,west=true": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 180,
+      "y": 90
+    },
+    "down=true,east=true,north=true,orientation=down_east,south=true,up=true,west=false": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 180,
+      "y": 90
+    },
+    "down=true,east=true,north=true,orientation=down_east,south=true,up=true,west=true": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 180,
+      "y": 90
+    },
+    "down=true,east=true,north=true,orientation=down_north,south=false,up=false,west=false": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 180
+    },
+    "down=true,east=true,north=true,orientation=down_north,south=false,up=false,west=true": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 180
+    },
+    "down=true,east=true,north=true,orientation=down_north,south=false,up=true,west=false": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 180
+    },
+    "down=true,east=true,north=true,orientation=down_north,south=false,up=true,west=true": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 180
+    },
+    "down=true,east=true,north=true,orientation=down_north,south=true,up=false,west=false": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 180
+    },
+    "down=true,east=true,north=true,orientation=down_north,south=true,up=false,west=true": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 180
+    },
+    "down=true,east=true,north=true,orientation=down_north,south=true,up=true,west=false": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 180
+    },
+    "down=true,east=true,north=true,orientation=down_north,south=true,up=true,west=true": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 180
+    },
+    "down=true,east=true,north=true,orientation=down_south,south=false,up=false,west=false": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 180,
+      "y": 180
+    },
+    "down=true,east=true,north=true,orientation=down_south,south=false,up=false,west=true": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 180,
+      "y": 180
+    },
+    "down=true,east=true,north=true,orientation=down_south,south=false,up=true,west=false": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 180,
+      "y": 180
+    },
+    "down=true,east=true,north=true,orientation=down_south,south=false,up=true,west=true": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 180,
+      "y": 180
+    },
+    "down=true,east=true,north=true,orientation=down_south,south=true,up=false,west=false": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 180,
+      "y": 180
+    },
+    "down=true,east=true,north=true,orientation=down_south,south=true,up=false,west=true": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 180,
+      "y": 180
+    },
+    "down=true,east=true,north=true,orientation=down_south,south=true,up=true,west=false": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 180,
+      "y": 180
+    },
+    "down=true,east=true,north=true,orientation=down_south,south=true,up=true,west=true": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 180,
+      "y": 180
+    },
+    "down=true,east=true,north=true,orientation=down_west,south=false,up=false,west=false": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 180,
+      "y": 270
+    },
+    "down=true,east=true,north=true,orientation=down_west,south=false,up=false,west=true": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 180,
+      "y": 270
+    },
+    "down=true,east=true,north=true,orientation=down_west,south=false,up=true,west=false": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 180,
+      "y": 270
+    },
+    "down=true,east=true,north=true,orientation=down_west,south=false,up=true,west=true": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 180,
+      "y": 270
+    },
+    "down=true,east=true,north=true,orientation=down_west,south=true,up=false,west=false": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 180,
+      "y": 270
+    },
+    "down=true,east=true,north=true,orientation=down_west,south=true,up=false,west=true": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 180,
+      "y": 270
+    },
+    "down=true,east=true,north=true,orientation=down_west,south=true,up=true,west=false": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 180,
+      "y": 270
+    },
+    "down=true,east=true,north=true,orientation=down_west,south=true,up=true,west=true": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 180,
+      "y": 270
+    },
+    "down=true,east=true,north=true,orientation=east_up,south=false,up=false,west=false": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 90,
+      "y": 90
+    },
+    "down=true,east=true,north=true,orientation=east_up,south=false,up=false,west=true": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 90,
+      "y": 90
+    },
+    "down=true,east=true,north=true,orientation=east_up,south=false,up=true,west=false": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 90,
+      "y": 90
+    },
+    "down=true,east=true,north=true,orientation=east_up,south=false,up=true,west=true": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 90,
+      "y": 90
+    },
+    "down=true,east=true,north=true,orientation=east_up,south=true,up=false,west=false": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 90,
+      "y": 90
+    },
+    "down=true,east=true,north=true,orientation=east_up,south=true,up=false,west=true": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 90,
+      "y": 90
+    },
+    "down=true,east=true,north=true,orientation=east_up,south=true,up=true,west=false": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 90,
+      "y": 90
+    },
+    "down=true,east=true,north=true,orientation=east_up,south=true,up=true,west=true": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 90,
+      "y": 90
+    },
+    "down=true,east=true,north=true,orientation=north_up,south=false,up=false,west=false": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 90
+    },
+    "down=true,east=true,north=true,orientation=north_up,south=false,up=false,west=true": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 90
+    },
+    "down=true,east=true,north=true,orientation=north_up,south=false,up=true,west=false": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 90
+    },
+    "down=true,east=true,north=true,orientation=north_up,south=false,up=true,west=true": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 90
+    },
+    "down=true,east=true,north=true,orientation=north_up,south=true,up=false,west=false": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 90
+    },
+    "down=true,east=true,north=true,orientation=north_up,south=true,up=false,west=true": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 90
+    },
+    "down=true,east=true,north=true,orientation=north_up,south=true,up=true,west=false": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 90
+    },
+    "down=true,east=true,north=true,orientation=north_up,south=true,up=true,west=true": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 90
+    },
+    "down=true,east=true,north=true,orientation=south_up,south=false,up=false,west=false": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 90,
+      "y": 180
+    },
+    "down=true,east=true,north=true,orientation=south_up,south=false,up=false,west=true": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 90,
+      "y": 180
+    },
+    "down=true,east=true,north=true,orientation=south_up,south=false,up=true,west=false": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 90,
+      "y": 180
+    },
+    "down=true,east=true,north=true,orientation=south_up,south=false,up=true,west=true": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 90,
+      "y": 180
+    },
+    "down=true,east=true,north=true,orientation=south_up,south=true,up=false,west=false": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 90,
+      "y": 180
+    },
+    "down=true,east=true,north=true,orientation=south_up,south=true,up=false,west=true": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 90,
+      "y": 180
+    },
+    "down=true,east=true,north=true,orientation=south_up,south=true,up=true,west=false": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 90,
+      "y": 180
+    },
+    "down=true,east=true,north=true,orientation=south_up,south=true,up=true,west=true": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 90,
+      "y": 180
+    },
+    "down=true,east=true,north=true,orientation=up_east,south=false,up=false,west=false": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "y": 90
+    },
+    "down=true,east=true,north=true,orientation=up_east,south=false,up=false,west=true": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "y": 90
+    },
+    "down=true,east=true,north=true,orientation=up_east,south=false,up=true,west=false": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "y": 90
+    },
+    "down=true,east=true,north=true,orientation=up_east,south=false,up=true,west=true": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "y": 90
+    },
+    "down=true,east=true,north=true,orientation=up_east,south=true,up=false,west=false": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "y": 90
+    },
+    "down=true,east=true,north=true,orientation=up_east,south=true,up=false,west=true": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "y": 90
+    },
+    "down=true,east=true,north=true,orientation=up_east,south=true,up=true,west=false": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "y": 90
+    },
+    "down=true,east=true,north=true,orientation=up_east,south=true,up=true,west=true": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "y": 90
+    },
+    "down=true,east=true,north=true,orientation=up_north,south=false,up=false,west=false": {
+      "model": "little_big_redstone:block/gray_microchip"
+    },
+    "down=true,east=true,north=true,orientation=up_north,south=false,up=false,west=true": {
+      "model": "little_big_redstone:block/gray_microchip"
+    },
+    "down=true,east=true,north=true,orientation=up_north,south=false,up=true,west=false": {
+      "model": "little_big_redstone:block/gray_microchip"
+    },
+    "down=true,east=true,north=true,orientation=up_north,south=false,up=true,west=true": {
+      "model": "little_big_redstone:block/gray_microchip"
+    },
+    "down=true,east=true,north=true,orientation=up_north,south=true,up=false,west=false": {
+      "model": "little_big_redstone:block/gray_microchip"
+    },
+    "down=true,east=true,north=true,orientation=up_north,south=true,up=false,west=true": {
+      "model": "little_big_redstone:block/gray_microchip"
+    },
+    "down=true,east=true,north=true,orientation=up_north,south=true,up=true,west=false": {
+      "model": "little_big_redstone:block/gray_microchip"
+    },
+    "down=true,east=true,north=true,orientation=up_north,south=true,up=true,west=true": {
+      "model": "little_big_redstone:block/gray_microchip"
+    },
+    "down=true,east=true,north=true,orientation=up_south,south=false,up=false,west=false": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "y": 180
+    },
+    "down=true,east=true,north=true,orientation=up_south,south=false,up=false,west=true": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "y": 180
+    },
+    "down=true,east=true,north=true,orientation=up_south,south=false,up=true,west=false": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "y": 180
+    },
+    "down=true,east=true,north=true,orientation=up_south,south=false,up=true,west=true": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "y": 180
+    },
+    "down=true,east=true,north=true,orientation=up_south,south=true,up=false,west=false": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "y": 180
+    },
+    "down=true,east=true,north=true,orientation=up_south,south=true,up=false,west=true": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "y": 180
+    },
+    "down=true,east=true,north=true,orientation=up_south,south=true,up=true,west=false": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "y": 180
+    },
+    "down=true,east=true,north=true,orientation=up_south,south=true,up=true,west=true": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "y": 180
+    },
+    "down=true,east=true,north=true,orientation=up_west,south=false,up=false,west=false": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "y": 270
+    },
+    "down=true,east=true,north=true,orientation=up_west,south=false,up=false,west=true": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "y": 270
+    },
+    "down=true,east=true,north=true,orientation=up_west,south=false,up=true,west=false": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "y": 270
+    },
+    "down=true,east=true,north=true,orientation=up_west,south=false,up=true,west=true": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "y": 270
+    },
+    "down=true,east=true,north=true,orientation=up_west,south=true,up=false,west=false": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "y": 270
+    },
+    "down=true,east=true,north=true,orientation=up_west,south=true,up=false,west=true": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "y": 270
+    },
+    "down=true,east=true,north=true,orientation=up_west,south=true,up=true,west=false": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "y": 270
+    },
+    "down=true,east=true,north=true,orientation=up_west,south=true,up=true,west=true": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "y": 270
+    },
+    "down=true,east=true,north=true,orientation=west_up,south=false,up=false,west=false": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 90,
+      "y": 270
+    },
+    "down=true,east=true,north=true,orientation=west_up,south=false,up=false,west=true": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 90,
+      "y": 270
+    },
+    "down=true,east=true,north=true,orientation=west_up,south=false,up=true,west=false": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 90,
+      "y": 270
+    },
+    "down=true,east=true,north=true,orientation=west_up,south=false,up=true,west=true": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 90,
+      "y": 270
+    },
+    "down=true,east=true,north=true,orientation=west_up,south=true,up=false,west=false": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 90,
+      "y": 270
+    },
+    "down=true,east=true,north=true,orientation=west_up,south=true,up=false,west=true": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 90,
+      "y": 270
+    },
+    "down=true,east=true,north=true,orientation=west_up,south=true,up=true,west=false": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 90,
+      "y": 270
+    },
+    "down=true,east=true,north=true,orientation=west_up,south=true,up=true,west=true": {
+      "model": "little_big_redstone:block/gray_microchip",
+      "x": 90,
+      "y": 270
     }
   }
 }
