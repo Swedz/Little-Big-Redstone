@@ -82,7 +82,7 @@ public final class LBRClient
 	{
 		if(event.getItemStack().getItem() instanceof StickyNoteItem)
 		{
-			StickyNoteInHandItemRenderer.renderItemFirstPerson(
+			StickyNoteInHandItemRenderer.submit(
 					event.getPoseStack(),
 					event.getSubmitNodeCollector(),
 					event.getPackedLight(),
