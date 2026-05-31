@@ -28,7 +28,7 @@ public final class StickyNoteEntry implements MicrochipObject
 					DyeColor.CODEC.fieldOf("color").forGetter(StickyNoteEntry::noteColor),
 					StickyNote.CODEC.fieldOf("note").forGetter(StickyNoteEntry::note),
 					DyeColor.CODEC.fieldOf("text_color").forGetter(StickyNoteEntry::textColor),
-					Codec.BOOL.fieldOf("editable").forGetter(StickyNoteEntry::isEditable)
+					Codec.BOOL.optionalFieldOf("editable", true).forGetter(StickyNoteEntry::isEditable)
 			)
 			.apply(instance, StickyNoteEntry::new));
 	
