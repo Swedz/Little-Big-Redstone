@@ -469,7 +469,7 @@ public final class LogicConfigScreen extends AbstractContainerScreen<LogicConfig
 	@Override
 	public boolean mouseDragged(MouseButtonEvent event, double dragX, double dragY)
 	{
-		return this.getFocused() != null && this.isDragging() && event.isLeft() ?
+		return this.getFocused() != null && this.isDragging() && event.button() == InputConstants.MOUSE_BUTTON_LEFT ?
 				this.getFocused().mouseDragged(event, dragX, dragY) :
 				super.mouseDragged(event, dragX, dragY);
 	}

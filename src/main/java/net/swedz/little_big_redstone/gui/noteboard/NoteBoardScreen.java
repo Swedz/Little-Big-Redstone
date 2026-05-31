@@ -1,5 +1,6 @@
 package net.swedz.little_big_redstone.gui.noteboard;
 
+import com.mojang.blaze3d.platform.InputConstants;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
@@ -131,7 +132,7 @@ public final class NoteBoardScreen extends AbstractContainerScreen<NoteBoardMenu
 	
 	private boolean placeNote(int x, int y, MouseButtonEvent event)
 	{
-		if(event.isLeft())
+		if(event.button() == InputConstants.MOUSE_BUTTON_LEFT)
 		{
 			var carried = menu.getCarried();
 			if(holdingHudNote ||
@@ -163,7 +164,7 @@ public final class NoteBoardScreen extends AbstractContainerScreen<NoteBoardMenu
 	
 	private boolean takeNote(int x, int y, MouseButtonEvent event)
 	{
-		if(event.isLeft())
+		if(event.button() == InputConstants.MOUSE_BUTTON_LEFT)
 		{
 			if(this.isHoveringHudNote(x, y))
 			{
@@ -200,7 +201,7 @@ public final class NoteBoardScreen extends AbstractContainerScreen<NoteBoardMenu
 	
 	private boolean editNote(int x, int y, MouseButtonEvent event)
 	{
-		if(event.isRight() &&
+		if(event.button() == InputConstants.MOUSE_BUTTON_RIGHT &&
 		   menu.getCarried().isEmpty())
 		{
 			int clickedNoteIndex = contents.findAt(x, y, width, height);

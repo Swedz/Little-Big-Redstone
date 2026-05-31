@@ -168,7 +168,7 @@ public final class MicrochipWidget implements GuiEventListener, Renderable, Narr
 		var carried = menu.getCarried();
 		var entry = context.object();
 		
-		if(event.isRight() &&
+		if(event.button() == InputConstants.MOUSE_BUTTON_RIGHT &&
 		   context.shouldDyeObject())
 		{
 			int slot = entry.slot();
@@ -198,7 +198,7 @@ public final class MicrochipWidget implements GuiEventListener, Renderable, Narr
 		var carried = menu.getCarried();
 		var note = context.note();
 		
-		if(event.isLeft() &&
+		if(event.button() == InputConstants.MOUSE_BUTTON_LEFT &&
 		   context.shouldInteractNote() &&
 		   carried.isEmpty())
 		{
@@ -246,7 +246,7 @@ public final class MicrochipWidget implements GuiEventListener, Renderable, Narr
 		var menu = this.menu();
 		var carried = menu.getCarried();
 		
-		if(event.isLeft() &&
+		if(event.button() == InputConstants.MOUSE_BUTTON_LEFT &&
 		   MicrochipWidgetContext.canInteractWire(carried) &&
 		   !this.hasSelectedPort())
 		{
@@ -301,7 +301,7 @@ public final class MicrochipWidget implements GuiEventListener, Renderable, Narr
 		var carried = menu.getCarried();
 		var logic = context.logic();
 		
-		if(event.isLeft() &&
+		if(event.button() == InputConstants.MOUSE_BUTTON_LEFT &&
 		   context.shouldInteractLogic() &&
 		   carried.isEmpty())
 		{
@@ -328,8 +328,8 @@ public final class MicrochipWidget implements GuiEventListener, Renderable, Narr
 		var carried = menu.getCarried();
 		var player = screen.getMinecraft().player;
 		
-		boolean leftClick = event.isLeft();
-		boolean rightClick = event.isRight();
+		boolean leftClick = event.button() == InputConstants.MOUSE_BUTTON_LEFT;
+		boolean rightClick = event.button() == InputConstants.MOUSE_BUTTON_RIGHT;
 		if((leftClick || rightClick) &&
 		   carried.getItem() instanceof StickyNoteItem &&
 		   context.shouldInteractBoard())
@@ -365,7 +365,7 @@ public final class MicrochipWidget implements GuiEventListener, Renderable, Narr
 		if(carried.is(LBRItems.REDSTONE_BIT.asItem()) &&
 		   this.hasSelectedPort())
 		{
-			if(event.isLeft() &&
+			if(event.button() == InputConstants.MOUSE_BUTTON_LEFT &&
 			   context.shouldInteractPort() &&
 			   context.isPortInput() &&
 			   context.isPortEmpty() &&
@@ -395,8 +395,8 @@ public final class MicrochipWidget implements GuiEventListener, Renderable, Narr
 		var carried = menu.getCarried();
 		var player = screen.getMinecraft().player;
 		
-		boolean leftClick = event.isLeft();
-		boolean rightClick = event.isRight();
+		boolean leftClick = event.button() == InputConstants.MOUSE_BUTTON_LEFT;
+		boolean rightClick = event.button() == InputConstants.MOUSE_BUTTON_RIGHT;
 		if((leftClick || rightClick) &&
 		   carried.has(LBRComponents.LOGIC) &&
 		   context.shouldInteractBoard())
@@ -431,7 +431,7 @@ public final class MicrochipWidget implements GuiEventListener, Renderable, Narr
 		var carried = menu.getCarried();
 		var logic = context.logic();
 		
-		if(event.isRight() &&
+		if(event.button() == InputConstants.MOUSE_BUTTON_RIGHT &&
 		   context.shouldInteractLogic() &&
 		   carried.isEmpty() &&
 		   logic.component().config().hasMenu())
@@ -450,7 +450,7 @@ public final class MicrochipWidget implements GuiEventListener, Renderable, Narr
 		var player = screen.getMinecraft().player;
 		var note = context.note();
 		
-		if(event.isRight() &&
+		if(event.button() == InputConstants.MOUSE_BUTTON_RIGHT &&
 		   context.shouldInteractNote() &&
 		   carried.isEmpty())
 		{

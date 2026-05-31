@@ -1,5 +1,6 @@
 package net.swedz.little_big_redstone.gui.stickynote.edit;
 
+import com.mojang.blaze3d.platform.InputConstants;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
@@ -79,7 +80,7 @@ public final class StickyNoteEditWidget implements GuiEventListener, Renderable,
 			return false;
 		}
 		
-		if(event.isLeft())
+		if(event.button() == InputConstants.MOUSE_BUTTON_LEFT)
 		{
 			int localMouseX = (int) (mouseX - x);
 			int localMouseY = (int) (mouseY - y);
@@ -101,7 +102,7 @@ public final class StickyNoteEditWidget implements GuiEventListener, Renderable,
 			return false;
 		}
 		
-		if(event.isLeft())
+		if(event.button() == InputConstants.MOUSE_BUTTON_LEFT)
 		{
 			int localMouseX = (int) (mouseX - x);
 			int localMouseY = (int) (mouseY - y);

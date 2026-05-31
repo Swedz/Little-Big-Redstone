@@ -1,5 +1,6 @@
 package net.swedz.little_big_redstone.gui.logicconfig.widget.iconcycle;
 
+import com.mojang.blaze3d.platform.InputConstants;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.AbstractButton;
 import net.minecraft.client.gui.narration.NarrationElementOutput;
@@ -86,17 +87,17 @@ public class IconCycleLogicConfigButton<T extends IconCycleLogicConfigButtonIcon
 	@Override
 	protected boolean isValidClickButton(MouseButtonInfo button)
 	{
-		return button.isLeft() || button.isRight();
+		return button.button() == InputConstants.MOUSE_BUTTON_LEFT || button.button() == InputConstants.MOUSE_BUTTON_RIGHT;
 	}
 	
 	@Override
 	public void onClick(MouseButtonEvent event, boolean doubleClick)
 	{
-		if(event.isLeft())
+		if(event.button() == InputConstants.MOUSE_BUTTON_LEFT)
 		{
 			this.next();
 		}
-		else if(event.isRight())
+		else if(event.button() == InputConstants.MOUSE_BUTTON_RIGHT)
 		{
 			this.previous();
 		}

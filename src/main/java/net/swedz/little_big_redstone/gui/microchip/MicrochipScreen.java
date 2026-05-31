@@ -105,7 +105,7 @@ public final class MicrochipScreen extends AbstractContainerScreen<MicrochipMenu
 	{
 		boolean drag = this.getFocused() != null &&
 					   this.isDragging() &&
-					   (event.isLeft() || event.button() == InputConstants.MOUSE_BUTTON_MIDDLE) &&
+					   (event.button() == InputConstants.MOUSE_BUTTON_LEFT || event.button() == InputConstants.MOUSE_BUTTON_MIDDLE) &&
 					   this.getFocused().mouseDragged(event, dragX, dragY);
 		return drag || super.mouseDragged(event, dragX, dragY);
 	}
@@ -136,19 +136,19 @@ public final class MicrochipScreen extends AbstractContainerScreen<MicrochipMenu
 	@Override
 	public void extractFloatingItem(GuiGraphicsExtractor graphics, ItemStack carried, int localX, int localY, String itemCount)
 	{
-		int mouseX = localX + leftPos + 8;
-		int mouseY = localY + topPos + 8;
+		int mouseX = localX + 8;
+		int mouseY = localY + 8;
 		
 		if(microchipWidget.isMouseOver(mouseX, mouseY))
 		{
 			var microchip = menu.microchip();
 			var size = microchip.size();
-			int boardMouseX = size.boardCoord(localX, microchipWidget.viewPosition().zoom(), microchipWidget.viewPosition().x());
-			int boardMouseY = size.boardCoord(localY, microchipWidget.viewPosition().zoom(), microchipWidget.viewPosition().y());
+			int boardMouseX = size.boardCoord(localX - leftPos, microchipWidget.viewPosition().zoom(), microchipWidget.viewPosition().x());
+			int boardMouseY = size.boardCoord(localY - topPos, microchipWidget.viewPosition().zoom(), microchipWidget.viewPosition().y());
 			
 			graphics.enableScissor(microchipWidget.x(), microchipWidget.y(), microchipWidget.x() + MicrochipBlockEntity.CIRCUIT_BOUNDS.width(), microchipWidget.y() + MicrochipBlockEntity.CIRCUIT_BOUNDS.height());
 			graphics.pose().pushMatrix();
-			graphics.pose().translate(8, 8);
+			graphics.pose().translate(leftPos + 8, topPos + 8);
 			graphics.pose().scale(size.scale(), size.scale());
 			graphics.pose().scale(microchipWidget.viewPosition().zoom(), microchipWidget.viewPosition().zoom());
 			graphics.pose().translate((int) -microchipWidget.viewPosition().x(), (int) -microchipWidget.viewPosition().y());
