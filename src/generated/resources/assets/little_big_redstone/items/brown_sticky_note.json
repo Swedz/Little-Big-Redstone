@@ -7,8 +7,123 @@
         "model": "little_big_redstone:item/sticky_note/paper/brown"
       },
       {
-        "type": "minecraft:model",
-        "model": "little_big_redstone:item/sticky_note/text"
+        "type": "minecraft:select",
+        "cases": [
+          {
+            "model": {
+              "type": "minecraft:model",
+              "model": "little_big_redstone:item/sticky_note/text/white"
+            },
+            "when": "white"
+          },
+          {
+            "model": {
+              "type": "minecraft:model",
+              "model": "little_big_redstone:item/sticky_note/text/orange"
+            },
+            "when": "orange"
+          },
+          {
+            "model": {
+              "type": "minecraft:model",
+              "model": "little_big_redstone:item/sticky_note/text/magenta"
+            },
+            "when": "magenta"
+          },
+          {
+            "model": {
+              "type": "minecraft:model",
+              "model": "little_big_redstone:item/sticky_note/text/light_blue"
+            },
+            "when": "light_blue"
+          },
+          {
+            "model": {
+              "type": "minecraft:model",
+              "model": "little_big_redstone:item/sticky_note/text/yellow"
+            },
+            "when": "yellow"
+          },
+          {
+            "model": {
+              "type": "minecraft:model",
+              "model": "little_big_redstone:item/sticky_note/text/lime"
+            },
+            "when": "lime"
+          },
+          {
+            "model": {
+              "type": "minecraft:model",
+              "model": "little_big_redstone:item/sticky_note/text/pink"
+            },
+            "when": "pink"
+          },
+          {
+            "model": {
+              "type": "minecraft:model",
+              "model": "little_big_redstone:item/sticky_note/text/gray"
+            },
+            "when": "gray"
+          },
+          {
+            "model": {
+              "type": "minecraft:model",
+              "model": "little_big_redstone:item/sticky_note/text/light_gray"
+            },
+            "when": "light_gray"
+          },
+          {
+            "model": {
+              "type": "minecraft:model",
+              "model": "little_big_redstone:item/sticky_note/text/cyan"
+            },
+            "when": "cyan"
+          },
+          {
+            "model": {
+              "type": "minecraft:model",
+              "model": "little_big_redstone:item/sticky_note/text/purple"
+            },
+            "when": "purple"
+          },
+          {
+            "model": {
+              "type": "minecraft:model",
+              "model": "little_big_redstone:item/sticky_note/text/blue"
+            },
+            "when": "blue"
+          },
+          {
+            "model": {
+              "type": "minecraft:model",
+              "model": "little_big_redstone:item/sticky_note/text/brown"
+            },
+            "when": "brown"
+          },
+          {
+            "model": {
+              "type": "minecraft:model",
+              "model": "little_big_redstone:item/sticky_note/text/green"
+            },
+            "when": "green"
+          },
+          {
+            "model": {
+              "type": "minecraft:model",
+              "model": "little_big_redstone:item/sticky_note/text/red"
+            },
+            "when": "red"
+          },
+          {
+            "model": {
+              "type": "minecraft:model",
+              "model": "little_big_redstone:item/sticky_note/text/black"
+            },
+            "when": "black"
+          }
+        ],
+        "component": "little_big_redstone:sticky_note_text_color",
+        "property": "minecraft:component"
       }
     ]
   }

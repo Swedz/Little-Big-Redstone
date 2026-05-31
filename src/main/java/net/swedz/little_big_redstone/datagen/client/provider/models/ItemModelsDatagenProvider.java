@@ -5,8 +5,8 @@ import net.minecraft.client.data.models.model.ItemModelUtils;
 import net.minecraft.client.data.models.model.ModelTemplates;
 import net.minecraft.client.data.models.model.TextureMapping;
 import net.minecraft.client.data.models.model.TextureSlot;
-import net.minecraft.client.renderer.item.ClientItem;
 import net.minecraft.client.renderer.item.CompositeModel;
+import net.minecraft.client.renderer.item.ItemModel;
 import net.minecraft.client.renderer.item.SelectItemModel;
 import net.minecraft.client.renderer.item.properties.select.ComponentContents;
 import net.minecraft.client.resources.model.sprite.Material;
@@ -32,42 +32,35 @@ final class ItemModelsDatagenProvider
 			}
 		}
 		
-		stickyNoteText(generators);
+		stickyNoteTexts(generators);
 		stickyNotes(generators);
 	}
 	
-	private static void stickyNoteText(ModelGenerators generators)
+	private static void stickyNoteTexts(ModelGenerators generators)
 	{
-		List<SelectItemModel.SwitchCase<DyeColor>> cases = Lists.newArrayList();
 		for(var textColor : DyeColor.values())
 		{
-			// TODO 26.1 for some reason this model doesnt render
-			var textModelId = ModelTemplates.FLAT_ITEM.create(
+			ModelTemplates.FLAT_ITEM.create(
 					LBR.id("item/sticky_note/text/" + textColor.getName()),
 					new TextureMapping()
 							.put(TextureSlot.LAYER0, new Material(LBR.id("item/sticky_note/text/" + textColor.getName()))),
 					generators.item().modelOutput
 			);
-			
+		}
+	}
+	
+	private static ItemModel.Unbaked stickyNoteText(ModelGenerators generators)
+	{
+		List<SelectItemModel.SwitchCase<DyeColor>> cases = Lists.newArrayList();
+		for(var textColor : DyeColor.values())
+		{
 			cases.add(new SelectItemModel.SwitchCase<>(
 					List.of(textColor),
-					ItemModelUtils.plainModel(textModelId)
+					ItemModelUtils.plainModel(LBR.id("item/sticky_note/text/" + textColor.getName()))
 			));
 		}
-		
-		var model = new SelectItemModel.Unbaked(
-				Optional.empty(),
-				new SelectItemModel.UnbakedSwitch<>(
-						new ComponentContents(LBRComponents.STICKY_NOTE_TEXT_COLOR.get()),
-						cases
-				),
-				Optional.empty()
-		);
-		
-		generators.item().modelOutputById().register(
-				LBR.id("item/sticky_note/text"),
-				model
-		);
+		var property = new ComponentContents(LBRComponents.STICKY_NOTE_TEXT_COLOR.get());
+		return ItemModelUtils.select(property, cases);
 	}
 	
 	private static void stickyNotes(ModelGenerators generators)
@@ -83,17 +76,14 @@ final class ItemModelsDatagenProvider
 					generators.item().modelOutput
 			);
 			
-			generators.item().itemModelOutput.register(
+			generators.item().itemModelOutput.accept(
 					item.asItem(),
-					new ClientItem(
-							new CompositeModel.Unbaked(
-									List.of(
-											ItemModelUtils.plainModel(paperModelId),
-											ItemModelUtils.plainModel(LBR.id("item/sticky_note/text"))
-									),
-									Optional.empty()
+					new CompositeModel.Unbaked(
+							List.of(
+									ItemModelUtils.plainModel(paperModelId),
+									stickyNoteText(generators)
 							),
-							ClientItem.Properties.DEFAULT
+							Optional.empty()
 					)
 			);
 		}
