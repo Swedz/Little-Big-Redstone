@@ -1,9 +1,9 @@
 #version 330
 
-in vec4 vertexColor;
+#moj_import <minecraft:globals.glsl>
+#moj_import <minecraft:dynamictransforms.glsl>
 
-uniform float GameTime;
-uniform vec4 ColorModulator;
+in vec4 vertexColor;
 
 out vec4 fragColor;
 

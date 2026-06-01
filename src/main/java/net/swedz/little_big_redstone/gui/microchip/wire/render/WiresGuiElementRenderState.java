@@ -7,6 +7,7 @@ import net.minecraft.client.gui.navigation.ScreenRectangle;
 import net.minecraft.client.gui.render.TextureSetup;
 import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.client.renderer.state.gui.GuiElementRenderState;
+import net.minecraft.util.ARGB;
 import net.swedz.little_big_redstone.LBR;
 import net.swedz.little_big_redstone.LBRClientRenderPipelines;
 import org.joml.Matrix3x2f;
@@ -18,6 +19,26 @@ public record WiresGuiElementRenderState(
 		boolean hovered
 ) implements GuiElementRenderState
 {
+	private static float mix(float x, float y, float a)
+	{
+		return x * (1 - a) + (y * a);
+	}
+	
+	private int calculateColor(int color)
+	{
+		if(hovered)
+		{
+			float time = (System.currentTimeMillis() % 1500) / 1500f;
+			float wave = ((float) Math.sin(time * 6.28318f) + 1f) / 2f;
+			float alpha = mix(0.25f, 0.5f, wave);
+			float red = mix(ARGB.redFloat(color), 1, alpha);
+			float green = mix(ARGB.greenFloat(color), 1, alpha);
+			float blue = mix(ARGB.blueFloat(color), 1, alpha);
+			return ARGB.colorFromFloat(1, red, green, blue);
+		}
+		return color;
+	}
+	
 	@Override
 	public void buildVertices(VertexConsumer buffer)
 	{
@@ -37,10 +58,12 @@ public record WiresGuiElementRenderState(
 					float v0 = y0 / 16f;
 					float v1 = y1 / 16f;
 					
-					buffer.addVertexWith2DPose(pose, x0, y1).setColor(wire.color).setUv(u0, v1);
-					buffer.addVertexWith2DPose(pose, x1, y1).setColor(wire.color).setUv(u1, v1);
-					buffer.addVertexWith2DPose(pose, x1, y0).setColor(wire.color).setUv(u1, v0);
-					buffer.addVertexWith2DPose(pose, x0, y0).setColor(wire.color).setUv(u0, v0);
+					int color = wire.color;//this.calculateColor(wire.color);
+					
+					buffer.addVertexWith2DPose(pose, x0, y1).setColor(color).setUv(u0, v1);
+					buffer.addVertexWith2DPose(pose, x1, y1).setColor(color).setUv(u1, v1);
+					buffer.addVertexWith2DPose(pose, x1, y0).setColor(color).setUv(u1, v0);
+					buffer.addVertexWith2DPose(pose, x0, y0).setColor(color).setUv(u0, v0);
 				}
 			}
 		}
