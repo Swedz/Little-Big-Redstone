@@ -3,10 +3,10 @@ package net.swedz.little_big_redstone.item.tooltip;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.screens.inventory.tooltip.ClientTooltipComponent;
+import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.world.item.component.ItemContainerContents;
 import net.swedz.little_big_redstone.LBR;
 import net.swedz.tesseract.api.Assert;
-import net.swedz.tesseract.neoforge.helper.gui.ExtraGuiGraphics;
 
 public final class ItemContainerContentsClientTooltip implements ClientTooltipComponent
 {
@@ -63,7 +63,14 @@ public final class ItemContainerContentsClientTooltip implements ClientTooltipCo
 	{
 		if(storage.getSlots() != 0)
 		{
-			ExtraGuiGraphics.nineSlice(graphics, LBR.id("textures/gui/slot_background.png"), x, y, this.backgroundWidth(), this.backgroundHeight(), 32, 32, 4);
+			graphics.blitSprite(
+					RenderPipelines.GUI_TEXTURED,
+					LBR.id("slot_background"),
+					x,
+					y,
+					this.backgroundWidth(),
+					this.backgroundHeight()
+			);
 		}
 		
 		int index = 0;

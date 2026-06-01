@@ -3,6 +3,7 @@ package net.swedz.little_big_redstone.client.hud;
 import net.minecraft.client.DeltaTracker;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
+import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.core.BlockPos;
 import net.minecraft.util.ARGB;
 import net.minecraft.world.entity.player.Player;
@@ -24,7 +25,6 @@ import net.swedz.little_big_redstone.item.floppydisk.FloppyDiskItem;
 import net.swedz.little_big_redstone.microchip.Microchip;
 import net.swedz.little_big_redstone.network.packet.RequestMicrochipWatcherPacket;
 import net.swedz.little_big_redstone.proxy.LBRProxy;
-import net.swedz.tesseract.neoforge.helper.gui.ExtraGuiGraphics;
 import net.swedz.tesseract.neoforge.proxy.Proxies;
 
 import java.util.List;
@@ -84,7 +84,14 @@ public final class FloppyDiskConsumeItemsGuiOverlay
 		int maxItems = 9;
 		int x = -(Math.min(ITEMS.size(), maxItems) * 18) / 2;
 		
-		ExtraGuiGraphics.nineSlice(graphics, LBR.id("textures/gui/slot_background.png"), color, 0xFFFFFFFF, x - 2, -2, Math.min(ITEMS.size(), maxItems) * 18 + 2, 20, 32, 32, 4);
+		graphics.blitSprite(
+				RenderPipelines.GUI_TEXTURED,
+				LBR.id("slot_background"),
+				x - 2,
+				-2,
+				Math.min(ITEMS.size(), maxItems) * 18 + 2,
+				20
+		);
 		
 		var index = new AtomicInteger();
 		var itemX = new AtomicInteger(x);
