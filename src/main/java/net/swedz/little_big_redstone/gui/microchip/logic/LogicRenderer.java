@@ -20,18 +20,17 @@ public abstract class LogicRenderer<L extends LogicComponent>
 	
 	public abstract void render(Context context, GuiGraphicsExtractor graphics, L component, int x, int y);
 	
-	protected void renderPort(GuiGraphicsExtractor graphics, int x, int y, LogicGridSize size, boolean input, int index, int maxPorts, float red, float green, float blue, float alpha)
+	protected void renderPort(GuiGraphicsExtractor graphics, int x, int y, LogicGridSize size, boolean input, int index, int maxPorts, int color)
 	{
-		Identifier texture = input ? PORT_INPUT : PORT_OUTPUT;
+		var texture = input ? PORT_INPUT : PORT_OUTPUT;
 		
 		int renderX = size.portTopLeftCornerX(x, input, index, maxPorts);
 		int renderY = size.portTopLeftCornerY(y, input, index, maxPorts);
 		
-		int color = ARGB.colorFromFloat(alpha, red, green, blue);
 		graphics.blitSprite(RenderPipelines.GUI_TEXTURED, texture, renderX, renderY, 16, 16, color);
 	}
 	
-	protected void renderAllPorts(Context context, GuiGraphicsExtractor graphics, int x, int y, L component, float red, float green, float blue)
+	protected void renderAllPorts(Context context, GuiGraphicsExtractor graphics, int x, int y, L component)
 	{
 		if(context.showPorts())
 		{
@@ -47,17 +46,19 @@ public abstract class LogicRenderer<L extends LogicComponent>
 			{
 				outputAlpha = 1;
 			}
+			int inputColor = ARGB.colorFromFloat(inputAlpha, 1, 1, 1);
+			int outputColor = ARGB.colorFromFloat(outputAlpha, 1, 1, 1);
 			
 			int inputs = component.inputs();
 			for(int i = 0; i < inputs; i++)
 			{
-				this.renderPort(graphics, x, y, size, true, i, inputs, red, green, blue, inputAlpha);
+				this.renderPort(graphics, x, y, size, true, i, inputs, inputColor);
 			}
 			
 			int outputs = component.outputs();
 			for(int i = 0; i < outputs; i++)
 			{
-				this.renderPort(graphics, x, y, size, false, i, outputs, red, green, blue, outputAlpha);
+				this.renderPort(graphics, x, y, size, false, i, outputs, outputColor);
 			}
 		}
 	}

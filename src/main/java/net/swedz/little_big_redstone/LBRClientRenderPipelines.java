@@ -14,6 +14,8 @@ import net.neoforged.neoforge.client.event.RegisterRenderPipelinesEvent;
 @EventBusSubscriber(modid = LBR.ID, value = Dist.CLIENT)
 public final class LBRClientRenderPipelines
 {
+	// TODO 26.1 logic scanline
+	
 	public static final RenderPipeline PULSING_ALPHA = RenderPipeline
 			.builder(RenderPipelines.MATRICES_PROJECTION_SNIPPET)
 			.withLocation(LBR.id("pipelines/pulsing_alpha"))

@@ -1,6 +1,7 @@
 package net.swedz.little_big_redstone.gui.microchip.logic.renderer;
 
 import net.minecraft.client.gui.GuiGraphicsExtractor;
+import net.minecraft.client.renderer.RenderPipelines;
 import net.swedz.little_big_redstone.gui.microchip.logic.LogicRenderer;
 import net.swedz.little_big_redstone.microchip.object.logic.calculator.LogicCalculator;
 
@@ -11,24 +12,20 @@ public final class CalculatorLogicRenderer extends LogicRenderer<LogicCalculator
 	{
 		var size = component.size();
 		
-		this.renderAllPorts(context, graphics, x, y, component, 1, 1, 1);
+		this.renderAllPorts(context, graphics, x, y, component);
 		this.renderBackground(context, graphics, x, y, component);
 		
-		// TODO 26.1
-		/*graphics.setColor(context.foregroundColor());
-		graphics.setTextureShader(
-				LBRClientShaders::logicScanline,
-				(shader) -> shader.getUniform("LogicUV").set(16f, 16f)
-		);
-		graphics.setTextures(
-				context.getTexture(component.config().mode.textureKey()),
-				LBR.id("textures/logic/scanline.png")
-		);
 		int centerX = x + size.centerX() - 8;
 		int centerY = y + size.centerY() - 8;
-		graphics.blit(centerX, centerY, 0, 0, 16, 16, 16, 16);
-		graphics.resetTextureShader();
-		graphics.resetColor();*/
+		graphics.blitSprite(
+				RenderPipelines.GUI_TEXTURED,
+				context.getTexture(component.config().mode.textureKey()),
+				centerX,
+				centerY,
+				16,
+				16,
+				context.foregroundColor()
+		);
 		
 		if(!component.config().isValid())
 		{
