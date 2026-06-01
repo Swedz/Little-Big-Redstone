@@ -168,7 +168,7 @@ public final class ItemRecipesDatagenProvider extends RecipeProvider
 				DataComponentPatch.builder()
 						.set(LBRComponents.STICKY_NOTE.get(), StickyNote.EMPTY)
 						.build(),
-				registries.get(LBRTags.Items.STICKY_NOTES).orElseThrow()
+				noteItem
 		);
 		TransmuteRecipeBuilder
 				.transmute(

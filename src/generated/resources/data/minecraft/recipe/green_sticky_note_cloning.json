@@ -11,7 +11,7 @@
       "components": {
         "little_big_redstone:sticky_note": ""
       },
-      "items": "#little_big_redstone:sticky_notes"
+      "items": "little_big_redstone:green_sticky_note"
     }
   },
   "material": {
@@ -19,7 +19,7 @@
     "components": {
       "little_big_redstone:sticky_note": ""
     },
-    "items": "#little_big_redstone:sticky_notes"
+    "items": "little_big_redstone:green_sticky_note"
   },
   "material_count": {
     "max": 8,
