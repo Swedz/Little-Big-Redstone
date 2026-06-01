@@ -23,7 +23,7 @@ public final class LBRComponents
 {
 	private static final DeferredRegister.DataComponents COMPONENTS = DeferredRegister.createDataComponents(Registries.DATA_COMPONENT_TYPE, LBR.ID);
 	
-	public static final Supplier<DataComponentType<LogicComponent>>        LOGIC                    = create("logic", LogicComponent.CODEC, LogicComponent.STREAM_CODEC);
+	public static final Supplier<DataComponentType<LogicComponent>>        LOGIC                    = create("logic", LogicComponent.CODEC, LogicComponent.STREAM_CODEC); // TODO 26.1 split into LOGIC_COLOR, LOGIC_CONFIG? would make recipes really simple
 	public static final Supplier<DataComponentType<ItemContainerContents>> LOGIC_ARRAY_STORAGE      = create("logic_array_storage", ItemContainerContents.CODEC, ItemContainerContents.STREAM_CODEC);
 	public static final Supplier<DataComponentType<Microchip.Immutable>>   FLOPPY_DISK              = create("floppy_disk", Microchip.Immutable.CODEC, Microchip.Immutable.STREAM_CODEC);
 	public static final Supplier<DataComponentType<FloppyDiskProgramName>> FLOPPY_DISK_PROGRAM_NAME = create("floppy_disk_program_name", FloppyDiskProgramName.CODEC, FloppyDiskProgramName.STREAM_CODEC);
