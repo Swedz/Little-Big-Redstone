@@ -45,7 +45,7 @@ public final class ItemRecipesDatagenProvider extends RecipeProvider
 				.define('C', LBRItems.REDSTONE_CIRCUIT_BOARD)
 				.define('D', color.getTag())
 				.output(LBRBlocks.microchip(color).get(), 1)
-				.offerTo(output, LBR.id("microchip/%s".formatted(color.getName())));
+				.offerTo(output, LBR.id("microchip/" + color.getName()));
 		
 		this.dyeItem(
 				RecipeCategory.REDSTONE,
@@ -69,7 +69,7 @@ public final class ItemRecipesDatagenProvider extends RecipeProvider
 				.define('C', Tags.Items.CHESTS_WOODEN)
 				.define('Q', Tags.Items.GEMS_QUARTZ)
 				.output(LBRItems.logicArray(color), 1)
-				.offerTo(output, LBR.id("logic_array/%s".formatted(color.getName())));
+				.offerTo(output, LBR.id("logic_array/" + color.getName()));
 		
 		this.dyeItem(
 				RecipeCategory.REDSTONE,
@@ -93,7 +93,7 @@ public final class ItemRecipesDatagenProvider extends RecipeProvider
 				.define('D', color.getTag())
 				.define('R', Tags.Items.DUSTS_REDSTONE)
 				.output(LBRItems.floppyDisk(color), 1)
-				.offerTo(output, LBR.id("floppy_disk/%s".formatted(color.getName())));
+				.offerTo(output, LBR.id("floppy_disk/" + color.getName()));
 		
 		this.dyeItem(
 				RecipeCategory.REDSTONE,
@@ -114,7 +114,7 @@ public final class ItemRecipesDatagenProvider extends RecipeProvider
 				.with(Tags.Items.NUGGETS_IRON)
 				.with(color.getTag())
 				.output(LBRItems.stickyNote(color), 1)
-				.offerTo(output, LBR.id("sticky_note/%s".formatted(color.getName())));
+				.offerTo(output, LBR.id("sticky_note/" + color.getName()));
 		
 		this.dyeItem(
 				RecipeCategory.DECORATIONS,
@@ -149,7 +149,7 @@ public final class ItemRecipesDatagenProvider extends RecipeProvider
 				)
 				.group(group)
 				.unlockedBy(unlockedBy, this.has(fromItem));
-		builder.save(output, builder.defaultId().identifier().withPrefix("dye_").toString());
+		builder.save(output, builder.defaultId().identifier().withPrefix("dye/").toString());
 	}
 	
 	private void stickyNoteCloning(DyeColor color)
@@ -176,7 +176,7 @@ public final class ItemRecipesDatagenProvider extends RecipeProvider
 				.setMaterialCount(TransmuteRecipe.FULL_RANGE_MATERIAL_COUNT)
 				.group("sticky_note_cloning")
 				.unlockedBy("has_sticky_note", this.has(LBRTags.Items.STICKY_NOTES))
-				.save(output, color.getName() + "_sticky_note_cloning");
+				.save(output, "sticky_note/" + color.getName() + "/cloning");
 	}
 	
 	private void sealStickyNote(DyeColor color)
@@ -202,7 +202,7 @@ public final class ItemRecipesDatagenProvider extends RecipeProvider
 				)
 				.group("sticky_note_sealing")
 				.unlockedBy("has_sticky_note", this.has(LBRTags.Items.STICKY_NOTES))
-				.save(output, color.getName() + "_sticky_note_sealing");
+				.save(output, "sticky_note/" + color.getName() + "/sealing");
 	}
 	
 	@Override

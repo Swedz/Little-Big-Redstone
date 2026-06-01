@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_floppy_disk": {
+      "conditions": {
+        "items": [
+          {
+            "items": "#little_big_redstone:floppy_disks"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "little_big_redstone:dye/brown_floppy_disk"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_floppy_disk"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "little_big_redstone:dye/brown_floppy_disk"
+    ]
+  }
+}
