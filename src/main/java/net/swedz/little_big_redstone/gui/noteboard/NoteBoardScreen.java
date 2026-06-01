@@ -268,8 +268,7 @@ public final class NoteBoardScreen extends AbstractContainerScreen<NoteBoardMenu
 		int mouseX = x + 8;
 		int mouseY = y + 8;
 		
-		// mouseX and mouseY are relative to the leftPos and topPos position, so we need to add here
-		if(this.shouldRenderFloatingNote(mouseX + leftPos, mouseY + topPos, carried))
+		if(this.shouldRenderFloatingNote(mouseX, mouseY, carried))
 		{
 			// This is handled in renderBg so that it is underneath the slots
 			return;
