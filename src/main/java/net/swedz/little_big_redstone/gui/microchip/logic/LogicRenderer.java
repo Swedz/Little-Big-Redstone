@@ -10,20 +10,13 @@ import net.swedz.little_big_redstone.client.model.logic.LogicItemModel;
 import net.swedz.little_big_redstone.client.model.logic.LogicModelColorSet;
 import net.swedz.little_big_redstone.microchip.object.logic.LogicComponent;
 import net.swedz.little_big_redstone.microchip.object.logic.LogicGridSize;
-import net.swedz.tesseract.neoforge.helper.gui.ExtraGuiGraphics;
 
 import java.util.function.Function;
 
 public abstract class LogicRenderer<L extends LogicComponent>
 {
-	public static final Identifier BORDER_SQUARE     = LBR.id("textures/logic/border_square.png");
-	public static final Identifier BACKGROUND_SQUARE = LBR.id("textures/logic/background_square.png");
-	
-	public static final Identifier BORDER_CIRCLE     = LBR.id("textures/logic/border_circle.png");
-	public static final Identifier BACKGROUND_CIRCLE = LBR.id("textures/logic/background_circle.png");
-	
-	public static final Identifier PORT_INPUT  = LBR.id("textures/logic/port_input.png");
-	public static final Identifier PORT_OUTPUT = LBR.id("textures/logic/port_output.png");
+	public static final Identifier PORT_INPUT  = LBR.id("logic/port_input");
+	public static final Identifier PORT_OUTPUT = LBR.id("logic/port_output");
 	
 	public abstract void render(Context context, GuiGraphicsExtractor graphics, L component, int x, int y);
 	
@@ -35,7 +28,7 @@ public abstract class LogicRenderer<L extends LogicComponent>
 		int renderY = size.portTopLeftCornerY(y, input, index, maxPorts);
 		
 		int color = ARGB.colorFromFloat(alpha, red, green, blue);
-		graphics.blit(texture, renderX, renderY, 0, 0, 16, 16, 16, 16, color);
+		graphics.blitSprite(RenderPipelines.GUI_TEXTURED, texture, renderX, renderY, 16, 16, color);
 	}
 	
 	protected void renderAllPorts(Context context, GuiGraphicsExtractor graphics, int x, int y, L component, float red, float green, float blue)
@@ -71,14 +64,7 @@ public abstract class LogicRenderer<L extends LogicComponent>
 	
 	protected void renderGridBlock(GuiGraphicsExtractor graphics, Identifier texture, int x, int y, LogicGridSize size, int argb)
 	{
-		if(size.isSingle())
-		{
-			graphics.blit(texture, x, y, 0, 0, 16, 16, 16, 16, argb);
-		}
-		else
-		{
-			ExtraGuiGraphics.nineSlice(graphics, RenderPipelines.GUI_TEXTURED, texture, argb, 0xFFFFFFFF, x, y, size.widthPixels(), size.heightPixels(), 16, 16, 3);
-		}
+		graphics.blitSprite(RenderPipelines.GUI_TEXTURED, texture, x, y, size.widthPixels(), size.heightPixels(), argb);
 	}
 	
 	protected void renderBackground(GuiGraphicsExtractor graphics, Identifier background, Identifier border, int x, int y, LogicGridSize size, int foregroundColor, int backgroundColor)
@@ -93,14 +79,17 @@ public abstract class LogicRenderer<L extends LogicComponent>
 				graphics,
 				context.getTexture("background"),
 				context.getTexture("border"),
-				x, y, component.size(),
-				context.foregroundColor(), context.backgroundColor()
+				x,
+				y,
+				component.size(),
+				context.foregroundColor(),
+				context.backgroundColor()
 		);
 	}
 	
 	protected void renderInvalidOverlay(GuiGraphicsExtractor graphics, int x, int y, LogicGridSize size)
 	{
-		graphics.blit(LBR.id("textures/logic/misconfigured.png"), x + size.widthPixels() - 7 + 1, y - 1, 0, 0, 7, 7, 7, 7);
+		graphics.blitSprite(RenderPipelines.GUI_TEXTURED, LBR.id("logic/misconfigured"), x + size.widthPixels() - 7 + 1, y - 1, 7, 7);
 	}
 	
 	public record Context(
