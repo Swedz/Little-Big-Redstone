@@ -24,11 +24,14 @@ import net.swedz.little_big_redstone.gui.microchip.widget.MicrochipWidget;
 import net.swedz.little_big_redstone.gui.microchip.wire.WireMetadata;
 import net.swedz.little_big_redstone.gui.microchip.wire.WirePath;
 import net.swedz.little_big_redstone.gui.microchip.wire.WirePathKey;
+import net.swedz.little_big_redstone.gui.microchip.wire.render.WiresGuiElementRenderState;
+import net.swedz.little_big_redstone.gui.microchip.wire.render.WiresRenderState;
 import net.swedz.little_big_redstone.gui.slot.MaybeLockedPlayerSlot;
 import net.swedz.little_big_redstone.item.stickynote.StickyNoteItem;
 import net.swedz.little_big_redstone.microchip.object.logic.LogicComponent;
 import net.swedz.little_big_redstone.microchip.wire.Wire;
 import net.swedz.little_big_redstone.network.packet.StoreMicrochipViewPositionPacket;
+import org.joml.Matrix3x2f;
 
 import java.util.Map;
 
@@ -220,16 +223,17 @@ public final class MicrochipScreen extends AbstractContainerScreen<MicrochipMenu
 			}
 			WirePath.blockAllOf(paths.values().stream().map(CarriedWiresData::path).toList());
 			
-			// TODO batching??
-			graphics.pose().pushMatrix();
+			var renderState = new WiresRenderState();
 			for(var entry : paths.entrySet())
 			{
 				var wire = entry.getKey();
 				var data = entry.getValue();
 				var metadata = WireMetadata.carried(microchipWidget.microchip(), microchipWidget.color(), menu.getCarriedComponentSlot(), component, wire);
-				wirePanel.renderWire(graphics, data.key(), data.path(), metadata);
+				renderState.add(wirePanel.renderWire(data.key(), data.path(), metadata));
 			}
-			graphics.pose().popMatrix();
+			var pose = new Matrix3x2f(graphics.pose());
+			graphics.submitGuiElementRenderState(new WiresGuiElementRenderState(pose, renderState, false, true));
+			graphics.submitGuiElementRenderState(new WiresGuiElementRenderState(pose, renderState, true, true));
 		}
 	}
 	

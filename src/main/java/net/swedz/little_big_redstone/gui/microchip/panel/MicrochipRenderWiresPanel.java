@@ -2,18 +2,19 @@ package net.swedz.little_big_redstone.gui.microchip.panel;
 
 import com.google.common.collect.Lists;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
-import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.world.item.DyeColor;
-import net.swedz.little_big_redstone.LBR;
-import net.swedz.little_big_redstone.LBRClientRenderPipelines;
 import net.swedz.little_big_redstone.gui.microchip.widget.MicrochipWidgetContext;
 import net.swedz.little_big_redstone.gui.microchip.wire.WireMetadata;
 import net.swedz.little_big_redstone.gui.microchip.wire.WirePath;
 import net.swedz.little_big_redstone.gui.microchip.wire.WirePathKey;
 import net.swedz.little_big_redstone.gui.microchip.wire.WirePathing;
+import net.swedz.little_big_redstone.gui.microchip.wire.render.WireRenderState;
+import net.swedz.little_big_redstone.gui.microchip.wire.render.WiresGuiElementRenderState;
+import net.swedz.little_big_redstone.gui.microchip.wire.render.WiresRenderState;
 import net.swedz.little_big_redstone.microchip.Microchip;
 import net.swedz.little_big_redstone.microchip.wire.Wire;
 import net.swedz.tesseract.neoforge.api.Bounds;
+import org.joml.Matrix3x2f;
 
 import java.util.Collections;
 import java.util.List;
@@ -89,6 +90,8 @@ public final class MicrochipRenderWiresPanel extends MicrochipRenderPanel
 	{
 		var context = this.context();
 		
+		var state = new WiresRenderState();
+		
 		for(var wire : microchip.wires())
 		{
 			if(context != null && context.topLayerWires().contains(wire))
@@ -98,7 +101,7 @@ public final class MicrochipRenderWiresPanel extends MicrochipRenderPanel
 			var key = WirePathKey.placed(microchip, wire);
 			var path = pathing.get(key, true);
 			var metadata = WireMetadata.of(microchip, color, wire, false);
-			this.renderWire(graphics, key, path, metadata);
+			state.add(this.renderWire(key, path, metadata));
 		}
 		
 		if(context != null)
@@ -109,7 +112,7 @@ public final class MicrochipRenderWiresPanel extends MicrochipRenderPanel
 				var path = pathing.get(key, true);
 				boolean hovered = !context.widget().hasSelectedPort() && (context.wire() == null || context.wire() == wire);
 				var metadata = WireMetadata.of(microchip, color, wire, hovered);
-				this.renderWire(graphics, key, path, metadata);
+				state.add(this.renderWire(key, path, metadata));
 			}
 			
 			if(context.widget().hasSelectedPort() &&
@@ -119,46 +122,42 @@ public final class MicrochipRenderWiresPanel extends MicrochipRenderPanel
 				var path = pathing.get(key, false);
 				path.block();
 				var metadata = WireMetadata.of(microchip, color, context.widget().getSelectedPort(), true);
-				this.renderWire(graphics, key, path, metadata);
+				state.add(this.renderWire(key, path, metadata));
 			}
 		}
+		
+		var pose = new Matrix3x2f(graphics.pose());
+		graphics.submitGuiElementRenderState(new WiresGuiElementRenderState(pose, state, false, false));
+		graphics.submitGuiElementRenderState(new WiresGuiElementRenderState(pose, state, true, false));
+		graphics.submitGuiElementRenderState(new WiresGuiElementRenderState(pose, state, false, true));
+		graphics.submitGuiElementRenderState(new WiresGuiElementRenderState(pose, state, true, true));
 	}
 	
-	public void renderWire(GuiGraphicsExtractor graphics, WirePathKey key, WirePath path, WireMetadata metadata)
+	public WireRenderState renderWire(WirePathKey key, WirePath path, WireMetadata metadata)
 	{
 		if(!path.isPopulated())
 		{
-			return;
+			return null;
 		}
 		
 		int maxX = microchip.size().bounds().maxX();
 		int maxY = microchip.size().bounds().maxY();
 		
-		int startX = key.startX();
-		int startY = key.startY();
-		int endX = key.endX();
-		int endY = key.endY();
+		var state = new WireRenderState();
+		state.wireSize = wireSize;
+		state.powered = metadata.powered();
+		state.hovered = metadata.hovered();
+		state.color = metadata.argb();
 		
-		boolean renderStart = startX >= 0 && startX < maxX && startY >= 0 && startY < maxY;
-		boolean renderEnd = endX - wirePortPadding >= 0 && endX - wirePortPadding < maxX && endY >= 0 && endY < maxY;
-		
-		if(renderStart || renderEnd)
+		for(var position : path.positions())
 		{
-			var pipeline = RenderPipelines.GUI_TEXTURED;
-			if(metadata.hovered())
+			if(position.x() < 0 || position.y() < 0 || position.x() >= maxX || position.y() >= maxY)
 			{
-				pipeline = LBRClientRenderPipelines.PULSING_TEXTURE_LIGHTNESS;
+				continue;
 			}
-			
-			var texture = LBR.id("textures/gui/container/microchip/wire_%s.png".formatted(metadata.powered() ? "on" : "off"));
-			for(var position : path.positions())
-			{
-				if(position.x() < 0 || position.y() < 0 || position.x() >= maxX || position.y() >= maxY)
-				{
-					continue;
-				}
-				graphics.blit(pipeline, texture, position.x(), position.y(), position.x(), position.y(), wireSize, wireSize, 16, 16, metadata.argb());
-			}
+			state.positions.add(position);
 		}
+		
+		return state;
 	}
 }
