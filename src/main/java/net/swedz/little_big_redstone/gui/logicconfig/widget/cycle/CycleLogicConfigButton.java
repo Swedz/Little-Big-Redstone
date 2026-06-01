@@ -11,7 +11,6 @@ import net.minecraft.client.input.MouseButtonInfo;
 import net.minecraft.network.chat.CommonComponents;
 import net.minecraft.network.chat.Component;
 import net.swedz.little_big_redstone.gui.logicconfig.widget.LogicConfigButtonHelper;
-import net.swedz.tesseract.neoforge.helper.gui.ExtraGuiGraphics;
 
 import java.util.List;
 
@@ -27,12 +26,19 @@ public class CycleLogicConfigButton<T> extends AbstractButton implements LogicCo
 	private int valueIndex;
 	private T   value;
 	
-	public CycleLogicConfigButton(int x, int y, int width, int height, int color, Component message,
-								  boolean displayOnlyValue,
-								  T initialValue,
-								  List<T> allowedValues,
-								  ValueStringifier<T> stringifier,
-								  OnValueChange<T> onValueChange)
+	public CycleLogicConfigButton(
+			int x,
+			int y,
+			int width,
+			int height,
+			int color,
+			Component message,
+			boolean displayOnlyValue,
+			T initialValue,
+			List<T> allowedValues,
+			ValueStringifier<T> stringifier,
+			OnValueChange<T> onValueChange
+	)
 	{
 		super(x, y, width, height, message);
 		
@@ -113,18 +119,18 @@ public class CycleLogicConfigButton<T> extends AbstractButton implements LogicCo
 	@Override
 	protected void extractContents(GuiGraphicsExtractor graphics, int mouseX, int mouseY, float partialTick)
 	{
-		this.extractBackground(graphics, partialTick, this.getX(), this.getY(), width, height, color, active && this.isHoveredOrFocused());
+		this.extractBackground(graphics, this.getX(), this.getY(), width, height, color, active && this.isHoveredOrFocused());
 		
 		this.extractBorder(graphics, this.getX(), this.getY(), width, height, color);
 		
 		var valueText = stringifier.stringify(value);
 		var text = displayOnlyValue ? valueText : CommonComponents.optionNameValue(this.getMessage(), valueText);
-		ExtraGuiGraphics.centeredText(
-				graphics,
-				Minecraft.getInstance().font,
+		var font = Minecraft.getInstance().font;
+		graphics.centeredText(
+				font,
 				text,
 				Math.round(this.getX() + (width / 2f)),
-				Math.round(this.getY() + (height / 2f)),
+				Math.round(this.getY() + (height / 2f) - (font.lineHeight / 2f)),
 				color,
 				false
 		);

@@ -200,7 +200,7 @@ public final class LogicConfigScreen extends AbstractContainerScreen<LogicConfig
 			{
 				super.extractContents(graphics, mouseX, mouseY, partialTick);
 				
-				graphics.text(font, text, this.getX() + width + 6, Math.round(this.getY() + (18 / 2f) - (Minecraft.getInstance().font.lineHeight / 2f)), color, false);
+				graphics.text(font, text, this.getX() + width + 6, Math.round(this.getY() + (18 / 2f) - (font.lineHeight / 2f)), color, false);
 			}
 		};
 		button.setTooltip(Tooltip.create(tooltip));

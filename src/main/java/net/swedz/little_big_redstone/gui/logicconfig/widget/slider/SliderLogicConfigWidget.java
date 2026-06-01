@@ -8,7 +8,6 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.util.Mth;
 import net.neoforged.neoforge.client.gui.widget.ExtendedSlider;
 import net.swedz.little_big_redstone.gui.logicconfig.widget.LogicConfigButtonHelper;
-import net.swedz.tesseract.neoforge.helper.gui.ExtraGuiGraphics;
 import org.lwjgl.glfw.GLFW;
 
 public class SliderLogicConfigWidget extends ExtendedSlider implements LogicConfigButtonHelper
@@ -189,12 +188,20 @@ public class SliderLogicConfigWidget extends ExtendedSlider implements LogicConf
 	@Override
 	public void extractWidgetRenderState(GuiGraphicsExtractor graphics, int mouseX, int mouseY, float partialTick)
 	{
-		this.extractBackground(graphics, partialTick, this.getX() + (int) (value * (width - 8D)), this.getY(), 8, height, color, active && this.isHoveredOrFocused());
+		this.extractBackground(graphics, this.getX() + (int) (value * (width - 8D)), this.getY(), 8, height, color, active && this.isHoveredOrFocused());
 		
 		this.extractBorder(graphics, this.getX(), this.getY(), width, height, color);
 		this.extractBorder(graphics, this.getX() + (int) (value * (width - 8D)), this.getY(), 8, height, color);
 		
-		ExtraGuiGraphics.centeredText(graphics, Minecraft.getInstance().font, this.getMessage(), Math.round(this.getX() + (width / 2f)), Math.round(this.getY() + (height / 2f)), color, false);
+		var font = Minecraft.getInstance().font;
+		graphics.centeredText(
+				font,
+				this.getMessage(),
+				Math.round(this.getX() + (width / 2f)),
+				Math.round(this.getY() + (height / 2f) - (font.lineHeight / 2f)),
+				color,
+				false
+		);
 	}
 	
 	public interface OnValueChange

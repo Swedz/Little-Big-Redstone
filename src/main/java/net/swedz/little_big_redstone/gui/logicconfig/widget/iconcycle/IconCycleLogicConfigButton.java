@@ -19,19 +19,22 @@ public class IconCycleLogicConfigButton<T extends IconCycleLogicConfigButtonIcon
 {
 	private final int color;
 	
-	private final Identifier atlas;
+	private final Identifier       atlas;
 	private final List<T>          allowedValues;
 	private final OnValueChange<T> onValueChange;
 	
 	private int valueIndex;
 	private T   value;
 	
-	public IconCycleLogicConfigButton(int x, int y,
-									  int color,
-									  Identifier atlas,
-									  T initialValue,
-									  List<T> allowedValues,
-									  OnValueChange<T> onValueChange)
+	public IconCycleLogicConfigButton(
+			int x,
+			int y,
+			int color,
+			Identifier atlas,
+			T initialValue,
+			List<T> allowedValues,
+			OnValueChange<T> onValueChange
+	)
 	{
 		super(x, y, 18, 18, Component.empty());
 		
@@ -111,7 +114,7 @@ public class IconCycleLogicConfigButton<T extends IconCycleLogicConfigButtonIcon
 	@Override
 	protected void extractContents(GuiGraphicsExtractor graphics, int mouseX, int mouseY, float partialTick)
 	{
-		this.extractBackground(graphics, partialTick, this.getX(), this.getY(), width, height, color, active && this.isHoveredOrFocused());
+		this.extractBackground(graphics, this.getX(), this.getY(), width, height, color, active && this.isHoveredOrFocused());
 		
 		this.extractBorder(graphics, this.getX(), this.getY(), width, height, color);
 		

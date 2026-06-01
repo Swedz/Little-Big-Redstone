@@ -1,0 +1,12 @@
+{
+    "animation": {
+        "frametime": 4
+    },
+    "gui": {
+        "scaling": {
+            "type": "tile",
+            "width": 18,
+            "height": 18
+        }
+    }
+}
