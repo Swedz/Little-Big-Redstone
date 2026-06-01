@@ -3,13 +3,7 @@
   "category": "redstone",
   "group": "floppy_disk_dye",
   "input": "#little_big_redstone:floppy_disks",
-  "material": {
-    "neoforge:ingredient_type": "neoforge:components",
-    "components": {
-      "minecraft:dye": "gray"
-    },
-    "items": "#minecraft:dyes"
-  },
+  "material": "#c:dyes/gray",
   "result": {
     "id": "little_big_redstone:gray_floppy_disk"
   }

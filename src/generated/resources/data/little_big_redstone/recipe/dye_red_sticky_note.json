@@ -3,13 +3,7 @@
   "category": "misc",
   "group": "sticky_note_dye",
   "input": "#little_big_redstone:sticky_notes",
-  "material": {
-    "neoforge:ingredient_type": "neoforge:components",
-    "components": {
-      "minecraft:dye": "red"
-    },
-    "items": "#minecraft:dyes"
-  },
+  "material": "#c:dyes/red",
   "result": {
     "id": "little_big_redstone:red_sticky_note"
   }

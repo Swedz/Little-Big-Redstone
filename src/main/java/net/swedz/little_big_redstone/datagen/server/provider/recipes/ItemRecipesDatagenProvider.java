@@ -2,12 +2,10 @@ package net.swedz.little_big_redstone.datagen.server.provider.recipes;
 
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.component.DataComponentPatch;
-import net.minecraft.core.component.DataComponents;
 import net.minecraft.data.recipes.RecipeCategory;
 import net.minecraft.data.recipes.RecipeOutput;
 import net.minecraft.data.recipes.RecipeProvider;
 import net.minecraft.data.recipes.TransmuteRecipeBuilder;
-import net.minecraft.tags.ItemTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.Item;
@@ -146,13 +144,7 @@ public final class ItemRecipesDatagenProvider extends RecipeProvider
 				.transmute(
 						category,
 						this.tag(fromItem),
-						DataComponentIngredient.of(
-								false,
-								DataComponentPatch.builder()
-										.set(DataComponents.DYE, toColor)
-										.build(),
-								registries.get(ItemTags.DYES).orElseThrow()
-						),
+						this.tag(toColor.getTag()),
 						toItem
 				)
 				.group(group)

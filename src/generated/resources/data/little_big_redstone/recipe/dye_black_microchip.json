@@ -3,13 +3,7 @@
   "category": "redstone",
   "group": "microchip_dye",
   "input": "#little_big_redstone:microchips",
-  "material": {
-    "neoforge:ingredient_type": "neoforge:components",
-    "components": {
-      "minecraft:dye": "black"
-    },
-    "items": "#minecraft:dyes"
-  },
+  "material": "#c:dyes/black",
   "result": {
     "id": "little_big_redstone:black_microchip"
   }

@@ -3,13 +3,7 @@
   "category": "redstone",
   "group": "logic_array_dye",
   "input": "#little_big_redstone:logic_arrays",
-  "material": {
-    "neoforge:ingredient_type": "neoforge:components",
-    "components": {
-      "minecraft:dye": "yellow"
-    },
-    "items": "#minecraft:dyes"
-  },
+  "material": "#c:dyes/yellow",
   "result": {
     "id": "little_big_redstone:yellow_logic_array"
   }
