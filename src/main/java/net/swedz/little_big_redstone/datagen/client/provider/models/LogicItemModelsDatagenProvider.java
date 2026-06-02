@@ -20,7 +20,7 @@ import java.util.function.Function;
 
 final class LogicItemModelsDatagenProvider
 {
-	private static final Set<LogicType<?>> GENERATED = Sets.newHashSet();
+	private static final Set<LogicType<?, ?>> GENERATED = Sets.newHashSet();
 	
 	private static void registerLogicModels(ModelGenerators generators)
 	{
@@ -125,7 +125,7 @@ final class LogicItemModelsDatagenProvider
 	
 	private static void logicComponent(
 			ModelGenerators generators,
-			LogicType<?> type,
+			LogicType<?, ?> type,
 			BackgroundType backgroundType,
 			boolean icon,
 			Function<TextureMap, TextureMap> extraBoardTextures
@@ -165,7 +165,7 @@ final class LogicItemModelsDatagenProvider
 		generators.item().itemModelOutput.accept(type.item(), model);
 	}
 	
-	private static void logicComponent(ModelGenerators generators, LogicType<?> type, BackgroundType backgroundType, boolean icon)
+	private static void logicComponent(ModelGenerators generators, LogicType<?, ?> type, BackgroundType backgroundType, boolean icon)
 	{
 		logicComponent(generators, type, backgroundType, icon, null);
 	}

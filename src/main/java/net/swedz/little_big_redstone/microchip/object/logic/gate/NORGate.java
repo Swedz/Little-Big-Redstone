@@ -2,26 +2,23 @@ package net.swedz.little_big_redstone.microchip.object.logic.gate;
 
 import com.mojang.serialization.MapCodec;
 import io.netty.buffer.ByteBuf;
-import net.minecraft.network.chat.Component;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.world.item.DyeColor;
-import net.swedz.little_big_redstone.LBR;
-import net.swedz.little_big_redstone.microchip.object.logic.LogicContext;
+import net.swedz.little_big_redstone.microchip.object.logic.LogicTickingContext;
 import net.swedz.little_big_redstone.microchip.object.logic.LogicType;
 import net.swedz.little_big_redstone.microchip.object.logic.LogicTypes;
-import net.swedz.little_big_redstone.microchip.object.logic.gate.config.MultiLogicGateConfig;
+import net.swedz.little_big_redstone.microchip.object.logic.gate.config.NORGateConfig;
 
-import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
-public final class NORGate extends LogicGate<NORGate, MultiLogicGateConfig>
+public final class NORGate extends LogicGate<NORGate, NORGateConfig>
 {
-	public static final MapCodec<NORGate> CODEC = mapCodec(MultiLogicGateConfig.CODEC, NORGate::new);
+	public static final MapCodec<NORGate> CODEC = mapCodec(NORGateConfig.CODEC, NORGate::new);
 	
-	public static final StreamCodec<ByteBuf, NORGate> STREAM_CODEC = streamCodec(MultiLogicGateConfig.STREAM_CODEC, NORGate::new);
+	public static final StreamCodec<ByteBuf, NORGate> STREAM_CODEC = streamCodec(NORGateConfig.STREAM_CODEC, NORGate::new);
 	
-	private NORGate(MultiLogicGateConfig config, Optional<DyeColor> color, int outputState)
+	private NORGate(NORGateConfig config, Optional<DyeColor> color, int outputState)
 	{
 		super(config, color, outputState);
 	}
@@ -37,19 +34,13 @@ public final class NORGate extends LogicGate<NORGate, MultiLogicGateConfig>
 	}
 	
 	@Override
-	protected MultiLogicGateConfig defaultConfig()
-	{
-		return new MultiLogicGateConfig();
-	}
-	
-	@Override
-	public LogicType<NORGate> type()
+	public LogicType<NORGate, NORGateConfig> type()
 	{
 		return LogicTypes.NOR;
 	}
 	
 	@Override
-	public int processInputs(LogicContext context, int[] inputs)
+	public int processInputs(LogicTickingContext context, int[] inputs)
 	{
 		for(int input : inputs)
 		{
@@ -59,18 +50,6 @@ public final class NORGate extends LogicGate<NORGate, MultiLogicGateConfig>
 			}
 		}
 		return 1;
-	}
-	
-	@Override
-	public void appendNoShiftHoverText(List<Component> lines)
-	{
-		lines.add(LBR.text().logicGateAlgebra(LBR.text().logicGateAlgebraNOR()));
-	}
-	
-	@Override
-	public void appendShiftHoverText(List<Component> lines)
-	{
-		lines.add(LBR.text().logicHelpNORGate());
 	}
 	
 	@Override

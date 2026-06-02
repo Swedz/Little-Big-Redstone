@@ -38,7 +38,7 @@ public final class LogicRecipesDatagenProvider extends RecipeProvider
 		super(registries, output);
 	}
 	
-	private void logicComponent(LogicType<?> type, Consumer<ShapedRecipeBuilder> action)
+	private void logicComponent(LogicType<?, ?> type, Consumer<ShapedRecipeBuilder> action)
 	{
 		var builder = new ShapedRecipeBuilder(registries)
 				.output(type.item(), 1);

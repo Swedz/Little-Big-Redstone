@@ -6,11 +6,11 @@ import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.DyeColor;
 import net.swedz.little_big_redstone.LBR;
+import net.swedz.little_big_redstone.LBRClientRenderPipelines;
 import net.swedz.little_big_redstone.LBRColors;
 import net.swedz.little_big_redstone.LBRComponents;
 import net.swedz.little_big_redstone.LBRItemDisplayContext;
 import net.swedz.little_big_redstone.LBRItems;
-import net.swedz.little_big_redstone.LBRClientRenderPipelines;
 import net.swedz.little_big_redstone.gui.microchip.MicrochipScreen;
 import net.swedz.little_big_redstone.gui.microchip.logic.LogicRenderer;
 import net.swedz.little_big_redstone.gui.microchip.logic.LogicRenderers;
@@ -64,9 +64,9 @@ public final class MicrochipRenderBoardPanel extends MicrochipRenderPanel
 	
 	private void renderLogic(GuiGraphicsExtractor graphics, LogicEntry entry, boolean hasSelectedPort, boolean isCarryingWire)
 	{
-		if(entry.component().config().isVisible())
+		if(entry.visible())
 		{
-			var context = LogicRenderer.Context.create(color, entry.component(), true, hasSelectedPort, isCarryingWire);
+			var context = LogicRenderer.Context.create(entry.color(), color, entry.type(), true, hasSelectedPort, isCarryingWire);
 			LogicRenderers.render(context, graphics, entry.component(), entry.x(), entry.y());
 			
 			if(microchip.isDebug())
@@ -153,7 +153,7 @@ public final class MicrochipRenderBoardPanel extends MicrochipRenderPanel
 			int boardMouseY = context.boardMouseY();
 			
 			boolean isStickyNote = carried.getItem() instanceof StickyNoteItem;
-			boolean isLogic = carried.has(LBRComponents.LOGIC);
+			boolean isLogic = carried.has(LBRComponents.LOGIC_CONFIG);
 			if(isStickyNote || isLogic)
 			{
 				int x, y;
@@ -167,11 +167,11 @@ public final class MicrochipRenderBoardPanel extends MicrochipRenderPanel
 				}
 				else
 				{
-					var component = carried.get(LBRComponents.LOGIC);
-					x = MicrochipScreen.getGridSnappedCoord(component.size().topLeftCornerX(boardMouseX) + 8);
-					y = MicrochipScreen.getGridSnappedCoord(component.size().topLeftCornerY(boardMouseY) + 8);
-					width = component.size().widthPixels();
-					height = component.size().heightPixels();
+					var logic = carried.get(LBRComponents.LOGIC_CONFIG);
+					x = MicrochipScreen.getGridSnappedCoord(logic.size().topLeftCornerX(boardMouseX) + 8);
+					y = MicrochipScreen.getGridSnappedCoord(logic.size().topLeftCornerY(boardMouseY) + 8);
+					width = logic.size().widthPixels();
+					height = logic.size().heightPixels();
 				}
 				var pipeline = LBRClientRenderPipelines.PULSING_ALPHA;
 				var texture = LBR.id("textures/gui/container/microchip/grid_snapping_overlay.png");

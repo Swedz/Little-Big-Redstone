@@ -3,55 +3,29 @@ package net.swedz.little_big_redstone.microchip.object.logic.gate.config;
 import net.swedz.little_big_redstone.microchip.object.logic.config.LogicConfig;
 import net.swedz.tesseract.neoforge.api.range.IntRange;
 
-public final class SingleLogicGateConfig extends LogicConfig<SingleLogicGateConfig>
+public interface SingleLogicGateConfig<C extends SingleLogicGateConfig<C>> extends LogicConfig<C>
 {
-	public SingleLogicGateConfig()
-	{
-	}
-	
 	@Override
-	public IntRange inputsAllowed()
+	default IntRange inputsAllowed()
 	{
 		return new IntRange(1, 1);
 	}
 	
 	@Override
-	public int inputs()
+	default int inputs()
 	{
 		return 1;
 	}
 	
 	@Override
-	public IntRange outputsAllowed()
+	default IntRange outputsAllowed()
 	{
 		return new IntRange(1, 1);
 	}
 	
 	@Override
-	public int outputs()
+	default int outputs()
 	{
 		return 1;
-	}
-	
-	@Override
-	protected void internalLoadFrom(SingleLogicGateConfig other)
-	{
-	}
-	
-	@Override
-	public void resetForPickup()
-	{
-	}
-	
-	@Override
-	public int hashCode()
-	{
-		return 0;
-	}
-	
-	@Override
-	public boolean equals(Object o)
-	{
-		return o instanceof SingleLogicGateConfig;
 	}
 }

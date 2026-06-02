@@ -33,7 +33,7 @@ import net.swedz.little_big_redstone.microchip.Microchip;
 import net.swedz.little_big_redstone.microchip.MicrochipSize;
 import net.swedz.little_big_redstone.microchip.awareness.AwarenessContext;
 import net.swedz.little_big_redstone.microchip.awareness.AwarenessTypes;
-import net.swedz.little_big_redstone.microchip.object.logic.LogicContext;
+import net.swedz.little_big_redstone.microchip.object.logic.LogicTickingContext;
 import net.swedz.little_big_redstone.network.packet.UpdateComponentsMicrochipMenuPacket;
 import net.swedz.little_big_redstone.network.packet.UpdateMicrochipMenuPacket;
 import net.swedz.little_big_redstone.network.packet.UpdateMicrochipWatcherPacket;
@@ -201,11 +201,11 @@ public final class MicrochipBlockEntity extends BlockEntity implements MenuProvi
 		awarenesses.removed(awarenessContext);
 		awarenesses.preTick(awarenessContext);
 		
-		var logicContext = new LogicContext(this);
-		microchip.tickLogic(logicContext);
+		var context = new LogicTickingContext(this);
+		microchip.tickLogic(context);
 		
 		var microchipDirty = microchip.isDirty();
-		var contextDirty = logicContext.isDirty();
+		var contextDirty = context.isDirty();
 		if(microchipDirty || contextDirty)
 		{
 			var rerouteWires = microchip.isWireRouteDirty();
@@ -230,7 +230,7 @@ public final class MicrochipBlockEntity extends BlockEntity implements MenuProvi
 			}
 			else if(contextDirty)
 			{
-				this.publishUpdatePacket((container) -> new UpdateComponentsMicrochipMenuPacket(container, logicContext.getDirtyEntries()));
+				this.publishUpdatePacket((container) -> new UpdateComponentsMicrochipMenuPacket(container, context.getDirtyEntries()));
 			}
 		}
 	}

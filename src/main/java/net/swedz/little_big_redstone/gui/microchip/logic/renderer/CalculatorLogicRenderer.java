@@ -4,8 +4,9 @@ import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.renderer.RenderPipelines;
 import net.swedz.little_big_redstone.gui.microchip.logic.LogicRenderer;
 import net.swedz.little_big_redstone.microchip.object.logic.calculator.LogicCalculator;
+import net.swedz.little_big_redstone.microchip.object.logic.calculator.LogicCalculatorConfig;
 
-public final class CalculatorLogicRenderer extends LogicRenderer<LogicCalculator>
+public final class CalculatorLogicRenderer extends LogicRenderer<LogicCalculator, LogicCalculatorConfig>
 {
 	@Override
 	public void render(Context context, GuiGraphicsExtractor graphics, LogicCalculator component, int x, int y)
@@ -19,7 +20,7 @@ public final class CalculatorLogicRenderer extends LogicRenderer<LogicCalculator
 		int centerY = y + size.centerY() - 8;
 		graphics.blitSprite(
 				RenderPipelines.GUI_TEXTURED,
-				context.getTexture(component.config().mode.textureKey()),
+				context.getTexture(component.config().mode().textureKey()),
 				centerX,
 				centerY,
 				16,
@@ -27,7 +28,7 @@ public final class CalculatorLogicRenderer extends LogicRenderer<LogicCalculator
 				context.foregroundColor()
 		);
 		
-		if(!component.config().isValid())
+		if(!component.isConfigValid())
 		{
 			this.renderInvalidOverlay(graphics, x, y, component.size());
 		}

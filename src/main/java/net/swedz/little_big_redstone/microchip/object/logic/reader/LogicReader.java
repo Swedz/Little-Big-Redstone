@@ -4,22 +4,19 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import io.netty.buffer.ByteBuf;
-import net.minecraft.network.chat.Component;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.Mth;
 import net.minecraft.world.item.DyeColor;
-import net.swedz.little_big_redstone.LBR;
 import net.swedz.little_big_redstone.microchip.awareness.AwarenessType;
 import net.swedz.little_big_redstone.microchip.awareness.AwarenessTypes;
 import net.swedz.little_big_redstone.microchip.awareness.MicrochipAware;
 import net.swedz.little_big_redstone.microchip.object.logic.LogicComponent;
-import net.swedz.little_big_redstone.microchip.object.logic.LogicContext;
+import net.swedz.little_big_redstone.microchip.object.logic.LogicTickingContext;
 import net.swedz.little_big_redstone.microchip.object.logic.LogicType;
 import net.swedz.little_big_redstone.microchip.object.logic.LogicTypes;
 
-import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -62,7 +59,7 @@ public final class LogicReader extends LogicComponent<LogicReader, LogicReaderCo
 	@Override
 	public AwarenessType<?>[] awarenessTypes()
 	{
-		return new AwarenessType[]{switch(config.mode)
+		return new AwarenessType[]{switch(config.mode())
 		{
 			case ITEM -> AwarenessTypes.CAPABILITY_ITEM;
 			case FLUID -> AwarenessTypes.CAPABILITY_FLUID;
@@ -72,27 +69,21 @@ public final class LogicReader extends LogicComponent<LogicReader, LogicReaderCo
 	}
 	
 	@Override
-	protected LogicReaderConfig defaultConfig()
-	{
-		return new LogicReaderConfig();
-	}
-	
-	@Override
-	protected void processTickInternal(LogicContext context, int[] inputs)
+	protected void processTickInternal(LogicTickingContext context, int[] inputs)
 	{
 		int originalOutputState = outputState;
 		
-		boolean isPercentage = config.fillThreshold.isPercentage();
+		boolean isPercentage = config.fillThreshold().isPercentage();
 		Number fill = 0;
-		Number compareAgainst = isPercentage ? config.fillThreshold.percentage() : config.fillThreshold.number();
+		Number compareAgainst = isPercentage ? config.fillThreshold().percentage() : config.fillThreshold().number();
 		int signal = 0;
 		
 		if(context.level() instanceof ServerLevel)
 		{
-			if(config.mode == LogicReaderMode.ITEM)
+			if(config.mode() == LogicReaderMode.ITEM)
 			{
 				var awareness = context.awareness(AwarenessTypes.CAPABILITY_ITEM);
-				var handler = awareness.get(context.level(), context.blockPos(), config.direction);
+				var handler = awareness.get(context.level(), context.blockPos(), config.direction());
 				if(handler != null)
 				{
 					int totalItems = 0;
@@ -116,10 +107,10 @@ public final class LogicReader extends LogicComponent<LogicReader, LogicReaderCo
 				}
 			}
 			
-			else if(config.mode == LogicReaderMode.FLUID)
+			else if(config.mode() == LogicReaderMode.FLUID)
 			{
 				var awareness = context.awareness(AwarenessTypes.CAPABILITY_FLUID);
-				var handler = awareness.get(context.level(), context.blockPos(), config.direction);
+				var handler = awareness.get(context.level(), context.blockPos(), config.direction());
 				if(handler != null)
 				{
 					int totalFluid = 0;
@@ -135,10 +126,10 @@ public final class LogicReader extends LogicComponent<LogicReader, LogicReaderCo
 				}
 			}
 			
-			else if(config.mode == LogicReaderMode.ENERGY)
+			else if(config.mode() == LogicReaderMode.ENERGY)
 			{
 				var awareness = context.awareness(AwarenessTypes.CAPABILITY_ENERGY);
-				var handler = awareness.get(context.level(), context.blockPos(), config.direction);
+				var handler = awareness.get(context.level(), context.blockPos(), config.direction());
 				if(handler != null)
 				{
 					int totalEnergy = handler.getAmountAsInt();
@@ -149,20 +140,20 @@ public final class LogicReader extends LogicComponent<LogicReader, LogicReaderCo
 				}
 			}
 			
-			else if(config.mode == LogicReaderMode.COMPARATOR)
+			else if(config.mode() == LogicReaderMode.COMPARATOR)
 			{
 				var awareness = context.awareness(AwarenessTypes.ANALOG_SIGNAL);
-				signal = awareness.getSignal(config.direction);
+				signal = awareness.getSignal(config.direction());
 			}
 		}
 		
-		if(config.mode.readsSignal())
+		if(config.mode().readsSignal())
 		{
-			outputState = config.comparison.test(signal, config.signalThreshold) ? signal : 0;
+			outputState = config.comparison().test(signal, config.signalThreshold()) ? signal : 0;
 		}
 		else
 		{
-			outputState = config.comparison.test(fill, compareAgainst) ? 1 : 0;
+			outputState = config.comparison().test(fill, compareAgainst) ? 1 : 0;
 		}
 		if(outputState != originalOutputState)
 		{
@@ -171,7 +162,7 @@ public final class LogicReader extends LogicComponent<LogicReader, LogicReaderCo
 	}
 	
 	@Override
-	public LogicType<LogicReader> type()
+	public LogicType<LogicReader, LogicReaderConfig> type()
 	{
 		return LogicTypes.READER;
 	}
@@ -188,22 +179,9 @@ public final class LogicReader extends LogicComponent<LogicReader, LogicReaderCo
 	}
 	
 	@Override
-	public void appendShiftHoverText(List<Component> lines)
-	{
-		lines.add(LBR.text().logicHelpReader1());
-		lines.add(LBR.text().logicHelpReader2());
-	}
-	
-	@Override
 	protected void internalLoadFrom(LogicReader other)
 	{
 		outputState = other.outputState;
-	}
-	
-	@Override
-	public void internalResetForPickup()
-	{
-		outputState = 0;
 	}
 	
 	@Override

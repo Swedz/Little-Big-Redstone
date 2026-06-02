@@ -17,7 +17,7 @@ public final class LogicArrayItemHandler extends ItemAccessItemHandler
 	public boolean isValid(int index, ItemResource resource)
 	{
 		return resource.isEmpty() ||
-			   resource.has(LBRComponents.LOGIC) ||
+			   resource.has(LBRComponents.LOGIC_CONFIG) ||
 			   resource.is(LBRItems.REDSTONE_BIT.asItem());
 	}
 	

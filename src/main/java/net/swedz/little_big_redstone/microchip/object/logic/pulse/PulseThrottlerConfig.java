@@ -8,41 +8,41 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.swedz.little_big_redstone.LBR;
+import net.swedz.little_big_redstone.microchip.object.logic.LogicType;
+import net.swedz.little_big_redstone.microchip.object.logic.LogicTypes;
 import net.swedz.little_big_redstone.microchip.object.logic.config.LogicConfig;
 import net.swedz.little_big_redstone.microchip.object.logic.config.menu.LogicConfigMenuProvider;
 import net.swedz.tesseract.neoforge.api.range.IntRange;
 
 import java.util.List;
-import java.util.Objects;
 
-public final class PulseThrottlerConfig extends LogicConfig<PulseThrottlerConfig>
+public record PulseThrottlerConfig(
+		long outputDuration,
+		int signalStrength
+) implements LogicConfig<PulseThrottlerConfig>
 {
+	public static final PulseThrottlerConfig DEFAULT = new PulseThrottlerConfig(
+			1,
+			0
+	);
+	
 	public static final MapCodec<PulseThrottlerConfig> CODEC = RecordCodecBuilder.mapCodec((instance) -> instance
 			.group(
-					Codec.LONG.optionalFieldOf("duration", 1L).forGetter((config) -> config.outputDuration),
-					Codec.intRange(0, 15).optionalFieldOf("signal_strength", 0).forGetter((config) -> config.signalStrength)
+					Codec.LONG.optionalFieldOf("duration", 1L).forGetter(PulseThrottlerConfig::outputDuration),
+					Codec.intRange(0, 15).optionalFieldOf("signal_strength", 0).forGetter(PulseThrottlerConfig::signalStrength)
 			)
 			.apply(instance, PulseThrottlerConfig::new));
 	
 	public static final StreamCodec<ByteBuf, PulseThrottlerConfig> STREAM_CODEC = StreamCodec.composite(
-			ByteBufCodecs.VAR_LONG, (config) -> config.outputDuration,
-			ByteBufCodecs.VAR_INT, (config) -> config.signalStrength,
+			ByteBufCodecs.VAR_LONG, PulseThrottlerConfig::outputDuration,
+			ByteBufCodecs.VAR_INT, PulseThrottlerConfig::signalStrength,
 			PulseThrottlerConfig::new
 	);
 	
-	public long outputDuration;
-	
-	public int signalStrength;
-	
-	private PulseThrottlerConfig(long outputDuration, int signalStrength)
+	@Override
+	public LogicType<?, PulseThrottlerConfig> type()
 	{
-		this.outputDuration = outputDuration;
-		this.signalStrength = signalStrength;
-	}
-	
-	public PulseThrottlerConfig()
-	{
-		this(1, 0);
+		return LogicTypes.PULSE_THROTTLER;
 	}
 	
 	@Override
@@ -70,7 +70,14 @@ public final class PulseThrottlerConfig extends LogicConfig<PulseThrottlerConfig
 	}
 	
 	@Override
-	public void appendHoverText(List<Component> lines)
+	public void appendShiftHoverText(List<Component> lines)
+	{
+		lines.add(LBR.text().logicHelpPulseThrottler1());
+		lines.add(LBR.text().logicHelpPulseThrottler2());
+	}
+	
+	@Override
+	public void appendConfigHoverText(List<Component> lines)
 	{
 		lines.add(outputDuration == 0 ?
 				LBR.text().logicConfigTooltipDuration(LBR.text().indefinite()) :
@@ -91,30 +98,5 @@ public final class PulseThrottlerConfig extends LogicConfig<PulseThrottlerConfig
 	public LogicConfigMenuProvider getMenuProvider()
 	{
 		return new PulseThrottlerConfigMenuProvider(this);
-	}
-	
-	@Override
-	protected void internalLoadFrom(PulseThrottlerConfig other)
-	{
-		outputDuration = other.outputDuration;
-		signalStrength = other.signalStrength;
-	}
-	
-	@Override
-	public void resetForPickup()
-	{
-	}
-	
-	@Override
-	public int hashCode()
-	{
-		return Objects.hash(outputDuration, signalStrength);
-	}
-	
-	@Override
-	public boolean equals(Object o)
-	{
-		return this == o ||
-			   (o instanceof PulseThrottlerConfig other && outputDuration == other.outputDuration && signalStrength == other.signalStrength);
 	}
 }

@@ -8,45 +8,51 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.swedz.little_big_redstone.LBR;
+import net.swedz.little_big_redstone.microchip.object.logic.LogicType;
+import net.swedz.little_big_redstone.microchip.object.logic.LogicTypes;
 import net.swedz.little_big_redstone.microchip.object.logic.config.LogicConfig;
 import net.swedz.little_big_redstone.microchip.object.logic.config.menu.LogicConfigMenuProvider;
 import net.swedz.tesseract.neoforge.api.range.IntRange;
 
 import java.util.List;
-import java.util.Objects;
 
-public final class LogicRandomizerConfig extends LogicConfig<LogicRandomizerConfig>
+public record LogicRandomizerConfig(
+		int outputs,
+		float chance
+) implements LogicConfig<LogicRandomizerConfig>
 {
+	public static final LogicRandomizerConfig DEFAULT = new LogicRandomizerConfig(
+			1,
+			1
+	);
+	
 	public static final MapCodec<LogicRandomizerConfig> CODEC = RecordCodecBuilder.mapCodec((instance) -> instance
 			.group(
-					Codec.intRange(1, 10).optionalFieldOf("outputs", 1).forGetter((config) -> config.outputs),
-					Codec.FLOAT.optionalFieldOf("chance", 1f).forGetter((config) -> config.chance)
+					Codec.intRange(1, 10).optionalFieldOf("outputs", 1).forGetter(LogicRandomizerConfig::outputs),
+					Codec.FLOAT.optionalFieldOf("chance", 1f).forGetter(LogicRandomizerConfig::chance)
 			)
 			.apply(instance, LogicRandomizerConfig::new));
 	
 	public static final StreamCodec<ByteBuf, LogicRandomizerConfig> STREAM_CODEC = StreamCodec.composite(
-			ByteBufCodecs.INT, (config) -> config.outputs,
-			ByteBufCodecs.FLOAT, (config) -> config.chance,
+			ByteBufCodecs.INT, LogicRandomizerConfig::outputs,
+			ByteBufCodecs.FLOAT, LogicRandomizerConfig::chance,
 			LogicRandomizerConfig::new
 	);
 	
-	public int outputs;
-	
-	public float chance;
-	
-	private LogicRandomizerConfig(int outputs, float chance)
+	@Override
+	public LogicType<?, LogicRandomizerConfig> type()
 	{
-		this.outputs = outputs;
-		this.chance = chance;
-	}
-	
-	public LogicRandomizerConfig()
-	{
-		this(1, 1);
+		return LogicTypes.RANDOMIZER;
 	}
 	
 	@Override
-	public void appendHoverText(List<Component> lines)
+	public void appendShiftHoverText(List<Component> lines)
+	{
+		lines.add(LBR.text().logicHelpRandomizer());
+	}
+	
+	@Override
+	public void appendConfigHoverText(List<Component> lines)
 	{
 		lines.add(LBR.text().logicConfigTooltipOutputs(outputs));
 		lines.add(LBR.text().logicConfigTooltipChance(chance));
@@ -62,18 +68,6 @@ public final class LogicRandomizerConfig extends LogicConfig<LogicRandomizerConf
 	public LogicConfigMenuProvider getMenuProvider()
 	{
 		return new LogicRandomizerConfigMenuProvider(this);
-	}
-	
-	@Override
-	protected void internalLoadFrom(LogicRandomizerConfig other)
-	{
-		outputs = other.outputs;
-		chance = other.chance;
-	}
-	
-	@Override
-	public void resetForPickup()
-	{
 	}
 	
 	@Override
@@ -98,18 +92,5 @@ public final class LogicRandomizerConfig extends LogicConfig<LogicRandomizerConf
 	public int outputs()
 	{
 		return outputs;
-	}
-	
-	@Override
-	public int hashCode()
-	{
-		return Objects.hash(outputs, chance);
-	}
-	
-	@Override
-	public boolean equals(Object o)
-	{
-		return this == o ||
-			   (o instanceof LogicRandomizerConfig other && outputs == other.outputs && chance == other.chance);
 	}
 }

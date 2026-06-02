@@ -5,22 +5,20 @@ import net.minecraft.world.entity.player.Player;
 import net.swedz.little_big_redstone.LBR;
 import net.swedz.little_big_redstone.LBRComponents;
 import net.swedz.little_big_redstone.LBRTags;
-import net.swedz.little_big_redstone.microchip.object.logic.LogicComponent;
+import net.swedz.little_big_redstone.microchip.object.logic.config.LogicConfig;
 
 public record HeldItemLogicConfigReference(
 		InteractionHand hand
 ) implements LogicConfigReference
 {
 	@Override
-	public void save(Player player, LogicComponent component)
+	public void save(Player player, LogicConfig<?> config)
 	{
 		var stack = player.getItemInHand(hand);
-		var stackLogicComponent = stack.get(LBRComponents.LOGIC);
-		if(stackLogicComponent != null && stackLogicComponent.type().equals(component.type()))
+		var stackLogicConfig = stack.get(LBRComponents.LOGIC_CONFIG);
+		if(stackLogicConfig != null && stackLogicConfig.type().equals(config.type()))
 		{
-			var newLogicComponent = stackLogicComponent.copy();
-			newLogicComponent.config().loadFrom(component.config());
-			stack.set(LBRComponents.LOGIC, newLogicComponent);
+			stack.set(LBRComponents.LOGIC_CONFIG, config);
 		}
 		else
 		{

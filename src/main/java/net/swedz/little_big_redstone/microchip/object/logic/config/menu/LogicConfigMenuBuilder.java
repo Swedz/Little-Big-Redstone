@@ -2,8 +2,8 @@ package net.swedz.little_big_redstone.microchip.object.logic.config.menu;
 
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
-import net.swedz.little_big_redstone.gui.logicconfig.widget.iconcycle.CheckboxState;
 import net.swedz.little_big_redstone.gui.logicconfig.widget.cycle.CycleLogicConfigButton;
+import net.swedz.little_big_redstone.gui.logicconfig.widget.iconcycle.CheckboxState;
 import net.swedz.little_big_redstone.gui.logicconfig.widget.iconcycle.IconCycleLogicConfigButtonIcon;
 import net.swedz.little_big_redstone.gui.logicconfig.widget.slider.SliderLogicConfigWidget;
 

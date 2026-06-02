@@ -38,12 +38,12 @@ public final class AnalogSignalAwareness extends MicrochipAwareness<AnalogSignal
 		{
 			if(entry.component() instanceof LogicReader reader)
 			{
-				var direction = reader.config().direction.ordinal();
+				var direction = reader.config().direction().ordinal();
 				if(sides[direction])
 				{
 					continue;
 				}
-				if(reader.config().mode == LogicReaderMode.COMPARATOR)
+				if(reader.config().mode() == LogicReaderMode.COMPARATOR)
 				{
 					sides[direction] = true;
 				}

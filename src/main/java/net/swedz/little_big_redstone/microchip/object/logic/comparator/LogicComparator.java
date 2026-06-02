@@ -4,19 +4,15 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import io.netty.buffer.ByteBuf;
-import net.minecraft.network.chat.Component;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.world.item.DyeColor;
-import net.swedz.little_big_redstone.LBR;
 import net.swedz.little_big_redstone.microchip.object.logic.LogicComponent;
-import net.swedz.little_big_redstone.microchip.object.logic.LogicContext;
-import net.swedz.little_big_redstone.microchip.object.logic.LogicGridSize;
+import net.swedz.little_big_redstone.microchip.object.logic.LogicTickingContext;
 import net.swedz.little_big_redstone.microchip.object.logic.LogicType;
 import net.swedz.little_big_redstone.microchip.object.logic.LogicTypes;
 import net.swedz.little_big_redstone.microchip.object.logic.config.LogicAccumulationMode;
 
-import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -57,33 +53,27 @@ public final class LogicComparator extends LogicComponent<LogicComparator, Logic
 	}
 	
 	@Override
-	protected LogicComparatorConfig defaultConfig()
-	{
-		return new LogicComparatorConfig();
-	}
-	
-	@Override
-	public LogicType<LogicComparator> type()
+	public LogicType<LogicComparator, LogicComparatorConfig> type()
 	{
 		return LogicTypes.COMPARATOR;
 	}
 	
 	@Override
-	protected void processTickInternal(LogicContext context, int[] inputs)
+	protected void processTickInternal(LogicTickingContext context, int[] inputs)
 	{
 		int originalOutputState = outputState;
 		
-		boolean isPass = config.signalStrength == 0;
-		int against = isPass ? inputs[0] : config.signalStrength;
-		boolean matches = config.mode == LogicAccumulationMode.ALL;
+		boolean isPass = config.signalStrength() == 0;
+		int against = isPass ? inputs[0] : config.signalStrength();
+		boolean matches = config.mode() == LogicAccumulationMode.ALL;
 		
 		for(int index = (isPass ? 1 : 0); index < inputs.length; index++)
 		{
 			int input = inputs[index];
 			
-			if(config.signalComparison.test(input, against))
+			if(config.signalComparison().test(input, against))
 			{
-				if(config.mode == LogicAccumulationMode.ANY)
+				if(config.mode() == LogicAccumulationMode.ANY)
 				{
 					matches = true;
 					break;
@@ -91,7 +81,7 @@ public final class LogicComparator extends LogicComponent<LogicComparator, Logic
 			}
 			else
 			{
-				if(config.mode == LogicAccumulationMode.ALL)
+				if(config.mode() == LogicAccumulationMode.ALL)
 				{
 					matches = false;
 					break;
@@ -118,29 +108,9 @@ public final class LogicComparator extends LogicComponent<LogicComparator, Logic
 	}
 	
 	@Override
-	public LogicGridSize size()
-	{
-		int inputs = this.inputs();
-		return new LogicGridSize(1, Math.max(1, inputs / 2));
-	}
-	
-	@Override
-	public void appendShiftHoverText(List<Component> lines)
-	{
-		lines.add(LBR.text().logicHelpComparator1());
-		lines.add(LBR.text().logicHelpComparator2());
-	}
-	
-	@Override
 	protected void internalLoadFrom(LogicComparator other)
 	{
 		outputState = other.outputState;
-	}
-	
-	@Override
-	protected void internalResetForPickup()
-	{
-		outputState = 0;
 	}
 	
 	@Override

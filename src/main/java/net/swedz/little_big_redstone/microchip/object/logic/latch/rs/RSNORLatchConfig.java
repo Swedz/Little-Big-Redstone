@@ -1,12 +1,29 @@
 package net.swedz.little_big_redstone.microchip.object.logic.latch.rs;
 
+import com.mojang.serialization.MapCodec;
+import io.netty.buffer.ByteBuf;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.codec.StreamCodec;
+import net.swedz.little_big_redstone.LBR;
+import net.swedz.little_big_redstone.microchip.object.logic.LogicType;
+import net.swedz.little_big_redstone.microchip.object.logic.LogicTypes;
 import net.swedz.little_big_redstone.microchip.object.logic.config.LogicConfig;
 import net.swedz.tesseract.neoforge.api.range.IntRange;
 
-public final class RSNORLatchConfig extends LogicConfig<RSNORLatchConfig>
+import java.util.List;
+
+public record RSNORLatchConfig() implements LogicConfig<RSNORLatchConfig>
 {
-	public RSNORLatchConfig()
+	public static final RSNORLatchConfig DEFAULT = new RSNORLatchConfig();
+	
+	public static final MapCodec<RSNORLatchConfig> CODEC = MapCodec.unit(DEFAULT);
+	
+	public static final StreamCodec<ByteBuf, RSNORLatchConfig> STREAM_CODEC = StreamCodec.unit(DEFAULT);
+	
+	@Override
+	public LogicType<?, RSNORLatchConfig> type()
 	{
+		return LogicTypes.RS_NOR_LATCH;
 	}
 	
 	@Override
@@ -34,24 +51,9 @@ public final class RSNORLatchConfig extends LogicConfig<RSNORLatchConfig>
 	}
 	
 	@Override
-	protected void internalLoadFrom(RSNORLatchConfig other)
+	public void appendShiftHoverText(List<Component> lines)
 	{
-	}
-	
-	@Override
-	public void resetForPickup()
-	{
-	}
-	
-	@Override
-	public int hashCode()
-	{
-		return 0;
-	}
-	
-	@Override
-	public boolean equals(Object o)
-	{
-		return o instanceof RSNORLatchConfig;
+		lines.add(LBR.text().logicHelpRSNORLatch1());
+		lines.add(LBR.text().logicHelpRSNORLatch2());
 	}
 }

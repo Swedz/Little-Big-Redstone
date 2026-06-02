@@ -9,8 +9,12 @@ import io.netty.buffer.ByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.swedz.little_big_redstone.microchip.object.logic.calculator.LogicCalculator;
+import net.swedz.little_big_redstone.microchip.object.logic.calculator.LogicCalculatorConfig;
 import net.swedz.little_big_redstone.microchip.object.logic.comparator.LogicComparator;
+import net.swedz.little_big_redstone.microchip.object.logic.comparator.LogicComparatorConfig;
+import net.swedz.little_big_redstone.microchip.object.logic.config.LogicConfig;
 import net.swedz.little_big_redstone.microchip.object.logic.debug.LogicDebugger;
+import net.swedz.little_big_redstone.microchip.object.logic.debug.LogicDebuggerConfig;
 import net.swedz.little_big_redstone.microchip.object.logic.gate.ANDGate;
 import net.swedz.little_big_redstone.microchip.object.logic.gate.LogicGate;
 import net.swedz.little_big_redstone.microchip.object.logic.gate.NANDGate;
@@ -18,15 +22,30 @@ import net.swedz.little_big_redstone.microchip.object.logic.gate.NORGate;
 import net.swedz.little_big_redstone.microchip.object.logic.gate.NOTGate;
 import net.swedz.little_big_redstone.microchip.object.logic.gate.ORGate;
 import net.swedz.little_big_redstone.microchip.object.logic.gate.XORGate;
+import net.swedz.little_big_redstone.microchip.object.logic.gate.config.ANDGateConfig;
+import net.swedz.little_big_redstone.microchip.object.logic.gate.config.NANDGateConfig;
+import net.swedz.little_big_redstone.microchip.object.logic.gate.config.NORGateConfig;
+import net.swedz.little_big_redstone.microchip.object.logic.gate.config.NOTGateConfig;
+import net.swedz.little_big_redstone.microchip.object.logic.gate.config.ORGateConfig;
+import net.swedz.little_big_redstone.microchip.object.logic.gate.config.XORGateConfig;
 import net.swedz.little_big_redstone.microchip.object.logic.io.LogicIO;
+import net.swedz.little_big_redstone.microchip.object.logic.io.LogicIOConfig;
 import net.swedz.little_big_redstone.microchip.object.logic.latch.rs.RSNORLatch;
+import net.swedz.little_big_redstone.microchip.object.logic.latch.rs.RSNORLatchConfig;
 import net.swedz.little_big_redstone.microchip.object.logic.latch.tflipflop.TFlipFlop;
+import net.swedz.little_big_redstone.microchip.object.logic.latch.tflipflop.TFlipFlopConfig;
 import net.swedz.little_big_redstone.microchip.object.logic.pulse.PulseThrottler;
+import net.swedz.little_big_redstone.microchip.object.logic.pulse.PulseThrottlerConfig;
 import net.swedz.little_big_redstone.microchip.object.logic.randomizer.LogicRandomizer;
+import net.swedz.little_big_redstone.microchip.object.logic.randomizer.LogicRandomizerConfig;
 import net.swedz.little_big_redstone.microchip.object.logic.reader.LogicReader;
+import net.swedz.little_big_redstone.microchip.object.logic.reader.LogicReaderConfig;
 import net.swedz.little_big_redstone.microchip.object.logic.selector.LogicSelector;
+import net.swedz.little_big_redstone.microchip.object.logic.selector.LogicSelectorConfig;
 import net.swedz.little_big_redstone.microchip.object.logic.sequencer.LogicSequencer;
+import net.swedz.little_big_redstone.microchip.object.logic.sequencer.LogicSequencerConfig;
 import net.swedz.little_big_redstone.microchip.object.logic.tag.LogicTag;
+import net.swedz.little_big_redstone.microchip.object.logic.tag.LogicTagConfig;
 import org.apache.commons.lang3.mutable.MutableInt;
 
 import java.util.Collections;
@@ -35,82 +54,110 @@ import java.util.Map;
 
 public final class LogicTypes
 {
-	private static final List<LogicType<?>>        LOGICS     = Lists.newArrayList();
-	private static final Map<String, LogicType<?>> LOGICS_MAP = Maps.newHashMap();
+	private static final List<LogicType<?, ?>>        TYPES     = Lists.newArrayList();
+	private static final Map<String, LogicType<?, ?>> TYPES_MAP = Maps.newHashMap();
 	
 	private static final MutableInt SYMBOL = new MutableInt();
 	
-	static final Codec<LogicComponent> CODEC = Codec.STRING
+	static final Codec<LogicComponent> COMPONENT_CODEC = Codec.STRING
 			.comapFlatMap(LogicTypes::getMaybe, LogicType::id)
 			.dispatch(LogicComponent::type, LogicType::codec);
 	
-	static final StreamCodec<ByteBuf, LogicComponent> STREAM_CODEC = ByteBufCodecs.STRING_UTF8
+	static final StreamCodec<ByteBuf, LogicComponent> COMPONENT_STREAM_CODEC = ByteBufCodecs.STRING_UTF8
 			.map(LogicTypes::get, LogicType::id)
 			.dispatch(LogicComponent::type, LogicType::streamCodec);
 	
-	public static final LogicType<LogicDebugger> DEBUGGER = register("debugger", "Debugger", LogicDebugger.CODEC, LogicDebugger.STREAM_CODEC, LogicDebugger::new);
+	static final Codec<LogicConfig> CONFIG_CODEC = Codec.STRING
+			.comapFlatMap(LogicTypes::getMaybe, LogicType::id)
+			.dispatch(LogicConfig::type, LogicType::configCodec);
 	
-	public static final LogicType<LogicIO>     IO     = register("io", "I/O Port", LogicIO.CODEC, LogicIO.STREAM_CODEC, LogicIO::new);
-	public static final LogicType<LogicReader> READER = register("reader", "Reader", LogicReader.CODEC, LogicReader.STREAM_CODEC, LogicReader::new);
-	public static final LogicType<LogicTag>    TAG    = register("tag", "Tag", LogicTag.CODEC, LogicTag.STREAM_CODEC, LogicTag::new);
+	static final StreamCodec<ByteBuf, LogicConfig> CONFIG_STREAM_CODEC = ByteBufCodecs.STRING_UTF8
+			.map(LogicTypes::get, LogicType::id)
+			.dispatch(LogicConfig::type, LogicType::configStreamCodec);
 	
-	public static final LogicType<NOTGate>  NOT  = registerGate("not", "NOT", NOTGate.CODEC, NOTGate.STREAM_CODEC, NOTGate::new);
-	public static final LogicType<ANDGate>  AND  = registerGate("and", "AND", ANDGate.CODEC, ANDGate.STREAM_CODEC, ANDGate::new);
-	public static final LogicType<NANDGate> NAND = registerGate("nand", "NAND", NANDGate.CODEC, NANDGate.STREAM_CODEC, NANDGate::new);
-	public static final LogicType<ORGate>   OR   = registerGate("or", "OR", ORGate.CODEC, ORGate.STREAM_CODEC, ORGate::new);
-	public static final LogicType<NORGate>  NOR  = registerGate("nor", "NOR", NORGate.CODEC, NORGate.STREAM_CODEC, NORGate::new);
-	public static final LogicType<XORGate>  XOR  = registerGate("xor", "XOR", XORGate.CODEC, XORGate.STREAM_CODEC, XORGate::new);
+	public static final LogicType<LogicDebugger, LogicDebuggerConfig> DEBUGGER = register("debugger", "Debugger", LogicDebugger.CODEC, LogicDebugger.STREAM_CODEC, LogicDebugger::new, LogicDebuggerConfig.CODEC, LogicDebuggerConfig.STREAM_CODEC, LogicDebuggerConfig.DEFAULT);
 	
-	public static final LogicType<LogicSequencer>  SEQUENCER       = register("sequencer", "Sequencer", LogicSequencer.CODEC, LogicSequencer.STREAM_CODEC, LogicSequencer::new);
-	public static final LogicType<PulseThrottler>  PULSE_THROTTLER = register("pulse_throttler", "Pulse Throttler", PulseThrottler.CODEC, PulseThrottler.STREAM_CODEC, PulseThrottler::new);
-	public static final LogicType<LogicSelector>   SELECTOR        = register("selector", "Selector", LogicSelector.CODEC, LogicSelector.STREAM_CODEC, LogicSelector::new);
-	public static final LogicType<LogicRandomizer> RANDOMIZER      = register("randomizer", "Randomizer", LogicRandomizer.CODEC, LogicRandomizer.STREAM_CODEC, LogicRandomizer::new);
-	public static final LogicType<LogicComparator> COMPARATOR      = register("comparator", "Comparator", LogicComparator.CODEC, LogicComparator.STREAM_CODEC, LogicComparator::new);
-	public static final LogicType<LogicCalculator> CALCULATOR      = register("calculator", "Calculator", LogicCalculator.CODEC, LogicCalculator.STREAM_CODEC, LogicCalculator::new);
+	public static final LogicType<LogicIO, LogicIOConfig>         IO     = register("io", "I/O Port", LogicIO.CODEC, LogicIO.STREAM_CODEC, LogicIO::new, LogicIOConfig.CODEC, LogicIOConfig.STREAM_CODEC, LogicIOConfig.DEFAULT);
+	public static final LogicType<LogicReader, LogicReaderConfig> READER = register("reader", "Reader", LogicReader.CODEC, LogicReader.STREAM_CODEC, LogicReader::new, LogicReaderConfig.CODEC, LogicReaderConfig.STREAM_CODEC, LogicReaderConfig.DEFAULT);
+	public static final LogicType<LogicTag, LogicTagConfig>       TAG    = register("tag", "Tag", LogicTag.CODEC, LogicTag.STREAM_CODEC, LogicTag::new, LogicTagConfig.CODEC, LogicTagConfig.STREAM_CODEC, LogicTagConfig.DEFAULT);
 	
-	public static final LogicType<TFlipFlop>  T_FLIP_FLOP  = register("t_flip_flop", "T Flip-Flop", TFlipFlop.CODEC, TFlipFlop.STREAM_CODEC, TFlipFlop::new);
-	public static final LogicType<RSNORLatch> RS_NOR_LATCH = register("rs_nor_latch", "RS NOR Latch", RSNORLatch.CODEC, RSNORLatch.STREAM_CODEC, RSNORLatch::new);
+	public static final LogicType<NOTGate, NOTGateConfig>   NOT  = registerGate("not", "NOT", NOTGate.CODEC, NOTGate.STREAM_CODEC, NOTGate::new, NOTGateConfig.CODEC, NOTGateConfig.STREAM_CODEC, NOTGateConfig.DEFAULT);
+	public static final LogicType<ANDGate, ANDGateConfig>   AND  = registerGate("and", "AND", ANDGate.CODEC, ANDGate.STREAM_CODEC, ANDGate::new, ANDGateConfig.CODEC, ANDGateConfig.STREAM_CODEC, ANDGateConfig.DEFAULT);
+	public static final LogicType<NANDGate, NANDGateConfig> NAND = registerGate("nand", "NAND", NANDGate.CODEC, NANDGate.STREAM_CODEC, NANDGate::new, NANDGateConfig.CODEC, NANDGateConfig.STREAM_CODEC, NANDGateConfig.DEFAULT);
+	public static final LogicType<ORGate, ORGateConfig>     OR   = registerGate("or", "OR", ORGate.CODEC, ORGate.STREAM_CODEC, ORGate::new, ORGateConfig.CODEC, ORGateConfig.STREAM_CODEC, ORGateConfig.DEFAULT);
+	public static final LogicType<NORGate, NORGateConfig>   NOR  = registerGate("nor", "NOR", NORGate.CODEC, NORGate.STREAM_CODEC, NORGate::new, NORGateConfig.CODEC, NORGateConfig.STREAM_CODEC, NORGateConfig.DEFAULT);
+	public static final LogicType<XORGate, XORGateConfig>   XOR  = registerGate("xor", "XOR", XORGate.CODEC, XORGate.STREAM_CODEC, XORGate::new, XORGateConfig.CODEC, XORGateConfig.STREAM_CODEC, XORGateConfig.DEFAULT);
 	
-	public static List<LogicType<?>> values()
+	public static final LogicType<LogicSequencer, LogicSequencerConfig>   SEQUENCER       = register("sequencer", "Sequencer", LogicSequencer.CODEC, LogicSequencer.STREAM_CODEC, LogicSequencer::new, LogicSequencerConfig.CODEC, LogicSequencerConfig.STREAM_CODEC, LogicSequencerConfig.DEFAULT);
+	public static final LogicType<PulseThrottler, PulseThrottlerConfig>   PULSE_THROTTLER = register("pulse_throttler", "Pulse Throttler", PulseThrottler.CODEC, PulseThrottler.STREAM_CODEC, PulseThrottler::new, PulseThrottlerConfig.CODEC, PulseThrottlerConfig.STREAM_CODEC, PulseThrottlerConfig.DEFAULT);
+	public static final LogicType<LogicSelector, LogicSelectorConfig>     SELECTOR        = register("selector", "Selector", LogicSelector.CODEC, LogicSelector.STREAM_CODEC, LogicSelector::new, LogicSelectorConfig.CODEC, LogicSelectorConfig.STREAM_CODEC, LogicSelectorConfig.DEFAULT);
+	public static final LogicType<LogicRandomizer, LogicRandomizerConfig> RANDOMIZER      = register("randomizer", "Randomizer", LogicRandomizer.CODEC, LogicRandomizer.STREAM_CODEC, LogicRandomizer::new, LogicRandomizerConfig.CODEC, LogicRandomizerConfig.STREAM_CODEC, LogicRandomizerConfig.DEFAULT);
+	public static final LogicType<LogicComparator, LogicComparatorConfig> COMPARATOR      = register("comparator", "Comparator", LogicComparator.CODEC, LogicComparator.STREAM_CODEC, LogicComparator::new, LogicComparatorConfig.CODEC, LogicComparatorConfig.STREAM_CODEC, LogicComparatorConfig.DEFAULT);
+	public static final LogicType<LogicCalculator, LogicCalculatorConfig> CALCULATOR      = register("calculator", "Calculator", LogicCalculator.CODEC, LogicCalculator.STREAM_CODEC, LogicCalculator::new, LogicCalculatorConfig.CODEC, LogicCalculatorConfig.STREAM_CODEC, LogicCalculatorConfig.DEFAULT);
+	
+	public static final LogicType<TFlipFlop, TFlipFlopConfig>   T_FLIP_FLOP  = register("t_flip_flop", "T Flip-Flop", TFlipFlop.CODEC, TFlipFlop.STREAM_CODEC, TFlipFlop::new, TFlipFlopConfig.CODEC, TFlipFlopConfig.STREAM_CODEC, TFlipFlopConfig.DEFAULT);
+	public static final LogicType<RSNORLatch, RSNORLatchConfig> RS_NOR_LATCH = register("rs_nor_latch", "RS NOR Latch", RSNORLatch.CODEC, RSNORLatch.STREAM_CODEC, RSNORLatch::new, RSNORLatchConfig.CODEC, RSNORLatchConfig.STREAM_CODEC, RSNORLatchConfig.DEFAULT);
+	
+	public static List<LogicType<?, ?>> values()
 	{
-		return Collections.unmodifiableList(LOGICS);
+		return Collections.unmodifiableList(TYPES);
 	}
 	
 	public static boolean exists(String id)
 	{
-		return LOGICS_MAP.containsKey(id);
+		return TYPES_MAP.containsKey(id);
 	}
 	
-	private static DataResult<LogicType<?>> getMaybe(String id)
+	private static DataResult<LogicType<?, ?>> getMaybe(String id)
 	{
-		var type = LOGICS_MAP.get(id);
+		var type = TYPES_MAP.get(id);
 		return type == null ? DataResult.error(() -> "No logic type exists for the id %s".formatted(id)) : DataResult.success(type);
 	}
 	
-	public static LogicType<?> get(String id)
+	public static LogicType<?, ?> get(String id)
 	{
 		return getMaybe(id).getOrThrow(IllegalArgumentException::new);
 	}
 	
-	private static <T extends LogicComponent> LogicType<T> register(
-			String id, String englishName,
-			MapCodec<T> codec, StreamCodec<ByteBuf, T> streamCodec,
-			LogicFactory defaultFactory
+	private static <T extends LogicComponent<T, C>, C extends LogicConfig<C>> LogicType<T, C> register(
+			String id,
+			String englishName,
+			MapCodec<T> codec,
+			StreamCodec<ByteBuf, T> streamCodec,
+			LogicFactory<T> defaultFactory,
+			MapCodec<C> configCodec,
+			StreamCodec<ByteBuf, C> configStreamCodec,
+			C defaultConfig
 	)
 	{
-		var type = new LogicType<>(id, englishName, (char) (SYMBOL.getAndIncrement() + (int) '0'), codec, streamCodec, defaultFactory);
-		LOGICS.add(type);
-		LOGICS_MAP.put(id, type);
+		var type = new LogicType<>(
+				id,
+				englishName,
+				(char) (SYMBOL.getAndIncrement() + (int) '0'),
+				codec,
+				streamCodec,
+				defaultFactory,
+				configCodec,
+				configStreamCodec,
+				defaultConfig
+		);
+		TYPES.add(type);
+		TYPES_MAP.put(id, type);
 		return type;
 	}
 	
-	private static <T extends LogicGate> LogicType<T> registerGate(
-			String id, String englishName,
-			MapCodec<T> codec, StreamCodec<ByteBuf, T> streamCodec,
-			LogicFactory defaultFactory
+	private static <T extends LogicGate<T, C>, C extends LogicConfig<C>> LogicType<T, C> registerGate(
+			String id,
+			String englishName,
+			MapCodec<T> codec,
+			StreamCodec<ByteBuf, T> streamCodec,
+			LogicFactory<T> defaultFactory,
+			MapCodec<C> configCodec,
+			StreamCodec<ByteBuf, C> configStreamCodec,
+			C defaultConfig
 	)
 	{
-		return register(id + "_gate", englishName + " Gate", codec, streamCodec, defaultFactory);
+		return register(id + "_gate", englishName + " Gate", codec, streamCodec, defaultFactory, configCodec, configStreamCodec, defaultConfig);
 	}
 	
 	public static void init()

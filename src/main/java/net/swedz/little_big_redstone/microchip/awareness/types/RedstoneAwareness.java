@@ -110,19 +110,19 @@ public final class RedstoneAwareness extends MicrochipAwareness<RedstoneAwarenes
 		{
 			if(entry.component() instanceof LogicIO io)
 			{
-				var direction = io.config().direction.ordinal();
+				var direction = io.config().direction().ordinal();
 				if(inputSides[direction] || outputSides[direction])
 				{
 					continue;
 				}
-				if(io.config().input)
+				if(io.config().input())
 				{
 					inputSides[direction] = true;
 				}
 				else
 				{
 					outputSides[direction] = true;
-					outputStrongSides[direction] = io.config().powerType == LogicPowerOutputType.STRONG;
+					outputStrongSides[direction] = io.config().powerType() == LogicPowerOutputType.STRONG;
 				}
 			}
 		}

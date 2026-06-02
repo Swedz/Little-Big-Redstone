@@ -79,7 +79,7 @@ public final class LBRItems
 	{
 		{
 			int index = 0;
-			for(LogicType<?> type : LogicTypes.values())
+			for(var type : LogicTypes.values())
 			{
 				createLogic(type.id(), type.englishName(), type, index++).register();
 			}
@@ -138,7 +138,7 @@ public final class LBRItems
 		return holder;
 	}
 	
-	private static ItemHolder<LogicItem> createLogic(String id, String englishName, LogicType<?> type, int order)
+	private static ItemHolder<LogicItem> createLogic(String id, String englishName, LogicType<?, ?> type, int order)
 	{
 		return create(id, englishName, (p) -> new LogicItem(p, type), LBRSortOrder.LOGIC.and(order))
 				.tag(LBRTags.Items.LOGIC_COMPONENTS);

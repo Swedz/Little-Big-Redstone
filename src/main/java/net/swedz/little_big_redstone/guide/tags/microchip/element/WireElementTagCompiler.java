@@ -43,7 +43,7 @@ public final class WireElementTagCompiler implements MicrochipSceneElementTagCom
 		if(powerLock != null)
 		{
 			var fromLogic = microchip.getLogic(from);
-			fromLogic.component().config().setOutputLock(fromPort, powerLock);
+			fromLogic.component().setOutputLock(fromPort, powerLock);
 		}
 	}
 	

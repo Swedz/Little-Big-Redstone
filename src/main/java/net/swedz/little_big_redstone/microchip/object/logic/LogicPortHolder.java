@@ -11,4 +11,10 @@ public interface LogicPortHolder
 	IntRange outputsAllowed();
 	
 	int outputs();
+	
+	default LogicGridSize size()
+	{
+		int ports = Math.max(this.inputs(), this.outputs());
+		return new LogicGridSize(1, Math.max(1, ports / 2));
+	}
 }

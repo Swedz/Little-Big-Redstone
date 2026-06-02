@@ -4,8 +4,9 @@ import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.renderer.RenderPipelines;
 import net.swedz.little_big_redstone.gui.microchip.logic.LogicRenderer;
 import net.swedz.little_big_redstone.microchip.object.logic.LogicComponent;
+import net.swedz.little_big_redstone.microchip.object.logic.config.LogicConfig;
 
-public final class SimpleLogicRenderer<G extends LogicComponent<?, ?>> extends LogicRenderer<G>
+public final class SimpleLogicRenderer<G extends LogicComponent<G, C>, C extends LogicConfig<C>> extends LogicRenderer<G, C>
 {
 	@Override
 	public void render(Context context, GuiGraphicsExtractor graphics, G component, int x, int y)

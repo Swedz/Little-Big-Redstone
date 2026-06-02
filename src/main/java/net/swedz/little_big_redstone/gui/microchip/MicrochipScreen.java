@@ -10,12 +10,13 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.inventory.Slot;
+import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.ItemStack;
 import net.swedz.little_big_redstone.LBR;
+import net.swedz.little_big_redstone.LBRClientRenderPipelines;
 import net.swedz.little_big_redstone.LBRComponents;
 import net.swedz.little_big_redstone.LBRItemDisplayContext;
 import net.swedz.little_big_redstone.LBRItems;
-import net.swedz.little_big_redstone.LBRClientRenderPipelines;
 import net.swedz.little_big_redstone.block.microchip.MicrochipBlockEntity;
 import net.swedz.little_big_redstone.gui.microchip.logic.LogicRenderer;
 import net.swedz.little_big_redstone.gui.microchip.logic.LogicRenderers;
@@ -27,13 +28,15 @@ import net.swedz.little_big_redstone.gui.microchip.wire.WirePathKey;
 import net.swedz.little_big_redstone.gui.microchip.wire.render.WiresGuiElementRenderState;
 import net.swedz.little_big_redstone.gui.microchip.wire.render.WiresRenderState;
 import net.swedz.little_big_redstone.gui.slot.MaybeLockedPlayerSlot;
+import net.swedz.little_big_redstone.item.LogicItem;
 import net.swedz.little_big_redstone.item.stickynote.StickyNoteItem;
-import net.swedz.little_big_redstone.microchip.object.logic.LogicComponent;
+import net.swedz.little_big_redstone.microchip.object.logic.config.LogicConfig;
 import net.swedz.little_big_redstone.microchip.wire.Wire;
 import net.swedz.little_big_redstone.network.packet.StoreMicrochipViewPositionPacket;
 import org.joml.Matrix3x2f;
 
 import java.util.Map;
+import java.util.Optional;
 
 public final class MicrochipScreen extends AbstractContainerScreen<MicrochipMenu>
 {
@@ -167,16 +170,17 @@ public final class MicrochipScreen extends AbstractContainerScreen<MicrochipMenu
 				graphics.disableScissor();
 				return;
 			}
-			else if(carried.has(LBRComponents.LOGIC))
+			else if(carried.has(LBRComponents.LOGIC_CONFIG))
 			{
-				var component = carried.get(LBRComponents.LOGIC);
-				var context = LogicRenderer.Context.create(menu.color(), component, menu.getCarriedWires() != null, microchipWidget.hasSelectedPort(), false);
+				var logicColor = LogicItem.getColor(carried);
+				var config = carried.get(LBRComponents.LOGIC_CONFIG);
+				var context = LogicRenderer.Context.create(logicColor, menu.color(), config.type(), menu.getCarriedWires() != null, microchipWidget.hasSelectedPort(), false);
 				
-				int logicX = minecraft.hasControlDown() ? getGridSnappedCoord(component.size().topLeftCornerX(boardMouseX) + 8) : component.size().topLeftCornerX(boardMouseX);
-				int logicY = minecraft.hasControlDown() ? getGridSnappedCoord(component.size().topLeftCornerY(boardMouseY) + 8) : component.size().topLeftCornerY(boardMouseY);
+				int logicX = minecraft.hasControlDown() ? getGridSnappedCoord(config.size().topLeftCornerX(boardMouseX) + 8) : config.size().topLeftCornerX(boardMouseX);
+				int logicY = minecraft.hasControlDown() ? getGridSnappedCoord(config.size().topLeftCornerY(boardMouseY) + 8) : config.size().topLeftCornerY(boardMouseY);
 				
-				this.renderCarriedWires(graphics, logicX, logicY, context, component);
-				this.renderCarriedLogic(graphics, logicX, logicY, context, component);
+				this.renderCarriedWires(graphics, logicX, logicY, context, config, logicColor);
+				this.renderCarriedLogic(graphics, logicX, logicY, context, config, logicColor);
 				
 				graphics.pose().popMatrix();
 				graphics.disableScissor();
@@ -208,7 +212,7 @@ public final class MicrochipScreen extends AbstractContainerScreen<MicrochipMenu
 	{
 	}
 	
-	private void renderCarriedWires(GuiGraphicsExtractor graphics, int logicX, int logicY, LogicRenderer.Context context, LogicComponent<?, ?> component)
+	private void renderCarriedWires(GuiGraphicsExtractor graphics, int logicX, int logicY, LogicRenderer.Context context, LogicConfig<?> config, Optional<DyeColor> color)
 	{
 		if(menu.getCarriedWires() != null)
 		{
@@ -217,7 +221,7 @@ public final class MicrochipScreen extends AbstractContainerScreen<MicrochipMenu
 			Map<Wire, CarriedWiresData> paths = Maps.newConcurrentMap();
 			for(var wire : menu.getCarriedWires())
 			{
-				var key = WirePathKey.carried(microchipWidget.context(), menu.getCarriedComponentSlot(), component, wire, logicX, logicY);
+				var key = WirePathKey.carried(microchipWidget.context(), menu.getCarriedComponentSlot(), config, wire, logicX, logicY);
 				var path = wirePanel.pathing().get(key, false);
 				paths.put(wire, new CarriedWiresData(key, path));
 			}
@@ -228,7 +232,7 @@ public final class MicrochipScreen extends AbstractContainerScreen<MicrochipMenu
 			{
 				var wire = entry.getKey();
 				var data = entry.getValue();
-				var metadata = WireMetadata.carried(microchipWidget.microchip(), microchipWidget.color(), menu.getCarriedComponentSlot(), component, wire);
+				var metadata = WireMetadata.carried(microchipWidget.microchip(), microchipWidget.color(), menu.getCarriedComponentSlot(), config.type(), color, wire);
 				renderState.add(wirePanel.renderWire(data.key(), data.path(), metadata));
 			}
 			var pose = new Matrix3x2f(graphics.pose());
@@ -237,14 +241,14 @@ public final class MicrochipScreen extends AbstractContainerScreen<MicrochipMenu
 		}
 	}
 	
-	private void renderCarriedLogic(GuiGraphicsExtractor graphics, int logicX, int logicY, LogicRenderer.Context context, LogicComponent<?, ?> component)
+	private <C extends LogicConfig<C>> void renderCarriedLogic(GuiGraphicsExtractor graphics, int logicX, int logicY, LogicRenderer.Context context, C config, Optional<DyeColor> logicColor)
 	{
 		var microchip = menu.microchip();
 		var size = microchip.size();
 		
 		graphics.pose().pushMatrix();
 		
-		LogicRenderers.render(context, graphics, component, logicX, logicY);
+		LogicRenderers.render(context, graphics, config.type().create(config, logicColor), logicX, logicY);
 		
 		graphics.pose().popMatrix();
 	}

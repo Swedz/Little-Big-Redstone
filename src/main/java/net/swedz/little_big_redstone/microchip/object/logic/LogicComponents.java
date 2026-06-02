@@ -32,10 +32,10 @@ public final class LogicComponents extends MicrochipObjectContainer<LogicEntry, 
 		super(microchip, components);
 		for(var entry : components)
 		{
+			entry.component().updateConfigValidState(this);
 			if(entry.component().type() == LogicTypes.DEBUGGER)
 			{
 				debug = true;
-				break;
 			}
 		}
 	}
@@ -89,12 +89,12 @@ public final class LogicComponents extends MicrochipObjectContainer<LogicEntry, 
 	{
 		if(microchip.canFit(component.size().toBounds(x, y)))
 		{
-			return this.addUnsafe(x, y, component);
+			return this.addUnsafe(x, y, component, true);
 		}
 		return null;
 	}
 	
-	public LogicEntry addUnsafe(int x, int y, LogicComponent component)
+	public LogicEntry addUnsafe(int x, int y, LogicComponent component, boolean visible)
 	{
 		if(component.type() == LogicTypes.DEBUGGER)
 		{
@@ -105,7 +105,7 @@ public final class LogicComponents extends MicrochipObjectContainer<LogicEntry, 
 			debug = true;
 		}
 		int slot = this.pickAvailableSlot();
-		var entry = new LogicEntry(slot, x, y, component);
+		var entry = new LogicEntry(slot, x, y, component, visible);
 		objects.put(slot, entry);
 		return entry;
 	}
@@ -133,14 +133,6 @@ public final class LogicComponents extends MicrochipObjectContainer<LogicEntry, 
 		traversalOrder = LogicTraversal.buildOrder(microchip);
 	}
 	
-	public void updateValidity()
-	{
-		for(var entry : objects.values())
-		{
-			entry.component().config().recalculateValidity(this);
-		}
-	}
-	
 	@Override
 	public LogicComponents with(Microchip microchip)
 	{
@@ -152,7 +144,7 @@ public final class LogicComponents extends MicrochipObjectContainer<LogicEntry, 
 	@Override
 	public void loadFrom(LogicComponents other)
 	{
-		this.loadFrom(other, (before) -> new LogicEntry(before.slot(), before.x(), before.y(), before.component()));
+		this.loadFrom(other, (before) -> new LogicEntry(before.slot(), before.x(), before.y(), before.component(), before.visible()));
 	}
 	
 	public void loadFrom(LogicComponents other, Function<LogicEntry, LogicEntry> conversion)
@@ -161,6 +153,10 @@ public final class LogicComponents extends MicrochipObjectContainer<LogicEntry, 
 		other.objects.forEach((slot, entry) -> copiedComponents.put(slot, conversion.apply(entry)));
 		objects = copiedComponents;
 		debug = other.debug;
+		for(var entry : this)
+		{
+			entry.component().updateConfigValidState(this);
+		}
 	}
 	
 	@Override

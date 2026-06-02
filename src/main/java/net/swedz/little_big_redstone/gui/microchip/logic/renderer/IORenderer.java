@@ -4,8 +4,9 @@ import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.renderer.RenderPipelines;
 import net.swedz.little_big_redstone.gui.microchip.logic.LogicRenderer;
 import net.swedz.little_big_redstone.microchip.object.logic.io.LogicIO;
+import net.swedz.little_big_redstone.microchip.object.logic.io.LogicIOConfig;
 
-public final class IORenderer extends LogicRenderer<LogicIO>
+public final class IORenderer extends LogicRenderer<LogicIO, LogicIOConfig>
 {
 	@Override
 	public void render(Context context, GuiGraphicsExtractor graphics, LogicIO component, int x, int y)
@@ -15,7 +16,7 @@ public final class IORenderer extends LogicRenderer<LogicIO>
 		
 		graphics.blitSprite(
 				RenderPipelines.GUI_TEXTURED,
-				context.getTexture(component.config().input ? "input" : "output"),
+				context.getTexture(component.config().input() ? "input" : "output"),
 				x,
 				y,
 				16,
@@ -23,7 +24,7 @@ public final class IORenderer extends LogicRenderer<LogicIO>
 				context.foregroundColor()
 		);
 		
-		if(!component.config().isValid())
+		if(!component.isConfigValid())
 		{
 			this.renderInvalidOverlay(graphics, x, y, component.size());
 		}

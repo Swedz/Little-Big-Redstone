@@ -41,7 +41,7 @@ public final class LBRCreativeTabs
 		items.add(ItemResource.of(LBRItems.REDSTONE_BIT));
 		for(LogicType type : LogicTypes.values())
 		{
-			var stack = type.toStack(type.defaultFactory().create());
+			var stack = type.toStack();
 			items.add(ItemResource.of(stack));
 		}
 		return Collections.unmodifiableList(items);

@@ -35,9 +35,9 @@ import net.neoforged.neoforge.client.NeoForgeRenderTypes;
 import net.neoforged.neoforge.client.model.ComposedModelState;
 import net.neoforged.neoforge.client.model.ExtraFaceData;
 import net.swedz.little_big_redstone.LBR;
-import net.swedz.little_big_redstone.LBRComponents;
 import net.swedz.little_big_redstone.LBRItemDisplayContext;
-import net.swedz.little_big_redstone.microchip.object.logic.LogicComponent;
+import net.swedz.little_big_redstone.item.LogicItem;
+import net.swedz.little_big_redstone.microchip.object.logic.LogicType;
 import org.joml.Matrix4fc;
 import org.joml.Vector3f;
 
@@ -56,9 +56,9 @@ public record LogicItemModel(
 	private static final ModelDebugName DEBUG_NAME  = () -> "LogicItemModel";
 	private static final ModelState     MODEL_STATE = new ComposedModelState(BlockModelRotation.IDENTITY, Transformation.IDENTITY);
 	
-	public static LogicItemModel get(LogicComponent<?, ?> component)
+	public static LogicItemModel get(LogicType<?, ?> type)
 	{
-		var modelId = LBR.id(component.type().id());
+		var modelId = LBR.id(type.id());
 		var model = Minecraft.getInstance().getModelManager().getItemModel(modelId);
 		if(!(model instanceof LogicItemModel logicItemModel))
 		{
@@ -78,9 +78,8 @@ public record LogicItemModel(
 			int seed
 	)
 	{
-		var component = stack.get(LBRComponents.LOGIC);
+		var colorSet = colorPalette.getColorSet(LogicItem.getColor(stack), DyeColor.WHITE);
 		var textureMap = displayContext == LBRItemDisplayContext.MICROCHIP_GUI ? boardTextures : itemTextures;
-		var colorSet = colorPalette.getColorSet(component, DyeColor.WHITE);
 		
 		List<ItemModel> models = Lists.newArrayList();
 		models.add(this.bakeLayer(textureMap, 0, "background", colorSet.backgroundFaceData()));

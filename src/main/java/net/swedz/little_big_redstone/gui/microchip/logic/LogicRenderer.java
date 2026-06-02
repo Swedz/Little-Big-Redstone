@@ -10,10 +10,14 @@ import net.swedz.little_big_redstone.client.model.logic.LogicItemModel;
 import net.swedz.little_big_redstone.client.model.logic.LogicModelColorSet;
 import net.swedz.little_big_redstone.microchip.object.logic.LogicComponent;
 import net.swedz.little_big_redstone.microchip.object.logic.LogicGridSize;
+import net.swedz.little_big_redstone.microchip.object.logic.LogicPortHolder;
+import net.swedz.little_big_redstone.microchip.object.logic.LogicType;
+import net.swedz.little_big_redstone.microchip.object.logic.config.LogicConfig;
 
+import java.util.Optional;
 import java.util.function.Function;
 
-public abstract class LogicRenderer<L extends LogicComponent>
+public abstract class LogicRenderer<L extends LogicComponent<L, C>, C extends LogicConfig<C>>
 {
 	public static final Identifier PORT_INPUT  = LBR.id("logic/port_input");
 	public static final Identifier PORT_OUTPUT = LBR.id("logic/port_output");
@@ -30,11 +34,11 @@ public abstract class LogicRenderer<L extends LogicComponent>
 		graphics.blitSprite(RenderPipelines.GUI_TEXTURED, texture, renderX, renderY, 16, 16, color);
 	}
 	
-	protected void renderAllPorts(Context context, GuiGraphicsExtractor graphics, int x, int y, L component)
+	protected void renderAllPorts(Context context, GuiGraphicsExtractor graphics, int x, int y, LogicPortHolder portHolder)
 	{
 		if(context.showPorts())
 		{
-			var size = component.size();
+			var size = portHolder.size();
 			
 			float inputAlpha = 0.5f;
 			float outputAlpha = 0.5f;
@@ -49,13 +53,13 @@ public abstract class LogicRenderer<L extends LogicComponent>
 			int inputColor = ARGB.colorFromFloat(inputAlpha, 1, 1, 1);
 			int outputColor = ARGB.colorFromFloat(outputAlpha, 1, 1, 1);
 			
-			int inputs = component.inputs();
+			int inputs = portHolder.inputs();
 			for(int i = 0; i < inputs; i++)
 			{
 				this.renderPort(graphics, x, y, size, true, i, inputs, inputColor);
 			}
 			
-			int outputs = component.outputs();
+			int outputs = portHolder.outputs();
 			for(int i = 0; i < outputs; i++)
 			{
 				this.renderPort(graphics, x, y, size, false, i, outputs, outputColor);
@@ -74,7 +78,7 @@ public abstract class LogicRenderer<L extends LogicComponent>
 		this.renderGridBlock(graphics, border, x, y, size, foregroundColor);
 	}
 	
-	protected void renderBackground(Context context, GuiGraphicsExtractor graphics, int x, int y, LogicComponent component)
+	protected void renderBackground(Context context, GuiGraphicsExtractor graphics, int x, int y, LogicPortHolder portHolder)
 	{
 		this.renderBackground(
 				graphics,
@@ -82,7 +86,7 @@ public abstract class LogicRenderer<L extends LogicComponent>
 				context.getTexture("border"),
 				x,
 				y,
-				component.size(),
+				portHolder.size(),
 				context.foregroundColor(),
 				context.backgroundColor()
 		);
@@ -101,16 +105,21 @@ public abstract class LogicRenderer<L extends LogicComponent>
 			boolean isCarryingWire
 	)
 	{
-		public static Context create(DyeColor menuColor, LogicComponent<?, ?> component, boolean showPorts, boolean hasSelectedPort, boolean isCarryingWire)
+		public static Context create(Optional<DyeColor> logicColor, DyeColor menuColor, LogicType<?, ?> type, boolean showPorts, boolean hasSelectedPort, boolean isCarryingWire)
 		{
-			var model = LogicItemModel.get(component);
+			var model = LogicItemModel.get(type);
 			return new Context(
-					model.colorPalette().getColorSet(component, menuColor),
+					model.colorPalette().getColorSet(logicColor, menuColor),
 					model.boardTextures()::get,
 					showPorts,
 					hasSelectedPort,
 					isCarryingWire
 			);
+		}
+		
+		public static Context create(DyeColor logicColor, DyeColor menuColor, LogicType<?, ?> type, boolean showPorts, boolean hasSelectedPort, boolean isCarryingWire)
+		{
+			return create(Optional.ofNullable(logicColor), menuColor, type, showPorts, hasSelectedPort, isCarryingWire);
 		}
 		
 		public Identifier getTexture(String key)

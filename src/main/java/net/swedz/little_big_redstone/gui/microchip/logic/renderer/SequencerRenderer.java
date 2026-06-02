@@ -4,8 +4,9 @@ import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.renderer.RenderPipelines;
 import net.swedz.little_big_redstone.gui.microchip.logic.LogicRenderer;
 import net.swedz.little_big_redstone.microchip.object.logic.sequencer.LogicSequencer;
+import net.swedz.little_big_redstone.microchip.object.logic.sequencer.LogicSequencerConfig;
 
-public final class SequencerRenderer extends LogicRenderer<LogicSequencer>
+public final class SequencerRenderer extends LogicRenderer<LogicSequencer, LogicSequencerConfig>
 {
 	@Override
 	public void render(Context context, GuiGraphicsExtractor graphics, LogicSequencer component, int x, int y)

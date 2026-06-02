@@ -5,19 +5,15 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import io.netty.buffer.ByteBuf;
-import net.minecraft.network.chat.Component;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.item.DyeColor;
-import net.swedz.little_big_redstone.LBR;
 import net.swedz.little_big_redstone.microchip.object.logic.LogicComponent;
-import net.swedz.little_big_redstone.microchip.object.logic.LogicContext;
-import net.swedz.little_big_redstone.microchip.object.logic.LogicGridSize;
+import net.swedz.little_big_redstone.microchip.object.logic.LogicTickingContext;
 import net.swedz.little_big_redstone.microchip.object.logic.LogicType;
 import net.swedz.little_big_redstone.microchip.object.logic.LogicTypes;
 
-import java.util.List;
 import java.util.Optional;
 
 public final class LogicRandomizer extends LogicComponent<LogicRandomizer, LogicRandomizerConfig>
@@ -68,14 +64,14 @@ public final class LogicRandomizer extends LogicComponent<LogicRandomizer, Logic
 	}
 	
 	@Override
-	protected void processTickInternal(LogicContext context, int[] inputs)
+	protected void processTickInternal(LogicTickingContext context, int[] inputs)
 	{
 		int originalOutputIndex = outputIndex;
 		
 		int input = inputs[0];
-		if(input > 0 && RANDOM.nextFloat() <= config.chance)
+		if(input > 0 && RANDOM.nextFloat() <= config.chance())
 		{
-			outputIndex = RANDOM.nextInt(config.outputs);
+			outputIndex = RANDOM.nextInt(config.outputs());
 			outputState = input;
 		}
 		else
@@ -102,19 +98,6 @@ public final class LogicRandomizer extends LogicComponent<LogicRandomizer, Logic
 	}
 	
 	@Override
-	public LogicGridSize size()
-	{
-		int outputs = this.outputs();
-		return new LogicGridSize(1, Math.max(1, outputs / 2));
-	}
-	
-	@Override
-	public void appendShiftHoverText(List<Component> lines)
-	{
-		lines.add(LBR.text().logicHelpRandomizer());
-	}
-	
-	@Override
 	protected void internalLoadFrom(LogicRandomizer other)
 	{
 		outputIndex = other.outputIndex;
@@ -122,20 +105,7 @@ public final class LogicRandomizer extends LogicComponent<LogicRandomizer, Logic
 	}
 	
 	@Override
-	protected void internalResetForPickup()
-	{
-		outputIndex = -1;
-		outputState = 0;
-	}
-	
-	@Override
-	protected LogicRandomizerConfig defaultConfig()
-	{
-		return new LogicRandomizerConfig();
-	}
-	
-	@Override
-	public LogicType<LogicRandomizer> type()
+	public LogicType<LogicRandomizer, LogicRandomizerConfig> type()
 	{
 		return LogicTypes.RANDOMIZER;
 	}

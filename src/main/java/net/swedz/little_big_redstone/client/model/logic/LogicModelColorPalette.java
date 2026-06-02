@@ -3,11 +3,11 @@ package net.swedz.little_big_redstone.client.model.logic;
 import com.google.common.collect.Maps;
 import com.mojang.serialization.Codec;
 import net.minecraft.world.item.DyeColor;
-import net.swedz.little_big_redstone.microchip.object.logic.LogicComponent;
 import net.swedz.tesseract.api.Assert;
 
 import java.util.Collections;
 import java.util.Map;
+import java.util.Optional;
 
 public final class LogicModelColorPalette
 {
@@ -30,9 +30,14 @@ public final class LogicModelColorPalette
 		return map.getOrDefault(color, LogicModelColorSet.DEFAULT);
 	}
 	
-	public LogicModelColorSet getColorSet(LogicComponent<?, ?> component, DyeColor fallback)
+	public LogicModelColorSet getColorSet(DyeColor value, DyeColor fallback)
 	{
-		return this.getColorSet(component.color().orElse(fallback));
+		return this.getColorSet(value != null ? value : fallback);
+	}
+	
+	public LogicModelColorSet getColorSet(Optional<DyeColor> value, DyeColor fallback)
+	{
+		return this.getColorSet(value.orElse(fallback));
 	}
 	
 	public static Builder builder()

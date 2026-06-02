@@ -23,27 +23,28 @@ import net.swedz.little_big_redstone.gui.logicconfig.widget.iconcycle.IconCycleL
 import net.swedz.little_big_redstone.gui.logicconfig.widget.iconcycle.IconCycleLogicConfigButtonIcon;
 import net.swedz.little_big_redstone.gui.logicconfig.widget.slider.SliderLogicConfigWidget;
 import net.swedz.little_big_redstone.gui.logicconfig.widget.textbox.TextBoxLogicConfigWidget;
-import net.swedz.little_big_redstone.microchip.object.logic.LogicComponent;
+import net.swedz.little_big_redstone.microchip.object.logic.config.LogicConfig;
 import net.swedz.little_big_redstone.microchip.object.logic.config.menu.LogicConfigButtonReference;
 import net.swedz.little_big_redstone.microchip.object.logic.config.menu.LogicConfigMenuBuilder;
+import net.swedz.little_big_redstone.microchip.object.logic.config.menu.LogicConfigMenuProvider;
 import net.swedz.little_big_redstone.network.packet.ReturnToMicrochipMenuPacket;
 import net.swedz.little_big_redstone.network.packet.WriteLogicConfigPacket;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
 
 public final class LogicConfigScreen extends AbstractContainerScreen<LogicConfigMenu> implements LogicConfigMenuBuilder
 {
-	private final int            color;
-	private final LogicComponent logicComponent;
-	private final ItemStack      logicStack;
+	private final int       color;
+	private final ItemStack logicStack;
 	
 	private int configX, configY, configWidth, configHeight;
 	
 	private final List<TickableLogicConfigWidget> tickableWidgets = Lists.newArrayList();
+	
+	private final LogicConfigMenuProvider<?> logicConfigMenuProvider;
 	
 	public LogicConfigScreen(LogicConfigMenu menu, Inventory playerInventory, Component title)
 	{
@@ -54,14 +55,21 @@ public final class LogicConfigScreen extends AbstractContainerScreen<LogicConfig
 		configWidth = 160 - 4;
 		configHeight = 180 - 4;
 		
-		logicComponent = menu.logicComponent();
-		var colorSet = LogicItemModel.get(logicComponent).colorPalette().getColorSet(logicComponent, menu.color());
+		var logicConfig = menu.logicConfig();
+		logicConfigMenuProvider = logicConfig.getMenuProvider();
+		var colorSet = LogicItemModel.get(logicConfig.type()).colorPalette().getColorSet(menu.color());
 		color = colorSet.foreground();
 		
-		logicStack = logicComponent.type().toStack(logicComponent);
-		var stackComponent = logicStack.get(LBRComponents.LOGIC).copy();
-		stackComponent.setColor(Optional.of(stackComponent.color().orElse(menu.color())));
-		logicStack.set(LBRComponents.LOGIC, stackComponent);
+		logicStack = logicConfig.type().toStack();
+		if(!logicStack.has(LBRComponents.LOGIC_COLOR))
+		{
+			logicStack.set(LBRComponents.LOGIC_COLOR, menu.color());
+		}
+	}
+	
+	private LogicConfig<?> logicConfig()
+	{
+		return logicConfigMenuProvider.config();
 	}
 	
 	@Override
@@ -401,7 +409,7 @@ public final class LogicConfigScreen extends AbstractContainerScreen<LogicConfig
 	
 	private void save()
 	{
-		new WriteLogicConfigPacket(logicComponent).sendToServer();
+		new WriteLogicConfigPacket(this.logicConfig()).sendToServer();
 		
 		this.maybeClose();
 	}
@@ -420,7 +428,7 @@ public final class LogicConfigScreen extends AbstractContainerScreen<LogicConfig
 		configX = leftPos + 8 + 2;
 		configY = topPos + 8 + 2;
 		
-		logicComponent.config().getMenuProvider().create(this, configWidth, configHeight);
+		logicConfigMenuProvider.create(this, configWidth, configHeight);
 		
 		int buttonWidth = (configWidth / 2) - 4;
 		

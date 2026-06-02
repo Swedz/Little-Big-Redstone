@@ -5,14 +5,17 @@ import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.server.level.ServerPlayer;
 import net.swedz.little_big_redstone.LBR;
 import net.swedz.little_big_redstone.gui.logicconfig.LogicConfigMenu;
-import net.swedz.little_big_redstone.microchip.object.logic.LogicComponent;
+import net.swedz.little_big_redstone.microchip.object.logic.LogicCodecs;
+import net.swedz.little_big_redstone.microchip.object.logic.config.LogicConfig;
 import net.swedz.little_big_redstone.network.LBRCustomPacket;
 import net.swedz.tesseract.neoforge.packet.PacketContext;
 
-public record WriteLogicConfigPacket(LogicComponent component) implements LBRCustomPacket
+public record WriteLogicConfigPacket(
+		LogicConfig<?> config
+) implements LBRCustomPacket
 {
 	public static final StreamCodec<ByteBuf, WriteLogicConfigPacket> STREAM_CODEC = StreamCodec.composite(
-			LogicComponent.STREAM_CODEC, WriteLogicConfigPacket::component,
+			LogicCodecs.CONFIG_STREAM_CODEC, WriteLogicConfigPacket::config,
 			WriteLogicConfigPacket::new
 	);
 	
@@ -26,7 +29,7 @@ public record WriteLogicConfigPacket(LogicComponent component) implements LBRCus
 		
 		if(player.containerMenu instanceof LogicConfigMenu menu)
 		{
-			menu.save(player, component);
+			menu.save(player, config);
 		}
 		else
 		{
