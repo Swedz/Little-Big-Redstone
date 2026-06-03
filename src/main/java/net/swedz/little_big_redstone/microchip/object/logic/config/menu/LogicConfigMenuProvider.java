@@ -11,7 +11,7 @@ public abstract class LogicConfigMenuProvider<C extends LogicConfig<C>>
 		this.config = config;
 	}
 	
-	public C config()
+	public final C config()
 	{
 		return config;
 	}

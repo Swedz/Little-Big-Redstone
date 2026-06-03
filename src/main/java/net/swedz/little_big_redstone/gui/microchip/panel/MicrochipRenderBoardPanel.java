@@ -167,11 +167,11 @@ public final class MicrochipRenderBoardPanel extends MicrochipRenderPanel
 				}
 				else
 				{
-					var logic = carried.get(LBRComponents.LOGIC_CONFIG);
-					x = MicrochipScreen.getGridSnappedCoord(logic.size().topLeftCornerX(boardMouseX) + 8);
-					y = MicrochipScreen.getGridSnappedCoord(logic.size().topLeftCornerY(boardMouseY) + 8);
-					width = logic.size().widthPixels();
-					height = logic.size().heightPixels();
+					var logicConfig = carried.get(LBRComponents.LOGIC_CONFIG);
+					x = MicrochipScreen.getGridSnappedCoord(logicConfig.size().topLeftCornerX(boardMouseX) + 8);
+					y = MicrochipScreen.getGridSnappedCoord(logicConfig.size().topLeftCornerY(boardMouseY) + 8);
+					width = logicConfig.size().widthPixels();
+					height = logicConfig.size().heightPixels();
 				}
 				var pipeline = LBRClientRenderPipelines.PULSING_ALPHA;
 				var texture = LBR.id("textures/gui/container/microchip/grid_snapping_overlay.png");
