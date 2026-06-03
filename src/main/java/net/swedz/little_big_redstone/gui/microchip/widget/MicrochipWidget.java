@@ -23,10 +23,9 @@ import net.swedz.little_big_redstone.gui.microchip.MicrochipMenu;
 import net.swedz.little_big_redstone.gui.microchip.MicrochipScreen;
 import net.swedz.little_big_redstone.gui.microchip.MicrochipViewPosition;
 import net.swedz.little_big_redstone.gui.microchip.logic.DyeComponentResult;
-import net.swedz.little_big_redstone.gui.microchip.logic.LogicRenderer;
-import net.swedz.little_big_redstone.gui.microchip.logic.LogicRenderers;
 import net.swedz.little_big_redstone.gui.microchip.panel.MicrochipRenderBoardPanel;
 import net.swedz.little_big_redstone.gui.stickynote.reference.MicrochipStickyNoteReference;
+import net.swedz.little_big_redstone.item.LogicItem;
 import net.swedz.little_big_redstone.item.stickynote.StickyNoteItem;
 import net.swedz.little_big_redstone.microchip.Microchip;
 import net.swedz.little_big_redstone.microchip.object.logic.LogicSelectedPort;
@@ -393,16 +392,17 @@ public final class MicrochipWidget implements GuiEventListener, Renderable, Narr
 		boolean leftClick = button == InputConstants.MOUSE_BUTTON_LEFT;
 		boolean rightClick = button == InputConstants.MOUSE_BUTTON_RIGHT;
 		if((leftClick || rightClick) &&
-		   carried.has(LBRComponents.LOGIC) &&
+		   carried.has(LBRComponents.LOGIC_CONFIG) &&
 		   context.shouldInteractBoard())
 		{
-			var component = carried.get(LBRComponents.LOGIC);
-			int placeX = Screen.hasControlDown() ? MicrochipScreen.getGridSnappedCoord(component.size().topLeftCornerX(x) + 8) : component.size().topLeftCornerX(x);
-			int placeY = Screen.hasControlDown() ? MicrochipScreen.getGridSnappedCoord(component.size().topLeftCornerY(y) + 8) : component.size().topLeftCornerY(y);
+			var config = carried.get(LBRComponents.LOGIC_CONFIG);
+			int placeX = Screen.hasControlDown() ? MicrochipScreen.getGridSnappedCoord(config.size().topLeftCornerX(x) + 8) : config.size().topLeftCornerX(x);
+			int placeY = Screen.hasControlDown() ? MicrochipScreen.getGridSnappedCoord(config.size().topLeftCornerY(y) + 8) : config.size().topLeftCornerY(y);
 			
-			if(microchip.size().bounds().normalize().contains(component.size().toBounds(placeX, placeY)))
+			if(microchip.size().bounds().normalize().contains(config.size().toBounds(placeX, placeY)))
 			{
-				var logic = microchip.components().add(placeX, placeY, component);
+				var logicColor = LogicItem.getColor(carried);
+				var logic = microchip.components().add(placeX, placeY, config.type().create(config, logicColor));
 				if(logic != null)
 				{
 					menu.placeCarriedWires(logic.slot());
@@ -567,43 +567,32 @@ public final class MicrochipWidget implements GuiEventListener, Renderable, Narr
 	
 	private void renderTooltipLogic(TesseractGuiGraphics graphics, int x, int y)
 	{
-		var component = context.logic().component();
+		var logicComponent = context.logic().component();
+		var logicConfig = logicComponent.config();
 		List<Component> lines = Lists.newArrayList();
-		lines.add(component.type().displayName().withStyle(Style.EMPTY.withUnderlined(true)));
-		component.type().tooltip(component, false, true, false).ifPresent((Consumer<List<Component>>) lines::addAll);
-		if(component.config().hasMenu())
+		lines.add(logicConfig.type().displayName().withStyle(Style.EMPTY.withUnderlined(true)));
+		logicConfig.type().tooltip(logicConfig, false, true, false).ifPresent((Consumer<List<Component>>) lines::addAll);
+		if(logicConfig.hasMenu())
 		{
 			lines.add(Component.empty());
 			lines.add(LBR.text().logicConfigTooltipClickToOpen());
 		}
 		
-		var colorSet = LogicBakingModelData.get(component).getColorSet(component, this.color());
+		var colorSet = LogicBakingModelData.get(logicConfig.type()).getColorSet(logicComponent.color(), this.color());
 		int backgroundColor = colorSet.background();
 		int borderColor = colorSet.foreground();
 		graphics.renderTooltip(lines, x, y, backgroundColor, backgroundColor, borderColor, borderColor);
-		
-		if(microchip.isDebug())
-		{
-			graphics.pose().pushPose();
-			graphics.pose().translate(this.x + 211, this.y + 139, 0);
-			graphics.pose().scale(2, 2, 2);
-			graphics.enableBatching();
-			var context = LogicRenderer.Context.create(this.color(), component, this.menu().getCarriedWires() != null, this.hasSelectedPort(), false);
-			LogicRenderers.render(context, graphics, component, 0, 0);
-			graphics.drawBatches();
-			graphics.pose().popPose();
-		}
 	}
 	
 	private void renderTooltipWire(TesseractGuiGraphics graphics, int x, int y)
 	{
-		var component = context.logic().component();
+		var logicComponent = context.logic().component();
 		
 		List<Component> lines = Lists.newArrayList();
 		lines.add(LBRItems.REDSTONE_BIT.asItem().getDefaultInstance().getHoverName().copy().withStyle(Style.EMPTY.withUnderlined(true)));
 		lines.add(LBR.text().logicConfigTooltipSignal(context.wireSignal()));
 		
-		var colorSet = LogicBakingModelData.get(component).getColorSet(component, this.color());
+		var colorSet = LogicBakingModelData.get(logicComponent.type()).getColorSet(logicComponent.color(), this.color());
 		int backgroundColor = colorSet.background();
 		int borderColor = colorSet.foreground();
 		graphics.renderTooltip(lines, x, y, backgroundColor, backgroundColor, borderColor, borderColor);

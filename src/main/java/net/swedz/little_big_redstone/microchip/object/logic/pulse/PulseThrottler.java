@@ -5,17 +5,14 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import io.netty.buffer.ByteBuf;
-import net.minecraft.network.chat.Component;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.world.item.DyeColor;
-import net.swedz.little_big_redstone.LBR;
 import net.swedz.little_big_redstone.microchip.object.logic.LogicComponent;
-import net.swedz.little_big_redstone.microchip.object.logic.LogicContext;
+import net.swedz.little_big_redstone.microchip.object.logic.LogicTickingContext;
 import net.swedz.little_big_redstone.microchip.object.logic.LogicType;
 import net.swedz.little_big_redstone.microchip.object.logic.LogicTypes;
 
-import java.util.List;
 import java.util.Optional;
 
 public final class PulseThrottler extends LogicComponent<PulseThrottler, PulseThrottlerConfig>
@@ -71,13 +68,7 @@ public final class PulseThrottler extends LogicComponent<PulseThrottler, PulseTh
 	}
 	
 	@Override
-	protected PulseThrottlerConfig defaultConfig()
-	{
-		return new PulseThrottlerConfig();
-	}
-	
-	@Override
-	public LogicType<PulseThrottler> type()
+	public LogicType<PulseThrottler, PulseThrottlerConfig> type()
 	{
 		return LogicTypes.PULSE_THROTTLER;
 	}
@@ -98,7 +89,7 @@ public final class PulseThrottler extends LogicComponent<PulseThrottler, PulseTh
 	}
 	
 	@Override
-	protected void processTickInternal(LogicContext context, int[] inputs)
+	protected void processTickInternal(LogicTickingContext context, int[] inputs)
 	{
 		int originalOutputState = outputState;
 		
@@ -107,9 +98,9 @@ public final class PulseThrottler extends LogicComponent<PulseThrottler, PulseTh
 		
 		boolean changed = false;
 		
-		if(config.outputDuration > 0)
+		if(config.outputDuration() > 0)
 		{
-			if(processedTicks >= config.outputDuration)
+			if(processedTicks >= config.outputDuration())
 			{
 				processedTicks = 0;
 				output = false;
@@ -135,7 +126,7 @@ public final class PulseThrottler extends LogicComponent<PulseThrottler, PulseTh
 			storedSignal = input;
 		}
 		
-		outputState = output ? (config.signalStrength == 0 ? storedSignal : config.signalStrength) : 0;
+		outputState = output ? (config.signalStrength() == 0 ? storedSignal : config.signalStrength()) : 0;
 		if(outputState == 0)
 		{
 			storedSignal = 0;
@@ -159,28 +150,12 @@ public final class PulseThrottler extends LogicComponent<PulseThrottler, PulseTh
 	}
 	
 	@Override
-	public void appendShiftHoverText(List<Component> lines)
-	{
-		lines.add(LBR.text().logicHelpPulseThrottler1());
-		lines.add(LBR.text().logicHelpPulseThrottler2());
-	}
-	
-	@Override
 	protected void internalLoadFrom(PulseThrottler other)
 	{
 		lastInputState = other.lastInputState;
 		processedTicks = other.processedTicks;
 		storedSignal = other.storedSignal;
 		outputState = other.outputState;
-	}
-	
-	@Override
-	protected void internalResetForPickup()
-	{
-		lastInputState = false;
-		processedTicks = 0;
-		storedSignal = 0;
-		outputState = 0;
 	}
 	
 	@Override

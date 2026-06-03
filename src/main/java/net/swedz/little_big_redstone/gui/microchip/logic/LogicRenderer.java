@@ -7,18 +7,15 @@ import net.swedz.little_big_redstone.client.model.logic.LogicBakingModelData;
 import net.swedz.little_big_redstone.client.model.logic.LogicModelColorSet;
 import net.swedz.little_big_redstone.microchip.object.logic.LogicComponent;
 import net.swedz.little_big_redstone.microchip.object.logic.LogicGridSize;
+import net.swedz.little_big_redstone.microchip.object.logic.LogicType;
+import net.swedz.little_big_redstone.microchip.object.logic.config.LogicConfig;
 import net.swedz.tesseract.neoforge.helper.guigraphics.TesseractGuiGraphics;
 
+import java.util.Optional;
 import java.util.function.Function;
 
-public abstract class LogicRenderer<L extends LogicComponent>
+public abstract class LogicRenderer<L extends LogicComponent<L, C>, C extends LogicConfig<C>>
 {
-	public static final ResourceLocation BORDER_SQUARE     = LBR.id("textures/logic/border_square.png");
-	public static final ResourceLocation BACKGROUND_SQUARE = LBR.id("textures/logic/background_square.png");
-	
-	public static final ResourceLocation BORDER_CIRCLE     = LBR.id("textures/logic/border_circle.png");
-	public static final ResourceLocation BACKGROUND_CIRCLE = LBR.id("textures/logic/background_circle.png");
-	
 	public static final ResourceLocation PORT_INPUT  = LBR.id("textures/logic/port_input.png");
 	public static final ResourceLocation PORT_OUTPUT = LBR.id("textures/logic/port_output.png");
 	
@@ -110,10 +107,21 @@ public abstract class LogicRenderer<L extends LogicComponent>
 			boolean showPorts, boolean hasSelectedPort, boolean isCarryingWire
 	)
 	{
-		public static Context create(DyeColor menuColor, LogicComponent<?, ?> component, boolean showPorts, boolean hasSelectedPort, boolean isCarryingWire)
+		public static Context create(Optional<DyeColor> logicColor, DyeColor menuColor, LogicType<?, ?> type, boolean showPorts, boolean hasSelectedPort, boolean isCarryingWire)
 		{
-			var modelData = LogicBakingModelData.get(component);
-			return new Context(modelData.getColorSet(component, menuColor), modelData::getBoardTextureLocation, showPorts, hasSelectedPort, isCarryingWire);
+			var modelData = LogicBakingModelData.get(type);
+			return new Context(
+					modelData.getColorSet(logicColor, menuColor),
+					modelData::getBoardTextureLocation,
+					showPorts,
+					hasSelectedPort,
+					isCarryingWire
+			);
+		}
+		
+		public static Context create(DyeColor logicColor, DyeColor menuColor, LogicType<?, ?> type, boolean showPorts, boolean hasSelectedPort, boolean isCarryingWire)
+		{
+			return create(Optional.ofNullable(logicColor), menuColor, type, showPorts, hasSelectedPort, isCarryingWire);
 		}
 		
 		public ResourceLocation getTexture(String key)

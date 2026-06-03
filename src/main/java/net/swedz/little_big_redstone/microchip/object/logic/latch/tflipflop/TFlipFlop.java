@@ -4,17 +4,14 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import io.netty.buffer.ByteBuf;
-import net.minecraft.network.chat.Component;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.world.item.DyeColor;
-import net.swedz.little_big_redstone.LBR;
 import net.swedz.little_big_redstone.microchip.object.logic.LogicComponent;
-import net.swedz.little_big_redstone.microchip.object.logic.LogicContext;
+import net.swedz.little_big_redstone.microchip.object.logic.LogicTickingContext;
 import net.swedz.little_big_redstone.microchip.object.logic.LogicType;
 import net.swedz.little_big_redstone.microchip.object.logic.LogicTypes;
 
-import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -51,19 +48,13 @@ public final class TFlipFlop extends LogicComponent<TFlipFlop, TFlipFlopConfig>
 	}
 	
 	@Override
-	protected TFlipFlopConfig defaultConfig()
-	{
-		return new TFlipFlopConfig();
-	}
-	
-	@Override
-	public LogicType<TFlipFlop> type()
+	public LogicType<TFlipFlop, TFlipFlopConfig> type()
 	{
 		return LogicTypes.T_FLIP_FLOP;
 	}
 	
 	@Override
-	protected void processTickInternal(LogicContext context, int[] inputs)
+	protected void processTickInternal(LogicTickingContext context, int[] inputs)
 	{
 		int input = inputs[0];
 		
@@ -93,23 +84,10 @@ public final class TFlipFlop extends LogicComponent<TFlipFlop, TFlipFlopConfig>
 	}
 	
 	@Override
-	public void appendShiftHoverText(List<Component> lines)
-	{
-		lines.add(LBR.text().logicHelpTFlipFlop());
-	}
-	
-	@Override
 	protected void internalLoadFrom(TFlipFlop other)
 	{
 		lastInputState = other.lastInputState;
 		outputState = other.outputState;
-	}
-	
-	@Override
-	public void internalResetForPickup()
-	{
-		lastInputState = false;
-		outputState = 0;
 	}
 	
 	@Override

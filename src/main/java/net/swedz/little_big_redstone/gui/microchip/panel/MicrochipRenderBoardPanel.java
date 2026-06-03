@@ -65,9 +65,9 @@ public final class MicrochipRenderBoardPanel extends MicrochipRenderPanel
 	
 	private void renderLogic(TesseractGuiGraphics graphics, LogicEntry entry, boolean hasSelectedPort, boolean isCarryingWire)
 	{
-		if(entry.component().config().isVisible())
+		if(entry.visible())
 		{
-			var context = LogicRenderer.Context.create(color, entry.component(), true, hasSelectedPort, isCarryingWire);
+			var context = LogicRenderer.Context.create(entry.color(), color, entry.type(), true, hasSelectedPort, isCarryingWire);
 			LogicRenderers.render(context, graphics, entry.component(), entry.x(), entry.y());
 			
 			if(microchip.isDebug())
@@ -163,7 +163,7 @@ public final class MicrochipRenderBoardPanel extends MicrochipRenderPanel
 			int boardMouseY = context.boardMouseY();
 			
 			boolean isStickyNote = carried.getItem() instanceof StickyNoteItem;
-			boolean isLogic = carried.has(LBRComponents.LOGIC);
+			boolean isLogic = carried.has(LBRComponents.LOGIC_CONFIG);
 			if(isStickyNote || isLogic)
 			{
 				int x, y;
@@ -177,11 +177,11 @@ public final class MicrochipRenderBoardPanel extends MicrochipRenderPanel
 				}
 				else
 				{
-					var component = carried.get(LBRComponents.LOGIC);
-					x = MicrochipScreen.getGridSnappedCoord(component.size().topLeftCornerX(boardMouseX) + 8);
-					y = MicrochipScreen.getGridSnappedCoord(component.size().topLeftCornerY(boardMouseY) + 8);
-					width = component.size().widthPixels();
-					height = component.size().heightPixels();
+					var logicConfig = carried.get(LBRComponents.LOGIC_CONFIG);
+					x = MicrochipScreen.getGridSnappedCoord(logicConfig.size().topLeftCornerX(boardMouseX) + 8);
+					y = MicrochipScreen.getGridSnappedCoord(logicConfig.size().topLeftCornerY(boardMouseY) + 8);
+					width = logicConfig.size().widthPixels();
+					height = logicConfig.size().heightPixels();
 				}
 				graphics.enableBatching();
 				graphics.resetColor();

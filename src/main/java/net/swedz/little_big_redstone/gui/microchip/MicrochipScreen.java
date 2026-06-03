@@ -9,6 +9,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.inventory.Slot;
+import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.ItemStack;
 import net.swedz.little_big_redstone.LBR;
 import net.swedz.little_big_redstone.LBRClientShaders;
@@ -16,7 +17,6 @@ import net.swedz.little_big_redstone.LBRComponents;
 import net.swedz.little_big_redstone.LBRItemDisplayContext;
 import net.swedz.little_big_redstone.LBRItems;
 import net.swedz.little_big_redstone.block.microchip.MicrochipBlockEntity;
-import net.swedz.little_big_redstone.gui.slot.MaybeLockedPlayerSlot;
 import net.swedz.little_big_redstone.gui.microchip.logic.LogicRenderer;
 import net.swedz.little_big_redstone.gui.microchip.logic.LogicRenderers;
 import net.swedz.little_big_redstone.gui.microchip.widget.MicrochipThermostatWidget;
@@ -24,13 +24,16 @@ import net.swedz.little_big_redstone.gui.microchip.widget.MicrochipWidget;
 import net.swedz.little_big_redstone.gui.microchip.wire.WireMetadata;
 import net.swedz.little_big_redstone.gui.microchip.wire.WirePath;
 import net.swedz.little_big_redstone.gui.microchip.wire.WirePathKey;
+import net.swedz.little_big_redstone.gui.slot.MaybeLockedPlayerSlot;
+import net.swedz.little_big_redstone.item.LogicItem;
 import net.swedz.little_big_redstone.item.stickynote.StickyNoteItem;
-import net.swedz.little_big_redstone.microchip.object.logic.LogicComponent;
+import net.swedz.little_big_redstone.microchip.object.logic.config.LogicConfig;
 import net.swedz.little_big_redstone.microchip.wire.Wire;
 import net.swedz.little_big_redstone.network.packet.StoreMicrochipViewPositionPacket;
 import net.swedz.tesseract.neoforge.helper.guigraphics.TesseractGuiGraphics;
 
 import java.util.Map;
+import java.util.Optional;
 
 public final class MicrochipScreen extends AbstractContainerScreen<MicrochipMenu>
 {
@@ -147,7 +150,7 @@ public final class MicrochipScreen extends AbstractContainerScreen<MicrochipMenu
 	}
 	
 	@Override
-	public void renderFloatingItem(GuiGraphics vanilla, ItemStack stack, int localX, int localY, String text)
+	public void renderFloatingItem(GuiGraphics vanilla, ItemStack carried, int localX, int localY, String text)
 	{
 		int mouseX = localX + leftPos + 8;
 		int mouseY = localY + topPos + 8;
@@ -168,33 +171,34 @@ public final class MicrochipScreen extends AbstractContainerScreen<MicrochipMenu
 			graphics.pose().scale(microchipWidget.viewPosition().zoom(), microchipWidget.viewPosition().zoom(), 1);
 			graphics.pose().translate(-microchipWidget.viewPosition().x(), -microchipWidget.viewPosition().y(), 0);
 			
-			if(stack.getItem() instanceof StickyNoteItem)
+			if(carried.getItem() instanceof StickyNoteItem)
 			{
 				int itemX = Screen.hasControlDown() ? getGridSnappedCoord(boardMouseX) : (boardMouseX - 8);
 				int itemY = Screen.hasControlDown() ? getGridSnappedCoord(boardMouseY) : (boardMouseY - 8);
 				
-				graphics.renderItem(stack, LBRItemDisplayContext.MICROCHIP_GUI, itemX, itemY);
+				graphics.renderItem(carried, LBRItemDisplayContext.MICROCHIP_GUI, itemX, itemY);
 				
 				graphics.pose().popPose();
 				vanilla.disableScissor();
 				return;
 			}
-			else if(stack.has(LBRComponents.LOGIC))
+			else if(carried.has(LBRComponents.LOGIC_CONFIG))
 			{
-				var component = stack.get(LBRComponents.LOGIC);
-				var context = LogicRenderer.Context.create(menu.color(), component, menu.getCarriedWires() != null, microchipWidget.hasSelectedPort(), false);
+				var logicColor = LogicItem.getColor(carried);
+				var config = carried.get(LBRComponents.LOGIC_CONFIG);
+				var context = LogicRenderer.Context.create(logicColor, menu.color(), config.type(), menu.getCarriedWires() != null, microchipWidget.hasSelectedPort(), false);
 				
-				int logicX = Screen.hasControlDown() ? getGridSnappedCoord(component.size().topLeftCornerX(boardMouseX) + 8) : component.size().topLeftCornerX(boardMouseX);
-				int logicY = Screen.hasControlDown() ? getGridSnappedCoord(component.size().topLeftCornerY(boardMouseY) + 8) : component.size().topLeftCornerY(boardMouseY);
+				int logicX = Screen.hasControlDown() ? getGridSnappedCoord(config.size().topLeftCornerX(boardMouseX) + 8) : config.size().topLeftCornerX(boardMouseX);
+				int logicY = Screen.hasControlDown() ? getGridSnappedCoord(config.size().topLeftCornerY(boardMouseY) + 8) : config.size().topLeftCornerY(boardMouseY);
 				
-				this.renderCarriedWires(graphics, logicX, logicY, context, component);
-				this.renderCarriedLogic(graphics, logicX, logicY, context, component);
+				this.renderCarriedWires(graphics, logicX, logicY, context, config, logicColor);
+				this.renderCarriedLogic(graphics, logicX, logicY, context, config, logicColor);
 				
 				graphics.pose().popPose();
 				vanilla.disableScissor();
 				return;
 			}
-			else if(stack.is(LBRItems.REDSTONE_BIT.asItem()))
+			else if(carried.is(LBRItems.REDSTONE_BIT.asItem()))
 			{
 				graphics.setTexture(LBR.id("textures/item/redstone_bit.png"));
 				if(!microchipWidget.context().hasPort())
@@ -202,7 +206,7 @@ public final class MicrochipScreen extends AbstractContainerScreen<MicrochipMenu
 					graphics.setTextureShader(LBRClientShaders::pulsingTextureAlpha);
 				}
 				graphics.blit(boardMouseX - 8, boardMouseY - 8, 0, 0, 16, 16, 16, 16);
-				graphics.renderItemDecorations(stack, boardMouseX - 8, boardMouseY - 8);
+				graphics.renderItemDecorations(carried, boardMouseX - 8, boardMouseY - 8);
 				
 				graphics.pose().popPose();
 				vanilla.disableScissor();
@@ -213,14 +217,14 @@ public final class MicrochipScreen extends AbstractContainerScreen<MicrochipMenu
 			vanilla.disableScissor();
 		}
 		
-		super.renderFloatingItem(vanilla, stack, localX, localY, text);
+		super.renderFloatingItem(vanilla, carried, localX, localY, text);
 	}
 	
 	private record CarriedWiresData(WirePathKey key, WirePath path)
 	{
 	}
 	
-	private void renderCarriedWires(TesseractGuiGraphics graphics, int logicX, int logicY, LogicRenderer.Context context, LogicComponent<?, ?> component)
+	private void renderCarriedWires(TesseractGuiGraphics graphics, int logicX, int logicY, LogicRenderer.Context context, LogicConfig<?> config, Optional<DyeColor> color)
 	{
 		if(menu.getCarriedWires() != null)
 		{
@@ -229,7 +233,7 @@ public final class MicrochipScreen extends AbstractContainerScreen<MicrochipMenu
 			Map<Wire, CarriedWiresData> paths = Maps.newConcurrentMap();
 			for(var wire : menu.getCarriedWires())
 			{
-				var key = WirePathKey.carried(microchipWidget.context(), menu.getCarriedComponentSlot(), component, wire, logicX, logicY);
+				var key = WirePathKey.carried(microchipWidget.context(), menu.getCarriedComponentSlot(), config, wire, logicX, logicY);
 				var path = wirePanel.pathing().get(key, false);
 				paths.put(wire, new CarriedWiresData(key, path));
 			}
@@ -241,7 +245,7 @@ public final class MicrochipScreen extends AbstractContainerScreen<MicrochipMenu
 			{
 				var wire = entry.getKey();
 				var data = entry.getValue();
-				var metadata = WireMetadata.carried(microchipWidget.microchip(), microchipWidget.color(), menu.getCarriedComponentSlot(), component, wire);
+				var metadata = WireMetadata.carried(microchipWidget.microchip(), microchipWidget.color(), menu.getCarriedComponentSlot(), config.type(), color, wire);
 				wirePanel.renderWire(graphics, data.key(), data.path(), metadata);
 			}
 			graphics.drawBatches();
@@ -249,7 +253,7 @@ public final class MicrochipScreen extends AbstractContainerScreen<MicrochipMenu
 		}
 	}
 	
-	private void renderCarriedLogic(TesseractGuiGraphics graphics, int logicX, int logicY, LogicRenderer.Context context, LogicComponent<?, ?> component)
+	private <C extends LogicConfig<C>> void renderCarriedLogic(TesseractGuiGraphics graphics, int logicX, int logicY, LogicRenderer.Context context, C config, Optional<DyeColor> logicColor)
 	{
 		var microchip = menu.microchip();
 		var size = microchip.size();
@@ -257,7 +261,7 @@ public final class MicrochipScreen extends AbstractContainerScreen<MicrochipMenu
 		graphics.pose().pushPose();
 		graphics.enableBatching();
 		
-		LogicRenderers.render(context, graphics, component, logicX, logicY);
+		LogicRenderers.render(context, graphics, config.type().create(config, logicColor), logicX, logicY);
 		
 		graphics.drawBatches();
 		graphics.pose().popPose();

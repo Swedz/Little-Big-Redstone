@@ -38,7 +38,7 @@ public final class LogicRecipesDatagenProvider extends RecipeProvider
 			'P', Either.right(Tags.Items.ENDER_PEARLS)
 	);
 	
-	private static void logicComponent(RecipeOutput output, LogicType<?> type, Consumer<ShapedRecipeBuilder> action)
+	private static void logicComponent(RecipeOutput output, LogicType<?, ?> type, Consumer<ShapedRecipeBuilder> action)
 	{
 		var builder = new ShapedRecipeBuilder()
 				.output(type.item(), 1);

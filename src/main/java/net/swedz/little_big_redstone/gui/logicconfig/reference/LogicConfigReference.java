@@ -1,14 +1,14 @@
 package net.swedz.little_big_redstone.gui.logicconfig.reference;
 
 import net.minecraft.world.entity.player.Player;
-import net.swedz.little_big_redstone.microchip.object.logic.LogicComponent;
+import net.swedz.little_big_redstone.microchip.object.logic.config.LogicConfig;
 
 public interface LogicConfigReference
 {
 	/**
 	 * Saves the logic config on the server.
 	 */
-	void save(Player player, LogicComponent component);
+	void save(Player player, LogicConfig<?> config);
 	
 	/**
 	 * Closes the menu for the player with no changes being saved on the server.

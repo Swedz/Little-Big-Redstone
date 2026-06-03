@@ -32,11 +32,11 @@ final class PulseThrottlerConfigMenuProvider extends LogicConfigMenuProvider<Pul
 				18,
 				0,
 				60 * 20,
-				config.outputDuration,
+				config.outputDuration(),
 				1,
 				0,
 				this::stringifyDuration,
-				(value) -> config.outputDuration = Math.round(value)
+				(value) -> config = new PulseThrottlerConfig(Math.round(value), config.signalStrength())
 		);
 	}
 	
@@ -59,11 +59,11 @@ final class PulseThrottlerConfigMenuProvider extends LogicConfigMenuProvider<Pul
 				18,
 				0,
 				15,
-				config.signalStrength,
+				config.signalStrength(),
 				1,
 				0,
 				this::stringifySignalStrength,
-				(value) -> config.signalStrength = (int) Math.round(value)
+				(value) -> config = new PulseThrottlerConfig(config.outputDuration(), (int) Math.round(value))
 		);
 	}
 	

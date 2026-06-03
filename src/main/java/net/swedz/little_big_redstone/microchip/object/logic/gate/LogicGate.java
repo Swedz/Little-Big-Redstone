@@ -9,8 +9,7 @@ import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.world.item.DyeColor;
 import net.swedz.little_big_redstone.microchip.object.logic.LogicComponent;
-import net.swedz.little_big_redstone.microchip.object.logic.LogicContext;
-import net.swedz.little_big_redstone.microchip.object.logic.LogicGridSize;
+import net.swedz.little_big_redstone.microchip.object.logic.LogicTickingContext;
 import net.swedz.little_big_redstone.microchip.object.logic.config.LogicConfig;
 
 import java.util.Optional;
@@ -18,7 +17,7 @@ import java.util.function.BiFunction;
 
 public abstract class LogicGate<G extends LogicGate<G, C>, C extends LogicConfig<C>> extends LogicComponent<G, C>
 {
-	protected static <G extends LogicGate<G, C>, C extends LogicConfig<C>> MapCodec<G> mapCodec(Codec<C> configCodec, Function3<C, Optional<DyeColor>, Integer, G> function)
+	protected static <G extends LogicGate<G, C>, C extends LogicConfig<C>> MapCodec<G> mapCodec(MapCodec<C> configCodec, Function3<C, Optional<DyeColor>, Integer, G> function)
 	{
 		return RecordCodecBuilder.mapCodec((instance) -> instance
 				.group(
@@ -72,10 +71,10 @@ public abstract class LogicGate<G extends LogicGate<G, C>, C extends LogicConfig
 		this.outputState = outputState;
 	}
 	
-	protected abstract int processInputs(LogicContext context, int[] inputs);
+	protected abstract int processInputs(LogicTickingContext context, int[] inputs);
 	
 	@Override
-	public final void processTickInternal(LogicContext context, int[] inputs)
+	public final void processTickInternal(LogicTickingContext context, int[] inputs)
 	{
 		int originalOutputState = outputState;
 		outputState = this.processInputs(context, inputs);
@@ -97,21 +96,8 @@ public abstract class LogicGate<G extends LogicGate<G, C>, C extends LogicConfig
 	}
 	
 	@Override
-	public LogicGridSize size()
-	{
-		int inputs = this.inputs();
-		return new LogicGridSize(1, Math.max(1, inputs / 2));
-	}
-	
-	@Override
 	protected void internalLoadFrom(G other)
 	{
 		outputState = other.output();
-	}
-	
-	@Override
-	public void internalResetForPickup()
-	{
-		outputState = 0;
 	}
 }

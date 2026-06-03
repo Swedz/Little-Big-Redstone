@@ -8,42 +8,42 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.swedz.little_big_redstone.LBR;
+import net.swedz.little_big_redstone.microchip.object.logic.LogicType;
+import net.swedz.little_big_redstone.microchip.object.logic.LogicTypes;
 import net.swedz.little_big_redstone.microchip.object.logic.config.LogicConfig;
 import net.swedz.little_big_redstone.microchip.object.logic.config.menu.LogicConfigMenuProvider;
 import net.swedz.tesseract.neoforge.api.range.IntRange;
 import net.swedz.tesseract.neoforge.helper.CodecHelper;
 
 import java.util.List;
-import java.util.Objects;
 
-public final class LogicCalculatorConfig extends LogicConfig<LogicCalculatorConfig>
+public record LogicCalculatorConfig(
+		LogicCalculatorMode mode,
+		int inputs
+) implements LogicConfig<LogicCalculatorConfig>
 {
+	public static final LogicCalculatorConfig DEFAULT = new LogicCalculatorConfig(
+			LogicCalculatorMode.ADDITION,
+			2
+	);
+	
 	public static final MapCodec<LogicCalculatorConfig> CODEC = RecordCodecBuilder.mapCodec((instance) -> instance
 			.group(
-					CodecHelper.forLowercaseEnum(LogicCalculatorMode.class).optionalFieldOf("mode", LogicCalculatorMode.ADDITION).forGetter((config) -> config.mode),
-					Codec.intRange(2, 10).optionalFieldOf("inputs", 2).forGetter((config) -> config.inputs)
+					CodecHelper.forLowercaseEnum(LogicCalculatorMode.class).optionalFieldOf("mode", LogicCalculatorMode.ADDITION).forGetter(LogicCalculatorConfig::mode),
+					Codec.intRange(2, 10).optionalFieldOf("inputs", 2).forGetter(LogicCalculatorConfig::inputs)
 			)
 			.apply(instance, LogicCalculatorConfig::new));
 	
 	public static final StreamCodec<ByteBuf, LogicCalculatorConfig> STREAM_CODEC = StreamCodec.composite(
-			CodecHelper.forEnumStream(LogicCalculatorMode.class), (config) -> config.mode,
-			ByteBufCodecs.VAR_INT, (config) -> config.inputs,
+			CodecHelper.forEnumStream(LogicCalculatorMode.class), LogicCalculatorConfig::mode,
+			ByteBufCodecs.VAR_INT, LogicCalculatorConfig::inputs,
 			LogicCalculatorConfig::new
 	);
 	
-	public LogicCalculatorMode mode;
-	
-	public int inputs;
-	
-	public LogicCalculatorConfig(LogicCalculatorMode mode, int inputs)
+	@Override
+	public LogicType<?, LogicCalculatorConfig> type()
 	{
-		this.mode = mode;
-		this.inputs = inputs;
-	}
-	
-	public LogicCalculatorConfig()
-	{
-		this(LogicCalculatorMode.ADDITION, 2);
+		return LogicTypes.CALCULATOR;
 	}
 	
 	@Override
@@ -71,7 +71,14 @@ public final class LogicCalculatorConfig extends LogicConfig<LogicCalculatorConf
 	}
 	
 	@Override
-	public void appendHoverText(List<Component> lines)
+	public void appendShiftHoverText(List<Component> lines)
+	{
+		lines.add(LBR.text().logicHelpCalculator1());
+		lines.add(LBR.text().logicHelpCalculator2());
+	}
+	
+	@Override
+	public void appendConfigHoverText(List<Component> lines)
 	{
 		lines.add(LBR.text().logicConfigTooltipMode(mode));
 		
@@ -88,30 +95,5 @@ public final class LogicCalculatorConfig extends LogicConfig<LogicCalculatorConf
 	public LogicConfigMenuProvider<LogicCalculatorConfig> getMenuProvider()
 	{
 		return new LogicCalculatorConfigMenuProvider(this);
-	}
-	
-	@Override
-	protected void internalLoadFrom(LogicCalculatorConfig other)
-	{
-		mode = other.mode;
-		inputs = other.inputs;
-	}
-	
-	@Override
-	public void resetForPickup()
-	{
-	}
-	
-	@Override
-	public int hashCode()
-	{
-		return Objects.hash(mode, inputs);
-	}
-	
-	@Override
-	public boolean equals(Object o)
-	{
-		return this == o ||
-			   (o instanceof LogicCalculatorConfig other && mode == other.mode && inputs == other.inputs);
 	}
 }

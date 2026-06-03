@@ -74,15 +74,16 @@ public record PlaceTakeMicrochipObjectPacket(
 						LBR.LOGGER.warn("Received PlaceTakeMicrochipObjectPacket from {} with an invalid placement position, discarding", playerName);
 					}
 				}
-				else if(heldItem.has(LBRComponents.LOGIC))
+				else if(heldItem.has(LBRComponents.LOGIC_CONFIG))
 				{
-					var component = heldItem.get(LBRComponents.LOGIC);
-					if(microchip.size().bounds().normalize().contains(component.size().toBounds(x, y)))
+					var logicConfig = heldItem.get(LBRComponents.LOGIC_CONFIG);
+					if(microchip.size().bounds().normalize().contains(logicConfig.size().toBounds(x, y)))
 					{
-						var logic = components.add(x, y, component);
+						var logicColor = heldItem.get(LBRComponents.LOGIC_COLOR);
+						var logicComponent = logicConfig.type().create(logicConfig, logicColor);
+						var logic = components.add(x, y, logicComponent);
 						if(logic != null)
 						{
-							microchip.components().updateValidity();
 							menu.placeCarriedWires(logic.slot());
 							microchip.markDirty(true);
 							if(!player.hasInfiniteMaterials() || leftClick)

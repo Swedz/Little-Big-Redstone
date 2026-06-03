@@ -9,7 +9,8 @@ import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.ItemStack;
 import net.swedz.little_big_redstone.LBRMenus;
 import net.swedz.little_big_redstone.gui.logicconfig.reference.LogicConfigReference;
-import net.swedz.little_big_redstone.microchip.object.logic.LogicComponent;
+import net.swedz.little_big_redstone.microchip.object.logic.LogicCodecs;
+import net.swedz.little_big_redstone.microchip.object.logic.config.LogicConfig;
 
 import java.util.function.Supplier;
 
@@ -22,7 +23,7 @@ public final class LogicConfigMenu extends AbstractContainerMenu
 	private final Supplier<Boolean> validChecker;
 	
 	private final DyeColor       color;
-	private final LogicComponent logicComponent;
+	private final LogicConfig<?> logicConfig;
 	
 	public LogicConfigMenu(
 			int containerId,
@@ -31,7 +32,7 @@ public final class LogicConfigMenu extends AbstractContainerMenu
 			LogicConfigReference reference,
 			Supplier<Boolean> validChecker,
 			DyeColor color,
-			LogicComponent logicComponent
+			LogicConfig<?> logicConfig
 	)
 	{
 		super(LBRMenus.LOGIC_CONFIG.get(), containerId);
@@ -40,7 +41,7 @@ public final class LogicConfigMenu extends AbstractContainerMenu
 		this.reference = reference;
 		this.validChecker = validChecker;
 		this.color = color;
-		this.logicComponent = logicComponent;
+		this.logicConfig = logicConfig;
 	}
 	
 	public LogicConfigMenu(
@@ -55,7 +56,7 @@ public final class LogicConfigMenu extends AbstractContainerMenu
 		this.reference = null;
 		this.validChecker = null;
 		this.color = DyeColor.STREAM_CODEC.decode(buf);
-		this.logicComponent = LogicComponent.STREAM_CODEC.decode(buf);
+		this.logicConfig = LogicCodecs.CONFIG_STREAM_CODEC.decode(buf);
 	}
 	
 	public boolean shouldClientClose()
@@ -68,14 +69,14 @@ public final class LogicConfigMenu extends AbstractContainerMenu
 		return color;
 	}
 	
-	public LogicComponent logicComponent()
+	public LogicConfig<?> logicConfig()
 	{
-		return logicComponent;
+		return logicConfig;
 	}
 	
-	public void save(Player player, LogicComponent component)
+	public void save(Player player, LogicConfig<?> config)
 	{
-		reference.save(player, component);
+		reference.save(player, config);
 	}
 	
 	public void cancel(Player player)

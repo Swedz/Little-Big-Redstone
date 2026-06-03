@@ -21,21 +21,21 @@ final class LogicSelectorConfigMenuProvider extends LogicConfigMenuProvider<Logi
 	{
 		modeButton = builder.addCycleButton(
 				LBR.text().logicConfigButtonLabelMode(),
-				config.mode.tooltip(),
+				config.mode().tooltip(),
 				0,
 				0,
 				width,
 				18,
 				false,
-				config.mode,
+				config.mode(),
 				Arrays.asList(LogicSelectorMode.values()),
 				LogicSelectorMode::label,
 				(value) ->
 				{
-					config.mode = value;
+					config = new LogicSelectorConfig(value, config.outputs(), config.passSignal());
 					if(modeButton != null)
 					{
-						modeButton.setTooltip(config.mode.tooltip());
+						modeButton.setTooltip(config.mode().tooltip());
 					}
 				}
 		);
@@ -53,10 +53,10 @@ final class LogicSelectorConfigMenuProvider extends LogicConfigMenuProvider<Logi
 				18,
 				config.outputsAllowed().min(),
 				config.outputsAllowed().max(),
-				config.outputs,
+				config.outputs(),
 				1,
 				0,
-				(value) -> config.outputs = (int) Math.round(value)
+				(value) -> config = new LogicSelectorConfig(config.mode(), (int) Math.round(value), config.passSignal())
 		);
 	}
 	
@@ -67,8 +67,8 @@ final class LogicSelectorConfigMenuProvider extends LogicConfigMenuProvider<Logi
 				LBR.text().logicConfigButtonTooltipPassSignal(),
 				0,
 				22 * 2,
-				config.passSignal,
-				(value) -> config.passSignal = value
+				config.passSignal(),
+				(value) -> config = new LogicSelectorConfig(config.mode(), config.outputs(), value)
 		);
 	}
 	

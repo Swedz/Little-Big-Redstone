@@ -20,6 +20,7 @@ import net.swedz.little_big_redstone.client.model.logic.LogicBakedModel;
 import net.swedz.tesseract.neoforge.helper.model.QuadColorFix;
 
 import java.util.Collection;
+import java.util.Optional;
 
 /**
  * <p>I am not happy that I had to do this.</p>
@@ -42,8 +43,9 @@ public final class LogicItemRenderer extends BlockEntityWithoutLevelRenderer
 	@Override
 	public void renderByItem(ItemStack stack, ItemDisplayContext displayContext, PoseStack poseStack, MultiBufferSource bufferSource, int packedLight, int packedOverlay)
 	{
-		var component = stack.get(LBRComponents.LOGIC);
-		var model = ((LogicBakedModel) Minecraft.getInstance().getModelManager().getModel(ModelResourceLocation.inventory(LBR.id(component.type().id())))).getModel(component);
+		var logicConfig = stack.get(LBRComponents.LOGIC_CONFIG);
+		var logicColor = Optional.ofNullable(stack.get(LBRComponents.LOGIC_COLOR));
+		var model = ((LogicBakedModel) Minecraft.getInstance().getModelManager().getModel(ModelResourceLocation.inventory(LBR.id(logicConfig.type().id())))).getModel(logicColor);
 		
 		int index = 0;
 		for(var modelLayer : model.getRenderPasses(stack, false))

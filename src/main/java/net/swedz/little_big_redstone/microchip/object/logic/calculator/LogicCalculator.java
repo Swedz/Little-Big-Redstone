@@ -4,19 +4,15 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import io.netty.buffer.ByteBuf;
-import net.minecraft.network.chat.Component;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.util.Mth;
 import net.minecraft.world.item.DyeColor;
-import net.swedz.little_big_redstone.LBR;
 import net.swedz.little_big_redstone.microchip.object.logic.LogicComponent;
-import net.swedz.little_big_redstone.microchip.object.logic.LogicContext;
-import net.swedz.little_big_redstone.microchip.object.logic.LogicGridSize;
+import net.swedz.little_big_redstone.microchip.object.logic.LogicTickingContext;
 import net.swedz.little_big_redstone.microchip.object.logic.LogicType;
 import net.swedz.little_big_redstone.microchip.object.logic.LogicTypes;
 
-import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -57,19 +53,13 @@ public final class LogicCalculator extends LogicComponent<LogicCalculator, Logic
 	}
 	
 	@Override
-	protected LogicCalculatorConfig defaultConfig()
-	{
-		return new LogicCalculatorConfig();
-	}
-	
-	@Override
-	public LogicType<LogicCalculator> type()
+	public LogicType<LogicCalculator, LogicCalculatorConfig> type()
 	{
 		return LogicTypes.CALCULATOR;
 	}
 	
 	@Override
-	protected void processTickInternal(LogicContext context, int[] inputs)
+	protected void processTickInternal(LogicTickingContext context, int[] inputs)
 	{
 		int originalOutputState = outputState;
 		
@@ -77,11 +67,11 @@ public final class LogicCalculator extends LogicComponent<LogicCalculator, Logic
 		for(int index = 1; index < inputs.length; index++)
 		{
 			int signal = inputs[index];
-			if(config.mode == LogicCalculatorMode.ADDITION)
+			if(config.mode() == LogicCalculatorMode.ADDITION)
 			{
 				total += signal;
 			}
-			else if(config.mode == LogicCalculatorMode.SUBTRACTION)
+			else if(config.mode() == LogicCalculatorMode.SUBTRACTION)
 			{
 				total -= signal;
 			}
@@ -106,29 +96,9 @@ public final class LogicCalculator extends LogicComponent<LogicCalculator, Logic
 	}
 	
 	@Override
-	public LogicGridSize size()
-	{
-		int inputs = this.inputs();
-		return new LogicGridSize(1, Math.max(1, inputs / 2));
-	}
-	
-	@Override
-	public void appendShiftHoverText(List<Component> lines)
-	{
-		lines.add(LBR.text().logicHelpCalculator1());
-		lines.add(LBR.text().logicHelpCalculator2());
-	}
-	
-	@Override
 	protected void internalLoadFrom(LogicCalculator other)
 	{
 		outputState = other.outputState;
-	}
-	
-	@Override
-	protected void internalResetForPickup()
-	{
-		outputState = 0;
 	}
 	
 	@Override

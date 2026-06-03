@@ -4,20 +4,17 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import io.netty.buffer.ByteBuf;
-import net.minecraft.network.chat.Component;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.world.item.DyeColor;
-import net.swedz.little_big_redstone.LBR;
 import net.swedz.little_big_redstone.microchip.awareness.AwarenessType;
 import net.swedz.little_big_redstone.microchip.awareness.AwarenessTypes;
 import net.swedz.little_big_redstone.microchip.awareness.MicrochipAware;
 import net.swedz.little_big_redstone.microchip.object.logic.LogicComponent;
-import net.swedz.little_big_redstone.microchip.object.logic.LogicContext;
+import net.swedz.little_big_redstone.microchip.object.logic.LogicTickingContext;
 import net.swedz.little_big_redstone.microchip.object.logic.LogicType;
 import net.swedz.little_big_redstone.microchip.object.logic.LogicTypes;
 
-import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -66,27 +63,21 @@ public final class LogicIO extends LogicComponent<LogicIO, LogicIOConfig> implem
 	}
 	
 	@Override
-	protected LogicIOConfig defaultConfig()
-	{
-		return new LogicIOConfig();
-	}
-	
-	@Override
-	protected void processTickInternal(LogicContext context, int[] inputs)
+	protected void processTickInternal(LogicTickingContext context, int[] inputs)
 	{
 		boolean powerChanged = false;
 		int originalOutputState = outputState;
-		if(config.input)
+		if(config.input())
 		{
-			int signal = context.awareness(AwarenessTypes.REDSTONE).getInputPower(config.direction);
-			outputState = config.signalComparison.test(signal, config.signalStrength) ? signal : 0;
+			int signal = context.awareness(AwarenessTypes.REDSTONE).getInputPower(config.direction());
+			outputState = config.signalComparison().test(signal, config.signalStrength()) ? signal : 0;
 		}
 		else
 		{
 			outputState = inputs[0];
 			var redstone = context.awareness(AwarenessTypes.REDSTONE);
-			int signal = outputState > 0 ? (config.signalStrength == 0 ? outputState : config.signalStrength) : 0;
-			if(redstone.setOutputPowered(config.direction, signal))
+			int signal = outputState > 0 ? (config.signalStrength() == 0 ? outputState : config.signalStrength()) : 0;
+			if(redstone.setOutputPowered(config.direction(), signal))
 			{
 				powerChanged = true;
 			}
@@ -98,7 +89,7 @@ public final class LogicIO extends LogicComponent<LogicIO, LogicIOConfig> implem
 	}
 	
 	@Override
-	public LogicType<LogicIO> type()
+	public LogicType<LogicIO, LogicIOConfig> type()
 	{
 		return LogicTypes.IO;
 	}
@@ -115,22 +106,9 @@ public final class LogicIO extends LogicComponent<LogicIO, LogicIOConfig> implem
 	}
 	
 	@Override
-	public void appendShiftHoverText(List<Component> lines)
-	{
-		lines.add(LBR.text().logicHelpIOPort1());
-		lines.add(LBR.text().logicHelpIOPort2());
-	}
-	
-	@Override
 	protected void internalLoadFrom(LogicIO other)
 	{
 		outputState = other.outputState;
-	}
-	
-	@Override
-	public void internalResetForPickup()
-	{
-		outputState = 0;
 	}
 	
 	@Override

@@ -24,10 +24,10 @@ public final class MicrochipObjectGuideTooltip implements GuideTooltip
 		icon = object.toStack();
 		if(object instanceof LogicEntry logic)
 		{
-			var component = logic.component();
+			var logicConfig = logic.component().config();
 			List<Component> lines = Lists.newArrayList();
-			lines.add(component.type().displayName().withStyle(Style.EMPTY.withUnderlined(true)));
-			component.type().tooltip(component, false, true, false).ifPresent((Consumer<List<Component>>) lines::addAll);
+			lines.add(logicConfig.type().displayName().withStyle(Style.EMPTY.withUnderlined(true)));
+			logicConfig.type().tooltip(logicConfig, false, true, false).ifPresent((Consumer<List<Component>>) lines::addAll);
 			this.lines = lines.stream()
 					.<ClientTooltipComponent>map(line -> new ClientTextTooltip(line.getVisualOrderText()))
 					.toList();

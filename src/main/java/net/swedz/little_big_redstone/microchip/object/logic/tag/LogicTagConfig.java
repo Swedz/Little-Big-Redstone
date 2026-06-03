@@ -8,51 +8,49 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.swedz.little_big_redstone.LBR;
+import net.swedz.little_big_redstone.microchip.object.logic.LogicType;
+import net.swedz.little_big_redstone.microchip.object.logic.LogicTypes;
 import net.swedz.little_big_redstone.microchip.object.logic.config.LogicConfig;
 import net.swedz.little_big_redstone.microchip.object.logic.config.menu.LogicConfigMenuProvider;
 import net.swedz.tesseract.neoforge.api.range.IntRange;
 
 import java.util.List;
-import java.util.Objects;
 
-public final class LogicTagConfig extends LogicConfig<LogicTagConfig>
+public record LogicTagConfig(
+		boolean input,
+		LogicTagLabel label,
+		int threshold,
+		boolean global
+) implements LogicConfig<LogicTagConfig>
 {
+	public static final LogicTagConfig DEFAULT = new LogicTagConfig(
+			true,
+			LogicTagLabel.EMPTY,
+			1,
+			false
+	);
+	
 	public static final MapCodec<LogicTagConfig> CODEC = RecordCodecBuilder.mapCodec((instance) -> instance
 			.group(
-					Codec.BOOL.optionalFieldOf("input", true).forGetter((config) -> config.input),
-					LogicTagLabel.CODEC.optionalFieldOf("label", LogicTagLabel.EMPTY).forGetter((config) -> config.label),
-					Codec.intRange(1, 100).optionalFieldOf("threshold", 1).forGetter((config) -> config.threshold),
-					Codec.BOOL.optionalFieldOf("global", false).forGetter((config) -> config.global)
+					Codec.BOOL.optionalFieldOf("input", true).forGetter(LogicTagConfig::input),
+					LogicTagLabel.CODEC.optionalFieldOf("label", LogicTagLabel.EMPTY).forGetter(LogicTagConfig::label),
+					Codec.intRange(1, 100).optionalFieldOf("threshold", 1).forGetter(LogicTagConfig::threshold),
+					Codec.BOOL.optionalFieldOf("global", false).forGetter(LogicTagConfig::global)
 			)
-			.apply(instance, (input, label, threshold, global) -> new LogicTagConfig(true, input, label, threshold, global)));
+			.apply(instance, LogicTagConfig::new));
 	
 	public static final StreamCodec<ByteBuf, LogicTagConfig> STREAM_CODEC = StreamCodec.composite(
-			ByteBufCodecs.BOOL, (config) -> config.valid,
-			ByteBufCodecs.BOOL, (config) -> config.input,
-			LogicTagLabel.STREAM_CODEC, (config) -> config.label,
-			ByteBufCodecs.INT, (config) -> config.threshold,
-			ByteBufCodecs.BOOL, (config) -> config.global,
+			ByteBufCodecs.BOOL, LogicTagConfig::input,
+			LogicTagLabel.STREAM_CODEC, LogicTagConfig::label,
+			ByteBufCodecs.INT, LogicTagConfig::threshold,
+			ByteBufCodecs.BOOL, LogicTagConfig::global,
 			LogicTagConfig::new
 	);
 	
-	public boolean input;
-	
-	public LogicTagLabel label;
-	public int           threshold;
-	public boolean       global;
-	
-	private LogicTagConfig(boolean valid, boolean input, LogicTagLabel label, int threshold, boolean global)
+	@Override
+	public LogicType<?, LogicTagConfig> type()
 	{
-		this.valid = valid;
-		this.input = input;
-		this.label = label;
-		this.threshold = threshold;
-		this.global = global;
-	}
-	
-	public LogicTagConfig()
-	{
-		this(true, true, LogicTagLabel.EMPTY, 1, false);
+		return LogicTypes.TAG;
 	}
 	
 	@Override
@@ -80,7 +78,15 @@ public final class LogicTagConfig extends LogicConfig<LogicTagConfig>
 	}
 	
 	@Override
-	public void appendHoverText(List<Component> lines)
+	public void appendShiftHoverText(List<Component> lines)
+	{
+		lines.add(LBR.text().logicHelpTag1());
+		lines.add(LBR.text().logicHelpTag2());
+		lines.add(LBR.text().logicHelpTag3());
+	}
+	
+	@Override
+	public void appendConfigHoverText(List<Component> lines)
 	{
 		lines.add(LBR.text().logicConfigTooltipMode(input ? LogicTagMode.SENSOR : LogicTagMode.EMITTER));
 		if(!label.label().isEmpty())
@@ -104,33 +110,5 @@ public final class LogicTagConfig extends LogicConfig<LogicTagConfig>
 	public LogicConfigMenuProvider getMenuProvider()
 	{
 		return new LogicTagConfigMenuProvider(this);
-	}
-	
-	@Override
-	protected void internalLoadFrom(LogicTagConfig other)
-	{
-		input = other.input;
-		label = other.label;
-		threshold = other.threshold;
-		global = other.global;
-	}
-	
-	@Override
-	public void resetForPickup()
-	{
-		valid = true;
-	}
-	
-	@Override
-	public int hashCode()
-	{
-		return Objects.hash(input, label, threshold, global);
-	}
-	
-	@Override
-	public boolean equals(Object o)
-	{
-		return this == o ||
-			   (o instanceof LogicTagConfig other && input == other.input && Objects.equals(label, other.label) && threshold == other.threshold && global == other.global);
 	}
 }

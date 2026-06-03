@@ -7,7 +7,7 @@ import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.world.item.DyeColor;
 import net.swedz.little_big_redstone.microchip.object.logic.LogicComponent;
-import net.swedz.little_big_redstone.microchip.object.logic.LogicContext;
+import net.swedz.little_big_redstone.microchip.object.logic.LogicTickingContext;
 import net.swedz.little_big_redstone.microchip.object.logic.LogicType;
 import net.swedz.little_big_redstone.microchip.object.logic.LogicTypes;
 
@@ -38,19 +38,13 @@ public final class LogicDebugger extends LogicComponent<LogicDebugger, LogicDebu
 	}
 	
 	@Override
-	protected LogicDebuggerConfig defaultConfig()
-	{
-		return new LogicDebuggerConfig();
-	}
-	
-	@Override
-	public LogicType<LogicDebugger> type()
+	public LogicType<LogicDebugger, LogicDebuggerConfig> type()
 	{
 		return LogicTypes.DEBUGGER;
 	}
 	
 	@Override
-	protected void processTickInternal(LogicContext context, int[] inputs)
+	protected void processTickInternal(LogicTickingContext context, int[] inputs)
 	{
 	}
 	
@@ -62,11 +56,6 @@ public final class LogicDebugger extends LogicComponent<LogicDebugger, LogicDebu
 	
 	@Override
 	protected void internalLoadFrom(LogicDebugger other)
-	{
-	}
-	
-	@Override
-	protected void internalResetForPickup()
 	{
 	}
 	

@@ -29,12 +29,12 @@ final class LogicComparatorConfigMenuProvider extends LogicConfigMenuProvider<Lo
 				width,
 				18,
 				false,
-				config.mode,
+				config.mode(),
 				Arrays.asList(LogicAccumulationMode.values()),
 				LogicAccumulationMode::label,
 				(value) ->
 				{
-					config.mode = value;
+					config = new LogicComparatorConfig(value, config.signalStrength(), config.signalComparison(), config.inputs());
 					this.updateComparisonButton();
 				}
 		);
@@ -42,11 +42,11 @@ final class LogicComparatorConfigMenuProvider extends LogicConfigMenuProvider<Lo
 	
 	private Component signalComparisonTooltip()
 	{
-		if(config.mode == LogicAccumulationMode.ANY)
+		if(config.mode() == LogicAccumulationMode.ANY)
 		{
-			if(config.signalStrength == 0)
+			if(config.signalStrength() == 0)
 			{
-				return switch(config.signalComparison)
+				return switch(config.signalComparison())
 				{
 					case LESS_THAN_OR_EQUAL_TO -> LBR.text().logicConfigButtonTooltipComparatorAnyPassSignalComparisonModeLessThanOrEqualTo();
 					case EQUAL_TO -> LBR.text().logicConfigButtonTooltipComparatorAnyPassSignalComparisonModeEqualTo();
@@ -55,19 +55,19 @@ final class LogicComparatorConfigMenuProvider extends LogicConfigMenuProvider<Lo
 			}
 			else
 			{
-				return switch(config.signalComparison)
+				return switch(config.signalComparison())
 				{
-					case LESS_THAN_OR_EQUAL_TO -> LBR.text().logicConfigButtonTooltipComparatorAnySignalComparisonModeLessThanOrEqualTo(config.signalStrength);
-					case EQUAL_TO -> LBR.text().logicConfigButtonTooltipComparatorAnySignalComparisonModeEqualTo(config.signalStrength);
-					case GREATER_THAN_OR_EQUAL_TO -> LBR.text().logicConfigButtonTooltipComparatorAnySignalComparisonModeGreaterThanOrEqualTo(config.signalStrength);
+					case LESS_THAN_OR_EQUAL_TO -> LBR.text().logicConfigButtonTooltipComparatorAnySignalComparisonModeLessThanOrEqualTo(config.signalStrength());
+					case EQUAL_TO -> LBR.text().logicConfigButtonTooltipComparatorAnySignalComparisonModeEqualTo(config.signalStrength());
+					case GREATER_THAN_OR_EQUAL_TO -> LBR.text().logicConfigButtonTooltipComparatorAnySignalComparisonModeGreaterThanOrEqualTo(config.signalStrength());
 				};
 			}
 		}
 		else
 		{
-			if(config.signalStrength == 0)
+			if(config.signalStrength() == 0)
 			{
-				return switch(config.signalComparison)
+				return switch(config.signalComparison())
 				{
 					case LESS_THAN_OR_EQUAL_TO -> LBR.text().logicConfigButtonTooltipComparatorAllPassSignalComparisonModeLessThanOrEqualTo();
 					case EQUAL_TO -> LBR.text().logicConfigButtonTooltipComparatorAllPassSignalComparisonModeEqualTo();
@@ -76,11 +76,11 @@ final class LogicComparatorConfigMenuProvider extends LogicConfigMenuProvider<Lo
 			}
 			else
 			{
-				return switch(config.signalComparison)
+				return switch(config.signalComparison())
 				{
-					case LESS_THAN_OR_EQUAL_TO -> LBR.text().logicConfigButtonTooltipComparatorAllSignalComparisonModeLessThanOrEqualTo(config.signalStrength);
-					case EQUAL_TO -> LBR.text().logicConfigButtonTooltipComparatorAllSignalComparisonModeEqualTo(config.signalStrength);
-					case GREATER_THAN_OR_EQUAL_TO -> LBR.text().logicConfigButtonTooltipComparatorAllSignalComparisonModeGreaterThanOrEqualTo(config.signalStrength);
+					case LESS_THAN_OR_EQUAL_TO -> LBR.text().logicConfigButtonTooltipComparatorAllSignalComparisonModeLessThanOrEqualTo(config.signalStrength());
+					case EQUAL_TO -> LBR.text().logicConfigButtonTooltipComparatorAllSignalComparisonModeEqualTo(config.signalStrength());
+					case GREATER_THAN_OR_EQUAL_TO -> LBR.text().logicConfigButtonTooltipComparatorAllSignalComparisonModeGreaterThanOrEqualTo(config.signalStrength());
 				};
 			}
 		}
@@ -93,11 +93,11 @@ final class LogicComparatorConfigMenuProvider extends LogicConfigMenuProvider<Lo
 				0,
 				22,
 				LBR.id("textures/gui/slot_atlas.png"),
-				config.signalComparison,
+				config.signalComparison(),
 				Arrays.asList(LogicComparisonMode.values()),
 				(value) ->
 				{
-					config.signalComparison = value;
+					config = new LogicComparatorConfig(config.mode(), config.signalStrength(), value, config.inputs());
 					this.updateComparisonButton();
 				}
 		);
@@ -132,13 +132,13 @@ final class LogicComparatorConfigMenuProvider extends LogicConfigMenuProvider<Lo
 				18,
 				0,
 				15,
-				config.signalStrength,
+				config.signalStrength(),
 				1,
 				0,
 				this::stringifySignalStrength,
 				(value) ->
 				{
-					config.signalStrength = (int) Math.round(value);
+					config = new LogicComparatorConfig(config.mode(), (int) Math.round(value), config.signalComparison(), config.inputs());
 					this.updateComparisonButton();
 				}
 		);
@@ -156,10 +156,10 @@ final class LogicComparatorConfigMenuProvider extends LogicConfigMenuProvider<Lo
 				18,
 				1,
 				10,
-				config.inputs,
+				config.inputs(),
 				1,
 				0,
-				(value) -> config.inputs = (int) Math.round(value)
+				(value) -> config = new LogicComparatorConfig(config.mode(), config.signalStrength(), config.signalComparison(), (int) Math.round(value))
 		);
 	}
 	

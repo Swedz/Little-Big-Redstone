@@ -4,9 +4,10 @@ import net.swedz.little_big_redstone.LBR;
 import net.swedz.little_big_redstone.LBRClientShaders;
 import net.swedz.little_big_redstone.gui.microchip.logic.LogicRenderer;
 import net.swedz.little_big_redstone.microchip.object.logic.LogicComponent;
+import net.swedz.little_big_redstone.microchip.object.logic.config.LogicConfig;
 import net.swedz.tesseract.neoforge.helper.guigraphics.TesseractGuiGraphics;
 
-public final class OnOffLogicRenderer<L extends LogicComponent<?, ?>> extends LogicRenderer<L>
+public final class OnOffLogicRenderer<L extends LogicComponent<L, C>, C extends LogicConfig<C>> extends LogicRenderer<L, C>
 {
 	@Override
 	public void render(Context context, TesseractGuiGraphics graphics, L component, int x, int y)

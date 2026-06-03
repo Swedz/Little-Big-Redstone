@@ -2,20 +2,17 @@ package net.swedz.little_big_redstone.microchip.object.logic.gate;
 
 import com.mojang.serialization.MapCodec;
 import io.netty.buffer.ByteBuf;
-import net.minecraft.network.chat.Component;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.world.item.DyeColor;
-import net.swedz.little_big_redstone.LBR;
-import net.swedz.little_big_redstone.microchip.object.logic.LogicContext;
+import net.swedz.little_big_redstone.microchip.object.logic.LogicTickingContext;
 import net.swedz.little_big_redstone.microchip.object.logic.LogicType;
 import net.swedz.little_big_redstone.microchip.object.logic.LogicTypes;
-import net.swedz.little_big_redstone.microchip.object.logic.gate.config.SingleLogicGateConfig;
+import net.swedz.little_big_redstone.microchip.object.logic.gate.config.NOTGateConfig;
 
-import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
-public final class NOTGate extends LogicGate<NOTGate, SingleLogicGateConfig>
+public final class NOTGate extends LogicGate<NOTGate, NOTGateConfig>
 {
 	public static final MapCodec<NOTGate> CODEC = mapCodec(NOTGate::new);
 	
@@ -32,33 +29,15 @@ public final class NOTGate extends LogicGate<NOTGate, SingleLogicGateConfig>
 	}
 	
 	@Override
-	protected SingleLogicGateConfig defaultConfig()
-	{
-		return new SingleLogicGateConfig();
-	}
-	
-	@Override
-	public LogicType<NOTGate> type()
+	public LogicType<NOTGate, NOTGateConfig> type()
 	{
 		return LogicTypes.NOT;
 	}
 	
 	@Override
-	public int processInputs(LogicContext context, int[] inputs)
+	public int processInputs(LogicTickingContext context, int[] inputs)
 	{
 		return inputs[0] == 0 ? 1 : 0;
-	}
-	
-	@Override
-	public void appendNoShiftHoverText(List<Component> lines)
-	{
-		lines.add(LBR.text().logicGateAlgebra(LBR.text().logicGateAlgebraNOT()));
-	}
-	
-	@Override
-	public void appendShiftHoverText(List<Component> lines)
-	{
-		lines.add(LBR.text().logicHelpNOTGate());
 	}
 	
 	@Override

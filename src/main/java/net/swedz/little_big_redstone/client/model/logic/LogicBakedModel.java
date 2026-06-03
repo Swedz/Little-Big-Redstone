@@ -16,11 +16,11 @@ import net.neoforged.neoforge.client.model.IDynamicBakedModel;
 import net.neoforged.neoforge.client.model.data.ModelData;
 import net.swedz.little_big_redstone.LBR;
 import net.swedz.little_big_redstone.LBRComponents;
-import net.swedz.little_big_redstone.microchip.object.logic.LogicComponent;
 
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 public final class LogicBakedModel implements IDynamicBakedModel
 {
@@ -42,21 +42,17 @@ public final class LogicBakedModel implements IDynamicBakedModel
 		return bakingModelData;
 	}
 	
-	public BakedModel getModel(LogicComponent<?, ?> component)
+	public BakedModel getModel(Optional<DyeColor> logicColor)
 	{
-		if(component == null)
-		{
-			return fallback;
-		}
-		var color = component.color().orElse(DyeColor.WHITE);
+		var color = logicColor.orElse(DyeColor.WHITE);
 		return itemModels.getOrDefault(color, fallback);
 	}
 	
 	@Override
 	public List<BakedModel> getRenderPasses(ItemStack stack, boolean fabulous)
 	{
-		var component = stack.get(LBRComponents.LOGIC);
-		return List.of(this.getModel(component));
+		var logicColor = Optional.ofNullable(stack.get(LBRComponents.LOGIC_COLOR));
+		return List.of(this.getModel(logicColor));
 	}
 	
 	@Override

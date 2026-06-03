@@ -35,16 +35,17 @@ final class LogicIOConfigMenuProvider extends LogicConfigMenuProvider<LogicIOCon
 				width,
 				18,
 				false,
-				config.input,
+				config.input(),
 				List.of(true, false),
 				(value) -> LBRTooltips.INPUT_OUTPUT_PARSER.parse(value).plainCopy(),
 				(value) ->
 				{
-					config.input = value;
+					int signalStrength = config.signalStrength();
 					if(inputSignalStrengthSlider != null && outputSignalStrengthSlider != null)
 					{
-						config.signalStrength = (int) Math.round((config.input ? inputSignalStrengthSlider : outputSignalStrengthSlider).getValue());
+						signalStrength = (int) Math.round((value ? inputSignalStrengthSlider : outputSignalStrengthSlider).getValue());
 					}
+					config = new LogicIOConfig(value, config.direction(), signalStrength, config.signalComparison(), config.powerType());
 					this.updateSignalStrengthButton();
 					this.updateComparisonButton();
 					this.updatePowerTypeButton();
@@ -62,31 +63,31 @@ final class LogicIOConfigMenuProvider extends LogicConfigMenuProvider<LogicIOCon
 				width,
 				18,
 				false,
-				config.direction,
+				config.direction(),
 				Arrays.asList(Direction.values()),
 				LBRTooltips.DIRECTION_PARSER::parse,
-				(value) -> config.direction = value
+				(value) -> config = new LogicIOConfig(config.input(), value, config.signalStrength(), config.signalComparison(), config.powerType())
 		);
 	}
 	
 	private Component tooltipSignalComparison()
 	{
-		if(config.input)
+		if(config.input())
 		{
-			return switch(config.signalComparison)
+			return switch(config.signalComparison())
 			{
-				case LESS_THAN_OR_EQUAL_TO -> LBR.text().logicConfigButtonTooltipIoSignalComparisonModeLessThanOrEqualTo(config.signalStrength);
-				case EQUAL_TO -> LBR.text().logicConfigButtonTooltipIoSignalComparisonModeEqualTo(config.signalStrength);
-				case GREATER_THAN_OR_EQUAL_TO -> LBR.text().logicConfigButtonTooltipIoSignalComparisonModeGreaterThanOrEqualTo(config.signalStrength);
+				case LESS_THAN_OR_EQUAL_TO -> LBR.text().logicConfigButtonTooltipIoSignalComparisonModeLessThanOrEqualTo(config.signalStrength());
+				case EQUAL_TO -> LBR.text().logicConfigButtonTooltipIoSignalComparisonModeEqualTo(config.signalStrength());
+				case GREATER_THAN_OR_EQUAL_TO -> LBR.text().logicConfigButtonTooltipIoSignalComparisonModeGreaterThanOrEqualTo(config.signalStrength());
 			};
 		}
-		else if(config.signalStrength == 0)
+		else if(config.signalStrength() == 0)
 		{
 			return LBR.text().logicConfigButtonTooltipIoSignalComparisonOutputPass();
 		}
 		else
 		{
-			return LBR.text().logicConfigButtonTooltipIoSignalComparisonOutput(config.signalStrength);
+			return LBR.text().logicConfigButtonTooltipIoSignalComparisonOutput(config.signalStrength());
 		}
 	}
 	
@@ -97,11 +98,11 @@ final class LogicIOConfigMenuProvider extends LogicConfigMenuProvider<LogicIOCon
 				0,
 				22 * 2,
 				LBR.id("textures/gui/slot_atlas.png"),
-				config.signalComparison,
+				config.signalComparison(),
 				Arrays.asList(LogicComparisonMode.values()),
 				(value) ->
 				{
-					config.signalComparison = value;
+					config = new LogicIOConfig(config.input(), config.direction(), config.signalStrength(), value, config.powerType());
 					this.updateComparisonButton();
 				}
 		);
@@ -113,14 +114,14 @@ final class LogicIOConfigMenuProvider extends LogicConfigMenuProvider<LogicIOCon
 	{
 		if(comparisonButton != null)
 		{
-			comparisonButton.setActive(config.input);
+			comparisonButton.setActive(config.input());
 			comparisonButton.setTooltip(this.tooltipSignalComparison());
 		}
 	}
 	
 	private Component tooltipSignalStrength()
 	{
-		return config.input ?
+		return config.input() ?
 				LBR.text().logicConfigButtonTooltipIoSignalStrengthInput() :
 				LBR.text().logicConfigButtonTooltipIoSignalStrengthOutput();
 	}
@@ -144,7 +145,7 @@ final class LogicIOConfigMenuProvider extends LogicConfigMenuProvider<LogicIOCon
 				18,
 				input ? 1 : 0,
 				15,
-				config.signalStrength,
+				config.signalStrength(),
 				1,
 				0,
 				(value, string) -> this.stringifySignalStrength(input, value, string),
@@ -152,9 +153,9 @@ final class LogicIOConfigMenuProvider extends LogicConfigMenuProvider<LogicIOCon
 				{
 					// Since onChange is invoked when the button is created, we have to use this check to prevent the
 					//  input slider from forcing the signalStrength value to always be >= 1
-					if(config.input == input)
+					if(config.input() == input)
 					{
-						config.signalStrength = (int) Math.round(value);
+						config = new LogicIOConfig(config.input(), config.direction(), (int) Math.round(value), config.signalComparison(), config.powerType());
 						this.updateComparisonButton();
 					}
 				}
@@ -173,17 +174,17 @@ final class LogicIOConfigMenuProvider extends LogicConfigMenuProvider<LogicIOCon
 	{
 		if(inputSignalStrengthSlider != null)
 		{
-			inputSignalStrengthSlider.setVisible(config.input);
+			inputSignalStrengthSlider.setVisible(config.input());
 		}
 		if(outputSignalStrengthSlider != null)
 		{
-			outputSignalStrengthSlider.setVisible(!config.input);
+			outputSignalStrengthSlider.setVisible(!config.input());
 		}
 	}
 	
 	private Component tooltipPowerType()
 	{
-		return switch(config.powerType)
+		return switch(config.powerType())
 		{
 			case WEAK -> LBR.text().logicConfigButtonTooltipOutputPowerWeak();
 			case STRONG -> LBR.text().logicConfigButtonTooltipOutputPowerStrong();
@@ -200,12 +201,12 @@ final class LogicIOConfigMenuProvider extends LogicConfigMenuProvider<LogicIOCon
 				width,
 				18,
 				false,
-				config.powerType,
+				config.powerType(),
 				Arrays.asList(LogicPowerOutputType.values()),
 				LogicMode::label,
 				(value) ->
 				{
-					config.powerType = value;
+					config = new LogicIOConfig(config.input(), config.direction(), config.signalStrength(), config.signalComparison(), value);
 					if(powerTypeButton != null)
 					{
 						powerTypeButton.setTooltip(this.tooltipPowerType());
@@ -220,7 +221,7 @@ final class LogicIOConfigMenuProvider extends LogicConfigMenuProvider<LogicIOCon
 	{
 		if(powerTypeButton != null)
 		{
-			powerTypeButton.setVisible(!config.input);
+			powerTypeButton.setVisible(!config.input());
 		}
 	}
 	

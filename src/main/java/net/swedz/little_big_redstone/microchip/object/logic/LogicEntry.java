@@ -17,7 +17,8 @@ public record LogicEntry(
 		int slot,
 		int x,
 		int y,
-		LogicComponent component
+		LogicComponent component,
+		boolean visible
 ) implements MicrochipObject
 {
 	public static final Codec<LogicEntry> CODEC = RecordCodecBuilder.create((instance) -> instance
@@ -25,7 +26,7 @@ public record LogicEntry(
 					Codec.INT.fieldOf("slot").forGetter(LogicEntry::slot),
 					Codec.INT.fieldOf("x").forGetter(LogicEntry::x),
 					Codec.INT.fieldOf("y").forGetter(LogicEntry::y),
-					LogicComponent.CODEC.fieldOf("logic").forGetter(LogicEntry::component)
+					LogicCodecs.COMPONENT_CODEC.fieldOf("logic").forGetter(LogicEntry::component)
 			)
 			.apply(instance, LogicEntry::new));
 	
@@ -33,13 +34,28 @@ public record LogicEntry(
 			ByteBufCodecs.VAR_INT, LogicEntry::slot,
 			ByteBufCodecs.VAR_INT, LogicEntry::x,
 			ByteBufCodecs.VAR_INT, LogicEntry::y,
-			LogicComponent.STREAM_CODEC, LogicEntry::component,
+			LogicCodecs.COMPONENT_STREAM_CODEC, LogicEntry::component,
 			LogicEntry::new
 	);
 	
 	public LogicEntry
 	{
 		component = component.copy();
+	}
+	
+	public LogicEntry(
+			int slot,
+			int x,
+			int y,
+			LogicComponent component
+	)
+	{
+		this(slot, x, y, component, true);
+	}
+	
+	public LogicType<?, ?> type()
+	{
+		return component.type();
 	}
 	
 	@Override

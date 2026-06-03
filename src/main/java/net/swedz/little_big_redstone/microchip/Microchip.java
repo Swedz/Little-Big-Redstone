@@ -14,7 +14,7 @@ import net.swedz.little_big_redstone.microchip.object.MicrochipObjectContainer;
 import net.swedz.little_big_redstone.microchip.object.MicrochipObjectContainerType;
 import net.swedz.little_big_redstone.microchip.object.logic.LogicComponent;
 import net.swedz.little_big_redstone.microchip.object.logic.LogicComponents;
-import net.swedz.little_big_redstone.microchip.object.logic.LogicContext;
+import net.swedz.little_big_redstone.microchip.object.logic.LogicTickingContext;
 import net.swedz.little_big_redstone.microchip.object.logic.LogicEntry;
 import net.swedz.little_big_redstone.microchip.object.note.MicrochipStickyNotes;
 import net.swedz.little_big_redstone.microchip.object.note.StickyNoteEntry;
@@ -61,7 +61,6 @@ public final class Microchip
 		this.size = size;
 		this.stickyNotes = stickyNotes != null ? stickyNotes.with(this) : new MicrochipStickyNotes(this);
 		this.components = components != null ? components.with(this) : new LogicComponents(this);
-		this.components.updateValidity();
 		this.wires = wires != null ? wires.with(this) : new MicrochipWires(this);
 		this.components.rebuildTraversal();
 		this.awarenesses = new MicrochipAwarenesses();
@@ -75,7 +74,6 @@ public final class Microchip
 		this.size = size;
 		this.stickyNotes = new MicrochipStickyNotes(this);
 		this.components = new LogicComponents(this);
-		this.components.updateValidity();
 		this.wires = new MicrochipWires(this);
 		this.components.rebuildTraversal();
 		this.awarenesses = new MicrochipAwarenesses();
@@ -238,7 +236,7 @@ public final class Microchip
 		rerouteWires = false;
 	}
 	
-	public void tickLogic(LogicContext context)
+	public void tickLogic(LogicTickingContext context)
 	{
 		for(var entry : components.traversal())
 		{

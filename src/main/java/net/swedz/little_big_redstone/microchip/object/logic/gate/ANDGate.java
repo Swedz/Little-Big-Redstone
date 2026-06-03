@@ -2,26 +2,23 @@ package net.swedz.little_big_redstone.microchip.object.logic.gate;
 
 import com.mojang.serialization.MapCodec;
 import io.netty.buffer.ByteBuf;
-import net.minecraft.network.chat.Component;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.world.item.DyeColor;
-import net.swedz.little_big_redstone.LBR;
-import net.swedz.little_big_redstone.microchip.object.logic.LogicContext;
+import net.swedz.little_big_redstone.microchip.object.logic.LogicTickingContext;
 import net.swedz.little_big_redstone.microchip.object.logic.LogicType;
 import net.swedz.little_big_redstone.microchip.object.logic.LogicTypes;
-import net.swedz.little_big_redstone.microchip.object.logic.gate.config.MultiLogicGateConfig;
+import net.swedz.little_big_redstone.microchip.object.logic.gate.config.ANDGateConfig;
 
-import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
-public final class ANDGate extends LogicGate<ANDGate, MultiLogicGateConfig>
+public final class ANDGate extends LogicGate<ANDGate, ANDGateConfig>
 {
-	public static final MapCodec<ANDGate> CODEC = mapCodec(MultiLogicGateConfig.CODEC, ANDGate::new);
+	public static final MapCodec<ANDGate> CODEC = mapCodec(ANDGateConfig.CODEC, ANDGate::new);
 	
-	public static final StreamCodec<ByteBuf, ANDGate> STREAM_CODEC = streamCodec(MultiLogicGateConfig.STREAM_CODEC, ANDGate::new);
+	public static final StreamCodec<ByteBuf, ANDGate> STREAM_CODEC = streamCodec(ANDGateConfig.STREAM_CODEC, ANDGate::new);
 	
-	private ANDGate(MultiLogicGateConfig config, Optional<DyeColor> color, int outputState)
+	private ANDGate(ANDGateConfig config, Optional<DyeColor> color, int outputState)
 	{
 		super(config, color, outputState);
 	}
@@ -37,19 +34,13 @@ public final class ANDGate extends LogicGate<ANDGate, MultiLogicGateConfig>
 	}
 	
 	@Override
-	protected MultiLogicGateConfig defaultConfig()
-	{
-		return new MultiLogicGateConfig();
-	}
-	
-	@Override
-	public LogicType<ANDGate> type()
+	public LogicType<ANDGate, ANDGateConfig> type()
 	{
 		return LogicTypes.AND;
 	}
 	
 	@Override
-	public int processInputs(LogicContext context, int[] inputs)
+	public int processInputs(LogicTickingContext context, int[] inputs)
 	{
 		int greatest = 0;
 		for(int input : inputs)
@@ -64,18 +55,6 @@ public final class ANDGate extends LogicGate<ANDGate, MultiLogicGateConfig>
 			}
 		}
 		return greatest;
-	}
-	
-	@Override
-	public void appendNoShiftHoverText(List<Component> lines)
-	{
-		lines.add(LBR.text().logicGateAlgebra(LBR.text().logicGateAlgebraAND()));
-	}
-	
-	@Override
-	public void appendShiftHoverText(List<Component> lines)
-	{
-		lines.add(LBR.text().logicHelpANDGate());
 	}
 	
 	@Override

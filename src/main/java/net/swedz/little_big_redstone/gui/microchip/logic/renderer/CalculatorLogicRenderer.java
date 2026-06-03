@@ -4,9 +4,10 @@ import net.swedz.little_big_redstone.LBR;
 import net.swedz.little_big_redstone.LBRClientShaders;
 import net.swedz.little_big_redstone.gui.microchip.logic.LogicRenderer;
 import net.swedz.little_big_redstone.microchip.object.logic.calculator.LogicCalculator;
+import net.swedz.little_big_redstone.microchip.object.logic.calculator.LogicCalculatorConfig;
 import net.swedz.tesseract.neoforge.helper.guigraphics.TesseractGuiGraphics;
 
-public final class CalculatorLogicRenderer extends LogicRenderer<LogicCalculator>
+public final class CalculatorLogicRenderer extends LogicRenderer<LogicCalculator, LogicCalculatorConfig>
 {
 	@Override
 	public void render(Context context, TesseractGuiGraphics graphics, LogicCalculator component, int x, int y)
@@ -22,7 +23,7 @@ public final class CalculatorLogicRenderer extends LogicRenderer<LogicCalculator
 				(shader) -> shader.getUniform("LogicUV").set(16f, 16f)
 		);
 		graphics.setTextures(
-				context.getTexture(component.config().mode.textureKey()),
+				context.getTexture(component.config().mode().textureKey()),
 				LBR.id("textures/logic/scanline.png")
 		);
 		int centerX = x + size.centerX() - 8;
@@ -31,7 +32,7 @@ public final class CalculatorLogicRenderer extends LogicRenderer<LogicCalculator
 		graphics.resetTextureShader();
 		graphics.resetColor();
 		
-		if(!component.config().isValid())
+		if(!component.isConfigValid())
 		{
 			this.renderInvalidOverlay(graphics, x, y, component.size());
 		}

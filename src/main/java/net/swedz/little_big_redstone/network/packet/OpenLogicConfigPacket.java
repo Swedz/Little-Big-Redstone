@@ -15,12 +15,14 @@ import net.swedz.little_big_redstone.gui.logicconfig.LogicConfigMenu;
 import net.swedz.little_big_redstone.gui.logicconfig.reference.MicrochipLogicConfigReference;
 import net.swedz.little_big_redstone.gui.microchip.MicrochipMenu;
 import net.swedz.little_big_redstone.gui.microchip.MicrochipViewPosition;
-import net.swedz.little_big_redstone.microchip.object.logic.LogicComponent;
+import net.swedz.little_big_redstone.microchip.object.logic.LogicCodecs;
 import net.swedz.little_big_redstone.network.LBRCustomPacket;
 import net.swedz.tesseract.neoforge.packet.PacketContext;
 
 public record OpenLogicConfigPacket(
-		int containerId, int slot, MicrochipViewPosition returnViewPosition
+		int containerId,
+		int slot,
+		MicrochipViewPosition returnViewPosition
 ) implements LBRCustomPacket
 {
 	public static final StreamCodec<ByteBuf, OpenLogicConfigPacket> STREAM_CODEC = StreamCodec.composite(
@@ -48,8 +50,8 @@ public record OpenLogicConfigPacket(
 				var entry = microchip.components().get(slot);
 				if(entry != null && entry.component().config().hasMenu())
 				{
-					var component = entry.component().copy();
-					var color = entry.color().orElse(menu.color());
+					var logicConfig = entry.component().config();
+					var logicColor = entry.color().orElse(menu.color());
 					
 					player.openMenu(
 							new MenuProvider()
@@ -57,7 +59,7 @@ public record OpenLogicConfigPacket(
 								@Override
 								public Component getDisplayName()
 								{
-									return component.type().displayName();
+									return logicConfig.type().displayName();
 								}
 								
 								@Override
@@ -69,16 +71,16 @@ public record OpenLogicConfigPacket(
 											false,
 											new MicrochipLogicConfigReference(pos, entry.slot(), returnViewPosition),
 											() -> menu.stillValid(player) && microchip.components().values().contains(entry),
-											color,
-											component
+											logicColor,
+											logicConfig
 									);
 								}
 							},
 							(buf) ->
 							{
 								ByteBufCodecs.BOOL.encode(buf, false);
-								DyeColor.STREAM_CODEC.encode(buf, color);
-								LogicComponent.STREAM_CODEC.encode(buf, component);
+								DyeColor.STREAM_CODEC.encode(buf, logicColor);
+								LogicCodecs.CONFIG_STREAM_CODEC.encode(buf, logicConfig);
 							}
 					);
 				}

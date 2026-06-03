@@ -2,26 +2,23 @@ package net.swedz.little_big_redstone.microchip.object.logic.gate;
 
 import com.mojang.serialization.MapCodec;
 import io.netty.buffer.ByteBuf;
-import net.minecraft.network.chat.Component;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.world.item.DyeColor;
-import net.swedz.little_big_redstone.LBR;
-import net.swedz.little_big_redstone.microchip.object.logic.LogicContext;
+import net.swedz.little_big_redstone.microchip.object.logic.LogicTickingContext;
 import net.swedz.little_big_redstone.microchip.object.logic.LogicType;
 import net.swedz.little_big_redstone.microchip.object.logic.LogicTypes;
-import net.swedz.little_big_redstone.microchip.object.logic.gate.config.MultiLogicGateConfig;
+import net.swedz.little_big_redstone.microchip.object.logic.gate.config.ORGateConfig;
 
-import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
-public final class ORGate extends LogicGate<ORGate, MultiLogicGateConfig>
+public final class ORGate extends LogicGate<ORGate, ORGateConfig>
 {
-	public static final MapCodec<ORGate> CODEC = mapCodec(MultiLogicGateConfig.CODEC, ORGate::new);
+	public static final MapCodec<ORGate> CODEC = mapCodec(ORGateConfig.CODEC, ORGate::new);
 	
-	public static final StreamCodec<ByteBuf, ORGate> STREAM_CODEC = streamCodec(MultiLogicGateConfig.STREAM_CODEC, ORGate::new);
+	public static final StreamCodec<ByteBuf, ORGate> STREAM_CODEC = streamCodec(ORGateConfig.STREAM_CODEC, ORGate::new);
 	
-	private ORGate(MultiLogicGateConfig config, Optional<DyeColor> color, int outputState)
+	private ORGate(ORGateConfig config, Optional<DyeColor> color, int outputState)
 	{
 		super(config, color, outputState);
 	}
@@ -37,19 +34,13 @@ public final class ORGate extends LogicGate<ORGate, MultiLogicGateConfig>
 	}
 	
 	@Override
-	protected MultiLogicGateConfig defaultConfig()
-	{
-		return new MultiLogicGateConfig();
-	}
-	
-	@Override
-	public LogicType<ORGate> type()
+	public LogicType<ORGate, ORGateConfig> type()
 	{
 		return LogicTypes.OR;
 	}
 	
 	@Override
-	public int processInputs(LogicContext context, int[] inputs)
+	public int processInputs(LogicTickingContext context, int[] inputs)
 	{
 		int greatest = 0;
 		for(int input : inputs)
@@ -60,18 +51,6 @@ public final class ORGate extends LogicGate<ORGate, MultiLogicGateConfig>
 			}
 		}
 		return greatest;
-	}
-	
-	@Override
-	public void appendNoShiftHoverText(List<Component> lines)
-	{
-		lines.add(LBR.text().logicGateAlgebra(LBR.text().logicGateAlgebraOR()));
-	}
-	
-	@Override
-	public void appendShiftHoverText(List<Component> lines)
-	{
-		lines.add(LBR.text().logicHelpORGate());
 	}
 	
 	@Override

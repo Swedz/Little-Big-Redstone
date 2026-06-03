@@ -33,7 +33,7 @@ final class LogicReaderConfigMenuProvider extends LogicConfigMenuProvider<LogicR
 	
 	private void updateThresholdSlider()
 	{
-		boolean readsSignal = config.mode.readsSignal();
+		boolean readsSignal = config.mode().readsSignal();
 		thresholdFillTextBox.setVisible(!readsSignal);
 		thresholdSignalSlider.setVisible(readsSignal);
 	}
@@ -48,13 +48,13 @@ final class LogicReaderConfigMenuProvider extends LogicConfigMenuProvider<LogicR
 				width,
 				18,
 				false,
-				config.mode,
+				config.mode(),
 				Arrays.asList(LogicReaderMode.values()),
 				LogicReaderMode::label,
 				(value) ->
 				{
-					boolean changed = value.readsSignal() != config.mode.readsSignal();
-					config.mode = value;
+					boolean changed = value.readsSignal() != config.mode().readsSignal();
+					config = new LogicReaderConfig(value, config.direction(), config.fillThreshold(), config.signalThreshold(), config.comparison());
 					if(changed)
 					{
 						this.updateComparisonButton();
@@ -74,37 +74,37 @@ final class LogicReaderConfigMenuProvider extends LogicConfigMenuProvider<LogicR
 				width,
 				18,
 				false,
-				config.direction,
+				config.direction(),
 				Arrays.asList(Direction.values()),
 				LBRTooltips.DIRECTION_PARSER::parse,
-				(value) -> config.direction = value
+				(value) -> config = new LogicReaderConfig(config.mode(), value, config.fillThreshold(), config.signalThreshold(), config.comparison())
 		);
 	}
 	
 	private MutableComponent tooltipComparison()
 	{
-		return config.mode.readsSignal() ?
+		return config.mode().readsSignal() ?
 				this.tooltipSignalComparison() :
 				this.tooltipFillComparison();
 	}
 	
 	private MutableComponent tooltipFillComparison()
 	{
-		return switch(config.comparison)
+		return switch(config.comparison())
 		{
-			case LESS_THAN_OR_EQUAL_TO -> LBR.text().logicConfigButtonTooltipReaderThresholdComparisonModeLessThanOrEqualTo(config.fillThreshold);
-			case EQUAL_TO -> LBR.text().logicConfigButtonTooltipReaderThresholdComparisonModeEqualTo(config.fillThreshold);
-			case GREATER_THAN_OR_EQUAL_TO -> LBR.text().logicConfigButtonTooltipReaderThresholdComparisonModeGreaterThanOrEqualTo(config.fillThreshold);
+			case LESS_THAN_OR_EQUAL_TO -> LBR.text().logicConfigButtonTooltipReaderThresholdComparisonModeLessThanOrEqualTo(config.fillThreshold());
+			case EQUAL_TO -> LBR.text().logicConfigButtonTooltipReaderThresholdComparisonModeEqualTo(config.fillThreshold());
+			case GREATER_THAN_OR_EQUAL_TO -> LBR.text().logicConfigButtonTooltipReaderThresholdComparisonModeGreaterThanOrEqualTo(config.fillThreshold());
 		};
 	}
 	
 	private MutableComponent tooltipSignalComparison()
 	{
-		return switch(config.comparison)
+		return switch(config.comparison())
 		{
-			case LESS_THAN_OR_EQUAL_TO -> LBR.text().logicConfigButtonTooltipReaderSignalComparisonModeLessThanOrEqualTo(config.signalThreshold);
-			case EQUAL_TO -> LBR.text().logicConfigButtonTooltipReaderSignalComparisonModeEqualTo(config.signalThreshold);
-			case GREATER_THAN_OR_EQUAL_TO -> LBR.text().logicConfigButtonTooltipReaderSignalComparisonModeGreaterThanOrEqualTo(config.signalThreshold);
+			case LESS_THAN_OR_EQUAL_TO -> LBR.text().logicConfigButtonTooltipReaderSignalComparisonModeLessThanOrEqualTo(config.signalThreshold());
+			case EQUAL_TO -> LBR.text().logicConfigButtonTooltipReaderSignalComparisonModeEqualTo(config.signalThreshold());
+			case GREATER_THAN_OR_EQUAL_TO -> LBR.text().logicConfigButtonTooltipReaderSignalComparisonModeGreaterThanOrEqualTo(config.signalThreshold());
 		};
 	}
 	
@@ -115,11 +115,11 @@ final class LogicReaderConfigMenuProvider extends LogicConfigMenuProvider<LogicR
 				0,
 				22 * 2,
 				LBR.id("textures/gui/slot_atlas.png"),
-				config.comparison,
+				config.comparison(),
 				Arrays.asList(LogicComparisonMode.values()),
 				(value) ->
 				{
-					config.comparison = value;
+					config = new LogicReaderConfig(config.mode(), config.direction(), config.fillThreshold(), config.signalThreshold(), value);
 					this.updateComparisonButton();
 				}
 		);
@@ -136,12 +136,12 @@ final class LogicReaderConfigMenuProvider extends LogicConfigMenuProvider<LogicR
 				22 * 2,
 				width - 18 - 4,
 				18,
-				config.fillThreshold.value(),
+				config.fillThreshold().value(),
 				LogicReaderThreshold.MAX_LENGTH,
 				LogicReaderThreshold::isValid,
 				(value) ->
 				{
-					config.fillThreshold = LogicReaderThreshold.from(value);
+					config = new LogicReaderConfig(config.mode(), config.direction(), LogicReaderThreshold.from(value), config.signalThreshold(), config.comparison());
 					this.updateComparisonButton();
 				}
 		).setVisible(false);
@@ -156,12 +156,12 @@ final class LogicReaderConfigMenuProvider extends LogicConfigMenuProvider<LogicR
 				18,
 				1,
 				15,
-				config.signalThreshold,
+				config.signalThreshold(),
 				1,
 				0,
 				(value) ->
 				{
-					config.signalThreshold = (int) Math.round(value);
+					config = new LogicReaderConfig(config.mode(), config.direction(), config.fillThreshold(), (int) Math.round(value), config.comparison());
 					this.updateComparisonButton();
 				}
 		).setVisible(false);

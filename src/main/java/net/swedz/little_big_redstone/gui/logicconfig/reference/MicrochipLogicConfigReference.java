@@ -9,7 +9,7 @@ import net.swedz.little_big_redstone.LBRItems;
 import net.swedz.little_big_redstone.block.microchip.MicrochipBlockEntity;
 import net.swedz.little_big_redstone.gui.microchip.MicrochipMenu;
 import net.swedz.little_big_redstone.gui.microchip.MicrochipViewPosition;
-import net.swedz.little_big_redstone.microchip.object.logic.LogicComponent;
+import net.swedz.little_big_redstone.microchip.object.logic.config.LogicConfig;
 import net.swedz.tesseract.neoforge.helper.TransferHelper;
 
 public record MicrochipLogicConfigReference(
@@ -19,7 +19,7 @@ public record MicrochipLogicConfigReference(
 ) implements LogicConfigReference
 {
 	@Override
-	public void save(Player player, LogicComponent component)
+	public void save(Player player, LogicConfig<?> config)
 	{
 		var playerName = player.getGameProfile().getName();
 		
@@ -27,10 +27,9 @@ public record MicrochipLogicConfigReference(
 		{
 			var microchip = blockEntity.microchip();
 			var targetEntry = microchip.components().get(slot);
-			if(targetEntry != null && targetEntry.component().type().equals(component.type()))
+			if(targetEntry != null && targetEntry.component().type().equals(config.type()))
 			{
-				targetEntry.component().config().loadFrom(component.config());
-				microchip.components().updateValidity();
+				targetEntry.component().setConfig(config);
 				int wiresPopped = microchip.wires().cleanup(targetEntry);
 				microchip.markDirty(false);
 				

@@ -5,18 +5,14 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import io.netty.buffer.ByteBuf;
-import net.minecraft.network.chat.Component;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.world.item.DyeColor;
-import net.swedz.little_big_redstone.LBR;
 import net.swedz.little_big_redstone.microchip.object.logic.LogicComponent;
-import net.swedz.little_big_redstone.microchip.object.logic.LogicContext;
-import net.swedz.little_big_redstone.microchip.object.logic.LogicGridSize;
+import net.swedz.little_big_redstone.microchip.object.logic.LogicTickingContext;
 import net.swedz.little_big_redstone.microchip.object.logic.LogicType;
 import net.swedz.little_big_redstone.microchip.object.logic.LogicTypes;
 
-import java.util.List;
 import java.util.Optional;
 
 public final class LogicSelector extends LogicComponent<LogicSelector, LogicSelectorConfig>
@@ -65,12 +61,12 @@ public final class LogicSelector extends LogicComponent<LogicSelector, LogicSele
 	}
 	
 	@Override
-	protected void processTickInternal(LogicContext context, int[] inputs)
+	protected void processTickInternal(LogicTickingContext context, int[] inputs)
 	{
 		int originalSelected = selected;
 		int originalOutputState = outputState;
 		
-		if(config.mode == LogicSelectorMode.COUNTER)
+		if(config.mode() == LogicSelectorMode.COUNTER)
 		{
 			boolean decrement = inputs[0] > 0;
 			boolean increment = inputs[1] > 0;
@@ -80,13 +76,13 @@ public final class LogicSelector extends LogicComponent<LogicSelector, LogicSele
 				newSelected--;
 				if(newSelected < 0)
 				{
-					newSelected = config.outputs - 1;
+					newSelected = config.outputs() - 1;
 				}
 			}
 			if(increment)
 			{
 				newSelected++;
-				if(newSelected >= config.outputs)
+				if(newSelected >= config.outputs())
 				{
 					newSelected = 0;
 				}
@@ -97,7 +93,7 @@ public final class LogicSelector extends LogicComponent<LogicSelector, LogicSele
 				outputState = Math.max(inputs[0], inputs[1]);
 			}
 		}
-		else if(config.mode == LogicSelectorMode.SETTER)
+		else if(config.mode() == LogicSelectorMode.SETTER)
 		{
 			for(int index = inputs.length - 1; index >= 0; index--)
 			{
@@ -121,25 +117,12 @@ public final class LogicSelector extends LogicComponent<LogicSelector, LogicSele
 	@Override
 	protected int outputInternal(int index)
 	{
-		return index == selected ? (config.passSignal ? outputState : (index + 1)) : 0;
+		return index == selected ? (config.passSignal() ? outputState : (index + 1)) : 0;
 	}
 	
 	public int output()
 	{
 		return outputState;
-	}
-	
-	@Override
-	public LogicGridSize size()
-	{
-		int outputs = this.outputs();
-		return new LogicGridSize(1, Math.max(1, outputs / 2));
-	}
-	
-	@Override
-	public void appendShiftHoverText(List<Component> lines)
-	{
-		lines.add(LBR.text().logicHelpSelector());
 	}
 	
 	@Override
@@ -150,20 +133,7 @@ public final class LogicSelector extends LogicComponent<LogicSelector, LogicSele
 	}
 	
 	@Override
-	protected void internalResetForPickup()
-	{
-		selected = 0;
-		outputState = 0;
-	}
-	
-	@Override
-	protected LogicSelectorConfig defaultConfig()
-	{
-		return new LogicSelectorConfig();
-	}
-	
-	@Override
-	public LogicType<LogicSelector> type()
+	public LogicType<LogicSelector, LogicSelectorConfig> type()
 	{
 		return LogicTypes.SELECTOR;
 	}

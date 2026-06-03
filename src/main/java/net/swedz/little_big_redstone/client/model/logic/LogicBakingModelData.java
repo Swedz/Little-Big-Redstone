@@ -16,12 +16,13 @@ import net.neoforged.neoforge.client.model.generators.ModelBuilder;
 import net.neoforged.neoforge.client.model.generators.ModelProvider;
 import net.neoforged.neoforge.common.data.ExistingFileHelper;
 import net.swedz.little_big_redstone.LBR;
-import net.swedz.little_big_redstone.microchip.object.logic.LogicComponent;
+import net.swedz.little_big_redstone.microchip.object.logic.LogicType;
 import net.swedz.tesseract.api.Assert;
 import net.swedz.tesseract.neoforge.helper.CodecHelper;
 
 import java.util.Collections;
 import java.util.Map;
+import java.util.Optional;
 
 public final class LogicBakingModelData
 {
@@ -35,9 +36,9 @@ public final class LogicBakingModelData
 			)
 			.apply(instance, LogicBakingModelData::new));
 	
-	public static LogicBakingModelData get(LogicComponent<?, ?> component)
+	public static LogicBakingModelData get(LogicType<?, ?> type)
 	{
-		return ((LogicBakedModel) Minecraft.getInstance().getModelManager().getModel(ModelResourceLocation.inventory(LBR.id(component.type().id())))).getData();
+		return ((LogicBakedModel) Minecraft.getInstance().getModelManager().getModel(ModelResourceLocation.inventory(LBR.id(type.id())))).getData();
 	}
 	
 	private final Map<DyeColor, LogicModelColorSet> colorPalette;
@@ -58,9 +59,14 @@ public final class LogicBakingModelData
 		return colorPalette.getOrDefault(color, LogicModelColorSet.DEFAULT);
 	}
 	
-	public LogicModelColorSet getColorSet(LogicComponent<?, ?> component, DyeColor fallback)
+	public LogicModelColorSet getColorSet(DyeColor value, DyeColor fallback)
 	{
-		return this.getColorSet(component.color().orElse(fallback));
+		return this.getColorSet(value != null ? value : fallback);
+	}
+	
+	public LogicModelColorSet getColorSet(Optional<DyeColor> value, DyeColor fallback)
+	{
+		return this.getColorSet(value.orElse(fallback));
 	}
 	
 	public ResourceLocation getItemTexture(String texture)
