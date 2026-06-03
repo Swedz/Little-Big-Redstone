@@ -29,8 +29,10 @@ import net.swedz.little_big_redstone.item.LogicItem;
 import net.swedz.little_big_redstone.item.stickynote.StickyNoteItem;
 import net.swedz.little_big_redstone.microchip.object.logic.config.LogicConfig;
 import net.swedz.little_big_redstone.microchip.wire.Wire;
+import net.swedz.little_big_redstone.network.packet.ScrollLogicCreativePacket;
 import net.swedz.little_big_redstone.network.packet.StoreMicrochipViewPositionPacket;
 import net.swedz.tesseract.neoforge.helper.guigraphics.TesseractGuiGraphics;
+import org.lwjgl.glfw.GLFW;
 
 import java.util.Map;
 import java.util.Optional;
@@ -106,6 +108,58 @@ public final class MicrochipScreen extends AbstractContainerScreen<MicrochipMenu
 		super.removed();
 	}
 	
+	private boolean isOverLogicArrayPanel(double mouseX, double mouseY)
+	{
+		if(!menu.getLogicArrayItemHandler().isCreativeMode())
+		{
+			return false;
+		}
+		double localX = mouseX - leftPos;
+		double localY = mouseY - topPos;
+		return localX >= -75 && localX < -3 && localY >= 10 && localY < 136;
+	}
+
+	private boolean adjustCreativeScroll(int delta)
+	{
+		var creative = menu.getLogicArrayItemHandler().creativeHandler();
+		int current = creative.scrollRows();
+		int next = Math.max(0, Math.min(creative.maxScrollRows(), current + delta));
+		if(next == current)
+		{
+			return false;
+		}
+		creative.setScrollRows(next);
+		new ScrollLogicCreativePacket(menu.containerId, next).sendToServer();
+		return true;
+	}
+
+	@Override
+	public boolean mouseScrolled(double mouseX, double mouseY, double scrollX, double scrollY)
+	{
+		if(this.isOverLogicArrayPanel(mouseX, mouseY) && this.adjustCreativeScroll(scrollY > 0 ? -1 : 1))
+		{
+			return true;
+		}
+		return super.mouseScrolled(mouseX, mouseY, scrollX, scrollY);
+	}
+
+	@Override
+	public boolean keyPressed(int keyCode, int scanCode, int modifiers)
+	{
+		if(menu.getLogicArrayItemHandler().isCreativeMode() && this.getFocused() == null)
+		{
+			if(keyCode == GLFW.GLFW_KEY_UP && this.adjustCreativeScroll(-1))
+			{
+				return true;
+			}
+			if(keyCode == GLFW.GLFW_KEY_DOWN && this.adjustCreativeScroll(1))
+			{
+				return true;
+			}
+		}
+		return super.keyPressed(keyCode, scanCode, modifiers);
+	}
+
 	@Override
 	public boolean mouseDragged(double mouseX, double mouseY, int button, double dragX, double dragY)
 	{
