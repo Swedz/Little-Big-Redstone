@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_nor_gate": {
+      "conditions": {
+        "items": [
+          {
+            "items": "little_big_redstone:nor_gate"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "little_big_redstone:dye/nor_gate/pink"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_nor_gate"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "little_big_redstone:dye/nor_gate/pink"
+    ]
+  }
+}

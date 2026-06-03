@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_pulse_throttler": {
+      "conditions": {
+        "items": [
+          {
+            "items": "little_big_redstone:pulse_throttler"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "little_big_redstone:dye/pulse_throttler/yellow"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_pulse_throttler"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "little_big_redstone:dye/pulse_throttler/yellow"
+    ]
+  }
+}

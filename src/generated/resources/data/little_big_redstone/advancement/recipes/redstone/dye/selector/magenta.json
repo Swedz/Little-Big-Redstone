@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_selector": {
+      "conditions": {
+        "items": [
+          {
+            "items": "little_big_redstone:selector"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "little_big_redstone:dye/selector/magenta"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_selector"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "little_big_redstone:dye/selector/magenta"
+    ]
+  }
+}

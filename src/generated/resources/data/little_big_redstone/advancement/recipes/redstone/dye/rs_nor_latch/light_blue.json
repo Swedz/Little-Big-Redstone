@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_rs_nor_latch": {
+      "conditions": {
+        "items": [
+          {
+            "items": "little_big_redstone:rs_nor_latch"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "little_big_redstone:dye/rs_nor_latch/light_blue"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_rs_nor_latch"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "little_big_redstone:dye/rs_nor_latch/light_blue"
+    ]
+  }
+}

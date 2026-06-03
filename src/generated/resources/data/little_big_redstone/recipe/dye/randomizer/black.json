@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:crafting_transmute",
+  "category": "redstone",
+  "group": "randomizer_logic_dye",
+  "input": "little_big_redstone:randomizer",
+  "material": "#c:dyes/black",
+  "result": {
+    "components": {
+      "little_big_redstone:logic_color": "black"
+    },
+    "id": "little_big_redstone:randomizer"
+  }
+}

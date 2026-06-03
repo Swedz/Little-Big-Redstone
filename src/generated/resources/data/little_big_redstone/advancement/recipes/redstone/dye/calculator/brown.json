@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_calculator": {
+      "conditions": {
+        "items": [
+          {
+            "items": "little_big_redstone:calculator"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "little_big_redstone:dye/calculator/brown"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_calculator"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "little_big_redstone:dye/calculator/brown"
+    ]
+  }
+}

@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_debugger": {
+      "conditions": {
+        "items": [
+          {
+            "items": "little_big_redstone:debugger"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "little_big_redstone:dye/debugger/orange"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_debugger"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "little_big_redstone:dye/debugger/orange"
+    ]
+  }
+}

@@ -23,6 +23,8 @@ import net.swedz.little_big_redstone.LBRComponents;
 import net.swedz.little_big_redstone.LBRItems;
 import net.swedz.little_big_redstone.LBRTags;
 import net.swedz.little_big_redstone.item.stickynote.StickyNote;
+import net.swedz.little_big_redstone.microchip.object.logic.LogicType;
+import net.swedz.little_big_redstone.microchip.object.logic.LogicTypes;
 import net.swedz.tesseract.neoforge.compat.vanilla.recipe.ShapedRecipeBuilder;
 import net.swedz.tesseract.neoforge.compat.vanilla.recipe.ShapelessRecipeBuilder;
 
@@ -130,6 +132,26 @@ public final class ItemRecipesDatagenProvider extends RecipeProvider
 		this.sealStickyNote(color);
 	}
 	
+	private void dyeLogic(LogicType<?, ?> type, DyeColor color)
+	{
+		var logicItem = type.item();
+		var builder = TransmuteRecipeBuilder
+				.transmute(
+						RecipeCategory.REDSTONE,
+						Ingredient.of(logicItem),
+						this.tag(color.getTag()),
+						new ItemStackTemplate(
+								logicItem,
+								DataComponentPatch.builder()
+										.set(LBRComponents.LOGIC_COLOR.get(), color)
+										.build()
+						)
+				)
+				.group(type.id() + "_logic_dye")
+				.unlockedBy("has_" + type.id(), this.has(logicItem));
+		builder.save(output, builder.defaultId().identifier().withPrefix("dye/").withSuffix("/" + color.getName()).toString());
+	}
+	
 	private void dyeItem(
 			RecipeCategory category,
 			TagKey<Item> fromItem,
@@ -208,7 +230,6 @@ public final class ItemRecipesDatagenProvider extends RecipeProvider
 	@Override
 	protected void buildRecipes()
 	{
-		// TODO 26.1 logic dyeing
 		// TODO 26.1 logic clear config
 		
 		for(var color : DyeColor.values())
@@ -217,6 +238,11 @@ public final class ItemRecipesDatagenProvider extends RecipeProvider
 			this.logicArray(color);
 			this.floppyDisk(color);
 			this.stickyNote(color);
+			
+			for(var logicType : LogicTypes.values())
+			{
+				this.dyeLogic(logicType, color);
+			}
 		}
 		
 		new ShapedRecipeBuilder(registries)
