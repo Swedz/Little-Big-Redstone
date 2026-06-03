@@ -50,9 +50,11 @@ public final class MicrochipBlockModel implements DynamicBlockStateModel
 	private final FaceTextures                 fallback;
 	private final Map<Direction, FaceTextures> sides;
 	
-	private Material.Baked particleMaterial;
+	private final Material.Baked particleMaterial;
 	
 	private final Map<MicrochipModelData, List<BlockStateModelPart>> cache = Maps.newHashMap();
+	
+	private int materialFlags = -1;
 	
 	private MicrochipBlockModel(
 			ModelBaker baker,
@@ -64,6 +66,17 @@ public final class MicrochipBlockModel implements DynamicBlockStateModel
 		this.fallback = fallback;
 		this.sides = sides;
 		this.particleMaterial = fallback.base().map((material) -> baker.materials().get(material, DEBUG_NAME)).orElse(null);
+	}
+	
+	private List<BlockStateModelPart> getModelParts(MicrochipModelData data)
+	{
+		var parts = cache.get(data);
+		if(parts == null)
+		{
+			parts = Collections.unmodifiableList(this.buildModel(data));
+			cache.put(data, parts);
+		}
+		return parts;
 	}
 	
 	@Override
@@ -81,13 +94,7 @@ public final class MicrochipBlockModel implements DynamicBlockStateModel
 			data = MicrochipModelData.DEFAULT;
 		}
 		
-		var parts = cache.get(data);
-		if(parts == null)
-		{
-			parts = Collections.unmodifiableList(this.buildModel(data));
-			cache.put(data, parts);
-		}
-		output.addAll(parts);
+		output.addAll(this.getModelParts(data));
 	}
 	
 	@Override
@@ -96,11 +103,25 @@ public final class MicrochipBlockModel implements DynamicBlockStateModel
 		return particleMaterial;
 	}
 	
+	private int computeMaterialFlags()
+	{
+		var parts = this.getModelParts(MicrochipModelData.DEFAULT);
+		int flags = 0;
+		for(var part : parts)
+		{
+			flags |= part.materialFlags();
+		}
+		return flags;
+	}
+	
 	@Override
 	public int materialFlags()
 	{
-		// TODO 26.1
-		return 0;
+		if(materialFlags == -1)
+		{
+			materialFlags = this.computeMaterialFlags();
+		}
+		return materialFlags;
 	}
 	
 	private List<BlockStateModelPart> buildModel(MicrochipModelData data)
@@ -109,19 +130,23 @@ public final class MicrochipBlockModel implements DynamicBlockStateModel
 		
 		parts.add(bakeLayerAsPart(baker, this.prepareLayer((direction, textures) -> textures.base(), true)));
 		
-		parts.add(bakeLayerAsPart(baker, this.prepareLayer((direction, textures) ->
-		{
-			if(direction != null)
-			{
-				return switch(data.side(direction))
-				{
-					case OFF -> textures.signalOffOverlay();
-					case ON -> textures.signalOnOverlay();
-					default -> Optional.empty();
-				};
-			}
-			return Optional.empty();
-		}, false)));
+		parts.add(bakeLayerAsPart(
+				baker, this.prepareLayer(
+						(direction, textures) ->
+						{
+							if(direction != null)
+							{
+								return switch(data.side(direction))
+								{
+									case OFF -> textures.signalOffOverlay();
+									case ON -> textures.signalOnOverlay();
+									default -> Optional.empty();
+								};
+							}
+							return Optional.empty();
+						}, false
+				)
+		));
 		
 		return parts;
 	}
