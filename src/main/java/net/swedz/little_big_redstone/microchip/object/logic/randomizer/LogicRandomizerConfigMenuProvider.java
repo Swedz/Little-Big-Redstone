@@ -18,12 +18,16 @@ final class LogicRandomizerConfigMenuProvider extends LogicConfigMenuProvider<Lo
 				LBR.text().logicConfigButtonLabelOutputs(),
 				Component.empty(),
 				LBR.text().logicConfigButtonTooltipOutputs(),
-				0, 0,
-				width, 18,
-				config.outputsAllowed().min(), config.outputsAllowed().max(),
-				config.outputs,
-				1, 0,
-				(value) -> config.outputs = (int) Math.round(value)
+				0,
+				0,
+				width,
+				18,
+				config.outputsAllowed().min(),
+				config.outputsAllowed().max(),
+				config.outputs(),
+				1,
+				0,
+				(value) -> config = new LogicRandomizerConfig((int) Math.round(value), config.chance())
 		);
 	}
 	
@@ -33,12 +37,16 @@ final class LogicRandomizerConfigMenuProvider extends LogicConfigMenuProvider<Lo
 				LBR.text().logicConfigButtonLabelChance(),
 				Component.literal("%"),
 				LBR.text().logicConfigButtonTooltipRandomizerChance(),
-				0, 22,
-				width, 18,
-				1, 100,
-				config.chance * 100,
-				1, 0,
-				(value) -> config.chance = (float) (value / 100f)
+				0,
+				22,
+				width,
+				18,
+				1,
+				100,
+				config.chance() * 100,
+				1,
+				0,
+				(value) -> config = new LogicRandomizerConfig(config.outputs(), (float) (value / 100f))
 		);
 	}
 	

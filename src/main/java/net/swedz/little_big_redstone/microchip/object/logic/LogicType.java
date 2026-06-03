@@ -7,22 +7,29 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.chat.Style;
 import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.swedz.little_big_redstone.LBR;
 import net.swedz.little_big_redstone.LBRComponents;
 import net.swedz.little_big_redstone.LBRItems;
+import net.swedz.little_big_redstone.microchip.object.logic.config.LogicConfig;
 
 import java.util.List;
 import java.util.Optional;
 
-public record LogicType<L extends LogicComponent>(
+public record LogicType<L extends LogicComponent<L, C>, C extends LogicConfig<C>>(
 		String id,
 		String englishName,
 		char symbol,
+		
 		MapCodec<L> codec,
 		StreamCodec<ByteBuf, L> streamCodec,
-		LogicFactory defaultFactory
+		LogicFactory<L> defaultFactory,
+		
+		MapCodec<C> configCodec,
+		StreamCodec<ByteBuf, C> configStreamCodec,
+		C defaultConfig
 )
 {
 	public MutableComponent displayName()
@@ -35,30 +42,30 @@ public record LogicType<L extends LogicComponent>(
 		return Component.literal(String.valueOf(symbol)).withStyle(Style.EMPTY.withFont(LBR.id("logic_component")));
 	}
 	
-	public Optional<List<Component>> tooltip(L component, boolean shift, boolean config, boolean configHeader)
+	public Optional<List<Component>> tooltip(C config, boolean holdingShift, boolean includeConfig, boolean configHeader)
 	{
 		List<Component> lines = Lists.newArrayList();
 		
 		List<Component> noShiftLines = Lists.newArrayList();
-		component.appendNoShiftHoverText(noShiftLines);
+		config.appendNoShiftHoverText(noShiftLines);
 		
-		if(shift)
+		if(holdingShift)
 		{
 			if(!noShiftLines.isEmpty())
 			{
 				lines.add(Component.empty());
 			}
-			component.appendShiftHoverText(lines);
+			config.appendShiftHoverText(lines);
 		}
 		else
 		{
 			lines.addAll(noShiftLines);
 		}
 		
-		if(config)
+		if(includeConfig)
 		{
 			List<Component> configLines = Lists.newArrayList();
-			component.config().appendHoverText(configLines);
+			config.appendConfigHoverText(configLines);
 			if(!configLines.isEmpty())
 			{
 				if(!lines.isEmpty())
@@ -76,9 +83,9 @@ public record LogicType<L extends LogicComponent>(
 		return lines.isEmpty() ? Optional.empty() : Optional.of(lines);
 	}
 	
-	public Optional<List<Component>> tooltip(L component, boolean shift, boolean config)
+	public Optional<List<Component>> tooltip(C config, boolean holdingShift, boolean includeConfig)
 	{
-		return this.tooltip(component, shift, config, true);
+		return this.tooltip(config, holdingShift, includeConfig, true);
 	}
 	
 	public Item item()
@@ -89,10 +96,27 @@ public record LogicType<L extends LogicComponent>(
 	public ItemStack toStack(L component)
 	{
 		var stack = new ItemStack(this.item());
-		var copy = component.copy();
-		copy.resetForPickup();
-		stack.set(LBRComponents.LOGIC, copy);
+		stack.set(LBRComponents.LOGIC_CONFIG, component.config());
+		stack.set(LBRComponents.LOGIC_COLOR, component.color().orElse(null));
 		return stack;
+	}
+	
+	public ItemStack toStack()
+	{
+		return this.toStack(defaultFactory.create());
+	}
+	
+	public L create(C config, Optional<DyeColor> color)
+	{
+		var logic = defaultFactory.create();
+		logic.setConfig(config);
+		logic.setColor(color);
+		return logic;
+	}
+	
+	public L create(C config, DyeColor color)
+	{
+		return this.create(config, Optional.ofNullable(color));
 	}
 	
 	@Override

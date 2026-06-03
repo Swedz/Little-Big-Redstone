@@ -7,14 +7,18 @@ import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.world.item.DyeColor;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.component.ItemContainerContents;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
+import net.swedz.little_big_redstone.item.LogicItem;
 import net.swedz.little_big_redstone.item.floppydisk.FloppyDiskProgramName;
 import net.swedz.little_big_redstone.item.stickynote.StickyNote;
 import net.swedz.little_big_redstone.microchip.Microchip;
+import net.swedz.little_big_redstone.microchip.object.logic.LogicCodecs;
 import net.swedz.little_big_redstone.microchip.object.logic.LogicComponent;
+import net.swedz.little_big_redstone.microchip.object.logic.config.LogicConfig;
 import net.swedz.tesseract.neoforge.item.ItemInstance;
 
 import java.util.function.Supplier;
@@ -23,7 +27,18 @@ public final class LBRComponents
 {
 	private static final DeferredRegister.DataComponents COMPONENTS = DeferredRegister.createDataComponents(Registries.DATA_COMPONENT_TYPE, LBR.ID);
 	
-	public static final Supplier<DataComponentType<LogicComponent>>        LOGIC                    = create("logic", LogicComponent.CODEC, LogicComponent.STREAM_CODEC);
+	/**
+	 * <p>The legacy logic component. This only still exists for the purpose of converting old data into the separate
+	 * {@link LBRComponents#LOGIC_CONFIG} and {@link LBRComponents#LOGIC_COLOR} components.</p>
+	 *
+	 * <p>Will be removed in MC 26.1+.</p>
+	 *
+	 * @see LogicItem#verifyComponentsAfterLoad(ItemStack)
+	 */
+	@Deprecated(since = "1.8.3-beta", forRemoval = true)
+	public static final Supplier<DataComponentType<LogicComponent>>        LOGIC                    = create("logic", LogicCodecs.COMPONENT_CODEC, LogicCodecs.COMPONENT_STREAM_CODEC);
+	public static final Supplier<DataComponentType<LogicConfig>>           LOGIC_CONFIG             = create("logic_config", LogicCodecs.CONFIG_CODEC, LogicCodecs.CONFIG_STREAM_CODEC);
+	public static final Supplier<DataComponentType<DyeColor>>              LOGIC_COLOR              = create("logic_color", DyeColor.CODEC, DyeColor.STREAM_CODEC);
 	public static final Supplier<DataComponentType<ItemContainerContents>> LOGIC_ARRAY_STORAGE      = create("logic_array_storage", ItemContainerContents.CODEC, ItemContainerContents.STREAM_CODEC);
 	public static final Supplier<DataComponentType<Microchip.Immutable>>   FLOPPY_DISK              = create("floppy_disk", Microchip.Immutable.CODEC, Microchip.Immutable.STREAM_CODEC);
 	public static final Supplier<DataComponentType<FloppyDiskProgramName>> FLOPPY_DISK_PROGRAM_NAME = create("floppy_disk_program_name", FloppyDiskProgramName.CODEC, FloppyDiskProgramName.STREAM_CODEC);

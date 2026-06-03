@@ -8,51 +8,51 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.swedz.little_big_redstone.LBR;
+import net.swedz.little_big_redstone.microchip.object.logic.LogicGridSize;
+import net.swedz.little_big_redstone.microchip.object.logic.LogicType;
+import net.swedz.little_big_redstone.microchip.object.logic.LogicTypes;
 import net.swedz.little_big_redstone.microchip.object.logic.config.LogicConfig;
 import net.swedz.little_big_redstone.microchip.object.logic.config.menu.LogicConfigMenuProvider;
 import net.swedz.tesseract.neoforge.api.range.IntRange;
 import net.swedz.tesseract.neoforge.helper.CodecHelper;
 
 import java.util.List;
-import java.util.Objects;
 
-public final class LogicSequencerConfig extends LogicConfig<LogicSequencerConfig>
+public record LogicSequencerConfig(
+		LogicSequencerMode mode,
+		long outputDelay,
+		boolean autoReset,
+		boolean resetPort
+) implements LogicConfig<LogicSequencerConfig>
 {
+	public static final LogicSequencerConfig DEFAULT = new LogicSequencerConfig(
+			LogicSequencerMode.WEAK,
+			20,
+			false,
+			false
+	);
+	
 	public static final MapCodec<LogicSequencerConfig> CODEC = RecordCodecBuilder.mapCodec((instance) -> instance
 			.group(
-					CodecHelper.forLowercaseEnum(LogicSequencerMode.class).optionalFieldOf("mode", LogicSequencerMode.WEAK).forGetter((config) -> config.mode),
-					Codec.LONG.optionalFieldOf("delay", 20L).forGetter((config) -> config.outputDelay),
-					Codec.BOOL.optionalFieldOf("auto_reset", false).forGetter((config) -> config.autoReset),
-					Codec.BOOL.optionalFieldOf("reset_port", false).forGetter((config) -> config.resetPort)
+					CodecHelper.forLowercaseEnum(LogicSequencerMode.class).optionalFieldOf("mode", LogicSequencerMode.WEAK).forGetter(LogicSequencerConfig::mode),
+					Codec.LONG.optionalFieldOf("delay", 20L).forGetter(LogicSequencerConfig::outputDelay),
+					Codec.BOOL.optionalFieldOf("auto_reset", false).forGetter(LogicSequencerConfig::autoReset),
+					Codec.BOOL.optionalFieldOf("reset_port", false).forGetter(LogicSequencerConfig::resetPort)
 			)
 			.apply(instance, LogicSequencerConfig::new));
 	
 	public static final StreamCodec<ByteBuf, LogicSequencerConfig> STREAM_CODEC = StreamCodec.composite(
-			CodecHelper.forLowercaseEnumStream(LogicSequencerMode.class), (config) -> config.mode,
-			ByteBufCodecs.VAR_LONG, (config) -> config.outputDelay,
-			ByteBufCodecs.BOOL, (config) -> config.autoReset,
-			ByteBufCodecs.BOOL, (config) -> config.resetPort,
+			CodecHelper.forLowercaseEnumStream(LogicSequencerMode.class), LogicSequencerConfig::mode,
+			ByteBufCodecs.VAR_LONG, LogicSequencerConfig::outputDelay,
+			ByteBufCodecs.BOOL, LogicSequencerConfig::autoReset,
+			ByteBufCodecs.BOOL, LogicSequencerConfig::resetPort,
 			LogicSequencerConfig::new
 	);
 	
-	public LogicSequencerMode mode;
-	
-	public long outputDelay;
-	
-	public boolean autoReset;
-	public boolean resetPort;
-	
-	private LogicSequencerConfig(LogicSequencerMode mode, long outputDelay, boolean autoReset, boolean resetPort)
+	@Override
+	public LogicType<?, LogicSequencerConfig> type()
 	{
-		this.mode = mode;
-		this.outputDelay = outputDelay;
-		this.autoReset = autoReset;
-		this.resetPort = resetPort;
-	}
-	
-	public LogicSequencerConfig()
-	{
-		this(LogicSequencerMode.WEAK, 20, false, false);
+		return LogicTypes.SEQUENCER;
 	}
 	
 	@Override
@@ -80,7 +80,21 @@ public final class LogicSequencerConfig extends LogicConfig<LogicSequencerConfig
 	}
 	
 	@Override
-	public void appendHoverText(List<Component> lines)
+	public LogicGridSize size()
+	{
+		return new LogicGridSize(2, 1);
+	}
+	
+	@Override
+	public void appendShiftHoverText(List<Component> lines)
+	{
+		lines.add(LBR.text().logicHelpSequencer1());
+		lines.add(LBR.text().logicHelpSequencer2());
+		lines.add(LBR.text().logicHelpSequencer3());
+	}
+	
+	@Override
+	public void appendConfigHoverText(List<Component> lines)
 	{
 		lines.add(LBR.text().logicConfigTooltipMode(mode));
 		lines.add(LBR.text().logicConfigTooltipSequencerDelay(outputDelay));
@@ -98,32 +112,5 @@ public final class LogicSequencerConfig extends LogicConfig<LogicSequencerConfig
 	public LogicConfigMenuProvider<LogicSequencerConfig> getMenuProvider()
 	{
 		return new LogicSequencerConfigMenuProvider(this);
-	}
-	
-	@Override
-	protected void internalLoadFrom(LogicSequencerConfig other)
-	{
-		mode = other.mode;
-		outputDelay = other.outputDelay;
-		autoReset = other.autoReset;
-		resetPort = other.resetPort;
-	}
-	
-	@Override
-	public void resetForPickup()
-	{
-	}
-	
-	@Override
-	public int hashCode()
-	{
-		return Objects.hash(mode, outputDelay, autoReset, resetPort);
-	}
-	
-	@Override
-	public boolean equals(Object o)
-	{
-		return this == o ||
-			   (o instanceof LogicSequencerConfig other && mode == other.mode && outputDelay == other.outputDelay && autoReset == other.autoReset && resetPort == other.resetPort);
 	}
 }

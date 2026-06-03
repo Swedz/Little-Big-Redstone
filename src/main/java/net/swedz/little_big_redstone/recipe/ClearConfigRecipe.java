@@ -23,7 +23,7 @@ public final class ClearConfigRecipe extends CustomRecipe
 		boolean hasLogic = false;
 		for(var stack : input.items())
 		{
-			if(stack.has(LBRComponents.LOGIC))
+			if(stack.has(LBRComponents.LOGIC_CONFIG))
 			{
 				if(hasLogic)
 				{
@@ -44,12 +44,10 @@ public final class ClearConfigRecipe extends CustomRecipe
 	{
 		for(var stack : input.items())
 		{
-			if(stack.has(LBRComponents.LOGIC))
+			if(stack.has(LBRComponents.LOGIC_CONFIG))
 			{
 				var copy = stack.copyWithCount(1);
-				var logic = stack.get(LBRComponents.LOGIC).copy();
-				logic.resetConfig();
-				copy.set(LBRComponents.LOGIC, logic);
+				copy.remove(LBRComponents.LOGIC_CONFIG);
 				return copy;
 			}
 		}

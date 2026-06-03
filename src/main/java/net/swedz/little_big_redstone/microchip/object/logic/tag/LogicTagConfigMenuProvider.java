@@ -30,19 +30,19 @@ final class LogicTagConfigMenuProvider extends LogicConfigMenuProvider<LogicTagC
 				width,
 				18,
 				false,
-				config.input,
+				config.input(),
 				List.of(true, false),
 				(value) -> LBRTooltips.SENSOR_EMITTER_PARSER.parse(value).plainCopy(),
 				(value) ->
 				{
-					config.input = value;
+					config = new LogicTagConfig(value, config.label(), config.threshold(), config.global());
 					if(thresholdSlider != null)
 					{
-						thresholdSlider.setVisible(config.input);
+						thresholdSlider.setVisible(config.input());
 					}
 					if(globalButton != null)
 					{
-						globalButton.setVisible(config.input);
+						globalButton.setVisible(config.input());
 					}
 				}
 		);
@@ -57,10 +57,10 @@ final class LogicTagConfigMenuProvider extends LogicConfigMenuProvider<LogicTagC
 				22,
 				width,
 				18,
-				config.label.label(),
+				config.label().label(),
 				LogicTagLabel.MAX_LENGTH,
 				(value) -> value.matches(LogicTagLabel.PATTERN),
-				(value) -> config.label = new LogicTagLabel(value)
+				(value) -> config = new LogicTagConfig(config.input(), new LogicTagLabel(value), config.threshold(), config.global())
 		);
 	}
 	
@@ -76,11 +76,11 @@ final class LogicTagConfigMenuProvider extends LogicConfigMenuProvider<LogicTagC
 				18,
 				1,
 				100,
-				config.threshold,
+				config.threshold(),
 				1,
 				0,
-				(value) -> config.threshold = (int) Math.round(value)
-		).setVisible(config.input);
+				(value) -> config = new LogicTagConfig(config.input(), config.label(), (int) Math.round(value), config.global())
+		).setVisible(config.input());
 	}
 	
 	private void createGlobal(LogicConfigMenuBuilder builder, int width, int height)
@@ -90,9 +90,9 @@ final class LogicTagConfigMenuProvider extends LogicConfigMenuProvider<LogicTagC
 				LBR.text().logicConfigButtonTooltipTagGlobal(),
 				0,
 				22 * 3,
-				config.global,
-				(value) -> config.global = value
-		).setVisible(config.input);
+				config.global(),
+				(value) -> config = new LogicTagConfig(config.input(), config.label(), config.threshold(), value)
+		).setVisible(config.input());
 	}
 	
 	@Override

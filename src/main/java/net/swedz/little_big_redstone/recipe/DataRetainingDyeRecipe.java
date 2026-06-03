@@ -19,7 +19,6 @@ import net.swedz.little_big_redstone.LBRItems;
 import net.swedz.little_big_redstone.LBRRecipeTypes;
 import net.swedz.little_big_redstone.LBRTags;
 import net.swedz.little_big_redstone.item.DyeColoredItem;
-import net.swedz.little_big_redstone.item.LogicItem;
 
 import java.util.Map;
 import java.util.Optional;
@@ -38,13 +37,12 @@ public final class DataRetainingDyeRecipe extends CustomRecipe
 			
 			LBRTags.Items.LOGIC_COMPONENTS,
 			new ColorableItemTagHandler(
-					(stack) -> stack.getItem() instanceof LogicItem ? stack.get(LBRComponents.LOGIC).color() : Optional.empty(),
+					(stack) ->
+							Optional.ofNullable(stack.get(LBRComponents.LOGIC_COLOR)),
 					(original, color) ->
 					{
 						var output = original.copyWithCount(1);
-						var logic = original.get(LBRComponents.LOGIC).copy();
-						logic.setColor(color);
-						output.set(LBRComponents.LOGIC, logic);
+						output.set(LBRComponents.LOGIC_COLOR, color.orElse(null));
 						return output;
 					}
 			),

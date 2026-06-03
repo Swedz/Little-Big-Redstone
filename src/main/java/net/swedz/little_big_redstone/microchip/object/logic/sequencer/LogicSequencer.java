@@ -5,18 +5,14 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import io.netty.buffer.ByteBuf;
-import net.minecraft.network.chat.Component;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.world.item.DyeColor;
-import net.swedz.little_big_redstone.LBR;
 import net.swedz.little_big_redstone.microchip.object.logic.LogicComponent;
-import net.swedz.little_big_redstone.microchip.object.logic.LogicContext;
-import net.swedz.little_big_redstone.microchip.object.logic.LogicGridSize;
+import net.swedz.little_big_redstone.microchip.object.logic.LogicTickingContext;
 import net.swedz.little_big_redstone.microchip.object.logic.LogicType;
 import net.swedz.little_big_redstone.microchip.object.logic.LogicTypes;
 
-import java.util.List;
 import java.util.Optional;
 
 public final class LogicSequencer extends LogicComponent<LogicSequencer, LogicSequencerConfig>
@@ -67,12 +63,6 @@ public final class LogicSequencer extends LogicComponent<LogicSequencer, LogicSe
 		this(Optional.empty(), 0, 0, false);
 	}
 	
-	@Override
-	protected LogicSequencerConfig defaultConfig()
-	{
-		return new LogicSequencerConfig();
-	}
-	
 	public long processedTicks()
 	{
 		return processedTicks;
@@ -80,18 +70,18 @@ public final class LogicSequencer extends LogicComponent<LogicSequencer, LogicSe
 	
 	public float processedPercentage()
 	{
-		return Math.min((float) processedTicks / (float) config.outputDelay, 1);
+		return Math.min((float) processedTicks / (float) config.outputDelay(), 1);
 	}
 	
 	@Override
-	protected void processTickInternal(LogicContext context, int[] inputs)
+	protected void processTickInternal(LogicTickingContext context, int[] inputs)
 	{
 		long originalProcessedTicks = processedTicks;
 		boolean originalOutputState = outputState;
 		boolean input = inputs[0] > 0;
 		boolean output = false;
 		
-		if(config.resetPort && inputs[1] > 0)
+		if(config.resetPort() && inputs[1] > 0)
 		{
 			processedTicks = 0;
 		}
@@ -104,20 +94,20 @@ public final class LogicSequencer extends LogicComponent<LogicSequencer, LogicSe
 			}
 			else if(processedTicks > 0)
 			{
-				if(config.mode == LogicSequencerMode.WEAK)
+				if(config.mode() == LogicSequencerMode.WEAK)
 				{
 					processedTicks++;
 				}
-				else if(config.mode == LogicSequencerMode.STRONG)
+				else if(config.mode() == LogicSequencerMode.STRONG)
 				{
 					processedTicks--;
 				}
 			}
 		}
 		
-		if(processedTicks >= config.outputDelay)
+		if(processedTicks >= config.outputDelay())
 		{
-			processedTicks = config.autoReset ? 0 : config.outputDelay;
+			processedTicks = config.autoReset() ? 0 : config.outputDelay();
 			output = true;
 		}
 		
@@ -129,7 +119,7 @@ public final class LogicSequencer extends LogicComponent<LogicSequencer, LogicSe
 	}
 	
 	@Override
-	public LogicType<LogicSequencer> type()
+	public LogicType<LogicSequencer, LogicSequencerConfig> type()
 	{
 		return LogicTypes.SEQUENCER;
 	}
@@ -146,33 +136,11 @@ public final class LogicSequencer extends LogicComponent<LogicSequencer, LogicSe
 	}
 	
 	@Override
-	public LogicGridSize size()
-	{
-		return new LogicGridSize(2, 1);
-	}
-	
-	@Override
-	public void appendShiftHoverText(List<Component> lines)
-	{
-		lines.add(LBR.text().logicHelpSequencer1());
-		lines.add(LBR.text().logicHelpSequencer2());
-		lines.add(LBR.text().logicHelpSequencer3());
-	}
-	
-	@Override
 	protected void internalLoadFrom(LogicSequencer other)
 	{
 		processedTicks = other.processedTicks;
 		lastInput = other.lastInput;
 		outputState = other.outputState;
-	}
-	
-	@Override
-	public void internalResetForPickup()
-	{
-		processedTicks = 0;
-		lastInput = 0;
-		outputState = false;
 	}
 	
 	@Override

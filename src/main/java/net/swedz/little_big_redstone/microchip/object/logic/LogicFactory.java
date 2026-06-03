@@ -1,6 +1,6 @@
 package net.swedz.little_big_redstone.microchip.object.logic;
 
-public interface LogicFactory
+public interface LogicFactory<L extends LogicComponent>
 {
-	LogicComponent create();
+	L create();
 }

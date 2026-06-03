@@ -10,8 +10,8 @@ import guideme.libs.mdast.mdx.model.MdxJsxElementFields;
 import guideme.scene.ImplicitAnnotationStrategy;
 import net.minecraft.world.item.DyeColor;
 import net.swedz.little_big_redstone.LBR;
-import net.swedz.little_big_redstone.guide.tags.block.LogicIndexTagCompiler;
 import net.swedz.little_big_redstone.guide.tags.block.FloatingBoxTagCompiler;
+import net.swedz.little_big_redstone.guide.tags.block.LogicIndexTagCompiler;
 import net.swedz.little_big_redstone.guide.tags.block.MarginFloatingImageCompiler;
 import net.swedz.little_big_redstone.guide.tags.block.PaddedBoxTagCompiler;
 import net.swedz.little_big_redstone.guide.tags.microchip.MicrochipSceneTagCompiler;
@@ -49,8 +49,13 @@ public final class LBRGuide
 				.build();
 	}
 	
-	public static DyeColor getDyeColor(PageCompiler compiler, LytErrorSink errorSink, MdxJsxElementFields el,
-									   String name, DyeColor defaultColor)
+	public static DyeColor getDyeColor(
+			PageCompiler compiler,
+			LytErrorSink errorSink,
+			MdxJsxElementFields el,
+			String name,
+			DyeColor defaultColor
+	)
 	{
 		var rawColor = MdxAttrs.getString(compiler, errorSink, el, name, null);
 		if(rawColor != null)
@@ -59,7 +64,7 @@ public final class LBRGuide
 			{
 				return DyeColor.valueOf(rawColor.toUpperCase());
 			}
-			catch (IllegalArgumentException ignored)
+			catch(IllegalArgumentException ignored)
 			{
 				errorSink.appendError(compiler, "Color must be a valid dye color", el);
 				return defaultColor;
@@ -68,8 +73,12 @@ public final class LBRGuide
 		return defaultColor;
 	}
 	
-	public static LogicType<?> getLogicType(PageCompiler compiler, LytErrorSink errorSink, MdxJsxElementFields el,
-											String name)
+	public static LogicType<?, ?> getLogicType(
+			PageCompiler compiler,
+			LytErrorSink errorSink,
+			MdxJsxElementFields el,
+			String name
+	)
 	{
 		var logicId = MdxAttrs.getString(compiler, errorSink, el, name, null);
 		if(logicId != null)
@@ -78,7 +87,7 @@ public final class LBRGuide
 			{
 				return LogicTypes.get(logicId.toLowerCase());
 			}
-			catch (Exception ignored)
+			catch(Exception ignored)
 			{
 				errorSink.appendError(compiler, "Logic type does not exist", el);
 				return null;
@@ -87,8 +96,12 @@ public final class LBRGuide
 		return null;
 	}
 	
-	public static String[] getStringArray(PageCompiler compiler, LytErrorSink errorSink, MdxJsxElementFields el,
-										  String name)
+	public static String[] getStringArray(
+			PageCompiler compiler,
+			LytErrorSink errorSink,
+			MdxJsxElementFields el,
+			String name
+	)
 	{
 		var rawInts = MdxAttrs.getString(compiler, errorSink, el, name, null);
 		if(rawInts != null)

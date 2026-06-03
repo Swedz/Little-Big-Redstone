@@ -32,8 +32,8 @@ import net.swedz.little_big_redstone.microchip.Microchip;
 import net.swedz.little_big_redstone.microchip.MicrochipSize;
 import net.swedz.little_big_redstone.microchip.awareness.AwarenessTypes;
 import net.swedz.little_big_redstone.microchip.object.logic.LogicComponent;
-import net.swedz.little_big_redstone.microchip.object.logic.LogicContext;
 import net.swedz.little_big_redstone.microchip.object.logic.LogicEntry;
+import net.swedz.little_big_redstone.microchip.object.logic.LogicTickingContext;
 import net.swedz.little_big_redstone.microchip.object.logic.LogicType;
 import net.swedz.tesseract.neoforge.api.Bounds;
 import net.swedz.tesseract.neoforge.helper.guigraphics.TesseractGuiGraphics;
@@ -66,10 +66,14 @@ public final class MicrochipGuidebookScene extends LytBox implements ExportableR
 	private final LytWidget resetButton;
 	private final LytWidget pausePlayButton;
 	
-	public MicrochipGuidebookScene(DyeColor color,
-								   int width, int height,
-								   int marginWidth, int marginHeight,
-								   boolean includeToolbar)
+	public MicrochipGuidebookScene(
+			DyeColor color,
+			int width,
+			int height,
+			int marginWidth,
+			int marginHeight,
+			boolean includeToolbar
+	)
 	{
 		this.color = color;
 		this.width = width;
@@ -85,20 +89,25 @@ public final class MicrochipGuidebookScene extends LytBox implements ExportableR
 		this.append(viewport);
 		
 		toolbar.append(resetButton = new LytWidget(new GuideIconButton(
-				0, 0, GuideIconButton.Role.RESET_VIEW, () ->
-		{
-			for(var entry : microchip.components())
-			{
-				entry.component().loadFrom(logicDefaults.get(entry.slot()));
-			}
-			redstoneSignals.reset();
-			this.tickLogic();
-		}
+				0,
+				0,
+				GuideIconButton.Role.RESET_VIEW,
+				() ->
+				{
+					for(var entry : microchip.components())
+					{
+						entry.component().loadFrom(logicDefaults.get(entry.slot()));
+					}
+					redstoneSignals.reset();
+					this.tickLogic();
+				}
 		)));
 		toolbar.append(pausePlayButton = new LytWidget(new PausePlayGuideIconButton(
-				0, 0, () ->
-		{
-		}
+				0,
+				0,
+				() ->
+				{
+				}
 		)));
 		if(includeToolbar)
 		{
@@ -115,7 +124,7 @@ public final class MicrochipGuidebookScene extends LytBox implements ExportableR
 		if(previous != null)
 		{
 			microchip.loadFrom(previous);
-			microchip.components().loadFrom(previous.components(), (before) -> new LogicEntry(before.slot(), before.x() - startX, before.y() - startY, before.component()));
+			microchip.components().loadFrom(previous.components(), (before) -> new LogicEntry(before.slot(), before.x() - startX, before.y() - startY, before.component(), before.visible()));
 		}
 		panel = new MicrochipRenderBoardPanel(color, microchip);
 	}
@@ -134,7 +143,7 @@ public final class MicrochipGuidebookScene extends LytBox implements ExportableR
 			for(var entry : microchip.components())
 			{
 				var bounds = entry.toBounds();
-				if(entry.component().config().isVisible())
+				if(entry.visible())
 				{
 					int x = bounds.minX() - marginWidth;
 					if(firstVisibleX == -1 || firstVisibleX > x)
@@ -151,7 +160,7 @@ public final class MicrochipGuidebookScene extends LytBox implements ExportableR
 			// Figure out where the start and end coordinates should be
 			for(var entry : microchip.components())
 			{
-				boolean visible = entry.component().config().isVisible();
+				var visible = entry.visible();
 				var bounds = entry.toBounds();
 				if(autoWidth)
 				{
@@ -220,8 +229,18 @@ public final class MicrochipGuidebookScene extends LytBox implements ExportableR
 		return slot == null ? null : microchip.components().get(slot);
 	}
 	
-	public void addLogic(String name, int x, int y, DyeColor color, LogicType<?> type, CompoundTag data, boolean hide,
-						 PageCompiler compiler, LytErrorSink errorSink, MdxJsxElementFields el)
+	public void addLogic(
+			String name,
+			int x,
+			int y,
+			DyeColor color,
+			LogicType<?, ?> type,
+			CompoundTag data,
+			boolean hide,
+			PageCompiler compiler,
+			LytErrorSink errorSink,
+			MdxJsxElementFields el
+	)
 	{
 		DataResult<? extends LogicComponent> result = type.codec().codec().parse(NbtOps.INSTANCE, data);
 		if(result.isError())
@@ -231,18 +250,21 @@ public final class MicrochipGuidebookScene extends LytBox implements ExportableR
 		}
 		LogicComponent<?, ?> component = result.getOrThrow();
 		component.setColor(Optional.ofNullable(color));
-		if(hide)
-		{
-			component.config().hide();
-		}
-		var entry = microchip.components().addUnsafe(x + marginWidth, y + marginHeight, component);
+		var entry = microchip.components().addUnsafe(x + marginWidth, y + marginHeight, component, !hide);
 		logicDefaults.put(entry.slot(), component);
 		logic.put(name, entry.slot());
 		microchip.markDirty(true);
 	}
 	
-	public void addWire(String from, String to, int fromPort, int toPort,
-						PageCompiler compiler, LytErrorSink errorSink, MdxJsxElementFields el)
+	public void addWire(
+			String from,
+			String to,
+			int fromPort,
+			int toPort,
+			PageCompiler compiler,
+			LytErrorSink errorSink,
+			MdxJsxElementFields el
+	)
 	{
 		var fromSlot = this.getLogicSlot(from);
 		if(fromSlot == null)
@@ -315,7 +337,7 @@ public final class MicrochipGuidebookScene extends LytBox implements ExportableR
 			redstoneSignals.applySignals(redstone);
 		}
 		
-		var context = new LogicContext(null, new BlockPos(0, 0, 0), microchip, null);
+		var context = new LogicTickingContext(null, new BlockPos(0, 0, 0), microchip, null);
 		
 		microchip.tickLogic(context);
 		
@@ -380,7 +402,7 @@ public final class MicrochipGuidebookScene extends LytBox implements ExportableR
 			int y = (int) (mouseY - bounds.y() - PANEL_MARGIN);
 			
 			var hoveredObject = microchip.findAt(x, y);
-			if(hoveredObject != null && !(hoveredObject instanceof LogicEntry entry && !entry.component().config().isVisible()))
+			if(hoveredObject != null && !(hoveredObject instanceof LogicEntry entry && !entry.visible()))
 			{
 				return Optional.of(new MicrochipObjectGuideTooltip(hoveredObject));
 			}

@@ -8,10 +8,11 @@ import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
-import net.minecraft.util.Mth;
 import net.swedz.little_big_redstone.LBR;
 import net.swedz.little_big_redstone.microchip.object.logic.LogicComponents;
 import net.swedz.little_big_redstone.microchip.object.logic.LogicMode;
+import net.swedz.little_big_redstone.microchip.object.logic.LogicType;
+import net.swedz.little_big_redstone.microchip.object.logic.LogicTypes;
 import net.swedz.little_big_redstone.microchip.object.logic.config.LogicComparisonMode;
 import net.swedz.little_big_redstone.microchip.object.logic.config.LogicConfig;
 import net.swedz.little_big_redstone.microchip.object.logic.config.menu.LogicConfigMenuProvider;
@@ -19,61 +20,57 @@ import net.swedz.tesseract.neoforge.api.range.IntRange;
 import net.swedz.tesseract.neoforge.helper.CodecHelper;
 
 import java.util.List;
-import java.util.Objects;
 
-public final class LogicIOConfig extends LogicConfig<LogicIOConfig>
+public record LogicIOConfig(
+		boolean input,
+		Direction direction,
+		int signalStrength,
+		LogicComparisonMode signalComparison,
+		LogicPowerOutputType powerType
+) implements LogicConfig<LogicIOConfig>
 {
 	public static final MapCodec<LogicIOConfig> CODEC = RecordCodecBuilder.mapCodec((instance) -> instance
 			.group(
-					Codec.BOOL.optionalFieldOf("input", true).forGetter((config) -> config.input),
-					Direction.CODEC.optionalFieldOf("direction", Direction.NORTH).forGetter((config) -> config.direction),
-					Codec.intRange(0, 15).optionalFieldOf("signal_strength", 0).forGetter((config) -> config.signalStrength),
-					CodecHelper.forLowercaseEnum(LogicComparisonMode.class).optionalFieldOf("signal_comparison", LogicComparisonMode.GREATER_THAN_OR_EQUAL_TO).forGetter((config) -> config.signalComparison),
-					CodecHelper.forLowercaseEnum(LogicPowerOutputType.class).optionalFieldOf("power_type", LogicPowerOutputType.WEAK).forGetter((config) -> config.powerType)
+					Codec.BOOL.optionalFieldOf("input", true).forGetter(LogicIOConfig::input),
+					Direction.CODEC.optionalFieldOf("direction", Direction.NORTH).forGetter(LogicIOConfig::direction),
+					Codec.intRange(0, 15).optionalFieldOf("signal_strength", 0).forGetter(LogicIOConfig::signalStrength),
+					CodecHelper.forLowercaseEnum(LogicComparisonMode.class).optionalFieldOf("signal_comparison", LogicComparisonMode.GREATER_THAN_OR_EQUAL_TO).forGetter(LogicIOConfig::signalComparison),
+					CodecHelper.forLowercaseEnum(LogicPowerOutputType.class).optionalFieldOf("power_type", LogicPowerOutputType.WEAK).forGetter(LogicIOConfig::powerType)
 			)
-			.apply(instance, (input, direction, signalStrength, precise, strong) -> new LogicIOConfig(true, input, direction, signalStrength, precise, strong)));
+			.apply(instance, LogicIOConfig::new));
 	
 	public static final StreamCodec<ByteBuf, LogicIOConfig> STREAM_CODEC = StreamCodec.composite(
-			ByteBufCodecs.BOOL, (config) -> config.valid,
-			ByteBufCodecs.BOOL, (config) -> config.input,
-			Direction.STREAM_CODEC, (config) -> config.direction,
-			ByteBufCodecs.INT, (config) -> config.signalStrength,
-			CodecHelper.forEnumStream(LogicComparisonMode.class), (config) -> config.signalComparison,
-			CodecHelper.forEnumStream(LogicPowerOutputType.class), (config) -> config.powerType,
+			ByteBufCodecs.BOOL, LogicIOConfig::input,
+			Direction.STREAM_CODEC, LogicIOConfig::direction,
+			ByteBufCodecs.INT, LogicIOConfig::signalStrength,
+			CodecHelper.forEnumStream(LogicComparisonMode.class), LogicIOConfig::signalComparison,
+			CodecHelper.forEnumStream(LogicPowerOutputType.class), LogicIOConfig::powerType,
 			LogicIOConfig::new
 	);
 	
-	public boolean input;
+	public static final LogicIOConfig DEFAULT = new LogicIOConfig(
+			true,
+			Direction.NORTH,
+			1,
+			LogicComparisonMode.GREATER_THAN_OR_EQUAL_TO,
+			LogicPowerOutputType.WEAK
+	);
 	
-	public Direction direction;
-	
-	public int signalStrength;
-	public LogicComparisonMode signalComparison;
-	
-	public LogicPowerOutputType powerType;
-	
-	private LogicIOConfig(boolean valid, boolean input, Direction direction, int signalStrength, LogicComparisonMode signalComparison, LogicPowerOutputType powerType)
+	@Override
+	public LogicType<?, LogicIOConfig> type()
 	{
-		this.valid = valid;
-		this.input = input;
-		this.direction = direction;
-		this.signalStrength = Mth.clamp(signalStrength, input ? 1 : 0, 15);
-		this.signalComparison = signalComparison;
-		this.powerType = powerType;
-	}
-	
-	public LogicIOConfig()
-	{
-		this(true, true, Direction.NORTH, 1, LogicComparisonMode.GREATER_THAN_OR_EQUAL_TO, LogicPowerOutputType.WEAK);
+		return LogicTypes.IO;
 	}
 	
 	@Override
-	protected boolean calculateValidity(LogicComponents components)
+	public boolean checkValid(LogicComponents components)
 	{
 		for(var entry : components)
 		{
-			if(entry.component().config() != this && entry.component().config() instanceof LogicIOConfig entryConfig &&
-			   input != entryConfig.input && direction == entryConfig.direction)
+			if(entry.component().config() != this &&
+			   entry.component().config() instanceof LogicIOConfig entryConfig &&
+			   input != entryConfig.input &&
+			   direction == entryConfig.direction)
 			{
 				return false;
 			}
@@ -106,7 +103,14 @@ public final class LogicIOConfig extends LogicConfig<LogicIOConfig>
 	}
 	
 	@Override
-	public void appendHoverText(List<Component> lines)
+	public void appendShiftHoverText(List<Component> lines)
+	{
+		lines.add(LBR.text().logicHelpIOPort1());
+		lines.add(LBR.text().logicHelpIOPort2());
+	}
+	
+	@Override
+	public void appendConfigHoverText(List<Component> lines)
 	{
 		lines.add(LBR.text().logicConfigTooltipMode(input ? LogicMode.input() : LogicMode.output()));
 		lines.add(LBR.text().logicConfigTooltipDirection(direction));
@@ -133,34 +137,5 @@ public final class LogicIOConfig extends LogicConfig<LogicIOConfig>
 	public LogicConfigMenuProvider getMenuProvider()
 	{
 		return new LogicIOConfigMenuProvider(this);
-	}
-	
-	@Override
-	protected void internalLoadFrom(LogicIOConfig other)
-	{
-		input = other.input;
-		direction = other.direction;
-		signalStrength = other.signalStrength;
-		signalComparison = other.signalComparison;
-		powerType = other.powerType;
-	}
-	
-	@Override
-	public void resetForPickup()
-	{
-		valid = true;
-	}
-	
-	@Override
-	public int hashCode()
-	{
-		return Objects.hash(input, direction, signalStrength, signalComparison, powerType);
-	}
-	
-	@Override
-	public boolean equals(Object o)
-	{
-		return this == o ||
-			   (o instanceof LogicIOConfig other && input == other.input && direction == other.direction && signalStrength == other.signalStrength && signalComparison == other.signalComparison && powerType == other.powerType);
 	}
 }

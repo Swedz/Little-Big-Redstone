@@ -2,7 +2,7 @@ package net.swedz.little_big_redstone.gui.microchip.wire;
 
 import net.swedz.little_big_redstone.gui.microchip.widget.MicrochipWidgetContext;
 import net.swedz.little_big_redstone.microchip.Microchip;
-import net.swedz.little_big_redstone.microchip.object.logic.LogicComponent;
+import net.swedz.little_big_redstone.microchip.object.logic.LogicPortHolder;
 import net.swedz.little_big_redstone.microchip.wire.Wire;
 import net.swedz.little_big_redstone.microchip.wire.WirePort;
 import net.swedz.tesseract.api.Assert;
@@ -75,7 +75,7 @@ public record WirePathKey(
 	public static WirePathKey carried(
 			MicrochipWidgetContext context,
 			int carriedComponentSlot,
-			LogicComponent<?, ?> component,
+			LogicPortHolder portHolder,
 			Wire wire,
 			int logicX,
 			int logicY
@@ -85,26 +85,26 @@ public record WirePathKey(
 		
 		boolean isOutput = wire.output().slot() == carriedComponentSlot;
 		var outputLogic = isOutput ? null : microchip.components().get(wire.output().slot());
-		var outputLogicComponent = isOutput ? component : outputLogic.component();
+		var outputLogicPorts = isOutput ? portHolder : outputLogic.component();
 		int outputX = isOutput ? logicX : outputLogic.x();
 		int outputY = isOutput ? logicY : outputLogic.y();
 		int outputIndex = wire.output().index();
 		
 		boolean isInput = wire.input().slot() == carriedComponentSlot;
 		var inputLogic = isInput ? null : microchip.components().get(wire.input().slot());
-		var inputLogicComponent = isInput ? component : inputLogic.component();
+		var inputLogicPorts = isInput ? portHolder : inputLogic.component();
 		int inputX = isInput ? logicX : inputLogic.x();
 		int inputY = isInput ? logicY : inputLogic.y();
 		int inputIndex = wire.input().index();
 		
-		List<Bounds> additionalAvoidBounds = List.of(context.widget().panel().wires().pathing().mutateComponentBounds(component.size().toBounds(logicX, logicY)));
+		List<Bounds> additionalAvoidBounds = List.of(context.widget().panel().wires().pathing().mutateComponentBounds(portHolder.size().toBounds(logicX, logicY)));
 		
 		return new WirePathKey(
 				Optional.empty(),
-				outputLogicComponent.size().wireOutStartX(outputX),
-				outputLogicComponent.size().wireOutStartY(outputY, outputIndex, outputLogicComponent.outputs()),
-				inputLogicComponent.size().wireInEndX(inputX),
-				inputLogicComponent.size().wireInEndY(inputY, inputIndex, inputLogicComponent.inputs()),
+				outputLogicPorts.size().wireOutStartX(outputX),
+				outputLogicPorts.size().wireOutStartY(outputY, outputIndex, outputLogicPorts.outputs()),
+				inputLogicPorts.size().wireInEndX(inputX),
+				inputLogicPorts.size().wireInEndY(inputY, inputIndex, inputLogicPorts.inputs()),
 				Optional.of(additionalAvoidBounds)
 		);
 	}

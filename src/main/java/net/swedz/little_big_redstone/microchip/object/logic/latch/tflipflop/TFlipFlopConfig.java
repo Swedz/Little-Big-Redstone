@@ -1,12 +1,29 @@
 package net.swedz.little_big_redstone.microchip.object.logic.latch.tflipflop;
 
+import com.mojang.serialization.MapCodec;
+import io.netty.buffer.ByteBuf;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.codec.StreamCodec;
+import net.swedz.little_big_redstone.LBR;
+import net.swedz.little_big_redstone.microchip.object.logic.LogicType;
+import net.swedz.little_big_redstone.microchip.object.logic.LogicTypes;
 import net.swedz.little_big_redstone.microchip.object.logic.config.LogicConfig;
 import net.swedz.tesseract.neoforge.api.range.IntRange;
 
-public final class TFlipFlopConfig extends LogicConfig<TFlipFlopConfig>
+import java.util.List;
+
+public record TFlipFlopConfig() implements LogicConfig<TFlipFlopConfig>
 {
-	public TFlipFlopConfig()
+	public static final TFlipFlopConfig DEFAULT = new TFlipFlopConfig();
+	
+	public static final MapCodec<TFlipFlopConfig> CODEC = MapCodec.unit(DEFAULT);
+	
+	public static final StreamCodec<ByteBuf, TFlipFlopConfig> STREAM_CODEC = StreamCodec.unit(DEFAULT);
+	
+	@Override
+	public LogicType<?, TFlipFlopConfig> type()
 	{
+		return LogicTypes.T_FLIP_FLOP;
 	}
 	
 	@Override
@@ -34,24 +51,8 @@ public final class TFlipFlopConfig extends LogicConfig<TFlipFlopConfig>
 	}
 	
 	@Override
-	protected void internalLoadFrom(TFlipFlopConfig other)
+	public void appendShiftHoverText(List<Component> lines)
 	{
-	}
-	
-	@Override
-	public void resetForPickup()
-	{
-	}
-	
-	@Override
-	public int hashCode()
-	{
-		return 0;
-	}
-	
-	@Override
-	public boolean equals(Object o)
-	{
-		return o instanceof TFlipFlopConfig;
+		lines.add(LBR.text().logicHelpTFlipFlop());
 	}
 }

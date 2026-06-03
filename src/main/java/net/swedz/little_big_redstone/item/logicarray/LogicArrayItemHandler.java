@@ -16,6 +16,8 @@ public final class LogicArrayItemHandler extends ComponentItemHandler
 	@Override
 	public boolean isItemValid(int slot, ItemStack stack)
 	{
-		return stack.isEmpty() || stack.has(LBRComponents.LOGIC) || stack.is(LBRItems.REDSTONE_BIT.asItem());
+		return stack.isEmpty() ||
+			   stack.has(LBRComponents.LOGIC_CONFIG) ||
+			   stack.is(LBRItems.REDSTONE_BIT.asItem());
 	}
 }

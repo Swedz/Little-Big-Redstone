@@ -4,17 +4,14 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import io.netty.buffer.ByteBuf;
-import net.minecraft.network.chat.Component;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.world.item.DyeColor;
-import net.swedz.little_big_redstone.LBR;
 import net.swedz.little_big_redstone.microchip.object.logic.LogicComponent;
-import net.swedz.little_big_redstone.microchip.object.logic.LogicContext;
+import net.swedz.little_big_redstone.microchip.object.logic.LogicTickingContext;
 import net.swedz.little_big_redstone.microchip.object.logic.LogicType;
 import net.swedz.little_big_redstone.microchip.object.logic.LogicTypes;
 
-import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -47,19 +44,13 @@ public final class RSNORLatch extends LogicComponent<RSNORLatch, RSNORLatchConfi
 	}
 	
 	@Override
-	protected RSNORLatchConfig defaultConfig()
-	{
-		return new RSNORLatchConfig();
-	}
-	
-	@Override
-	public LogicType<RSNORLatch> type()
+	public LogicType<RSNORLatch, RSNORLatchConfig> type()
 	{
 		return LogicTypes.RS_NOR_LATCH;
 	}
 	
 	@Override
-	protected void processTickInternal(LogicContext context, int[] inputs)
+	protected void processTickInternal(LogicTickingContext context, int[] inputs)
 	{
 		int originalOutputState = outputState;
 		int set = inputs[0];
@@ -92,22 +83,9 @@ public final class RSNORLatch extends LogicComponent<RSNORLatch, RSNORLatchConfi
 	}
 	
 	@Override
-	public void appendShiftHoverText(List<Component> lines)
-	{
-		lines.add(LBR.text().logicHelpRSNORLatch1());
-		lines.add(LBR.text().logicHelpRSNORLatch2());
-	}
-	
-	@Override
 	protected void internalLoadFrom(RSNORLatch other)
 	{
 		outputState = other.outputState;
-	}
-	
-	@Override
-	protected void internalResetForPickup()
-	{
-		outputState = 0;
 	}
 	
 	@Override

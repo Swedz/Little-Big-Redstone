@@ -28,7 +28,7 @@ import net.swedz.little_big_redstone.microchip.Microchip;
 import net.swedz.little_big_redstone.microchip.MicrochipSize;
 import net.swedz.little_big_redstone.microchip.awareness.AwarenessContext;
 import net.swedz.little_big_redstone.microchip.awareness.AwarenessTypes;
-import net.swedz.little_big_redstone.microchip.object.logic.LogicContext;
+import net.swedz.little_big_redstone.microchip.object.logic.LogicTickingContext;
 import net.swedz.little_big_redstone.network.packet.UpdateComponentsMicrochipMenuPacket;
 import net.swedz.little_big_redstone.network.packet.UpdateMicrochipMenuPacket;
 import net.swedz.little_big_redstone.network.packet.UpdateMicrochipWatcherPacket;
@@ -184,7 +184,7 @@ public final class MicrochipBlockEntity extends BlockEntity implements MenuProvi
 		awarenesses.removed(awarenessContext);
 		awarenesses.preTick(awarenessContext);
 		
-		var logicContext = new LogicContext(this);
+		var logicContext = new LogicTickingContext(this);
 		microchip.tickLogic(logicContext);
 		
 		var microchipDirty = microchip.isDirty();

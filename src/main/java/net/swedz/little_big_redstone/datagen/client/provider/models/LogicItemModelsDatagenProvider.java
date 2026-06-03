@@ -19,7 +19,7 @@ import java.util.function.Consumer;
 
 public final class LogicItemModelsDatagenProvider extends ItemModelProvider
 {
-	private final Set<LogicType<?>> generated = Sets.newHashSet();
+	private final Set<LogicType<?, ?>> generated = Sets.newHashSet();
 	
 	public LogicItemModelsDatagenProvider(GatherDataEvent event)
 	{
@@ -118,7 +118,7 @@ public final class LogicItemModelsDatagenProvider extends ItemModelProvider
 		}
 	}
 	
-	private void logicComponent(LogicType<?> type, BackgroundType backgroundType, boolean icon, Consumer<LogicBakingModelData.Builder<?>> also)
+	private void logicComponent(LogicType<?, ?> type, BackgroundType backgroundType, boolean icon, Consumer<LogicBakingModelData.Builder<?>> also)
 	{
 		generated.add(type);
 		String id = type.id();
@@ -150,7 +150,7 @@ public final class LogicItemModelsDatagenProvider extends ItemModelProvider
 				.end();
 	}
 	
-	private void logicComponent(LogicType<?> type, BackgroundType backgroundType, boolean icon)
+	private void logicComponent(LogicType<?, ?> type, BackgroundType backgroundType, boolean icon)
 	{
 		this.logicComponent(type, backgroundType, icon, null);
 	}

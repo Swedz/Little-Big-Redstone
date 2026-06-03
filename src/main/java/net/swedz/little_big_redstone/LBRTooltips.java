@@ -36,20 +36,20 @@ public final class LBRTooltips
 	};
 	
 	public static final TooltipAttachment LOGIC_GATE_NO_SHIFT = TooltipAttachment.multilinesOptional(
-			(stack, item) -> stack.has(LBRComponents.LOGIC),
+			(stack, item) -> stack.has(LBRComponents.LOGIC_CONFIG),
 			(flag, context, stack, item) ->
 			{
-				var logicComponent = stack.get(LBRComponents.LOGIC);
-				return logicComponent.type().tooltip(logicComponent, false, false);
+				var logicConfig = stack.get(LBRComponents.LOGIC_CONFIG);
+				return logicConfig.type().tooltip(logicConfig, false, false);
 			}
 	).noShiftRequired();
 	
 	public static final TooltipAttachment LOGIC_GATE_SHIFT = TooltipAttachment.multilinesOptional(
-			(stack, item) -> stack.has(LBRComponents.LOGIC),
+			(stack, item) -> stack.has(LBRComponents.LOGIC_CONFIG),
 			(flag, context, stack, item) ->
 			{
-				var logicComponent = stack.get(LBRComponents.LOGIC);
-				return logicComponent.type().tooltip(logicComponent, true, true);
+				var logicConfig = stack.get(LBRComponents.LOGIC_CONFIG);
+				return logicConfig.type().tooltip(logicConfig, true, true);
 			}
 	);
 	

@@ -18,24 +18,43 @@ import net.minecraft.world.level.Level;
 import net.swedz.little_big_redstone.LBRComponents;
 import net.swedz.little_big_redstone.gui.logicconfig.LogicConfigMenu;
 import net.swedz.little_big_redstone.gui.logicconfig.reference.HeldItemLogicConfigReference;
+import net.swedz.little_big_redstone.microchip.object.logic.LogicCodecs;
 import net.swedz.little_big_redstone.microchip.object.logic.LogicComponent;
 import net.swedz.little_big_redstone.microchip.object.logic.LogicType;
 
 import java.util.List;
+import java.util.Optional;
 
 public final class LogicItem extends Item
 {
-	private final LogicType<?> type;
-	
-	public LogicItem(Properties properties, LogicType<?> type)
+	public LogicItem(Properties properties, LogicType<?, ?> type)
 	{
-		super(properties.component(LBRComponents.LOGIC, type.defaultFactory().create()));
-		this.type = type;
+		super(properties
+				.component(LBRComponents.LOGIC_CONFIG, type.defaultConfig())
+				.component(LBRComponents.LOGIC_COLOR, null));
 	}
 	
-	public LogicType<?> getLogicGateType()
+	@SuppressWarnings("removal")
+	@Override
+	public void verifyComponentsAfterLoad(ItemStack stack)
 	{
-		return type;
+		// Convert old logic components into the new format
+		if(stack.has(LBRComponents.LOGIC))
+		{
+			var logicComponent = (LogicComponent<?, ?>) stack.remove(LBRComponents.LOGIC);
+			stack.set(LBRComponents.LOGIC_CONFIG, logicComponent.config());
+			stack.set(LBRComponents.LOGIC_COLOR, logicComponent.color().orElse(null));
+		}
+	}
+	
+	public static Optional<DyeColor> getColor(ItemStack stack)
+	{
+		return Optional.ofNullable(stack.get(LBRComponents.LOGIC_COLOR));
+	}
+	
+	public static DyeColor getColor(ItemStack stack, DyeColor fallback)
+	{
+		return getColor(stack).orElse(fallback);
 	}
 	
 	private static void appendColorTooltip(List<Component> lines, DyeColor color)
@@ -47,24 +66,26 @@ public final class LogicItem extends Item
 	@Override
 	public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> lines, TooltipFlag flag)
 	{
-		var component = (LogicComponent<?, ?>) stack.get(LBRComponents.LOGIC);
-		component.color().ifPresent((color) -> appendColorTooltip(lines, color));
+		if(stack.has(LBRComponents.LOGIC_COLOR))
+		{
+			var color = stack.get(LBRComponents.LOGIC_COLOR);
+			appendColorTooltip(lines, color);
+		}
 	}
 	
 	@Override
 	public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand)
 	{
 		var stack = player.getItemInHand(hand);
-		var stackComponent = (LogicComponent<?, ?>) stack.get(LBRComponents.LOGIC);
-		if(stackComponent == null)
+		var logicConfig = stack.get(LBRComponents.LOGIC_CONFIG);
+		if(logicConfig == null)
 		{
 			return InteractionResultHolder.fail(stack);
 		}
 		
 		if(!level.isClientSide())
 		{
-			var component = stackComponent.copy();
-			var color = component.color().orElse(DyeColor.WHITE);
+			var color = getColor(stack, DyeColor.WHITE);
 			
 			player.openMenu(
 					new MenuProvider()
@@ -72,7 +93,7 @@ public final class LogicItem extends Item
 						@Override
 						public Component getDisplayName()
 						{
-							return component.type().displayName();
+							return logicConfig.type().displayName();
 						}
 						
 						@Override
@@ -85,7 +106,7 @@ public final class LogicItem extends Item
 									new HeldItemLogicConfigReference(hand),
 									() -> true,
 									color,
-									component
+									logicConfig
 							);
 						}
 					},
@@ -93,7 +114,7 @@ public final class LogicItem extends Item
 					{
 						ByteBufCodecs.BOOL.encode(buf, true);
 						DyeColor.STREAM_CODEC.encode(buf, color);
-						LogicComponent.STREAM_CODEC.encode(buf, component);
+						LogicCodecs.CONFIG_STREAM_CODEC.encode(buf, logicConfig);
 					}
 			);
 		}

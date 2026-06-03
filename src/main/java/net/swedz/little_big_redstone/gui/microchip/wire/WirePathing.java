@@ -107,7 +107,7 @@ public final class WirePathing
 		key.additionalAvoidBounds().ifPresent(avoidBounds::addAll);
 		for(var entry : microchip.components())
 		{
-			if(entry.component().config().isVisible())
+			if(entry.visible())
 			{
 				avoidBounds.add(this.mutateComponentBounds(entry.toBounds()));
 			}

@@ -22,19 +22,21 @@ final class LogicSequencerConfigMenuProvider extends LogicConfigMenuProvider<Log
 	{
 		modeButton = builder.addCycleButton(
 				LBR.text().logicConfigButtonLabelMode(),
-				config.mode.tooltip(),
-				0, 0,
-				width, 18,
+				config.mode().tooltip(),
+				0,
+				0,
+				width,
+				18,
 				false,
-				config.mode,
+				config.mode(),
 				Arrays.asList(LogicSequencerMode.values()),
 				LogicSequencerMode::label,
 				(value) ->
 				{
-					config.mode = value;
+					config = new LogicSequencerConfig(value, config.outputDelay(), config.autoReset(), config.resetPort());
 					if(modeButton != null)
 					{
-						modeButton.setTooltip(config.mode.tooltip());
+						modeButton.setTooltip(config.mode().tooltip());
 					}
 				}
 		);
@@ -46,13 +48,17 @@ final class LogicSequencerConfigMenuProvider extends LogicConfigMenuProvider<Log
 				LBR.text().logicConfigButtonLabelSequencerDelay(),
 				Component.empty(),
 				LBR.text().logicConfigButtonTooltipSequencerDelay(),
-				0, 22,
-				width, 18,
-				1, 60 * 20,
-				config.outputDelay,
-				1, 0,
+				0,
+				22,
+				width,
+				18,
+				1,
+				60 * 20,
+				config.outputDelay(),
+				1,
+				0,
 				LBRTooltips.TICKS_AND_SECONDS_SLIDER_PARSER::parse,
-				(value) -> config.outputDelay = Math.round(value)
+				(value) -> config = new LogicSequencerConfig(config.mode(), Math.round(value), config.autoReset(), config.resetPort())
 		);
 	}
 	
@@ -61,9 +67,10 @@ final class LogicSequencerConfigMenuProvider extends LogicConfigMenuProvider<Log
 		builder.addCheckbox(
 				LBR.text().logicConfigButtonLabelSequencerAutoReset(),
 				LBR.text().logicConfigButtonTooltipSequencerAutoReset(),
-				0, 22 * 2,
-				config.autoReset,
-				(value) -> config.autoReset = value
+				0,
+				22 * 2,
+				config.autoReset(),
+				(value) -> config = new LogicSequencerConfig(config.mode(), config.outputDelay(), value, config.resetPort())
 		);
 	}
 	
@@ -72,9 +79,10 @@ final class LogicSequencerConfigMenuProvider extends LogicConfigMenuProvider<Log
 		builder.addCheckbox(
 				LBR.text().logicConfigButtonLabelSequencerResetPort(),
 				LBR.text().logicConfigButtonTooltipSequencerResetPort(),
-				0, 22 * 3,
-				config.resetPort,
-				(value) -> config.resetPort = value
+				0,
+				22 * 3,
+				config.resetPort(),
+				(value) -> config = new LogicSequencerConfig(config.mode(), config.outputDelay(), config.autoReset(), value)
 		);
 	}
 	

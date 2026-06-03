@@ -7,12 +7,13 @@ import net.swedz.little_big_redstone.block.microchip.MicrochipBlockEntity;
 import net.swedz.little_big_redstone.microchip.Microchip;
 import net.swedz.little_big_redstone.microchip.awareness.AwarenessType;
 import net.swedz.little_big_redstone.microchip.awareness.MicrochipAwareness;
+import net.swedz.little_big_redstone.microchip.object.logic.config.LogicConfig;
 
 import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
-public final class LogicContext implements LogicContextAccess
+public final class LogicTickingContext implements LogicContextAccess
 {
 	private final Level    level;
 	private final BlockPos blockPos;
@@ -23,7 +24,7 @@ public final class LogicContext implements LogicContextAccess
 	
 	private final List<LogicEntry> dirtyEntries = Lists.newArrayList();
 	
-	public LogicContext(Level level, BlockPos blockPos, Microchip microchip, UUID placedBy)
+	public LogicTickingContext(Level level, BlockPos blockPos, Microchip microchip, UUID placedBy)
 	{
 		this.level = level;
 		this.blockPos = blockPos;
@@ -31,7 +32,7 @@ public final class LogicContext implements LogicContextAccess
 		this.placedBy = placedBy;
 	}
 	
-	public LogicContext(MicrochipBlockEntity blockEntity)
+	public LogicTickingContext(MicrochipBlockEntity blockEntity)
 	{
 		this(blockEntity.getLevel(), blockEntity.getBlockPos(), blockEntity.microchip(), blockEntity.getPlacedBy());
 	}
@@ -78,5 +79,10 @@ public final class LogicContext implements LogicContextAccess
 	public List<LogicEntry> getDirtyEntries()
 	{
 		return Collections.unmodifiableList(dirtyEntries);
+	}
+	
+	public boolean checkValid(LogicConfig<?> config)
+	{
+		return config.checkValid(microchip.components());
 	}
 }

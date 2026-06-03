@@ -206,11 +206,12 @@ public final class FloppyDiskInstaller
 					entry.component().type().item(),
 					entry.color(),
 					(stack) ->
-							stack.has(LBRComponents.LOGIC) ?
-									stack.get(LBRComponents.LOGIC).color() :
-									Optional.empty(),
+							Optional.ofNullable(stack.get(LBRComponents.LOGIC_COLOR)),
 					(stack) ->
-							stack.set(LBRComponents.LOGIC, entry.component())
+					{
+						stack.set(LBRComponents.LOGIC_CONFIG, entry.component().config());
+						stack.set(LBRComponents.LOGIC_COLOR, (DyeColor) entry.component().color().orElse(null));
+					}
 			);
 			items.compute(item, (__, count) -> count == null ? 1 : (count + 1));
 		}

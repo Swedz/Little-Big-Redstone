@@ -10,15 +10,16 @@ import net.swedz.little_big_redstone.gui.microchip.logic.renderer.SimpleLogicRen
 import net.swedz.little_big_redstone.microchip.object.logic.LogicComponent;
 import net.swedz.little_big_redstone.microchip.object.logic.LogicType;
 import net.swedz.little_big_redstone.microchip.object.logic.LogicTypes;
+import net.swedz.little_big_redstone.microchip.object.logic.config.LogicConfig;
 import net.swedz.tesseract.neoforge.helper.guigraphics.TesseractGuiGraphics;
 
 import java.util.Map;
 
 public final class LogicRenderers
 {
-	private static final Map<LogicType<?>, LogicRendererProvider<?>> PROVIDERS = Maps.newConcurrentMap();
+	private static final Map<LogicType<?, ?>, LogicRendererProvider<?, ?>> PROVIDERS = Maps.newConcurrentMap();
 	
-	private static Map<LogicType<?>, LogicRenderer<?>> RENDERERS = Map.of();
+	private static Map<LogicType<?, ?>, LogicRenderer<?, ?>> RENDERERS = Map.of();
 	
 	static
 	{
@@ -51,14 +52,14 @@ public final class LogicRenderers
 		RENDERERS = createRenderers();
 	}
 	
-	private static <L extends LogicComponent> void register(LogicType<L> type, LogicRendererProvider<L> provider)
+	private static <L extends LogicComponent<L, C>, C extends LogicConfig<C>> void register(LogicType<L, C> type, LogicRendererProvider<L, C> provider)
 	{
 		PROVIDERS.put(type, provider);
 	}
 	
-	private static Map<LogicType<?>, LogicRenderer<?>> createRenderers()
+	private static Map<LogicType<?, ?>, LogicRenderer<?, ?>> createRenderers()
 	{
-		ImmutableMap.Builder<LogicType<?>, LogicRenderer<?>> builder = ImmutableMap.builder();
+		ImmutableMap.Builder<LogicType<?, ?>, LogicRenderer<?, ?>> builder = ImmutableMap.builder();
 		PROVIDERS.forEach((type, provider) ->
 		{
 			try
@@ -73,9 +74,9 @@ public final class LogicRenderers
 		return builder.build();
 	}
 	
-	public static <L extends LogicComponent> void render(LogicRenderer.Context context, TesseractGuiGraphics graphics, L component, int x, int y)
+	public static void render(LogicRenderer.Context context, TesseractGuiGraphics graphics, LogicComponent<?, ?> component, int x, int y)
 	{
-		var renderer = (LogicRenderer<L>) RENDERERS.get(component.type());
+		LogicRenderer renderer = RENDERERS.get(component.type());
 		if(renderer != null)
 		{
 			renderer.render(context, graphics, component, x, y);
