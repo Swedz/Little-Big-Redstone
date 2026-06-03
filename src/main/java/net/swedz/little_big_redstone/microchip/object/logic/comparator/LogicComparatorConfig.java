@@ -27,18 +27,18 @@ public record LogicComparatorConfig(
 ) implements LogicConfig<LogicComparatorConfig>
 {
 	public static final LogicComparatorConfig DEFAULT = new LogicComparatorConfig(
-			LogicAccumulationMode.ALL, 
-			0, 
-			LogicComparisonMode.EQUAL_TO, 
+			LogicAccumulationMode.ALL,
+			0,
+			LogicComparisonMode.EQUAL_TO,
 			1
 	);
 	
 	public static final MapCodec<LogicComparatorConfig> CODEC = RecordCodecBuilder.mapCodec((instance) -> instance
 			.group(
-					CodecHelper.forLowercaseEnum(LogicAccumulationMode.class).optionalFieldOf("mode", LogicAccumulationMode.ALL).forGetter(LogicComparatorConfig::mode),
-					Codec.intRange(0, 15).optionalFieldOf("signal_strength", 0).forGetter(LogicComparatorConfig::signalStrength),
-					CodecHelper.forLowercaseEnum(LogicComparisonMode.class).optionalFieldOf("signal_comparison", LogicComparisonMode.GREATER_THAN_OR_EQUAL_TO).forGetter(LogicComparatorConfig::signalComparison),
-					Codec.intRange(1, 10).optionalFieldOf("inputs", 1).forGetter(LogicComparatorConfig::inputs)
+					CodecHelper.forLowercaseEnum(LogicAccumulationMode.class).optionalFieldOf("mode", DEFAULT.mode()).forGetter(LogicComparatorConfig::mode),
+					Codec.intRange(0, 15).optionalFieldOf("signal_strength", DEFAULT.signalStrength()).forGetter(LogicComparatorConfig::signalStrength),
+					CodecHelper.forLowercaseEnum(LogicComparisonMode.class).optionalFieldOf("signal_comparison", DEFAULT.signalComparison()).forGetter(LogicComparatorConfig::signalComparison),
+					Codec.intRange(1, 10).optionalFieldOf("inputs", DEFAULT.inputs).forGetter((config) -> config.inputs)
 			)
 			.apply(instance, LogicComparatorConfig::new));
 	

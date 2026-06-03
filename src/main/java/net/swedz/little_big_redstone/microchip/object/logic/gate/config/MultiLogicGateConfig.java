@@ -18,11 +18,11 @@ import java.util.function.Function;
 
 public abstract class MultiLogicGateConfig<C extends MultiLogicGateConfig<C>> implements LogicConfig<C>
 {
-	public static <C extends MultiLogicGateConfig<C>> MapCodec<C> codec(Function<Integer, C> creator)
+	public static <C extends MultiLogicGateConfig<C>> MapCodec<C> codec(C defaultConfig, Function<Integer, C> creator)
 	{
 		return RecordCodecBuilder.mapCodec((instance) -> instance
 				.group(
-						Codec.INT.optionalFieldOf("input_count", 2).forGetter(MultiLogicGateConfig::inputs)
+						Codec.INT.optionalFieldOf("input_count", defaultConfig.inputs()).forGetter(MultiLogicGateConfig::inputs)
 				)
 				.apply(instance, creator));
 	}

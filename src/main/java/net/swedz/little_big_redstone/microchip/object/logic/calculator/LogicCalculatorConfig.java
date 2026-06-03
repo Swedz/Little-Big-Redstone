@@ -29,8 +29,8 @@ public record LogicCalculatorConfig(
 	
 	public static final MapCodec<LogicCalculatorConfig> CODEC = RecordCodecBuilder.mapCodec((instance) -> instance
 			.group(
-					CodecHelper.forLowercaseEnum(LogicCalculatorMode.class).optionalFieldOf("mode", LogicCalculatorMode.ADDITION).forGetter(LogicCalculatorConfig::mode),
-					Codec.intRange(2, 10).optionalFieldOf("inputs", 2).forGetter(LogicCalculatorConfig::inputs)
+					CodecHelper.forLowercaseEnum(LogicCalculatorMode.class).optionalFieldOf("mode", DEFAULT.mode()).forGetter(LogicCalculatorConfig::mode),
+					Codec.intRange(2, 10).optionalFieldOf("inputs", DEFAULT.inputs()).forGetter(LogicCalculatorConfig::inputs)
 			)
 			.apply(instance, LogicCalculatorConfig::new));
 	

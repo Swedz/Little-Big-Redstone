@@ -1,0 +1,14 @@
+{
+  "type": "little_big_redstone:transmute_without_material",
+  "category": "redstone",
+  "group": "reset_logic_config",
+  "ingredient": "little_big_redstone:randomizer",
+  "result": {
+    "components": {
+      "little_big_redstone:logic_config": {
+        "type": "randomizer"
+      }
+    },
+    "id": "little_big_redstone:randomizer"
+  }
+}

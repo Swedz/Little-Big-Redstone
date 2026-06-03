@@ -12,7 +12,8 @@ import java.util.List;
 
 public record NOTGateConfig() implements SingleLogicGateConfig<NOTGateConfig>
 {
-	public static final NOTGateConfig                       DEFAULT      = new NOTGateConfig();
+	public static final NOTGateConfig DEFAULT = new NOTGateConfig();
+	
 	public static final MapCodec<NOTGateConfig>             CODEC        = MapCodec.unit(DEFAULT);
 	public static final StreamCodec<ByteBuf, NOTGateConfig> STREAM_CODEC = StreamCodec.unit(DEFAULT);
 	

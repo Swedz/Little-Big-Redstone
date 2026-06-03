@@ -25,6 +25,7 @@ import net.swedz.little_big_redstone.LBRTags;
 import net.swedz.little_big_redstone.item.stickynote.StickyNote;
 import net.swedz.little_big_redstone.microchip.object.logic.LogicType;
 import net.swedz.little_big_redstone.microchip.object.logic.LogicTypes;
+import net.swedz.little_big_redstone.recipe.TransmuteWithoutMaterialRecipe;
 import net.swedz.tesseract.neoforge.compat.vanilla.recipe.ShapedRecipeBuilder;
 import net.swedz.tesseract.neoforge.compat.vanilla.recipe.ShapelessRecipeBuilder;
 
@@ -147,9 +148,29 @@ public final class ItemRecipesDatagenProvider extends RecipeProvider
 										.build()
 						)
 				)
-				.group(type.id() + "_logic_dye")
+				.group(type.id() + "_dye")
 				.unlockedBy("has_" + type.id(), this.has(logicItem));
 		builder.save(output, builder.defaultId().identifier().withPrefix("dye/").withSuffix("/" + color.getName()).toString());
+	}
+	
+	private void removeDyeLogic(LogicType<?, ?> type)
+	{
+		var logicItem = type.item();
+		var builder = TransmuteRecipeBuilder
+				.transmute(
+						RecipeCategory.REDSTONE,
+						Ingredient.of(logicItem),
+						this.tag(LBRTags.Items.DYE_WASHER),
+						new ItemStackTemplate(
+								logicItem,
+								DataComponentPatch.builder()
+										.remove(LBRComponents.LOGIC_COLOR.get())
+										.build()
+						)
+				)
+				.group(type.id() + "_wash_dye")
+				.unlockedBy("has_" + type.id(), this.has(logicItem));
+		builder.save(output, builder.defaultId().identifier().withPrefix("dye/").withSuffix("/wash").toString());
 	}
 	
 	private void dyeItem(
@@ -172,6 +193,25 @@ public final class ItemRecipesDatagenProvider extends RecipeProvider
 				.group(group)
 				.unlockedBy(unlockedBy, this.has(fromItem));
 		builder.save(output, builder.defaultId().identifier().withPrefix("dye/").toString());
+	}
+	
+	private void resetLogicConfig(LogicType<?, ?> type)
+	{
+		var logicItem = type.item();
+		var builder = TransmuteWithoutMaterialRecipe
+				.builder(
+						RecipeCategory.REDSTONE,
+						Ingredient.of(logicItem),
+						new ItemStackTemplate(
+								logicItem,
+								DataComponentPatch.builder()
+										.set(LBRComponents.LOGIC_CONFIG.get(), type.defaultConfig())
+										.build()
+						)
+				)
+				.group("reset_logic_config")
+				.unlockedBy("has_" + type.id(), this.has(logicItem));
+		builder.save(output, builder.defaultId().identifier().withPrefix("reset_logic_config/").toString());
 	}
 	
 	private void stickyNoteCloning(DyeColor color)
@@ -230,8 +270,6 @@ public final class ItemRecipesDatagenProvider extends RecipeProvider
 	@Override
 	protected void buildRecipes()
 	{
-		// TODO 26.1 logic clear config
-		
 		for(var color : DyeColor.values())
 		{
 			this.microchip(color);
@@ -243,6 +281,12 @@ public final class ItemRecipesDatagenProvider extends RecipeProvider
 			{
 				this.dyeLogic(logicType, color);
 			}
+		}
+		
+		for(var logicType : LogicTypes.values())
+		{
+			this.resetLogicConfig(logicType);
+			this.removeDyeLogic(logicType);
 		}
 		
 		new ShapedRecipeBuilder(registries)

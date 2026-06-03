@@ -37,11 +37,11 @@ public record LogicReaderConfig(
 	
 	public static final MapCodec<LogicReaderConfig> CODEC = RecordCodecBuilder.mapCodec((instance) -> instance
 			.group(
-					CodecHelper.forLowercaseEnum(LogicReaderMode.class).optionalFieldOf("mode", LogicReaderMode.ITEM).forGetter(LogicReaderConfig::mode),
-					Direction.CODEC.optionalFieldOf("direction", Direction.NORTH).forGetter(LogicReaderConfig::direction),
-					LogicReaderThreshold.CODEC.optionalFieldOf("fill_threshold", LogicReaderThreshold.DEFAULT).forGetter(LogicReaderConfig::fillThreshold),
-					Codec.intRange(1, 15).optionalFieldOf("signal_threshold", 1).forGetter(LogicReaderConfig::signalThreshold),
-					CodecHelper.forLowercaseEnum(LogicComparisonMode.class).optionalFieldOf("comparison", LogicComparisonMode.GREATER_THAN_OR_EQUAL_TO).forGetter(LogicReaderConfig::comparison)
+					CodecHelper.forLowercaseEnum(LogicReaderMode.class).optionalFieldOf("mode", DEFAULT.mode()).forGetter(LogicReaderConfig::mode),
+					Direction.CODEC.optionalFieldOf("direction", DEFAULT.direction()).forGetter(LogicReaderConfig::direction),
+					LogicReaderThreshold.CODEC.optionalFieldOf("fill_threshold", DEFAULT.fillThreshold()).forGetter(LogicReaderConfig::fillThreshold),
+					Codec.intRange(1, 15).optionalFieldOf("signal_threshold", DEFAULT.signalThreshold()).forGetter(LogicReaderConfig::signalThreshold),
+					CodecHelper.forLowercaseEnum(LogicComparisonMode.class).optionalFieldOf("comparison", DEFAULT.comparison()).forGetter(LogicReaderConfig::comparison)
 			)
 			.apply(instance, LogicReaderConfig::new));
 	

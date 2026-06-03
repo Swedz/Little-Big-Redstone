@@ -28,8 +28,8 @@ public record PulseThrottlerConfig(
 	
 	public static final MapCodec<PulseThrottlerConfig> CODEC = RecordCodecBuilder.mapCodec((instance) -> instance
 			.group(
-					Codec.LONG.optionalFieldOf("duration", 1L).forGetter(PulseThrottlerConfig::outputDuration),
-					Codec.intRange(0, 15).optionalFieldOf("signal_strength", 0).forGetter(PulseThrottlerConfig::signalStrength)
+					Codec.LONG.optionalFieldOf("duration", DEFAULT.outputDuration()).forGetter(PulseThrottlerConfig::outputDuration),
+					Codec.intRange(0, 15).optionalFieldOf("signal_strength", DEFAULT.signalStrength()).forGetter(PulseThrottlerConfig::signalStrength)
 			)
 			.apply(instance, PulseThrottlerConfig::new));
 	

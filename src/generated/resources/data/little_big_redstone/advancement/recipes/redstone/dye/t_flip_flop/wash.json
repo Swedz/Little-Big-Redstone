@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_t_flip_flop": {
+      "conditions": {
+        "items": [
+          {
+            "items": "little_big_redstone:t_flip_flop"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "little_big_redstone:dye/t_flip_flop/wash"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_t_flip_flop"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "little_big_redstone:dye/t_flip_flop/wash"
+    ]
+  }
+}

@@ -1,7 +1,7 @@
 {
   "type": "minecraft:crafting_transmute",
   "category": "redstone",
-  "group": "xor_gate_logic_dye",
+  "group": "xor_gate_dye",
   "input": "little_big_redstone:xor_gate",
   "material": "#c:dyes/green",
   "result": {

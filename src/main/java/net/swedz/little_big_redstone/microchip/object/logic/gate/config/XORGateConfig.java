@@ -14,7 +14,7 @@ public final class XORGateConfig extends MultiLogicGateConfig<XORGateConfig>
 {
 	public static final XORGateConfig DEFAULT = new XORGateConfig();
 	
-	public static final MapCodec<XORGateConfig>             CODEC        = codec(XORGateConfig::new);
+	public static final MapCodec<XORGateConfig>             CODEC        = codec(DEFAULT, XORGateConfig::new);
 	public static final StreamCodec<ByteBuf, XORGateConfig> STREAM_CODEC = streamCodec(XORGateConfig::new);
 	
 	public XORGateConfig(int inputs)

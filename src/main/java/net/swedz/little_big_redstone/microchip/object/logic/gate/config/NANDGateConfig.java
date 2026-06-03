@@ -14,7 +14,7 @@ public final class NANDGateConfig extends MultiLogicGateConfig<NANDGateConfig>
 {
 	public static final NANDGateConfig DEFAULT = new NANDGateConfig();
 	
-	public static final MapCodec<NANDGateConfig>             CODEC        = codec(NANDGateConfig::new);
+	public static final MapCodec<NANDGateConfig>             CODEC        = codec(DEFAULT, NANDGateConfig::new);
 	public static final StreamCodec<ByteBuf, NANDGateConfig> STREAM_CODEC = streamCodec(NANDGateConfig::new);
 	
 	public NANDGateConfig(int inputs)

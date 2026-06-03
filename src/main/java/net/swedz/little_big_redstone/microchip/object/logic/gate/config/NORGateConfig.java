@@ -14,7 +14,7 @@ public final class NORGateConfig extends MultiLogicGateConfig<NORGateConfig>
 {
 	public static final NORGateConfig DEFAULT = new NORGateConfig();
 	
-	public static final MapCodec<NORGateConfig>             CODEC        = codec(NORGateConfig::new);
+	public static final MapCodec<NORGateConfig>             CODEC        = codec(DEFAULT, NORGateConfig::new);
 	public static final StreamCodec<ByteBuf, NORGateConfig> STREAM_CODEC = streamCodec(NORGateConfig::new);
 	
 	public NORGateConfig(int inputs)

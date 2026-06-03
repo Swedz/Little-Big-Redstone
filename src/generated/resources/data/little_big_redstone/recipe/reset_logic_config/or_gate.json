@@ -1,0 +1,14 @@
+{
+  "type": "little_big_redstone:transmute_without_material",
+  "category": "redstone",
+  "group": "reset_logic_config",
+  "ingredient": "little_big_redstone:or_gate",
+  "result": {
+    "components": {
+      "little_big_redstone:logic_config": {
+        "type": "or_gate"
+      }
+    },
+    "id": "little_big_redstone:or_gate"
+  }
+}
