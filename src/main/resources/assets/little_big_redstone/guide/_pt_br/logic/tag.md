@@ -46,14 +46,16 @@ e o sensor tem apenas um limiar de 1, quando o emissor está LIGADO, o sensor ta
 			<Logic name="output1" x="32" y="0" type="tag" data="{config:{input:false,label:'something'}}" />
 
 			<Logic name="tag2" x="64" y="0" type="tag" data="{config:{label:'something'}}" />
-			<Logic name="input2" x="64" y="0" type="io" hide={true} />
-			<Logic name="output2" x="96" y="0" type="io" data="{config:{input:false,signal_strength:15}}" hide={true} />
+			<Logic name="input2" x="64" y="0" type="io" data="{config:{direction:'south'}}" hide={true} />
+			<Logic name="output2" x="96" y="0" type="io" data="{config:{input:false,direction:'east',signal_strength:15}}" hide={true} />
 
 			<Wire from="input1" fromPort="0" to="output1" toPort="0" />
 			<Wire from="input2" fromPort="0" to="output2" toPort="0" />
 
 			<RedstoneSignal step="0" direction="north" strength="15" />
+			<RedstoneSignal step="0" direction="south" strength="15" />
 			<RedstoneSignal step="1" direction="north" strength="0" />
+			<RedstoneSignal step="1" direction="south" strength="0" />
 		</MicrochipScene>
 	</Column>
 </Row>
@@ -67,7 +69,7 @@ Observe que, abaixo, as duas etiquetas têm rótulos diferentes. Por causa disso
 			<Logic name="output1" x="32" y="0" type="tag" data="{config:{input:false,label:'something'}}" />
 
 			<Logic name="input2" x="64" y="0" type="tag" data="{config:{label:'something_else'}}" />
-			<Logic name="output2" x="96" y="0" type="io" data="{config:{input:false,signal_strength:15}}" hide={true} />
+			<Logic name="output2" x="96" y="0" type="io" data="{config:{input:false,direction:'south',signal_strength:15}}" hide={true} />
 
 			<Wire from="input1" fromPort="0" to="output1" toPort="0" />
 			<Wire from="input2" fromPort="0" to="output2" toPort="0" />
