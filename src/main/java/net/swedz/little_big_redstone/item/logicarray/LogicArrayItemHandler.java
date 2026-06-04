@@ -23,6 +23,7 @@ public final class LogicArrayItemHandler extends ItemAccessItemHandler
 	
 	public void set(int index, ItemResource newResource, int newAmount)
 	{
-		// TODO this.update(itemAccess.getResource(), index, newResource, newAmount);
+		var result = this.update(itemAccess.getResource(), index, newResource, newAmount);
+		itemAccess.exchange(result, itemAccess.getAmount(), null);
 	}
 }
