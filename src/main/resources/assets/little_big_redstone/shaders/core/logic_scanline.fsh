@@ -13,7 +13,7 @@ out vec4 fragColor;
 void main()
 {
 	vec4 color = texture(Sampler0, texCoord0) * vertexColor;
-	color.rgb *= logic_scanline(texCoord0);
+	color.rgb *= logic_scanline(texCoord0, textureSize(Sampler0, 0));
 	if (color.a == 0.0)
 	{
 		discard;

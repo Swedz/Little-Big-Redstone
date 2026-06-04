@@ -2,11 +2,11 @@
 
 #moj_import <minecraft:globals.glsl>
 
-float logic_scanline(vec2 texCoord0)
+float logic_scanline(vec2 texCoord0, ivec2 textureSize)
 {
     vec2 motion = vec2(0, 5);
     vec2 translation = vec2(GameTime) * motion;
-    vec2 coord = (texCoord0 + translation) * vec2(1024, 512); // TODO 26.1 somehow pull atlas size dynamically
+    vec2 coord = (texCoord0 + translation) * textureSize;
     float lineScale = 3;
     float minAlpha = 0.9;
     float intensity = floor(sin(coord.y * lineScale) / lineScale) + 1 + minAlpha;
