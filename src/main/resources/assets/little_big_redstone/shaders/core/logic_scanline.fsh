@@ -5,6 +5,10 @@
 
 uniform sampler2D Sampler0;
 
+#ifdef USE_LIGHTMAP
+in vec4 lightMapColor;
+#endif
+
 in vec2 texCoord0;
 in vec4 vertexColor;
 
@@ -19,5 +23,10 @@ void main()
 		discard;
 	}
 	color *= ColorModulator;
+
+#ifdef USE_LIGHTMAP
+    color *= lightMapColor;
+#endif
+
     fragColor = color;
 }

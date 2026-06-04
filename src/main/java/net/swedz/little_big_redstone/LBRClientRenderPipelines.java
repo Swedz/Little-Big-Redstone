@@ -29,13 +29,14 @@ public final class LBRClientRenderPipelines
 	public static final RenderPipeline LOGIC_SCANLINE_ENTITY = RenderPipeline
 			.builder(RenderPipelines.MATRICES_FOG_LIGHT_DIR_SNIPPET)
 			.withLocation(LBR.id("pipelines/logic_scanline_entity"))
-			.withVertexShader(LBR.id("core/logic_scanline_entity"))
-			.withFragmentShader(LBR.id("core/logic_scanline_entity"))
+			.withVertexShader(LBR.id("core/logic_scanline"))
+			.withFragmentShader(LBR.id("core/logic_scanline"))
 			.withColorTargetState(new ColorTargetState(BlendFunction.TRANSLUCENT))
 			.withVertexFormat(DefaultVertexFormat.ENTITY, VertexFormat.Mode.QUADS)
 			.withSampler("Sampler0")
 			.withSampler("Sampler2")
 			.withDepthStencilState(new DepthStencilState(CompareOp.LESS_THAN_OR_EQUAL, false))
+			.withShaderDefine("USE_LIGHTMAP")
 			.build();
 	
 	public static final RenderPipeline PULSING_ALPHA = RenderPipeline
