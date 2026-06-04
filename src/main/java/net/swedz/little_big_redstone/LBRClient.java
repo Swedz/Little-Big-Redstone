@@ -1,5 +1,10 @@
 package net.swedz.little_big_redstone;
 
+import com.mojang.math.OctahedralGroup;
+import net.minecraft.client.renderer.block.dispatch.BlockModelRotation;
+import net.minecraft.client.renderer.block.dispatch.BlockStateModelPart;
+import net.minecraft.core.Direction;
+import net.minecraft.util.Util;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.bus.api.SubscribeEvent;
@@ -10,6 +15,7 @@ import net.neoforged.fml.config.ModConfig;
 import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.neoforged.neoforge.client.event.EntityRenderersEvent;
+import net.neoforged.neoforge.client.event.ModelEvent;
 import net.neoforged.neoforge.client.event.RegisterBlockStateModels;
 import net.neoforged.neoforge.client.event.RegisterClientTooltipComponentFactoriesEvent;
 import net.neoforged.neoforge.client.event.RegisterGuiLayersEvent;
@@ -17,8 +23,11 @@ import net.neoforged.neoforge.client.event.RegisterItemModelsEvent;
 import net.neoforged.neoforge.client.event.RegisterMenuScreensEvent;
 import net.neoforged.neoforge.client.event.RenderHandEvent;
 import net.neoforged.neoforge.client.gui.VanillaGuiLayers;
+import net.neoforged.neoforge.client.model.standalone.SimpleUnbakedStandaloneModel;
+import net.neoforged.neoforge.client.model.standalone.StandaloneModelKey;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.GameShuttingDownEvent;
+import net.swedz.little_big_redstone.client.ber.MicrochipBlockEntityRenderer;
 import net.swedz.little_big_redstone.client.entity.StickyNoteEntityRenderer;
 import net.swedz.little_big_redstone.client.hud.FloppyDiskConsumeItemsGuiOverlay;
 import net.swedz.little_big_redstone.client.hud.NoteBoardGuiOverlay;
@@ -42,6 +51,8 @@ import net.swedz.tesseract.api.Assert;
 import net.swedz.tesseract.config.ConfigManager;
 import net.swedz.tesseract.neoforge.config.ModConfigFileAccess;
 import net.swedz.tesseract.neoforge.registry.holder.ItemHolder;
+
+import java.util.Map;
 
 @Mod(value = LBR.ID, dist = Dist.CLIENT)
 @EventBusSubscriber(modid = LBR.ID, value = Dist.CLIENT)
@@ -130,6 +141,7 @@ public final class LBRClient
 	private static void registerEntityRenderers(EntityRenderersEvent.RegisterRenderers event)
 	{
 		event.registerEntityRenderer(LBREntities.STICKY_NOTE.get(), StickyNoteEntityRenderer::new);
+		event.registerBlockEntityRenderer(LBRBlocks.MICROCHIP_ENTITY.get(), MicrochipBlockEntityRenderer::new);
 	}
 	
 	@SubscribeEvent
@@ -142,5 +154,40 @@ public final class LBRClient
 	private static void registerBlockModels(RegisterBlockStateModels event)
 	{
 		event.registerModel(MicrochipBlockModel.Unbaked.ID, MicrochipBlockModel.Unbaked.CODEC);
+	}
+	
+	private static final Map<Direction, StandaloneModelKey<BlockStateModelPart>> MICROCHIP_OVERLAY_MODELS = Util.makeEnumMap(
+			Direction.class,
+			(direction) -> new StandaloneModelKey(() -> "Microchip Overlay Model")
+	);
+	
+	public static StandaloneModelKey<BlockStateModelPart> getMicrochipOverlayModel(Direction direction)
+	{
+		Assert.notNull(direction);
+		return MICROCHIP_OVERLAY_MODELS.get(direction);
+	}
+	
+	@SubscribeEvent
+	private static void registerStandaloneModels(ModelEvent.RegisterStandalone event)
+	{
+		for(var direction : Direction.values())
+		{
+			var rotation = switch(direction)
+			{
+				case DOWN -> OctahedralGroup.BLOCK_ROT_X_90;
+				case UP -> OctahedralGroup.BLOCK_ROT_X_270;
+				case NORTH -> OctahedralGroup.IDENTITY;
+				case SOUTH -> OctahedralGroup.BLOCK_ROT_Y_180;
+				case WEST -> OctahedralGroup.BLOCK_ROT_Y_270;
+				case EAST -> OctahedralGroup.BLOCK_ROT_Y_90;
+			};
+			event.register(
+					getMicrochipOverlayModel(direction),
+					SimpleUnbakedStandaloneModel.simpleModelWrapper(
+							LBR.id("block/microchip/side_overlay_" + direction.getName()),
+							BlockModelRotation.get(rotation)
+					)
+			);
+		}
 	}
 }

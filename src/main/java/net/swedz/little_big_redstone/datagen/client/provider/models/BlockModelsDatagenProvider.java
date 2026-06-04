@@ -2,6 +2,7 @@ package net.swedz.little_big_redstone.datagen.client.provider.models;
 
 import net.minecraft.client.data.models.MultiVariant;
 import net.minecraft.client.data.models.blockstates.MultiVariantGenerator;
+import net.minecraft.client.data.models.model.ModelTemplate;
 import net.minecraft.client.data.models.model.ModelTemplates;
 import net.minecraft.client.data.models.model.TextureMapping;
 import net.minecraft.client.data.models.model.TextureSlot;
@@ -34,6 +35,13 @@ final class BlockModelsDatagenProvider
 		
 		microchips(generators);
 	}
+	
+	private static final ModelTemplate MICROCHIP_SIDE_OVERLAY = new ModelTemplate(
+			Optional.of(LBR.id("block/microchip/side_overlay")),
+			Optional.empty(),
+			TextureSlot.TEXTURE,
+			TextureSlot.PARTICLE
+	);
 	
 	private static void microchips(ModelGenerators generators)
 	{
@@ -74,6 +82,18 @@ final class BlockModelsDatagenProvider
 							)
 					)
 			));
+		}
+		
+		for(var direction : Direction.values())
+		{
+			var texture = new Material(LBR.id("block/microchip/overlay_" + direction.getName()));
+			MICROCHIP_SIDE_OVERLAY.create(
+					LBR.id("block/microchip/side_overlay_" + direction.getName()),
+					new TextureMapping()
+							.put(TextureSlot.TEXTURE, texture)
+							.put(TextureSlot.PARTICLE, texture),
+					generators.block().modelOutput
+			);
 		}
 	}
 	
