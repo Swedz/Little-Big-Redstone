@@ -25,6 +25,7 @@ import net.neoforged.neoforge.client.NeoForgeRenderTypes;
 import net.neoforged.neoforge.client.model.ComposedModelState;
 import net.neoforged.neoforge.client.model.ExtraFaceData;
 import net.swedz.little_big_redstone.LBR;
+import net.swedz.little_big_redstone.LBRClientRenderTypes;
 import net.swedz.little_big_redstone.LBRItemDisplayContext;
 import net.swedz.little_big_redstone.item.LogicItem;
 import net.swedz.little_big_redstone.microchip.object.logic.LogicType;
@@ -86,8 +87,7 @@ public record LogicItemModel(
 		var sprite = textureMap.get(texture);
 		var overlayMaterial = materials.get(new Material(sprite), DEBUG_NAME);
 		var overlayRenderProperties = new ModelRenderProperties(false, overlayMaterial, itemTransforms);
-		// TODO 26.1 logic scanline render type
-		var renderType = /*index == 2 ? LBRClientRenderTypes.logicScanline() : */NeoForgeRenderTypes.ITEM_UNSORTED_TRANSLUCENT.get();
+		var renderType = index == 2 ? LBRClientRenderTypes.LOGIC_SCANLINE_ENTITY : NeoForgeRenderTypes.ITEM_UNSORTED_TRANSLUCENT.get();
 		var overlayQuads = baker.compute(new RenderTypedItemLayerKey(overlayMaterial, MODEL_STATE, index, renderType, extraFaceData));
 		return new CuboidItemModelWrapper(List.of(), overlayQuads, overlayRenderProperties, transformation);
 	}

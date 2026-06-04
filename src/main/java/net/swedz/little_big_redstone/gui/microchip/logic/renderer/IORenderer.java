@@ -1,7 +1,7 @@
 package net.swedz.little_big_redstone.gui.microchip.logic.renderer;
 
 import net.minecraft.client.gui.GuiGraphicsExtractor;
-import net.minecraft.client.renderer.RenderPipelines;
+import net.swedz.little_big_redstone.LBRClientRenderPipelines;
 import net.swedz.little_big_redstone.gui.microchip.logic.LogicRenderer;
 import net.swedz.little_big_redstone.microchip.object.logic.io.LogicIO;
 import net.swedz.little_big_redstone.microchip.object.logic.io.LogicIOConfig;
@@ -15,7 +15,7 @@ public final class IORenderer extends LogicRenderer<LogicIO, LogicIOConfig>
 		this.renderBackground(context, graphics, x, y, component);
 		
 		graphics.blitSprite(
-				RenderPipelines.GUI_TEXTURED,
+				LBRClientRenderPipelines.LOGIC_SCANLINE,
 				context.getTexture(component.config().input() ? "input" : "output"),
 				x,
 				y,

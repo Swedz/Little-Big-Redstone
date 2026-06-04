@@ -1,7 +1,7 @@
 package net.swedz.little_big_redstone.gui.microchip.logic.renderer;
 
 import net.minecraft.client.gui.GuiGraphicsExtractor;
-import net.minecraft.client.renderer.RenderPipelines;
+import net.swedz.little_big_redstone.LBRClientRenderPipelines;
 import net.swedz.little_big_redstone.gui.microchip.logic.LogicRenderer;
 import net.swedz.little_big_redstone.microchip.object.logic.sequencer.LogicSequencer;
 import net.swedz.little_big_redstone.microchip.object.logic.sequencer.LogicSequencerConfig;
@@ -20,7 +20,7 @@ public final class SequencerRenderer extends LogicRenderer<LogicSequencer, Logic
 		int fillHeight = size.heightPixels() - 4;
 		
 		graphics.blitSprite(
-				RenderPipelines.GUI_TEXTURED,
+				LBRClientRenderPipelines.LOGIC_SCANLINE,
 				context.getTexture("progress"),
 				x + 2,
 				y + 2,

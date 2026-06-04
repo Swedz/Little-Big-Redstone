@@ -3,6 +3,7 @@ package net.swedz.little_big_redstone.gui.logicconfig.widget;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.renderer.RenderPipelines;
 import net.swedz.little_big_redstone.LBR;
+import net.swedz.little_big_redstone.LBRClientRenderPipelines;
 
 public interface LogicConfigButtonHelper
 {
@@ -13,8 +14,8 @@ public interface LogicConfigButtonHelper
 		alpha *= hoveredAlpha;
 		
 		graphics.blitSprite(
-				RenderPipelines.GUI_TEXTURED,
-				LBR.id("container/logic_config/button_scanline"),
+				LBRClientRenderPipelines.LOGIC_SCANLINE,
+				LBR.id("container/logic_config/button_background"),
 				x,
 				y,
 				width,
@@ -27,7 +28,7 @@ public interface LogicConfigButtonHelper
 	{
 		graphics.blitSprite(
 				RenderPipelines.GUI_TEXTURED,
-				LBR.id("container/logic_config/button"),
+				LBR.id("container/logic_config/button_border"),
 				x,
 				y,
 				width,

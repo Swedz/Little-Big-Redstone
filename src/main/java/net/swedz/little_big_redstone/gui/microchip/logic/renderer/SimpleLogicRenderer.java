@@ -1,7 +1,7 @@
 package net.swedz.little_big_redstone.gui.microchip.logic.renderer;
 
 import net.minecraft.client.gui.GuiGraphicsExtractor;
-import net.minecraft.client.renderer.RenderPipelines;
+import net.swedz.little_big_redstone.LBRClientRenderPipelines;
 import net.swedz.little_big_redstone.gui.microchip.logic.LogicRenderer;
 import net.swedz.little_big_redstone.microchip.object.logic.LogicComponent;
 import net.swedz.little_big_redstone.microchip.object.logic.config.LogicConfig;
@@ -19,7 +19,7 @@ public final class SimpleLogicRenderer<G extends LogicComponent<G, C>, C extends
 		int centerX = x + size.centerX() - 8;
 		int centerY = y + size.centerY() - 8;
 		graphics.blitSprite(
-				RenderPipelines.GUI_TEXTURED,
+				LBRClientRenderPipelines.LOGIC_SCANLINE,
 				context.getTexture("icon"),
 				centerX,
 				centerY,

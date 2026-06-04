@@ -16,7 +16,27 @@ import net.neoforged.neoforge.client.event.RegisterRenderPipelinesEvent;
 @EventBusSubscriber(modid = LBR.ID, value = Dist.CLIENT)
 public final class LBRClientRenderPipelines
 {
-	// TODO 26.1 logic scanline
+	public static final RenderPipeline LOGIC_SCANLINE = RenderPipeline
+			.builder(RenderPipelines.MATRICES_PROJECTION_SNIPPET)
+			.withLocation(LBR.id("pipelines/logic_scanline"))
+			.withVertexShader(LBR.id("core/logic_scanline"))
+			.withFragmentShader(LBR.id("core/logic_scanline"))
+			.withColorTargetState(new ColorTargetState(BlendFunction.TRANSLUCENT))
+			.withVertexFormat(DefaultVertexFormat.POSITION_TEX_COLOR, VertexFormat.Mode.QUADS)
+			.withSampler("Sampler0")
+			.build();
+	
+	public static final RenderPipeline LOGIC_SCANLINE_ENTITY = RenderPipeline
+			.builder(RenderPipelines.MATRICES_FOG_LIGHT_DIR_SNIPPET)
+			.withLocation(LBR.id("pipelines/logic_scanline_entity"))
+			.withVertexShader(LBR.id("core/logic_scanline_entity"))
+			.withFragmentShader(LBR.id("core/logic_scanline_entity"))
+			.withColorTargetState(new ColorTargetState(BlendFunction.TRANSLUCENT))
+			.withVertexFormat(DefaultVertexFormat.ENTITY, VertexFormat.Mode.QUADS)
+			.withSampler("Sampler0")
+			.withSampler("Sampler2")
+			.withDepthStencilState(new DepthStencilState(CompareOp.LESS_THAN_OR_EQUAL, false))
+			.build();
 	
 	public static final RenderPipeline PULSING_ALPHA = RenderPipeline
 			.builder(RenderPipelines.MATRICES_PROJECTION_SNIPPET)
@@ -64,6 +84,8 @@ public final class LBRClientRenderPipelines
 	@SubscribeEvent
 	private static void register(RegisterRenderPipelinesEvent event)
 	{
+		event.registerPipeline(LOGIC_SCANLINE);
+		event.registerPipeline(LOGIC_SCANLINE_ENTITY);
 		event.registerPipeline(PULSING_ALPHA);
 		event.registerPipeline(PULSING_TEXTURE_ALPHA);
 		event.registerPipeline(PULSING_TEXTURE_LIGHTNESS);
