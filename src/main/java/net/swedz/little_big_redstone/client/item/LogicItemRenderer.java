@@ -13,7 +13,6 @@ import net.neoforged.neoforge.client.NeoForgeRenderTypes;
 import net.neoforged.neoforge.client.RenderTypeGroup;
 import net.neoforged.neoforge.client.model.CompositeModel;
 import net.neoforged.neoforge.client.model.data.ModelData;
-import net.swedz.little_big_redstone.LBR;
 import net.swedz.little_big_redstone.LBRClientRenderTypes;
 import net.swedz.little_big_redstone.LBRComponents;
 import net.swedz.little_big_redstone.client.model.logic.LogicBakedModel;
@@ -45,7 +44,7 @@ public final class LogicItemRenderer extends BlockEntityWithoutLevelRenderer
 	{
 		var logicConfig = stack.get(LBRComponents.LOGIC_CONFIG);
 		var logicColor = Optional.ofNullable(stack.get(LBRComponents.LOGIC_COLOR));
-		var model = ((LogicBakedModel) Minecraft.getInstance().getModelManager().getModel(ModelResourceLocation.inventory(LBR.id(logicConfig.type().id())))).getModel(logicColor);
+		var model = ((LogicBakedModel) Minecraft.getInstance().getModelManager().getModel(ModelResourceLocation.inventory(logicConfig.type().id()))).getModel(logicColor);
 		
 		int index = 0;
 		for(var modelLayer : model.getRenderPasses(stack, false))

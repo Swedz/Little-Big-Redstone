@@ -6,6 +6,7 @@ import com.mojang.serialization.Codec;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
+import net.swedz.little_big_redstone.LBRLogicTypes;
 import net.swedz.little_big_redstone.microchip.Microchip;
 import net.swedz.little_big_redstone.microchip.object.MicrochipObjectContainer;
 import net.swedz.little_big_redstone.microchip.wire.Wire;
@@ -33,7 +34,7 @@ public final class LogicComponents extends MicrochipObjectContainer<LogicEntry, 
 		for(var entry : components)
 		{
 			entry.component().updateConfigValidState(this);
-			if(entry.component().type() == LogicTypes.DEBUGGER)
+			if(entry.component().type().is(LBRLogicTypes.DEBUGGER))
 			{
 				debug = true;
 			}
@@ -96,7 +97,7 @@ public final class LogicComponents extends MicrochipObjectContainer<LogicEntry, 
 	
 	public LogicEntry addUnsafe(int x, int y, LogicComponent component, boolean visible)
 	{
-		if(component.type() == LogicTypes.DEBUGGER)
+		if(component.type().is(LBRLogicTypes.DEBUGGER))
 		{
 			if(debug)
 			{
@@ -116,7 +117,7 @@ public final class LogicComponents extends MicrochipObjectContainer<LogicEntry, 
 		var original = objects.remove(slot);
 		wiresRemoved.addAll(microchip.wires().removeAllOutputs(slot));
 		wiresRemoved.addAll(microchip.wires().removeAllInputs(slot));
-		if(original.component().type() == LogicTypes.DEBUGGER)
+		if(original.component().type().is(LBRLogicTypes.DEBUGGER))
 		{
 			debug = false;
 		}

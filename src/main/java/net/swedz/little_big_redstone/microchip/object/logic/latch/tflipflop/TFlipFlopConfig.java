@@ -5,8 +5,8 @@ import io.netty.buffer.ByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.codec.StreamCodec;
 import net.swedz.little_big_redstone.LBR;
+import net.swedz.little_big_redstone.LBRLogicTypes;
 import net.swedz.little_big_redstone.microchip.object.logic.LogicType;
-import net.swedz.little_big_redstone.microchip.object.logic.LogicTypes;
 import net.swedz.little_big_redstone.microchip.object.logic.config.LogicConfig;
 import net.swedz.tesseract.neoforge.api.range.IntRange;
 
@@ -23,7 +23,7 @@ public record TFlipFlopConfig() implements LogicConfig<TFlipFlopConfig>
 	@Override
 	public LogicType<?, TFlipFlopConfig> type()
 	{
-		return LogicTypes.T_FLIP_FLOP;
+		return LBRLogicTypes.T_FLIP_FLOP.get();
 	}
 	
 	@Override

@@ -5,8 +5,8 @@ import io.netty.buffer.ByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.codec.StreamCodec;
 import net.swedz.little_big_redstone.LBR;
+import net.swedz.little_big_redstone.LBRLogicTypes;
 import net.swedz.little_big_redstone.microchip.object.logic.LogicType;
-import net.swedz.little_big_redstone.microchip.object.logic.LogicTypes;
 import net.swedz.little_big_redstone.microchip.object.logic.config.LogicConfig;
 import net.swedz.tesseract.neoforge.api.range.IntRange;
 
@@ -23,7 +23,7 @@ public record RSNORLatchConfig() implements LogicConfig<RSNORLatchConfig>
 	@Override
 	public LogicType<?, RSNORLatchConfig> type()
 	{
-		return LogicTypes.RS_NOR_LATCH;
+		return LBRLogicTypes.RS_NOR_LATCH.get();
 	}
 	
 	@Override

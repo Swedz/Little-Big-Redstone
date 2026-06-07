@@ -8,10 +8,10 @@ import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.util.Mth;
 import net.minecraft.world.item.DyeColor;
+import net.swedz.little_big_redstone.LBRLogicTypes;
 import net.swedz.little_big_redstone.microchip.object.logic.LogicComponent;
 import net.swedz.little_big_redstone.microchip.object.logic.LogicTickingContext;
 import net.swedz.little_big_redstone.microchip.object.logic.LogicType;
-import net.swedz.little_big_redstone.microchip.object.logic.LogicTypes;
 
 import java.util.Objects;
 import java.util.Optional;
@@ -55,7 +55,7 @@ public final class LogicCalculator extends LogicComponent<LogicCalculator, Logic
 	@Override
 	public LogicType<LogicCalculator, LogicCalculatorConfig> type()
 	{
-		return LogicTypes.CALCULATOR;
+		return LBRLogicTypes.CALCULATOR.get();
 	}
 	
 	@Override

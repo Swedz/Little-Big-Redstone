@@ -5,8 +5,8 @@ import io.netty.buffer.ByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.codec.StreamCodec;
 import net.swedz.little_big_redstone.LBR;
+import net.swedz.little_big_redstone.LBRLogicTypes;
 import net.swedz.little_big_redstone.microchip.object.logic.LogicType;
-import net.swedz.little_big_redstone.microchip.object.logic.LogicTypes;
 
 import java.util.List;
 
@@ -19,7 +19,7 @@ public record NOTGateConfig() implements SingleLogicGateConfig<NOTGateConfig>
 	@Override
 	public LogicType<?, NOTGateConfig> type()
 	{
-		return LogicTypes.NOT;
+		return LBRLogicTypes.NOT.get();
 	}
 	
 	@Override

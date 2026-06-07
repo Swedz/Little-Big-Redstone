@@ -15,7 +15,6 @@ import net.neoforged.neoforge.client.model.generators.CustomLoaderBuilder;
 import net.neoforged.neoforge.client.model.generators.ModelBuilder;
 import net.neoforged.neoforge.client.model.generators.ModelProvider;
 import net.neoforged.neoforge.common.data.ExistingFileHelper;
-import net.swedz.little_big_redstone.LBR;
 import net.swedz.little_big_redstone.microchip.object.logic.LogicType;
 import net.swedz.tesseract.api.Assert;
 import net.swedz.tesseract.neoforge.helper.CodecHelper;
@@ -38,7 +37,7 @@ public final class LogicBakingModelData
 	
 	public static LogicBakingModelData get(LogicType<?, ?> type)
 	{
-		return ((LogicBakedModel) Minecraft.getInstance().getModelManager().getModel(ModelResourceLocation.inventory(LBR.id(type.id())))).getData();
+		return ((LogicBakedModel) Minecraft.getInstance().getModelManager().getModel(ModelResourceLocation.inventory(type.id()))).getData();
 	}
 	
 	private final Map<DyeColor, LogicModelColorSet> colorPalette;

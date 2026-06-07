@@ -3,8 +3,8 @@ package net.swedz.little_big_redstone.microchip.object.logic.debug;
 import com.mojang.serialization.MapCodec;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.network.codec.StreamCodec;
+import net.swedz.little_big_redstone.LBRLogicTypes;
 import net.swedz.little_big_redstone.microchip.object.logic.LogicType;
-import net.swedz.little_big_redstone.microchip.object.logic.LogicTypes;
 import net.swedz.little_big_redstone.microchip.object.logic.config.LogicConfig;
 import net.swedz.tesseract.neoforge.api.range.IntRange;
 
@@ -19,7 +19,7 @@ public record LogicDebuggerConfig() implements LogicConfig<LogicDebuggerConfig>
 	@Override
 	public LogicType<?, LogicDebuggerConfig> type()
 	{
-		return LogicTypes.DEBUGGER;
+		return LBRLogicTypes.DEBUGGER.get();
 	}
 	
 	@Override

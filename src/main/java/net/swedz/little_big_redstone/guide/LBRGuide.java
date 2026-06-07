@@ -8,6 +8,7 @@ import guideme.compiler.tags.MdxAttrs;
 import guideme.document.LytErrorSink;
 import guideme.libs.mdast.mdx.model.MdxJsxElementFields;
 import guideme.scene.ImplicitAnnotationStrategy;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.DyeColor;
 import net.swedz.little_big_redstone.LBR;
 import net.swedz.little_big_redstone.guide.tags.block.FloatingBoxTagCompiler;
@@ -85,7 +86,12 @@ public final class LBRGuide
 		{
 			try
 			{
-				return LogicTypes.get(logicId.toLowerCase());
+				logicId = logicId.toLowerCase();
+				return LogicTypes.REGISTRY.get(
+						ResourceLocation.isValidPath(logicId) ?
+								LBR.id(logicId) :
+								ResourceLocation.parse(logicId)
+				);
 			}
 			catch(Exception ignored)
 			{

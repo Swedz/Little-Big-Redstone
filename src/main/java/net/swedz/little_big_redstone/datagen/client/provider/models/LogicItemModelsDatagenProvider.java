@@ -8,14 +8,17 @@ import net.neoforged.neoforge.client.model.generators.ModelFile;
 import net.neoforged.neoforge.data.event.GatherDataEvent;
 import net.swedz.little_big_redstone.LBR;
 import net.swedz.little_big_redstone.LBRColors;
+import net.swedz.little_big_redstone.LBRLogicTypes;
 import net.swedz.little_big_redstone.client.model.logic.LogicBakingModelData;
+import net.swedz.little_big_redstone.microchip.object.logic.LogicComponent;
 import net.swedz.little_big_redstone.microchip.object.logic.LogicType;
-import net.swedz.little_big_redstone.microchip.object.logic.LogicTypes;
 import net.swedz.little_big_redstone.microchip.object.logic.calculator.LogicCalculatorMode;
+import net.swedz.little_big_redstone.microchip.object.logic.config.LogicConfig;
 
 import java.util.Locale;
 import java.util.Set;
 import java.util.function.Consumer;
+import java.util.function.Supplier;
 
 public final class LogicItemModelsDatagenProvider extends ItemModelProvider
 {
@@ -28,37 +31,52 @@ public final class LogicItemModelsDatagenProvider extends ItemModelProvider
 	
 	private void registerLogicModels()
 	{
-		this.logicComponent(LogicTypes.DEBUGGER, BackgroundType.SQUARE, true);
+		this.logicComponent(LBRLogicTypes.DEBUGGER, BackgroundType.SQUARE, true);
 		
-		this.logicComponent(LogicTypes.IO, BackgroundType.CIRCLE, false, (b) -> b
-				.boardTexture("input", LBR.id("logic/io_input"))
-				.boardTexture("output", LBR.id("logic/io_output")));
-		this.logicComponent(LogicTypes.READER, BackgroundType.CIRCLE, true);
-		this.logicComponent(LogicTypes.TAG, BackgroundType.CIRCLE, true);
+		this.logicComponent(
+				LBRLogicTypes.IO, BackgroundType.CIRCLE, false,
+				(b) -> b
+						.boardTexture("input", LBR.id("logic/io_input"))
+						.boardTexture("output", LBR.id("logic/io_output"))
+		);
+		this.logicComponent(LBRLogicTypes.READER, BackgroundType.CIRCLE, true);
+		this.logicComponent(LBRLogicTypes.TAG, BackgroundType.CIRCLE, true);
 		
-		this.logicComponent(LogicTypes.NOT, BackgroundType.SQUARE, true);
-		this.logicComponent(LogicTypes.AND, BackgroundType.SQUARE, true);
-		this.logicComponent(LogicTypes.NAND, BackgroundType.SQUARE, true);
-		this.logicComponent(LogicTypes.OR, BackgroundType.SQUARE, true);
-		this.logicComponent(LogicTypes.NOR, BackgroundType.SQUARE, true);
-		this.logicComponent(LogicTypes.XOR, BackgroundType.SQUARE, true);
+		this.logicComponent(LBRLogicTypes.NOT, BackgroundType.SQUARE, true);
+		this.logicComponent(LBRLogicTypes.AND, BackgroundType.SQUARE, true);
+		this.logicComponent(LBRLogicTypes.NAND, BackgroundType.SQUARE, true);
+		this.logicComponent(LBRLogicTypes.OR, BackgroundType.SQUARE, true);
+		this.logicComponent(LBRLogicTypes.NOR, BackgroundType.SQUARE, true);
+		this.logicComponent(LBRLogicTypes.XOR, BackgroundType.SQUARE, true);
 		
-		this.logicComponent(LogicTypes.SEQUENCER, BackgroundType.SQUARE, false, (b) -> b
-				.boardTexture("progress", LBR.id("logic/sequencer")));
-		this.logicComponent(LogicTypes.PULSE_THROTTLER, BackgroundType.SQUARE, true);
-		this.logicComponent(LogicTypes.SELECTOR, BackgroundType.SQUARE, true);
-		this.logicComponent(LogicTypes.RANDOMIZER, BackgroundType.SQUARE, true);
-		this.logicComponent(LogicTypes.COMPARATOR, BackgroundType.SQUARE, true);
-		this.logicComponent(LogicTypes.CALCULATOR, BackgroundType.SQUARE, false, (b) -> b
-				.boardTexture(LogicCalculatorMode.ADDITION.textureKey(), LBR.id("logic/calculator_addition"))
-				.boardTexture(LogicCalculatorMode.SUBTRACTION.textureKey(), LBR.id("logic/calculator_subtraction")));
+		this.logicComponent(
+				LBRLogicTypes.SEQUENCER, BackgroundType.SQUARE, false,
+				(b) -> b
+						.boardTexture("progress", LBR.id("logic/sequencer"))
+		);
+		this.logicComponent(LBRLogicTypes.PULSE_THROTTLER, BackgroundType.SQUARE, true);
+		this.logicComponent(LBRLogicTypes.SELECTOR, BackgroundType.SQUARE, true);
+		this.logicComponent(LBRLogicTypes.RANDOMIZER, BackgroundType.SQUARE, true);
+		this.logicComponent(LBRLogicTypes.COMPARATOR, BackgroundType.SQUARE, true);
+		this.logicComponent(
+				LBRLogicTypes.CALCULATOR, BackgroundType.SQUARE, false,
+				(b) -> b
+						.boardTexture(LogicCalculatorMode.ADDITION.textureKey(), LBR.id("logic/calculator_addition"))
+						.boardTexture(LogicCalculatorMode.SUBTRACTION.textureKey(), LBR.id("logic/calculator_subtraction"))
+		);
 		
-		this.logicComponent(LogicTypes.T_FLIP_FLOP, BackgroundType.SQUARE, false, (b) -> b
-				.boardTexture("on", LBR.id("logic/t_flip_flop_on"))
-				.boardTexture("off", LBR.id("logic/t_flip_flop_off")));
-		this.logicComponent(LogicTypes.RS_NOR_LATCH, BackgroundType.SQUARE, false, (b) -> b
-				.boardTexture("on", LBR.id("logic/rs_nor_latch_on"))
-				.boardTexture("off", LBR.id("logic/rs_nor_latch_off")));
+		this.logicComponent(
+				LBRLogicTypes.T_FLIP_FLOP, BackgroundType.SQUARE, false,
+				(b) -> b
+						.boardTexture("on", LBR.id("logic/t_flip_flop_on"))
+						.boardTexture("off", LBR.id("logic/t_flip_flop_off"))
+		);
+		this.logicComponent(
+				LBRLogicTypes.RS_NOR_LATCH, BackgroundType.SQUARE, false,
+				(b) -> b
+						.boardTexture("on", LBR.id("logic/rs_nor_latch_on"))
+						.boardTexture("off", LBR.id("logic/rs_nor_latch_off"))
+		);
 	}
 	
 	@Override
@@ -71,7 +89,7 @@ public final class LogicItemModelsDatagenProvider extends ItemModelProvider
 	private void assertAllTypesAreGenerated()
 	{
 		boolean missing = false;
-		for(var type : LogicTypes.values())
+		for(var type : LBRLogicTypes.values())
 		{
 			if(!generated.contains(type))
 			{
@@ -118,23 +136,29 @@ public final class LogicItemModelsDatagenProvider extends ItemModelProvider
 		}
 	}
 	
-	private void logicComponent(LogicType<?, ?> type, BackgroundType backgroundType, boolean icon, Consumer<LogicBakingModelData.Builder<?>> also)
+	private <L extends LogicComponent<L, C>, C extends LogicConfig<C>> void logicComponent(
+			Supplier<LogicType<L, C>> entry,
+			BackgroundType backgroundType,
+			boolean icon,
+			Consumer<LogicBakingModelData.Builder<?>> also
+	)
 	{
+		var type = entry.get();
 		generated.add(type);
-		String id = type.id();
-		this.getBuilder("item/%s".formatted(id))
+		var name = type.id().getPath();
+		this.getBuilder("item/%s".formatted(name))
 				.parent(new ModelFile.UncheckedModelFile("item/generated"))
 				.customLoader((parent, efh) ->
 				{
 					var builder = LogicBakingModelData.builder(parent, efh)
 							.itemTexture("background", backgroundType.itemBackground())
 							.itemTexture("border", backgroundType.itemBorder())
-							.itemTexture("icon", LBR.id("item/logic/%s".formatted(id)))
+							.itemTexture("icon", LBR.id("item/logic/%s".formatted(name)))
 							.boardTexture("background", backgroundType.boardBackground())
 							.boardTexture("border", backgroundType.boardBorder());
 					if(icon)
 					{
-						builder.boardTexture("icon", LBR.id("logic/%s".formatted(id)));
+						builder.boardTexture("icon", LBR.id("logic/%s".formatted(name)));
 					}
 					for(var color : DyeColor.values())
 					{
@@ -150,7 +174,11 @@ public final class LogicItemModelsDatagenProvider extends ItemModelProvider
 				.end();
 	}
 	
-	private void logicComponent(LogicType<?, ?> type, BackgroundType backgroundType, boolean icon)
+	private <L extends LogicComponent<L, C>, C extends LogicConfig<C>> void logicComponent(
+			Supplier<LogicType<L, C>> type,
+			BackgroundType backgroundType,
+			boolean icon
+	)
 	{
 		this.logicComponent(type, backgroundType, icon, null);
 	}

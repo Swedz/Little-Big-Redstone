@@ -4,9 +4,9 @@ import com.mojang.serialization.MapCodec;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.world.item.DyeColor;
+import net.swedz.little_big_redstone.LBRLogicTypes;
 import net.swedz.little_big_redstone.microchip.object.logic.LogicTickingContext;
 import net.swedz.little_big_redstone.microchip.object.logic.LogicType;
-import net.swedz.little_big_redstone.microchip.object.logic.LogicTypes;
 import net.swedz.little_big_redstone.microchip.object.logic.gate.config.XORGateConfig;
 
 import java.util.Objects;
@@ -36,7 +36,7 @@ public final class XORGate extends LogicGate<XORGate, XORGateConfig>
 	@Override
 	public LogicType<XORGate, XORGateConfig> type()
 	{
-		return LogicTypes.XOR;
+		return LBRLogicTypes.XOR.get();
 	}
 	
 	@Override

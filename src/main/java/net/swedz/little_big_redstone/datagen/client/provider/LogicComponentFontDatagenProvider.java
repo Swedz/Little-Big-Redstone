@@ -2,7 +2,7 @@ package net.swedz.little_big_redstone.datagen.client.provider;
 
 import net.neoforged.neoforge.data.event.GatherDataEvent;
 import net.swedz.little_big_redstone.LBR;
-import net.swedz.little_big_redstone.microchip.object.logic.LogicTypes;
+import net.swedz.little_big_redstone.LBRLogicTypes;
 import net.swedz.tesseract.neoforge.helper.datagen.FontDatagenProvider;
 
 public final class LogicComponentFontDatagenProvider extends FontDatagenProvider
@@ -15,16 +15,16 @@ public final class LogicComponentFontDatagenProvider extends FontDatagenProvider
 	@Override
 	protected void addProviders()
 	{
-		for(var type : LogicTypes.values())
+		for(var type : LBRLogicTypes.values())
 		{
 			int height = 8;
 			int ascent = 7;
-			if(type == LogicTypes.DEBUGGER)
+			if(type.is(LBRLogicTypes.DEBUGGER))
 			{
 				height = 10;
 				ascent = 8;
 			}
-			this.addBitmap(type.symbol(), LBR.id("font/logic/" + type.id()), height, ascent);
+			this.addBitmap(type.symbol(), type.id().withPrefix("font/logic/"), height, ascent);
 		}
 	}
 }

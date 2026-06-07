@@ -4,9 +4,9 @@ import com.mojang.serialization.MapCodec;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.world.item.DyeColor;
+import net.swedz.little_big_redstone.LBRLogicTypes;
 import net.swedz.little_big_redstone.microchip.object.logic.LogicTickingContext;
 import net.swedz.little_big_redstone.microchip.object.logic.LogicType;
-import net.swedz.little_big_redstone.microchip.object.logic.LogicTypes;
 import net.swedz.little_big_redstone.microchip.object.logic.gate.config.ANDGateConfig;
 
 import java.util.Objects;
@@ -36,7 +36,7 @@ public final class ANDGate extends LogicGate<ANDGate, ANDGateConfig>
 	@Override
 	public LogicType<ANDGate, ANDGateConfig> type()
 	{
-		return LogicTypes.AND;
+		return LBRLogicTypes.AND.get();
 	}
 	
 	@Override

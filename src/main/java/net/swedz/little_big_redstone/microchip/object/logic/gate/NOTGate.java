@@ -4,9 +4,9 @@ import com.mojang.serialization.MapCodec;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.world.item.DyeColor;
+import net.swedz.little_big_redstone.LBRLogicTypes;
 import net.swedz.little_big_redstone.microchip.object.logic.LogicTickingContext;
 import net.swedz.little_big_redstone.microchip.object.logic.LogicType;
-import net.swedz.little_big_redstone.microchip.object.logic.LogicTypes;
 import net.swedz.little_big_redstone.microchip.object.logic.gate.config.NOTGateConfig;
 
 import java.util.Objects;
@@ -31,7 +31,7 @@ public final class NOTGate extends LogicGate<NOTGate, NOTGateConfig>
 	@Override
 	public LogicType<NOTGate, NOTGateConfig> type()
 	{
-		return LogicTypes.NOT;
+		return LBRLogicTypes.NOT.get();
 	}
 	
 	@Override
