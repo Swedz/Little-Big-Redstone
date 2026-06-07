@@ -34,7 +34,7 @@ final class LogicComparatorConfigMenuProvider extends LogicConfigMenuProvider<Lo
 				LogicAccumulationMode::label,
 				(value) ->
 				{
-					config = new LogicComparatorConfig(value, config.signalStrength(), config.signalComparison(), config.inputs());
+					config = new LogicComparatorConfig(value, config.signalStrength(), config.signalComparison(), config.outputOverride(), config.inputs());
 					this.updateComparisonButton();
 				}
 		);
@@ -97,7 +97,7 @@ final class LogicComparatorConfigMenuProvider extends LogicConfigMenuProvider<Lo
 				Arrays.asList(LogicComparisonMode.values()),
 				(value) ->
 				{
-					config = new LogicComparatorConfig(config.mode(), config.signalStrength(), value, config.inputs());
+					config = new LogicComparatorConfig(config.mode(), config.signalStrength(), value, config.outputOverride(), config.inputs());
 					this.updateComparisonButton();
 				}
 		);
@@ -138,9 +138,36 @@ final class LogicComparatorConfigMenuProvider extends LogicConfigMenuProvider<Lo
 				this::stringifySignalStrength,
 				(value) ->
 				{
-					config = new LogicComparatorConfig(config.mode(), (int) Math.round(value), config.signalComparison(), config.inputs());
+					config = new LogicComparatorConfig(config.mode(), (int) Math.round(value), config.signalComparison(), config.outputOverride(), config.inputs());
 					this.updateComparisonButton();
 				}
+		);
+	}
+	
+	private Component stringifyOutputOverride(double value, String string)
+	{
+		return value == 0 ?
+				LBR.text().pass() :
+				Component.literal(string);
+	}
+	
+	private void createOutputOverride(LogicConfigMenuBuilder builder, int width, int height)
+	{
+		builder.addSlider(
+				LBR.text().logicConfigButtonLabelComparatorOutputOverride(),
+				Component.empty(),
+				LBR.text().logicConfigButtonTooltipComparatorOutputOverride(),
+				0,
+				22 * 2,
+				width,
+				18,
+				0,
+				15,
+				config.outputOverride(),
+				1,
+				0,
+				this::stringifyOutputOverride,
+				(value) -> config = new LogicComparatorConfig(config.mode(), config.signalStrength(), config.signalComparison(), (int) Math.round(value), config.inputs())
 		);
 	}
 	
@@ -151,7 +178,7 @@ final class LogicComparatorConfigMenuProvider extends LogicConfigMenuProvider<Lo
 				Component.empty(),
 				LBR.text().logicConfigButtonTooltipInputs(),
 				0,
-				22 * 2,
+				22 * 3,
 				width,
 				18,
 				1,
@@ -159,7 +186,7 @@ final class LogicComparatorConfigMenuProvider extends LogicConfigMenuProvider<Lo
 				config.inputs(),
 				1,
 				0,
-				(value) -> config = new LogicComparatorConfig(config.mode(), config.signalStrength(), config.signalComparison(), (int) Math.round(value))
+				(value) -> config = new LogicComparatorConfig(config.mode(), config.signalStrength(), config.signalComparison(), config.outputOverride(), (int) Math.round(value))
 		);
 	}
 	
@@ -169,6 +196,7 @@ final class LogicComparatorConfigMenuProvider extends LogicConfigMenuProvider<Lo
 		this.createMode(builder, width, height);
 		this.createComparison(builder, width, height);
 		this.createSignalStrength(builder, width, height);
+		this.createOutputOverride(builder, width, height);
 		this.createInputs(builder, width, height);
 	}
 }

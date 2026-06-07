@@ -89,7 +89,7 @@ public final class LogicComparator extends LogicComponent<LogicComparator, Logic
 			}
 		}
 		
-		outputState = matches ? against : 0;
+		outputState = matches ? (config.outputOverride() > 0 ? config.outputOverride() : against) : 0;
 		if(outputState != originalOutputState)
 		{
 			context.markDirty(this);
