@@ -69,7 +69,7 @@ public final class LogicComponents extends MicrochipObjectContainer<LogicEntry, 
 		var size = entry.size();
 		LogicSelectedPort nearest = null;
 		int nearestDistance = 0;
-		int totalPorts = input ? entry.component().inputs() : entry.component().outputs();
+		int totalPorts = input ? entry.component().inputPorts() : entry.component().outputPorts();
 		for(int index = 0; index < totalPorts; index++)
 		{
 			int portX = size.portX(entry.x(), input, index, totalPorts);

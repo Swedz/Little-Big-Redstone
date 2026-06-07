@@ -54,25 +54,25 @@ public record LogicTagConfig(
 	}
 	
 	@Override
-	public IntRange inputsAllowed()
+	public IntRange inputPortsAllowed()
 	{
 		return input ? new IntRange(0, 0) : new IntRange(1, 1);
 	}
 	
 	@Override
-	public int inputs()
+	public int inputPorts()
 	{
 		return input ? 0 : 1;
 	}
 	
 	@Override
-	public IntRange outputsAllowed()
+	public IntRange outputPortsAllowed()
 	{
 		return input ? new IntRange(1, 1) : new IntRange(0, 0);
 	}
 	
 	@Override
-	public int outputs()
+	public int outputPorts()
 	{
 		return input ? 1 : 0;
 	}

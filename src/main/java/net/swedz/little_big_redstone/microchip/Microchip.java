@@ -241,7 +241,7 @@ public final class Microchip
 		for(var entry : components.traversal())
 		{
 			int inputSlot = entry.slot();
-			int totalInputs = entry.component().inputs();
+			int totalInputs = entry.component().inputPorts();
 			int[] inputs = new int[totalInputs];
 			outer:
 			for(int inputPort = 0; inputPort < totalInputs; inputPort++)
@@ -432,10 +432,10 @@ public final class Microchip
 				var outputComponent = components.get(wire.output().slot());
 				var inputComponent = components.get(wire.input().slot());
 				// Check that a port exists at the output index
-				if(wire.output().index() >= outputComponent.component().outputs() ||
+				if(wire.output().index() >= outputComponent.component().outputPorts() ||
 				   wire.output().index() < 0 ||
 				   // Check that a port exists at the input index
-				   wire.input().index() >= inputComponent.component().inputs() ||
+				   wire.input().index() >= inputComponent.component().inputPorts() ||
 				   wire.input().index() < 0)
 				{
 					return false;

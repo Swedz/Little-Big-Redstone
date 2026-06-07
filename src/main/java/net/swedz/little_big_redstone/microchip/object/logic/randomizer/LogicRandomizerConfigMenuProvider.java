@@ -22,9 +22,9 @@ final class LogicRandomizerConfigMenuProvider extends LogicConfigMenuProvider<Lo
 				0,
 				width,
 				18,
-				config.outputsAllowed().min(),
-				config.outputsAllowed().max(),
-				config.outputs(),
+				config.outputPortsAllowed().min(),
+				config.outputPortsAllowed().max(),
+				config.outputPorts(),
 				1,
 				0,
 				(value) -> config = new LogicRandomizerConfig((int) Math.round(value), config.chance())
@@ -46,7 +46,7 @@ final class LogicRandomizerConfigMenuProvider extends LogicConfigMenuProvider<Lo
 				config.chance() * 100,
 				1,
 				0,
-				(value) -> config = new LogicRandomizerConfig(config.outputs(), (float) (value / 100f))
+				(value) -> config = new LogicRandomizerConfig(config.outputPorts(), (float) (value / 100f))
 		);
 	}
 	

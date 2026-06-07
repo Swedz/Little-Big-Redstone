@@ -39,34 +39,39 @@ public abstract class MultiLogicGateConfig<C extends MultiLogicGateConfig<C>> im
 	
 	public MultiLogicGateConfig(int inputs)
 	{
-		this.inputs = this.inputsAllowed().clamp(inputs);
+		this.inputs = this.inputPortsAllowed().clamp(inputs);
 	}
 	
 	public MultiLogicGateConfig()
 	{
-		this.inputs = this.inputsAllowed().min();
+		this.inputs = this.inputPortsAllowed().min();
 	}
 	
-	@Override
-	public IntRange inputsAllowed()
-	{
-		return new IntRange(2, 10);
-	}
-	
-	@Override
 	public int inputs()
 	{
 		return inputs;
 	}
 	
 	@Override
-	public IntRange outputsAllowed()
+	public final IntRange inputPortsAllowed()
+	{
+		return new IntRange(2, 10);
+	}
+	
+	@Override
+	public final int inputPorts()
+	{
+		return inputs;
+	}
+	
+	@Override
+	public final IntRange outputPortsAllowed()
 	{
 		return new IntRange(1, 1);
 	}
 	
 	@Override
-	public int outputs()
+	public final int outputPorts()
 	{
 		return 1;
 	}

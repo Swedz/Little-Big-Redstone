@@ -77,25 +77,25 @@ public record LogicSelectorConfig(
 	}
 	
 	@Override
-	public IntRange inputsAllowed()
+	public IntRange inputPortsAllowed()
 	{
 		return new IntRange(2, 10);
 	}
 	
 	@Override
-	public int inputs()
+	public int inputPorts()
 	{
 		return mode == LogicSelectorMode.COUNTER ? 2 : outputs;
 	}
 	
 	@Override
-	public IntRange outputsAllowed()
+	public IntRange outputPortsAllowed()
 	{
 		return new IntRange(2, 10);
 	}
 	
 	@Override
-	public int outputs()
+	public int outputPorts()
 	{
 		return outputs;
 	}

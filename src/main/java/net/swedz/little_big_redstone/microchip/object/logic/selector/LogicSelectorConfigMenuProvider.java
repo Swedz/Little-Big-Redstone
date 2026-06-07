@@ -32,7 +32,7 @@ final class LogicSelectorConfigMenuProvider extends LogicConfigMenuProvider<Logi
 				LogicSelectorMode::label,
 				(value) ->
 				{
-					config = new LogicSelectorConfig(value, config.outputs(), config.passSignal());
+					config = new LogicSelectorConfig(value, config.outputPorts(), config.passSignal());
 					if(modeButton != null)
 					{
 						modeButton.setTooltip(config.mode().tooltip());
@@ -51,9 +51,9 @@ final class LogicSelectorConfigMenuProvider extends LogicConfigMenuProvider<Logi
 				22,
 				width,
 				18,
-				config.outputsAllowed().min(),
-				config.outputsAllowed().max(),
-				config.outputs(),
+				config.outputPortsAllowed().min(),
+				config.outputPortsAllowed().max(),
+				config.outputPorts(),
 				1,
 				0,
 				(value) -> config = new LogicSelectorConfig(config.mode(), (int) Math.round(value), config.passSignal())
@@ -68,7 +68,7 @@ final class LogicSelectorConfigMenuProvider extends LogicConfigMenuProvider<Logi
 				0,
 				22 * 2,
 				config.passSignal(),
-				(value) -> config = new LogicSelectorConfig(config.mode(), config.outputs(), value)
+				(value) -> config = new LogicSelectorConfig(config.mode(), config.outputPorts(), value)
 		);
 	}
 	

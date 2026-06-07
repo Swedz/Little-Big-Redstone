@@ -23,25 +23,25 @@ public record LogicDebuggerConfig() implements LogicConfig
 	}
 	
 	@Override
-	public IntRange inputsAllowed()
+	public IntRange inputPortsAllowed()
 	{
 		return new IntRange(0, 0);
 	}
 	
 	@Override
-	public int inputs()
+	public int inputPorts()
 	{
 		return 0;
 	}
 	
 	@Override
-	public IntRange outputsAllowed()
+	public IntRange outputPortsAllowed()
 	{
 		return new IntRange(0, 0);
 	}
 	
 	@Override
-	public int outputs()
+	public int outputPorts()
 	{
 		return 0;
 	}

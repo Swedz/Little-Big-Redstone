@@ -6,25 +6,25 @@ import net.swedz.tesseract.neoforge.api.range.IntRange;
 public interface SingleLogicGateConfig<C extends SingleLogicGateConfig<C>> extends LogicConfig
 {
 	@Override
-	default IntRange inputsAllowed()
+	default IntRange inputPortsAllowed()
 	{
 		return new IntRange(1, 1);
 	}
 	
 	@Override
-	default int inputs()
+	default int inputPorts()
 	{
 		return 1;
 	}
 	
 	@Override
-	default IntRange outputsAllowed()
+	default IntRange outputPortsAllowed()
 	{
 		return new IntRange(1, 1);
 	}
 	
 	@Override
-	default int outputs()
+	default int outputPorts()
 	{
 		return 1;
 	}
