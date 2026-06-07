@@ -475,6 +475,14 @@ public interface LBRText
 			@WithStyle("highlighted") int signal
 	);
 	
+	@LangKey(text = "  Output Override: %s")
+	@WithStyle("tooltip")
+	MutableComponent logicConfigTooltipComparatorOutputOverride(@WithStyle("highlighted") Component signal);
+	
+	@LangKey(datagen = false)
+	@WithStyle("tooltip")
+	MutableComponent logicConfigTooltipComparatorOutputOverride(@WithStyle("highlighted") int signal);
+	
 	@LangKey(text = "  Power: %s")
 	@WithStyle("tooltip")
 	MutableComponent logicConfigTooltipIoPowerOutput(@WithStyle("highlighted") LogicPowerOutputType powerType);
@@ -655,7 +663,7 @@ public interface LBRText
 	@WithStyle("tooltip")
 	MutableComponent logicHelpComparator1();
 	
-	@LangKey(text = "When the output is ON, the signal strength will always equal the strength being compared against.")
+	@LangKey(text = "When the output is ON, the signal strength will equal the output override value. When the output override is set to pass, the output signal strength will equal the strength being compared against.")
 	@WithStyle("tooltip")
 	MutableComponent logicHelpComparator2();
 	

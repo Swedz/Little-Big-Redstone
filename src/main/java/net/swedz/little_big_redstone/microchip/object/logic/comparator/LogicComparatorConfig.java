@@ -100,6 +100,10 @@ public record LogicComparatorConfig(
 				LBR.text().logicConfigTooltipSignalComparison(signalComparison, LBR.text().pass()) :
 				LBR.text().logicConfigTooltipSignalComparison(signalComparison, signalStrength));
 		
+		lines.add(outputOverride == 0 ?
+				LBR.text().logicConfigTooltipComparatorOutputOverride(LBR.text().pass()) :
+				LBR.text().logicConfigTooltipComparatorOutputOverride(outputOverride));
+		
 		lines.add(LBR.text().logicConfigTooltipInputs(inputs));
 	}
 	
