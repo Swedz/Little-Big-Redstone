@@ -57,9 +57,9 @@ public final class MicrochipStickyNotes extends MicrochipObjectContainer<StickyN
 	
 	public StickyNoteEntry add(int x, int y, ItemStack stack)
 	{
-		if(stack.getItem() instanceof StickyNoteItem stickyNote)
+		if(StickyNoteItem.hasRelevantComponents(stack))
 		{
-			var color = stickyNote.color();
+			var color = stack.get(LBRComponents.STICKY_NOTE_COLOR);
 			var note = stack.get(LBRComponents.STICKY_NOTE);
 			var textColor = stack.get(LBRComponents.STICKY_NOTE_TEXT_COLOR);
 			var editable = stack.get(LBRComponents.STICKY_NOTE_EDITABLE);

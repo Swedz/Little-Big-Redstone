@@ -171,7 +171,7 @@ public final class MicrochipScreen extends AbstractContainerScreen<MicrochipMenu
 			graphics.pose().scale(microchipWidget.viewPosition().zoom(), microchipWidget.viewPosition().zoom(), 1);
 			graphics.pose().translate(-microchipWidget.viewPosition().x(), -microchipWidget.viewPosition().y(), 0);
 			
-			if(carried.getItem() instanceof StickyNoteItem)
+			if(StickyNoteItem.hasRelevantComponents(carried))
 			{
 				int itemX = Screen.hasControlDown() ? getGridSnappedCoord(boardMouseX) : (boardMouseX - 8);
 				int itemY = Screen.hasControlDown() ? getGridSnappedCoord(boardMouseY) : (boardMouseY - 8);

@@ -325,7 +325,7 @@ public final class MicrochipWidget implements GuiEventListener, Renderable, Narr
 		boolean leftClick = button == InputConstants.MOUSE_BUTTON_LEFT;
 		boolean rightClick = button == InputConstants.MOUSE_BUTTON_RIGHT;
 		if((leftClick || rightClick) &&
-		   carried.getItem() instanceof StickyNoteItem &&
+		   StickyNoteItem.hasRelevantComponents(carried) &&
 		   context.shouldInteractBoard())
 		{
 			int placeX = Screen.hasControlDown() ? MicrochipScreen.getGridSnappedCoord(x) : (x - 8);

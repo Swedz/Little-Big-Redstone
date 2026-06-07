@@ -7,7 +7,6 @@ import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.ItemStack;
 import net.swedz.little_big_redstone.LBRComponents;
-import net.swedz.little_big_redstone.item.stickynote.StickyNoteItem;
 
 public record StickyNoteView(
 		DyeColor color,
@@ -25,7 +24,7 @@ public record StickyNoteView(
 	public StickyNoteView(ItemStack stack)
 	{
 		this(
-				((StickyNoteItem) stack.getItem()).color(),
+				stack.get(LBRComponents.STICKY_NOTE_COLOR),
 				stack.get(LBRComponents.STICKY_NOTE_TEXT_COLOR),
 				stack.get(LBRComponents.STICKY_NOTE).parsed()
 		);

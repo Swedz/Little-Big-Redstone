@@ -36,16 +36,24 @@ public final class LBRComponents
 	 * @see LogicItem#verifyComponentsAfterLoad(ItemStack)
 	 */
 	@Deprecated(since = "1.8.3-beta", forRemoval = true)
-	public static final Supplier<DataComponentType<LogicComponent>>        LOGIC                    = create("logic", LogicCodecs.COMPONENT_CODEC, LogicCodecs.COMPONENT_STREAM_CODEC);
-	public static final Supplier<DataComponentType<LogicConfig>>           LOGIC_CONFIG             = create("logic_config", LogicCodecs.CONFIG_CODEC, LogicCodecs.CONFIG_STREAM_CODEC);
-	public static final Supplier<DataComponentType<DyeColor>>              LOGIC_COLOR              = create("logic_color", DyeColor.CODEC, DyeColor.STREAM_CODEC);
-	public static final Supplier<DataComponentType<ItemContainerContents>> LOGIC_ARRAY_STORAGE      = create("logic_array_storage", ItemContainerContents.CODEC, ItemContainerContents.STREAM_CODEC);
+	public static final Supplier<DataComponentType<LogicComponent>> LOGIC        = create("logic", LogicCodecs.COMPONENT_CODEC, LogicCodecs.COMPONENT_STREAM_CODEC);
+	public static final Supplier<DataComponentType<LogicConfig>>    LOGIC_CONFIG = create("logic_config", LogicCodecs.CONFIG_CODEC, LogicCodecs.CONFIG_STREAM_CODEC);
+	public static final Supplier<DataComponentType<DyeColor>>       LOGIC_COLOR  = create("logic_color", DyeColor.CODEC, DyeColor.STREAM_CODEC);
+	
+	public static final Supplier<DataComponentType<DyeColor>> MICROCHIP_COLOR = create("microchip_color", DyeColor.CODEC, DyeColor.STREAM_CODEC);
+	
+	public static final Supplier<DataComponentType<DyeColor>>              LOGIC_ARRAY_COLOR   = create("logic_array_color", DyeColor.CODEC, DyeColor.STREAM_CODEC);
+	public static final Supplier<DataComponentType<ItemContainerContents>> LOGIC_ARRAY_STORAGE = create("logic_array_storage", ItemContainerContents.CODEC, ItemContainerContents.STREAM_CODEC);
+	
+	public static final Supplier<DataComponentType<DyeColor>>              FLOPPY_DISK_COLOR        = create("floppy_disk_color", DyeColor.CODEC, DyeColor.STREAM_CODEC);
 	public static final Supplier<DataComponentType<Microchip.Immutable>>   FLOPPY_DISK              = create("floppy_disk", Microchip.Immutable.CODEC, Microchip.Immutable.STREAM_CODEC);
 	public static final Supplier<DataComponentType<FloppyDiskProgramName>> FLOPPY_DISK_PROGRAM_NAME = create("floppy_disk_program_name", FloppyDiskProgramName.CODEC, FloppyDiskProgramName.STREAM_CODEC);
-	public static final Supplier<DataComponentType<StickyNote>>            STICKY_NOTE              = create("sticky_note", StickyNote.CODEC, StickyNote.STREAM_CODEC);
-	public static final Supplier<DataComponentType<DyeColor>>              STICKY_NOTE_TEXT_COLOR   = create("sticky_note_text_color", DyeColor.CODEC, DyeColor.STREAM_CODEC);
-	public static final Supplier<DataComponentType<Boolean>>               STICKY_NOTE_EDITABLE     = create("sticky_note_editable", Codec.BOOL, ByteBufCodecs.BOOL);
-	public static final Supplier<DataComponentType<ItemInstance>>          STICKY_NOTE_DISPLAY_ITEM = create("sticky_note_display_item", ItemInstance.CODEC, ItemInstance.STREAM_CODEC);
+	
+	public static final Supplier<DataComponentType<StickyNote>>   STICKY_NOTE              = create("sticky_note", StickyNote.CODEC, StickyNote.STREAM_CODEC);
+	public static final Supplier<DataComponentType<DyeColor>>     STICKY_NOTE_COLOR        = create("sticky_note_color", DyeColor.CODEC, DyeColor.STREAM_CODEC);
+	public static final Supplier<DataComponentType<DyeColor>>     STICKY_NOTE_TEXT_COLOR   = create("sticky_note_text_color", DyeColor.CODEC, DyeColor.STREAM_CODEC);
+	public static final Supplier<DataComponentType<Boolean>>      STICKY_NOTE_EDITABLE     = create("sticky_note_editable", Codec.BOOL, ByteBufCodecs.BOOL);
+	public static final Supplier<DataComponentType<ItemInstance>> STICKY_NOTE_DISPLAY_ITEM = create("sticky_note_display_item", ItemInstance.CODEC, ItemInstance.STREAM_CODEC);
 	
 	public static void init(IEventBus bus)
 	{

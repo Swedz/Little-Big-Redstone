@@ -23,12 +23,12 @@ public final class HeldItemStickyNoteReference implements StickyNoteReference
 	
 	public HeldItemStickyNoteReference(InteractionHand hand, ItemStack stack)
 	{
-		if(!(stack.getItem() instanceof StickyNoteItem item))
+		if(!StickyNoteItem.hasRelevantComponents(stack))
 		{
 			throw new IllegalArgumentException("Non-sticky note item supplied");
 		}
 		this.hand = hand;
-		this.color = item.color();
+		this.color = stack.get(LBRComponents.STICKY_NOTE_COLOR);
 		this.textColor = stack.get(LBRComponents.STICKY_NOTE_TEXT_COLOR);
 		this.text = stack.getOrDefault(LBRComponents.STICKY_NOTE, StickyNote.EMPTY).text();
 		this.editable = stack.get(LBRComponents.STICKY_NOTE_EDITABLE);
@@ -83,7 +83,7 @@ public final class HeldItemStickyNoteReference implements StickyNoteReference
 	public void saveServer(Level level, Player player)
 	{
 		var stack = player.getItemInHand(hand);
-		if(stack.getItem() instanceof StickyNoteItem item &&
+		if(StickyNoteItem.hasRelevantComponents(stack) &&
 		   stack.get(LBRComponents.STICKY_NOTE_EDITABLE))
 		{
 			stack.set(LBRComponents.STICKY_NOTE, new StickyNote(text));

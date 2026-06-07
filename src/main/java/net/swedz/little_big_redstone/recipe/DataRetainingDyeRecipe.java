@@ -1,8 +1,8 @@
 package net.swedz.little_big_redstone.recipe;
 
 import net.minecraft.core.HolderLookup;
+import net.minecraft.core.component.DataComponentType;
 import net.minecraft.tags.TagKey;
-import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.DyeItem;
 import net.minecraft.world.item.Item;
@@ -18,11 +18,11 @@ import net.swedz.little_big_redstone.LBRComponents;
 import net.swedz.little_big_redstone.LBRItems;
 import net.swedz.little_big_redstone.LBRRecipeTypes;
 import net.swedz.little_big_redstone.LBRTags;
-import net.swedz.little_big_redstone.item.DyeColoredItem;
 
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
+import java.util.function.Supplier;
 
 public final class DataRetainingDyeRecipe extends CustomRecipe
 {
@@ -33,12 +33,14 @@ public final class DataRetainingDyeRecipe extends CustomRecipe
 	
 	private static final Map<TagKey<Item>, ColorableItemTagHandler> TAG_RESULTS = Map.of(
 			LBRTags.Items.MICROCHIPS,
-			new ColorableItemTagHandler((color) -> LBRBlocks.microchip(color).get()),
+			new ColorableItemTagHandler(
+					LBRComponents.MICROCHIP_COLOR,
+					(color) -> LBRBlocks.microchip(color).get()
+			),
 			
 			LBRTags.Items.LOGIC_COMPONENTS,
 			new ColorableItemTagHandler(
-					(stack) ->
-							Optional.ofNullable(stack.get(LBRComponents.LOGIC_COLOR)),
+					LBRComponents.LOGIC_COLOR,
 					(original, color) ->
 					{
 						var output = original.copyWithCount(1);
@@ -48,48 +50,54 @@ public final class DataRetainingDyeRecipe extends CustomRecipe
 			),
 			
 			LBRTags.Items.LOGIC_ARRAYS,
-			new ColorableItemTagHandler(LBRItems::logicArray),
+			new ColorableItemTagHandler(
+					LBRComponents.LOGIC_ARRAY_COLOR,
+					LBRItems::logicArray
+			),
 			
 			LBRTags.Items.FLOPPY_DISKS,
-			new ColorableItemTagHandler(LBRItems::floppyDisk),
+			new ColorableItemTagHandler(
+					LBRComponents.FLOPPY_DISK_COLOR,
+					LBRItems::floppyDisk
+			),
 			
 			LBRTags.Items.STICKY_NOTES,
-			new ColorableItemTagHandler(LBRItems::stickyNote)
+			new ColorableItemTagHandler(
+					LBRComponents.STICKY_NOTE_COLOR,
+					LBRItems::stickyNote
+			)
 	);
 	
-	private record ColorableItemTagHandler(ItemColorGetter colorGetter, ColoredItemFactory coloredItemFactory)
+	private record ColorableItemTagHandler(
+			ItemColorGetter colorGetter,
+			ColoredItemFactory coloredItemFactory
+	)
 	{
-		public ColorableItemTagHandler(ColoredItemFactory coloredItemFactory)
+		public ColorableItemTagHandler(
+				Supplier<DataComponentType<DyeColor>> dyeColorComponent,
+				ColoredItemFactory coloredItemFactory
+		)
 		{
-			this(ItemColorGetter.DEFAULT, coloredItemFactory);
+			this(ItemColorGetter.forComponent(dyeColorComponent), coloredItemFactory);
 		}
 		
-		public ColorableItemTagHandler(ColoredItemFactory.Simple coloredItemFactory)
+		public ColorableItemTagHandler(
+				Supplier<DataComponentType<DyeColor>> dyeColorComponent,
+				ColoredItemFactory.Simple coloredItemFactory
+		)
 		{
-			this(ItemColorGetter.DEFAULT, coloredItemFactory);
+			this(ItemColorGetter.forComponent(dyeColorComponent), coloredItemFactory);
 		}
 	}
 	
 	private interface ItemColorGetter
 	{
-		ItemColorGetter DEFAULT = (stack) ->
+		static ItemColorGetter forComponent(Supplier<DataComponentType<DyeColor>> component)
 		{
-			DyeColoredItem dyeColoredItem;
-			if(stack.getItem() instanceof DyeColoredItem item)
-			{
-				dyeColoredItem = item;
-			}
-			else if(stack.getItem() instanceof BlockItem blockItem &&
-					blockItem.getBlock().asItem() instanceof DyeColoredItem item)
-			{
-				dyeColoredItem = item;
-			}
-			else
-			{
-				return Optional.empty();
-			}
-			return Optional.of(dyeColoredItem.color());
-		};
+			return (stack) -> stack.has(component) ?
+					Optional.of(stack.get(component)) :
+					Optional.empty();
+		}
 		
 		Optional<DyeColor> get(ItemStack stack);
 	}

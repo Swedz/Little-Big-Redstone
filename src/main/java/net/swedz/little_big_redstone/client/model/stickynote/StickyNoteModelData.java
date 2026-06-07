@@ -24,10 +24,10 @@ public final class StickyNoteModelData
 	
 	public static StickyNoteModelData of(ItemStack stack)
 	{
-		if(stack.getItem() instanceof StickyNoteItem stickyNoteItem)
+		if(StickyNoteItem.hasRelevantComponents(stack))
 		{
 			var note = stack.get(LBRComponents.STICKY_NOTE);
-			var color = stickyNoteItem.color();
+			var color = stack.get(LBRComponents.STICKY_NOTE_COLOR);
 			var textColor = stack.get(LBRComponents.STICKY_NOTE_TEXT_COLOR);
 			return new StickyNoteModelData(color, textColor, !note.isEmpty());
 		}

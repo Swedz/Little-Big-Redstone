@@ -31,7 +31,7 @@ public final class StickyNoteItemRenderer extends BlockEntityWithoutLevelRendere
 	@Override
 	public void renderByItem(ItemStack stack, ItemDisplayContext displayContext, PoseStack poseStack, MultiBufferSource bufferSource, int packedLight, int packedOverlay)
 	{
-		if(!(stack.getItem() instanceof StickyNoteItem stickyNoteItem))
+		if(!StickyNoteItem.hasRelevantComponents(stack))
 		{
 			return;
 		}

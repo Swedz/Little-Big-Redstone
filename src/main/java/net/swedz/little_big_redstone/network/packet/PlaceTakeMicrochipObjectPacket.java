@@ -51,7 +51,7 @@ public record PlaceTakeMicrochipObjectPacket(
 			ItemStack heldItem = menu.getCarried();
 			if(place)
 			{
-				if(heldItem.getItem() instanceof StickyNoteItem)
+				if(StickyNoteItem.hasRelevantComponents(heldItem))
 				{
 					if(microchip.size().bounds().normalize().contains(new Bounds(x, y, 16, 16)))
 					{
