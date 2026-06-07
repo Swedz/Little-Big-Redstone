@@ -56,7 +56,7 @@ public record NoteBoardStickyNote(
 	public NoteBoardStickyNote
 	{
 		Assert.notNull(stack);
-		Assert.that(stack.getItem() instanceof StickyNoteItem);
+		Assert.that(StickyNoteItem.hasRelevantComponents(stack));
 		Assert.that(size > 0);
 	}
 	

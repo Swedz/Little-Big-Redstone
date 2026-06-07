@@ -138,7 +138,10 @@ public final class LBRBlocks
 								.texture("base_down", LBR.id("block/microchip/bottom/%s".formatted(colorId)))
 								.texture("signal_on_overlay", LBR.id("block/microchip/signal_on_overlay"))
 								.texture("signal_off_overlay", LBR.id("block/microchip/signal_off_overlay"))));
-		holder.item().tag(LBRTags.Items.MICROCHIPS);
+		holder.item()
+				.withProperties((p) -> p
+						.component(LBRComponents.MICROCHIP_COLOR, color))
+				.tag(LBRTags.Items.MICROCHIPS);
 		return holder;
 	}
 }

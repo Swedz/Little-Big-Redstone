@@ -26,7 +26,7 @@ public final class SealStickyNoteRecipe extends CustomRecipe
 		boolean hasSealant = false;
 		for(var stack : input.items())
 		{
-			if(stack.getItem() instanceof StickyNoteItem item)
+			if(StickyNoteItem.hasRelevantComponents(stack))
 			{
 				if(hasNote ||
 				   !stack.get(LBRComponents.STICKY_NOTE_EDITABLE))
@@ -58,7 +58,7 @@ public final class SealStickyNoteRecipe extends CustomRecipe
 		boolean hasSealant = false;
 		for(var stack : input.items())
 		{
-			if(stack.getItem() instanceof StickyNoteItem item)
+			if(StickyNoteItem.hasRelevantComponents(stack))
 			{
 				if(!note.isEmpty() ||
 				   !stack.get(LBRComponents.STICKY_NOTE_EDITABLE))

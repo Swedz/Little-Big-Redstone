@@ -28,13 +28,14 @@ public final class CopyStickyNoteRecipe extends CustomRecipe
 		boolean hasTargetNote = false;
 		for(var stack : input.items())
 		{
-			if(stack.getItem() instanceof StickyNoteItem item)
+			if(StickyNoteItem.hasRelevantComponents(stack))
 			{
-				if(color != null && !color.equals(item.color()))
+				var stackColor = stack.get(LBRComponents.STICKY_NOTE_COLOR);
+				if(color != null && !color.equals(stackColor))
 				{
 					return false;
 				}
-				color = item.color();
+				color = stackColor;
 				
 				var stackTextColor = stack.get(LBRComponents.STICKY_NOTE_TEXT_COLOR);
 				if(textColor != null && !textColor.equals(stackTextColor))
@@ -78,13 +79,14 @@ public final class CopyStickyNoteRecipe extends CustomRecipe
 		var target = ItemStack.EMPTY;
 		for(var stack : input.items())
 		{
-			if(stack.getItem() instanceof StickyNoteItem item)
+			if(StickyNoteItem.hasRelevantComponents(stack))
 			{
-				if(color != null && !color.equals(item.color()))
+				var stackColor = stack.get(LBRComponents.STICKY_NOTE_COLOR);
+				if(color != null && !color.equals(stackColor))
 				{
 					return ItemStack.EMPTY;
 				}
-				color = item.color();
+				color = stackColor;
 				
 				var stackTextColor = stack.get(LBRComponents.STICKY_NOTE_TEXT_COLOR);
 				if(textColor != null && !textColor.equals(stackTextColor))

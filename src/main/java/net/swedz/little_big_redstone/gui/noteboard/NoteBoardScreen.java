@@ -141,7 +141,7 @@ public final class NoteBoardScreen extends AbstractContainerScreen<NoteBoardMenu
 		{
 			var carried = menu.getCarried();
 			if(holdingHudNote ||
-			   carried.getItem() instanceof StickyNoteItem)
+			   StickyNoteItem.hasRelevantComponents(carried))
 			{
 				int placeXRaw = x - (carriedNoteSize / 2);
 				int placeYRaw = y - (carriedNoteSize / 2);
@@ -242,7 +242,7 @@ public final class NoteBoardScreen extends AbstractContainerScreen<NoteBoardMenu
 	public boolean mouseReleased(double mouseX, double mouseY, int button)
 	{
 		if(this.isOutsideInventory(mouseX, mouseY) &&
-		   menu.getCarried().getItem() instanceof StickyNoteItem)
+		   StickyNoteItem.hasRelevantComponents(menu.getCarried()))
 		{
 			return false;
 		}
@@ -284,7 +284,7 @@ public final class NoteBoardScreen extends AbstractContainerScreen<NoteBoardMenu
 	private boolean shouldRenderFloatingNote(int mouseX, int mouseY, ItemStack stack)
 	{
 		return this.isOutsideInventory(mouseX, mouseY) &&
-			   stack.getItem() instanceof StickyNoteItem;
+			   StickyNoteItem.hasRelevantComponents(stack);
 	}
 	
 	private void renderFloatingNote(TesseractGuiGraphics graphics, int mouseX, int mouseY, ItemStack stack)
@@ -359,7 +359,7 @@ public final class NoteBoardScreen extends AbstractContainerScreen<NoteBoardMenu
 		{
 			var carried = menu.getCarried();
 			if(holdingHudNote ||
-			   carried.getItem() instanceof StickyNoteItem)
+			   StickyNoteItem.hasRelevantComponents(carried))
 			{
 				carriedNoteSize = this.resize(carriedNoteSize, scrollY);
 				return true;
