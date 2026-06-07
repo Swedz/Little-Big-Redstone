@@ -5,8 +5,8 @@ import io.netty.buffer.ByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.codec.StreamCodec;
 import net.swedz.little_big_redstone.LBR;
+import net.swedz.little_big_redstone.LBRLogicTypes;
 import net.swedz.little_big_redstone.microchip.object.logic.LogicType;
-import net.swedz.little_big_redstone.microchip.object.logic.LogicTypes;
 
 import java.util.List;
 
@@ -28,9 +28,9 @@ public final class ORGateConfig extends MultiLogicGateConfig<ORGateConfig>
 	}
 	
 	@Override
-	public LogicType<?, ORGateConfig> type()
+	public LogicType type()
 	{
-		return LogicTypes.OR;
+		return LBRLogicTypes.OR.get();
 	}
 	
 	@Override

@@ -27,7 +27,7 @@ import java.util.Optional;
 
 public final class LogicItem extends Item
 {
-	public LogicItem(Properties properties, LogicType<?, ?> type)
+	public LogicItem(Properties properties, LogicType type)
 	{
 		super(properties
 				.component(LBRComponents.LOGIC_CONFIG, type.defaultConfig())

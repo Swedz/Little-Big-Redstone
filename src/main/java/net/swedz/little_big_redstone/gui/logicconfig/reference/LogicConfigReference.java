@@ -8,7 +8,7 @@ public interface LogicConfigReference
 	/**
 	 * Saves the logic config on the server.
 	 */
-	void save(Player player, LogicConfig<?> config);
+	void save(Player player, LogicConfig config);
 	
 	/**
 	 * Closes the menu for the player with no changes being saved on the server.

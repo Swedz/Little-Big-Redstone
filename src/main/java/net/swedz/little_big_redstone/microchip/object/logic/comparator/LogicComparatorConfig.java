@@ -8,8 +8,8 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.swedz.little_big_redstone.LBR;
+import net.swedz.little_big_redstone.LBRLogicTypes;
 import net.swedz.little_big_redstone.microchip.object.logic.LogicType;
-import net.swedz.little_big_redstone.microchip.object.logic.LogicTypes;
 import net.swedz.little_big_redstone.microchip.object.logic.config.LogicAccumulationMode;
 import net.swedz.little_big_redstone.microchip.object.logic.config.LogicComparisonMode;
 import net.swedz.little_big_redstone.microchip.object.logic.config.LogicConfig;
@@ -24,7 +24,7 @@ public record LogicComparatorConfig(
 		int signalStrength,
 		LogicComparisonMode signalComparison,
 		int inputs
-) implements LogicConfig<LogicComparatorConfig>
+) implements LogicConfig
 {
 	public static final LogicComparatorConfig DEFAULT = new LogicComparatorConfig(
 			LogicAccumulationMode.ALL,
@@ -51,9 +51,9 @@ public record LogicComparatorConfig(
 	);
 	
 	@Override
-	public LogicType<?, LogicComparatorConfig> type()
+	public LogicType type()
 	{
-		return LogicTypes.COMPARATOR;
+		return LBRLogicTypes.COMPARATOR.get();
 	}
 	
 	@Override

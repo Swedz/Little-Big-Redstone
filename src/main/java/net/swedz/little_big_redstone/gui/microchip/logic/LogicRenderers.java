@@ -2,6 +2,9 @@ package net.swedz.little_big_redstone.gui.microchip.logic;
 
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Maps;
+import net.minecraft.resources.ResourceLocation;
+import net.neoforged.neoforge.registries.DeferredHolder;
+import net.swedz.little_big_redstone.LBRLogicTypes;
 import net.swedz.little_big_redstone.gui.microchip.logic.renderer.CalculatorLogicRenderer;
 import net.swedz.little_big_redstone.gui.microchip.logic.renderer.IORenderer;
 import net.swedz.little_big_redstone.gui.microchip.logic.renderer.OnOffLogicRenderer;
@@ -9,42 +12,40 @@ import net.swedz.little_big_redstone.gui.microchip.logic.renderer.SequencerRende
 import net.swedz.little_big_redstone.gui.microchip.logic.renderer.SimpleLogicRenderer;
 import net.swedz.little_big_redstone.microchip.object.logic.LogicComponent;
 import net.swedz.little_big_redstone.microchip.object.logic.LogicType;
-import net.swedz.little_big_redstone.microchip.object.logic.LogicTypes;
-import net.swedz.little_big_redstone.microchip.object.logic.config.LogicConfig;
 import net.swedz.tesseract.neoforge.helper.guigraphics.TesseractGuiGraphics;
 
 import java.util.Map;
 
 public final class LogicRenderers
 {
-	private static final Map<LogicType<?, ?>, LogicRendererProvider<?, ?>> PROVIDERS = Maps.newConcurrentMap();
+	private static final Map<ResourceLocation, LogicRendererProvider<?, ?>> PROVIDERS = Maps.newConcurrentMap();
 	
-	private static Map<LogicType<?, ?>, LogicRenderer<?, ?>> RENDERERS = Map.of();
+	private static Map<ResourceLocation, LogicRenderer<?, ?>> RENDERERS = Map.of();
 	
 	static
 	{
-		register(LogicTypes.DEBUGGER, SimpleLogicRenderer::new);
+		register(LBRLogicTypes.DEBUGGER, SimpleLogicRenderer::new);
 		
-		register(LogicTypes.IO, IORenderer::new);
-		register(LogicTypes.READER, SimpleLogicRenderer::new);
-		register(LogicTypes.TAG, SimpleLogicRenderer::new);
+		register(LBRLogicTypes.IO, IORenderer::new);
+		register(LBRLogicTypes.READER, SimpleLogicRenderer::new);
+		register(LBRLogicTypes.TAG, SimpleLogicRenderer::new);
 		
-		register(LogicTypes.NOT, SimpleLogicRenderer::new);
-		register(LogicTypes.AND, SimpleLogicRenderer::new);
-		register(LogicTypes.NAND, SimpleLogicRenderer::new);
-		register(LogicTypes.OR, SimpleLogicRenderer::new);
-		register(LogicTypes.NOR, SimpleLogicRenderer::new);
-		register(LogicTypes.XOR, SimpleLogicRenderer::new);
+		register(LBRLogicTypes.NOT, SimpleLogicRenderer::new);
+		register(LBRLogicTypes.AND, SimpleLogicRenderer::new);
+		register(LBRLogicTypes.NAND, SimpleLogicRenderer::new);
+		register(LBRLogicTypes.OR, SimpleLogicRenderer::new);
+		register(LBRLogicTypes.NOR, SimpleLogicRenderer::new);
+		register(LBRLogicTypes.XOR, SimpleLogicRenderer::new);
 		
-		register(LogicTypes.SEQUENCER, SequencerRenderer::new);
-		register(LogicTypes.PULSE_THROTTLER, SimpleLogicRenderer::new);
-		register(LogicTypes.SELECTOR, SimpleLogicRenderer::new);
-		register(LogicTypes.RANDOMIZER, SimpleLogicRenderer::new);
-		register(LogicTypes.COMPARATOR, SimpleLogicRenderer::new);
-		register(LogicTypes.CALCULATOR, CalculatorLogicRenderer::new);
+		register(LBRLogicTypes.SEQUENCER, SequencerRenderer::new);
+		register(LBRLogicTypes.PULSE_THROTTLER, SimpleLogicRenderer::new);
+		register(LBRLogicTypes.SELECTOR, SimpleLogicRenderer::new);
+		register(LBRLogicTypes.RANDOMIZER, SimpleLogicRenderer::new);
+		register(LBRLogicTypes.COMPARATOR, SimpleLogicRenderer::new);
+		register(LBRLogicTypes.CALCULATOR, CalculatorLogicRenderer::new);
 		
-		register(LogicTypes.T_FLIP_FLOP, OnOffLogicRenderer::new);
-		register(LogicTypes.RS_NOR_LATCH, OnOffLogicRenderer::new);
+		register(LBRLogicTypes.T_FLIP_FLOP, OnOffLogicRenderer::new);
+		register(LBRLogicTypes.RS_NOR_LATCH, OnOffLogicRenderer::new);
 	}
 	
 	public static void init()
@@ -52,23 +53,26 @@ public final class LogicRenderers
 		RENDERERS = createRenderers();
 	}
 	
-	private static <L extends LogicComponent<L, C>, C extends LogicConfig<C>> void register(LogicType<L, C> type, LogicRendererProvider<L, C> provider)
+	private static void register(
+			DeferredHolder<LogicType, LogicType> type,
+			LogicRendererProvider provider
+	)
 	{
-		PROVIDERS.put(type, provider);
+		PROVIDERS.put(type.getId(), provider);
 	}
 	
-	private static Map<LogicType<?, ?>, LogicRenderer<?, ?>> createRenderers()
+	private static Map<ResourceLocation, LogicRenderer<?, ?>> createRenderers()
 	{
-		ImmutableMap.Builder<LogicType<?, ?>, LogicRenderer<?, ?>> builder = ImmutableMap.builder();
-		PROVIDERS.forEach((type, provider) ->
+		ImmutableMap.Builder<ResourceLocation, LogicRenderer<?, ?>> builder = ImmutableMap.builder();
+		PROVIDERS.forEach((id, provider) ->
 		{
 			try
 			{
-				builder.put(type, provider.create());
+				builder.put(id, provider.create());
 			}
 			catch (Exception ex)
 			{
-				throw new IllegalStateException("Failed to create logic renderer for " + type.id(), ex);
+				throw new IllegalStateException("Failed to create logic renderer for " + id, ex);
 			}
 		});
 		return builder.build();
@@ -76,7 +80,7 @@ public final class LogicRenderers
 	
 	public static void render(LogicRenderer.Context context, TesseractGuiGraphics graphics, LogicComponent<?, ?> component, int x, int y)
 	{
-		LogicRenderer renderer = RENDERERS.get(component.type());
+		LogicRenderer renderer = RENDERERS.get(component.type().id());
 		if(renderer != null)
 		{
 			renderer.render(context, graphics, component, x, y);

@@ -8,9 +8,9 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.swedz.little_big_redstone.LBR;
+import net.swedz.little_big_redstone.LBRLogicTypes;
 import net.swedz.little_big_redstone.microchip.object.logic.LogicGridSize;
 import net.swedz.little_big_redstone.microchip.object.logic.LogicType;
-import net.swedz.little_big_redstone.microchip.object.logic.LogicTypes;
 import net.swedz.little_big_redstone.microchip.object.logic.config.LogicConfig;
 import net.swedz.little_big_redstone.microchip.object.logic.config.menu.LogicConfigMenuProvider;
 import net.swedz.tesseract.neoforge.api.range.IntRange;
@@ -23,7 +23,7 @@ public record LogicSequencerConfig(
 		long outputDelay,
 		boolean autoReset,
 		boolean resetPort
-) implements LogicConfig<LogicSequencerConfig>
+) implements LogicConfig
 {
 	public static final LogicSequencerConfig DEFAULT = new LogicSequencerConfig(
 			LogicSequencerMode.WEAK,
@@ -50,9 +50,9 @@ public record LogicSequencerConfig(
 	);
 	
 	@Override
-	public LogicType<?, LogicSequencerConfig> type()
+	public LogicType type()
 	{
-		return LogicTypes.SEQUENCER;
+		return LBRLogicTypes.SEQUENCER.get();
 	}
 	
 	@Override

@@ -8,8 +8,8 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.swedz.little_big_redstone.LBR;
+import net.swedz.little_big_redstone.LBRLogicTypes;
 import net.swedz.little_big_redstone.microchip.object.logic.LogicType;
-import net.swedz.little_big_redstone.microchip.object.logic.LogicTypes;
 import net.swedz.little_big_redstone.microchip.object.logic.config.LogicConfig;
 import net.swedz.little_big_redstone.microchip.object.logic.config.menu.LogicConfigMenuProvider;
 import net.swedz.tesseract.neoforge.api.range.IntRange;
@@ -19,7 +19,7 @@ import java.util.List;
 public record LogicRandomizerConfig(
 		int outputs,
 		float chance
-) implements LogicConfig<LogicRandomizerConfig>
+) implements LogicConfig
 {
 	public static final LogicRandomizerConfig DEFAULT = new LogicRandomizerConfig(
 			1,
@@ -40,9 +40,9 @@ public record LogicRandomizerConfig(
 	);
 	
 	@Override
-	public LogicType<?, LogicRandomizerConfig> type()
+	public LogicType type()
 	{
-		return LogicTypes.RANDOMIZER;
+		return LBRLogicTypes.RANDOMIZER.get();
 	}
 	
 	@Override

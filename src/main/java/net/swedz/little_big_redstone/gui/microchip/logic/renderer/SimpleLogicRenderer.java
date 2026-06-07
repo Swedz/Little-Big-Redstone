@@ -7,7 +7,7 @@ import net.swedz.little_big_redstone.microchip.object.logic.LogicComponent;
 import net.swedz.little_big_redstone.microchip.object.logic.config.LogicConfig;
 import net.swedz.tesseract.neoforge.helper.guigraphics.TesseractGuiGraphics;
 
-public final class SimpleLogicRenderer<G extends LogicComponent<G, C>, C extends LogicConfig<C>> extends LogicRenderer<G, C>
+public final class SimpleLogicRenderer<G extends LogicComponent<G, C>, C extends LogicConfig> extends LogicRenderer<G, C>
 {
 	@Override
 	public void render(Context context, TesseractGuiGraphics graphics, G component, int x, int y)

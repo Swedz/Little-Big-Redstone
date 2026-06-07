@@ -7,13 +7,13 @@ import io.netty.buffer.ByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.world.item.DyeColor;
+import net.swedz.little_big_redstone.LBRLogicTypes;
 import net.swedz.little_big_redstone.microchip.awareness.AwarenessType;
 import net.swedz.little_big_redstone.microchip.awareness.AwarenessTypes;
 import net.swedz.little_big_redstone.microchip.awareness.MicrochipAware;
 import net.swedz.little_big_redstone.microchip.object.logic.LogicComponent;
 import net.swedz.little_big_redstone.microchip.object.logic.LogicTickingContext;
 import net.swedz.little_big_redstone.microchip.object.logic.LogicType;
-import net.swedz.little_big_redstone.microchip.object.logic.LogicTypes;
 
 import java.util.Objects;
 import java.util.Optional;
@@ -89,9 +89,9 @@ public final class LogicIO extends LogicComponent<LogicIO, LogicIOConfig> implem
 	}
 	
 	@Override
-	public LogicType<LogicIO, LogicIOConfig> type()
+	public LogicType type()
 	{
-		return LogicTypes.IO;
+		return LBRLogicTypes.IO.get();
 	}
 	
 	@Override

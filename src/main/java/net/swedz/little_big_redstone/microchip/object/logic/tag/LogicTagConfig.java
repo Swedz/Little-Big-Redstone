@@ -8,8 +8,8 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.swedz.little_big_redstone.LBR;
+import net.swedz.little_big_redstone.LBRLogicTypes;
 import net.swedz.little_big_redstone.microchip.object.logic.LogicType;
-import net.swedz.little_big_redstone.microchip.object.logic.LogicTypes;
 import net.swedz.little_big_redstone.microchip.object.logic.config.LogicConfig;
 import net.swedz.little_big_redstone.microchip.object.logic.config.menu.LogicConfigMenuProvider;
 import net.swedz.tesseract.neoforge.api.range.IntRange;
@@ -21,7 +21,7 @@ public record LogicTagConfig(
 		LogicTagLabel label,
 		int threshold,
 		boolean global
-) implements LogicConfig<LogicTagConfig>
+) implements LogicConfig
 {
 	public static final LogicTagConfig DEFAULT = new LogicTagConfig(
 			true,
@@ -48,9 +48,9 @@ public record LogicTagConfig(
 	);
 	
 	@Override
-	public LogicType<?, LogicTagConfig> type()
+	public LogicType type()
 	{
-		return LogicTypes.TAG;
+		return LBRLogicTypes.TAG.get();
 	}
 	
 	@Override
