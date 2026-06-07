@@ -29,13 +29,21 @@ public record LogicIOConfig(
 		LogicPowerOutputType powerType
 ) implements LogicConfig
 {
+	public static final LogicIOConfig DEFAULT = new LogicIOConfig(
+			true,
+			Direction.NORTH,
+			1,
+			LogicComparisonMode.GREATER_THAN_OR_EQUAL_TO,
+			LogicPowerOutputType.WEAK
+	);
+	
 	public static final MapCodec<LogicIOConfig> CODEC = RecordCodecBuilder.mapCodec((instance) -> instance
 			.group(
-					Codec.BOOL.optionalFieldOf("input", true).forGetter(LogicIOConfig::input),
-					Direction.CODEC.optionalFieldOf("direction", Direction.NORTH).forGetter(LogicIOConfig::direction),
-					Codec.intRange(0, 15).optionalFieldOf("signal_strength", 0).forGetter(LogicIOConfig::signalStrength),
-					CodecHelper.forLowercaseEnum(LogicComparisonMode.class).optionalFieldOf("signal_comparison", LogicComparisonMode.GREATER_THAN_OR_EQUAL_TO).forGetter(LogicIOConfig::signalComparison),
-					CodecHelper.forLowercaseEnum(LogicPowerOutputType.class).optionalFieldOf("power_type", LogicPowerOutputType.WEAK).forGetter(LogicIOConfig::powerType)
+					Codec.BOOL.optionalFieldOf("input", DEFAULT.input()).forGetter(LogicIOConfig::input),
+					Direction.CODEC.optionalFieldOf("direction", DEFAULT.direction()).forGetter(LogicIOConfig::direction),
+					Codec.intRange(0, 15).optionalFieldOf("signal_strength", DEFAULT.signalStrength()).forGetter(LogicIOConfig::signalStrength),
+					CodecHelper.forLowercaseEnum(LogicComparisonMode.class).optionalFieldOf("signal_comparison", DEFAULT.signalComparison()).forGetter(LogicIOConfig::signalComparison),
+					CodecHelper.forLowercaseEnum(LogicPowerOutputType.class).optionalFieldOf("power_type", DEFAULT.powerType()).forGetter(LogicIOConfig::powerType)
 			)
 			.apply(instance, LogicIOConfig::new));
 	
@@ -46,14 +54,6 @@ public record LogicIOConfig(
 			CodecHelper.forEnumStream(LogicComparisonMode.class), LogicIOConfig::signalComparison,
 			CodecHelper.forEnumStream(LogicPowerOutputType.class), LogicIOConfig::powerType,
 			LogicIOConfig::new
-	);
-	
-	public static final LogicIOConfig DEFAULT = new LogicIOConfig(
-			true,
-			Direction.NORTH,
-			1,
-			LogicComparisonMode.GREATER_THAN_OR_EQUAL_TO,
-			LogicPowerOutputType.WEAK
 	);
 	
 	@Override

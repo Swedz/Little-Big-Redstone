@@ -32,10 +32,10 @@ public record LogicTagConfig(
 	
 	public static final MapCodec<LogicTagConfig> CODEC = RecordCodecBuilder.mapCodec((instance) -> instance
 			.group(
-					Codec.BOOL.optionalFieldOf("input", true).forGetter(LogicTagConfig::input),
-					LogicTagLabel.CODEC.optionalFieldOf("label", LogicTagLabel.EMPTY).forGetter(LogicTagConfig::label),
-					Codec.intRange(1, 100).optionalFieldOf("threshold", 1).forGetter(LogicTagConfig::threshold),
-					Codec.BOOL.optionalFieldOf("global", false).forGetter(LogicTagConfig::global)
+					Codec.BOOL.optionalFieldOf("input", DEFAULT.input()).forGetter(LogicTagConfig::input),
+					LogicTagLabel.CODEC.optionalFieldOf("label", DEFAULT.label()).forGetter(LogicTagConfig::label),
+					Codec.intRange(1, 100).optionalFieldOf("threshold", DEFAULT.threshold()).forGetter(LogicTagConfig::threshold),
+					Codec.BOOL.optionalFieldOf("global", DEFAULT.global()).forGetter(LogicTagConfig::global)
 			)
 			.apply(instance, LogicTagConfig::new));
 	

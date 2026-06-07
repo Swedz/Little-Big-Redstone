@@ -31,9 +31,9 @@ public record LogicSelectorConfig(
 	
 	public static final MapCodec<LogicSelectorConfig> CODEC = RecordCodecBuilder.mapCodec((instance) -> instance
 			.group(
-					CodecHelper.forLowercaseEnum(LogicSelectorMode.class).optionalFieldOf("mode", LogicSelectorMode.COUNTER).forGetter(LogicSelectorConfig::mode),
-					Codec.intRange(2, 10).optionalFieldOf("outputs", 2).forGetter(LogicSelectorConfig::outputs),
-					Codec.BOOL.optionalFieldOf("pass_signal", true).forGetter(LogicSelectorConfig::passSignal)
+					CodecHelper.forLowercaseEnum(LogicSelectorMode.class).optionalFieldOf("mode", DEFAULT.mode()).forGetter(LogicSelectorConfig::mode),
+					Codec.intRange(2, 10).optionalFieldOf("outputs", DEFAULT.outputs()).forGetter(LogicSelectorConfig::outputs),
+					Codec.BOOL.optionalFieldOf("pass_signal", DEFAULT.passSignal()).forGetter(LogicSelectorConfig::passSignal)
 			)
 			.apply(instance, LogicSelectorConfig::new));
 	

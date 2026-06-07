@@ -16,8 +16,7 @@ public record TFlipFlopConfig() implements LogicConfig
 {
 	public static final TFlipFlopConfig DEFAULT = new TFlipFlopConfig();
 	
-	public static final MapCodec<TFlipFlopConfig> CODEC = MapCodec.unit(DEFAULT);
-	
+	public static final MapCodec<TFlipFlopConfig>             CODEC        = MapCodec.unit(DEFAULT);
 	public static final StreamCodec<ByteBuf, TFlipFlopConfig> STREAM_CODEC = StreamCodec.unit(DEFAULT);
 	
 	@Override

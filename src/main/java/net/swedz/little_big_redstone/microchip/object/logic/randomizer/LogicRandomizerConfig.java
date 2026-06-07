@@ -28,8 +28,8 @@ public record LogicRandomizerConfig(
 	
 	public static final MapCodec<LogicRandomizerConfig> CODEC = RecordCodecBuilder.mapCodec((instance) -> instance
 			.group(
-					Codec.intRange(1, 10).optionalFieldOf("outputs", 1).forGetter(LogicRandomizerConfig::outputs),
-					Codec.FLOAT.optionalFieldOf("chance", 1f).forGetter(LogicRandomizerConfig::chance)
+					Codec.intRange(1, 10).optionalFieldOf("outputs", DEFAULT.outputs()).forGetter(LogicRandomizerConfig::outputs),
+					Codec.FLOAT.optionalFieldOf("chance", DEFAULT.chance()).forGetter(LogicRandomizerConfig::chance)
 			)
 			.apply(instance, LogicRandomizerConfig::new));
 	
