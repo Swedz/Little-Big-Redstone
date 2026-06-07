@@ -1,15 +1,13 @@
 package net.swedz.little_big_redstone;
 
-import com.google.common.collect.Sets;
+import com.google.common.collect.Lists;
 import com.mojang.serialization.MapCodec;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.network.codec.StreamCodec;
 import net.neoforged.bus.api.IEventBus;
-import net.swedz.little_big_redstone.microchip.object.logic.register.DeferredLogicType;
 import net.swedz.little_big_redstone.microchip.object.logic.LogicComponent;
 import net.swedz.little_big_redstone.microchip.object.logic.LogicFactory;
 import net.swedz.little_big_redstone.microchip.object.logic.LogicType;
-import net.swedz.little_big_redstone.microchip.object.logic.register.LogicTypeDeferredRegister;
 import net.swedz.little_big_redstone.microchip.object.logic.calculator.LogicCalculator;
 import net.swedz.little_big_redstone.microchip.object.logic.calculator.LogicCalculatorConfig;
 import net.swedz.little_big_redstone.microchip.object.logic.comparator.LogicComparator;
@@ -42,6 +40,8 @@ import net.swedz.little_big_redstone.microchip.object.logic.randomizer.LogicRand
 import net.swedz.little_big_redstone.microchip.object.logic.randomizer.LogicRandomizerConfig;
 import net.swedz.little_big_redstone.microchip.object.logic.reader.LogicReader;
 import net.swedz.little_big_redstone.microchip.object.logic.reader.LogicReaderConfig;
+import net.swedz.little_big_redstone.microchip.object.logic.register.DeferredLogicType;
+import net.swedz.little_big_redstone.microchip.object.logic.register.LogicTypeDeferredRegister;
 import net.swedz.little_big_redstone.microchip.object.logic.selector.LogicSelector;
 import net.swedz.little_big_redstone.microchip.object.logic.selector.LogicSelectorConfig;
 import net.swedz.little_big_redstone.microchip.object.logic.sequencer.LogicSequencer;
@@ -51,13 +51,13 @@ import net.swedz.little_big_redstone.microchip.object.logic.tag.LogicTagConfig;
 import org.apache.commons.lang3.mutable.MutableInt;
 
 import java.util.Collections;
-import java.util.Set;
+import java.util.List;
 
 public final class LBRLogicTypes
 {
 	private static final LogicTypeDeferredRegister REGISTRY = new LogicTypeDeferredRegister(LBR.ID);
 	
-	private static final Set<LogicType> VALUES = Sets.newHashSet();
+	private static final List<LogicType> VALUES = Lists.newArrayList();
 	
 	private static final MutableInt SYMBOL = new MutableInt();
 	
@@ -83,9 +83,9 @@ public final class LBRLogicTypes
 	public static final DeferredLogicType<LogicType> T_FLIP_FLOP     = register("t_flip_flop", "T Flip-Flop", TFlipFlop.CODEC, TFlipFlop.STREAM_CODEC, TFlipFlop::new, TFlipFlopConfig.CODEC, TFlipFlopConfig.STREAM_CODEC, TFlipFlopConfig.DEFAULT);
 	public static final DeferredLogicType<LogicType> RS_NOR_LATCH    = register("rs_nor_latch", "RS NOR Latch", RSNORLatch.CODEC, RSNORLatch.STREAM_CODEC, RSNORLatch::new, RSNORLatchConfig.CODEC, RSNORLatchConfig.STREAM_CODEC, RSNORLatchConfig.DEFAULT);
 	
-	public static Set<LogicType> values()
+	public static List<LogicType> values()
 	{
-		return Collections.unmodifiableSet(VALUES);
+		return Collections.unmodifiableList(VALUES);
 	}
 	
 	private static <T extends LogicComponent<T, C>, C extends LogicConfig> DeferredLogicType<LogicType> register(
