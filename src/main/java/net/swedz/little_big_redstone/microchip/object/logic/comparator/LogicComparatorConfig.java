@@ -38,7 +38,7 @@ public record LogicComparatorConfig(
 					CodecHelper.forLowercaseEnum(LogicAccumulationMode.class).optionalFieldOf("mode", DEFAULT.mode()).forGetter(LogicComparatorConfig::mode),
 					Codec.intRange(0, 15).optionalFieldOf("signal_strength", DEFAULT.signalStrength()).forGetter(LogicComparatorConfig::signalStrength),
 					CodecHelper.forLowercaseEnum(LogicComparisonMode.class).optionalFieldOf("signal_comparison", DEFAULT.signalComparison()).forGetter(LogicComparatorConfig::signalComparison),
-					Codec.intRange(1, 10).optionalFieldOf("inputs", DEFAULT.inputs).forGetter(LogicComparatorConfig::inputs)
+					Codec.intRange(1, 10).optionalFieldOf("inputs", DEFAULT.inputs()).forGetter(LogicComparatorConfig::inputs)
 			)
 			.apply(instance, LogicComparatorConfig::new));
 	
