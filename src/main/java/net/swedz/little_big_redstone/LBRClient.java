@@ -38,6 +38,12 @@ import net.swedz.little_big_redstone.gui.logicarray.LogicArrayScreen;
 import net.swedz.little_big_redstone.gui.logicconfig.LogicConfigScreen;
 import net.swedz.little_big_redstone.gui.microchip.MicrochipScreen;
 import net.swedz.little_big_redstone.gui.microchip.logic.LogicRenderers;
+import net.swedz.little_big_redstone.gui.microchip.logic.RegisterLogicRenderersEvent;
+import net.swedz.little_big_redstone.gui.microchip.logic.renderer.CalculatorLogicRenderer;
+import net.swedz.little_big_redstone.gui.microchip.logic.renderer.IORenderer;
+import net.swedz.little_big_redstone.gui.microchip.logic.renderer.OnOffLogicRenderer;
+import net.swedz.little_big_redstone.gui.microchip.logic.renderer.SequencerRenderer;
+import net.swedz.little_big_redstone.gui.microchip.logic.renderer.SimpleLogicRenderer;
 import net.swedz.little_big_redstone.gui.microchip.wire.WirePathing;
 import net.swedz.little_big_redstone.gui.noteboard.NoteBoardScreen;
 import net.swedz.little_big_redstone.item.LogicItem;
@@ -64,7 +70,12 @@ public final class LBRClient
 		LBRKeybinds.init(bus);
 		FloppyDiskScreen.createPath();
 		LBRTooltips.init();
-		LogicRenderers.init();
+		
+		bus.addListener(
+				FMLClientSetupEvent.class,
+				(event) -> event.enqueueWork(() ->
+						LogicRenderers.setup(bus))
+		);
 		
 		NeoForge.EVENT_BUS.addListener(GameShuttingDownEvent.class, (event) -> WirePathing.shutdownExecutor());
 	}
@@ -172,5 +183,32 @@ public final class LBRClient
 		event.register(MicrochipUnbakedModel.ID, MicrochipUnbakedModel.LOADER);
 		event.register(StickyNoteEntityUnbakedModel.ID, StickyNoteEntityUnbakedModel.LOADER);
 		event.register(StickyNoteItemUnbakedModel.ID, StickyNoteItemUnbakedModel.LOADER);
+	}
+	
+	@SubscribeEvent
+	private static void registerLogicRenderers(RegisterLogicRenderersEvent event)
+	{
+		event.register(LBRLogicTypes.DEBUGGER, SimpleLogicRenderer::new);
+		
+		event.register(LBRLogicTypes.IO, IORenderer::new);
+		event.register(LBRLogicTypes.READER, SimpleLogicRenderer::new);
+		event.register(LBRLogicTypes.TAG, SimpleLogicRenderer::new);
+		
+		event.register(LBRLogicTypes.NOT, SimpleLogicRenderer::new);
+		event.register(LBRLogicTypes.AND, SimpleLogicRenderer::new);
+		event.register(LBRLogicTypes.NAND, SimpleLogicRenderer::new);
+		event.register(LBRLogicTypes.OR, SimpleLogicRenderer::new);
+		event.register(LBRLogicTypes.NOR, SimpleLogicRenderer::new);
+		event.register(LBRLogicTypes.XOR, SimpleLogicRenderer::new);
+		
+		event.register(LBRLogicTypes.SEQUENCER, SequencerRenderer::new);
+		event.register(LBRLogicTypes.PULSE_THROTTLER, SimpleLogicRenderer::new);
+		event.register(LBRLogicTypes.SELECTOR, SimpleLogicRenderer::new);
+		event.register(LBRLogicTypes.RANDOMIZER, SimpleLogicRenderer::new);
+		event.register(LBRLogicTypes.COMPARATOR, SimpleLogicRenderer::new);
+		event.register(LBRLogicTypes.CALCULATOR, CalculatorLogicRenderer::new);
+		
+		event.register(LBRLogicTypes.T_FLIP_FLOP, OnOffLogicRenderer::new);
+		event.register(LBRLogicTypes.RS_NOR_LATCH, OnOffLogicRenderer::new);
 	}
 }
