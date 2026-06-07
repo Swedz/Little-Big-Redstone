@@ -27,4 +27,6 @@ public interface LogicConfigMenuBuilder
 	<T extends IconCycleLogicConfigButtonIcon> LogicConfigButtonReference<T> addCycleButton(Component tooltip, int x, int y, ResourceLocation atlas, T initialValue, List<T> values, Consumer<T> onChange);
 	
 	LogicConfigButtonReference<String> addTextBox(Component name, Component tooltip, int x, int y, int width, int height, String initialValue, int maxLength, Predicate<String> filter, Consumer<String> onChange);
+	
+	LogicConfigTextLabelReference addTextLabel(Component text, int x, int y, LogicConfigTextLabelAlignment alignment);
 }
