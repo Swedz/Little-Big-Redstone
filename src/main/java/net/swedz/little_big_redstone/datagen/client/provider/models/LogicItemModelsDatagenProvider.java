@@ -173,12 +173,12 @@ public final class LogicItemModelsDatagenProvider extends ItemModelProvider
 	}
 	
 	private void logicComponent(
-			Supplier<LogicType> type,
+			Supplier<LogicType> entry,
 			BackgroundType backgroundType,
 			boolean icon
 	)
 	{
-		this.logicComponent(type, backgroundType, icon, null);
+		this.logicComponent(entry, backgroundType, icon, null);
 	}
 	
 	@Override

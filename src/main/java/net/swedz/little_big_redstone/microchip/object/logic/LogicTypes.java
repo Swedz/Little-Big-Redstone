@@ -36,18 +36,15 @@ public final class LogicTypes
 			.stable();
 	
 	/**
-	 * <p>Prior to 1.8.3-beta, {@link LogicType} identifiers were a string path and the namespace was assumed to always
-	 * be LBR's. So, in order for old data to be able to be loaded on newer versions, this codec cannot simply be
+	 * <p>In the past, {@link LogicType} identifiers were a string path and the namespace was assumed to always be
+	 * LBR's. So, in order for old data to be able to be loaded on newer versions, this codec cannot simply be
 	 * {@link Registry#byNameCodec()}. That uses the vanilla {@link ResourceLocation#CODEC}, which would mean that the
 	 * Minecraft namespace would be used by default. This codec instead uses the
 	 * {@link LogicTypes#RESOURCE_LOCATION_CODEC}, which defaults to the LBR namespace instead of the Minecraft one.
 	 * Otherwise, this codec is merely a replication of what {@link Registry#byNameCodec()} would return.</p>
 	 *
-	 * <p>Will be removed in MC 26.1+.</p>
-	 *
 	 * @see Registry#byNameCodec()
 	 */
-	@Deprecated(since = "1.8.3-beta", forRemoval = true)
 	private static final Codec<LogicType> CODEC = RESOURCE_LOCATION_CODEC
 			.comapFlatMap(
 					(id) -> REGISTRY
