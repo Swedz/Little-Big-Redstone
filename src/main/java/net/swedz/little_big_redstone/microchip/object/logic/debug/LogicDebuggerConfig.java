@@ -29,7 +29,7 @@ public record LogicDebuggerConfig() implements LogicConfig
 	}
 	
 	@Override
-	public int inputs()
+	public int inputPorts()
 	{
 		return 0;
 	}
@@ -41,7 +41,7 @@ public record LogicDebuggerConfig() implements LogicConfig
 	}
 	
 	@Override
-	public int outputs()
+	public int outputPorts()
 	{
 		return 0;
 	}

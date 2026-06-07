@@ -53,13 +53,13 @@ public abstract class LogicRenderer<L extends LogicComponent<L, C>, C extends Lo
 			int inputColor = ARGB.colorFromFloat(inputAlpha, 1, 1, 1);
 			int outputColor = ARGB.colorFromFloat(outputAlpha, 1, 1, 1);
 			
-			int inputs = portHolder.inputs();
+			int inputs = portHolder.inputPorts();
 			for(int i = 0; i < inputs; i++)
 			{
 				this.renderPort(graphics, x, y, size, true, i, inputs, inputColor);
 			}
 			
-			int outputs = portHolder.outputs();
+			int outputs = portHolder.outputPorts();
 			for(int i = 0; i < outputs; i++)
 			{
 				this.renderPort(graphics, x, y, size, false, i, outputs, outputColor);

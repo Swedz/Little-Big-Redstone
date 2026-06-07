@@ -22,7 +22,7 @@ public abstract class MultiLogicGateConfig<C extends MultiLogicGateConfig<C>> im
 	{
 		return RecordCodecBuilder.mapCodec((instance) -> instance
 				.group(
-						Codec.INT.optionalFieldOf("input_count", defaultConfig.inputs()).forGetter(MultiLogicGateConfig::inputs)
+						Codec.INT.optionalFieldOf("input_count", defaultConfig.inputPorts()).forGetter(MultiLogicGateConfig::inputs)
 				)
 				.apply(instance, creator));
 	}
@@ -47,26 +47,31 @@ public abstract class MultiLogicGateConfig<C extends MultiLogicGateConfig<C>> im
 		this.inputs = this.inputsAllowed().min();
 	}
 	
-	@Override
-	public IntRange inputsAllowed()
-	{
-		return new IntRange(2, 10);
-	}
-	
-	@Override
 	public int inputs()
 	{
 		return inputs;
 	}
 	
 	@Override
-	public IntRange outputsAllowed()
+	public final IntRange inputsAllowed()
+	{
+		return new IntRange(2, 10);
+	}
+	
+	@Override
+	public final int inputPorts()
+	{
+		return inputs;
+	}
+	
+	@Override
+	public final IntRange outputsAllowed()
 	{
 		return new IntRange(1, 1);
 	}
 	
 	@Override
-	public int outputs()
+	public final int outputPorts()
 	{
 		return 1;
 	}

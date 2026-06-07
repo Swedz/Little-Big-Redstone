@@ -33,7 +33,7 @@ public record TFlipFlopConfig() implements LogicConfig
 	}
 	
 	@Override
-	public int inputs()
+	public int inputPorts()
 	{
 		return 1;
 	}
@@ -45,7 +45,7 @@ public record TFlipFlopConfig() implements LogicConfig
 	}
 	
 	@Override
-	public int outputs()
+	public int outputPorts()
 	{
 		return 1;
 	}

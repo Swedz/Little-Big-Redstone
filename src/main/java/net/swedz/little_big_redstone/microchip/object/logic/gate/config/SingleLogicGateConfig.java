@@ -12,7 +12,7 @@ public interface SingleLogicGateConfig<C extends SingleLogicGateConfig<C>> exten
 	}
 	
 	@Override
-	default int inputs()
+	default int inputPorts()
 	{
 		return 1;
 	}
@@ -24,7 +24,7 @@ public interface SingleLogicGateConfig<C extends SingleLogicGateConfig<C>> exten
 	}
 	
 	@Override
-	default int outputs()
+	default int outputPorts()
 	{
 		return 1;
 	}

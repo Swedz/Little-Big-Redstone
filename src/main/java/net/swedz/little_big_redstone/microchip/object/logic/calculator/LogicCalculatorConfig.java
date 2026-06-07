@@ -53,7 +53,7 @@ public record LogicCalculatorConfig(
 	}
 	
 	@Override
-	public int inputs()
+	public int inputPorts()
 	{
 		return inputs;
 	}
@@ -65,7 +65,7 @@ public record LogicCalculatorConfig(
 	}
 	
 	@Override
-	public int outputs()
+	public int outputPorts()
 	{
 		return 1;
 	}

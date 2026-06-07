@@ -77,7 +77,7 @@ public record LogicRandomizerConfig(
 	}
 	
 	@Override
-	public int inputs()
+	public int inputPorts()
 	{
 		return 1;
 	}
@@ -89,7 +89,7 @@ public record LogicRandomizerConfig(
 	}
 	
 	@Override
-	public int outputs()
+	public int outputPorts()
 	{
 		return outputs;
 	}

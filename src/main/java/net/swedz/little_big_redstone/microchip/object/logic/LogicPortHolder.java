@@ -6,15 +6,15 @@ public interface LogicPortHolder
 {
 	IntRange inputsAllowed();
 	
-	int inputs();
+	int inputPorts();
 	
 	IntRange outputsAllowed();
 	
-	int outputs();
+	int outputPorts();
 	
 	default LogicGridSize size()
 	{
-		int ports = Math.max(this.inputs(), this.outputs());
+		int ports = Math.max(this.inputPorts(), this.outputPorts());
 		return new LogicGridSize(1, Math.max(1, ports / 2));
 	}
 }

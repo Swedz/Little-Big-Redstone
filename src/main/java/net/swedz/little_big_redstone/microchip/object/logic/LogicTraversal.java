@@ -39,7 +39,7 @@ public final class LogicTraversal
 		List<LogicEntry> starts = Lists.newArrayList();
 		for(var entry : microchip.components())
 		{
-			if(entry.component().inputs() == 0 || microchip.wires().getByInputSlot(entry.slot()).isEmpty())
+			if(entry.component().inputPorts() == 0 || microchip.wires().getByInputSlot(entry.slot()).isEmpty())
 			{
 				order.add(entry);
 				starts.add(entry);

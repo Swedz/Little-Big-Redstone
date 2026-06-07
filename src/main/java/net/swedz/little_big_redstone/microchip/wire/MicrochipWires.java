@@ -203,8 +203,8 @@ public final class MicrochipWires implements Iterable<Wire>
 	{
 		int wiresRemoved = 0;
 		int slot = entry.slot();
-		int totalInputs = entry.component().inputs();
-		int totalOutputs = entry.component().outputs();
+		int totalInputs = entry.component().inputPorts();
+		int totalOutputs = entry.component().outputPorts();
 		for(var wire : this.getInvolvingSlot(slot))
 		{
 			if((wire.input().slot() == slot && wire.input().index() >= totalInputs) ||

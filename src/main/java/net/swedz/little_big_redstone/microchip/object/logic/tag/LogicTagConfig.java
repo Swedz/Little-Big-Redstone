@@ -60,7 +60,7 @@ public record LogicTagConfig(
 	}
 	
 	@Override
-	public int inputs()
+	public int inputPorts()
 	{
 		return input ? 0 : 1;
 	}
@@ -72,7 +72,7 @@ public record LogicTagConfig(
 	}
 	
 	@Override
-	public int outputs()
+	public int outputPorts()
 	{
 		return input ? 1 : 0;
 	}

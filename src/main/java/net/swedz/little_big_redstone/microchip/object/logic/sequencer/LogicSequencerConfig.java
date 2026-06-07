@@ -62,7 +62,7 @@ public record LogicSequencerConfig(
 	}
 	
 	@Override
-	public int inputs()
+	public int inputPorts()
 	{
 		return resetPort ? 2 : 1;
 	}
@@ -74,7 +74,7 @@ public record LogicSequencerConfig(
 	}
 	
 	@Override
-	public int outputs()
+	public int outputPorts()
 	{
 		return 1;
 	}

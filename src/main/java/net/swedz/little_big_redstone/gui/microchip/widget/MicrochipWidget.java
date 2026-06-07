@@ -148,7 +148,7 @@ public final class MicrochipWidget implements GuiEventListener, Renderable, Narr
 		if(this.hasSelectedPort())
 		{
 			var component = microchip.components().get(selectedPort.slot());
-			if(component == null || selectedPort.index() >= component.component().outputs())
+			if(component == null || selectedPort.index() >= component.component().outputPorts())
 			{
 				selectedPort = null;
 				LBR.LOGGER.info("Cleared selected port because it doesn't exist anymore");

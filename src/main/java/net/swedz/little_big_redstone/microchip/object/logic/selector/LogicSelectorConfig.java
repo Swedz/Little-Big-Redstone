@@ -83,7 +83,7 @@ public record LogicSelectorConfig(
 	}
 	
 	@Override
-	public int inputs()
+	public int inputPorts()
 	{
 		return mode == LogicSelectorMode.COUNTER ? 2 : outputs;
 	}
@@ -95,7 +95,7 @@ public record LogicSelectorConfig(
 	}
 	
 	@Override
-	public int outputs()
+	public int outputPorts()
 	{
 		return outputs;
 	}

@@ -35,9 +35,9 @@ public record WirePathKey(
 		return new WirePathKey(
 				Optional.of(wire),
 				output.size().wireOutStartX(outputX),
-				output.size().wireOutStartY(outputY, outputIndex, output.component().outputs()),
+				output.size().wireOutStartY(outputY, outputIndex, output.component().outputPorts()),
 				input.size().wireInEndX(inputX),
-				input.size().wireInEndY(inputY, inputIndex, input.component().inputs()),
+				input.size().wireInEndY(inputY, inputIndex, input.component().inputPorts()),
 				Optional.empty()
 		);
 	}
@@ -60,7 +60,7 @@ public record WirePathKey(
 		}
 		
 		int startX = outputLogic.size().wireOutStartX(outputLogic.x());
-		int startY = outputLogic.size().wireOutStartY(outputLogic.y(), selectedPort.index(), outputLogic.component().outputs());
+		int startY = outputLogic.size().wireOutStartY(outputLogic.y(), selectedPort.index(), outputLogic.component().outputPorts());
 		
 		return new WirePathKey(
 				Optional.empty(),
@@ -102,9 +102,9 @@ public record WirePathKey(
 		return new WirePathKey(
 				Optional.empty(),
 				outputLogicPorts.size().wireOutStartX(outputX),
-				outputLogicPorts.size().wireOutStartY(outputY, outputIndex, outputLogicPorts.outputs()),
+				outputLogicPorts.size().wireOutStartY(outputY, outputIndex, outputLogicPorts.outputPorts()),
 				inputLogicPorts.size().wireInEndX(inputX),
-				inputLogicPorts.size().wireInEndY(inputY, inputIndex, inputLogicPorts.inputs()),
+				inputLogicPorts.size().wireInEndY(inputY, inputIndex, inputLogicPorts.inputPorts()),
 				Optional.of(additionalAvoidBounds)
 		);
 	}
