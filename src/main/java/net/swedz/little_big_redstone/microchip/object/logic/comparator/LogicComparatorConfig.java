@@ -57,25 +57,25 @@ public record LogicComparatorConfig(
 	}
 	
 	@Override
-	public IntRange inputsAllowed()
+	public IntRange inputPortsAllowed()
 	{
 		return new IntRange(1, 11);
 	}
 	
 	@Override
-	public int inputs()
+	public int inputPorts()
 	{
 		return inputs + (signalStrength == 0 ? 1 : 0);
 	}
 	
 	@Override
-	public IntRange outputsAllowed()
+	public IntRange outputPortsAllowed()
 	{
 		return new IntRange(1, 1);
 	}
 	
 	@Override
-	public int outputs()
+	public int outputPorts()
 	{
 		return 1;
 	}

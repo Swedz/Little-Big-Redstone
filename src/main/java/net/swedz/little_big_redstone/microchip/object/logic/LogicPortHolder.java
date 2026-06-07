@@ -4,17 +4,17 @@ import net.swedz.tesseract.neoforge.api.range.IntRange;
 
 public interface LogicPortHolder
 {
-	IntRange inputsAllowed();
+	IntRange inputPortsAllowed();
 	
-	int inputs();
+	int inputPorts();
 	
-	IntRange outputsAllowed();
+	IntRange outputPortsAllowed();
 	
-	int outputs();
+	int outputPorts();
 	
 	default LogicGridSize size()
 	{
-		int ports = Math.max(this.inputs(), this.outputs());
+		int ports = Math.max(this.inputPorts(), this.outputPorts());
 		return new LogicGridSize(1, Math.max(1, ports / 2));
 	}
 }

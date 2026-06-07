@@ -59,8 +59,8 @@ public record PlaceTakeMicrochipWirePacket(
 			{
 				var outputLogic = components.get(outputSlot);
 				var inputLogic = components.get(inputSlot);
-				if(outputLogic != null && outputPort < outputLogic.component().outputs() &&
-				   inputLogic != null && inputPort < inputLogic.component().inputs())
+				if(outputLogic != null && outputPort < outputLogic.component().outputPorts() &&
+				   inputLogic != null && inputPort < inputLogic.component().inputPorts())
 				{
 					if(place)
 					{

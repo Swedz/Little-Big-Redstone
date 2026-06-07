@@ -71,25 +71,25 @@ public record LogicRandomizerConfig(
 	}
 	
 	@Override
-	public IntRange inputsAllowed()
+	public IntRange inputPortsAllowed()
 	{
 		return new IntRange(1, 1);
 	}
 	
 	@Override
-	public int inputs()
+	public int inputPorts()
 	{
 		return 1;
 	}
 	
 	@Override
-	public IntRange outputsAllowed()
+	public IntRange outputPortsAllowed()
 	{
 		return new IntRange(1, 10);
 	}
 	
 	@Override
-	public int outputs()
+	public int outputPorts()
 	{
 		return outputs;
 	}

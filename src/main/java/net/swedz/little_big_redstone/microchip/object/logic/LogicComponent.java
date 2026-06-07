@@ -75,27 +75,27 @@ public abstract class LogicComponent<L extends LogicComponent<L, C>, C extends L
 	public abstract LogicType type();
 	
 	@Override
-	public final IntRange inputsAllowed()
+	public final IntRange inputPortsAllowed()
 	{
-		return config.inputsAllowed();
+		return config.inputPortsAllowed();
 	}
 	
 	@Override
-	public final int inputs()
+	public final int inputPorts()
 	{
-		return config.inputs();
+		return config.inputPorts();
 	}
 	
 	@Override
-	public final IntRange outputsAllowed()
+	public final IntRange outputPortsAllowed()
 	{
-		return config.outputsAllowed();
+		return config.outputPortsAllowed();
 	}
 	
 	@Override
-	public final int outputs()
+	public final int outputPorts()
 	{
-		return config.outputs();
+		return config.outputPorts();
 	}
 	
 	@Override
@@ -108,7 +108,7 @@ public abstract class LogicComponent<L extends LogicComponent<L, C>, C extends L
 	
 	public final void processTick(LogicTickingContext context, int[] inputs)
 	{
-		int expectedInputs = this.inputs();
+		int expectedInputs = this.inputPorts();
 		Assert.that(expectedInputs == inputs.length, "Mismatching logic component input sizes: expected %d but got %d".formatted(expectedInputs, inputs.length));
 		if(configValid == null)
 		{

@@ -49,13 +49,13 @@ public abstract class LogicRenderer<L extends LogicComponent<L, C>, C extends Lo
 				outputAlpha = 1;
 			}
 			
-			int inputs = component.inputs();
+			int inputs = component.inputPorts();
 			for(int i = 0; i < inputs; i++)
 			{
 				this.renderPort(graphics, x, y, size, true, i, inputs, red, green, blue, inputAlpha);
 			}
 			
-			int outputs = component.outputs();
+			int outputs = component.outputPorts();
 			for(int i = 0; i < outputs; i++)
 			{
 				this.renderPort(graphics, x, y, size, false, i, outputs, red, green, blue, outputAlpha);

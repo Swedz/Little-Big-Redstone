@@ -273,7 +273,7 @@ public final class MicrochipGuidebookScene extends LytBox implements ExportableR
 			return;
 		}
 		var fromLogic = microchip.components().get(fromSlot);
-		if(fromLogic.component().outputs() <= fromPort)
+		if(fromLogic.component().outputPorts() <= fromPort)
 		{
 			errorSink.appendError(compiler, "Logic with name '" + from + "' does not have an output port for that index", el);
 			return;
@@ -286,7 +286,7 @@ public final class MicrochipGuidebookScene extends LytBox implements ExportableR
 			return;
 		}
 		var toLogic = microchip.components().get(toSlot);
-		if(toLogic.component().inputs() <= toPort)
+		if(toLogic.component().inputPorts() <= toPort)
 		{
 			errorSink.appendError(compiler, "Logic with name '" + from + "' does not have an input port for that index", el);
 			return;

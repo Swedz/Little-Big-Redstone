@@ -76,13 +76,13 @@ public final class LogicSelector extends LogicComponent<LogicSelector, LogicSele
 				newSelected--;
 				if(newSelected < 0)
 				{
-					newSelected = config.outputs() - 1;
+					newSelected = config.outputPorts() - 1;
 				}
 			}
 			if(increment)
 			{
 				newSelected++;
-				if(newSelected >= config.outputs())
+				if(newSelected >= config.outputPorts())
 				{
 					newSelected = 0;
 				}
