@@ -197,6 +197,9 @@ public interface LBRText
 	@LangKey(text = "Signal Strength: ")
 	MutableComponent logicConfigButtonLabelIoSignalStrength();
 	
+	@LangKey(text = "Output Override: ")
+	MutableComponent logicConfigButtonLabelComparatorOutputOverride();
+	
 	@LangKey(text = "Power")
 	MutableComponent logicConfigButtonLabelOutputPower();
 	
@@ -331,6 +334,9 @@ public interface LBRText
 	
 	@LangKey(text = "All input signals must be less than or equal to the first input's signal.")
 	MutableComponent logicConfigButtonTooltipComparatorAllPassSignalComparisonModeLessThanOrEqualTo();
+	
+	@LangKey(text = "The output signal to yield when the comparator matches the input.")
+	MutableComponent logicConfigButtonTooltipComparatorOutputOverride();
 	
 	@LangKey(text = "The number of outputs that this component can yield.")
 	MutableComponent logicConfigButtonTooltipOutputs();

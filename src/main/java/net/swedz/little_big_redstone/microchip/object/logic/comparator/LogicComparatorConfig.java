@@ -23,6 +23,7 @@ public record LogicComparatorConfig(
 		LogicAccumulationMode mode,
 		int signalStrength,
 		LogicComparisonMode signalComparison,
+		int outputOverride,
 		int inputs
 ) implements LogicConfig
 {
@@ -30,6 +31,7 @@ public record LogicComparatorConfig(
 			LogicAccumulationMode.ALL,
 			0,
 			LogicComparisonMode.EQUAL_TO,
+			0,
 			1
 	);
 	
@@ -38,6 +40,7 @@ public record LogicComparatorConfig(
 					CodecHelper.forLowercaseEnum(LogicAccumulationMode.class).optionalFieldOf("mode", DEFAULT.mode()).forGetter(LogicComparatorConfig::mode),
 					Codec.intRange(0, 15).optionalFieldOf("signal_strength", DEFAULT.signalStrength()).forGetter(LogicComparatorConfig::signalStrength),
 					CodecHelper.forLowercaseEnum(LogicComparisonMode.class).optionalFieldOf("signal_comparison", DEFAULT.signalComparison()).forGetter(LogicComparatorConfig::signalComparison),
+					Codec.intRange(0, 15).optionalFieldOf("output_override", DEFAULT.outputOverride()).forGetter(LogicComparatorConfig::outputOverride),
 					Codec.intRange(1, 10).optionalFieldOf("inputs", DEFAULT.inputs()).forGetter(LogicComparatorConfig::inputs)
 			)
 			.apply(instance, LogicComparatorConfig::new));
@@ -46,6 +49,7 @@ public record LogicComparatorConfig(
 			CodecHelper.forEnumStream(LogicAccumulationMode.class), LogicComparatorConfig::mode,
 			ByteBufCodecs.VAR_INT, LogicComparatorConfig::signalStrength,
 			CodecHelper.forEnumStream(LogicComparisonMode.class), LogicComparatorConfig::signalComparison,
+			ByteBufCodecs.VAR_INT, LogicComparatorConfig::outputOverride,
 			ByteBufCodecs.VAR_INT, LogicComparatorConfig::inputs,
 			LogicComparatorConfig::new
 	);
