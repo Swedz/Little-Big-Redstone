@@ -5,7 +5,6 @@ import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.item.DyeColor;
-import net.minecraft.world.item.DyeItem;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.neoforge.common.Tags;
 import net.swedz.little_big_redstone.LBRTags;
@@ -29,7 +28,7 @@ public record DyeComponentResult(Result result, Action action, Optional<DyeColor
 	
 	public static boolean is(ItemStack stack)
 	{
-		return (stack.is(Tags.Items.DYES) && stack.getItem() instanceof DyeItem dyeItem) ||
+		return (stack.is(Tags.Items.DYES) && stack.has(DataComponents.DYE)) ||
 			   stack.is(LBRTags.Items.DYE_WASHER);
 	}
 	
@@ -39,7 +38,7 @@ public record DyeComponentResult(Result result, Action action, Optional<DyeColor
 		Action action;
 		Optional<DyeColor> color = Optional.empty();
 		boolean consume;
-		if(carried.is(Tags.Items.DYES) && carried.getItem() instanceof DyeItem dyeItem)
+		if(carried.is(Tags.Items.DYES) && carried.has(DataComponents.DYE))
 		{
 			result = Result.SUCCESS;
 			color = Optional.of(carried.get(DataComponents.DYE));

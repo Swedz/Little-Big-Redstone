@@ -24,7 +24,6 @@ import net.swedz.little_big_redstone.LBR;
 import net.swedz.little_big_redstone.LBRComponents;
 import net.swedz.little_big_redstone.LBRTags;
 import net.swedz.little_big_redstone.block.microchip.MicrochipBlockEntity;
-import net.swedz.little_big_redstone.item.DyeColoredItem;
 import net.swedz.little_big_redstone.item.tooltip.ItemContainerContentsTooltipData;
 import net.swedz.little_big_redstone.microchip.Microchip;
 import net.swedz.little_big_redstone.network.packet.FloppyDiskGuiOverlayUpdatePacket;
@@ -36,22 +35,13 @@ import java.util.Optional;
 import java.util.function.Consumer;
 
 @EventBusSubscriber(modid = LBR.ID)
-public final class FloppyDiskItem extends Item implements DyeColoredItem
+public final class FloppyDiskItem extends Item
 {
-	private final DyeColor color;
-	
 	public FloppyDiskItem(Properties properties, DyeColor color)
 	{
 		super(properties
 				.stacksTo(1)
 				.component(LBRComponents.FLOPPY_DISK, null));
-		this.color = color;
-	}
-	
-	@Override
-	public DyeColor color()
-	{
-		return color;
 	}
 	
 	public static ItemStack getHeldStack(Player player)

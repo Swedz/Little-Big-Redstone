@@ -17,12 +17,11 @@ import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.redstone.Orientation;
 import net.minecraft.world.phys.BlockHitResult;
-import net.swedz.little_big_redstone.item.DyeColoredItem;
 import net.swedz.little_big_redstone.microchip.awareness.AwarenessContext;
 import net.swedz.little_big_redstone.microchip.awareness.AwarenessTypes;
 import net.swedz.tesseract.neoforge.api.TickableBlock;
 
-public final class MicrochipBlock extends Block implements TickableBlock, DyeColoredItem
+public final class MicrochipBlock extends Block implements TickableBlock
 {
 	public static final BooleanProperty UP    = BooleanProperty.create("up");
 	public static final BooleanProperty DOWN  = BooleanProperty.create("down");
@@ -73,7 +72,6 @@ public final class MicrochipBlock extends Block implements TickableBlock, DyeCol
 		}
 	}
 	
-	@Override
 	public DyeColor color()
 	{
 		return color;

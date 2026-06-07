@@ -58,7 +58,7 @@ public record PlaceTakeNoteBoardStickyNotePacket(
 			
 			if(place)
 			{
-				if(carried.getItem() instanceof StickyNoteItem)
+				if(StickyNoteItem.hasRelevantComponents(carried))
 				{
 					if(x >= 0 && x <= 1 && y >= 0 && y <= 1)
 					{

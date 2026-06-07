@@ -23,7 +23,6 @@ import net.swedz.little_big_redstone.LBRComponents;
 import net.swedz.little_big_redstone.entity.stickynote.StickyNoteEntity;
 import net.swedz.little_big_redstone.entity.stickynote.StickyNoteView;
 import net.swedz.little_big_redstone.gui.stickynote.reference.HeldItemStickyNoteReference;
-import net.swedz.little_big_redstone.item.DyeColoredItem;
 import net.swedz.little_big_redstone.item.stickynote.tooltip.StickyNoteTooltipData;
 import net.swedz.little_big_redstone.proxy.LBRProxy;
 import net.swedz.tesseract.neoforge.helper.DirectionHelper;
@@ -33,7 +32,7 @@ import net.swedz.tesseract.neoforge.proxy.Proxies;
 import java.util.Optional;
 import java.util.function.Consumer;
 
-public final class StickyNoteItem extends Item implements DyeColoredItem
+public final class StickyNoteItem extends Item
 {
 	public static DyeColor getDefaultTextColor(DyeColor color)
 	{
@@ -44,7 +43,12 @@ public final class StickyNoteItem extends Item implements DyeColoredItem
 		};
 	}
 	
-	private final DyeColor color;
+	public static boolean hasRelevantComponents(ItemStack stack)
+	{
+		return stack.has(LBRComponents.STICKY_NOTE) &&
+			   stack.has(LBRComponents.STICKY_NOTE_COLOR) &&
+			   stack.has(LBRComponents.STICKY_NOTE_TEXT_COLOR);
+	}
 	
 	public StickyNoteItem(Properties properties, DyeColor color)
 	{
@@ -54,13 +58,6 @@ public final class StickyNoteItem extends Item implements DyeColoredItem
 				.component(LBRComponents.STICKY_NOTE_TEXT_COLOR, getDefaultTextColor(color))
 				.component(LBRComponents.STICKY_NOTE_EDITABLE, true)
 				.component(LBRComponents.STICKY_NOTE_DISPLAY_ITEM, ItemStackInstance.EMPTY));
-		this.color = color;
-	}
-	
-	@Override
-	public DyeColor color()
-	{
-		return color;
 	}
 	
 	private boolean mayPlace(Player player, Direction direction, ItemStack itemStack, BlockPos pos)
@@ -125,6 +122,7 @@ public final class StickyNoteItem extends Item implements DyeColoredItem
 		
 		var facing = direction.getAxis().isVertical() ? Direction.fromYRot(player.getYRot()).getOpposite() : Direction.SOUTH;
 		var quadrant = findClosestQuadrant(context.getClickedPos(), direction, facing, context.getClickLocation());
+		var color = stack.get(LBRComponents.STICKY_NOTE_COLOR);
 		var textColor = stack.get(LBRComponents.STICKY_NOTE_TEXT_COLOR);
 		var editable = stack.get(LBRComponents.STICKY_NOTE_EDITABLE);
 		

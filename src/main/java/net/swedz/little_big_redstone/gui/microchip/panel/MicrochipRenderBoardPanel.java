@@ -152,7 +152,7 @@ public final class MicrochipRenderBoardPanel extends MicrochipRenderPanel
 			int boardMouseX = context.boardMouseX();
 			int boardMouseY = context.boardMouseY();
 			
-			boolean isStickyNote = carried.getItem() instanceof StickyNoteItem;
+			boolean isStickyNote = StickyNoteItem.hasRelevantComponents(carried);
 			boolean isLogic = carried.has(LBRComponents.LOGIC_CONFIG);
 			if(isStickyNote || isLogic)
 			{

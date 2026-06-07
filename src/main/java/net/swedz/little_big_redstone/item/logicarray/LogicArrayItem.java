@@ -24,29 +24,21 @@ import net.neoforged.neoforge.transfer.access.ItemAccess;
 import net.neoforged.neoforge.transfer.item.ItemResource;
 import net.swedz.little_big_redstone.LBRComponents;
 import net.swedz.little_big_redstone.gui.logicarray.LogicArrayMenu;
-import net.swedz.little_big_redstone.item.DyeColoredItem;
 import net.swedz.little_big_redstone.item.tooltip.ItemContainerContentsTooltipData;
 
 import java.util.Optional;
 
-public final class LogicArrayItem extends Item implements DyeColoredItem
+public final class LogicArrayItem extends Item
 {
 	public static final int ROWS      = 4;
 	public static final int COLUMNS   = 7;
 	public static final int MAX_SLOTS = ROWS * COLUMNS;
 	
-	private final DyeColor color;
-	
 	public LogicArrayItem(Properties properties, DyeColor color)
 	{
-		super(properties.stacksTo(1).component(LBRComponents.LOGIC_ARRAY_STORAGE, ItemContainerContents.EMPTY));
-		this.color = color;
-	}
-	
-	@Override
-	public DyeColor color()
-	{
-		return color;
+		super(properties
+				.stacksTo(1)
+				.component(LBRComponents.LOGIC_ARRAY_STORAGE, ItemContainerContents.EMPTY));
 	}
 	
 	@Override

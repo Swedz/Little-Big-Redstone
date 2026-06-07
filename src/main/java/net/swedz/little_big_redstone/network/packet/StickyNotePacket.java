@@ -72,7 +72,7 @@ public record StickyNotePacket(
 		{
 			var hand = data == 0 ? InteractionHand.MAIN_HAND : InteractionHand.OFF_HAND;
 			var stack = player.getItemInHand(hand);
-			return stack.getItem() instanceof StickyNoteItem ? new HeldItemStickyNoteReference(hand, stack) : null;
+			return StickyNoteItem.hasRelevantComponents(stack) ? new HeldItemStickyNoteReference(hand, stack) : null;
 		}),
 		
 		MICROCHIP((player, data) ->

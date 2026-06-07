@@ -91,7 +91,8 @@ public final class LBRClient
 	@SubscribeEvent
 	private static void renderHand(RenderHandEvent event)
 	{
-		if(event.getItemStack().getItem() instanceof StickyNoteItem)
+		if(event.getItemStack().getItem() instanceof StickyNoteItem &&
+		   StickyNoteItem.hasRelevantComponents(event.getItemStack()))
 		{
 			StickyNoteInHandItemRenderer.submit(
 					event.getPoseStack(),

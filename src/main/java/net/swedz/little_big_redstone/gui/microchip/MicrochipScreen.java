@@ -159,7 +159,7 @@ public final class MicrochipScreen extends AbstractContainerScreen<MicrochipMenu
 			graphics.pose().scale(microchipWidget.viewPosition().zoom(), microchipWidget.viewPosition().zoom());
 			graphics.pose().translate((int) -microchipWidget.viewPosition().x(), (int) -microchipWidget.viewPosition().y());
 			
-			if(carried.getItem() instanceof StickyNoteItem)
+			if(StickyNoteItem.hasRelevantComponents(carried))
 			{
 				int itemX = minecraft.hasControlDown() ? getGridSnappedCoord(boardMouseX) : (boardMouseX - 8);
 				int itemY = minecraft.hasControlDown() ? getGridSnappedCoord(boardMouseY) : (boardMouseY - 8);
