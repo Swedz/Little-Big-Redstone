@@ -16,8 +16,7 @@ public record RSNORLatchConfig() implements LogicConfig
 {
 	public static final RSNORLatchConfig DEFAULT = new RSNORLatchConfig();
 	
-	public static final MapCodec<RSNORLatchConfig> CODEC = MapCodec.unit(DEFAULT);
-	
+	public static final MapCodec<RSNORLatchConfig>             CODEC        = MapCodec.unit(DEFAULT);
 	public static final StreamCodec<ByteBuf, RSNORLatchConfig> STREAM_CODEC = StreamCodec.unit(DEFAULT);
 	
 	@Override

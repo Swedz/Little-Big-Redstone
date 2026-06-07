@@ -14,7 +14,7 @@ public final class ORGateConfig extends MultiLogicGateConfig<ORGateConfig>
 {
 	public static final ORGateConfig DEFAULT = new ORGateConfig();
 	
-	public static final MapCodec<ORGateConfig>             CODEC        = codec(ORGateConfig::new);
+	public static final MapCodec<ORGateConfig>             CODEC        = codec(DEFAULT, ORGateConfig::new);
 	public static final StreamCodec<ByteBuf, ORGateConfig> STREAM_CODEC = streamCodec(ORGateConfig::new);
 	
 	public ORGateConfig(int inputs)

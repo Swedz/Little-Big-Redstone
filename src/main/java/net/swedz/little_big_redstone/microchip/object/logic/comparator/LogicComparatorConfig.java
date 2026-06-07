@@ -35,10 +35,10 @@ public record LogicComparatorConfig(
 	
 	public static final MapCodec<LogicComparatorConfig> CODEC = RecordCodecBuilder.mapCodec((instance) -> instance
 			.group(
-					CodecHelper.forLowercaseEnum(LogicAccumulationMode.class).optionalFieldOf("mode", LogicAccumulationMode.ALL).forGetter(LogicComparatorConfig::mode),
-					Codec.intRange(0, 15).optionalFieldOf("signal_strength", 0).forGetter(LogicComparatorConfig::signalStrength),
-					CodecHelper.forLowercaseEnum(LogicComparisonMode.class).optionalFieldOf("signal_comparison", LogicComparisonMode.GREATER_THAN_OR_EQUAL_TO).forGetter(LogicComparatorConfig::signalComparison),
-					Codec.intRange(1, 10).optionalFieldOf("inputs", 1).forGetter(LogicComparatorConfig::inputs)
+					CodecHelper.forLowercaseEnum(LogicAccumulationMode.class).optionalFieldOf("mode", DEFAULT.mode()).forGetter(LogicComparatorConfig::mode),
+					Codec.intRange(0, 15).optionalFieldOf("signal_strength", DEFAULT.signalStrength()).forGetter(LogicComparatorConfig::signalStrength),
+					CodecHelper.forLowercaseEnum(LogicComparisonMode.class).optionalFieldOf("signal_comparison", DEFAULT.signalComparison()).forGetter(LogicComparatorConfig::signalComparison),
+					Codec.intRange(1, 10).optionalFieldOf("inputs", DEFAULT.inputs()).forGetter(LogicComparatorConfig::inputs)
 			)
 			.apply(instance, LogicComparatorConfig::new));
 	

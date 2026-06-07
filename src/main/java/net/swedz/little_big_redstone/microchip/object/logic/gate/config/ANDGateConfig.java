@@ -14,7 +14,7 @@ public final class ANDGateConfig extends MultiLogicGateConfig<ANDGateConfig>
 {
 	public static final ANDGateConfig DEFAULT = new ANDGateConfig();
 	
-	public static final MapCodec<ANDGateConfig>             CODEC        = codec(ANDGateConfig::new);
+	public static final MapCodec<ANDGateConfig>             CODEC        = codec(DEFAULT, ANDGateConfig::new);
 	public static final StreamCodec<ByteBuf, ANDGateConfig> STREAM_CODEC = streamCodec(ANDGateConfig::new);
 	
 	public ANDGateConfig(int inputs)
