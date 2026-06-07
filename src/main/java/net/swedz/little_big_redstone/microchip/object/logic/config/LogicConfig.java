@@ -8,9 +8,9 @@ import net.swedz.little_big_redstone.microchip.object.logic.config.menu.LogicCon
 
 import java.util.List;
 
-public interface LogicConfig<C extends LogicConfig<C>> extends LogicPortHolder
+public interface LogicConfig extends LogicPortHolder
 {
-	LogicType<?, C> type();
+	LogicType type();
 	
 	default boolean checkValid(LogicComponents components)
 	{
@@ -34,7 +34,7 @@ public interface LogicConfig<C extends LogicConfig<C>> extends LogicPortHolder
 		return false;
 	}
 	
-	default LogicConfigMenuProvider<C> getMenuProvider()
+	default LogicConfigMenuProvider<?> getMenuProvider()
 	{
 		throw new UnsupportedOperationException("LogicConfig#getMenuProvider must be implemented when LogicConfig#hasMenu returns true");
 	}

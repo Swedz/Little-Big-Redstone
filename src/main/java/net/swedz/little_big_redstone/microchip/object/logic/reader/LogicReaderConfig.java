@@ -25,7 +25,7 @@ public record LogicReaderConfig(
 		LogicReaderThreshold fillThreshold,
 		int signalThreshold,
 		LogicComparisonMode comparison
-) implements LogicConfig<LogicReaderConfig>
+) implements LogicConfig
 {
 	public static final LogicReaderConfig DEFAULT = new LogicReaderConfig(
 			LogicReaderMode.ITEM,
@@ -55,7 +55,7 @@ public record LogicReaderConfig(
 	);
 	
 	@Override
-	public LogicType<?, LogicReaderConfig> type()
+	public LogicType type()
 	{
 		return LBRLogicTypes.READER.get();
 	}

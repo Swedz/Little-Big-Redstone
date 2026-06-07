@@ -9,7 +9,6 @@ import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.registries.DeferredRegister;
-import net.swedz.little_big_redstone.microchip.object.logic.LogicType;
 import net.swedz.tesseract.neoforge.registry.holder.ItemHolder;
 
 import java.util.Collections;
@@ -38,7 +37,7 @@ public final class LBRCreativeTabs
 	{
 		List<ItemStack> items = Lists.newArrayList();
 		items.add(LBRItems.REDSTONE_BIT.asItem().getDefaultInstance());
-		for(LogicType type : LBRLogicTypes.values())
+		for(var type : LBRLogicTypes.values())
 		{
 			var stack = type.toStack(type.defaultFactory().create());
 			items.add(stack);

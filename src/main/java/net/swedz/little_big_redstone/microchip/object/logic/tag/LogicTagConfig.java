@@ -21,7 +21,7 @@ public record LogicTagConfig(
 		LogicTagLabel label,
 		int threshold,
 		boolean global
-) implements LogicConfig<LogicTagConfig>
+) implements LogicConfig
 {
 	public static final LogicTagConfig DEFAULT = new LogicTagConfig(
 			true,
@@ -48,7 +48,7 @@ public record LogicTagConfig(
 	);
 	
 	@Override
-	public LogicType<?, LogicTagConfig> type()
+	public LogicType type()
 	{
 		return LBRLogicTypes.TAG.get();
 	}

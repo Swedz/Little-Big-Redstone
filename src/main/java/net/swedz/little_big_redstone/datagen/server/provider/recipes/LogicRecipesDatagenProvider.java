@@ -13,9 +13,7 @@ import net.neoforged.neoforge.data.event.GatherDataEvent;
 import net.swedz.little_big_redstone.LBR;
 import net.swedz.little_big_redstone.LBRItems;
 import net.swedz.little_big_redstone.LBRLogicTypes;
-import net.swedz.little_big_redstone.microchip.object.logic.LogicComponent;
 import net.swedz.little_big_redstone.microchip.object.logic.LogicType;
-import net.swedz.little_big_redstone.microchip.object.logic.config.LogicConfig;
 import net.swedz.tesseract.neoforge.compat.vanilla.recipe.ShapedRecipeBuilder;
 
 import java.util.Map;
@@ -41,9 +39,9 @@ public final class LogicRecipesDatagenProvider extends RecipeProvider
 			'P', Either.right(Tags.Items.ENDER_PEARLS)
 	);
 	
-	private static <L extends LogicComponent<L, C>, C extends LogicConfig<C>> void logicComponent(
+	private static void logicComponent(
 			RecipeOutput output,
-			Supplier<LogicType<L, C>> typeEntry,
+			Supplier<LogicType> typeEntry,
 			Consumer<ShapedRecipeBuilder> action
 	)
 	{

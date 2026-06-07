@@ -34,7 +34,7 @@ public final class XORGate extends LogicGate<XORGate, XORGateConfig>
 	}
 	
 	@Override
-	public LogicType<XORGate, XORGateConfig> type()
+	public LogicType type()
 	{
 		return LBRLogicTypes.XOR.get();
 	}

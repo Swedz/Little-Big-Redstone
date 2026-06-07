@@ -35,7 +35,7 @@ public final class LogicBakingModelData
 			)
 			.apply(instance, LogicBakingModelData::new));
 	
-	public static LogicBakingModelData get(LogicType<?, ?> type)
+	public static LogicBakingModelData get(LogicType type)
 	{
 		return ((LogicBakedModel) Minecraft.getInstance().getModelManager().getModel(ModelResourceLocation.inventory(type.id()))).getData();
 	}

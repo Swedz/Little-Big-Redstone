@@ -12,7 +12,6 @@ import net.swedz.little_big_redstone.gui.microchip.logic.renderer.SequencerRende
 import net.swedz.little_big_redstone.gui.microchip.logic.renderer.SimpleLogicRenderer;
 import net.swedz.little_big_redstone.microchip.object.logic.LogicComponent;
 import net.swedz.little_big_redstone.microchip.object.logic.LogicType;
-import net.swedz.little_big_redstone.microchip.object.logic.config.LogicConfig;
 import net.swedz.tesseract.neoforge.helper.guigraphics.TesseractGuiGraphics;
 
 import java.util.Map;
@@ -54,7 +53,10 @@ public final class LogicRenderers
 		RENDERERS = createRenderers();
 	}
 	
-	private static <L extends LogicComponent<L, C>, C extends LogicConfig<C>> void register(DeferredHolder<LogicType<?, ?>, LogicType<L, C>> type, LogicRendererProvider<L, C> provider)
+	private static void register(
+			DeferredHolder<LogicType, LogicType> type,
+			LogicRendererProvider provider
+	)
 	{
 		PROVIDERS.put(type.getId(), provider);
 	}

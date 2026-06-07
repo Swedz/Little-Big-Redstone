@@ -16,7 +16,7 @@ public record WireMetadata(
 		int argb
 )
 {
-	private static int getColor(LogicType<?, ?> output, Optional<DyeColor> color, DyeColor fallback)
+	private static int getColor(LogicType output, Optional<DyeColor> color, DyeColor fallback)
 	{
 		return LogicBakingModelData.get(output).getColorSet(color, fallback).foreground();
 	}
@@ -39,7 +39,7 @@ public record WireMetadata(
 		return of(microchip, color, wire.output(), hovered);
 	}
 	
-	public static WireMetadata carried(Microchip microchip, DyeColor fallbackColor, int carriedComponentSlot, LogicType<?, ?> type, Optional<DyeColor> logicColor, Wire wire)
+	public static WireMetadata carried(Microchip microchip, DyeColor fallbackColor, int carriedComponentSlot, LogicType type, Optional<DyeColor> logicColor, Wire wire)
 	{
 		boolean isOutput = wire.output().slot() == carriedComponentSlot;
 		var outputLogic = isOutput ? null : microchip.components().get(wire.output().slot());

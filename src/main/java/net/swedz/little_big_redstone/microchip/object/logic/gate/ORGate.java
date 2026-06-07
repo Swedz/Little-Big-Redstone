@@ -34,7 +34,7 @@ public final class ORGate extends LogicGate<ORGate, ORGateConfig>
 	}
 	
 	@Override
-	public LogicType<ORGate, ORGateConfig> type()
+	public LogicType type()
 	{
 		return LBRLogicTypes.OR.get();
 	}

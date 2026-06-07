@@ -162,7 +162,7 @@ public final class LogicReader extends LogicComponent<LogicReader, LogicReaderCo
 	}
 	
 	@Override
-	public LogicType<LogicReader, LogicReaderConfig> type()
+	public LogicType type()
 	{
 		return LBRLogicTypes.READER.get();
 	}

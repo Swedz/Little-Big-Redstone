@@ -19,7 +19,7 @@ import java.util.List;
 public record PulseThrottlerConfig(
 		long outputDuration,
 		int signalStrength
-) implements LogicConfig<PulseThrottlerConfig>
+) implements LogicConfig
 {
 	public static final PulseThrottlerConfig DEFAULT = new PulseThrottlerConfig(
 			1,
@@ -40,7 +40,7 @@ public record PulseThrottlerConfig(
 	);
 	
 	@Override
-	public LogicType<?, PulseThrottlerConfig> type()
+	public LogicType type()
 	{
 		return LBRLogicTypes.PULSE_THROTTLER.get();
 	}

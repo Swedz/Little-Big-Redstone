@@ -12,7 +12,7 @@ import net.swedz.tesseract.neoforge.api.range.IntRange;
 
 import java.util.List;
 
-public record TFlipFlopConfig() implements LogicConfig<TFlipFlopConfig>
+public record TFlipFlopConfig() implements LogicConfig
 {
 	public static final TFlipFlopConfig DEFAULT = new TFlipFlopConfig();
 	
@@ -21,7 +21,7 @@ public record TFlipFlopConfig() implements LogicConfig<TFlipFlopConfig>
 	public static final StreamCodec<ByteBuf, TFlipFlopConfig> STREAM_CODEC = StreamCodec.unit(DEFAULT);
 	
 	@Override
-	public LogicType<?, TFlipFlopConfig> type()
+	public LogicType type()
 	{
 		return LBRLogicTypes.T_FLIP_FLOP.get();
 	}

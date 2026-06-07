@@ -44,7 +44,7 @@ public final class RSNORLatch extends LogicComponent<RSNORLatch, RSNORLatchConfi
 	}
 	
 	@Override
-	public LogicType<RSNORLatch, RSNORLatchConfig> type()
+	public LogicType type()
 	{
 		return LBRLogicTypes.RS_NOR_LATCH.get();
 	}

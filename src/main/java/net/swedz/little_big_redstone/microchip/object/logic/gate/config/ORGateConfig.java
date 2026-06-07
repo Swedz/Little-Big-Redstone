@@ -28,7 +28,7 @@ public final class ORGateConfig extends MultiLogicGateConfig<ORGateConfig>
 	}
 	
 	@Override
-	public LogicType<?, ORGateConfig> type()
+	public LogicType type()
 	{
 		return LBRLogicTypes.OR.get();
 	}

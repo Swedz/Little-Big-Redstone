@@ -34,7 +34,7 @@ public final class NANDGate extends LogicGate<NANDGate, NANDGateConfig>
 	}
 	
 	@Override
-	public LogicType<NANDGate, NANDGateConfig> type()
+	public LogicType type()
 	{
 		return LBRLogicTypes.NAND.get();
 	}

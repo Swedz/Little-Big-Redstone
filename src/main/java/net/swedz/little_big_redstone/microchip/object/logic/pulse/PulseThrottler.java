@@ -68,7 +68,7 @@ public final class PulseThrottler extends LogicComponent<PulseThrottler, PulseTh
 	}
 	
 	@Override
-	public LogicType<PulseThrottler, PulseThrottlerConfig> type()
+	public LogicType type()
 	{
 		return LBRLogicTypes.PULSE_THROTTLER.get();
 	}

@@ -57,7 +57,7 @@ public final class LogicTag extends LogicComponent<LogicTag, LogicTagConfig> imp
 	}
 	
 	@Override
-	public LogicType<LogicTag, LogicTagConfig> type()
+	public LogicType type()
 	{
 		return LBRLogicTypes.TAG.get();
 	}

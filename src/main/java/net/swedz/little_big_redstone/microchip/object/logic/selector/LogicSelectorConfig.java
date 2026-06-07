@@ -21,7 +21,7 @@ public record LogicSelectorConfig(
 		LogicSelectorMode mode,
 		int outputs,
 		boolean passSignal
-) implements LogicConfig<LogicSelectorConfig>
+) implements LogicConfig
 {
 	public static final LogicSelectorConfig DEFAULT = new LogicSelectorConfig(
 			LogicSelectorMode.COUNTER,
@@ -45,7 +45,7 @@ public record LogicSelectorConfig(
 	);
 	
 	@Override
-	public LogicType<?, LogicSelectorConfig> type()
+	public LogicType type()
 	{
 		return LBRLogicTypes.SELECTOR.get();
 	}

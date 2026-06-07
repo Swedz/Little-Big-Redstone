@@ -53,7 +53,7 @@ public final class LogicComparator extends LogicComponent<LogicComparator, Logic
 	}
 	
 	@Override
-	public LogicType<LogicComparator, LogicComparatorConfig> type()
+	public LogicType type()
 	{
 		return LBRLogicTypes.COMPARATOR.get();
 	}

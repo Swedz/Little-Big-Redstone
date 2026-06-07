@@ -15,9 +15,9 @@ import net.swedz.little_big_redstone.microchip.object.logic.config.LogicConfig;
 import java.util.Optional;
 import java.util.function.BiFunction;
 
-public abstract class LogicGate<G extends LogicGate<G, C>, C extends LogicConfig<C>> extends LogicComponent<G, C>
+public abstract class LogicGate<G extends LogicGate<G, C>, C extends LogicConfig> extends LogicComponent<G, C>
 {
-	protected static <G extends LogicGate<G, C>, C extends LogicConfig<C>> MapCodec<G> mapCodec(MapCodec<C> configCodec, Function3<C, Optional<DyeColor>, Integer, G> function)
+	protected static <G extends LogicGate<G, C>, C extends LogicConfig> MapCodec<G> mapCodec(MapCodec<C> configCodec, Function3<C, Optional<DyeColor>, Integer, G> function)
 	{
 		return RecordCodecBuilder.mapCodec((instance) -> instance
 				.group(
@@ -28,7 +28,7 @@ public abstract class LogicGate<G extends LogicGate<G, C>, C extends LogicConfig
 				.apply(instance, function));
 	}
 	
-	protected static <G extends LogicGate<G, C>, C extends LogicConfig<C>> MapCodec<G> mapCodec(BiFunction<Optional<DyeColor>, Integer, G> creator)
+	protected static <G extends LogicGate<G, C>, C extends LogicConfig> MapCodec<G> mapCodec(BiFunction<Optional<DyeColor>, Integer, G> creator)
 	{
 		return RecordCodecBuilder.mapCodec((instance) -> instance
 				.group(
@@ -38,7 +38,7 @@ public abstract class LogicGate<G extends LogicGate<G, C>, C extends LogicConfig
 				.apply(instance, creator));
 	}
 	
-	protected static <G extends LogicGate<G, C>, C extends LogicConfig<C>> StreamCodec<ByteBuf, G> streamCodec(StreamCodec<ByteBuf, C> configCodec, Function3<C, Optional<DyeColor>, Integer, G> function)
+	protected static <G extends LogicGate<G, C>, C extends LogicConfig> StreamCodec<ByteBuf, G> streamCodec(StreamCodec<ByteBuf, C> configCodec, Function3<C, Optional<DyeColor>, Integer, G> function)
 	{
 		return StreamCodec.composite(
 				configCodec, LogicComponent::config,
@@ -48,7 +48,7 @@ public abstract class LogicGate<G extends LogicGate<G, C>, C extends LogicConfig
 		);
 	}
 	
-	protected static <G extends LogicGate<G, C>, C extends LogicConfig<C>> StreamCodec<ByteBuf, G> streamCodec(BiFunction<Optional<DyeColor>, Integer, G> creator)
+	protected static <G extends LogicGate<G, C>, C extends LogicConfig> StreamCodec<ByteBuf, G> streamCodec(BiFunction<Optional<DyeColor>, Integer, G> creator)
 	{
 		return StreamCodec.composite(
 				ByteBufCodecs.optional(DyeColor.STREAM_CODEC), LogicGate::color,

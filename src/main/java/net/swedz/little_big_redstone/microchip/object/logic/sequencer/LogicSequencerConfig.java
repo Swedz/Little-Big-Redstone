@@ -23,7 +23,7 @@ public record LogicSequencerConfig(
 		long outputDelay,
 		boolean autoReset,
 		boolean resetPort
-) implements LogicConfig<LogicSequencerConfig>
+) implements LogicConfig
 {
 	public static final LogicSequencerConfig DEFAULT = new LogicSequencerConfig(
 			LogicSequencerMode.WEAK,
@@ -50,7 +50,7 @@ public record LogicSequencerConfig(
 	);
 	
 	@Override
-	public LogicType<?, LogicSequencerConfig> type()
+	public LogicType type()
 	{
 		return LBRLogicTypes.SEQUENCER.get();
 	}

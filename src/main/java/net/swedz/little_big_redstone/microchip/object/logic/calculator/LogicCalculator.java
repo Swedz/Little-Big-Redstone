@@ -53,7 +53,7 @@ public final class LogicCalculator extends LogicComponent<LogicCalculator, Logic
 	}
 	
 	@Override
-	public LogicType<LogicCalculator, LogicCalculatorConfig> type()
+	public LogicType type()
 	{
 		return LBRLogicTypes.CALCULATOR.get();
 	}

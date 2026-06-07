@@ -17,7 +17,7 @@ public record NOTGateConfig() implements SingleLogicGateConfig<NOTGateConfig>
 	public static final StreamCodec<ByteBuf, NOTGateConfig> STREAM_CODEC = StreamCodec.unit(DEFAULT);
 	
 	@Override
-	public LogicType<?, NOTGateConfig> type()
+	public LogicType type()
 	{
 		return LBRLogicTypes.NOT.get();
 	}

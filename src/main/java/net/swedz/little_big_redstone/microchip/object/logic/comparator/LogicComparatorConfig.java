@@ -24,7 +24,7 @@ public record LogicComparatorConfig(
 		int signalStrength,
 		LogicComparisonMode signalComparison,
 		int inputs
-) implements LogicConfig<LogicComparatorConfig>
+) implements LogicConfig
 {
 	public static final LogicComparatorConfig DEFAULT = new LogicComparatorConfig(
 			LogicAccumulationMode.ALL,
@@ -51,7 +51,7 @@ public record LogicComparatorConfig(
 	);
 	
 	@Override
-	public LogicType<?, LogicComparatorConfig> type()
+	public LogicType type()
 	{
 		return LBRLogicTypes.COMPARATOR.get();
 	}

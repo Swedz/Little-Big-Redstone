@@ -133,7 +133,7 @@ public final class LogicSelector extends LogicComponent<LogicSelector, LogicSele
 	}
 	
 	@Override
-	public LogicType<LogicSelector, LogicSelectorConfig> type()
+	public LogicType type()
 	{
 		return LBRLogicTypes.SELECTOR.get();
 	}

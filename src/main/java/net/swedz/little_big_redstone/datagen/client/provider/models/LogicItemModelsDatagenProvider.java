@@ -10,10 +10,8 @@ import net.swedz.little_big_redstone.LBR;
 import net.swedz.little_big_redstone.LBRColors;
 import net.swedz.little_big_redstone.LBRLogicTypes;
 import net.swedz.little_big_redstone.client.model.logic.LogicBakingModelData;
-import net.swedz.little_big_redstone.microchip.object.logic.LogicComponent;
 import net.swedz.little_big_redstone.microchip.object.logic.LogicType;
 import net.swedz.little_big_redstone.microchip.object.logic.calculator.LogicCalculatorMode;
-import net.swedz.little_big_redstone.microchip.object.logic.config.LogicConfig;
 
 import java.util.Locale;
 import java.util.Set;
@@ -22,7 +20,7 @@ import java.util.function.Supplier;
 
 public final class LogicItemModelsDatagenProvider extends ItemModelProvider
 {
-	private final Set<LogicType<?, ?>> generated = Sets.newHashSet();
+	private final Set<LogicType> generated = Sets.newHashSet();
 	
 	public LogicItemModelsDatagenProvider(GatherDataEvent event)
 	{
@@ -136,8 +134,8 @@ public final class LogicItemModelsDatagenProvider extends ItemModelProvider
 		}
 	}
 	
-	private <L extends LogicComponent<L, C>, C extends LogicConfig<C>> void logicComponent(
-			Supplier<LogicType<L, C>> entry,
+	private void logicComponent(
+			Supplier<LogicType> entry,
 			BackgroundType backgroundType,
 			boolean icon,
 			Consumer<LogicBakingModelData.Builder<?>> also
@@ -174,8 +172,8 @@ public final class LogicItemModelsDatagenProvider extends ItemModelProvider
 				.end();
 	}
 	
-	private <L extends LogicComponent<L, C>, C extends LogicConfig<C>> void logicComponent(
-			Supplier<LogicType<L, C>> type,
+	private void logicComponent(
+			Supplier<LogicType> type,
 			BackgroundType backgroundType,
 			boolean icon
 	)

@@ -68,7 +68,7 @@ public final class LogicConfigScreen extends AbstractContainerScreen<LogicConfig
 		}
 	}
 	
-	private LogicConfig<?> logicConfig()
+	private LogicConfig logicConfig()
 	{
 		return logicConfigMenuProvider.config();
 	}

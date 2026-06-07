@@ -28,7 +28,7 @@ public final class ANDGateConfig extends MultiLogicGateConfig<ANDGateConfig>
 	}
 	
 	@Override
-	public LogicType<?, ANDGateConfig> type()
+	public LogicType type()
 	{
 		return LBRLogicTypes.AND.get();
 	}

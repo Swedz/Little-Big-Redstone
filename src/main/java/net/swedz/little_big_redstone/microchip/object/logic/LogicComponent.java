@@ -8,7 +8,7 @@ import net.swedz.tesseract.neoforge.api.range.IntRange;
 import java.util.Arrays;
 import java.util.Optional;
 
-public abstract class LogicComponent<L extends LogicComponent<L, C>, C extends LogicConfig<C>> implements LogicPortHolder
+public abstract class LogicComponent<L extends LogicComponent<L, C>, C extends LogicConfig> implements LogicPortHolder
 {
 	protected C config;
 	
@@ -33,7 +33,7 @@ public abstract class LogicComponent<L extends LogicComponent<L, C>, C extends L
 	protected LogicComponent(Optional<DyeColor> color)
 	{
 		this.color = color;
-		this.config = this.type().defaultConfig();
+		this.config = (C) this.type().defaultConfig();
 	}
 	
 	public final C config()
@@ -72,7 +72,7 @@ public abstract class LogicComponent<L extends LogicComponent<L, C>, C extends L
 		color = Optional.empty();
 	}
 	
-	public abstract LogicType<L, C> type();
+	public abstract LogicType type();
 	
 	@Override
 	public final IntRange inputsAllowed()
@@ -157,7 +157,7 @@ public abstract class LogicComponent<L extends LogicComponent<L, C>, C extends L
 	
 	public final L copy()
 	{
-		var copy = this.type().defaultFactory().create();
+		var copy = (L) this.type().defaultFactory().create();
 		copy.loadFrom((L) this);
 		return copy;
 	}

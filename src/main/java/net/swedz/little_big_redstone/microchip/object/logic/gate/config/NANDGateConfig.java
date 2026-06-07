@@ -28,7 +28,7 @@ public final class NANDGateConfig extends MultiLogicGateConfig<NANDGateConfig>
 	}
 	
 	@Override
-	public LogicType<?, NANDGateConfig> type()
+	public LogicType type()
 	{
 		return LBRLogicTypes.NAND.get();
 	}

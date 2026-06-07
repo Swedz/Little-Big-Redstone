@@ -19,7 +19,7 @@ import java.util.List;
 public record LogicRandomizerConfig(
 		int outputs,
 		float chance
-) implements LogicConfig<LogicRandomizerConfig>
+) implements LogicConfig
 {
 	public static final LogicRandomizerConfig DEFAULT = new LogicRandomizerConfig(
 			1,
@@ -40,7 +40,7 @@ public record LogicRandomizerConfig(
 	);
 	
 	@Override
-	public LogicType<?, LogicRandomizerConfig> type()
+	public LogicType type()
 	{
 		return LBRLogicTypes.RANDOMIZER.get();
 	}

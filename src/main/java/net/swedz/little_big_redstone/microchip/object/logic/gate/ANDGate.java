@@ -34,7 +34,7 @@ public final class ANDGate extends LogicGate<ANDGate, ANDGateConfig>
 	}
 	
 	@Override
-	public LogicType<ANDGate, ANDGateConfig> type()
+	public LogicType type()
 	{
 		return LBRLogicTypes.AND.get();
 	}

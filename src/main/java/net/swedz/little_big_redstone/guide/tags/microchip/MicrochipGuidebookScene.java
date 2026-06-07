@@ -234,7 +234,7 @@ public final class MicrochipGuidebookScene extends LytBox implements ExportableR
 			int x,
 			int y,
 			DyeColor color,
-			LogicType<?, ?> type,
+			LogicType type,
 			CompoundTag data,
 			boolean hide,
 			PageCompiler compiler,

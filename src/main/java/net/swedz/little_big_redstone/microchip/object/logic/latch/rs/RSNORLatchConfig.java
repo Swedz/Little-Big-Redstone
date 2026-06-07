@@ -12,7 +12,7 @@ import net.swedz.tesseract.neoforge.api.range.IntRange;
 
 import java.util.List;
 
-public record RSNORLatchConfig() implements LogicConfig<RSNORLatchConfig>
+public record RSNORLatchConfig() implements LogicConfig
 {
 	public static final RSNORLatchConfig DEFAULT = new RSNORLatchConfig();
 	
@@ -21,7 +21,7 @@ public record RSNORLatchConfig() implements LogicConfig<RSNORLatchConfig>
 	public static final StreamCodec<ByteBuf, RSNORLatchConfig> STREAM_CODEC = StreamCodec.unit(DEFAULT);
 	
 	@Override
-	public LogicType<?, RSNORLatchConfig> type()
+	public LogicType type()
 	{
 		return LBRLogicTypes.RS_NOR_LATCH.get();
 	}

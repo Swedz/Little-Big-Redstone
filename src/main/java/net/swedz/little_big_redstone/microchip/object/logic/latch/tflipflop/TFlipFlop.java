@@ -48,7 +48,7 @@ public final class TFlipFlop extends LogicComponent<TFlipFlop, TFlipFlopConfig>
 	}
 	
 	@Override
-	public LogicType<TFlipFlop, TFlipFlopConfig> type()
+	public LogicType type()
 	{
 		return LBRLogicTypes.T_FLIP_FLOP.get();
 	}

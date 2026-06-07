@@ -89,7 +89,7 @@ public final class LogicIO extends LogicComponent<LogicIO, LogicIOConfig> implem
 	}
 	
 	@Override
-	public LogicType<LogicIO, LogicIOConfig> type()
+	public LogicType type()
 	{
 		return LBRLogicTypes.IO.get();
 	}

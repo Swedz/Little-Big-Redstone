@@ -27,7 +27,7 @@ public record LogicIOConfig(
 		int signalStrength,
 		LogicComparisonMode signalComparison,
 		LogicPowerOutputType powerType
-) implements LogicConfig<LogicIOConfig>
+) implements LogicConfig
 {
 	public static final MapCodec<LogicIOConfig> CODEC = RecordCodecBuilder.mapCodec((instance) -> instance
 			.group(
@@ -57,7 +57,7 @@ public record LogicIOConfig(
 	);
 	
 	@Override
-	public LogicType<?, LogicIOConfig> type()
+	public LogicType type()
 	{
 		return LBRLogicTypes.IO.get();
 	}

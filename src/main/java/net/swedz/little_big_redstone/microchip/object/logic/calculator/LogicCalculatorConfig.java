@@ -20,7 +20,7 @@ import java.util.List;
 public record LogicCalculatorConfig(
 		LogicCalculatorMode mode,
 		int inputs
-) implements LogicConfig<LogicCalculatorConfig>
+) implements LogicConfig
 {
 	public static final LogicCalculatorConfig DEFAULT = new LogicCalculatorConfig(
 			LogicCalculatorMode.ADDITION,
@@ -41,7 +41,7 @@ public record LogicCalculatorConfig(
 	);
 	
 	@Override
-	public LogicType<?, LogicCalculatorConfig> type()
+	public LogicType type()
 	{
 		return LBRLogicTypes.CALCULATOR.get();
 	}
@@ -92,7 +92,7 @@ public record LogicCalculatorConfig(
 	}
 	
 	@Override
-	public LogicConfigMenuProvider<LogicCalculatorConfig> getMenuProvider()
+	public LogicConfigMenuProvider<?> getMenuProvider()
 	{
 		return new LogicCalculatorConfigMenuProvider(this);
 	}

@@ -29,7 +29,7 @@ public final class NOTGate extends LogicGate<NOTGate, NOTGateConfig>
 	}
 	
 	@Override
-	public LogicType<NOTGate, NOTGateConfig> type()
+	public LogicType type()
 	{
 		return LBRLogicTypes.NOT.get();
 	}

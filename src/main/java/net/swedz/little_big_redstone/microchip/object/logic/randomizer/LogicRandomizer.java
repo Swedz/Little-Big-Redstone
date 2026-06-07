@@ -105,7 +105,7 @@ public final class LogicRandomizer extends LogicComponent<LogicRandomizer, Logic
 	}
 	
 	@Override
-	public LogicType<LogicRandomizer, LogicRandomizerConfig> type()
+	public LogicType type()
 	{
 		return LBRLogicTypes.RANDOMIZER.get();
 	}

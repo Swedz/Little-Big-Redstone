@@ -134,7 +134,7 @@ public final class LBRItems
 		return holder;
 	}
 	
-	private static ItemHolder<LogicItem> createLogic(String id, String englishName, LogicType<?, ?> type, int order)
+	private static ItemHolder<LogicItem> createLogic(String id, String englishName, LogicType type, int order)
 	{
 		return create(id, englishName, (p) -> new LogicItem(p, type), LBRSortOrder.LOGIC.and(order))
 				.tag(LBRTags.Items.LOGIC_COMPONENTS);

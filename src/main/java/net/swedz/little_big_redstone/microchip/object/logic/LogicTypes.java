@@ -15,9 +15,9 @@ import net.swedz.tesseract.neoforge.helper.CodecHelper;
 
 public final class LogicTypes
 {
-	public static final ResourceKey<Registry<LogicType<?, ?>>> REGISTRY_KEY = ResourceKey.createRegistryKey(LBR.id("logic"));
+	public static final ResourceKey<Registry<LogicType>> REGISTRY_KEY = ResourceKey.createRegistryKey(LBR.id("logic"));
 	
-	public static final Registry<LogicType<?, ?>> REGISTRY = new RegistryBuilder<>(REGISTRY_KEY)
+	public static final Registry<LogicType> REGISTRY = new RegistryBuilder<>(REGISTRY_KEY)
 			.sync(true)
 			.create();
 	
@@ -48,7 +48,7 @@ public final class LogicTypes
 	 * @see Registry#byNameCodec()
 	 */
 	@Deprecated(since = "1.8.3-beta", forRemoval = true)
-	private static final Codec<LogicType<?, ?>> CODEC = RESOURCE_LOCATION_CODEC
+	private static final Codec<LogicType> CODEC = RESOURCE_LOCATION_CODEC
 			.comapFlatMap(
 					(id) -> REGISTRY
 							.getHolder(id)
@@ -62,7 +62,7 @@ public final class LogicTypes
 					(value) ->
 					{
 						var holder = REGISTRY.wrapAsHolder(value);
-						if(holder.getDelegate() instanceof Holder.Reference<LogicType<?, ?>> reference)
+						if(holder.getDelegate() instanceof Holder.Reference<LogicType> reference)
 						{
 							return DataResult.success(reference);
 						}

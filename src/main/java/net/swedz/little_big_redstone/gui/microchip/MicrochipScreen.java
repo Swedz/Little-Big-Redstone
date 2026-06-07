@@ -224,7 +224,7 @@ public final class MicrochipScreen extends AbstractContainerScreen<MicrochipMenu
 	{
 	}
 	
-	private void renderCarriedWires(TesseractGuiGraphics graphics, int logicX, int logicY, LogicRenderer.Context context, LogicConfig<?> config, Optional<DyeColor> color)
+	private void renderCarriedWires(TesseractGuiGraphics graphics, int logicX, int logicY, LogicRenderer.Context context, LogicConfig config, Optional<DyeColor> color)
 	{
 		if(menu.getCarriedWires() != null)
 		{
@@ -253,7 +253,7 @@ public final class MicrochipScreen extends AbstractContainerScreen<MicrochipMenu
 		}
 	}
 	
-	private <C extends LogicConfig<C>> void renderCarriedLogic(TesseractGuiGraphics graphics, int logicX, int logicY, LogicRenderer.Context context, C config, Optional<DyeColor> logicColor)
+	private void renderCarriedLogic(TesseractGuiGraphics graphics, int logicX, int logicY, LogicRenderer.Context context, LogicConfig config, Optional<DyeColor> logicColor)
 	{
 		var microchip = menu.microchip();
 		var size = microchip.size();

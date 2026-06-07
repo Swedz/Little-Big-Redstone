@@ -53,7 +53,7 @@ public record LogicEntry(
 		this(slot, x, y, component, true);
 	}
 	
-	public LogicType<?, ?> type()
+	public LogicType type()
 	{
 		return component.type();
 	}

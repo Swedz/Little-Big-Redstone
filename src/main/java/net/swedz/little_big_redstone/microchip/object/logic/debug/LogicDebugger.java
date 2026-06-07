@@ -38,7 +38,7 @@ public final class LogicDebugger extends LogicComponent<LogicDebugger, LogicDebu
 	}
 	
 	@Override
-	public LogicType<LogicDebugger, LogicDebuggerConfig> type()
+	public LogicType type()
 	{
 		return LBRLogicTypes.DEBUGGER.get();
 	}

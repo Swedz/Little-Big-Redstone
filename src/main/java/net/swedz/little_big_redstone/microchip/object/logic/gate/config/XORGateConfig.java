@@ -28,7 +28,7 @@ public final class XORGateConfig extends MultiLogicGateConfig<XORGateConfig>
 	}
 	
 	@Override
-	public LogicType<?, XORGateConfig> type()
+	public LogicType type()
 	{
 		return LBRLogicTypes.XOR.get();
 	}

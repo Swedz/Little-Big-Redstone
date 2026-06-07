@@ -20,23 +20,21 @@ import net.swedz.little_big_redstone.microchip.object.logic.config.LogicConfig;
 import java.util.List;
 import java.util.Optional;
 
-public record LogicType<L extends LogicComponent<L, C>, C extends LogicConfig<C>>(
+public record LogicType(
 		ResourceLocation id,
 		String englishName,
 		char symbol,
 		
-		MapCodec<L> codec,
-		StreamCodec<ByteBuf, L> streamCodec,
-		LogicFactory<L> defaultFactory,
+		MapCodec<? extends LogicComponent<?, ?>> codec,
+		StreamCodec<ByteBuf, ? extends LogicComponent<?, ?>> streamCodec,
+		LogicFactory<? extends LogicComponent<?, ?>> defaultFactory,
 		
-		MapCodec<C> configCodec,
-		StreamCodec<ByteBuf, C> configStreamCodec,
-		C defaultConfig
+		MapCodec<? extends LogicConfig> configCodec,
+		StreamCodec<ByteBuf, ? extends LogicConfig> configStreamCodec,
+		LogicConfig defaultConfig
 )
 {
-	public <L2 extends LogicComponent<L2, C2>, C2 extends LogicConfig<C2>> boolean is(
-			DeferredHolder<LogicType<?, ?>, LogicType<L2, C2>> other
-	)
+	public boolean is(DeferredHolder<LogicType, LogicType> other)
 	{
 		return id.equals(other.get().id());
 	}
@@ -51,7 +49,7 @@ public record LogicType<L extends LogicComponent<L, C>, C extends LogicConfig<C>
 		return Component.literal(String.valueOf(symbol)).withStyle(Style.EMPTY.withFont(id.withPath("logic_component")));
 	}
 	
-	public Optional<List<Component>> tooltip(C config, boolean holdingShift, boolean includeConfig, boolean configHeader)
+	public Optional<List<Component>> tooltip(LogicConfig config, boolean holdingShift, boolean includeConfig, boolean configHeader)
 	{
 		List<Component> lines = Lists.newArrayList();
 		
@@ -92,7 +90,7 @@ public record LogicType<L extends LogicComponent<L, C>, C extends LogicConfig<C>
 		return lines.isEmpty() ? Optional.empty() : Optional.of(lines);
 	}
 	
-	public Optional<List<Component>> tooltip(C config, boolean holdingShift, boolean includeConfig)
+	public Optional<List<Component>> tooltip(LogicConfig config, boolean holdingShift, boolean includeConfig)
 	{
 		return this.tooltip(config, holdingShift, includeConfig, true);
 	}
@@ -102,7 +100,7 @@ public record LogicType<L extends LogicComponent<L, C>, C extends LogicConfig<C>
 		return BuiltInRegistries.ITEM.get(id);
 	}
 	
-	public ItemStack toStack(L component)
+	public ItemStack toStack(LogicComponent<?, ?> component)
 	{
 		var stack = new ItemStack(this.item());
 		stack.set(LBRComponents.LOGIC_CONFIG, component.config());
@@ -115,15 +113,15 @@ public record LogicType<L extends LogicComponent<L, C>, C extends LogicConfig<C>
 		return this.toStack(defaultFactory.create());
 	}
 	
-	public L create(C config, Optional<DyeColor> color)
+	public LogicComponent<?, ?> create(LogicConfig config, Optional<DyeColor> color)
 	{
-		var logic = defaultFactory.create();
+		LogicComponent logic = defaultFactory.create();
 		logic.setConfig(config);
 		logic.setColor(color);
 		return logic;
 	}
 	
-	public L create(C config, DyeColor color)
+	public LogicComponent create(LogicConfig config, DyeColor color)
 	{
 		return this.create(config, Optional.ofNullable(color));
 	}

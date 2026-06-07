@@ -119,7 +119,7 @@ public final class LogicSequencer extends LogicComponent<LogicSequencer, LogicSe
 	}
 	
 	@Override
-	public LogicType<LogicSequencer, LogicSequencerConfig> type()
+	public LogicType type()
 	{
 		return LBRLogicTypes.SEQUENCER.get();
 	}

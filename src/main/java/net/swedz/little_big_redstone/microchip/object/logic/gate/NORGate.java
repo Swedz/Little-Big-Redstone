@@ -34,7 +34,7 @@ public final class NORGate extends LogicGate<NORGate, NORGateConfig>
 	}
 	
 	@Override
-	public LogicType<NORGate, NORGateConfig> type()
+	public LogicType type()
 	{
 		return LBRLogicTypes.NOR.get();
 	}

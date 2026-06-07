@@ -74,7 +74,7 @@ public final class LBRGuide
 		return defaultColor;
 	}
 	
-	public static LogicType<?, ?> getLogicType(
+	public static LogicType getLogicType(
 			PageCompiler compiler,
 			LytErrorSink errorSink,
 			MdxJsxElementFields el,

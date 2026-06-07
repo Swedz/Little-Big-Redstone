@@ -28,7 +28,7 @@ public final class NORGateConfig extends MultiLogicGateConfig<NORGateConfig>
 	}
 	
 	@Override
-	public LogicType<?, NORGateConfig> type()
+	public LogicType type()
 	{
 		return LBRLogicTypes.NOR.get();
 	}
