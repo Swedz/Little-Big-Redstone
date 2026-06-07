@@ -6,7 +6,7 @@
   "result": {
     "components": {
       "little_big_redstone:logic_config": {
-        "type": "debugger"
+        "type": "little_big_redstone:debugger"
       }
     },
     "id": "little_big_redstone:debugger"

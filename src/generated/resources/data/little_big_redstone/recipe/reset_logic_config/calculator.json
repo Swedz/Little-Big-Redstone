@@ -6,7 +6,7 @@
   "result": {
     "components": {
       "little_big_redstone:logic_config": {
-        "type": "calculator"
+        "type": "little_big_redstone:calculator"
       }
     },
     "id": "little_big_redstone:calculator"

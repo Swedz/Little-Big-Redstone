@@ -1,13 +1,7 @@
 {
   "parent": "minecraft:recipes/root",
   "criteria": {
-    "has_the_recipe": {
-      "conditions": {
-        "recipe": "little_big_redstone:dye/xor_gate/yellow"
-      },
-      "trigger": "minecraft:recipe_unlocked"
-    },
-    "has_xor_gate": {
+    "has_little_big_redstone:xor_gate": {
       "conditions": {
         "items": [
           {
@@ -16,12 +10,18 @@
         ]
       },
       "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "little_big_redstone:dye/xor_gate/yellow"
+      },
+      "trigger": "minecraft:recipe_unlocked"
     }
   },
   "requirements": [
     [
       "has_the_recipe",
-      "has_xor_gate"
+      "has_little_big_redstone:xor_gate"
     ]
   ],
   "rewards": {

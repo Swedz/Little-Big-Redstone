@@ -6,7 +6,7 @@
   "result": {
     "components": {
       "little_big_redstone:logic_config": {
-        "type": "sequencer"
+        "type": "little_big_redstone:sequencer"
       }
     },
     "id": "little_big_redstone:sequencer"

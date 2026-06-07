@@ -24,7 +24,7 @@ public final class LogicComponentFontDatagenProvider extends FontDatagenProvider
 				height = 10;
 				ascent = 8;
 			}
-			this.addBitmap(type.symbol(), LBR.id("font/logic/" + type.id()), height, ascent);
+			this.addBitmap(type.symbol(), type.id().withPrefix("font/logic/"), height, ascent);
 		}
 	}
 }

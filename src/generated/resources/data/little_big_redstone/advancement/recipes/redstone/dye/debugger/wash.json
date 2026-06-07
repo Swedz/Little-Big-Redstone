@@ -1,7 +1,7 @@
 {
   "parent": "minecraft:recipes/root",
   "criteria": {
-    "has_debugger": {
+    "has_little_big_redstone:debugger": {
       "conditions": {
         "items": [
           {
@@ -21,7 +21,7 @@
   "requirements": [
     [
       "has_the_recipe",
-      "has_debugger"
+      "has_little_big_redstone:debugger"
     ]
   ],
   "rewards": {

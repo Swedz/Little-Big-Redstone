@@ -1,7 +1,7 @@
 {
   "type": "minecraft:crafting_transmute",
   "category": "redstone",
-  "group": "sequencer_dye",
+  "group": "little_big_redstone:sequencer_dye",
   "input": "little_big_redstone:sequencer",
   "material": "#c:dyes/white",
   "result": {

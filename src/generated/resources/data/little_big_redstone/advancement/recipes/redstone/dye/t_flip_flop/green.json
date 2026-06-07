@@ -1,7 +1,7 @@
 {
   "parent": "minecraft:recipes/root",
   "criteria": {
-    "has_t_flip_flop": {
+    "has_little_big_redstone:t_flip_flop": {
       "conditions": {
         "items": [
           {
@@ -21,7 +21,7 @@
   "requirements": [
     [
       "has_the_recipe",
-      "has_t_flip_flop"
+      "has_little_big_redstone:t_flip_flop"
     ]
   ],
   "rewards": {

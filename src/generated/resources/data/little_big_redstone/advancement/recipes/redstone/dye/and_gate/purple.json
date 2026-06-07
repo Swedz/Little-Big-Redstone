@@ -1,7 +1,7 @@
 {
   "parent": "minecraft:recipes/root",
   "criteria": {
-    "has_and_gate": {
+    "has_little_big_redstone:and_gate": {
       "conditions": {
         "items": [
           {
@@ -21,7 +21,7 @@
   "requirements": [
     [
       "has_the_recipe",
-      "has_and_gate"
+      "has_little_big_redstone:and_gate"
     ]
   ],
   "rewards": {

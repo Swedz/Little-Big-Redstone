@@ -1,7 +1,7 @@
 {
   "parent": "minecraft:recipes/root",
   "criteria": {
-    "has_reader": {
+    "has_little_big_redstone:reader": {
       "conditions": {
         "items": [
           {
@@ -21,7 +21,7 @@
   "requirements": [
     [
       "has_the_recipe",
-      "has_reader"
+      "has_little_big_redstone:reader"
     ]
   ],
   "rewards": {

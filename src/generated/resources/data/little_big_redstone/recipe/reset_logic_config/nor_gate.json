@@ -6,7 +6,7 @@
   "result": {
     "components": {
       "little_big_redstone:logic_config": {
-        "type": "nor_gate"
+        "type": "little_big_redstone:nor_gate"
       }
     },
     "id": "little_big_redstone:nor_gate"

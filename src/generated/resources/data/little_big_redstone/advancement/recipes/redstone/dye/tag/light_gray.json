@@ -1,7 +1,7 @@
 {
   "parent": "minecraft:recipes/root",
   "criteria": {
-    "has_tag": {
+    "has_little_big_redstone:tag": {
       "conditions": {
         "items": [
           {
@@ -21,7 +21,7 @@
   "requirements": [
     [
       "has_the_recipe",
-      "has_tag"
+      "has_little_big_redstone:tag"
     ]
   ],
   "rewards": {

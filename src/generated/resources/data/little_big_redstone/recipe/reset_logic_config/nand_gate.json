@@ -6,7 +6,7 @@
   "result": {
     "components": {
       "little_big_redstone:logic_config": {
-        "type": "nand_gate"
+        "type": "little_big_redstone:nand_gate"
       }
     },
     "id": "little_big_redstone:nand_gate"

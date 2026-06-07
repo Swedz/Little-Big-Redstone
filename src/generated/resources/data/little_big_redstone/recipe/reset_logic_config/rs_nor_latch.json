@@ -6,7 +6,7 @@
   "result": {
     "components": {
       "little_big_redstone:logic_config": {
-        "type": "rs_nor_latch"
+        "type": "little_big_redstone:rs_nor_latch"
       }
     },
     "id": "little_big_redstone:rs_nor_latch"

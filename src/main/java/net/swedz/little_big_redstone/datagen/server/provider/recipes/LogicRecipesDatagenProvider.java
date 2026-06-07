@@ -10,7 +10,6 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.level.ItemLike;
 import net.neoforged.neoforge.common.Tags;
 import net.neoforged.neoforge.data.event.GatherDataEvent;
-import net.swedz.little_big_redstone.LBR;
 import net.swedz.little_big_redstone.LBRItems;
 import net.swedz.little_big_redstone.LBRLogicTypes;
 import net.swedz.little_big_redstone.microchip.object.logic.LogicType;
@@ -61,7 +60,7 @@ public final class LogicRecipesDatagenProvider extends RecipeProvider
 			}
 		}
 		
-		builder.offerTo(output, LBR.id("logic/%s".formatted(type.id())));
+		builder.offerTo(output, type.id().withPrefix("logic/"));
 	}
 	
 	@Override

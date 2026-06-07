@@ -1,7 +1,7 @@
 {
   "parent": "minecraft:recipes/root",
   "criteria": {
-    "has_io": {
+    "has_little_big_redstone:io": {
       "conditions": {
         "items": [
           {
@@ -21,7 +21,7 @@
   "requirements": [
     [
       "has_the_recipe",
-      "has_io"
+      "has_little_big_redstone:io"
     ]
   ],
   "rewards": {

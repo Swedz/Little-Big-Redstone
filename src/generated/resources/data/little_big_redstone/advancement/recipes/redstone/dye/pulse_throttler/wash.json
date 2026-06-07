@@ -1,7 +1,7 @@
 {
   "parent": "minecraft:recipes/root",
   "criteria": {
-    "has_pulse_throttler": {
+    "has_little_big_redstone:pulse_throttler": {
       "conditions": {
         "items": [
           {
@@ -21,7 +21,7 @@
   "requirements": [
     [
       "has_the_recipe",
-      "has_pulse_throttler"
+      "has_little_big_redstone:pulse_throttler"
     ]
   ],
   "rewards": {

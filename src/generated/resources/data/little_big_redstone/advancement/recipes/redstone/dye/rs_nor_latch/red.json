@@ -1,7 +1,7 @@
 {
   "parent": "minecraft:recipes/root",
   "criteria": {
-    "has_rs_nor_latch": {
+    "has_little_big_redstone:rs_nor_latch": {
       "conditions": {
         "items": [
           {
@@ -21,7 +21,7 @@
   "requirements": [
     [
       "has_the_recipe",
-      "has_rs_nor_latch"
+      "has_little_big_redstone:rs_nor_latch"
     ]
   ],
   "rewards": {

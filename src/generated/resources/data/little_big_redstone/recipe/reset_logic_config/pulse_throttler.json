@@ -6,7 +6,7 @@
   "result": {
     "components": {
       "little_big_redstone:logic_config": {
-        "type": "pulse_throttler"
+        "type": "little_big_redstone:pulse_throttler"
       }
     },
     "id": "little_big_redstone:pulse_throttler"

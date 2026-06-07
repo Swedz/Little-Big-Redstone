@@ -6,7 +6,7 @@
   "result": {
     "components": {
       "little_big_redstone:logic_config": {
-        "type": "and_gate"
+        "type": "little_big_redstone:and_gate"
       }
     },
     "id": "little_big_redstone:and_gate"
