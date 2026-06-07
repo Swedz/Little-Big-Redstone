@@ -30,7 +30,7 @@ final class MultiLogicGateConfigMenuProvider<C extends MultiLogicGateConfig<C>> 
 				18,
 				config.inputPortsAllowed().min(),
 				config.inputPortsAllowed().max(),
-				config.inputPorts(),
+				config.inputs(),
 				1,
 				0,
 				(value) -> config = mutator.apply((int) Math.round(value))

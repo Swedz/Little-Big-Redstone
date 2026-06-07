@@ -27,7 +27,7 @@ final class LogicCalculatorConfigMenuProvider extends LogicConfigMenuProvider<Lo
 				config.mode(),
 				Arrays.asList(LogicCalculatorMode.values()),
 				LogicCalculatorMode::label,
-				(value) -> config = new LogicCalculatorConfig(value, config.inputPorts())
+				(value) -> config = new LogicCalculatorConfig(value, config.inputs())
 		);
 	}
 	
@@ -43,7 +43,7 @@ final class LogicCalculatorConfigMenuProvider extends LogicConfigMenuProvider<Lo
 				18,
 				2,
 				10,
-				config.inputPorts(),
+				config.inputs(),
 				1,
 				0,
 				(value) -> config = new LogicCalculatorConfig(config.mode(), (int) Math.round(value))
