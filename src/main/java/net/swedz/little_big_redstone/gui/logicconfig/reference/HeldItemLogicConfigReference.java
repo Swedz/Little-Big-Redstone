@@ -12,7 +12,7 @@ public record HeldItemLogicConfigReference(
 ) implements LogicConfigReference
 {
 	@Override
-	public void save(Player player, LogicConfig<?> config)
+	public void save(Player player, LogicConfig config)
 	{
 		var stack = player.getItemInHand(hand);
 		var stackLogicConfig = stack.get(LBRComponents.LOGIC_CONFIG);

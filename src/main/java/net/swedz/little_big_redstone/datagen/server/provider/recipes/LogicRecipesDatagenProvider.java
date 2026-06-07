@@ -12,12 +12,13 @@ import net.neoforged.neoforge.common.Tags;
 import net.neoforged.neoforge.data.event.GatherDataEvent;
 import net.swedz.little_big_redstone.LBR;
 import net.swedz.little_big_redstone.LBRItems;
+import net.swedz.little_big_redstone.LBRLogicTypes;
 import net.swedz.little_big_redstone.microchip.object.logic.LogicType;
-import net.swedz.little_big_redstone.microchip.object.logic.LogicTypes;
 import net.swedz.tesseract.neoforge.compat.vanilla.recipe.ShapedRecipeBuilder;
 
 import java.util.Map;
 import java.util.function.Consumer;
+import java.util.function.Supplier;
 
 public final class LogicRecipesDatagenProvider extends RecipeProvider
 {
@@ -38,8 +39,10 @@ public final class LogicRecipesDatagenProvider extends RecipeProvider
 		super(registries, output);
 	}
 	
-	private void logicComponent(LogicType<?, ?> type, Consumer<ShapedRecipeBuilder> action)
+	private void logicComponent(Supplier<LogicType> typeEntry, Consumer<ShapedRecipeBuilder> action)
 	{
+		var type = typeEntry.get();
+		
 		var builder = new ShapedRecipeBuilder(registries)
 				.output(type.item(), 1);
 		
@@ -64,89 +67,90 @@ public final class LogicRecipesDatagenProvider extends RecipeProvider
 	@Override
 	protected void buildRecipes()
 	{
-		logicComponent(LogicTypes.IO, (b) -> b
+		logicComponent(LBRLogicTypes.IO, (b) -> b
 				.pattern("R  ")
 				.pattern(" r ")
 				.pattern("  R"));
 		
-		logicComponent(LogicTypes.READER, (b) -> b
+		logicComponent(
+				LBRLogicTypes.READER, (b) -> b
 				.pattern("R  ")
 				.pattern("QrR")
 				.pattern("R  "));
 		
-		logicComponent(LogicTypes.TAG, (b) -> b
+		logicComponent(LBRLogicTypes.TAG, (b) -> b
 				.pattern("PQG")
 				.pattern("PrR")
 				.pattern("PQG"));
 		
-		logicComponent(LogicTypes.NOT, (b) -> b
+		logicComponent(LBRLogicTypes.NOT, (b) -> b
 				.pattern("RrT"));
 		
-		logicComponent(LogicTypes.AND, (b) -> b
+		logicComponent(LBRLogicTypes.AND, (b) -> b
 				.pattern("T  ")
 				.pattern("RrT")
 				.pattern("T  "));
 		
-		logicComponent(LogicTypes.NAND, (b) -> b
+		logicComponent(LBRLogicTypes.NAND, (b) -> b
 				.pattern("T  ")
 				.pattern("RrR")
 				.pattern("T  "));
 		
-		logicComponent(LogicTypes.OR, (b) -> b
+		logicComponent(LBRLogicTypes.OR, (b) -> b
 				.pattern("R  ")
 				.pattern("RrR")
 				.pattern("R  "));
 		
-		logicComponent(LogicTypes.NOR, (b) -> b
+		logicComponent(LBRLogicTypes.NOR, (b) -> b
 				.pattern("R  ")
 				.pattern("RrT")
 				.pattern("R  "));
 		
-		logicComponent(LogicTypes.XOR, (b) -> b
+		logicComponent(LBRLogicTypes.XOR, (b) -> b
 				.pattern("1  ")
 				.pattern("Rr2")
 				.pattern("2  ")
 				.define('1', LBRItems.valueOf("and_gate"))
 				.define('2', LBRItems.valueOf("nor_gate")));
 		
-		logicComponent(LogicTypes.SEQUENCER, (b) -> b
+		logicComponent(LBRLogicTypes.SEQUENCER, (b) -> b
 				.pattern("GGG")
 				.pattern("ErR")
 				.pattern("GGG"));
 		
-		logicComponent(LogicTypes.PULSE_THROTTLER, (b) -> b
+		logicComponent(LBRLogicTypes.PULSE_THROTTLER, (b) -> b
 				.pattern("RrR")
 				.pattern(" p "));
 		
-		logicComponent(LogicTypes.SELECTOR, (b) -> b
+		logicComponent(LBRLogicTypes.SELECTOR, (b) -> b
 				.pattern("EGR")
 				.pattern("ErR")
 				.pattern("EGR"));
 		
-		logicComponent(LogicTypes.RANDOMIZER, (b) -> b
+		logicComponent(LBRLogicTypes.RANDOMIZER, (b) -> b
 				.pattern("GGR")
 				.pattern("1rR")
 				.pattern("GGR")
 				.define('1', Items.DROPPER));
 		
-		logicComponent(LogicTypes.COMPARATOR, (b) -> b
+		logicComponent(LBRLogicTypes.COMPARATOR, (b) -> b
 				.pattern("RT ")
 				.pattern("QrT")
 				.pattern("RT "));
 		
-		logicComponent(LogicTypes.CALCULATOR, (b) -> b
+		logicComponent(LBRLogicTypes.CALCULATOR, (b) -> b
 				.pattern("CCG")
 				.pattern("RrQ")
 				.pattern("CCG"));
 		
-		logicComponent(LogicTypes.T_FLIP_FLOP, (b) -> b
+		logicComponent(LBRLogicTypes.T_FLIP_FLOP, (b) -> b
 				.pattern("1  ")
 				.pattern("2rR")
 				.pattern("1  ")
 				.define('1', LBRItems.valueOf("nand_gate"))
 				.define('2', LBRItems.valueOf("rs_nor_latch")));
 		
-		logicComponent(LogicTypes.RS_NOR_LATCH, (b) -> b
+		logicComponent(LBRLogicTypes.RS_NOR_LATCH, (b) -> b
 				.pattern("R1 ")
 				.pattern(" rR")
 				.pattern("R1 ")

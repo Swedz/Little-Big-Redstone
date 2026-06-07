@@ -16,7 +16,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.function.Function;
 
-public abstract class MultiLogicGateConfig<C extends MultiLogicGateConfig<C>> implements LogicConfig<C>
+public abstract class MultiLogicGateConfig<C extends MultiLogicGateConfig<C>> implements LogicConfig
 {
 	public static <C extends MultiLogicGateConfig<C>> MapCodec<C> codec(C defaultConfig, Function<Integer, C> creator)
 	{

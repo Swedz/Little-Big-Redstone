@@ -21,10 +21,10 @@ import net.swedz.little_big_redstone.LBR;
 import net.swedz.little_big_redstone.LBRBlocks;
 import net.swedz.little_big_redstone.LBRComponents;
 import net.swedz.little_big_redstone.LBRItems;
+import net.swedz.little_big_redstone.LBRLogicTypes;
 import net.swedz.little_big_redstone.LBRTags;
 import net.swedz.little_big_redstone.item.stickynote.StickyNote;
 import net.swedz.little_big_redstone.microchip.object.logic.LogicType;
-import net.swedz.little_big_redstone.microchip.object.logic.LogicTypes;
 import net.swedz.little_big_redstone.recipe.TransmuteWithoutMaterialRecipe;
 import net.swedz.tesseract.neoforge.compat.vanilla.recipe.ShapedRecipeBuilder;
 import net.swedz.tesseract.neoforge.compat.vanilla.recipe.ShapelessRecipeBuilder;
@@ -133,7 +133,7 @@ public final class ItemRecipesDatagenProvider extends RecipeProvider
 		this.sealStickyNote(color);
 	}
 	
-	private void dyeLogic(LogicType<?, ?> type, DyeColor color)
+	private void dyeLogic(LogicType type, DyeColor color)
 	{
 		var logicItem = type.item();
 		var builder = TransmuteRecipeBuilder
@@ -153,7 +153,7 @@ public final class ItemRecipesDatagenProvider extends RecipeProvider
 		builder.save(output, builder.defaultId().identifier().withPrefix("dye/").withSuffix("/" + color.getName()).toString());
 	}
 	
-	private void removeDyeLogic(LogicType<?, ?> type)
+	private void removeDyeLogic(LogicType type)
 	{
 		var logicItem = type.item();
 		var builder = TransmuteRecipeBuilder
@@ -195,7 +195,7 @@ public final class ItemRecipesDatagenProvider extends RecipeProvider
 		builder.save(output, builder.defaultId().identifier().withPrefix("dye/").toString());
 	}
 	
-	private void resetLogicConfig(LogicType<?, ?> type)
+	private void resetLogicConfig(LogicType type)
 	{
 		var logicItem = type.item();
 		var builder = TransmuteWithoutMaterialRecipe
@@ -277,13 +277,13 @@ public final class ItemRecipesDatagenProvider extends RecipeProvider
 			this.floppyDisk(color);
 			this.stickyNote(color);
 			
-			for(var logicType : LogicTypes.values())
+			for(var logicType : LBRLogicTypes.values())
 			{
 				this.dyeLogic(logicType, color);
 			}
 		}
 		
-		for(var logicType : LogicTypes.values())
+		for(var logicType : LBRLogicTypes.values())
 		{
 			this.resetLogicConfig(logicType);
 			this.removeDyeLogic(logicType);

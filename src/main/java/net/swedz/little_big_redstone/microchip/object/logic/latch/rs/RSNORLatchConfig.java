@@ -5,14 +5,14 @@ import io.netty.buffer.ByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.codec.StreamCodec;
 import net.swedz.little_big_redstone.LBR;
+import net.swedz.little_big_redstone.LBRLogicTypes;
 import net.swedz.little_big_redstone.microchip.object.logic.LogicType;
-import net.swedz.little_big_redstone.microchip.object.logic.LogicTypes;
 import net.swedz.little_big_redstone.microchip.object.logic.config.LogicConfig;
 import net.swedz.tesseract.neoforge.api.range.IntRange;
 
 import java.util.List;
 
-public record RSNORLatchConfig() implements LogicConfig<RSNORLatchConfig>
+public record RSNORLatchConfig() implements LogicConfig
 {
 	public static final RSNORLatchConfig DEFAULT = new RSNORLatchConfig();
 	
@@ -21,9 +21,9 @@ public record RSNORLatchConfig() implements LogicConfig<RSNORLatchConfig>
 	public static final StreamCodec<ByteBuf, RSNORLatchConfig> STREAM_CODEC = StreamCodec.unit(DEFAULT);
 	
 	@Override
-	public LogicType<?, RSNORLatchConfig> type()
+	public LogicType type()
 	{
-		return LogicTypes.RS_NOR_LATCH;
+		return LBRLogicTypes.RS_NOR_LATCH.get();
 	}
 	
 	@Override

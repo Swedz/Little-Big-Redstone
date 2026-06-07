@@ -23,7 +23,7 @@ public final class LogicConfigMenu extends AbstractContainerMenu
 	private final Supplier<Boolean> validChecker;
 	
 	private final DyeColor       color;
-	private final LogicConfig<?> logicConfig;
+	private final LogicConfig logicConfig;
 	
 	public LogicConfigMenu(
 			int containerId,
@@ -32,7 +32,7 @@ public final class LogicConfigMenu extends AbstractContainerMenu
 			LogicConfigReference reference,
 			Supplier<Boolean> validChecker,
 			DyeColor color,
-			LogicConfig<?> logicConfig
+			LogicConfig logicConfig
 	)
 	{
 		super(LBRMenus.LOGIC_CONFIG.get(), containerId);
@@ -69,12 +69,12 @@ public final class LogicConfigMenu extends AbstractContainerMenu
 		return color;
 	}
 	
-	public LogicConfig<?> logicConfig()
+	public LogicConfig logicConfig()
 	{
 		return logicConfig;
 	}
 	
-	public void save(Player player, LogicConfig<?> config)
+	public void save(Player player, LogicConfig config)
 	{
 		reference.save(player, config);
 	}

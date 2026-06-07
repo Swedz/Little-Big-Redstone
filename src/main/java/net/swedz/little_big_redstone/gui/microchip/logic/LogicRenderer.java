@@ -17,7 +17,7 @@ import net.swedz.little_big_redstone.microchip.object.logic.config.LogicConfig;
 import java.util.Optional;
 import java.util.function.Function;
 
-public abstract class LogicRenderer<L extends LogicComponent<L, C>, C extends LogicConfig<C>>
+public abstract class LogicRenderer<L extends LogicComponent<L, C>, C extends LogicConfig>
 {
 	public static final Identifier PORT_INPUT  = LBR.id("logic/port_input");
 	public static final Identifier PORT_OUTPUT = LBR.id("logic/port_output");
@@ -105,7 +105,7 @@ public abstract class LogicRenderer<L extends LogicComponent<L, C>, C extends Lo
 			boolean isCarryingWire
 	)
 	{
-		public static Context create(Optional<DyeColor> logicColor, DyeColor menuColor, LogicType<?, ?> type, boolean showPorts, boolean hasSelectedPort, boolean isCarryingWire)
+		public static Context create(Optional<DyeColor> logicColor, DyeColor menuColor, LogicType type, boolean showPorts, boolean hasSelectedPort, boolean isCarryingWire)
 		{
 			var model = LogicItemModel.get(type);
 			return new Context(
@@ -117,7 +117,7 @@ public abstract class LogicRenderer<L extends LogicComponent<L, C>, C extends Lo
 			);
 		}
 		
-		public static Context create(DyeColor logicColor, DyeColor menuColor, LogicType<?, ?> type, boolean showPorts, boolean hasSelectedPort, boolean isCarryingWire)
+		public static Context create(DyeColor logicColor, DyeColor menuColor, LogicType type, boolean showPorts, boolean hasSelectedPort, boolean isCarryingWire)
 		{
 			return create(Optional.ofNullable(logicColor), menuColor, type, showPorts, hasSelectedPort, isCarryingWire);
 		}

@@ -11,6 +11,7 @@ import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent;
 import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
+import net.neoforged.neoforge.registries.NewRegistryEvent;
 import net.swedz.little_big_redstone.datagen.client.provider.LanguageDatagenProvider;
 import net.swedz.little_big_redstone.guide.LBRGuide;
 import net.swedz.little_big_redstone.microchip.awareness.AwarenessTypes;
@@ -46,7 +47,12 @@ public final class LBR
 	{
 		setupText();
 		
-		LogicTypes.init();
+		bus.addListener(
+				NewRegistryEvent.class,
+				(event) -> event.register(LogicTypes.REGISTRY)
+		);
+		
+		LBRLogicTypes.init(bus);
 		AwarenessTypes.init();
 		
 		LBRComponents.init(bus);

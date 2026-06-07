@@ -8,8 +8,8 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.swedz.little_big_redstone.LBR;
+import net.swedz.little_big_redstone.LBRLogicTypes;
 import net.swedz.little_big_redstone.microchip.object.logic.LogicType;
-import net.swedz.little_big_redstone.microchip.object.logic.LogicTypes;
 import net.swedz.little_big_redstone.microchip.object.logic.config.LogicConfig;
 import net.swedz.little_big_redstone.microchip.object.logic.config.menu.LogicConfigMenuProvider;
 import net.swedz.tesseract.neoforge.api.range.IntRange;
@@ -20,7 +20,7 @@ import java.util.List;
 public record LogicCalculatorConfig(
 		LogicCalculatorMode mode,
 		int inputs
-) implements LogicConfig<LogicCalculatorConfig>
+) implements LogicConfig
 {
 	public static final LogicCalculatorConfig DEFAULT = new LogicCalculatorConfig(
 			LogicCalculatorMode.ADDITION,
@@ -41,9 +41,9 @@ public record LogicCalculatorConfig(
 	);
 	
 	@Override
-	public LogicType<?, LogicCalculatorConfig> type()
+	public LogicType type()
 	{
-		return LogicTypes.CALCULATOR;
+		return LBRLogicTypes.CALCULATOR.get();
 	}
 	
 	@Override

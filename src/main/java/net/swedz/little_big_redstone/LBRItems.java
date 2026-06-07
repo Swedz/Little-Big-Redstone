@@ -17,7 +17,6 @@ import net.swedz.little_big_redstone.item.logicarray.LogicArrayItem;
 import net.swedz.little_big_redstone.item.logicarray.LogicArrayItemHandler;
 import net.swedz.little_big_redstone.item.stickynote.StickyNoteItem;
 import net.swedz.little_big_redstone.microchip.object.logic.LogicType;
-import net.swedz.little_big_redstone.microchip.object.logic.LogicTypes;
 import net.swedz.tesseract.api.Assert;
 import net.swedz.tesseract.neoforge.registry.SortOrder;
 import net.swedz.tesseract.neoforge.registry.common.CommonModelBuilders;
@@ -79,9 +78,9 @@ public final class LBRItems
 	{
 		{
 			int index = 0;
-			for(var type : LogicTypes.values())
+			for(var type : LBRLogicTypes.values())
 			{
-				createLogic(type.id(), type.englishName(), type, index++).register();
+				createLogic(type.id().getPath(), type.englishName(), type, index++).register();
 			}
 		}
 		
@@ -138,7 +137,7 @@ public final class LBRItems
 		return holder;
 	}
 	
-	private static ItemHolder<LogicItem> createLogic(String id, String englishName, LogicType<?, ?> type, int order)
+	private static ItemHolder<LogicItem> createLogic(String id, String englishName, LogicType type, int order)
 	{
 		return create(id, englishName, (p) -> new LogicItem(p, type), LBRSortOrder.LOGIC.and(order))
 				.tag(LBRTags.Items.LOGIC_COMPONENTS);

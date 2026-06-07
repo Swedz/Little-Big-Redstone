@@ -19,7 +19,7 @@ public record MicrochipLogicConfigReference(
 ) implements LogicConfigReference
 {
 	@Override
-	public void save(Player player, LogicConfig<?> config)
+	public void save(Player player, LogicConfig config)
 	{
 		var playerName = player.getGameProfile().name();
 		

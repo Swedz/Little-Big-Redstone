@@ -81,7 +81,7 @@ public final class LogicTickingContext implements LogicContextAccess
 		return Collections.unmodifiableList(dirtyEntries);
 	}
 	
-	public boolean checkValid(LogicConfig<?> config)
+	public boolean checkValid(LogicConfig config)
 	{
 		return config.checkValid(microchip.components());
 	}

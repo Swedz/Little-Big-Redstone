@@ -8,6 +8,7 @@ import guideme.compiler.tags.MdxAttrs;
 import guideme.document.LytErrorSink;
 import guideme.libs.mdast.mdx.model.MdxJsxElementFields;
 import guideme.scene.ImplicitAnnotationStrategy;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.DyeColor;
 import net.swedz.little_big_redstone.LBR;
 import net.swedz.little_big_redstone.guide.tags.block.FloatingBoxTagCompiler;
@@ -73,7 +74,7 @@ public final class LBRGuide
 		return defaultColor;
 	}
 	
-	public static LogicType<?, ?> getLogicType(
+	public static LogicType getLogicType(
 			PageCompiler compiler,
 			LytErrorSink errorSink,
 			MdxJsxElementFields el,
@@ -85,7 +86,12 @@ public final class LBRGuide
 		{
 			try
 			{
-				return LogicTypes.get(logicId.toLowerCase());
+				logicId = logicId.toLowerCase();
+				return LogicTypes.REGISTRY.getValue(
+						Identifier.isValidPath(logicId) ?
+								LBR.id(logicId) :
+								Identifier.parse(logicId)
+				);
 			}
 			catch(Exception ignored)
 			{

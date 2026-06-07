@@ -4,9 +4,9 @@ import com.mojang.serialization.MapCodec;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.world.item.DyeColor;
+import net.swedz.little_big_redstone.LBRLogicTypes;
 import net.swedz.little_big_redstone.microchip.object.logic.LogicTickingContext;
 import net.swedz.little_big_redstone.microchip.object.logic.LogicType;
-import net.swedz.little_big_redstone.microchip.object.logic.LogicTypes;
 import net.swedz.little_big_redstone.microchip.object.logic.gate.config.NORGateConfig;
 
 import java.util.Objects;
@@ -34,9 +34,9 @@ public final class NORGate extends LogicGate<NORGate, NORGateConfig>
 	}
 	
 	@Override
-	public LogicType<NORGate, NORGateConfig> type()
+	public LogicType type()
 	{
-		return LogicTypes.NOR;
+		return LBRLogicTypes.NOR.get();
 	}
 	
 	@Override

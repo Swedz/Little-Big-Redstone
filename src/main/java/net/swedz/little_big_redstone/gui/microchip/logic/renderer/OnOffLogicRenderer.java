@@ -6,7 +6,7 @@ import net.swedz.little_big_redstone.gui.microchip.logic.LogicRenderer;
 import net.swedz.little_big_redstone.microchip.object.logic.LogicComponent;
 import net.swedz.little_big_redstone.microchip.object.logic.config.LogicConfig;
 
-public final class OnOffLogicRenderer<L extends LogicComponent<L, C>, C extends LogicConfig<C>> extends LogicRenderer<L, C>
+public final class OnOffLogicRenderer<L extends LogicComponent<L, C>, C extends LogicConfig> extends LogicRenderer<L, C>
 {
 	@Override
 	public void render(Context context, GuiGraphicsExtractor graphics, L component, int x, int y)

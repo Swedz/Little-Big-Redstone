@@ -11,7 +11,7 @@ import net.swedz.little_big_redstone.network.LBRCustomPacket;
 import net.swedz.tesseract.neoforge.packet.PacketContext;
 
 public record WriteLogicConfigPacket(
-		LogicConfig<?> config
+		LogicConfig config
 ) implements LBRCustomPacket
 {
 	public static final StreamCodec<ByteBuf, WriteLogicConfigPacket> STREAM_CODEC = StreamCodec.composite(

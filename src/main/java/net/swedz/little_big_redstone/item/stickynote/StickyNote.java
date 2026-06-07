@@ -7,7 +7,9 @@ import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.chat.Style;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.resources.Identifier;
 import net.neoforged.fml.loading.FMLEnvironment;
+import net.swedz.little_big_redstone.LBR;
 import net.swedz.little_big_redstone.LBRFonts;
 import net.swedz.little_big_redstone.microchip.object.logic.LogicTypes;
 
@@ -120,10 +122,13 @@ public final class StickyNote
 		String matchedText;
 		if((matchedText = matcher.group("placeholder")) != null)
 		{
-			var placeholderKey = matcher.group("placeholderkey");
-			if(LogicTypes.exists(placeholderKey))
+			var placeholderKeyString = matcher.group("placeholderkey");
+			var placeholderKey = Identifier.isValidPath(placeholderKeyString) ?
+					LBR.id(placeholderKeyString) :
+					Identifier.parse(placeholderKeyString);
+			if(LogicTypes.REGISTRY.containsKey(placeholderKey))
 			{
-				var logicType = LogicTypes.get(placeholderKey);
+				var logicType = LogicTypes.REGISTRY.getValue(placeholderKey);
 				result.append(logicType.displaySymbol());
 			}
 			else

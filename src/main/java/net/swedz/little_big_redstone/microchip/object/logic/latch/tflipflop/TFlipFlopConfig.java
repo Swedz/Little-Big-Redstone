@@ -5,14 +5,14 @@ import io.netty.buffer.ByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.codec.StreamCodec;
 import net.swedz.little_big_redstone.LBR;
+import net.swedz.little_big_redstone.LBRLogicTypes;
 import net.swedz.little_big_redstone.microchip.object.logic.LogicType;
-import net.swedz.little_big_redstone.microchip.object.logic.LogicTypes;
 import net.swedz.little_big_redstone.microchip.object.logic.config.LogicConfig;
 import net.swedz.tesseract.neoforge.api.range.IntRange;
 
 import java.util.List;
 
-public record TFlipFlopConfig() implements LogicConfig<TFlipFlopConfig>
+public record TFlipFlopConfig() implements LogicConfig
 {
 	public static final TFlipFlopConfig DEFAULT = new TFlipFlopConfig();
 	
@@ -21,9 +21,9 @@ public record TFlipFlopConfig() implements LogicConfig<TFlipFlopConfig>
 	public static final StreamCodec<ByteBuf, TFlipFlopConfig> STREAM_CODEC = StreamCodec.unit(DEFAULT);
 	
 	@Override
-	public LogicType<?, TFlipFlopConfig> type()
+	public LogicType type()
 	{
-		return LogicTypes.T_FLIP_FLOP;
+		return LBRLogicTypes.T_FLIP_FLOP.get();
 	}
 	
 	@Override

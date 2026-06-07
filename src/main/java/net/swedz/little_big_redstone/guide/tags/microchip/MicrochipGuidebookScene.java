@@ -232,7 +232,7 @@ public final class MicrochipGuidebookScene extends LytBox implements ExportableR
 			int x,
 			int y,
 			DyeColor color,
-			LogicType<?, ?> type,
+			LogicType type,
 			CompoundTag data,
 			boolean hide,
 			PageCompiler compiler,
@@ -240,13 +240,13 @@ public final class MicrochipGuidebookScene extends LytBox implements ExportableR
 			MdxJsxElementFields el
 	)
 	{
-		DataResult<? extends LogicComponent> result = type.codec().codec().parse(NbtOps.INSTANCE, data);
+		DataResult<? extends LogicComponent<?, ?>> result = type.codec().codec().parse(NbtOps.INSTANCE, data);
 		if(result.isError())
 		{
 			errorSink.appendError(compiler, "Failed to parse data: " + result.error().orElseThrow().message(), el);
 			return;
 		}
-		LogicComponent<?, ?> component = result.getOrThrow();
+		var component = result.getOrThrow();
 		component.setColor(Optional.ofNullable(color));
 		var entry = microchip.components().addUnsafe(x + marginWidth, y + marginHeight, component, !hide);
 		logicDefaults.put(entry.slot(), component);

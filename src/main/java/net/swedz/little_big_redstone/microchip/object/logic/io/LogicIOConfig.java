@@ -9,10 +9,10 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.swedz.little_big_redstone.LBR;
+import net.swedz.little_big_redstone.LBRLogicTypes;
 import net.swedz.little_big_redstone.microchip.object.logic.LogicComponents;
 import net.swedz.little_big_redstone.microchip.object.logic.LogicMode;
 import net.swedz.little_big_redstone.microchip.object.logic.LogicType;
-import net.swedz.little_big_redstone.microchip.object.logic.LogicTypes;
 import net.swedz.little_big_redstone.microchip.object.logic.config.LogicComparisonMode;
 import net.swedz.little_big_redstone.microchip.object.logic.config.LogicConfig;
 import net.swedz.little_big_redstone.microchip.object.logic.config.menu.LogicConfigMenuProvider;
@@ -27,7 +27,7 @@ public record LogicIOConfig(
 		int signalStrength,
 		LogicComparisonMode signalComparison,
 		LogicPowerOutputType powerType
-) implements LogicConfig<LogicIOConfig>
+) implements LogicConfig
 {
 	public static final LogicIOConfig DEFAULT = new LogicIOConfig(
 			true,
@@ -57,9 +57,9 @@ public record LogicIOConfig(
 	);
 	
 	@Override
-	public LogicType<?, LogicIOConfig> type()
+	public LogicType type()
 	{
-		return LogicTypes.IO;
+		return LBRLogicTypes.IO.get();
 	}
 	
 	@Override

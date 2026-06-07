@@ -5,11 +5,11 @@ import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.DyeColor;
 import net.swedz.little_big_redstone.LBR;
 import net.swedz.little_big_redstone.LBRColors;
+import net.swedz.little_big_redstone.LBRLogicTypes;
 import net.swedz.little_big_redstone.client.model.logic.LogicItemModel;
 import net.swedz.little_big_redstone.client.model.logic.LogicModelColorPalette;
 import net.swedz.little_big_redstone.client.model.logic.TextureMap;
 import net.swedz.little_big_redstone.microchip.object.logic.LogicType;
-import net.swedz.little_big_redstone.microchip.object.logic.LogicTypes;
 import net.swedz.little_big_redstone.microchip.object.logic.calculator.LogicCalculatorMode;
 import net.swedz.tesseract.neoforge.model.ModelGenerators;
 
@@ -17,51 +17,52 @@ import java.util.Locale;
 import java.util.Optional;
 import java.util.Set;
 import java.util.function.Function;
+import java.util.function.Supplier;
 
 final class LogicItemModelsDatagenProvider
 {
-	private static final Set<LogicType<?, ?>> GENERATED = Sets.newHashSet();
+	private static final Set<LogicType> GENERATED = Sets.newHashSet();
 	
 	private static void registerLogicModels(ModelGenerators generators)
 	{
-		logicComponent(generators, LogicTypes.DEBUGGER, BackgroundType.SQUARE, true);
+		logicComponent(generators, LBRLogicTypes.DEBUGGER, BackgroundType.SQUARE, true);
 		
 		logicComponent(
-				generators, LogicTypes.IO, BackgroundType.CIRCLE, false, (b) -> b
+				generators, LBRLogicTypes.IO, BackgroundType.CIRCLE, false, (b) -> b
 						.put("input", LBR.id("logic/io_input"))
 						.put("output", LBR.id("logic/io_output"))
 		);
-		logicComponent(generators, LogicTypes.READER, BackgroundType.CIRCLE, true);
-		logicComponent(generators, LogicTypes.TAG, BackgroundType.CIRCLE, true);
+		logicComponent(generators, LBRLogicTypes.READER, BackgroundType.CIRCLE, true);
+		logicComponent(generators, LBRLogicTypes.TAG, BackgroundType.CIRCLE, true);
 		
-		logicComponent(generators, LogicTypes.NOT, BackgroundType.SQUARE, true);
-		logicComponent(generators, LogicTypes.AND, BackgroundType.SQUARE, true);
-		logicComponent(generators, LogicTypes.NAND, BackgroundType.SQUARE, true);
-		logicComponent(generators, LogicTypes.OR, BackgroundType.SQUARE, true);
-		logicComponent(generators, LogicTypes.NOR, BackgroundType.SQUARE, true);
-		logicComponent(generators, LogicTypes.XOR, BackgroundType.SQUARE, true);
+		logicComponent(generators, LBRLogicTypes.NOT, BackgroundType.SQUARE, true);
+		logicComponent(generators, LBRLogicTypes.AND, BackgroundType.SQUARE, true);
+		logicComponent(generators, LBRLogicTypes.NAND, BackgroundType.SQUARE, true);
+		logicComponent(generators, LBRLogicTypes.OR, BackgroundType.SQUARE, true);
+		logicComponent(generators, LBRLogicTypes.NOR, BackgroundType.SQUARE, true);
+		logicComponent(generators, LBRLogicTypes.XOR, BackgroundType.SQUARE, true);
 		
 		logicComponent(
-				generators, LogicTypes.SEQUENCER, BackgroundType.SQUARE, false, (b) -> b
+				generators, LBRLogicTypes.SEQUENCER, BackgroundType.SQUARE, false, (b) -> b
 						.put("progress", LBR.id("logic/sequencer"))
 		);
-		logicComponent(generators, LogicTypes.PULSE_THROTTLER, BackgroundType.SQUARE, true);
-		logicComponent(generators, LogicTypes.SELECTOR, BackgroundType.SQUARE, true);
-		logicComponent(generators, LogicTypes.RANDOMIZER, BackgroundType.SQUARE, true);
-		logicComponent(generators, LogicTypes.COMPARATOR, BackgroundType.SQUARE, true);
+		logicComponent(generators, LBRLogicTypes.PULSE_THROTTLER, BackgroundType.SQUARE, true);
+		logicComponent(generators, LBRLogicTypes.SELECTOR, BackgroundType.SQUARE, true);
+		logicComponent(generators, LBRLogicTypes.RANDOMIZER, BackgroundType.SQUARE, true);
+		logicComponent(generators, LBRLogicTypes.COMPARATOR, BackgroundType.SQUARE, true);
 		logicComponent(
-				generators, LogicTypes.CALCULATOR, BackgroundType.SQUARE, false, (b) -> b
+				generators, LBRLogicTypes.CALCULATOR, BackgroundType.SQUARE, false, (b) -> b
 						.put(LogicCalculatorMode.ADDITION.textureKey(), LBR.id("logic/calculator_addition"))
 						.put(LogicCalculatorMode.SUBTRACTION.textureKey(), LBR.id("logic/calculator_subtraction"))
 		);
 		
 		logicComponent(
-				generators, LogicTypes.T_FLIP_FLOP, BackgroundType.SQUARE, false, (b) -> b
+				generators, LBRLogicTypes.T_FLIP_FLOP, BackgroundType.SQUARE, false, (b) -> b
 						.put("on", LBR.id("logic/t_flip_flop_on"))
 						.put("off", LBR.id("logic/t_flip_flop_off"))
 		);
 		logicComponent(
-				generators, LogicTypes.RS_NOR_LATCH, BackgroundType.SQUARE, false, (b) -> b
+				generators, LBRLogicTypes.RS_NOR_LATCH, BackgroundType.SQUARE, false, (b) -> b
 						.put("on", LBR.id("logic/rs_nor_latch_on"))
 						.put("off", LBR.id("logic/rs_nor_latch_off"))
 		);
@@ -76,7 +77,7 @@ final class LogicItemModelsDatagenProvider
 	private static void assertAllTypesAreGenerated()
 	{
 		boolean missing = false;
-		for(var type : LogicTypes.values())
+		for(var type : LBRLogicTypes.values())
 		{
 			if(!GENERATED.contains(type))
 			{
@@ -125,14 +126,15 @@ final class LogicItemModelsDatagenProvider
 	
 	private static void logicComponent(
 			ModelGenerators generators,
-			LogicType<?, ?> type,
+			Supplier<LogicType> entry,
 			BackgroundType backgroundType,
 			boolean icon,
 			Function<TextureMap, TextureMap> extraBoardTextures
 	)
 	{
+		var type = entry.get();
 		GENERATED.add(type);
-		String id = type.id();
+		var id = type.id().getPath();
 		
 		var colorPalette = LogicModelColorPalette.builder();
 		for(var color : DyeColor.values())
@@ -165,8 +167,8 @@ final class LogicItemModelsDatagenProvider
 		generators.item().itemModelOutput.accept(type.item(), model);
 	}
 	
-	private static void logicComponent(ModelGenerators generators, LogicType<?, ?> type, BackgroundType backgroundType, boolean icon)
+	private static void logicComponent(ModelGenerators generators, Supplier<LogicType> entry, BackgroundType backgroundType, boolean icon)
 	{
-		logicComponent(generators, type, backgroundType, icon, null);
+		logicComponent(generators, entry, backgroundType, icon, null);
 	}
 }

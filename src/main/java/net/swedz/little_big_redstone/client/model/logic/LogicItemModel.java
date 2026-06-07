@@ -24,7 +24,6 @@ import net.minecraft.world.item.ItemStack;
 import net.neoforged.neoforge.client.NeoForgeRenderTypes;
 import net.neoforged.neoforge.client.model.ComposedModelState;
 import net.neoforged.neoforge.client.model.ExtraFaceData;
-import net.swedz.little_big_redstone.LBR;
 import net.swedz.little_big_redstone.LBRClientRenderTypes;
 import net.swedz.little_big_redstone.LBRItemDisplayContext;
 import net.swedz.little_big_redstone.item.LogicItem;
@@ -47,9 +46,9 @@ public record LogicItemModel(
 	private static final ModelDebugName DEBUG_NAME  = () -> "LogicItemModel";
 	private static final ModelState     MODEL_STATE = new ComposedModelState(BlockModelRotation.IDENTITY, Transformation.IDENTITY);
 	
-	public static LogicItemModel get(LogicType<?, ?> type)
+	public static LogicItemModel get(LogicType type)
 	{
-		var modelId = LBR.id(type.id());
+		var modelId = type.id();
 		var model = Minecraft.getInstance().getModelManager().getItemModel(modelId);
 		if(!(model instanceof LogicItemModel logicItemModel))
 		{

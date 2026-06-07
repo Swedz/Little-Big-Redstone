@@ -212,7 +212,7 @@ public final class MicrochipScreen extends AbstractContainerScreen<MicrochipMenu
 	{
 	}
 	
-	private void renderCarriedWires(GuiGraphicsExtractor graphics, int logicX, int logicY, LogicRenderer.Context context, LogicConfig<?> config, Optional<DyeColor> color)
+	private void renderCarriedWires(GuiGraphicsExtractor graphics, int logicX, int logicY, LogicRenderer.Context context, LogicConfig config, Optional<DyeColor> color)
 	{
 		if(menu.getCarriedWires() != null)
 		{
@@ -242,7 +242,7 @@ public final class MicrochipScreen extends AbstractContainerScreen<MicrochipMenu
 		}
 	}
 	
-	private <C extends LogicConfig<C>> void renderCarriedLogic(GuiGraphicsExtractor graphics, int logicX, int logicY, LogicRenderer.Context context, C config, Optional<DyeColor> logicColor)
+	private <C extends LogicConfig> void renderCarriedLogic(GuiGraphicsExtractor graphics, int logicX, int logicY, LogicRenderer.Context context, C config, Optional<DyeColor> logicColor)
 	{
 		var microchip = menu.microchip();
 		var size = microchip.size();
