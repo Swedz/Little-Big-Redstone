@@ -64,6 +64,15 @@ public final class MicrochipAwarenesses implements AwarenessListener
 	}
 	
 	@Override
+	public void neighborBlockEntityChanged(AwarenessContext context, BlockPos neighborPos, Direction neighborDirection)
+	{
+		for(var awareness : awarenesses.values())
+		{
+			awareness.neighborBlockEntityChanged(context, neighborPos, neighborDirection);
+		}
+	}
+	
+	@Override
 	public void preTick(AwarenessContext context)
 	{
 		for(var awareness : awarenesses.values())

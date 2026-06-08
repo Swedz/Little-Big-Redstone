@@ -13,11 +13,11 @@ import net.swedz.little_big_redstone.microchip.object.logic.reader.LogicReaderMo
 
 public final class AnalogSignalAwareness extends MicrochipAwareness<AnalogSignalAwareness>
 {
-	private boolean initialized;
-	
 	private boolean[] sides = new boolean[6];
 	
 	private int[] signals = new int[6];
+	
+	private boolean[] dirtyNeighborSides = new boolean[]{true, true, true, true, true, true};
 	
 	public int getSignal(Direction direction)
 	{
@@ -71,7 +71,15 @@ public final class AnalogSignalAwareness extends MicrochipAwareness<AnalogSignal
 		signals[neighborDirectionIndex] = 0;
 	}
 	
-	private int tick = 0;
+	@Override
+	public void neighborBlockEntityChanged(AwarenessContext context, BlockPos neighborPos, Direction neighborDirection)
+	{
+		int directionIndex = neighborDirection.ordinal();
+		if(sides[directionIndex])
+		{
+			dirtyNeighborSides[directionIndex] = true;
+		}
+	}
 	
 	@Override
 	public void preTick(AwarenessContext context)
@@ -79,10 +87,11 @@ public final class AnalogSignalAwareness extends MicrochipAwareness<AnalogSignal
 		var level = context.level();
 		var pos = context.blockPos();
 		
-		if(++tick >= 10 || !initialized)
+		boolean changed = false;
+		int[] signals = new int[6];
+		for(int directionIndex = 0; directionIndex < dirtyNeighborSides.length; directionIndex++)
 		{
-			int[] signals = new int[6];
-			for(int directionIndex = 0; directionIndex < sides.length; directionIndex++)
+			if(dirtyNeighborSides[directionIndex])
 			{
 				if(sides[directionIndex])
 				{
@@ -93,12 +102,15 @@ public final class AnalogSignalAwareness extends MicrochipAwareness<AnalogSignal
 					{
 						int signal = state.getAnalogOutputSignal(level, neighborPos, direction);
 						signals[directionIndex] = signal;
+						changed = true;
 					}
 				}
+				dirtyNeighborSides[directionIndex] = false;
 			}
+		}
+		if(changed)
+		{
 			this.signals = signals;
-			initialized = true;
-			tick = 0;
 		}
 	}
 }

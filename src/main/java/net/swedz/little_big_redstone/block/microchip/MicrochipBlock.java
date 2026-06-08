@@ -9,6 +9,7 @@ import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -32,7 +33,7 @@ public final class MicrochipBlock extends Block implements TickableBlock
 	
 	public static BooleanProperty getDirectionalState(Direction direction)
 	{
-		return switch (direction)
+		return switch(direction)
 		{
 			case UP -> MicrochipBlock.UP;
 			case DOWN -> MicrochipBlock.DOWN;
@@ -150,10 +151,55 @@ public final class MicrochipBlock extends Block implements TickableBlock
 		}
 	}
 	
-	// TODO 26.1 use this for detecting comparator level changes
-	/*@Override
-	public void onNeighborChange(BlockState state, LevelReader level, BlockPos pos, BlockPos neighbor)
+	@Override
+	public void onNeighborChange(BlockState state, LevelReader level, BlockPos pos, BlockPos neighborPos)
 	{
-		super.onNeighborChange(state, level, pos, neighbor);
-	}*/
+		if(level.isClientSide() ||
+		   !(level.getBlockEntity(pos) instanceof MicrochipBlockEntity blockEntity))
+		{
+			return;
+		}
+		
+		var delta = neighborPos.subtract(pos);
+		var neighborDirection = directionFromDelta(delta.getX(), delta.getY(), delta.getZ());
+		if(neighborDirection != null)
+		{
+			blockEntity.microchip().awarenesses().neighborBlockEntityChanged(new AwarenessContext(blockEntity), neighborPos, neighborDirection);
+		}
+	}
+	
+	private static Direction directionFromDelta(int x, int y, int z)
+	{
+		if(x == 0)
+		{
+			if(y == 0)
+			{
+				if(z > 0)
+				{
+					return Direction.SOUTH;
+				}
+				if(z < 0)
+				{
+					return Direction.NORTH;
+				}
+			}
+			else if(z == 0)
+			{
+				if(y > 0)
+				{
+					return Direction.UP;
+				}
+				return Direction.DOWN;
+			}
+		}
+		else if(y == 0 && z == 0)
+		{
+			if(x > 0)
+			{
+				return Direction.EAST;
+			}
+			return Direction.WEST;
+		}
+		return null;
+	}
 }
