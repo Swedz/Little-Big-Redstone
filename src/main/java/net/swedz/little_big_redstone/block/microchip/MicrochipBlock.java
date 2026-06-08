@@ -10,6 +10,7 @@ import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -149,6 +150,23 @@ public final class MicrochipBlock extends Block implements TickableBlock
 		if(neighborDirection != null)
 		{
 			blockEntity.microchip().awarenesses().neighborChanged(new AwarenessContext(blockEntity), neighborBlock, neighborPos, neighborDirection, movedByPiston);
+		}
+	}
+	
+	@Override
+	public void onNeighborChange(BlockState state, LevelReader level, BlockPos pos, BlockPos neighborPos)
+	{
+		if(level.isClientSide() ||
+		   !(level.getBlockEntity(pos) instanceof MicrochipBlockEntity blockEntity))
+		{
+			return;
+		}
+		
+		var delta = neighborPos.subtract(pos);
+		Direction neighborDirection = Direction.fromDelta(delta.getX(), delta.getY(), delta.getZ());
+		if(neighborDirection != null)
+		{
+			blockEntity.microchip().awarenesses().neighborBlockEntityChanged(new AwarenessContext(blockEntity), neighborPos, neighborDirection);
 		}
 	}
 	
