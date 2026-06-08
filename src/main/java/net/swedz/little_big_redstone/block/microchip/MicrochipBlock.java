@@ -143,7 +143,6 @@ public final class MicrochipBlock extends Block implements TickableBlock
 			return;
 		}
 		
-		// TODO 26.1 i do not like having to this, but they took neighborPos away from me
 		for(var neighborDirection : Direction.values())
 		{
 			var neighborPos = pos.relative(neighborDirection);
