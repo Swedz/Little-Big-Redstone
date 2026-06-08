@@ -3,16 +3,19 @@
     "": {
       "type": "little_big_redstone:microchip",
       "fallback": {
-        "base": "little_big_redstone:block/microchip/side/cyan",
+        "base": "little_big_redstone:block/microchip/side/base",
+        "emissive_overlay": "little_big_redstone:block/microchip/side/cyan",
         "signal_off_overlay": "little_big_redstone:block/microchip/signal_off_overlay",
         "signal_on_overlay": "little_big_redstone:block/microchip/signal_on_overlay"
       },
       "sides": {
         "down": {
-          "base": "little_big_redstone:block/microchip/bottom/cyan"
+          "base": "little_big_redstone:block/microchip/bottom/base",
+          "emissive_overlay": "little_big_redstone:block/microchip/bottom/cyan"
         },
         "up": {
-          "base": "little_big_redstone:block/microchip/top/cyan"
+          "base": "little_big_redstone:block/microchip/top/base",
+          "emissive_overlay": "little_big_redstone:block/microchip/top/cyan"
         }
       }
     }
