@@ -146,7 +146,7 @@ public final class MicrochipBlock extends Block implements TickableBlock
 		}
 		
 		var delta = neighborPos.subtract(pos);
-		Direction neighborDirection = Direction.fromDelta(delta.getX(), delta.getY(), delta.getZ());
+		var neighborDirection = Direction.fromDelta(delta.getX(), delta.getY(), delta.getZ());
 		if(neighborDirection != null)
 		{
 			blockEntity.microchip().awarenesses().neighborChanged(new AwarenessContext(blockEntity), neighborBlock, neighborPos, neighborDirection, movedByPiston);
@@ -163,7 +163,7 @@ public final class MicrochipBlock extends Block implements TickableBlock
 		}
 		
 		var delta = neighborPos.subtract(pos);
-		Direction neighborDirection = Direction.fromDelta(delta.getX(), delta.getY(), delta.getZ());
+		var neighborDirection = Direction.fromDelta(delta.getX(), delta.getY(), delta.getZ());
 		if(neighborDirection != null)
 		{
 			blockEntity.microchip().awarenesses().neighborBlockEntityChanged(new AwarenessContext(blockEntity), neighborPos, neighborDirection);
