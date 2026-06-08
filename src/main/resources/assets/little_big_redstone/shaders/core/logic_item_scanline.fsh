@@ -21,11 +21,13 @@ out vec4 fragColor;
 
 vec2 transformScanlineUV(vec2 uv)
 {
+    vec2 textureScale = textureSize(Sampler0, 0) / 16.0;
 	vec2 transformedUV = uv;
-	vec2 motion = vec2(0, 150.0 / 32.0);
+	vec2 motion = vec2(0, 150);
+	motion /= textureScale;
 	vec2 translation = vec2(GameTime) * motion;
 	transformedUV += translation;
-	transformedUV *= (textureSize(Sampler0, 0).y / 2.0);
+	transformedUV *= textureScale;
 	return fract(transformedUV);
 }
 
