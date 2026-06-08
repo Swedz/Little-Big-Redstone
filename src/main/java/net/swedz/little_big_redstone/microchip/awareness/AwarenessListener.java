@@ -11,6 +11,8 @@ public interface AwarenessListener
 	
 	void neighborChanged(AwarenessContext context, Block neighborBlock, BlockPos neighborPos, Direction neighborDirection, boolean movedByPiston);
 	
+	void neighborBlockEntityChanged(AwarenessContext context, BlockPos neighborPos, Direction neighborDirection);
+	
 	void preTick(AwarenessContext context);
 	
 	void postTick(AwarenessContext context, boolean microchipDirty, boolean contextDirty);

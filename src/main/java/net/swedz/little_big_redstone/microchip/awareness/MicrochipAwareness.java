@@ -20,6 +20,11 @@ public abstract class MicrochipAwareness<A extends MicrochipAwareness<A>> implem
 	}
 	
 	@Override
+	public void neighborBlockEntityChanged(AwarenessContext context, BlockPos neighborPos, Direction neighborDirection)
+	{
+	}
+	
+	@Override
 	public void preTick(AwarenessContext context)
 	{
 	}
