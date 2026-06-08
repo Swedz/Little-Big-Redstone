@@ -109,7 +109,6 @@ public final class StickyNoteEntityRenderer<T extends StickyNoteEntity> extends 
 		pose.translate(0, -0.03125f, -0.00625f);
 		pose.scale(0.25f, 0.25f, 0.01f);
 		
-		// TODO 26.1 tint item
 		if(!state.itemModel.isEmpty())
 		{
 			state.itemModel.submit(pose, submitNodeCollector, state.lightCoords, OverlayTexture.NO_OVERLAY, state.outlineColor);
