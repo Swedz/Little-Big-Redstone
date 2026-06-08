@@ -25,7 +25,7 @@ vec2 transformScanlineUV(vec2 uv)
 	vec2 motion = vec2(0, 150.0 / 32.0);
 	vec2 translation = vec2(GameTime) * motion;
 	transformedUV += translation;
-	transformedUV *= 256.0;
+	transformedUV *= (textureSize(Sampler0, 0).y / 2.0);
 	return fract(transformedUV);
 }
 
