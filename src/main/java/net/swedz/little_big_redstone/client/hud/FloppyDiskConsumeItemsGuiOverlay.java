@@ -5,6 +5,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.core.BlockPos;
+import net.minecraft.network.chat.Component;
 import net.minecraft.util.ARGB;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -47,13 +48,20 @@ public final class FloppyDiskConsumeItemsGuiOverlay
 	
 	private static void renderItem(GuiGraphicsExtractor graphics, ItemStack stack, boolean isPresent, int x, int color)
 	{
-		graphics.blit(LBR.id("textures/gui/slot_atlas.png"), x - 1, -1, 0, 0, 18, 18, color);
+		graphics.pose().pushMatrix();
+		graphics.pose().translate(x, 0);
 		
-		// TODO 26.1 color
-		graphics.item(stack, x, 0);
-		graphics.itemDecorations(Minecraft.getInstance().font, stack, x, 0);
+		graphics.blit(LBR.id("textures/gui/slot_atlas.png"), -1, -1, 0, 0, 18, 18, color);
 		
-		graphics.blit(LBR.id("textures/gui/slot_atlas.png"), x - 1, -1, 18, isPresent ? 0 : 18, 18, 18, color);
+		graphics.itemTinted(stack, 0, 0, color);
+		
+		var font = Minecraft.getInstance().font;
+		var text = Component.literal("" + stack.getCount());
+		graphics.text(font, text, 19 - 2 - font.width(text), 9, color);
+		
+		graphics.blit(LBR.id("textures/gui/slot_atlas.png"), -1, -1, 18, isPresent ? 0 : 18, 18, 18, color);
+		
+		graphics.pose().popMatrix();
 	}
 	
 	private static void renderItems(GuiGraphicsExtractor graphics, int maxItems, AtomicInteger index, AtomicInteger x, List<ItemStack> items, boolean isPresent, int color)
@@ -66,9 +74,18 @@ public final class FloppyDiskConsumeItemsGuiOverlay
 			if(index.get() == maxItems - 1 &&
 			   index.get() != ITEMS.size() - 1)
 			{
-				graphics.blit(LBR.id("textures/gui/slot_atlas.png"), x.get() - 1, -1, 0, 18 * 2, 18, 18, color);
+				graphics.blit(
+						LBR.id("textures/gui/slot_atlas.png"),
+						x.get() - 1,
+						-1,
+						0,
+						18 * 2,
+						18,
+						18,
+						color
+				);
 				var text = LBR.text().floppyDiskMoreItems(ITEMS.size() - index.get());
-				graphics.text(font, text, x.get() + 19 - 2 - font.width(text), 9, color, false);
+				graphics.text(font, text, x.get() + 19 - 2 - font.width(text), 9, color);
 				continue;
 			}
 			var stack = items.get(itemIndex);
@@ -90,7 +107,8 @@ public final class FloppyDiskConsumeItemsGuiOverlay
 				x - 2,
 				-2,
 				Math.min(ITEMS.size(), maxItems) * 18 + 2,
-				20
+				20,
+				color
 		);
 		
 		var index = new AtomicInteger();
