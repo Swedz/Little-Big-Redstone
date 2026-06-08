@@ -3,7 +3,6 @@ package net.swedz.little_big_redstone.datagen.client.provider.models;
 import net.minecraft.client.data.models.MultiVariant;
 import net.minecraft.client.data.models.blockstates.MultiVariantGenerator;
 import net.minecraft.client.data.models.model.ModelTemplate;
-import net.minecraft.client.data.models.model.ModelTemplates;
 import net.minecraft.client.data.models.model.TextureMapping;
 import net.minecraft.client.data.models.model.TextureSlot;
 import net.minecraft.client.resources.model.sprite.Material;
@@ -36,6 +35,22 @@ final class BlockModelsDatagenProvider
 		microchips(generators);
 	}
 	
+	private static final TextureSlot TOP_OVERLAY = TextureSlot.create("top_overlay");
+	private static final TextureSlot BOTTOM_OVERLAY = TextureSlot.create("bottom_overlay");
+	private static final TextureSlot SIDE_OVERLAY = TextureSlot.create("side_overlay");
+	
+	private static final ModelTemplate MICROCHIP = new ModelTemplate(
+			Optional.of(LBR.id("block/microchip")),
+			Optional.empty(),
+			TextureSlot.TOP,
+			TextureSlot.BOTTOM,
+			TextureSlot.SIDE,
+			TOP_OVERLAY,
+			BOTTOM_OVERLAY,
+			SIDE_OVERLAY,
+			TextureSlot.PARTICLE
+	);
+	
 	private static final ModelTemplate MICROCHIP_SIDE_OVERLAY = new ModelTemplate(
 			Optional.of(LBR.id("block/microchip/side_overlay")),
 			Optional.empty(),
@@ -50,18 +65,24 @@ final class BlockModelsDatagenProvider
 			var colorId = color.getName();
 			var block = LBRBlocks.microchip(color);
 			
-			ModelTemplates.CUBE_BOTTOM_TOP.create(
+			MICROCHIP.create(
 					block.get(),
 					new TextureMapping()
-							.put(TextureSlot.TOP, new Material(LBR.id("block/microchip/top/" + colorId)))
-							.put(TextureSlot.BOTTOM, new Material(LBR.id("block/microchip/bottom/" + colorId)))
-							.put(TextureSlot.SIDE, new Material(LBR.id("block/microchip/side/" + colorId))),
+							.put(TextureSlot.PARTICLE, new Material(LBR.id("block/microchip/side/base")))
+							.put(TextureSlot.TOP, new Material(LBR.id("block/microchip/top/base")))
+							.put(TextureSlot.BOTTOM, new Material(LBR.id("block/microchip/bottom/base")))
+							.put(TextureSlot.SIDE, new Material(LBR.id("block/microchip/side/base")))
+							.put(TOP_OVERLAY, new Material(LBR.id("block/microchip/top/" + colorId)))
+							.put(BOTTOM_OVERLAY, new Material(LBR.id("block/microchip/bottom/" + colorId)))
+							.put(SIDE_OVERLAY, new Material(LBR.id("block/microchip/side/" + colorId))),
 					generators.block().modelOutput
 			);
 			
 			generators.block().blockStateOutput.accept(customModel(
-					block.get(), new MicrochipBlockModel.Unbaked(
+					block.get(),
+					new MicrochipBlockModel.Unbaked(
 							new MicrochipBlockModel.FaceTextures(
+									Optional.of(new Material(LBR.id("block/microchip/side/base"))),
 									Optional.of(new Material(LBR.id("block/microchip/side/%s".formatted(colorId)))),
 									Optional.of(new Material(LBR.id("block/microchip/signal_on_overlay"))),
 									Optional.of(new Material(LBR.id("block/microchip/signal_off_overlay")))
@@ -69,12 +90,14 @@ final class BlockModelsDatagenProvider
 							Map.of(
 									Direction.UP,
 									new MicrochipBlockModel.FaceTextures(
+											Optional.of(new Material(LBR.id("block/microchip/top/base"))),
 											Optional.of(new Material(LBR.id("block/microchip/top/%s".formatted(colorId)))),
 											Optional.empty(),
 											Optional.empty()
 									),
 									Direction.DOWN,
 									new MicrochipBlockModel.FaceTextures(
+											Optional.of(new Material(LBR.id("block/microchip/bottom/base"))),
 											Optional.of(new Material(LBR.id("block/microchip/bottom/%s".formatted(colorId)))),
 											Optional.empty(),
 											Optional.empty()

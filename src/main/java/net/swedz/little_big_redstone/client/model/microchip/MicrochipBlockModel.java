@@ -31,8 +31,11 @@ import net.minecraft.util.Util;
 import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.neoforge.client.model.ComposedModelState;
 import net.neoforged.neoforge.client.model.DynamicBlockStateModel;
+import net.neoforged.neoforge.client.model.EmptyModel;
+import net.neoforged.neoforge.client.model.ExtraFaceData;
 import net.neoforged.neoforge.client.model.block.CustomUnbakedBlockStateModel;
 import net.swedz.little_big_redstone.LBR;
+import org.apache.commons.lang3.mutable.MutableObject;
 import org.joml.Vector3f;
 
 import java.util.Collections;
@@ -132,6 +135,16 @@ public final class MicrochipBlockModel implements DynamicBlockStateModel
 				baker,
 				this.prepareLayer(
 						(direction, textures) -> textures.base(),
+						null,
+						true
+				)
+		));
+		
+		parts.add(bakeLayerAsPart(
+				baker,
+				this.prepareLayer(
+						(direction, textures) -> textures.emissiveOverlay(),
+						new ExtraFaceData(ExtraFaceData.DEFAULT.color(), 15, ExtraFaceData.DEFAULT.ambientOcclusion()),
 						true
 				)
 		));
@@ -152,6 +165,7 @@ public final class MicrochipBlockModel implements DynamicBlockStateModel
 							}
 							return Optional.empty();
 						},
+						null,
 						false
 				)
 		));
@@ -159,45 +173,59 @@ public final class MicrochipBlockModel implements DynamicBlockStateModel
 		return parts;
 	}
 	
-	private static final Material NO_TEXTURE_MATERIAL = new Material(LBR.id("block/microchip/no_overlay"));
-	
-	private UnbakedModel prepareLayer(BiFunction<Direction, FaceTextures, Optional<Material>> materialFunction, boolean particles)
+	private UnbakedModel prepareLayer(BiFunction<Direction, FaceTextures, Optional<Material>> materialFunction, ExtraFaceData faceData, boolean particles)
 	{
 		var fullFaceUv = new CuboidFace.UVs(0, 0, 16, 16);
 		var faces = Util.makeEnumMap(
 				Direction.class,
-				(direction) -> new CuboidFace(
-						direction,
-						-1,
-						direction.getName(),
-						fullFaceUv,
-						Quadrant.R0
-				)
+				(direction) ->
+				{
+					var faceTextures = sides.get(direction);
+					var material = materialFunction.apply(direction, faceTextures);
+					if(material.isPresent())
+					{
+						return new CuboidFace(
+								direction,
+								-1,
+								direction.getName(),
+								fullFaceUv,
+								Quadrant.R0,
+								faceData,
+								new MutableObject<>()
+						);
+					}
+					return null;
+				}
 		);
+		faces.entrySet().removeIf((entry) -> entry.getValue() == null);
+		
+		if(faces.isEmpty())
+		{
+			return EmptyModel.INSTANCE;
+		}
+		
 		var cube = new CuboidModelElement(
 				new Vector3f(0, 0, 0),
 				new Vector3f(16, 16, 16),
 				faces
 		);
+		
 		var textures = new TextureSlots.Data.Builder();
+		
 		if(particles)
 		{
 			var particleMaterial = materialFunction.apply(null, fallback);
 			particleMaterial.ifPresent((m) -> textures.addTexture("particle", m));
 		}
-		for(var direction : Direction.values())
+		
+		for(var direction : faces.keySet())
 		{
-			var faceTextures = sides.getOrDefault(direction, fallback);
+			var faceTextures = sides.get(direction);
 			var material = materialFunction.apply(direction, faceTextures);
-			if(material.isEmpty() && faceTextures != fallback)
-			{
-				material = materialFunction.apply(direction, fallback);
-			}
-			material.ifPresentOrElse(
-					(m) -> textures.addTexture(direction.getName(), m),
-					() -> textures.addTexture(direction.getName(), NO_TEXTURE_MATERIAL)
-			);
+			material.ifPresent((m) ->
+					textures.addTexture(direction.getName(), m));
 		}
+		
 		return new CuboidModel(
 				new UnbakedCuboidGeometry(List.of(cube)),
 				null,
@@ -217,6 +245,7 @@ public final class MicrochipBlockModel implements DynamicBlockStateModel
 	
 	public record FaceTextures(
 			Optional<Material> base,
+			Optional<Material> emissiveOverlay,
 			Optional<Material> signalOnOverlay,
 			Optional<Material> signalOffOverlay
 	)
@@ -224,10 +253,21 @@ public final class MicrochipBlockModel implements DynamicBlockStateModel
 		public static final Codec<FaceTextures> CODEC = RecordCodecBuilder.create((instance) -> instance
 				.group(
 						Material.CODEC.optionalFieldOf("base").forGetter(FaceTextures::base),
+						Material.CODEC.optionalFieldOf("emissive_overlay").forGetter(FaceTextures::emissiveOverlay),
 						Material.CODEC.optionalFieldOf("signal_on_overlay").forGetter(FaceTextures::signalOnOverlay),
 						Material.CODEC.optionalFieldOf("signal_off_overlay").forGetter(FaceTextures::signalOffOverlay)
 				)
 				.apply(instance, FaceTextures::new));
+		
+		public FaceTextures fillEmpty(FaceTextures fallback)
+		{
+			return new FaceTextures(
+					base.isPresent() ? base : fallback.base(),
+					emissiveOverlay.isPresent() ? emissiveOverlay : fallback.emissiveOverlay(),
+					signalOnOverlay.isPresent() ? signalOnOverlay : fallback.signalOnOverlay(),
+					signalOffOverlay.isPresent() ? signalOffOverlay : fallback.signalOffOverlay()
+			);
+		}
 	}
 	
 	public record Unbaked(
@@ -253,7 +293,20 @@ public final class MicrochipBlockModel implements DynamicBlockStateModel
 		@Override
 		public BlockStateModel bake(ModelBaker baker)
 		{
-			return new MicrochipBlockModel(baker, fallback, sides);
+			Map<Direction, FaceTextures> resolvedSides = Maps.newHashMap();
+			for(var direction : Direction.values())
+			{
+				if(sides.containsKey(direction))
+				{
+					var side = sides.get(direction);
+					resolvedSides.put(direction, side.fillEmpty(fallback));
+				}
+				else
+				{
+					resolvedSides.put(direction, fallback);
+				}
+			}
+			return new MicrochipBlockModel(baker, fallback, Collections.unmodifiableMap(resolvedSides));
 		}
 		
 		@Override

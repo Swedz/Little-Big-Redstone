@@ -1,8 +1,12 @@
 {
-  "parent": "minecraft:block/cube_bottom_top",
+  "parent": "little_big_redstone:block/microchip",
   "textures": {
-    "bottom": "little_big_redstone:block/microchip/bottom/light_gray",
-    "side": "little_big_redstone:block/microchip/side/light_gray",
-    "top": "little_big_redstone:block/microchip/top/light_gray"
+    "bottom": "little_big_redstone:block/microchip/bottom/base",
+    "bottom_overlay": "little_big_redstone:block/microchip/bottom/light_gray",
+    "particle": "little_big_redstone:block/microchip/side/base",
+    "side": "little_big_redstone:block/microchip/side/base",
+    "side_overlay": "little_big_redstone:block/microchip/side/light_gray",
+    "top": "little_big_redstone:block/microchip/top/base",
+    "top_overlay": "little_big_redstone:block/microchip/top/light_gray"
   }
 }
