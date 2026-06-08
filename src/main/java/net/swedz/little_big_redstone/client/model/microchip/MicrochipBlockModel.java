@@ -128,10 +128,17 @@ public final class MicrochipBlockModel implements DynamicBlockStateModel
 	{
 		List<BlockStateModelPart> parts = Lists.newArrayList();
 		
-		parts.add(bakeLayerAsPart(baker, this.prepareLayer((direction, textures) -> textures.base(), true)));
+		parts.add(bakeLayerAsPart(
+				baker,
+				this.prepareLayer(
+						(direction, textures) -> textures.base(),
+						true
+				)
+		));
 		
 		parts.add(bakeLayerAsPart(
-				baker, this.prepareLayer(
+				baker,
+				this.prepareLayer(
 						(direction, textures) ->
 						{
 							if(direction != null)
@@ -144,7 +151,8 @@ public final class MicrochipBlockModel implements DynamicBlockStateModel
 								};
 							}
 							return Optional.empty();
-						}, false
+						},
+						false
 				)
 		));
 		
