@@ -59,7 +59,7 @@ public abstract class StickyNoteScreen extends Screen
 		graphics.pose().pushPose();
 		graphics.pose().translate(leftPos, topPos, 0);
 		
-		StickyNoteViewRenderer.renderBackground(graphics, new StickyNoteView(color, textColor, Component.empty()));
+		StickyNoteViewRenderer.renderBackground(graphics, new StickyNoteView(color, textColor, Component.empty()), true);
 		
 		graphics.pose().popPose();
 	}

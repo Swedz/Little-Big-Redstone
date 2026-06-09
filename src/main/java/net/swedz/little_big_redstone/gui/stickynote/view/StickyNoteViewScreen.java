@@ -64,7 +64,7 @@ public final class StickyNoteViewScreen extends StickyNoteScreen
 		graphics.pose().pushPose();
 		graphics.pose().translate(leftPos, topPos, 0);
 		
-		StickyNoteViewRenderer.renderText(graphics, new StickyNoteView(color, textColor, text));
+		StickyNoteViewRenderer.renderText(graphics, new StickyNoteView(color, textColor, text), true);
 		
 		graphics.pose().popPose();
 	}

@@ -77,8 +77,8 @@ public final class NoteBoardScreen extends AbstractContainerScreen<NoteBoardMenu
 		graphics.pose().scale(scale, scale, 1);
 		
 		var view = new StickyNoteView(stack);
-		StickyNoteViewRenderer.renderBackground(graphics, view);
-		StickyNoteViewRenderer.renderText(graphics, view);
+		StickyNoteViewRenderer.renderBackground(graphics, view, true);
+		StickyNoteViewRenderer.renderText(graphics, view, true);
 		
 		graphics.pose().popPose();
 	}
