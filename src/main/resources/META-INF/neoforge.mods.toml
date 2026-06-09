@@ -42,6 +42,13 @@ side = "BOTH"
 #side = "CLIENT"
 
 [[dependencies.${ mod_id }]]
+modId = "jei"
+type = "optional"
+versionRange = "${jei_version_range}"
+ordering = "AFTER"
+side = "CLIENT"
+
+[[dependencies.${ mod_id }]]
 modId = "guideme"
 type = "required"
 versionRange = "${guideme_version_range}"

@@ -19,11 +19,13 @@ dependencyResolutionManagement {
 		mavenLocal()
 		mavenCentral()
 		maven {
-			name "Modmaven"
+			name = "Modmaven"
 			url "https://modmaven.dev"
 			content {
 				// Tesseract
 				includeGroup "net.swedz"
+				// JEI
+				includeGroup "mezz.jei"
 			}
 		}
 		maven {
@@ -35,7 +37,7 @@ dependencyResolutionManagement {
 			}
 		}
 		maven {
-			name "Sonatype"
+			name = "Sonatype"
 			url = "https://central.sonatype.com/repository/maven-snapshots/"
 			content {
 				// GuideME
