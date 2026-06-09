@@ -244,8 +244,9 @@ public final class MicrochipScreen extends AbstractContainerScreen<MicrochipMenu
 			}
 			var pose = new Matrix3x2f(graphics.pose());
 			var boardBounds = microchipWidget.microchip().size().bounds();
-			graphics.submitGuiElementRenderState(new WiresGuiElementRenderState(pose, boardBounds, renderState, false, true));
-			graphics.submitGuiElementRenderState(new WiresGuiElementRenderState(pose, boardBounds, renderState, true, true));
+			var scissorArea = graphics.peekScissorStack();
+			graphics.submitGuiElementRenderState(new WiresGuiElementRenderState(pose, boardBounds, renderState, false, true, scissorArea));
+			graphics.submitGuiElementRenderState(new WiresGuiElementRenderState(pose, boardBounds, renderState, true, true, scissorArea));
 		}
 	}
 	

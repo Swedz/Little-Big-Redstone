@@ -17,7 +17,8 @@ public record WiresGuiElementRenderState(
 		Bounds boardBounds,
 		WiresRenderState state,
 		boolean powered,
-		boolean hovered
+		boolean hovered,
+		ScreenRectangle scissorArea
 ) implements GuiElementRenderState
 {
 	@Override
@@ -67,7 +68,7 @@ public record WiresGuiElementRenderState(
 	@Override
 	public ScreenRectangle scissorArea()
 	{
-		return null;
+		return scissorArea;
 	}
 	
 	@Override

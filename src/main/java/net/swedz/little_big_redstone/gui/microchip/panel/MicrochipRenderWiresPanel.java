@@ -128,10 +128,11 @@ public final class MicrochipRenderWiresPanel extends MicrochipRenderPanel
 		
 		var pose = new Matrix3x2f(graphics.pose());
 		var boardBounds = microchip.size().bounds();
-		graphics.submitGuiElementRenderState(new WiresGuiElementRenderState(pose, boardBounds, state, false, false));
-		graphics.submitGuiElementRenderState(new WiresGuiElementRenderState(pose, boardBounds, state, true, false));
-		graphics.submitGuiElementRenderState(new WiresGuiElementRenderState(pose, boardBounds, state, false, true));
-		graphics.submitGuiElementRenderState(new WiresGuiElementRenderState(pose, boardBounds, state, true, true));
+		var scissorArea = graphics.peekScissorStack();
+		graphics.submitGuiElementRenderState(new WiresGuiElementRenderState(pose, boardBounds, state, false, false, scissorArea));
+		graphics.submitGuiElementRenderState(new WiresGuiElementRenderState(pose, boardBounds, state, true, false, scissorArea));
+		graphics.submitGuiElementRenderState(new WiresGuiElementRenderState(pose, boardBounds, state, false, true, scissorArea));
+		graphics.submitGuiElementRenderState(new WiresGuiElementRenderState(pose, boardBounds, state, true, true, scissorArea));
 	}
 	
 	public WireRenderState renderWire(WirePathKey key, WirePath path, WireMetadata metadata)
