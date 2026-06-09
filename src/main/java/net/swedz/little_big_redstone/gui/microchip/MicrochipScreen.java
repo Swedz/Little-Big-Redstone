@@ -117,6 +117,13 @@ public final class MicrochipScreen extends AbstractContainerScreen<MicrochipMenu
 	}
 	
 	@Override
+	public boolean mouseScrolled(double x, double y, double scrollX, double scrollY)
+	{
+		return super.mouseScrolled(x, y, scrollX, scrollY) ||
+			   this.getChildAt(x, y).filter((child) -> child.mouseScrolled(x, y, scrollX, scrollY)).isPresent();
+	}
+	
+	@Override
 	public void extractRenderState(GuiGraphicsExtractor graphics, int mouseX, int mouseY, float partialTicks)
 	{
 		super.extractRenderState(graphics, mouseX, mouseY, partialTicks);
