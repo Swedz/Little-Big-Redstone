@@ -103,8 +103,8 @@ public final class StickyNoteEditScreen extends StickyNoteScreen
 		graphics.pose().pushPose();
 		graphics.pose().translate(leftPos + uiWidth + 20, topPos, 0);
 		
-		StickyNoteViewRenderer.renderBackground(graphics, new StickyNoteView(color, textColor, Component.empty()));
-		StickyNoteViewRenderer.renderText(graphics, new StickyNoteView(color, textColor, editWidget.note().getDisplay().parsed()));
+		StickyNoteViewRenderer.renderBackground(graphics, new StickyNoteView(color, textColor, Component.empty()), true);
+		StickyNoteViewRenderer.renderText(graphics, new StickyNoteView(color, textColor, editWidget.note().getDisplay().parsed()), true);
 		
 		graphics.pose().popPose();
 	}

@@ -41,8 +41,8 @@ public final class NoteBoardGuiOverlay
 		float scale = size / 180f;
 		graphics.pose().scale(scale, scale, 1);
 		
-		StickyNoteViewRenderer.renderBackground(graphics, view);
-		StickyNoteViewRenderer.renderText(graphics, view);
+		StickyNoteViewRenderer.renderBackground(graphics, view, true);
+		StickyNoteViewRenderer.renderText(graphics, view, true);
 		
 		graphics.pose().popPose();
 	}
