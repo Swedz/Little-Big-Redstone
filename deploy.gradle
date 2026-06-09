@@ -114,7 +114,7 @@ if (System.getenv("CURSEFORGE_API_KEY")) {
 		def compatible_minecraft_versions = project.compatible_minecraft_versions.split(",")
 		compatible_minecraft_versions.each { mainFile.addGameVersion(it) }
 		mainFile.addGameVersion("NeoForge")
-		mainFile.addGameVersion("Java 21")
+		mainFile.addGameVersion("Java 25")
 
 		def projectRelations = gatherProjectRelations(project.curseforge_project_relations)
 		projectRelations.each {
