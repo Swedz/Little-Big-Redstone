@@ -35,7 +35,7 @@ public final class LBRComponents
 	 *
 	 * @see LogicItem#verifyComponentsAfterLoad(ItemStack)
 	 */
-	@Deprecated(since = "1.8.3-beta", forRemoval = true)
+	@Deprecated(since = "1.9.0", forRemoval = true)
 	public static final Supplier<DataComponentType<LogicComponent>> LOGIC        = create("logic", LogicCodecs.COMPONENT_CODEC, LogicCodecs.COMPONENT_STREAM_CODEC);
 	public static final Supplier<DataComponentType<LogicConfig>>    LOGIC_CONFIG = create("logic_config", LogicCodecs.CONFIG_CODEC, LogicCodecs.CONFIG_STREAM_CODEC);
 	public static final Supplier<DataComponentType<DyeColor>>       LOGIC_COLOR  = create("logic_color", DyeColor.CODEC, DyeColor.STREAM_CODEC);
