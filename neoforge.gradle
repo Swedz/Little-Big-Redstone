@@ -93,6 +93,7 @@ tasks.withType(ProcessResources).configureEach {
 			mod_github              : mod_github,
 			tesseract_version_range : tesseract_version_range,
 			emi_version_range       : emi_version_range,
+			jei_version_range       : jei_version_range,
 			guideme_version_range   : guideme_version_range
 	]
 	inputs.properties replaceProperties

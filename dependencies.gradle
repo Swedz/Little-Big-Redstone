@@ -7,6 +7,8 @@ repositories {
 		content {
 			// Tesseract
 			includeGroup "net.swedz"
+			// JEI
+			includeGroup "mezz.jei"
 		}
 	}
 	maven {
@@ -43,6 +45,12 @@ dependencies {
 		compileOnly "dev.emi:emi-neoforge:${emi_version}:api"
 	}
 	runtimeOnly "dev.emi:emi-neoforge:${emi_version}"
+
+	compileOnly "mezz.jei:jei-${minecraft_version}-neoforge-api:${jei_version}"
+	if(project.runtime_include_jei.toBoolean())
+	{
+		runtimeOnly "mezz.jei:jei-${minecraft_version}-neoforge:${jei_version}"
+	}
 
 	localImplementation "org.appliedenergistics:guideme:${guideme_version}"
 }
