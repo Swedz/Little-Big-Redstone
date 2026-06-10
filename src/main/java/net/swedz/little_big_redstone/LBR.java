@@ -13,7 +13,6 @@ import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent;
 import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
 import net.neoforged.neoforge.registries.NewRegistryEvent;
 import net.swedz.little_big_redstone.datagen.client.provider.LanguageDatagenProvider;
-import net.swedz.little_big_redstone.guide.LBRGuide;
 import net.swedz.little_big_redstone.microchip.awareness.AwarenessTypes;
 import net.swedz.little_big_redstone.microchip.object.logic.LogicMode;
 import net.swedz.little_big_redstone.microchip.object.logic.LogicTypes;
@@ -63,7 +62,6 @@ public final class LBR
 		LBRMenus.init(bus);
 		LBRRecipes.init(bus);
 		LBRAttachments.init(bus);
-		LBRGuide.init();
 		
 		bus.addListener(RegisterPayloadHandlersEvent.class, LBRPackets::init);
 		
