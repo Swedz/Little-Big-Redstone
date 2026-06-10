@@ -1,11 +1,6 @@
 package net.swedz.little_big_redstone;
 
 import com.google.common.collect.Maps;
-import net.minecraft.client.data.models.model.ItemModelUtils;
-import net.minecraft.client.data.models.model.ModelTemplates;
-import net.minecraft.client.data.models.model.TextureMapping;
-import net.minecraft.client.renderer.item.ClientItem;
-import net.minecraft.client.resources.model.sprite.Material;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.Item;
 import net.neoforged.bus.api.IEventBus;
@@ -19,7 +14,6 @@ import net.swedz.little_big_redstone.item.stickynote.StickyNoteItem;
 import net.swedz.little_big_redstone.microchip.object.logic.LogicType;
 import net.swedz.tesseract.api.Assert;
 import net.swedz.tesseract.neoforge.registry.SortOrder;
-import net.swedz.tesseract.neoforge.registry.common.CommonModelBuilders;
 import net.swedz.tesseract.neoforge.registry.holder.ItemHolder;
 
 import java.util.Collections;
@@ -57,7 +51,6 @@ public final class LBRItems
 					Item::new,
 					LBRSortOrder.RESOURCES
 			)
-			.withModelBuilder(CommonModelBuilders::generated)
 			.register();
 	
 	public static final ItemHolder<Item> REDSTONE_CIRCUIT_BOARD = create
@@ -67,7 +60,6 @@ public final class LBRItems
 					Item::new,
 					LBRSortOrder.RESOURCES
 			)
-			.withModelBuilder(CommonModelBuilders::generated)
 			.register();
 	
 	private static final Map<DyeColor, ItemHolder<LogicArrayItem>> LOGIC_ARRAYS;
@@ -151,16 +143,7 @@ public final class LBRItems
 		return create(id, englishName, (p) -> new LogicArrayItem(p, color), LBRSortOrder.LOGIC_ARRAYS.and(order))
 				.tag(LBRTags.Items.LOGIC_ARRAYS)
 				.withCapabilities((item, event) ->
-						event.registerItem(Capabilities.Item.ITEM, (__, access) -> new LogicArrayItemHandler(access), item))
-				.withModel((holder) -> (generators) ->
-				{
-					var modelId = ModelTemplates.FLAT_ITEM.create(
-							holder.asItem(),
-							TextureMapping.layer0(new Material(LBR.id("item/logic_array/%s".formatted(colorId)))),
-							generators.item().modelOutput
-					);
-					generators.item().itemModelOutput.register(holder.asItem(), new ClientItem(ItemModelUtils.plainModel(modelId), ClientItem.Properties.DEFAULT));
-				});
+						event.registerItem(Capabilities.Item.ITEM, (__, access) -> new LogicArrayItemHandler(access), item));
 	}
 	
 	private static ItemHolder<FloppyDiskItem> createFloppyDisk(DyeColor color, String colorEnglishName, int order)
@@ -169,16 +152,7 @@ public final class LBRItems
 		final String id = "%s_floppy_disk".formatted(colorId);
 		final String englishName = "%s Floppy Disk".formatted(colorEnglishName);
 		return create(id, englishName, (p) -> new FloppyDiskItem(p, color), LBRSortOrder.FLOPPY_DISKS.and(order))
-				.tag(LBRTags.Items.FLOPPY_DISKS)
-				.withModel((holder) -> (generators) ->
-				{
-					var modelId = ModelTemplates.FLAT_ITEM.create(
-							holder.asItem(),
-							TextureMapping.layer0(new Material(LBR.id("item/floppy_disk/%s".formatted(colorId)))),
-							generators.item().modelOutput
-					);
-					generators.item().itemModelOutput.register(holder.asItem(), new ClientItem(ItemModelUtils.plainModel(modelId), ClientItem.Properties.DEFAULT));
-				});
+				.tag(LBRTags.Items.FLOPPY_DISKS);
 	}
 	
 	private static ItemHolder<StickyNoteItem> createStickyNote(DyeColor color, String colorEnglishName, int order)

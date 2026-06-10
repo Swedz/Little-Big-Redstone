@@ -53,17 +53,17 @@ public final class LBRBlocks
 		Registry.init(bus);
 	}
 	
-	private static final Map<DyeColor, BlockHolder<MicrochipBlock>> MICROCHIPS;
+	private static final Map<DyeColor, BlockWithItemHolder<MicrochipBlock, BlockItem>> MICROCHIPS;
 	
 	static
 	{
-		Map<DyeColor, BlockHolder<MicrochipBlock>> microchips = Maps.newHashMap();
+		Map<DyeColor, BlockWithItemHolder<MicrochipBlock, BlockItem>> microchips = Maps.newHashMap();
 		LBRColors.forEachIndexed((color, colorName, index) ->
 				microchips.put(color, createMicrochip(color, colorName, index).register()));
 		MICROCHIPS = Collections.unmodifiableMap(microchips);
 	}
 	
-	public static BlockHolder<MicrochipBlock> microchip(DyeColor color)
+	public static BlockWithItemHolder<MicrochipBlock, BlockItem> microchip(DyeColor color)
 	{
 		Assert.notNull(color);
 		return MICROCHIPS.get(color);
@@ -113,7 +113,7 @@ public final class LBRBlocks
 		return holder;
 	}
 	
-	private static BlockHolder<MicrochipBlock> createMicrochip(DyeColor color, String colorEnglishName, int order)
+	private static BlockWithItemHolder<MicrochipBlock, BlockItem> createMicrochip(DyeColor color, String colorEnglishName, int order)
 	{
 		final String colorId = color.getName();
 		final String id = "%s_microchip".formatted(colorId);

@@ -48,6 +48,7 @@ import net.swedz.little_big_redstone.gui.microchip.logic.renderer.SequencerRende
 import net.swedz.little_big_redstone.gui.microchip.logic.renderer.SimpleLogicRenderer;
 import net.swedz.little_big_redstone.gui.microchip.wire.WirePathing;
 import net.swedz.little_big_redstone.gui.noteboard.NoteBoardScreen;
+import net.swedz.little_big_redstone.guide.LBRGuide;
 import net.swedz.little_big_redstone.item.stickynote.StickyNoteItem;
 import net.swedz.little_big_redstone.item.stickynote.tooltip.StickyNoteClientTooltip;
 import net.swedz.little_big_redstone.item.stickynote.tooltip.StickyNoteTooltipData;
@@ -71,6 +72,7 @@ public final class LBRClient
 		LBRKeybinds.init(bus);
 		FloppyDiskScreen.createPath();
 		LBRTooltips.init();
+		LBRGuide.init();
 		
 		bus.addListener(
 				FMLClientSetupEvent.class,
