@@ -9,6 +9,29 @@ import net.swedz.little_big_redstone.item.logicarray.LogicArrayItem;
 
 public final class LogicCreativeItemHandler implements IItemHandlerModifiable
 {
+	public static final int VISIBLE_COLUMNS = LogicArrayItem.ROWS;
+	public static final int VISIBLE_ROWS    = LogicArrayItem.COLUMNS;
+	public static final int VISIBLE_SLOTS   = VISIBLE_COLUMNS * VISIBLE_ROWS;
+	
+	private int scrollRows;
+	
+	public int scrollRows()
+	{
+		return scrollRows;
+	}
+	
+	public int maxScrollRows()
+	{
+		int totalItems = LBRCreativeTabs.getLogicArrayItems().size();
+		int totalRows = (totalItems + VISIBLE_COLUMNS - 1) / VISIBLE_COLUMNS;
+		return Math.max(0, totalRows - VISIBLE_ROWS);
+	}
+	
+	public void setScrollRows(int scrollRows)
+	{
+		this.scrollRows = Math.max(0, Math.min(this.maxScrollRows(), scrollRows));
+	}
+	
 	@Override
 	public void setStackInSlot(int slot, ItemStack stack)
 	{
@@ -17,14 +40,15 @@ public final class LogicCreativeItemHandler implements IItemHandlerModifiable
 	@Override
 	public int getSlots()
 	{
-		return LogicArrayItem.MAX_SLOTS;
+		return VISIBLE_SLOTS;
 	}
 	
 	@Override
 	public ItemStack getStackInSlot(int slot)
 	{
 		var items = LBRCreativeTabs.getLogicArrayItems();
-		return slot < items.size() ? items.get(slot) : ItemStack.EMPTY;
+		int realIndex = slot + scrollRows * VISIBLE_COLUMNS;
+		return realIndex >= 0 && realIndex < items.size() ? items.get(realIndex) : ItemStack.EMPTY;
 	}
 	
 	@Override
@@ -37,7 +61,8 @@ public final class LogicCreativeItemHandler implements IItemHandlerModifiable
 	public ItemStack extractItem(int slot, int amount, boolean simulate)
 	{
 		var items = LBRCreativeTabs.getLogicArrayItems();
-		return slot < items.size() ? items.get(slot).copyWithCount(amount) : ItemStack.EMPTY;
+		int realIndex = slot + scrollRows * VISIBLE_COLUMNS;
+		return realIndex >= 0 && realIndex < items.size() ? items.get(realIndex).copyWithCount(amount) : ItemStack.EMPTY;
 	}
 	
 	@Override
