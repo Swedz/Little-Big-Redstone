@@ -47,7 +47,7 @@ public final class ClearConfigRecipe extends CustomRecipe
 			if(stack.has(LBRComponents.LOGIC_CONFIG))
 			{
 				var copy = stack.copyWithCount(1);
-				copy.remove(LBRComponents.LOGIC_CONFIG);
+				copy.set(LBRComponents.LOGIC_CONFIG, copy.get(LBRComponents.LOGIC_CONFIG).type().defaultConfig());
 				return copy;
 			}
 		}
