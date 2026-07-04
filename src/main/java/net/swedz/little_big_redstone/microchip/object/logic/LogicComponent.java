@@ -109,7 +109,7 @@ public abstract class LogicComponent<L extends LogicComponent<L, C>, C extends L
 	public final void processTick(LogicTickingContext context, int[] inputs)
 	{
 		int expectedInputs = this.inputPorts();
-		Assert.that(expectedInputs == inputs.length, "Mismatching logic component input sizes: expected %d but got %d".formatted(expectedInputs, inputs.length));
+		Assert.that(expectedInputs == inputs.length, "Mismatching logic component input sizes: expected " + expectedInputs + " but got " + inputs.length);
 		if(configValid == null)
 		{
 			configValid = context.checkValid(config);
