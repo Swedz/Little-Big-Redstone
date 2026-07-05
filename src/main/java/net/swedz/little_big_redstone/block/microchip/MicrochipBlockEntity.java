@@ -51,7 +51,6 @@ public final class MicrochipBlockEntity extends BlockEntity implements MenuProvi
 	
 	private MicrochipViewPosition viewPosition;
 	
-	private boolean            modelDataChanged = true;
 	private MicrochipModelData modelData;
 	
 	public MicrochipBlockEntity(BlockPos pos, BlockState blockState)
@@ -109,7 +108,6 @@ public final class MicrochipBlockEntity extends BlockEntity implements MenuProvi
 		{
 			throw new IllegalStateException("Cannot call sync() on the logical client");
 		}
-		modelDataChanged = true;
 		serverLevel.getChunkSource().blockChanged(worldPosition);
 	}
 	
@@ -251,11 +249,7 @@ public final class MicrochipBlockEntity extends BlockEntity implements MenuProvi
 	public CompoundTag getUpdateTag(HolderLookup.Provider registries)
 	{
 		var tag = new CompoundTag();
-		if(modelDataChanged)
-		{
-			modelDataChanged = false;
-			tag.put("microchip_model_data", MicrochipModelData.CODEC.encodeStart(NbtOps.INSTANCE, this.createModelData()).getOrThrow());
-		}
+		tag.put("microchip_model_data", MicrochipModelData.CODEC.encodeStart(NbtOps.INSTANCE, this.createModelData()).getOrThrow());
 		return tag;
 	}
 	
