@@ -49,5 +49,5 @@ dependencies {
 
 	localImplementation "org.appliedenergistics:guideme:${guideme_version}"
 
-	implementation "dev.technici4n:GrandPower:${grandpower_version}"
+	compileOnly "dev.technici4n:GrandPower:${grandpower_version}"
 }
