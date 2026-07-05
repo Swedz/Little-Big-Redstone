@@ -241,12 +241,13 @@ public final class Microchip
 		for(var entry : components.traversal())
 		{
 			int inputSlot = entry.slot();
+			var wiresByInputSlot = wires.getByInputSlot(inputSlot);
 			int totalInputs = entry.component().inputPorts();
 			int[] inputs = new int[totalInputs];
 			outer:
 			for(int inputPort = 0; inputPort < totalInputs; inputPort++)
 			{
-				for(var wire : wires.getByInputSlot(inputSlot))
+				for(var wire : wiresByInputSlot)
 				{
 					if(wire.input().index() == inputPort)
 					{
