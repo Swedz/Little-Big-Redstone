@@ -9,6 +9,8 @@ repositories {
 			includeGroup "net.swedz"
 			// JEI
 			includeGroup "mezz.jei"
+			// GrandPower
+			includeGroup "dev.technici4n"
 		}
 	}
 	maven {
@@ -46,4 +48,6 @@ dependencies {
 	}
 
 	localImplementation "org.appliedenergistics:guideme:${guideme_version}"
+
+	implementation "dev.technici4n:GrandPower:${grandpower_version}"
 }

@@ -10,12 +10,14 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.Mth;
 import net.minecraft.world.item.DyeColor;
 import net.swedz.little_big_redstone.LBRLogicTypes;
+import net.swedz.little_big_redstone.compat.grandpower.GrandPowerProxy;
 import net.swedz.little_big_redstone.microchip.awareness.AwarenessType;
 import net.swedz.little_big_redstone.microchip.awareness.AwarenessTypes;
 import net.swedz.little_big_redstone.microchip.awareness.MicrochipAware;
 import net.swedz.little_big_redstone.microchip.object.logic.LogicComponent;
 import net.swedz.little_big_redstone.microchip.object.logic.LogicTickingContext;
 import net.swedz.little_big_redstone.microchip.object.logic.LogicType;
+import net.swedz.tesseract.neoforge.proxy.Proxies;
 
 import java.util.Objects;
 import java.util.Optional;
@@ -132,8 +134,9 @@ public final class LogicReader extends LogicComponent<LogicReader, LogicReaderCo
 				var handler = awareness.get(context.level(), context.blockPos(), config.direction());
 				if(handler != null)
 				{
-					int totalEnergy = handler.getEnergyStored();
-					int maxEnergy = handler.getMaxEnergyStored();
+					var powerProxy = Proxies.get(GrandPowerProxy.class);
+					long totalEnergy = powerProxy.getEnergyStored(handler);
+					long maxEnergy = powerProxy.getMaxEnergyStored(handler);
 					fill = isPercentage ?
 							((float) totalEnergy / maxEnergy) :
 							totalEnergy;
