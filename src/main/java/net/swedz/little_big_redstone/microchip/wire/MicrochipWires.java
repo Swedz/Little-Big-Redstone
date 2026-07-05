@@ -9,12 +9,13 @@ import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.swedz.little_big_redstone.microchip.Microchip;
 import net.swedz.little_big_redstone.microchip.object.logic.LogicEntry;
+import net.swedz.tesseract.api.collection.CollectionWithSnapshot;
 
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 public final class MicrochipWires implements Iterable<Wire>
 {
@@ -24,9 +25,17 @@ public final class MicrochipWires implements Iterable<Wire>
 	
 	private final Microchip microchip;
 	
-	private List<Wire>              wires;
-	private Map<Integer, Set<Wire>> wiresByOutputSlot;
-	private Map<Integer, Set<Wire>> wiresByInputSlot;
+	private List<Wire>                                 wires;
+	private Map<Integer, CollectionWithSnapshot<Wire>> wiresByOutputSlot;
+	private Map<Integer, CollectionWithSnapshot<Wire>> wiresByInputSlot;
+	
+	private static CollectionWithSnapshot<Wire> createWiresBySlotCache()
+	{
+		return new CollectionWithSnapshot<>(
+				Sets::newHashSet,
+				List::copyOf
+		);
+	}
 	
 	/**
 	 * Should not ever be used directly, only by other constructors.
@@ -69,28 +78,28 @@ public final class MicrochipWires implements Iterable<Wire>
 		return this.values().iterator();
 	}
 	
-	public List<Wire> getByOutputSlot(int outputSlot)
+	public Collection<Wire> getByOutputSlot(int outputSlot)
 	{
-		var list = wiresByOutputSlot.get(outputSlot);
-		return list == null ? List.of() : List.copyOf(list);
+		var wires = wiresByOutputSlot.get(outputSlot);
+		return wires == null ? List.of() : wires.snapshot();
 	}
 	
-	public List<Wire> getByOutputSlot(int outputSlot, int outputPort)
+	public Collection<Wire> getByOutputSlot(int outputSlot, int outputPort)
 	{
 		return this.getByOutputSlot(outputSlot).stream()
 				.filter((wire) -> wire.output().index() == outputPort)
 				.toList();
 	}
 	
-	public List<Wire> getByOutputSlot(PortReference port)
+	public Collection<Wire> getByOutputSlot(PortReference port)
 	{
 		return this.getByOutputSlot(port.slot(), port.index());
 	}
 	
-	public List<Wire> getByInputSlot(int inputSlot)
+	public Collection<Wire> getByInputSlot(int inputSlot)
 	{
-		var list = wiresByInputSlot.get(inputSlot);
-		return list == null ? List.of() : List.copyOf(list);
+		var wires = wiresByInputSlot.get(inputSlot);
+		return wires == null ? List.of() : wires.snapshot();
 	}
 	
 	public Wire getByInputSlot(int inputSlot, int inputPort)
@@ -136,9 +145,9 @@ public final class MicrochipWires implements Iterable<Wire>
 		{
 			return false;
 		}
-		if(wiresByOutputSlot.computeIfAbsent(wire.output().slot(), (__) -> Sets.newHashSet()).add(wire))
+		if(wiresByOutputSlot.computeIfAbsent(wire.output().slot(), (__) -> createWiresBySlotCache()).add(wire))
 		{
-			wiresByInputSlot.computeIfAbsent(wire.input().slot(), (__) -> Sets.newHashSet()).add(wire);
+			wiresByInputSlot.computeIfAbsent(wire.input().slot(), (__) -> createWiresBySlotCache()).add(wire);
 			wires.add(wire);
 			return true;
 		}
@@ -185,14 +194,14 @@ public final class MicrochipWires implements Iterable<Wire>
 		return this.remove(new Wire(outputSlot, outputPort, inputSlot, inputPort));
 	}
 	
-	public List<Wire> removeAllOutputs(int outputSlot)
+	public Collection<Wire> removeAllOutputs(int outputSlot)
 	{
 		var wires = this.getByOutputSlot(outputSlot);
 		wires.forEach(this::remove);
 		return wires;
 	}
 	
-	public List<Wire> removeAllInputs(int inputSlot)
+	public Collection<Wire> removeAllInputs(int inputSlot)
 	{
 		var wires = this.getByInputSlot(inputSlot);
 		wires.forEach(this::remove);
@@ -230,12 +239,16 @@ public final class MicrochipWires implements Iterable<Wire>
 		wiresByOutputSlot = Maps.newHashMap();
 		for(var entry : other.wiresByOutputSlot.entrySet())
 		{
-			wiresByOutputSlot.put(entry.getKey(), Sets.newHashSet(entry.getValue()));
+			var cache = createWiresBySlotCache();
+			cache.addAll(entry.getValue());
+			wiresByOutputSlot.put(entry.getKey(), cache);
 		}
 		wiresByInputSlot = Maps.newHashMap();
 		for(var entry : other.wiresByInputSlot.entrySet())
 		{
-			wiresByInputSlot.put(entry.getKey(), Sets.newHashSet(entry.getValue()));
+			var cache = createWiresBySlotCache();
+			cache.addAll(entry.getValue());
+			wiresByInputSlot.put(entry.getKey(), cache);
 		}
 	}
 	
