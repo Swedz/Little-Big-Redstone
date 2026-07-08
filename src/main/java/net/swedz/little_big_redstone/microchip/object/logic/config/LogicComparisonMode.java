@@ -45,11 +45,11 @@ public enum LogicComparisonMode implements IconCycleLogicConfigButtonIcon
 	
 	public boolean test(Number input, Number setting)
 	{
-		return test.test(input.floatValue(), setting.floatValue());
+		return test.test(input.doubleValue(), setting.doubleValue());
 	}
 	
 	private interface Test
 	{
-		boolean test(float input, float setting);
+		boolean test(double input, double setting);
 	}
 }

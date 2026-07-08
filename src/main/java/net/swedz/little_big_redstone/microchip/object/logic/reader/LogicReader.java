@@ -88,8 +88,8 @@ public final class LogicReader extends LogicComponent<LogicReader, LogicReaderCo
 				var handler = awareness.get(context.level(), context.blockPos(), config.direction());
 				if(handler != null)
 				{
-					int totalItems = 0;
-					int maxItems = 0;
+					long totalItems = 0;
+					long maxItems = 0;
 					for(int slot = 0; slot < handler.getSlots(); slot++)
 					{
 						var stack = handler.getStackInSlot(slot);
@@ -104,7 +104,7 @@ public final class LogicReader extends LogicComponent<LogicReader, LogicReaderCo
 						}
 					}
 					fill = isPercentage ?
-							((float) totalItems / maxItems) :
+							((double) totalItems / maxItems) :
 							totalItems;
 				}
 			}
@@ -115,15 +115,15 @@ public final class LogicReader extends LogicComponent<LogicReader, LogicReaderCo
 				var handler = awareness.get(context.level(), context.blockPos(), config.direction());
 				if(handler != null)
 				{
-					int totalFluid = 0;
-					int maxFluid = 0;
+					long totalFluid = 0;
+					long maxFluid = 0;
 					for(int tank = 0; tank < handler.getTanks(); tank++)
 					{
 						totalFluid += handler.getFluidInTank(tank).getAmount();
 						maxFluid += handler.getTankCapacity(tank);
 					}
 					fill = isPercentage ?
-							((float) totalFluid / maxFluid) :
+							((double) totalFluid / maxFluid) :
 							totalFluid;
 				}
 			}
@@ -138,7 +138,7 @@ public final class LogicReader extends LogicComponent<LogicReader, LogicReaderCo
 					long totalEnergy = powerProxy.getEnergyStored(handler);
 					long maxEnergy = powerProxy.getMaxEnergyStored(handler);
 					fill = isPercentage ?
-							((float) totalEnergy / maxEnergy) :
+							((double) totalEnergy / maxEnergy) :
 							totalEnergy;
 				}
 			}
