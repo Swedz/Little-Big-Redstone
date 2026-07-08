@@ -12,7 +12,7 @@ import net.swedz.little_big_redstone.microchip.awareness.AwarenessType;
 import net.swedz.little_big_redstone.microchip.awareness.AwarenessTypes;
 import net.swedz.little_big_redstone.microchip.awareness.MicrochipAware;
 import net.swedz.little_big_redstone.microchip.object.logic.LogicComponent;
-import net.swedz.little_big_redstone.microchip.object.logic.LogicTickingContext;
+import net.swedz.little_big_redstone.microchip.object.logic.LogicContextAccess;
 import net.swedz.little_big_redstone.microchip.object.logic.LogicType;
 import net.swedz.little_big_redstone.microchip.tag.MicrochipTagSystem;
 import net.swedz.little_big_redstone.microchip.tag.TagOwnerKey;
@@ -71,7 +71,7 @@ public final class LogicTag extends LogicComponent<LogicTag, LogicTagConfig> imp
 	}
 	
 	@Override
-	protected void processTickInternal(LogicTickingContext context, int[] inputs)
+	protected void processTickInternal(LogicContextAccess context, int[] inputs)
 	{
 		int originalOutputState = outputState;
 		
