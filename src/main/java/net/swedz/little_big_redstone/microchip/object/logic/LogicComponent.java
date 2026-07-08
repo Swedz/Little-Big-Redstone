@@ -104,7 +104,7 @@ public abstract class LogicComponent<L extends LogicComponent<L, C>, C extends L
 		return config.size();
 	}
 	
-	protected abstract void processTickInternal(LogicTickingContext context, int[] inputs);
+	protected abstract void processTickInternal(LogicContextAccess context, int[] inputs);
 	
 	public final void processTick(LogicTickingContext context, int[] inputs)
 	{

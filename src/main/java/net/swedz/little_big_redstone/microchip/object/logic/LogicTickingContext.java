@@ -55,6 +55,13 @@ public final class LogicTickingContext implements LogicContextAccess
 		return placedBy;
 	}
 	
+	@Override
+	public boolean isDebug()
+	{
+		return microchip.isDebug();
+	}
+	
+	@Override
 	public <A extends MicrochipAwareness<A>> A awareness(AwarenessType<A> type)
 	{
 		return microchip.awarenesses().get(type);
@@ -65,6 +72,7 @@ public final class LogicTickingContext implements LogicContextAccess
 		return !dirtyEntries.isEmpty();
 	}
 	
+	@Override
 	public void markDirty(LogicComponent component)
 	{
 		for(var entry : microchip.components())

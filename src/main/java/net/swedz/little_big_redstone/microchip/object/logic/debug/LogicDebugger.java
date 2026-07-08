@@ -8,7 +8,7 @@ import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.world.item.DyeColor;
 import net.swedz.little_big_redstone.LBRLogicTypes;
 import net.swedz.little_big_redstone.microchip.object.logic.LogicComponent;
-import net.swedz.little_big_redstone.microchip.object.logic.LogicTickingContext;
+import net.swedz.little_big_redstone.microchip.object.logic.LogicContextAccess;
 import net.swedz.little_big_redstone.microchip.object.logic.LogicType;
 
 import java.util.Objects;
@@ -44,7 +44,7 @@ public final class LogicDebugger extends LogicComponent<LogicDebugger, LogicDebu
 	}
 	
 	@Override
-	protected void processTickInternal(LogicTickingContext context, int[] inputs)
+	protected void processTickInternal(LogicContextAccess context, int[] inputs)
 	{
 	}
 	
