@@ -9,7 +9,7 @@ import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.world.item.DyeColor;
 import net.swedz.little_big_redstone.microchip.object.logic.LogicComponent;
-import net.swedz.little_big_redstone.microchip.object.logic.LogicTickingContext;
+import net.swedz.little_big_redstone.microchip.object.logic.LogicContextAccess;
 import net.swedz.little_big_redstone.microchip.object.logic.config.LogicConfig;
 
 import java.util.Optional;
@@ -71,10 +71,10 @@ public abstract class LogicGate<G extends LogicGate<G, C>, C extends LogicConfig
 		this.outputState = outputState;
 	}
 	
-	protected abstract int processInputs(LogicTickingContext context, int[] inputs);
+	protected abstract int processInputs(LogicContextAccess context, int[] inputs);
 	
 	@Override
-	public final void processTickInternal(LogicTickingContext context, int[] inputs)
+	public final void processTickInternal(LogicContextAccess context, int[] inputs)
 	{
 		int originalOutputState = outputState;
 		outputState = this.processInputs(context, inputs);

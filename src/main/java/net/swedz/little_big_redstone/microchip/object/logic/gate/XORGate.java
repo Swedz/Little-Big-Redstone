@@ -5,7 +5,7 @@ import io.netty.buffer.ByteBuf;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.world.item.DyeColor;
 import net.swedz.little_big_redstone.LBRLogicTypes;
-import net.swedz.little_big_redstone.microchip.object.logic.LogicTickingContext;
+import net.swedz.little_big_redstone.microchip.object.logic.LogicContextAccess;
 import net.swedz.little_big_redstone.microchip.object.logic.LogicType;
 import net.swedz.little_big_redstone.microchip.object.logic.gate.config.XORGateConfig;
 
@@ -40,7 +40,7 @@ public final class XORGate extends LogicGate<XORGate, XORGateConfig>
 	}
 	
 	@Override
-	public int processInputs(LogicTickingContext context, int[] inputs)
+	public int processInputs(LogicContextAccess context, int[] inputs)
 	{
 		int trueCount = 0;
 		int greatest = 0;

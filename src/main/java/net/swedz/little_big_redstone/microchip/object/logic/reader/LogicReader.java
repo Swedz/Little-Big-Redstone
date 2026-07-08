@@ -14,8 +14,9 @@ import net.swedz.little_big_redstone.microchip.awareness.AwarenessType;
 import net.swedz.little_big_redstone.microchip.awareness.AwarenessTypes;
 import net.swedz.little_big_redstone.microchip.awareness.MicrochipAware;
 import net.swedz.little_big_redstone.microchip.object.logic.LogicComponent;
-import net.swedz.little_big_redstone.microchip.object.logic.LogicTickingContext;
+import net.swedz.little_big_redstone.microchip.object.logic.LogicContextAccess;
 import net.swedz.little_big_redstone.microchip.object.logic.LogicType;
+import org.jetbrains.annotations.UnknownNullability;
 
 import java.util.Objects;
 import java.util.Optional;
@@ -69,7 +70,7 @@ public final class LogicReader extends LogicComponent<LogicReader, LogicReaderCo
 	}
 	
 	@Override
-	protected void processTickInternal(LogicTickingContext context, int[] inputs)
+	protected void processTickInternal(@UnknownNullability LogicContextAccess context, int[] inputs)
 	{
 		int originalOutputState = outputState;
 		
