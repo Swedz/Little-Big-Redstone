@@ -131,7 +131,7 @@ publishMods {
 	curseforge {
 		projectId = project.curseforge_project
 		accessToken = System.getenv("CURSEFORGE_API_KEY")
-		javaVersions.add JavaVersion.VERSION_21
+		javaVersions.add JavaVersion.VERSION_25
 		client = true
 		server = true
 		changelogType = "markdown"
