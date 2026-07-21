@@ -29,8 +29,8 @@ dependencyResolutionManagement {
 			}
 		}
 		maven {
-			name = "TerraformersMC"
-			url = "https://maven.terraformersmc.com/releases/"
+			name = "Gnomecraft"
+			url = "https://maven.gnomecraft.net/repository/maven-public"
 			content {
 				// EMI
 				includeGroup "dev.emi"
