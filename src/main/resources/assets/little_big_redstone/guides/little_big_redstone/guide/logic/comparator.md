@@ -18,7 +18,7 @@ item_ids:
 	value set in the settings, or when the comparator is set to pass, the first input value.
 </FloatingColumn>
 
-<RecipeFor id="comparator" />
+<Recipe id="little_big_redstone:logic/comparator" />
 
 The comparator is a logic component that allows for comparing anywhere between 1 and 10 inputs' (B₁ - B₁₀) signal
 strength against some other signal strength (A). The mode option for the comparator determines if all or just one of

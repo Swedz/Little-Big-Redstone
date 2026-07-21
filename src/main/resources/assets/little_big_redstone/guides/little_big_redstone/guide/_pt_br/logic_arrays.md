@@ -26,7 +26,7 @@ item_ids:
 
 <FloatingColumn align="right">
 	<PaddedBox left="5">
-		<RecipeFor id="red_logic_array" />
+		<Recipe id="little_big_redstone:logic_array/red" />
 	</PaddedBox>
 </FloatingColumn>
 

@@ -18,7 +18,7 @@ item_ids:
 	threshold > 1), the highest signal value is used.
 </FloatingColumn>
 
-<RecipeFor id="tag" />
+<Recipe id="little_big_redstone:logic/tag" />
 
 Tags allow you to wirelessly send signals between circuits. Tags have two modes, sensor and emitter. Sensors are how
 you receive signals, and emitters are how you transmit signals.

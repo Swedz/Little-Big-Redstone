@@ -17,7 +17,7 @@ item_ids:
 	计数器会取各输入的计算结果作为输出。信号值不会超出0到15的范围。
 </FloatingColumn>
 
-<RecipeFor id="calculator" />
+<Recipe id="little_big_redstone:logic/calculator" />
 
 计算器的输入端口数目最少为2，最多为10。根据当前模式，计算器会对各输入执行加法或减法。计算结果即为输出值。
 

@@ -18,7 +18,7 @@ item_ids:
 	exceed the range of 0 to 15.
 </FloatingColumn>
 
-<RecipeFor id="calculator" />
+<Recipe id="little_big_redstone:logic/calculator" />
 
 The calculator can take anywhere from 2 to 10 inputs. The input signals will either be added or subtracted depending on
 the selected mode. The output signal then is the total calculated result of the inputs.

@@ -17,7 +17,7 @@ item_ids:
 	Randomizers yield an output signal value equal to the input signal value.
 </FloatingColumn>
 
-<RecipeFor id="randomizer" />
+<Recipe id="little_big_redstone:logic/randomizer" />
 
 The randomizer can have anywhere between 1 and 10 outputs, however only one output can be ON at a time. When the input
 is ON, every tick, a random output will be ON a configurable percentage of the time. By default, the chance is 100%,

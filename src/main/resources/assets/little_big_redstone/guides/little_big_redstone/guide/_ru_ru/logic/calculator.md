@@ -18,7 +18,7 @@ item_ids:
     Сигнал не выходит за пределы диапазона от 0 до 15.
 </FloatingColumn>
 
-<RecipeFor id="calculator" />
+<Recipe id="little_big_redstone:logic/calculator" />
 
 Калькулятор может принимать от 2 до 10 входов. 
 Входные сигналы складываются или вычитаются в зависимости от выбранного режима. 

@@ -28,7 +28,7 @@ item_ids:
 
 <Row>
     <Column>
-       <RecipeFor id="xor_gate" />
+       <Recipe id="little_big_redstone:logic/xor_gate" />
     </Column>
 
     <Column>

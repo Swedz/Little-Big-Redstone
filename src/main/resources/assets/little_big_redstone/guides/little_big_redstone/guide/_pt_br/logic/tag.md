@@ -12,7 +12,7 @@ item_ids:
 
 # Etiqueta
 
-<RecipeFor id="tag" />
+<Recipe id="little_big_redstone:logic/tag" />
 
 As Etiquetas permitem enviar sinais sem fio entre circuitos. As Etiquetas têm dois modos: sensor e emissor. Sensores 
 são como você recebe sinais, e emissores são como você transmite sinais.

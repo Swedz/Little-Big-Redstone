@@ -12,7 +12,7 @@ item_ids:
 
 # Aleatorizador
 
-<RecipeFor id="randomizer" />
+<Recipe id="little_big_redstone:logic/randomizer" />
 
 O aleatorizador pode ter entre 1 e 10 saídas, no entanto, apenas uma saída pode estar LIGADA por vez. Quando a entrada
 está LIGADA, a cada tick, uma saída aleatória estará LIGADA por uma porcentagem de tempo configurável. Por padrão, a chance é de 100%,

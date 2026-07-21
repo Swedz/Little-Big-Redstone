@@ -20,7 +20,7 @@ item_ids:
 
 <Row>
 	<Column>
-		<RecipeFor id="pulse_throttler" />
+		<Recipe id="little_big_redstone:logic/pulse_throttler" />
 	</Column>
 
 	<Column>

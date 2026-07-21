@@ -11,7 +11,7 @@ item_ids:
 
 <FloatingColumn align="right">
 	<PaddedBox left="5">
-		<RecipeFor id="redstone_bit" />
+		<Recipe id="little_big_redstone:redstone_bit" />
 	</PaddedBox>
 </FloatingColumn>
 

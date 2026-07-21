@@ -19,7 +19,7 @@ item_ids:
 
 <Row>
     <Column>
-       <RecipeFor id="t_flip_flop" />
+       <Recipe id="little_big_redstone:logic/t_flip_flop" />
     </Column>
 
     <Column>

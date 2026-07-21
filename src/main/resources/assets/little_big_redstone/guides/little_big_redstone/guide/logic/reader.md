@@ -18,7 +18,7 @@ item_ids:
 	block for comparators. Otherwise, readers will only ever yield an output value of 0 (OFF) or 1 (ON).
 </FloatingColumn>
 
-<RecipeFor id="reader" />
+<Recipe id="little_big_redstone:logic/reader" />
 
 The reader is a logic component that has no input inside of the circuit. Instead, the reader will output a signal based
 on the fullness of the container directly adjacent to the microchip in the direction it is configured to.

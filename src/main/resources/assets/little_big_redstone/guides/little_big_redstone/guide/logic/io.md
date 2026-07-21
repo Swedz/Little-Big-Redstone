@@ -17,7 +17,7 @@ item_ids:
 	I/O ports yield an output signal value equal to the input signal value.
 </FloatingColumn>
 
-<RecipeFor id="io" />
+<Recipe id="little_big_redstone:logic/io" />
 
 I/O ports are how you can input and output redstone signals to and from your circuits. When I/O ports are placed into
 a circuit, you will be able to see redstone faces on the sides of the microchip block that may accept or provide a

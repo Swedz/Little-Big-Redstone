@@ -26,7 +26,7 @@ item_ids:
 
 <Row>
 	<Column>
-		<RecipeFor id="not_gate" />
+		<Recipe id="little_big_redstone:logic/not_gate" />
 	</Column>
 
 	<Column>

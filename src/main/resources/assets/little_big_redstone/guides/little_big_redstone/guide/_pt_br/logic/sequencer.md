@@ -14,7 +14,7 @@ item_ids:
 
 <Row>
 	<Column>
-		<RecipeFor id="sequencer" />
+		<Recipe id="little_big_redstone:logic/sequencer" />
 	</Column>
 
 	<Column>

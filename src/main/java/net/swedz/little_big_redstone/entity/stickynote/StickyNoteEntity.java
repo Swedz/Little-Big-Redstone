@@ -549,11 +549,11 @@ public final class StickyNoteEntity extends HangingEntity
 		this.setFacing(input.read("Facing", Direction.CODEC).orElseThrow());
 		this.setQuadrant(input.read("Quadrant", Quadrant.CODEC).orElseThrow());
 		this.setColor(input.read("Color", DyeColor.CODEC).orElseThrow());
-		this.setTextColor(input.read("TextColor", DyeColor.CODEC).orElseThrow());
+		this.setTextColor(input.read("TextColor", DyeColor.CODEC).orElse(StickyNoteItem.getDefaultTextColor(this.getColor())));
 		this.setItemName(input.read("ItemName", ComponentSerialization.CODEC).orElse(null));
 		this.setNote(input.read("StickyNote", StickyNote.CODEC).orElseThrow());
 		this.setEditable(input.getBooleanOr("Editable", true));
-		this.setDisplayItem(input.read("DisplayItem", ItemStackInstance.CODEC).orElseThrow().asStack());
+		this.setDisplayItem(input.read("DisplayItem", ItemStackInstance.CODEC).orElse(ItemStackInstance.EMPTY).asStack());
 		
 		this.recalculateBoundingBox();
 	}

@@ -22,7 +22,7 @@ item_ids:
 	so on and so forth.
 </FloatingColumn>
 
-<RecipeFor id="selector" />
+<Recipe id="little_big_redstone:logic/selector" />
 
 The selector can have anywhere from 2 to 10 outputs, and only one of the outputs will be ON at any given time. There
 are two modes for the selector: Counter and Setter (see the below sections for more information).
