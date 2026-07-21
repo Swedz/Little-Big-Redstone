@@ -26,7 +26,7 @@ item_ids:
 
 <FloatingColumn align="right">
     <PaddedBox left="5">
-       <RecipeFor id="red_floppy_disk" />
+       <Recipe id="little_big_redstone:floppy_disk/red" />
     </PaddedBox>
 </FloatingColumn>
 

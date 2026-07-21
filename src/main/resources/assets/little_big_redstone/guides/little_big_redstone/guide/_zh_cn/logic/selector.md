@@ -19,7 +19,7 @@ item_ids:
 	若未处于直通模式，输出信号的强度则会与序号相等（从1开始）。例如，第一个输出的强度为1，第二个为2，第三个为3，以此类推。
 </FloatingColumn>
 
-<RecipeFor id="selector" />
+<Recipe id="little_big_redstone:logic/selector" />
 
 选择器的输出端口数目最少为2，最多10，且同一时刻只会有一个输出为ON。选择器共有两种模式：计数器和置位器（更多内容见此页面后续）。
 

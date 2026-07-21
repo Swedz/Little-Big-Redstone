@@ -28,7 +28,7 @@ item_ids:
 
 <Row>
 	<Column>
-		<RecipeFor id="rs_nor_latch" />
+		<Recipe id="little_big_redstone:logic/rs_nor_latch" />
 	</Column>
 
 	<Column>

@@ -12,7 +12,7 @@ item_ids:
 
 # Leitor
 
-<RecipeFor id="reader" />
+<Recipe id="little_big_redstone:logic/reader" />
 
 O leitor é um componente lógico que não tem entrada dentro do circuito. Em vez disso, o leitor emitirá um sinal baseado
 na capacidade de preenchimento do contêiner diretamente adjacente ao microchip, na direção em que está configurado.

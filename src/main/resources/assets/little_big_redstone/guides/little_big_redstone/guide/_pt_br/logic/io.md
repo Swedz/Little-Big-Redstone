@@ -12,7 +12,7 @@ item_ids:
 
 # Porta de E/S
 
-<RecipeFor id="io" />
+<Recipe id="little_big_redstone:logic/io" />
 
 Portas de E/S são a forma de você inserir e extrair sinais de redstone para e de seus circuitos. Quando Portas de E/S são colocadas em
 um circuito, você poderá ver faces de redstone nas laterais do bloco de microchip que podem aceitar ou fornecer um

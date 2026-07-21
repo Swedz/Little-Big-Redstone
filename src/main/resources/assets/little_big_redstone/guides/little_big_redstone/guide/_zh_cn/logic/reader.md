@@ -17,7 +17,7 @@ item_ids:
 	在比较器模式下，读取器会取对应方块的比较器输出值作为输出。其他情况下，读取器只会输出0（OFF）或1（ON）。
 </FloatingColumn>
 
-<RecipeFor id="reader" />
+<Recipe id="little_big_redstone:logic/reader" />
 
 读取器是一种逻辑元件。它不会接收来自电路内部的信号，而是会根据相邻容器方块的填充程度输出信号，读取的方向可配置。
 

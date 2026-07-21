@@ -12,7 +12,7 @@ item_ids:
 
 # Seletor
 
-<RecipeFor id="selector" />
+<Recipe id="little_big_redstone:logic/selector" />
 
 O seletor pode ter de 2 a 10 saídas, e apenas uma das saídas estará LIGADA em um dado momento. Existem
 dois modos para o seletor: Contador e Definidor (veja as seções abaixo para mais informações).

@@ -17,7 +17,7 @@ item_ids:
 	比较器所输出信号的值与比较基准信号的相等。基准可为设定中指定的值，或在比较器设为直通时取首个输入信号的值。
 </FloatingColumn>
 
-<RecipeFor id="comparator" />
+<Recipe id="little_big_redstone:logic/comparator" />
 
 比较器是能将1到10个输入信号（B₁ - B₁₀）的信号与某个其他信号（A）进行比较的逻辑元件。模式选项决定了输出ON需要全部输入均通过比较，还是任意一个通过比较即可。输出为ON时，其强度等于比较基准信号A的强度。
 

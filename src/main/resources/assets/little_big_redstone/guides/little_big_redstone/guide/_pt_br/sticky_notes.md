@@ -26,7 +26,7 @@ item_ids:
 
 <FloatingColumn align="right">
 	<PaddedBox left="5">
-		<RecipeFor id="red_sticky_note" />
+		<Recipe id="little_big_redstone:sticky_note/red" />
 	</PaddedBox>
 </FloatingColumn>
 
@@ -59,25 +59,25 @@ item_ids:
 
 		<PaddedBox left="2" top="10">
 			<GameScene zoom="3.3" padding="0" background="transparent">
-				<Entity id="little_big_redstone:sticky_note" x="0.75" y="0.75" z="0.96875" rotationY="180" rotationX="0" data="{StickyNote:' ',TextColor:15,Color:14,Facing:0,AttachedFace:2,Quadrant:0}" />
-				<Entity id="little_big_redstone:sticky_note" x="0.25" y="0.75" z="0.96875" rotationY="180" rotationX="0" data="{StickyNote:'',Color:1,Facing:0,AttachedFace:2,Quadrant:1}" />
-				<Entity id="little_big_redstone:sticky_note" x="-0.75" y="0.75" z="0.96875" rotationY="180" rotationX="0" data="{StickyNote:'',Color:4,Facing:0,AttachedFace:2,Quadrant:0}" />
-				<Entity id="little_big_redstone:sticky_note" x="-0.25" y="0.75" z="0.96875" rotationY="180" rotationX="0" data="{StickyNote:'',Color:5,Facing:0,AttachedFace:2,Quadrant:1}" />
+				<Entity id="little_big_redstone:sticky_note" x="0.75" y="0.75" z="0.96875" rotationY="180" rotationX="0" data="{block_pos:[0,0,0],StickyNote:' ',TextColor:'black',Color:'red',Facing:'north',AttachedFace:'north',Quadrant:'top_left'}" />
+				<Entity id="little_big_redstone:sticky_note" x="0.25" y="0.75" z="0.96875" rotationY="180" rotationX="0" data="{block_pos:[0,0,0],StickyNote:'',Color:'orange',Facing:'north',AttachedFace:'north',Quadrant:'top_right'}" />
+				<Entity id="little_big_redstone:sticky_note" x="-0.75" y="0.75" z="0.96875" rotationY="180" rotationX="0" data="{block_pos:[0,0,0],StickyNote:'',Color:'yellow',Facing:'north',AttachedFace:'north',Quadrant:'top_left'}" />
+				<Entity id="little_big_redstone:sticky_note" x="-0.25" y="0.75" z="0.96875" rotationY="180" rotationX="0" data="{block_pos:[0,0,0],StickyNote:'',Color:'lime',Facing:'north',AttachedFace:'north',Quadrant:'top_right'}" />
 
-				<Entity id="little_big_redstone:sticky_note" x="0.75" y="0.25" z="0.96875" rotationY="180" rotationX="0" data="{StickyNote:'',Color:13,Facing:0,AttachedFace:2,Quadrant:2}" />
-				<Entity id="little_big_redstone:sticky_note" x="0.25" y="0.25" z="0.96875" rotationY="180" rotationX="0" data="{StickyNote:' ',TextColor:15,Color:9,Facing:0,AttachedFace:2,Quadrant:3}" />
-				<Entity id="little_big_redstone:sticky_note" x="-0.75" y="0.25" z="0.96875" rotationY="180" rotationX="0" data="{StickyNote:'',Color:3,Facing:0,AttachedFace:2,Quadrant:2}" />
-				<Entity id="little_big_redstone:sticky_note" x="-0.25" y="0.25" z="0.96875" rotationY="180" rotationX="0" data="{StickyNote:'',Color:11,Facing:0,AttachedFace:2,Quadrant:3}" />
+				<Entity id="little_big_redstone:sticky_note" x="0.75" y="0.25" z="0.96875" rotationY="180" rotationX="0" data="{block_pos:[0,0,0],StickyNote:'',Color:'green',Facing:'north',AttachedFace:'north',Quadrant:'bottom_left'}" />
+				<Entity id="little_big_redstone:sticky_note" x="0.25" y="0.25" z="0.96875" rotationY="180" rotationX="0" data="{block_pos:[0,0,0],StickyNote:' ',TextColor:'black',Color:'cyan',Facing:'north',AttachedFace:'north',Quadrant:'bottom_right'}" />
+				<Entity id="little_big_redstone:sticky_note" x="-0.75" y="0.25" z="0.96875" rotationY="180" rotationX="0" data="{block_pos:[0,0,0],StickyNote:'',Color:'light_blue',Facing:'north',AttachedFace:'north',Quadrant:'bottom_left'}" />
+				<Entity id="little_big_redstone:sticky_note" x="-0.25" y="0.25" z="0.96875" rotationY="180" rotationX="0" data="{block_pos:[0,0,0],StickyNote:'',Color:'blue',Facing:'north',AttachedFace:'north',Quadrant:'bottom_right'}" />
 	
-				<Entity id="little_big_redstone:sticky_note" x="0.75" y="-0.75" z="0.96875" rotationY="180" rotationX="0" data="{StickyNote:'',Color:10,Facing:0,AttachedFace:2,Quadrant:0}" />
-				<Entity id="little_big_redstone:sticky_note" x="0.25" y="-0.75" z="0.96875" rotationY="180" rotationX="0" data="{StickyNote:'',Color:2,Facing:0,AttachedFace:2,Quadrant:1}" />
-				<Entity id="little_big_redstone:sticky_note" x="-0.75" y="-0.75" z="0.96875" rotationY="180" rotationX="0" data="{StickyNote:' ',TextColor:15,Color:6,Facing:0,AttachedFace:2,Quadrant:0}" />
-				<Entity id="little_big_redstone:sticky_note" x="-0.25" y="-0.75" z="0.96875" rotationY="180" rotationX="0" data="{StickyNote:'',Color:12,Facing:0,AttachedFace:2,Quadrant:1}" />
+				<Entity id="little_big_redstone:sticky_note" x="0.75" y="-0.75" z="0.96875" rotationY="180" rotationX="0" data="{block_pos:[0,0,0],StickyNote:'',Color:'purple',Facing:'north',AttachedFace:'north',Quadrant:'top_left'}" />
+				<Entity id="little_big_redstone:sticky_note" x="0.25" y="-0.75" z="0.96875" rotationY="180" rotationX="0" data="{block_pos:[0,0,0],StickyNote:'',Color:'magenta',Facing:'north',AttachedFace:'north',Quadrant:'top_right'}" />
+				<Entity id="little_big_redstone:sticky_note" x="-0.75" y="-0.75" z="0.96875" rotationY="180" rotationX="0" data="{block_pos:[0,0,0],StickyNote:' ',TextColor:'black',Color:'pink',Facing:'north',AttachedFace:'north',Quadrant:'top_left'}" />
+				<Entity id="little_big_redstone:sticky_note" x="-0.25" y="-0.75" z="0.96875" rotationY="180" rotationX="0" data="{block_pos:[0,0,0],StickyNote:'',Color:'brown',Facing:'north',AttachedFace:'north',Quadrant:'top_right'}" />
 	
-				<Entity id="little_big_redstone:sticky_note" x="0.75" y="-0.25" z="0.96875" rotationY="180" rotationX="0" data="{StickyNote:'',Color:0,Facing:0,AttachedFace:2,Quadrant:2}" />
-				<Entity id="little_big_redstone:sticky_note" x="0.25" y="-0.25" z="0.96875" rotationY="180" rotationX="0" data="{StickyNote:'',Color:8,Facing:0,AttachedFace:2,Quadrant:3}" />
-				<Entity id="little_big_redstone:sticky_note" x="-0.75" y="-0.25" z="0.96875" rotationY="180" rotationX="0" data="{StickyNote:'',Color:7,Facing:0,AttachedFace:2,Quadrant:2}" />
-				<Entity id="little_big_redstone:sticky_note" x="-0.25" y="-0.25" z="0.96875" rotationY="180" rotationX="0" data="{StickyNote:' ',TextColor:0,Color:15,Facing:0,AttachedFace:2,Quadrant:3}" />
+				<Entity id="little_big_redstone:sticky_note" x="0.75" y="-0.25" z="0.96875" rotationY="180" rotationX="0" data="{block_pos:[0,0,0],StickyNote:'',Color:'white',Facing:'north',AttachedFace:'north',Quadrant:'bottom_left'}" />
+				<Entity id="little_big_redstone:sticky_note" x="0.25" y="-0.25" z="0.96875" rotationY="180" rotationX="0" data="{block_pos:[0,0,0],StickyNote:'',Color:'light_gray',Facing:'north',AttachedFace:'north',Quadrant:'bottom_right'}" />
+				<Entity id="little_big_redstone:sticky_note" x="-0.75" y="-0.25" z="0.96875" rotationY="180" rotationX="0" data="{block_pos:[0,0,0],StickyNote:'',Color:'gray',Facing:'north',AttachedFace:'north',Quadrant:'bottom_left'}" />
+				<Entity id="little_big_redstone:sticky_note" x="-0.25" y="-0.25" z="0.96875" rotationY="180" rotationX="0" data="{block_pos:[0,0,0],StickyNote:' ',TextColor:'white',Color:'black',Facing:'north',AttachedFace:'north',Quadrant:'bottom_right'}" />
 	
 				<IsometricCamera yaw="180" pitch="0" />
 			</GameScene>

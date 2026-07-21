@@ -17,7 +17,7 @@ item_ids:
 	标信器所输出信号的值与输入信号的相等。在有多个输入信号的情况下（如阈值>1），则使用最高信号的值用作输出。
 </FloatingColumn>
 
-<RecipeFor id="tag" />
+<Recipe id="little_big_redstone:logic/tag" />
 
 标信器可在电路间无线收发信号。它有两个模式：发信和探测。探测端是接受信号的一端，发信端则是发送的一端。
 
