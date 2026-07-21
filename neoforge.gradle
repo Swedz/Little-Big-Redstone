@@ -52,7 +52,7 @@ neoForge {
 			it.systemProperty 'mixin.debug.export', 'true'
 			it.systemProperty 'mixin.debug.verbose', 'true'
 
-			it.systemProperty "guideme.${mod_id}.guide.sources", file("src/main/resources/assets/${mod_id}/guide").absolutePath
+			it.systemProperty "guideme.${mod_id}.guide.sources", file("src/main/resources/assets/${mod_id}/guides/${mod_id}/guide").absolutePath
 		}
 
 		server {
