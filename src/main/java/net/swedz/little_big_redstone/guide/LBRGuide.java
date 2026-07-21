@@ -33,7 +33,6 @@ public final class LBRGuide
 	public static void init()
 	{
 		Guide.builder(LBR.id("guide"))
-				.folder("guide")
 				.extension(TagCompiler.EXTENSION_POINT, new UnderlinedTextTagCompiler())
 				.extension(TagCompiler.EXTENSION_POINT, new PaddedBoxTagCompiler())
 				.extension(TagCompiler.EXTENSION_POINT, new MarginFloatingImageCompiler())
