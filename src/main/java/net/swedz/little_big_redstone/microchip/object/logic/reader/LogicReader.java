@@ -7,7 +7,6 @@ import io.netty.buffer.ByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.util.Mth;
 import net.minecraft.world.item.DyeColor;
 import net.swedz.little_big_redstone.LBRLogicTypes;
 import net.swedz.little_big_redstone.compat.grandpower.GrandPowerProxy;
@@ -89,22 +88,20 @@ public final class LogicReader extends LogicComponent<LogicReader, LogicReaderCo
 				if(handler != null)
 				{
 					long totalItems = 0;
-					long maxItems = 0;
-					for(int slot = 0; slot < handler.getSlots(); slot++)
+					float filledSlots = 0;
+					int slots = handler.getSlots();
+					for(int slot = 0; slot < slots; slot++)
 					{
 						var stack = handler.getStackInSlot(slot);
-						if(stack.isEmpty())
+						if(!stack.isEmpty())
 						{
-							maxItems += Mth.clamp(handler.getSlotLimit(slot), 0, 64);
-						}
-						else
-						{
-							totalItems += stack.getCount();
-							maxItems += stack.getMaxStackSize();
+							int amount = stack.getCount();
+							totalItems += amount;
+							filledSlots += amount / (float) stack.getMaxStackSize();
 						}
 					}
 					fill = isPercentage ?
-							((double) totalItems / maxItems) :
+							((double) filledSlots / slots) :
 							totalItems;
 				}
 			}
@@ -116,14 +113,20 @@ public final class LogicReader extends LogicComponent<LogicReader, LogicReaderCo
 				if(handler != null)
 				{
 					long totalFluid = 0;
-					long maxFluid = 0;
-					for(int tank = 0; tank < handler.getTanks(); tank++)
+					float filledSlots = 0;
+					int slots = handler.getTanks();
+					for(int slot = 0; slot < slots; slot++)
 					{
-						totalFluid += handler.getFluidInTank(tank).getAmount();
-						maxFluid += handler.getTankCapacity(tank);
+						var stack = handler.getFluidInTank(slot);
+						if(!stack.isEmpty())
+						{
+							long amount = stack.getAmount();
+							totalFluid += amount;
+							filledSlots += amount / (float) handler.getTankCapacity(slot);
+						}
 					}
 					fill = isPercentage ?
-							((double) totalFluid / maxFluid) :
+							((double) filledSlots / slots) :
 							totalFluid;
 				}
 			}
