@@ -7,7 +7,6 @@ import io.netty.buffer.ByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.util.Mth;
 import net.minecraft.world.item.DyeColor;
 import net.swedz.little_big_redstone.LBRLogicTypes;
 import net.swedz.little_big_redstone.microchip.awareness.AwarenessType;
@@ -87,23 +86,21 @@ public final class LogicReader extends LogicComponent<LogicReader, LogicReaderCo
 				var handler = awareness.get(context.level(), context.blockPos(), config.direction());
 				if(handler != null)
 				{
-					int totalItems = 0;
-					int maxItems = 0;
-					for(int slot = 0; slot < handler.size(); slot++)
+					long totalItems = 0;
+					float filledSlots = 0;
+					int slots = handler.size();
+					for(int slot = 0; slot < slots; slot++)
 					{
 						var resource = handler.getResource(slot);
-						if(resource.isEmpty())
+						if(!resource.isEmpty())
 						{
-							maxItems += Mth.clamp(handler.getCapacityAsInt(slot, resource), 0, 64);
-						}
-						else
-						{
-							totalItems += handler.getAmountAsInt(slot);
-							maxItems += resource.getMaxStackSize();
+							long amount = handler.getAmountAsLong(slot);
+							totalItems += amount;
+							filledSlots += amount / (float) resource.getMaxStackSize();
 						}
 					}
 					fill = isPercentage ?
-							((float) totalItems / maxItems) :
+							((double) filledSlots / slots) :
 							totalItems;
 				}
 			}
@@ -114,15 +111,21 @@ public final class LogicReader extends LogicComponent<LogicReader, LogicReaderCo
 				var handler = awareness.get(context.level(), context.blockPos(), config.direction());
 				if(handler != null)
 				{
-					int totalFluid = 0;
-					int maxFluid = 0;
-					for(int tank = 0; tank < handler.size(); tank++)
+					long totalFluid = 0;
+					float filledSlots = 0;
+					int slots = handler.size();
+					for(int slot = 0; slot < slots; slot++)
 					{
-						totalFluid += handler.getAmountAsInt(tank);
-						maxFluid += handler.getCapacityAsInt(tank, handler.getResource(tank));
+						var resource = handler.getResource(slot);
+						if(!resource.isEmpty())
+						{
+							long amount = handler.getAmountAsLong(slot);
+							totalFluid += amount;
+							filledSlots += amount / (float) handler.getCapacityAsInt(slot, handler.getResource(slot));
+						}
 					}
 					fill = isPercentage ?
-							((float) totalFluid / maxFluid) :
+							((double) filledSlots / slots) :
 							totalFluid;
 				}
 			}
@@ -133,10 +136,10 @@ public final class LogicReader extends LogicComponent<LogicReader, LogicReaderCo
 				var handler = awareness.get(context.level(), context.blockPos(), config.direction());
 				if(handler != null)
 				{
-					int totalEnergy = handler.getAmountAsInt();
-					int maxEnergy = handler.getCapacityAsInt();
+					long totalEnergy = handler.getAmountAsLong();
+					long maxEnergy = handler.getCapacityAsLong();
 					fill = isPercentage ?
-							((float) totalEnergy / maxEnergy) :
+							((double) totalEnergy / maxEnergy) :
 							totalEnergy;
 				}
 			}
