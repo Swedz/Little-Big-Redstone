@@ -4,6 +4,7 @@ import com.google.common.collect.Lists;
 import com.mojang.blaze3d.platform.InputConstants;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
+import net.minecraft.client.gui.components.StringWidget;
 import net.minecraft.client.gui.components.Tooltip;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.input.KeyEvent;
@@ -27,6 +28,8 @@ import net.swedz.little_big_redstone.microchip.object.logic.config.LogicConfig;
 import net.swedz.little_big_redstone.microchip.object.logic.config.menu.LogicConfigButtonReference;
 import net.swedz.little_big_redstone.microchip.object.logic.config.menu.LogicConfigMenuBuilder;
 import net.swedz.little_big_redstone.microchip.object.logic.config.menu.LogicConfigMenuProvider;
+import net.swedz.little_big_redstone.microchip.object.logic.config.menu.LogicConfigTextLabelOverflow;
+import net.swedz.little_big_redstone.microchip.object.logic.config.menu.LogicConfigTextLabelReference;
 import net.swedz.little_big_redstone.network.packet.ReturnToMicrochipMenuPacket;
 import net.swedz.little_big_redstone.network.packet.WriteLogicConfigPacket;
 
@@ -394,6 +397,51 @@ public final class LogicConfigScreen extends AbstractContainerScreen<LogicConfig
 			public LogicConfigButtonReference<String> setVisible(boolean visible)
 			{
 				editBox.visible = visible;
+				return this;
+			}
+		};
+	}
+	
+	@Override
+	public LogicConfigTextLabelReference addTextLabel(Component text, int x, int y, int maxWidth, LogicConfigTextLabelOverflow overflow)
+	{
+		var widget = new StringWidget(configX + x, configY + y, font.width(text), font.lineHeight, text, font)
+		{
+			@Override
+			public void setMessage(Component message)
+			{
+				super.setMessage(message);
+				width = font.width(message);
+			}
+		};
+		widget.setMaxWidth(
+				maxWidth,
+				switch(overflow)
+				{
+					case CLAMPED -> StringWidget.TextOverflow.CLAMPED;
+					case SCROLLING -> StringWidget.TextOverflow.SCROLLING;
+				}
+		);
+		this.addRenderableWidget(widget);
+		return new LogicConfigTextLabelReference()
+		{
+			@Override
+			public LogicConfigTextLabelReference setText(Component text)
+			{
+				widget.setMessage(text);
+				return this;
+			}
+			
+			@Override
+			public boolean isVisible()
+			{
+				return widget.visible;
+			}
+			
+			@Override
+			public LogicConfigTextLabelReference setVisible(boolean visible)
+			{
+				widget.visible = visible;
 				return this;
 			}
 		};
