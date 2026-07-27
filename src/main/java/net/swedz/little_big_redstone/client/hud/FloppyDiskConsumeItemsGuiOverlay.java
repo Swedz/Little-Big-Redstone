@@ -197,7 +197,7 @@ public final class FloppyDiskConsumeItemsGuiOverlay
 					new RequestMicrochipWatcherPacket(targetBlock, false).sendToServer();
 				}
 			}
-			else if(watchedMicrochip != null)
+			else if(watchedMicrochip != null && targetBlock != null)
 			{
 				new RequestMicrochipWatcherPacket(targetBlock, false).sendToServer();
 			}
