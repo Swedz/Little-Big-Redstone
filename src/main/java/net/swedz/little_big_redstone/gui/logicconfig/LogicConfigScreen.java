@@ -410,7 +410,7 @@ public final class LogicConfigScreen extends AbstractContainerScreen<LogicConfig
 	@Override
 	public LogicConfigTextLabelReference addTextLabel(Component text, int x, int y, LogicConfigTextLabelAlignment alignment)
 	{
-		var widget = new StringWidget(x, y, text, font)
+		var widget = new StringWidget(configX + x, configY + y, font.width(text), font.lineHeight, text, font)
 		{
 			@Override
 			public void setMessage(Component message)
@@ -425,6 +425,7 @@ public final class LogicConfigScreen extends AbstractContainerScreen<LogicConfig
 			case CENTER -> widget.alignCenter();
 			case RIGHT -> widget.alignRight();
 		}
+		this.addRenderableWidget(widget);
 		return new LogicConfigTextLabelReference()
 		{
 			@Override
