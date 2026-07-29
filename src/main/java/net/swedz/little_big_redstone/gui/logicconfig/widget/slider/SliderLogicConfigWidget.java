@@ -1,7 +1,9 @@
 package net.swedz.little_big_redstone.gui.logicconfig.widget.slider;
 
+import com.mojang.blaze3d.platform.InputConstants;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
+import net.minecraft.client.input.CharacterEvent;
 import net.minecraft.client.input.KeyEvent;
 import net.minecraft.client.input.MouseButtonEvent;
 import net.minecraft.network.chat.Component;
@@ -115,7 +117,7 @@ public class SliderLogicConfigWidget extends ExtendedSlider implements LogicConf
 	public boolean keyPressed(KeyEvent event)
 	{
 		// We cannot support stepSizes of <= 0 because ExtendedSlider#setSliderValue is private
-		if(stepSize <= 0D)
+		if(stepSize <= 0)
 		{
 			return false;
 		}
@@ -139,22 +141,34 @@ public class SliderLogicConfigWidget extends ExtendedSlider implements LogicConf
 			return false;
 		}
 		
-		if(isInteger)
+		if(isInteger && keyCode == InputConstants.KEY_BACKSPACE && !typed.isEmpty())
 		{
-			if(keyCode >= GLFW.GLFW_KEY_0 && keyCode <= GLFW.GLFW_KEY_9)
-			{
-				int number = keyCode - GLFW.GLFW_KEY_0;
-				typed += number;
-				this.setValue(Integer.parseInt(typed));
-				typed = this.getValueString();
-				return false;
-			}
-			else if(keyCode == GLFW.GLFW_KEY_BACKSPACE && !typed.isEmpty())
-			{
-				typed = typed.substring(0, typed.length() - 1);
-				this.setValue(typed.isEmpty() ? 0 : Integer.parseInt(typed));
-				return false;
-			}
+			typed = typed.substring(0, typed.length() - 1);
+			this.setValue(typed.isEmpty() ? 0 : Integer.parseInt(typed));
+			return false;
+		}
+		
+		return false;
+	}
+	
+	@Override
+	public boolean charTyped(CharacterEvent event)
+	{
+		// We cannot support stepSizes of <= 0 because ExtendedSlider#setSliderValue is private
+		if(stepSize <= 0)
+		{
+			return false;
+		}
+		
+		int keyCode = event.codepoint();
+		
+		if(isInteger && keyCode >= InputConstants.KEY_0 && keyCode <= InputConstants.KEY_9)
+		{
+			int number = keyCode - InputConstants.KEY_0;
+			typed += number;
+			this.setValue(Integer.parseInt(typed));
+			typed = this.getValueString();
+			return false;
 		}
 		
 		return false;
