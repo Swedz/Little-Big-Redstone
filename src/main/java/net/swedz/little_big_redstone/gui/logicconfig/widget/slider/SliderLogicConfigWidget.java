@@ -1,5 +1,6 @@
 package net.swedz.little_big_redstone.gui.logicconfig.widget.slider;
 
+import com.mojang.blaze3d.platform.InputConstants;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
@@ -20,9 +21,23 @@ public class SliderLogicConfigWidget extends ExtendedSlider implements LogicConf
 	
 	private String typed = "";
 	
-	public SliderLogicConfigWidget(int x, int y, int width, int height, int color, Component prefix, Component suffix,
-								   double minValue, double maxValue, double initialValue, double stepSize, int precision, boolean drawString,
-								   ValueStringifier valueStringifier, OnValueChange onChange)
+	public SliderLogicConfigWidget(
+			int x,
+			int y,
+			int width,
+			int height,
+			int color,
+			Component prefix,
+			Component suffix,
+			double minValue,
+			double maxValue,
+			double initialValue,
+			double stepSize,
+			int precision,
+			boolean drawString,
+			ValueStringifier valueStringifier,
+			OnValueChange onChange
+	)
 	{
 		super(x, y, width, height, prefix, suffix, minValue, maxValue, initialValue, stepSize, precision, drawString);
 		
@@ -36,9 +51,21 @@ public class SliderLogicConfigWidget extends ExtendedSlider implements LogicConf
 		this.updateMessage();
 	}
 	
-	public SliderLogicConfigWidget(int x, int y, int width, int height, int color, Component prefix, Component suffix,
-								   double minValue, double maxValue, double initialValue, boolean drawString,
-								   ValueStringifier valueStringifier, OnValueChange onChange)
+	public SliderLogicConfigWidget(
+			int x,
+			int y,
+			int width,
+			int height,
+			int color,
+			Component prefix,
+			Component suffix,
+			double minValue,
+			double maxValue,
+			double initialValue,
+			boolean drawString,
+			ValueStringifier valueStringifier,
+			OnValueChange onChange
+	)
 	{
 		super(x, y, width, height, prefix, suffix, minValue, maxValue, initialValue, drawString);
 		
@@ -110,22 +137,32 @@ public class SliderLogicConfigWidget extends ExtendedSlider implements LogicConf
 			return false;
 		}
 		
-		if(isInteger)
+		if(isInteger && keyCode == InputConstants.KEY_BACKSPACE && !typed.isEmpty())
 		{
-			if(keyCode >= GLFW.GLFW_KEY_0 && keyCode <= GLFW.GLFW_KEY_9)
-			{
-				int number = keyCode - GLFW.GLFW_KEY_0;
-				typed += number;
-				this.setValue(Integer.parseInt(typed));
-				typed = this.getValueString();
-				return false;
-			}
-			else if(keyCode == GLFW.GLFW_KEY_BACKSPACE && !typed.isEmpty())
-			{
-				typed = typed.substring(0, typed.length() - 1);
-				this.setValue(typed.isEmpty() ? 0 : Integer.parseInt(typed));
-				return false;
-			}
+			typed = typed.substring(0, typed.length() - 1);
+			this.setValue(typed.isEmpty() ? 0 : Integer.parseInt(typed));
+			return false;
+		}
+		
+		return false;
+	}
+	
+	@Override
+	public boolean charTyped(char codePoint, int modifiers)
+	{
+		// We cannot support stepSizes of <= 0 because ExtendedSlider#setSliderValue is private
+		if(stepSize <= 0)
+		{
+			return false;
+		}
+		
+		if(isInteger && codePoint >= InputConstants.KEY_0 && codePoint <= InputConstants.KEY_9)
+		{
+			int number = codePoint - InputConstants.KEY_0;
+			typed += number;
+			this.setValue(Integer.parseInt(typed));
+			typed = this.getValueString();
+			return false;
 		}
 		
 		return false;
