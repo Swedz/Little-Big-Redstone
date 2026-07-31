@@ -12,6 +12,7 @@ jobs:
       MODMAVEN_PASSWORD: ${{ secrets.MODMAVEN_PASSWORD }}
       CURSEFORGE_API_KEY: ${{ secrets.CURSEFORGE_API_KEY }}
       MODRINTH_API_KEY: ${{ secrets.MODRINTH_API_KEY }}
+      RELEASE_WEBHOOK_URL: ${{ secrets.RELEASE_WEBHOOK_URL }}
     steps:
       # Set up Github actions, JDK & Gradle
       - uses: actions/checkout@v2
