@@ -11,6 +11,7 @@ import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.Container;
 import net.minecraft.world.MenuProvider;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
@@ -133,7 +134,7 @@ public final class MicrochipBlockEntity extends BlockEntity implements MenuProvi
 	private boolean isMenuValid(Player player)
 	{
 		return !this.isRemoved() &&
-			   player.level() == level && worldPosition.getCenter().distanceTo(player.position()) <= 16;
+			   Container.stillValidBlockEntity(this, player);
 	}
 	
 	@Override
