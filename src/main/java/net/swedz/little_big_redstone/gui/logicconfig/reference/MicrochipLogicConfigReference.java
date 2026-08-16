@@ -71,6 +71,6 @@ public record MicrochipLogicConfigReference(
 	@Override
 	public boolean isStillValid(Player player)
 	{
-		return player.blockPosition().closerThan(pos, 10);
+		return player.distanceToSqr(pos.getCenter()) < 10 * 10;
 	}
 }
