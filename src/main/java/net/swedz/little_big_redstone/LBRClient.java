@@ -95,6 +95,7 @@ public final class LBRClient
 				.build(LBRClientConfig.class)
 				.load();
 		bus.addListener(FMLCommonSetupEvent.class, (event) -> instance.load(false));
+		file.registerReloadListeners(bus, instance);
 		CONFIG = instance.config();
 	}
 	
