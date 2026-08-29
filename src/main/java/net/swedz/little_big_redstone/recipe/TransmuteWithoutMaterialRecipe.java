@@ -60,7 +60,7 @@ public final class TransmuteWithoutMaterialRecipe extends NormalCraftingRecipe
 	@Override
 	public boolean matches(CraftingInput input, Level level)
 	{
-		return ingredient.test(input.getItem(0));
+		return !input.items().isEmpty() && ingredient.test(input.getItem(0));
 	}
 	
 	@Override
