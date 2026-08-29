@@ -7,7 +7,8 @@ dependencies {
 	}
 
 	implementation "net.swedz:tesseract-api-neoforge:${tesseract_version}"
-	interfaceInjectionData "net.swedz:tesseract-api-neoforge:${tesseract_version}"
+	// TODO wait for modmaven to include .json files
+	// interfaceInjectionData "net.swedz:tesseract-api-neoforge:${tesseract_version}"
 
 	// TODO wait for EMI
 	/*if (project.runtime_include_emi.toBoolean()) {
