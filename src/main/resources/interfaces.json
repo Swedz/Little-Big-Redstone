@@ -2,5 +2,14 @@
     "net/minecraft/world/entity/player/Player": [
         "net/swedz/little_big_redstone/block/microchip/MicrochipWatcher",
         "net/swedz/little_big_redstone/entity/stickynote/StickyNoteWatcher"
+    ],
+    "net/minecraft/client/gui/GuiGraphicsExtractor": [
+        "net/swedz/tesseract/neoforge/gui/GuiGraphicsExtractorExtension"
+    ],
+    "net/minecraft/client/data/models/ModelProvider$BlockStateGeneratorCollector": [
+        "net/swedz/tesseract/neoforge/helper/datagen/BlockStateGeneratorCollectorByIdentifier"
+    ],
+    "net/minecraft/client/data/models/BlockModelGenerators": [
+        "net/swedz/tesseract/neoforge/helper/datagen/BlockModelGeneratorsByIdentifier"
     ]
 }
