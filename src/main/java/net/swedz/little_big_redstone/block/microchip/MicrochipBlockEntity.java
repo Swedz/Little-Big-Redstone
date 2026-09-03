@@ -11,6 +11,7 @@ import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.Clearable;
 import net.minecraft.world.Container;
 import net.minecraft.world.MenuProvider;
 import net.minecraft.world.entity.player.Inventory;
@@ -41,7 +42,7 @@ import java.util.UUID;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
-public final class MicrochipBlockEntity extends BlockEntity implements MenuProvider, Tickable
+public final class MicrochipBlockEntity extends BlockEntity implements MenuProvider, Tickable, Clearable
 {
 	public static final Bounds CIRCUIT_BOUNDS = new Bounds(0, 0, 240, 128);
 	public static final float  CIRCUIT_SCALE  = 0.5f;
@@ -258,6 +259,12 @@ public final class MicrochipBlockEntity extends BlockEntity implements MenuProvi
 	public Packet<ClientGamePacketListener> getUpdatePacket()
 	{
 		return ClientboundBlockEntityDataPacket.create(this);
+	}
+	
+	@Override
+	public void clearContent()
+	{
+		microchip.clear();
 	}
 	
 	@Override
