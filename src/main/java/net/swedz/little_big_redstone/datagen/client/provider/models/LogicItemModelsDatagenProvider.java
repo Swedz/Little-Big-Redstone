@@ -34,6 +34,7 @@ final class LogicItemModelsDatagenProvider
 		);
 		logicComponent(generators, LBRLogicTypes.READER, BackgroundType.CIRCLE, true);
 		logicComponent(generators, LBRLogicTypes.TAG, BackgroundType.CIRCLE, true);
+		logicComponent(generators, LBRLogicTypes.BATTERY, BackgroundType.CIRCLE, true);
 		
 		logicComponent(generators, LBRLogicTypes.NOT, BackgroundType.SQUARE, true);
 		logicComponent(generators, LBRLogicTypes.AND, BackgroundType.SQUARE, true);

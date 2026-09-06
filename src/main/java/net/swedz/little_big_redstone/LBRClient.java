@@ -214,6 +214,7 @@ public final class LBRClient
 		event.register(LBRLogicTypes.IO, IORenderer::new);
 		event.register(LBRLogicTypes.READER, SimpleLogicRenderer::new);
 		event.register(LBRLogicTypes.TAG, SimpleLogicRenderer::new);
+		event.register(LBRLogicTypes.BATTERY, SimpleLogicRenderer::new);
 		
 		event.register(LBRLogicTypes.NOT, SimpleLogicRenderer::new);
 		event.register(LBRLogicTypes.AND, SimpleLogicRenderer::new);

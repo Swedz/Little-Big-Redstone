@@ -1,5 +1,6 @@
 {
   "item.little_big_redstone.and_gate": "AND Gate",
+  "item.little_big_redstone.battery": "Battery",
   "item.little_big_redstone.black_floppy_disk": "Black Floppy Disk",
   "item.little_big_redstone.black_logic_array": "Black Logic Array",
   "item.little_big_redstone.black_microchip": "Black Microchip",
@@ -246,6 +247,7 @@
   "text.little_big_redstone.logic_gate_algebra_or": "A ∨ B",
   "text.little_big_redstone.logic_gate_algebra_xor": "A ⊻ B",
   "text.little_big_redstone.logic_help_and_gate": "Output is ON when all inputs are ON, otherwise output is OFF.",
+  "text.little_big_redstone.logic_help_battery": "Output will always be equal to the configured signal strength.",
   "text.little_big_redstone.logic_help_calculator_1": "The mode determines whether the component will add or subtract the input signal strength values.",
   "text.little_big_redstone.logic_help_calculator_2": "The output signal strength will be the total calculated value.",
   "text.little_big_redstone.logic_help_comparator_1": "The mode determines whether all inputs or at least one must match the comparison.",

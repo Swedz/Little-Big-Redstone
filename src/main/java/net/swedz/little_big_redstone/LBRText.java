@@ -563,6 +563,10 @@ public interface LBRText
 	@WithStyle("tooltip")
 	MutableComponent logicHelpANDGate();
 	
+	@LangKey(text = "Output will always be equal to the configured signal strength.")
+	@WithStyle("tooltip")
+	MutableComponent logicHelpBattery();
+	
 	@LangKey(text = "Can either input or output a redstone signal in the world on a single face. Multiple I/O ports can be used to input and output from different faces.")
 	@WithStyle("tooltip")
 	MutableComponent logicHelpIOPort1();

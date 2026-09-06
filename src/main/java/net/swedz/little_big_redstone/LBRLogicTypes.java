@@ -8,6 +8,8 @@ import net.neoforged.bus.api.IEventBus;
 import net.swedz.little_big_redstone.microchip.object.logic.LogicComponent;
 import net.swedz.little_big_redstone.microchip.object.logic.LogicFactory;
 import net.swedz.little_big_redstone.microchip.object.logic.LogicType;
+import net.swedz.little_big_redstone.microchip.object.logic.battery.LogicBattery;
+import net.swedz.little_big_redstone.microchip.object.logic.battery.LogicBatteryConfig;
 import net.swedz.little_big_redstone.microchip.object.logic.calculator.LogicCalculator;
 import net.swedz.little_big_redstone.microchip.object.logic.calculator.LogicCalculatorConfig;
 import net.swedz.little_big_redstone.microchip.object.logic.comparator.LogicComparator;
@@ -66,6 +68,7 @@ public final class LBRLogicTypes
 	public static final DeferredLogicType<LogicType> IO     = register("io", "I/O Port", LogicIO.CODEC, LogicIO.STREAM_CODEC, LogicIO::new, LogicIOConfig.CODEC, LogicIOConfig.STREAM_CODEC, LogicIOConfig.DEFAULT);
 	public static final DeferredLogicType<LogicType> READER = register("reader", "Reader", LogicReader.CODEC, LogicReader.STREAM_CODEC, LogicReader::new, LogicReaderConfig.CODEC, LogicReaderConfig.STREAM_CODEC, LogicReaderConfig.DEFAULT);
 	public static final DeferredLogicType<LogicType> TAG    = register("tag", "Tag", LogicTag.CODEC, LogicTag.STREAM_CODEC, LogicTag::new, LogicTagConfig.CODEC, LogicTagConfig.STREAM_CODEC, LogicTagConfig.DEFAULT);
+	public static final DeferredLogicType<LogicType> BATTERY = register("battery", "Battery", LogicBattery.CODEC, LogicBattery.STREAM_CODEC, LogicBattery::new, LogicBatteryConfig.CODEC, LogicBatteryConfig.STREAM_CODEC, LogicBatteryConfig.DEFAULT);
 	
 	public static final DeferredLogicType<LogicType> NOT  = registerGate("not", "NOT", NOTGate.CODEC, NOTGate.STREAM_CODEC, NOTGate::new, NOTGateConfig.CODEC, NOTGateConfig.STREAM_CODEC, NOTGateConfig.DEFAULT);
 	public static final DeferredLogicType<LogicType> AND  = registerGate("and", "AND", ANDGate.CODEC, ANDGate.STREAM_CODEC, ANDGate::new, ANDGateConfig.CODEC, ANDGateConfig.STREAM_CODEC, ANDGateConfig.DEFAULT);

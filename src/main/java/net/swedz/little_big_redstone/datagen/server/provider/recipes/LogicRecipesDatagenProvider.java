@@ -82,6 +82,11 @@ public final class LogicRecipesDatagenProvider extends RecipeProvider
 				.pattern("PrR")
 				.pattern("PQG"));
 		
+		logicComponent(LBRLogicTypes.BATTERY, (b) -> b
+				.pattern("C  ")
+				.pattern("TrR")
+				.pattern("C  "));
+		
 		logicComponent(LBRLogicTypes.NOT, (b) -> b
 				.pattern("RrT"));
 		
