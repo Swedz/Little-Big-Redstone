@@ -39,6 +39,7 @@ public final class LogicItemModelsDatagenProvider extends ItemModelProvider
 		);
 		this.logicComponent(LBRLogicTypes.READER, BackgroundType.CIRCLE, true);
 		this.logicComponent(LBRLogicTypes.TAG, BackgroundType.CIRCLE, true);
+		this.logicComponent(LBRLogicTypes.BATTERY, BackgroundType.CIRCLE, true);
 		
 		this.logicComponent(LBRLogicTypes.NOT, BackgroundType.SQUARE, true);
 		this.logicComponent(LBRLogicTypes.AND, BackgroundType.SQUARE, true);

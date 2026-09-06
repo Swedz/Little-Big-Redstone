@@ -1,0 +1,20 @@
+{
+    DataVersion: 3955,
+    size: [3, 2, 2],
+    data: [
+        {pos: [0, 0, 1], state: "minecraft:orange_concrete"},
+        {pos: [1, 0, 1], state: "minecraft:smooth_stone"},
+        {pos: [2, 0, 1], state: "minecraft:smooth_stone"},
+        {pos: [0, 1, 1], state: "minecraft:redstone_wire{east:side,north:none,power:1,south:none,west:side}"},
+        {pos: [1, 1, 1], state: "minecraft:comparator{facing:east,mode:compare,powered:true}", nbt: {OutputSignal: 1, id: "minecraft:comparator"}},
+        {pos: [2, 1, 1], state: "minecraft:lectern{facing:east,has_book:true,powered:false}", nbt: {Book: {components: {"minecraft:writable_book_content": {pages: [{raw: ""}, {raw: ""}, {raw: ""}, {raw: ""}, {raw: ""}, {raw: ""}, {raw: ""}, {raw: ""}, {raw: ""}, {raw: ""}, {raw: ""}, {raw: ""}, {raw: ""}, {raw: ""}, {raw: "."}]}}, count: 1, id: "minecraft:writable_book"}, Page: 0, id: "minecraft:lectern"}}
+    ],
+    entities: [],
+    palette: [
+        "minecraft:orange_concrete",
+        "minecraft:smooth_stone",
+        "minecraft:redstone_wire{east:side,north:none,power:1,south:none,west:side}",
+        "minecraft:comparator{facing:east,mode:compare,powered:true}",
+        "minecraft:lectern{facing:east,has_book:true,powered:false}"
+    ]
+}
