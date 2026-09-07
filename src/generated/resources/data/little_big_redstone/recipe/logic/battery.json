@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "C": "#c:ingots/copper",
+    "R": "#c:dusts/redstone",
+    "T": "minecraft:redstone_torch",
+    "r": "little_big_redstone:redstone_bit"
+  },
+  "pattern": [
+    "C  ",
+    "TrR",
+    "C  "
+  ],
+  "result": {
+    "id": "little_big_redstone:battery"
+  },
+  "show_notification": false
+}
