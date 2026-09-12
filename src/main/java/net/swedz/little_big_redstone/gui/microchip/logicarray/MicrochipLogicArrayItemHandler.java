@@ -12,8 +12,8 @@ import java.util.Optional;
 
 public final class MicrochipLogicArrayItemHandler implements IItemHandlerModifiable
 {
-	private static final LogicCreativeItemHandler CREATIVE = new LogicCreativeItemHandler();
-	
+	private final LogicCreativeItemHandler creative = new LogicCreativeItemHandler();
+
 	private final AbstractContainerMenu menu;
 	private final Player                player;
 	
@@ -46,9 +46,14 @@ public final class MicrochipLogicArrayItemHandler implements IItemHandlerModifia
 		return this.handler().isPresent();
 	}
 	
+	public LogicCreativeItemHandler creativeHandler()
+	{
+		return creative;
+	}
+
 	private Optional<IItemHandlerModifiable> handler()
 	{
-		return logicArray.isEmpty() && player.hasInfiniteMaterials() ? Optional.of(CREATIVE) : logicArray;
+		return logicArray.isEmpty() && player.hasInfiniteMaterials() ? Optional.of(creative) : logicArray;
 	}
 	
 	private boolean setPickedLogicArray(int slotId, ItemStack stack)
