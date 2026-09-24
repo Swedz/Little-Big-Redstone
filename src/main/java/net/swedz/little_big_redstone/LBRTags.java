@@ -19,6 +19,8 @@ public final class LBRTags
 		public static final TagKey<Item> LOGIC_ARRAYS     = TagKey.create(Registries.ITEM, LBR.id("logic_arrays"));
 		public static final TagKey<Item> FLOPPY_DISKS     = TagKey.create(Registries.ITEM, LBR.id("floppy_disks"));
 		public static final TagKey<Item> STICKY_NOTES     = TagKey.create(Registries.ITEM, LBR.id("sticky_notes"));
+		
+		public static final TagKey<Item> LOGIC_ARRAY_CONTAINS = TagKey.create(Registries.ITEM, LBR.id("logic_array_contains"));
 	}
 	
 	public static final class Blocks

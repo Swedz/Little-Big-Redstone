@@ -2,6 +2,7 @@ package net.swedz.little_big_redstone.datagen.server.provider.tags;
 
 import net.minecraft.core.HolderLookup;
 import net.minecraft.tags.TagKey;
+import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
 import net.neoforged.neoforge.common.Tags;
@@ -9,6 +10,7 @@ import net.neoforged.neoforge.common.data.ItemTagsProvider;
 import net.neoforged.neoforge.data.event.GatherDataEvent;
 import net.swedz.little_big_redstone.LBR;
 import net.swedz.little_big_redstone.LBRItems;
+import net.swedz.little_big_redstone.LBRLogicTypes;
 import net.swedz.little_big_redstone.LBRTags;
 import net.swedz.tesseract.neoforge.registry.holder.ItemHolder;
 
@@ -37,6 +39,24 @@ public final class ItemTagDatagenProvider extends ItemTagsProvider
 				.add(Items.HONEYCOMB);
 	}
 	
+	private void logicArrayContains()
+	{
+		this.tag(LBRTags.Items.LOGIC_ARRAY_CONTAINS)
+				.add(LBRItems.REDSTONE_BIT.asItem());
+		
+		for(var type : LBRLogicTypes.values())
+		{
+			this.tag(LBRTags.Items.LOGIC_ARRAY_CONTAINS)
+					.add(type.item());
+		}
+		
+		for(var color : DyeColor.values())
+		{
+			this.tag(LBRTags.Items.LOGIC_ARRAY_CONTAINS)
+					.add(LBRItems.stickyNote(color).asItem());
+		}
+	}
+	
 	@Override
 	protected void addTags(HolderLookup.Provider provider)
 	{
@@ -50,6 +70,7 @@ public final class ItemTagDatagenProvider extends ItemTagsProvider
 		
 		this.dyeWasher();
 		this.sealant();
+		this.logicArrayContains();
 	}
 	
 	@Override
