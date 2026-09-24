@@ -2,9 +2,8 @@ package net.swedz.little_big_redstone.gui.microchip.logicarray;
 
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.neoforge.items.IItemHandlerModifiable;
-import net.swedz.little_big_redstone.LBRComponents;
 import net.swedz.little_big_redstone.LBRCreativeTabs;
-import net.swedz.little_big_redstone.LBRItems;
+import net.swedz.little_big_redstone.LBRTags;
 import net.swedz.little_big_redstone.item.logicarray.LogicArrayItem;
 
 public final class LogicCreativeItemHandler implements IItemHandlerModifiable
@@ -50,7 +49,6 @@ public final class LogicCreativeItemHandler implements IItemHandlerModifiable
 	public boolean isItemValid(int slot, ItemStack stack)
 	{
 		return stack.isEmpty() ||
-			   stack.has(LBRComponents.LOGIC_CONFIG) ||
-			   stack.is(LBRItems.REDSTONE_BIT.asItem());
+			   stack.is(LBRTags.Items.LOGIC_ARRAY_CONTAINS);
 	}
 }

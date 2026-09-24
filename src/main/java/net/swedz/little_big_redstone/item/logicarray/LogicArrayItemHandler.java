@@ -4,7 +4,7 @@ import net.minecraft.world.item.ItemStack;
 import net.neoforged.neoforge.common.MutableDataComponentHolder;
 import net.neoforged.neoforge.items.ComponentItemHandler;
 import net.swedz.little_big_redstone.LBRComponents;
-import net.swedz.little_big_redstone.LBRItems;
+import net.swedz.little_big_redstone.LBRTags;
 
 public final class LogicArrayItemHandler extends ComponentItemHandler
 {
@@ -17,7 +17,6 @@ public final class LogicArrayItemHandler extends ComponentItemHandler
 	public boolean isItemValid(int slot, ItemStack stack)
 	{
 		return stack.isEmpty() ||
-			   stack.has(LBRComponents.LOGIC_CONFIG) ||
-			   stack.is(LBRItems.REDSTONE_BIT.asItem());
+			   stack.is(LBRTags.Items.LOGIC_ARRAY_CONTAINS);
 	}
 }
