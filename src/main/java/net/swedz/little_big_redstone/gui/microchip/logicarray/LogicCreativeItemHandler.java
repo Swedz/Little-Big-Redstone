@@ -3,9 +3,8 @@ package net.swedz.little_big_redstone.gui.microchip.logicarray;
 import net.neoforged.neoforge.transfer.ResourceHandler;
 import net.neoforged.neoforge.transfer.item.ItemResource;
 import net.neoforged.neoforge.transfer.transaction.TransactionContext;
-import net.swedz.little_big_redstone.LBRComponents;
 import net.swedz.little_big_redstone.LBRCreativeTabs;
-import net.swedz.little_big_redstone.LBRItems;
+import net.swedz.little_big_redstone.LBRTags;
 import net.swedz.little_big_redstone.item.logicarray.LogicArrayItem;
 
 public final class LogicCreativeItemHandler implements ResourceHandler<ItemResource>
@@ -40,8 +39,7 @@ public final class LogicCreativeItemHandler implements ResourceHandler<ItemResou
 	public boolean isValid(int index, ItemResource resource)
 	{
 		return resource.isEmpty() ||
-			   resource.has(LBRComponents.LOGIC_CONFIG) ||
-			   resource.is(LBRItems.REDSTONE_BIT.asItem());
+			   resource.is(LBRTags.Items.LOGIC_ARRAY_CONTAINS);
 	}
 	
 	@Override
