@@ -95,8 +95,9 @@ public final class LogicReader extends LogicComponent<LogicReader, LogicReaderCo
 						if(!resource.isEmpty())
 						{
 							long amount = handler.getAmountAsLong(slot);
+							long maxItems = Math.max(resource.getMaxStackSize(), handler.getCapacityAsLong(slot, resource));
 							totalItems += amount;
-							filledSlots += amount / (float) resource.getMaxStackSize();
+							filledSlots += amount / (float) maxItems;
 						}
 					}
 					fill = isPercentage ?
