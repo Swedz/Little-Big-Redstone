@@ -60,7 +60,7 @@ public final class LogicIndexTagCompiler extends BlockTagCompiler
 				link.appendText(page.getFrontmatter().navigationEntry().title());
 				listItemPar.append(link);
 				
-				var itemIcon = NavigationUtil.createNavigationIcon(page);
+				var itemIcon = NavigationUtil.createNavigationIcon(page).icon();
 				if(!itemIcon.isEmpty())
 				{
 					var lytHBox = new LytHBox();
