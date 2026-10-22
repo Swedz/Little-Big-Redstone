@@ -81,6 +81,13 @@ public final class LogicSequencer extends LogicComponent<LogicSequencer, LogicSe
 		boolean input = inputs[0] > 0;
 		boolean output = false;
 		
+		if(processedTicks >= config.outputDelay())
+		{
+			processedTicks = config.autoReset() ? 0 : config.outputDelay();
+			output = true;
+		}
+		outputState = output;
+		
 		if(config.resetPort() && inputs[1] > 0)
 		{
 			processedTicks = 0;
@@ -105,13 +112,6 @@ public final class LogicSequencer extends LogicComponent<LogicSequencer, LogicSe
 			}
 		}
 		
-		if(processedTicks >= config.outputDelay())
-		{
-			processedTicks = config.autoReset() ? 0 : config.outputDelay();
-			output = true;
-		}
-		
-		outputState = output;
 		if(originalProcessedTicks != processedTicks || output != originalOutputState)
 		{
 			context.markDirty(this);
