@@ -135,6 +135,12 @@ public final class StickyNoteEntity extends HangingEntity
 	}
 	
 	@Override
+	protected Component getTypeName()
+	{
+		return Component.translatable("entity." + LBR.ID + ".sticky_note." + this.getColor().getName());
+	}
+	
+	@Override
 	protected AABB calculateBoundingBox(BlockPos pos, Direction direction)
 	{
 		Vec3 center = Vec3.atCenterOf(pos).relative(direction, -boundsPositionOffset());
