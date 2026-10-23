@@ -84,11 +84,11 @@ public final class LBRItems
 		Map<DyeColor, ItemHolder<LogicArrayItem>> logicArrays = Maps.newHashMap();
 		Map<DyeColor, ItemHolder<FloppyDiskItem>> floppyDisks = Maps.newHashMap();
 		Map<DyeColor, ItemHolder<StickyNoteItem>> stickyNotes = Maps.newHashMap();
-		LBRColors.forEachIndexed((color, colorName, index) ->
+		LBRColors.forEachIndexed((color, colorEnglishName, index) ->
 		{
-			logicArrays.put(color, createLogicArray(color, colorName, index).register());
-			floppyDisks.put(color, createFloppyDisk(color, colorName, index).register());
-			stickyNotes.put(color, createStickyNote(color, colorName, index).register());
+			logicArrays.put(color, createLogicArray(color, colorEnglishName, index).register());
+			floppyDisks.put(color, createFloppyDisk(color, colorEnglishName, index).register());
+			stickyNotes.put(color, createStickyNote(color, colorEnglishName, index).register());
 		});
 		LOGIC_ARRAYS = Collections.unmodifiableMap(logicArrays);
 		FLOPPY_DISKS = Collections.unmodifiableMap(floppyDisks);

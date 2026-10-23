@@ -4,6 +4,8 @@ import com.google.common.collect.Sets;
 import net.neoforged.neoforge.common.data.LanguageProvider;
 import net.neoforged.neoforge.data.event.GatherDataEvent;
 import net.swedz.little_big_redstone.LBR;
+import net.swedz.little_big_redstone.LBRColors;
+import net.swedz.little_big_redstone.LBREntities;
 import net.swedz.little_big_redstone.LBRItems;
 import net.swedz.little_big_redstone.LBRKeybinds;
 import net.swedz.tesseract.neoforge.lang.LangInstance;
@@ -37,6 +39,10 @@ public final class LanguageDatagenProvider extends LanguageProvider
 		{
 			this.add(item.asItem(), item.identifier().englishName());
 		}
+		
+		this.addEntityType(LBREntities.STICKY_NOTE, "Sticky Note");
+		LBRColors.forEachIndexed((color, colorEnglishName, index) ->
+				this.add("entity." + LBR.ID + ".sticky_note." + color.getName(), colorEnglishName + " Sticky Note"));
 		
 		this.add(LBR.id(LBR.ID).toLanguageKey("itemGroup"), LBR.NAME);
 		

@@ -102,6 +102,12 @@ public final class StickyNoteEntity extends HangingEntity
 		this.recalculateBoundingBox();
 	}
 	
+	@Override
+	protected Component getTypeName()
+	{
+		return Component.translatable("entity." + LBR.ID + ".sticky_note." + this.getColor().getName());
+	}
+	
 	public ModelData getModelData()
 	{
 		return ModelData.builder()
