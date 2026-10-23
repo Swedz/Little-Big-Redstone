@@ -21,6 +21,7 @@ import net.neoforged.neoforge.client.event.RegisterClientTooltipComponentFactori
 import net.neoforged.neoforge.client.event.RegisterGuiLayersEvent;
 import net.neoforged.neoforge.client.event.RegisterItemModelsEvent;
 import net.neoforged.neoforge.client.event.RegisterMenuScreensEvent;
+import net.neoforged.neoforge.client.event.RegisterSelectItemModelPropertyEvent;
 import net.neoforged.neoforge.client.event.RenderHandEvent;
 import net.neoforged.neoforge.client.gui.VanillaGuiLayers;
 import net.neoforged.neoforge.client.model.standalone.SimpleUnbakedStandaloneModel;
@@ -35,6 +36,7 @@ import net.swedz.little_big_redstone.client.hud.StickyNoteViewContentsGuiOverlay
 import net.swedz.little_big_redstone.client.item.StickyNoteInHandItemRenderer;
 import net.swedz.little_big_redstone.client.model.logic.LogicItemModel;
 import net.swedz.little_big_redstone.client.model.microchip.MicrochipBlockModel;
+import net.swedz.little_big_redstone.client.model.stickynote.SelectItemStickyNoteType;
 import net.swedz.little_big_redstone.gui.floppydisk.FloppyDiskScreen;
 import net.swedz.little_big_redstone.gui.logicarray.LogicArrayScreen;
 import net.swedz.little_big_redstone.gui.logicconfig.LogicConfigScreen;
@@ -123,11 +125,17 @@ public final class LBRClient
 	}
 	
 	@SubscribeEvent
-	private static void register(RegisterGuiLayersEvent event)
+	private static void registerGuiLayers(RegisterGuiLayersEvent event)
 	{
 		event.registerAbove(VanillaGuiLayers.HOTBAR, LBR.id("floppy_disk_consume_items"), FloppyDiskConsumeItemsGuiOverlay::extract);
 		event.registerBelow(VanillaGuiLayers.HOTBAR, LBR.id("sticky_note_view_contents"), StickyNoteViewContentsGuiOverlay::extract);
 		event.registerBelow(LBR.id("sticky_note_view_contents"), LBR.id("note_board"), NoteBoardGuiOverlay::extract);
+	}
+	
+	@SubscribeEvent
+	private static void registerSelectItemModelProperties(RegisterSelectItemModelPropertyEvent event)
+	{
+		event.register(LBR.id("sticky_note_type"), SelectItemStickyNoteType.TYPE);
 	}
 	
 	@SubscribeEvent

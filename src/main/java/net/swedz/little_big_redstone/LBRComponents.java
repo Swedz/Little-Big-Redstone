@@ -11,6 +11,7 @@ import net.minecraft.world.item.component.ItemContainerContents;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
+import net.swedz.little_big_redstone.client.model.stickynote.StickyNoteEntityModelData;
 import net.swedz.little_big_redstone.item.floppydisk.FloppyDiskProgramName;
 import net.swedz.little_big_redstone.item.stickynote.StickyNote;
 import net.swedz.little_big_redstone.microchip.Microchip;
@@ -32,11 +33,12 @@ public final class LBRComponents
 	public static final Supplier<DataComponentType<Microchip.Immutable>>   FLOPPY_DISK              = create("floppy_disk", Microchip.Immutable.CODEC, Microchip.Immutable.STREAM_CODEC);
 	public static final Supplier<DataComponentType<FloppyDiskProgramName>> FLOPPY_DISK_PROGRAM_NAME = create("floppy_disk_program_name", FloppyDiskProgramName.CODEC, FloppyDiskProgramName.STREAM_CODEC);
 	
-	public static final Supplier<DataComponentType<StickyNote>>        STICKY_NOTE              = create("sticky_note", StickyNote.CODEC, StickyNote.STREAM_CODEC);
-	public static final Supplier<DataComponentType<DyeColor>>          STICKY_NOTE_COLOR        = create("sticky_note_color", DyeColor.CODEC, DyeColor.STREAM_CODEC);
-	public static final Supplier<DataComponentType<DyeColor>>          STICKY_NOTE_TEXT_COLOR   = create("sticky_note_text_color", DyeColor.CODEC, DyeColor.STREAM_CODEC);
-	public static final Supplier<DataComponentType<Boolean>>           STICKY_NOTE_EDITABLE     = create("sticky_note_editable", Codec.BOOL, ByteBufCodecs.BOOL);
-	public static final Supplier<DataComponentType<ItemStackInstance>> STICKY_NOTE_DISPLAY_ITEM = create("sticky_note_display_item", ItemStackInstance.CODEC, ItemStackInstance.STREAM_CODEC);
+	public static final Supplier<DataComponentType<StickyNote>>                STICKY_NOTE                   = create("sticky_note", StickyNote.CODEC, StickyNote.STREAM_CODEC);
+	public static final Supplier<DataComponentType<DyeColor>>                  STICKY_NOTE_COLOR             = create("sticky_note_color", DyeColor.CODEC, DyeColor.STREAM_CODEC);
+	public static final Supplier<DataComponentType<DyeColor>>                  STICKY_NOTE_TEXT_COLOR        = create("sticky_note_text_color", DyeColor.CODEC, DyeColor.STREAM_CODEC);
+	public static final Supplier<DataComponentType<Boolean>>                   STICKY_NOTE_EDITABLE          = create("sticky_note_editable", Codec.BOOL, ByteBufCodecs.BOOL);
+	public static final Supplier<DataComponentType<ItemStackInstance>>         STICKY_NOTE_DISPLAY_ITEM      = create("sticky_note_display_item", ItemStackInstance.CODEC, ItemStackInstance.STREAM_CODEC);
+	public static final Supplier<DataComponentType<StickyNoteEntityModelData>> STICKY_NOTE_ENTITY_MODEL_DATA = create("sticky_note_entity_model_data", StickyNoteEntityModelData.CODEC, StickyNoteEntityModelData.STREAM_CODEC);
 	
 	public static void init(IEventBus bus)
 	{
