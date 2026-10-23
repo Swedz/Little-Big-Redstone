@@ -1,48 +1,52 @@
 package net.swedz.little_big_redstone.datagen.client.provider.models;
 
 import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
-import net.minecraft.client.data.models.MultiVariant;
-import net.minecraft.client.data.models.blockstates.PropertyValueList;
 import net.minecraft.client.data.models.model.ModelTemplate;
 import net.minecraft.client.data.models.model.TextureMapping;
 import net.minecraft.client.data.models.model.TextureSlot;
-import net.minecraft.client.renderer.block.dispatch.BlockStateModel;
-import net.minecraft.client.renderer.block.dispatch.BlockStateModelDispatcher;
-import net.minecraft.client.renderer.block.dispatch.SingleVariant;
-import net.minecraft.client.renderer.block.dispatch.Variant;
+import net.minecraft.client.renderer.item.ClientItem;
+import net.minecraft.client.renderer.item.CompositeModel;
+import net.minecraft.client.renderer.item.CuboidItemModelWrapper;
+import net.minecraft.client.renderer.item.ItemModel;
+import net.minecraft.client.renderer.item.SelectItemModel;
 import net.minecraft.client.resources.model.sprite.Material;
 import net.minecraft.world.item.DyeColor;
-import net.minecraft.world.level.block.state.properties.Property;
-import net.neoforged.neoforge.client.model.block.CompositeBlockModel;
-import net.neoforged.neoforge.client.model.block.CustomUnbakedBlockStateModel;
-import net.neoforged.neoforge.client.model.generators.blockstate.CustomBlockStateModelBuilder;
 import net.swedz.little_big_redstone.LBR;
-import net.swedz.little_big_redstone.entity.stickynote.StickyNoteEntity;
+import net.swedz.little_big_redstone.client.model.stickynote.SelectItemStickyNoteType;
+import net.swedz.little_big_redstone.client.model.stickynote.StickyNoteEntityModelData;
 import net.swedz.tesseract.neoforge.model.ModelGenerators;
 
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 
 final class StickyNoteEntityModelsDatagenProvider
 {
 	static void registerModels(ModelGenerators generators)
 	{
-		Map<List<Property.Value<?>>, CustomUnbakedBlockStateModel> variants = Maps.newHashMap();
+		List<SelectItemModel.SwitchCase<StickyNoteEntityModelData>> cases = Lists.newArrayList();
 		for(var paperColor : DyeColor.values())
 		{
 			generateModel(generators, paperColor);
 			
 			for(var textColor : DyeColor.values())
 			{
-				appendModel(variants, paperColor, textColor, true);
-				appendModel(variants, paperColor, textColor, false);
+				appendModel(cases, paperColor, textColor, true);
+				appendModel(cases, paperColor, textColor, false);
 			}
 		}
-		generators.block().blockStateOutputById().register(
-				LBR.id("sticky_note"),
-				dispatch(variants)
+		generators.item().itemModelOutput.register(
+				LBR.id("entity/sticky_note"),
+				new ClientItem(
+						new SelectItemModel.Unbaked(
+								Optional.empty(),
+								new SelectItemModel.UnbakedSwitch<>(
+										new SelectItemStickyNoteType(),
+										cases
+								),
+								Optional.empty()
+						),
+						ClientItem.Properties.DEFAULT
+				)
 		);
 	}
 	
@@ -85,39 +89,26 @@ final class StickyNoteEntityModelsDatagenProvider
 	}
 	
 	private static void appendModel(
-			Map<List<Property.Value<?>>, CustomUnbakedBlockStateModel> variants,
+			List<SelectItemModel.SwitchCase<StickyNoteEntityModelData>> cases,
 			DyeColor paperColor,
 			DyeColor textColor,
 			boolean showText
 	)
 	{
-		List<BlockStateModel.Unbaked> models = Lists.newArrayList();
-		models.add(new SingleVariant.Unbaked(new Variant(LBR.id("block/sticky_note/paper/" + paperColor.getName()))));
+		List<ItemModel.Unbaked> models = Lists.newArrayList();
+		models.add(new CuboidItemModelWrapper.Unbaked(LBR.id("block/sticky_note/paper/" + paperColor.getName()), Optional.empty(), List.of()));
 		if(showText)
 		{
-			models.add(new SingleVariant.Unbaked(new Variant(LBR.id("block/sticky_note/text/" + textColor.getName()))));
+			models.add(new CuboidItemModelWrapper.Unbaked(LBR.id("block/sticky_note/text/" + textColor.getName()), Optional.empty(), List.of()));
 		}
 		
-		variants.put(
-				List.of(
-						new Property.Value<>(StickyNoteEntity.BLOCKSTATE_PAPER_COLOR, paperColor),
-						new Property.Value<>(StickyNoteEntity.BLOCKSTATE_TEXT_COLOR, textColor),
-						new Property.Value<>(StickyNoteEntity.BLOCKSTATE_SHOW_TEXT, showText)
-				),
-				new CompositeBlockModel.Unbaked(models)
-		);
-	}
-	
-	private static BlockStateModelDispatcher dispatch(Map<List<Property.Value<?>>, CustomUnbakedBlockStateModel> variants)
-	{
-		Map<String, BlockStateModel.Unbaked> variantsUnbaked = Maps.newHashMap();
-		for(var entry : variants.entrySet())
-		{
-			variantsUnbaked.put(
-					new PropertyValueList(entry.getKey()).getKey(),
-					MultiVariant.of(new CustomBlockStateModelBuilder.Simple(entry.getValue())).toUnbaked()
-			);
-		}
-		return new BlockStateModelDispatcher(Optional.of(new BlockStateModelDispatcher.SimpleModelSelectors(variantsUnbaked)), Optional.empty());
+		cases.add(new SelectItemModel.SwitchCase<>(
+				List.of(new StickyNoteEntityModelData(
+						paperColor,
+						showText,
+						textColor
+				)),
+				new CompositeModel.Unbaked(models, Optional.empty())
+		));
 	}
 }

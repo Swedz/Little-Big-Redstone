@@ -3,7 +3,6 @@ package net.swedz.little_big_redstone.client.entity;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
 import net.minecraft.client.renderer.SubmitNodeCollector;
-import net.minecraft.client.renderer.block.BlockModelRenderState;
 import net.minecraft.client.renderer.block.BlockModelResolver;
 import net.minecraft.client.renderer.block.model.BlockDisplayContext;
 import net.minecraft.client.renderer.entity.EntityRenderer;
@@ -14,9 +13,12 @@ import net.minecraft.client.renderer.item.ItemStackRenderState;
 import net.minecraft.client.renderer.state.level.CameraRenderState;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.core.Direction;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.util.RandomSource;
-import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.ItemDisplayContext;
+import net.swedz.little_big_redstone.LBR;
+import net.swedz.little_big_redstone.LBRComponents;
+import net.swedz.little_big_redstone.client.model.stickynote.StickyNoteEntityModelData;
 import net.swedz.little_big_redstone.entity.stickynote.StickyNoteEntity;
 
 public final class StickyNoteEntityRenderer<T extends StickyNoteEntity> extends EntityRenderer<T, StickyNoteEntityRenderer.RenderState>
@@ -43,8 +45,8 @@ public final class StickyNoteEntityRenderer<T extends StickyNoteEntity> extends 
 	
 	public static final class RenderState extends EntityRenderState
 	{
-		public final BlockModelRenderState stickyNoteModel = new BlockModelRenderState();
-		public final ItemStackRenderState  itemModel       = new ItemStackRenderState();
+		public final ItemStackRenderState stickyNoteModel = new ItemStackRenderState();
+		public final ItemStackRenderState itemModel       = new ItemStackRenderState();
 		
 		public Direction direction;
 		public Direction facing;
@@ -76,6 +78,7 @@ public final class StickyNoteEntityRenderer<T extends StickyNoteEntity> extends 
 		
 		if(!state.stickyNoteModel.isEmpty())
 		{
+			pose.translate(0.5, 0.5, 0.5);
 			state.stickyNoteModel.submit(pose, submitNodeCollector, state.lightCoords, OverlayTexture.NO_OVERLAY, state.outlineColor);
 		}
 		
@@ -131,14 +134,21 @@ public final class StickyNoteEntityRenderer<T extends StickyNoteEntity> extends 
 		state.xRot = entity.getXRot();
 		state.yRot = entity.getYRot();
 		
-		this.updateForStickyNote(state.stickyNoteModel, entity.getColor(), entity.getTextColor(), entity.hasText() && entity.getDisplayItem().isEmpty());
+		var stack = entity.asItem(false);
+		stack.set(
+				DataComponents.ITEM_MODEL,
+				LBR.id("entity/sticky_note")
+		);
+		stack.set(
+				LBRComponents.STICKY_NOTE_ENTITY_MODEL_DATA,
+				new StickyNoteEntityModelData(
+						entity.getColor(),
+						entity.hasText() && entity.getDisplayItem().isEmpty(),
+						entity.getTextColor()
+				)
+		);
+		itemModelResolver.updateForNonLiving(state.stickyNoteModel, stack, ItemDisplayContext.NONE, entity);
 		
 		itemModelResolver.updateForNonLiving(state.itemModel, entity.getDisplayItem(), ItemDisplayContext.GUI, entity);
-	}
-	
-	private void updateForStickyNote(BlockModelRenderState renderState, DyeColor paperColor, DyeColor textColor, boolean showText)
-	{
-		var fakeState = StickyNoteEntity.fakeBlockState(paperColor, textColor, showText);
-		blockModelResolver.update(renderState, fakeState, BLOCK_DISPLAY_CONTEXT);
 	}
 }
