@@ -3,7 +3,7 @@ navigation:
   title: "Вентиль И-НЕ"
   icon: "nand_gate"
   parent: little_big_redstone:logic.md
-  position: 15
+  position: 16
 categories:
   - logic
 item_ids:

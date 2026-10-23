@@ -3,7 +3,7 @@ navigation:
   title: "RS-триггер на ИЛИ-НЕ"
   icon: "rs_nor_latch"
   parent: little_big_redstone:logic.md
-  position: 26
+  position: 27
 categories:
   - logic
 item_ids:
