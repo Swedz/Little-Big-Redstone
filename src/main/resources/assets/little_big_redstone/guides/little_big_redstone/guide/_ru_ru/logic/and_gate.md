@@ -3,7 +3,7 @@ navigation:
   title: "Вентиль И"
   icon: "and_gate"
   parent: little_big_redstone:logic.md
-  position: 14
+  position: 15
 categories:
   - logic
 item_ids:

@@ -3,7 +3,7 @@ navigation:
   title: "Вентиль ИЛИ-НЕ"
   icon: "nor_gate"
   parent: little_big_redstone:logic.md
-  position: 17
+  position: 18
 categories:
   - logic
 item_ids:
