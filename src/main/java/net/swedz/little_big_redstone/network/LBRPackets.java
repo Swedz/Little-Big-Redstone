@@ -21,6 +21,7 @@ import net.swedz.little_big_redstone.network.packet.QuickGrabMicrochipWireItemPa
 import net.swedz.little_big_redstone.network.packet.RequestMicrochipWatcherPacket;
 import net.swedz.little_big_redstone.network.packet.RequestStickyNoteWatcherPacket;
 import net.swedz.little_big_redstone.network.packet.ReturnToMicrochipMenuPacket;
+import net.swedz.little_big_redstone.network.packet.ScrollLogicCreativePacket;
 import net.swedz.little_big_redstone.network.packet.StickyNotePacket;
 import net.swedz.little_big_redstone.network.packet.StoreMicrochipViewPositionPacket;
 import net.swedz.little_big_redstone.network.packet.UpdateComponentsMicrochipMenuPacket;
@@ -62,6 +63,7 @@ public final class LBRPackets
 		create("request_microchip_watcher", RequestMicrochipWatcherPacket.class, RequestMicrochipWatcherPacket.STREAM_CODEC);
 		create("request_sticky_note_watcher", RequestStickyNoteWatcherPacket.class, RequestStickyNoteWatcherPacket.STREAM_CODEC);
 		create("return_to_microchip_menu", ReturnToMicrochipMenuPacket.class, ReturnToMicrochipMenuPacket.STREAM_CODEC);
+		create("scroll_logic_creative", ScrollLogicCreativePacket.class, ScrollLogicCreativePacket.STREAM_CODEC);
 		create("sticky_note", StickyNotePacket.class, StickyNotePacket.STREAM_CODEC);
 		create("store_microchip_view_position", StoreMicrochipViewPositionPacket.class, StoreMicrochipViewPositionPacket.STREAM_CODEC);
 		create("update_components_microchip_menu", UpdateComponentsMicrochipMenuPacket.class, UpdateComponentsMicrochipMenuPacket.STREAM_CODEC);
