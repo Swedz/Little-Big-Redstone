@@ -3,7 +3,7 @@ navigation:
   title: "Вентиль НЕ"
   icon: "not_gate"
   parent: little_big_redstone:logic.md
-  position: 13
+  position: 14
 categories:
   - logic
 item_ids:

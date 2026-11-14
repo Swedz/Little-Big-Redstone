@@ -3,7 +3,7 @@ navigation:
   title: "Калькулятор"
   icon: "calculator"
   parent: little_big_redstone:logic.md
-  position: 24
+  position: 25
 categories:
   - logic
 item_ids:
