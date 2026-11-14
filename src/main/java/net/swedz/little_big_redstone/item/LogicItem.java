@@ -67,7 +67,7 @@ public final class LogicItem extends Item
 	{
 		var stack = player.getItemInHand(hand);
 		var logicConfig = stack.get(LBRComponents.LOGIC_CONFIG);
-		if(logicConfig == null)
+		if(logicConfig == null || !logicConfig.hasMenu())
 		{
 			return InteractionResult.FAIL;
 		}
