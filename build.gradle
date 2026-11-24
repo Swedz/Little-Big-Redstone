@@ -22,13 +22,13 @@ logger.lifecycle("${mod_name} version ${version}")
 apply from: 'dependencies.gradle'
 
 tasks.named('jar') {
-    from "LICENSE"
+    from "LICENSE.md"
 }
 
 tasks.register("sourceJar", Jar) {
     archiveClassifier.set("sources")
     from sourceSets.main.allJava
-    from "LICENSE"
+    from "LICENSE.md"
 }
 
 apply from: 'deploy.gradle'
