@@ -1,6 +1,14 @@
+# Assets
+
+All Rights Reserved
+
+Copyright (c) 2025 Swedz
+
+# Software
+
 MIT License
 
-Copyright (c) 2024 Swedz
+Copyright (c) 2025 Swedz
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
